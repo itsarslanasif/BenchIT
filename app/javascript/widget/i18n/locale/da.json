@@ -1,0 +1,86 @@
+{
+  "COMPONENTS": {
+    "FILE_BUBBLE": {
+      "DOWNLOAD": "Download",
+      "UPLOADING": "Uploader..."
+    },
+    "FORM_BUBBLE": {
+      "SUBMIT": "Send"
+    },
+    "MESSAGE_BUBBLE": {
+      "RETRY": "Send message again",
+      "ERROR_MESSAGE": "Couldn't send, try again"
+    }
+  },
+  "TEAM_AVAILABILITY": {
+    "ONLINE": "Vi er online",
+    "OFFLINE": "Vi er ikke tilgængelige i øjeblikket"
+  },
+  "REPLY_TIME": {
+    "IN_A_FEW_MINUTES": "Svarer typisk på et par minutter",
+    "IN_A_FEW_HOURS": "Svarer typisk på et par timer",
+    "IN_A_DAY": "Svarer typisk på en dag"
+  },
+  "START_CONVERSATION": "Start Samtale",
+  "END_CONVERSATION": "End Conversation",
+  "CONTINUE_CONVERSATION": "Continue conversation",
+  "START_NEW_CONVERSATION": "Start en ny samtale",
+  "UNREAD_VIEW": {
+    "VIEW_MESSAGES_BUTTON": "Se nye beskeder",
+    "CLOSE_MESSAGES_BUTTON": "Luk",
+    "COMPANY_FROM": "fra",
+    "BOT": "Bot"
+  },
+  "BUBBLE": {
+    "LABEL": "Chat med os"
+  },
+  "POWERED_BY": "Drevet af Chatwoot",
+  "EMAIL_PLACEHOLDER": "Indtast venligst din e-mail",
+  "CHAT_PLACEHOLDER": "Skriv din besked",
+  "TODAY": "I dag",
+  "YESTERDAY": "I går",
+  "PRE_CHAT_FORM": {
+    "FIELDS": {
+      "FULL_NAME": {
+        "LABEL": "Fulde Navn",
+        "PLACEHOLDER": "Indtast venligst dit fulde navn",
+        "REQUIRED_ERROR": "Det fulde navn er påkrævet"
+      },
+      "EMAIL_ADDRESS": {
+        "LABEL": "E-Mail Adresse",
+        "PLACEHOLDER": "Indtast venligst din e-mail adresse",
+        "REQUIRED_ERROR": "Email Address is required",
+        "VALID_ERROR": "Indtast venligst en gyldig e-mailadresse"
+      },
+      "PHONE_NUMBER": {
+        "LABEL": "Telefonnummer",
+        "PLACEHOLDER": "Please enter your phone number",
+        "REQUIRED_ERROR": "Phone Number is required",
+        "VALID_ERROR": "Phone number should be of E.164 format eg: +1415555555"
+      },
+      "MESSAGE": {
+        "LABEL": "Besked",
+        "PLACEHOLDER": "Indtast venligst din besked",
+        "ERROR": "Beskeden er for kort"
+      }
+    },
+    "CAMPAIGN_HEADER": "Please provide your name and email before starting the conversation",
+    "IS_REQUIRED": "is required"
+  },
+  "FILE_SIZE_LIMIT": "Filen overskrider grænsen på {MAXIMUM_FILE_UPLOAD_SIZE} for vedhæftede filer",
+  "CHAT_FORM": {
+    "INVALID": {
+      "FIELD": "Ugyldigt felt"
+    }
+  },
+  "CSAT": {
+    "TITLE": "Bedøm din samtale",
+    "SUBMITTED_TITLE": "Tak for din bedømmelse",
+    "PLACEHOLDER": "Fortæl os mere..."
+  },
+  "EMAIL_TRANSCRIPT": {
+    "BUTTON_TEXT": "Anmod om en samtaleudskrift",
+    "SEND_EMAIL_SUCCESS": "Chatudskriften blev sendt med succes",
+    "SEND_EMAIL_ERROR": "Der opstod en fejl. Prøv venligst igen"
+  }
+}

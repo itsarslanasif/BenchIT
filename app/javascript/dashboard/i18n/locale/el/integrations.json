@@ -1,0 +1,135 @@
+{
+  "INTEGRATION_SETTINGS": {
+    "HEADER": "Ενοποιήσεις",
+    "WEBHOOK": {
+      "SUBSCRIBED_EVENTS": "Εγγεγραμμένα Συμβάντα",
+      "FORM": {
+        "CANCEL": "Άκυρο",
+        "DESC": "Τα συμβάντα Webhook μας εφοδιάζουν με πληροφορίες πραγματικού χρόνου σχετικά με το τι συμβαίνει στο λογαριασμό σας στο Chatwoot. Παρακαλώ εισάγετε ένα έγκυρο URL στην σχετική ρύθμιση.",
+        "SUBSCRIPTIONS": {
+          "LABEL": "Συμβάντα",
+          "EVENTS": {
+            "CONVERSATION_CREATED": "Δημιουργήθηκε Συνομιλία",
+            "CONVERSATION_STATUS_CHANGED": "Η κατάσταση της συνομιλίας άλλαξε",
+            "CONVERSATION_UPDATED": "Η Συνομιλία Ενημερώθηκε",
+            "MESSAGE_CREATED": "Δημιουργήθηκε Μήνυμα",
+            "MESSAGE_UPDATED": "Το μήνυμα ενημερώθηκε",
+            "WEBWIDGET_TRIGGERED": "Το widget συνομιλίας άνοιξε από τον χρήστη"
+          }
+        },
+        "END_POINT": {
+          "LABEL": "Σύνδεσμος Webhook",
+          "PLACEHOLDER": "Παράδειγμα: https://www.hmu.gr/api/webhook",
+          "ERROR": "Παρακαλώ εισάγετε ένα έγκυρο URL"
+        },
+        "EDIT_SUBMIT": "Ενημέρωση Webhook",
+        "ADD_SUBMIT": "Δημιουργία Webhook"
+      },
+      "TITLE": "Webhook",
+      "CONFIGURE": "Διαμόρφωση",
+      "HEADER": "Ρυθμίσεις Webhook",
+      "HEADER_BTN_TXT": "Προσθήκη Webhook",
+      "LOADING": "Λήψη σχετικών webhooks",
+      "SEARCH_404": "Δεν υπάρχουν δεδομένα που να ταιριάζουν με αυτό το ερώτημα",
+      "SIDEBAR_TXT": "<p><b>Webhooks</b> </p> <p>Τα Webhooks είναι κλήσεις HTTP οι οποίες μπορούν να οριστούν για κάθε λογαριασμό. Ενεργοποιούνται από τα συμβάντα στο Chatwoot όπως για παράδειγμα την έναρξη μια συνομιλίας. Μπορείτε να δημιουργείσετε πάνω από ένα για τον λογαριασμό σας. <br /><br /> Για την δημιουργία ενός <b>webhook</b>, Πατήστε στο κουμπί <b>Προσθήκη webhook</b>. Μπορείτε επίσης να αφαιρέσετε ένα υπάρχων webhook πατώντας στο σχετική κουμπί Διαγραφή.</p>",
+      "LIST": {
+        "404": "Δεν έχουν δημιουργηθεί webhooks για αυτόν το λογαριασμό.",
+        "TITLE": "Διαχείριση webhooks",
+        "TABLE_HEADER": [
+          "ΣΥΝΔΕΣΜΟΣ Webhook",
+          "ΕΝΕΡΓΕΙΕΣ"
+        ]
+      },
+      "EDIT": {
+        "BUTTON_TEXT": "Επεξεργασία",
+        "TITLE": "Επεξεργασία webhook",
+        "API": {
+          "SUCCESS_MESSAGE": "Οι ρυθμίσεις του Webhook ενημερώθηκαν με επιτυχία",
+          "ERROR_MESSAGE": "Αδυναμία σύνδεσης με τον Woot Server, Παρακαλώ προσπαθήστε αργότερα"
+        }
+      },
+      "ADD": {
+        "CANCEL": "Άκυρο",
+        "TITLE": "Προσθήκη Νέου webhook",
+        "API": {
+          "SUCCESS_MESSAGE": "Η διαμόρφωση Webhook προστέθηκε με επιτυχία",
+          "ERROR_MESSAGE": "Αδυναμία σύνδεσης με τον Woot Server, Παρακαλώ προσπαθήστε αργότερα"
+        }
+      },
+      "DELETE": {
+        "BUTTON_TEXT": "Διαγραφή",
+        "API": {
+          "SUCCESS_MESSAGE": "Το Webhook διαγράφηκε επιτυχώς",
+          "ERROR_MESSAGE": "Αδυναμία σύνδεσης με τον Woot Server, Παρακαλώ προσπαθήστε αργότερα"
+        },
+        "CONFIRM": {
+          "TITLE": "Επιβεβαίωση Διαγραφής",
+          "MESSAGE": "Είστε βέβαιοι να διαγράψετε το webhook? (%{webhookURL})",
+          "YES": "Ναι, Διέγραψε ",
+          "NO": "Όχι, Κράτησε τον/την"
+        }
+      }
+    },
+    "SLACK": {
+      "HELP_TEXT": {
+        "TITLE": "Χρήση Slack Integration",
+        "BODY": "<br/><p>Το Chatwoot θα συγχρονίσει τώρα όλες τις εισερχόμενες συνομιλίες στο κανάλι <b><i>πελατών-συνομιλιών</i></b> μέσα στο slack χώρο εργασίας σας.</p><p>Απάντηση σε μια συνομιλία από <b><i>συνομιλίες πελατών</i></b> το κανάλι slack θα δημιουργήσει μια απάντηση για στον πελάτη μέσω chatwoot.</p><p>Ξεκινήστε τις απαντήσεις με το <b><i>note:</i></b> για να δημιουργήσετε ιδιωτικές σημειώσεις αντί για απαντήσεις.</p><p>Αν ο χρήστης στο slack έχει προφίλ πράκτορα στο chatwoot με το ίδιο email, οι απαντήσεις θα συσχετιστούν ανάλογα.</p><p>Εφόσον δεν έχει προφίλ συνδεδεμένου πράκτορα, οι απαντήσεις θα γίνουν από το προφίλ bot.</p>"
+      }
+    },
+    "DELETE": {
+      "BUTTON_TEXT": "Διαγραφή",
+      "API": {
+        "SUCCESS_MESSAGE": "Η ενοποίηση διαγράφηκε επιτυχώς"
+      }
+    },
+    "CONNECT": {
+      "BUTTON_TEXT": "Σύνδεση"
+    },
+    "DASHBOARD_APPS": {
+      "TITLE": "Dashboard Apps",
+      "HEADER_BTN_TXT": "Add a new dashboard app",
+      "SIDEBAR_TXT": "<p><b>Dashboard Apps</b></p><p>Dashboard Apps allow organizations to embed an application inside the Chatwoot dashboard to provide the context for customer support agents. This feature allows you to create an application independently and embed that inside the dashboard to provide user information, their orders, or their previous payment history.</p><p>When you embed your application using the dashboard in Chatwoot, your application will get the context of the conversation and contact as a window event. Implement a listener for the message event on your page to receive the context.</p><p>To add a new dashboard app, click on the button 'Add a new dashboard app'.</p>",
+      "DESCRIPTION": "Dashboard Apps allow organizations to embed an application inside the dashboard to provide the context for customer support agents. This feature allows you to create an application independently and embed that to provide user information, their orders, or their previous payment history.",
+      "LIST": {
+        "404": "There are no dashboard apps configured on this account yet",
+        "LOADING": "Fetching dashboard apps...",
+        "TABLE_HEADER": [
+          "Όνομα",
+          "Endpoint"
+        ],
+        "EDIT_TOOLTIP": "Edit app",
+        "DELETE_TOOLTIP": "Delete app"
+      },
+      "FORM": {
+        "TITLE_LABEL": "Όνομα",
+        "TITLE_PLACEHOLDER": "Enter a name for your dashboard app",
+        "TITLE_ERROR": "A name for the dashboard app is required",
+        "URL_LABEL": "Endpoint",
+        "URL_PLACEHOLDER": "Enter the endpoint URL where your app is hosted",
+        "URL_ERROR": "A valid URL is required"
+      },
+      "CREATE": {
+        "HEADER": "Add a new dashboard app",
+        "FORM_SUBMIT": "Καταχώρηση",
+        "FORM_CANCEL": "Άκυρο",
+        "API_SUCCESS": "Dashboard app configured successfully",
+        "API_ERROR": "We couldn't create an app. Please try again later"
+      },
+      "UPDATE": {
+        "HEADER": "Edit dashboard app",
+        "FORM_SUBMIT": "Ενημέρωση",
+        "FORM_CANCEL": "Άκυρο",
+        "API_SUCCESS": "Dashboard app updated successfully",
+        "API_ERROR": "We couldn't update the app. Please try again later"
+      },
+      "DELETE": {
+        "CONFIRM_YES": "Yes, delete it",
+        "CONFIRM_NO": "No, keep it",
+        "TITLE": "Επιβεβαίωση Διαγραφής",
+        "MESSAGE": "Are you sure to delete the app - %{appName}?",
+        "API_SUCCESS": "Dashboard app deleted successfully",
+        "API_ERROR": "We couldn't delete the app. Please try again later"
+      }
+    }
+  }
+}
