@@ -6,4 +6,8 @@ bundle install
 
 yarn install
 
+rails db:create
+
+rails db:reset
+
 foreman start -f Procfile.dev
