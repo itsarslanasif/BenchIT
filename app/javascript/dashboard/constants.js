@@ -21,6 +21,6 @@ export default {
     CONDENSED: 'condensed',
     EXPANDED: 'expanded',
   },
-  DOCS_URL: '//www.chatwoot.com/docs/product/',
+  DOCS_URL: '//www.benchIT.com/docs/product/',
 };
 export const DEFAULT_REDIRECT_URL = '/app/';
