@@ -12,7 +12,7 @@ Bentch-it is a new way to communicate with your team. It's faster, better organi
 - Node 16.10
 
 **Test Cases**
-- N/A 
+- N/A
 
 
 ## Installation
@@ -41,7 +41,7 @@ Run bundle
     bundle install
 
 ### Step 4
-Then run compile assets using yarn 
+Then run compile assets using yarn
 
     yarn install
 
@@ -51,7 +51,7 @@ Setup database credentials in `database.yml` and rum migration
     rails db:create
     rails db:migrate
 
-OR we can do this in a single command 
+OR we can do this in a single command
 
     rails db:create db:migrate
 
