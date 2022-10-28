@@ -61,7 +61,7 @@ foreman start -f Procfile.dev
 * nvm use 16.10.0
 * bundle install
 * ruby -v (must be 3.0.4)
-*  rails -v (must be 6.1.6.1)
+* rails -v (must be 6.1.6.1)
 * node -v (must be 16.10.0)
 * yarn install
 * rails db:create
