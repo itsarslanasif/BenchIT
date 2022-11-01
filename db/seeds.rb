@@ -28,6 +28,12 @@ unless Rails.env.production?
   user = User.new(name: 'John', email: 'john@acme.inc', password: 'Password1!', type: 'SuperAdmin')
   user.skip_confirmation!
   user.save!
+  user = User.new(name: 'faisal', email: 'faisal@gmail.com', password: 'Password1!', type: 'SuperAdmin')
+  user.skip_confirmation!
+  user.save!
+  user = User.new(name: 'arshad', email: 'arshad@yahoo.com', password: 'Password1!', type: 'SuperAdmin')
+  user.skip_confirmation!
+  user.save!
 
   AccountUser.create!(
     account_id: account.id,

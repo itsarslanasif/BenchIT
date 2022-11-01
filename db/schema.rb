@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_20_014549) do
+ActiveRecord::Schema.define(version: 2022_10_31_165340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -350,6 +350,39 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
     t.index ["phone_number"], name: "index_channel_whatsapp_on_phone_number", unique: true
   end
 
+  create_table "chat_channels", force: :cascade do |t|
+    t.string "name"
+    t.text "description"
+    t.boolean "is_private", default: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "creator_id"
+    t.index ["creator_id"], name: "index_chat_channels_on_creator_id"
+  end
+
+  create_table "chat_conversations", force: :cascade do |t|
+    t.string "conversationable_type"
+    t.bigint "conversationable_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "sender_id"
+    t.index ["conversationable_type", "conversationable_id"], name: "index_chat_conversations_on_conversationable"
+    t.index ["sender_id"], name: "index_chat_conversations_on_sender_id"
+  end
+
+  create_table "chat_messages", force: :cascade do |t|
+    t.text "content"
+    t.boolean "is_threaded"
+    t.bigint "parent_message_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "sender_id"
+    t.bigint "chat_conversation_id"
+    t.index ["chat_conversation_id"], name: "index_chat_messages_on_chat_conversation_id"
+    t.index ["parent_message_id"], name: "index_chat_messages_on_parent_message_id"
+    t.index ["sender_id"], name: "index_chat_messages_on_sender_id"
+  end
+
   create_table "contact_inboxes", force: :cascade do |t|
     t.bigint "contact_id"
     t.bigint "inbox_id"
@@ -498,6 +531,11 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
     t.integer "account_id", null: false
     t.integer "category_id", null: false
     t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "groups", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -803,6 +841,26 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "user_chat_channels", force: :cascade do |t|
+    t.boolean "permission", default: true
+    t.datetime "left_on"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.bigint "chat_channel_id", null: false
+    t.index ["chat_channel_id"], name: "index_user_chat_channels_on_chat_channel_id"
+    t.index ["user_id"], name: "index_user_chat_channels_on_user_id"
+  end
+
+  create_table "user_groups", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "user_id", null: false
+    t.bigint "group_id", null: false
+    t.index ["group_id"], name: "index_user_groups_on_group_id"
+    t.index ["user_id"], name: "index_user_groups_on_user_id"
+  end
+
   create_table "users", id: :serial, force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -866,6 +924,14 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "chat_channels", "users", column: "creator_id"
+  add_foreign_key "chat_conversations", "users", column: "sender_id"
+  add_foreign_key "chat_messages", "chat_conversations"
+  add_foreign_key "chat_messages", "users", column: "sender_id"
+  add_foreign_key "user_chat_channels", "chat_channels"
+  add_foreign_key "user_chat_channels", "users"
+  add_foreign_key "user_groups", "groups"
+  add_foreign_key "user_groups", "users"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").
       after(:insert).
