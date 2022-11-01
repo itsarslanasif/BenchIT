@@ -17,6 +17,12 @@
       @click="$emit('click')"
     />
     <div class="reply-box__top">
+      <mention-response
+        v-if="hasMentionCommand && showMentions"
+        v-on-clickaway="hideMentions"
+        :search-key="mentionSearchKey"
+        @click="replaceText"
+      />
       <canned-response
         v-if="showMentions && hasSlashCommand"
         v-on-clickaway="hideMentions"
@@ -132,6 +138,7 @@ import alertMixin from 'shared/mixins/alertMixin';
 
 import EmojiInput from 'shared/components/emoji/EmojiInput';
 import CannedResponse from './CannedResponse';
+import MentionResponse from './MentionResponse';
 import ResizableTextArea from 'shared/components/ResizableTextArea';
 import AttachmentPreview from 'dashboard/components/widgets/AttachmentsPreview';
 import ReplyTopPanel from 'dashboard/components/widgets/WootWriter/ReplyTopPanel';
@@ -166,6 +173,7 @@ export default {
   components: {
     EmojiInput,
     CannedResponse,
+    'mention-response': MentionResponse,
     ResizableTextArea,
     AttachmentPreview,
     ReplyTopPanel,
@@ -210,7 +218,7 @@ export default {
       isUploading: false,
       replyType: REPLY_EDITOR_MODES.REPLY,
       mentionSearchKey: '',
-      hasUserMention: false,
+      hasMentionCommand: false,
       hasSlashCommand: false,
       bccEmails: '',
       ccEmails: '',
@@ -446,16 +454,46 @@ export default {
       this.setCCEmailFromLastChat();
     },
     message(updatedMessage) {
+      // this.hasSlashCommand =
+      //   updatedMessage[0] === '/' && !this.showRichContentEditor;
       this.hasSlashCommand =
-        updatedMessage[0] === '/' && !this.showRichContentEditor;
+        updatedMessage[0] === '/' && this.showRichContentEditor;
+      this.hasMentionCommand =
+        updatedMessage[updatedMessage.length - 1] === '@' &&
+        this.showRichContentEditor;
       const hasNextWord = updatedMessage.includes(' ');
-      const isShortCodeActive = this.hasSlashCommand && !hasNextWord;
-      if (isShortCodeActive) {
-        this.mentionSearchKey = updatedMessage.substr(1, updatedMessage.length);
-        this.showMentions = true;
-      } else {
-        this.mentionSearchKey = '';
-        this.showMentions = false;
+      if (this.hasSlashCommand) {
+        const isShortCodeActive = this.hasSlashCommand && !hasNextWord;
+        if (isShortCodeActive) {
+          this.mentionSearchKey = updatedMessage.substr(
+            1,
+            updatedMessage.length
+          );
+          this.showMentions = true;
+        } else {
+          this.mentionSearchKey = '';
+          this.showMentions = false;
+        }
+      }
+      if (this.hasMentionCommand) {
+        const isShortCodeActive = this.hasMentionCommand;
+        if (isShortCodeActive) {
+          this.mentionSearchKey = updatedMessage.substr(
+            1,
+            updatedMessage.length
+          );
+          this.showMentions = true;
+        } else {
+          this.mentionSearchKey = '';
+          this.showMentions = false;
+        }
+        if (
+          updatedMessage[updatedMessage.length - 1] ===
+          updatedMessage[updatedMessage.length - 2]
+        ) {
+          this.mentionSearchKey = '';
+          this.showMentions = false;
+        }
       }
     },
   },
@@ -590,7 +628,7 @@ export default {
     },
     replaceText(message) {
       setTimeout(() => {
-        this.message = message;
+        this.message += message;
       }, 100);
     },
     setReplyMode(mode = REPLY_EDITOR_MODES.REPLY) {
