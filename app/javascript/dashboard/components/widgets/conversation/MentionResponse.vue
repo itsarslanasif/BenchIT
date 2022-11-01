@@ -36,9 +36,7 @@ export default {
   },
   methods: {
     fetchContacts() {
-      this.$store.dispatch('contacts/getContacts', {
-        searchKey: this.searchKey,
-      });
+      this.$store.dispatch('contacts/getContacts');
     },
     handleMentionClick(item = {}) {
       this.$emit('click', item.label);

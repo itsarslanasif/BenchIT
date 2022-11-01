@@ -21,13 +21,13 @@
         v-if="hasMentionCommand && showMentions"
         v-on-clickaway="hideMentions"
         :search-key="mentionSearchKey"
-        @click="replaceText"
+        @click="replaceTextAfterMentions"
       />
       <canned-response
         v-if="showMentions && hasSlashCommand"
         v-on-clickaway="hideMentions"
-        :search-key="mentionSearchKey"
-        @click="replaceText"
+        :search-key="cannedSearchKey"
+        @click="replaceTextAfterCannedResponse"
       />
       <emoji-input
         v-if="showEmojiPicker"
@@ -218,6 +218,7 @@ export default {
       isUploading: false,
       replyType: REPLY_EDITOR_MODES.REPLY,
       mentionSearchKey: '',
+      cannedSearchKey: '',
       hasMentionCommand: false,
       hasSlashCommand: false,
       bccEmails: '',
@@ -454,8 +455,6 @@ export default {
       this.setCCEmailFromLastChat();
     },
     message(updatedMessage) {
-      // this.hasSlashCommand =
-      //   updatedMessage[0] === '/' && !this.showRichContentEditor;
       this.hasSlashCommand =
         updatedMessage[0] === '/' && this.showRichContentEditor;
       this.hasMentionCommand =
@@ -465,13 +464,13 @@ export default {
       if (this.hasSlashCommand) {
         const isShortCodeActive = this.hasSlashCommand && !hasNextWord;
         if (isShortCodeActive) {
-          this.mentionSearchKey = updatedMessage.substr(
+          this.cannedSearchKey = updatedMessage.substr(
             1,
             updatedMessage.length
           );
           this.showMentions = true;
         } else {
-          this.mentionSearchKey = '';
+          this.cannedSearchKey = '';
           this.showMentions = false;
         }
       }
@@ -482,6 +481,8 @@ export default {
             1,
             updatedMessage.length
           );
+          // eslint-disable-next-line no-console
+          // console.log(updatedMessage.substr(1, updatedMessage.length));
           this.showMentions = true;
         } else {
           this.mentionSearchKey = '';
@@ -626,7 +627,12 @@ export default {
       });
       this.hideWhatsappTemplatesModal();
     },
-    replaceText(message) {
+    replaceTextAfterCannedResponse(message) {
+      setTimeout(() => {
+        this.message = message;
+      }, 100);
+    },
+    replaceTextAfterMentions(message) {
       setTimeout(() => {
         this.message += message;
       }, 100);
