@@ -6,9 +6,15 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
+import slack from './SlackView/slack';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
-const routes = [...login.routes, ...dashboard.routes, ...authRoute.routes];
+const routes = [
+  ...login.routes,
+  ...dashboard.routes,
+  ...authRoute.routes,
+  ...slack.routes,
+];
 
 window.roleWiseRoutes = {
   agent: [],
@@ -35,7 +41,12 @@ generateRoleWiseRoute(routes);
 
 export const router = new VueRouter({ mode: 'history', routes });
 
-const unProtectedRoutes = ['login', 'auth_signup', 'auth_reset_password'];
+const unProtectedRoutes = [
+  'login',
+  'auth_signup',
+  'auth_reset_password',
+  'screen',
+]; // Add screen route
 
 const authIgnoreRoutes = [
   'auth_confirmation',
