@@ -101,19 +101,14 @@ class User < ApplicationRecord
            dependent: :nullify,
            source: :portal
   has_many :macros, foreign_key: 'created_by_id', dependent: :destroy_async
-
-
   has_many :user_chat_channels
   has_many :chat_channels, through: :user_chat_channels
-  has_many :chat_channels, foreign_key: :creator_id
+  has_many :chat_channels, foreign_key: :creator_id, inverse_of: :user
   has_many :user_groups
   has_many :groups, through: :user_groups
-  has_many :chat_conversations, foreign_key: :sender_id
-  has_many :chat_messages
-  has_one_attached :image
+  has_many :chat_conversations, foreign_key: :sender_id, inverse_of: :user
+  has_many :chat_messages, dependent: :destroy
   has_many :chat_conversations, as: :conversationable
-
-
 
   before_validation :set_password_and_uid, on: :create
 

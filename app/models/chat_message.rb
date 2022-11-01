@@ -3,7 +3,7 @@
 # Table name: chat_messages
 #
 #  id                   :bigint           not null, primary key
-#  content              :text
+#  content              :text             not null
 #  is_threaded          :boolean
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
@@ -23,13 +23,11 @@
 #  fk_rails_...  (sender_id => users.id)
 #
 class ChatMessage < ApplicationRecord
-
   belongs_to :chat_conversation
   belongs_to :user
-  has_many_attached :images
+  has_many_attached :message_attachments, optional: true, dependent: :purge_later
   has_many :replies, class_name: 'ChatMessage', foreign_key: :parent_message_id
   belongs_to :parent_message, class_name: 'ChatMessage', foreign_key: :parent_message_id, optional: true
-
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
   validates :is_threaded, presence: true

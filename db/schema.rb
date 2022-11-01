@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_31_165340) do
+ActiveRecord::Schema.define(version: 2022_11_01_150757) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -351,13 +351,14 @@ ActiveRecord::Schema.define(version: 2022_10_31_165340) do
   end
 
   create_table "chat_channels", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.text "description"
     t.boolean "is_private", default: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "creator_id"
     t.index ["creator_id"], name: "index_chat_channels_on_creator_id"
+    t.index ["name"], name: "index_chat_channels_on_name", unique: true
   end
 
   create_table "chat_conversations", force: :cascade do |t|
@@ -371,7 +372,7 @@ ActiveRecord::Schema.define(version: 2022_10_31_165340) do
   end
 
   create_table "chat_messages", force: :cascade do |t|
-    t.text "content"
+    t.text "content", null: false
     t.boolean "is_threaded"
     t.bigint "parent_message_id"
     t.datetime "created_at", precision: 6, null: false
