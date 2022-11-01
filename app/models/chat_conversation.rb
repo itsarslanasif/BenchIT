@@ -20,8 +20,6 @@
 #
 class ChatConversation < ApplicationRecord
   belongs_to :conversationable, polymorphic: true
-  belongs_to :user, foreign_key: :sender_id, optional: true
-
-
-  has_many :chat_messages
+  belongs_to :user, foreign_key: :sender_id, optional: true, inverse_of: :chat_conversations
+  has_many :chat_messages, dependent: :destroy
 end
