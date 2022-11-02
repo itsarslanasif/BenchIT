@@ -6,14 +6,14 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
-import slack from './SlackView/slack';
+import screen from './Screen/screen';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
 const routes = [
   ...login.routes,
   ...dashboard.routes,
   ...authRoute.routes,
-  ...slack.routes,
+  ...screen.routes,
 ];
 
 window.roleWiseRoutes = {
