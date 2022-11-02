@@ -107,7 +107,7 @@ class User < ApplicationRecord
   has_many :user_groups
   has_many :groups, through: :user_groups
   has_many :chat_conversations, foreign_key: :sender_id, inverse_of: :user
-  has_many :chat_messages, dependent: :destroy
+  has_many :chat_messages, dependent: :destroy, foreign_key: :sender_id, inverse_of: :user
   has_many :chat_conversations, as: :conversationable
 
   before_validation :set_password_and_uid, on: :create

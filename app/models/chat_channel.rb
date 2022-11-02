@@ -27,5 +27,5 @@ class ChatChannel < ApplicationRecord
   has_one :chat_conversation, as: :conversationable, dependent: :destroy
 
   validates :name, uniqueness: true, presence: true, length: { minimum: 1, maximum: 80 }
-  validates :description, length: { minimum: 1, maximum: 10 }
+  validates :description, length: { maximum: 500}
 end
