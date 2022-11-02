@@ -24,12 +24,11 @@
 #
 class ChatMessage < ApplicationRecord
   belongs_to :chat_conversation
-  belongs_to :user
-  has_many_attached :message_attachments, optional: true, dependent: :purge_later
+  belongs_to :user, foreign_key: :sender_id, inverse_of: :chat_messages
+  has_many_attached :message_attachments, dependent: :purge_later
   has_many :replies, class_name: 'ChatMessage', foreign_key: :parent_message_id
   belongs_to :parent_message, class_name: 'ChatMessage', foreign_key: :parent_message_id, optional: true
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
-  validates :is_threaded, presence: true
 
 end
