@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_20_014549) do
+ActiveRecord::Schema.define(version: 2022_10_28_184600) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -862,6 +862,17 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
     t.boolean "open_all_day", default: false
     t.index ["account_id"], name: "index_working_hours_on_account_id"
     t.index ["inbox_id"], name: "index_working_hours_on_inbox_id"
+  end
+
+  create_table "workspaces", force: :cascade do |t|
+    t.string "company_name", null: false
+    t.integer "workspace_type", default: 0, null: false
+    t.string "slack_URL", null: false
+    t.integer "capacity", null: false
+    t.integer "organization_type", default: 0, null: false
+    t.integer "admin_role", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
