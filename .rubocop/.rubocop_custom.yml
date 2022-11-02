@@ -1,0 +1,3 @@
+CustomCops/NoTodos:
+  Exclude:
+    - '.rubocop/custom_cops/no_todos.rb'

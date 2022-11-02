@@ -1,0 +1,59 @@
+require:
+  - rubocop-rails
+
+Rails/Delegate:
+  EnforceForPrefixed: false
+
+Rails/EnumHash:
+  Enabled: false
+
+Rails/FilePath:
+  Enabled: false
+
+Rails/HasManyOrHasOneDependent:
+  Enabled: false
+
+Rails/HelperInstanceVariable:
+  Enabled: false
+
+Rails/InverseOf:
+  Enabled: false
+
+Rails/LexicallyScopedActionFilter:
+  Enabled: false
+
+Rails/NegateInclude:
+  Enabled: false
+
+Rails/ReversibleMigration:
+  Enabled: false
+
+Rails/ScopeArgs:
+  Enabled: false
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+Rails/UnknownEnv:
+  Environments:
+    - test
+    - production
+    - development
+
+Rails/TimeZone:
+  Enabled: true
+  EnforcedStyle: flexible
+
+Rails/UniqBeforePluck:
+  Enabled: true
+  EnforcedStyle: conservative
+  AutoCorrect: false
+
+
+Rails/Output:
+  Enabled: true
+  Exclude: []
+
+Rails/FindEach:
+  Enabled: true
+  Exclude: []
