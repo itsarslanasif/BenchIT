@@ -6,7 +6,7 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
-import screen from './Screen/screen';
+import screen from './Screen/screen.routes';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
 const routes = [
@@ -46,7 +46,7 @@ const unProtectedRoutes = [
   'auth_signup',
   'auth_reset_password',
   'screen',
-]; // Add screen route
+];
 
 const authIgnoreRoutes = [
   'auth_confirmation',
