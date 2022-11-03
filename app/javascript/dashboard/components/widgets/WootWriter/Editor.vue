@@ -338,4 +338,8 @@ export default {
   font-weight: var(--font-weight-normal);
   padding: var(--space-smaller) 0 0 0;
 }
+
+// .prosemirror-mention-node {
+//   background-color: rgba(34, 146, 250, 0.37);
+// }
 </style>

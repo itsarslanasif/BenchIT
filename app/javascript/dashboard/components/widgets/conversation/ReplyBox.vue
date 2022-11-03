@@ -17,6 +17,12 @@
       @click="$emit('click')"
     />
     <div class="reply-box__top">
+      <channel-response
+        v-if="hasChannelCommand && showMentions"
+        v-on-clickaway="hideMentions"
+        :search-key="channelSearchKey"
+        @click="replaceTextAfterMentions"
+      />
       <mention-response
         v-if="hasMentionCommand && showMentions"
         v-on-clickaway="hideMentions"
@@ -139,6 +145,7 @@ import alertMixin from 'shared/mixins/alertMixin';
 import EmojiInput from 'shared/components/emoji/EmojiInput';
 import CannedResponse from './CannedResponse';
 import MentionResponse from './MentionResponse';
+import ChannelResponse from './ChannelResponse';
 import ResizableTextArea from 'shared/components/ResizableTextArea';
 import AttachmentPreview from 'dashboard/components/widgets/AttachmentsPreview';
 import ReplyTopPanel from 'dashboard/components/widgets/WootWriter/ReplyTopPanel';
@@ -174,6 +181,7 @@ export default {
     EmojiInput,
     CannedResponse,
     'mention-response': MentionResponse,
+    ChannelResponse,
     ResizableTextArea,
     AttachmentPreview,
     ReplyTopPanel,
@@ -219,8 +227,10 @@ export default {
       replyType: REPLY_EDITOR_MODES.REPLY,
       mentionSearchKey: '',
       cannedSearchKey: '',
+      channelSearchKey: '',
       hasMentionCommand: false,
       hasSlashCommand: false,
+      hasChannelCommand: false,
       bccEmails: '',
       ccEmails: '',
       showWhatsAppTemplatesModal: false,
@@ -460,6 +470,9 @@ export default {
       this.hasMentionCommand =
         updatedMessage[updatedMessage.length - 1] === '@' &&
         this.showRichContentEditor;
+      this.hasChannelCommand =
+        updatedMessage[updatedMessage.length - 1] === '#' &&
+        this.showRichContentEditor;
       const hasNextWord = updatedMessage.includes(' ');
       if (this.hasSlashCommand) {
         const isShortCodeActive = this.hasSlashCommand && !hasNextWord;
@@ -481,8 +494,6 @@ export default {
             1,
             updatedMessage.length
           );
-          // eslint-disable-next-line no-console
-          // console.log(updatedMessage.substr(1, updatedMessage.length));
           this.showMentions = true;
         } else {
           this.mentionSearchKey = '';
@@ -493,6 +504,26 @@ export default {
           updatedMessage[updatedMessage.length - 2]
         ) {
           this.mentionSearchKey = '';
+          this.showMentions = false;
+        }
+      }
+      if (this.hasChannelCommand) {
+        const isShortCodeActive = this.hasChannelCommand;
+        if (isShortCodeActive) {
+          this.channelSearchKey = updatedMessage.substr(
+            1,
+            updatedMessage.length
+          );
+          this.showMentions = true;
+        } else {
+          this.channelSearchKey = '';
+          this.showMentions = false;
+        }
+        if (
+          updatedMessage[updatedMessage.length - 1] ===
+          updatedMessage[updatedMessage.length - 2]
+        ) {
+          this.channelSearchKey = '';
           this.showMentions = false;
         }
       }
