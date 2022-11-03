@@ -1,6 +1,6 @@
 <template>
-  <splitpanes class="default-theme" vertical style="height:100rem">
-    <pane max-size="33" style="background-color: lightblue;" />
+  <splitpanes class="default-theme">
+    <pane max-size="33" min-size="10.45" style="background-color:#3f0e40;" />
     <pane max-size="100" min-size="67" />
   </splitpanes>
 </template>
@@ -13,3 +13,9 @@ export default {
   components: { Splitpanes, Pane },
 };
 </script>
+
+<style>
+splitpanes {
+  height: 100vh;
+}
+</style>
