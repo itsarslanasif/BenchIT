@@ -21,7 +21,6 @@
 #
 class ChatChannel < ApplicationRecord
   belongs_to :user, foreign_key: :creator_id, inverse_of: :chat_channels
-  belongs_to :workspace
   has_many :user_chat_channels, dependent: :destroy
   has_many :users, through: :user_chat_channels
   has_one :chat_conversation, as: :conversationable, dependent: :destroy
