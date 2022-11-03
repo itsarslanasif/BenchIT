@@ -6,9 +6,37 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
+import NameForm from './workspace/components';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
-const routes = [...login.routes, ...dashboard.routes, ...authRoute.routes];
+const routes = [...login.routes, ...dashboard.routes, ...authRoute.routes,
+  {
+    path: '/',
+    name: 'SignupForm',
+    component: NameForm
+  },
+  {
+    path: '/password_form',
+    name: 'PasswordForm',
+    component: PasswordForm
+  },
+  {
+    path: '/workspace_info',
+    name: 'WorkspaceInfo',
+    component: WorkspaceInfo
+  },
+  {
+    path: '/company_info',
+    name: 'CompanyInfo',
+    component: CompanyInfo
+  },
+  {
+    path: '/workspace_url',
+    name: 'WorkspaceURL',
+    component: WorkspaceURL
+  }
+
+];
 
 window.roleWiseRoutes = {
   agent: [],
