@@ -1,11 +1,5 @@
 class WorkspacesController < ApplicationController
 
-  def index
-    @workspaces = Workspace.all
-
-    render json: @workspaces
-  end
-
   def create
     @workspace = Workspace.new(workspace_params)
 
