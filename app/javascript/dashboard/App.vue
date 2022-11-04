@@ -1,7 +1,15 @@
 <template>
   <div v-if="!authUIFlags.isFetching" id="app" class="app-wrapper app-root">
     <update-banner :latest-chatwoot-version="latestChatwootVersion" />
-    <WorkspaceCreation />
+    <transition name="fade" mode="out-in">
+      <router-view />
+    </transition>
+    <add-account-modal
+      :show="showAddAccountModal"
+      :has-accounts="hasAccounts"
+    />
+    <woot-snackbar-box />
+    <network-notification />
   </div>
   <loading-state v-else />
 </template>
@@ -19,8 +27,6 @@ import {
   verifyServiceWorkerExistence,
 } from './helper/pushHelper';
 
-import WorkspaceCreation from './modules/workspace/components/WorkspaceCreation.vue';
-
 export default {
   name: 'App',
 
@@ -30,7 +36,6 @@ export default {
     NetworkNotification,
     UpdateBanner,
     WootSnackbarBox,
-    WorkspaceCreation,
   },
 
   data() {
