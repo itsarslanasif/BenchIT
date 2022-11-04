@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_20_014549) do
+ActiveRecord::Schema.define(version: 2022_11_04_134453) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -502,6 +502,12 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "identities", force: :cascade do |t|
+    t.string "email", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "inbox_members", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "inbox_id", null: false
@@ -720,6 +726,17 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
     t.index ["user_id"], name: "index_portals_members_on_user_id"
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.string "username", null: false
+    t.text "description"
+    t.bigint "workspace_id", null: false
+    t.bigint "identity_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["identity_id"], name: "index_profiles_on_identity_id"
+    t.index ["workspace_id", "identity_id"], name: "index_profiles_on_workspace_id_and_identity_id", unique: true
+  end
+
   create_table "related_categories", force: :cascade do |t|
     t.bigint "category_id"
     t.bigint "related_category_id"
@@ -866,6 +883,7 @@ ActiveRecord::Schema.define(version: 2022_09_20_014549) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "profiles", "identities"
   create_trigger("accounts_after_insert_row_tr", :generated => true, :compatibility => 1).
       on("accounts").
       after(:insert).

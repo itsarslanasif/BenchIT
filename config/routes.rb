@@ -178,12 +178,12 @@ Rails.application.routes.draw do
         resources :webhooks, only: [:create]
       end
 
-      resource :profile, only: [:show, :update] do
-        delete :avatar, on: :collection
-        member do
-          post :availability
-        end
-      end
+      # resource :profile, only: [:show, :update] do
+      #   delete :avatar, on: :collection
+      #   member do
+      #     post :availability
+      #   end
+      # end
 
       resource :notification_subscriptions, only: [:create, :destroy]
 
@@ -369,6 +369,12 @@ Rails.application.routes.draw do
   get '/swagger/*path', to: 'swagger#respond'
   get '/swagger', to: 'swagger#respond'
 
+  # ---------------------------------------------------------------------
+  # Routes for profiles
+  # identity will be later added through devise using invite functionlaity
+  resources :identities do
+    resources :profiles 
+  end
   # ----------------------------------------------------------------------
   # Routes for testing
   resources :widget_tests, only: [:index] unless Rails.env.production?
