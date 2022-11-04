@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: chat_conversations
+# Table name: bench_conversations
 #
 #  id                    :bigint           not null, primary key
 #  conversationable_type :string
@@ -11,15 +11,15 @@
 #
 # Indexes
 #
+#  index_bench_conversations_on_sender_id        (sender_id)
 #  index_chat_conversations_on_conversationable  (conversationable_type,conversationable_id)
-#  index_chat_conversations_on_sender_id         (sender_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (sender_id => users.id)
 #
-class ChatConversation < ApplicationRecord
+class BenchConversation < ApplicationRecord
   belongs_to :conversationable, polymorphic: true
-  belongs_to :user, foreign_key: :sender_id, optional: true, inverse_of: :chat_conversations
-  has_many :chat_messages, dependent: :destroy
+  belongs_to :user, foreign_key: :sender_id, optional: true, inverse_of: :bench_conversations
+  has_many :conversation_messages, dependent: :destroy
 end

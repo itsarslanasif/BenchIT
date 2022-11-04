@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :chat_message do
+  factory :conversation_message do
     content { "MyText" }
     is_threaded { false }
     conversation { nil }
