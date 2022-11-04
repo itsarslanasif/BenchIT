@@ -10405,6 +10405,11 @@
   "resolved" "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz"
   "version" "4.1.2"
 
+"lodash.merge@^4.6.2":
+  "integrity" "sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ=="
+  "resolved" "https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz"
+  "version" "4.6.2"
+
 "lodash.once@^4.1.1":
   "integrity" "sha1-DdOXEhPHxW34gJd9UEyI+0cal6w="
   "resolved" "https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz"
@@ -16189,6 +16194,13 @@
   "integrity" "sha512-807gn82hTnjCYGrnF3eNmIw/dk7/GE4B5h69BlyCK9KHASwSloD1Sjcn06zg9fVG4fYH2DrsNBZkpLtb25WtaQ=="
   "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.5.2.tgz"
   "version" "3.5.2"
+
+"vue-simple-accordion@^0.1.0":
+  "integrity" "sha512-y5oovH55smiNkEZ4lWLpE7H9t0TTYofN/zo4/NTap6Va/Ob+WlU7eRA2nzbFIaJUqk4cXHPJbLUblxU1jAL98g=="
+  "resolved" "https://registry.npmjs.org/vue-simple-accordion/-/vue-simple-accordion-0.1.0.tgz"
+  "version" "0.1.0"
+  dependencies:
+    "lodash.merge" "^4.6.2"
 
 "vue-style-loader@^4.1.0":
   "integrity" "sha512-sFuh0xfbtpRlKfm39ss/ikqs9AbKCoXZBpHeVZ8Tx650o0k0q/YCM7FRvigtxpACezfq6af+a7JeqVTWvncqDg=="
