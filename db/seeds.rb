@@ -31,24 +31,23 @@ unless Rails.env.production?
   user = User.new(name: 'John', email: 'john@acme.inc', password: 'Password1!', type: 'SuperAdmin')
   user.skip_confirmation!
   user.save!
-  ChatChannel.create(name: 'dev', description: 'dev', creator_id: 1)
-  ChatConversation.create(conversationable_type: 'ChatChannel', conversationable_id: 1)
-  UserChatChannel.create(permission: true,user_id: 1 , chat_channel_id: 1)
-  UserChatChannel.create(permission: true,user_id: 2 , chat_channel_id: 1)
-  m1=ChatMessage.new(content: 'Hi Dev Channel from faisal', chat_conversation_id: 1, sender_id: 1)
-  m1.save!
-  ChatMessage.create(content: 'Hi Dev Channel from arshad', chat_conversation_id: 1, sender_id: 2)
+  BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1)
+  BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
+  ChannelParticipant.create(permission: true,user_id: 1 , bench_channel_id: 1)
+  ChannelParticipant.create(permission: true,user_id: 2 , bench_channel_id: 1)
+  ConversationMessage.create(content: 'Hi Dev Channel from faisal', is_threaded: false, bench_conversation_id: 1, sender_id: 1)
+  ConversationMessage.create(content: 'Hi Dev Channel from arshad', is_threaded: false, bench_conversation_id: 1, sender_id: 2)
   Group.create(id: 1)
-  ChatConversation.create(conversationable_type: 'Group', conversationable_id: 1)
+  BenchConversation.create(conversationable_type: 'Group', conversationable_id: 1)
   UserGroup.create(user_id: 1, group_id: 1)
   UserGroup.create(user_id: 2, group_id: 1)
   UserGroup.create(user_id: 3, group_id: 1)
-  ChatMessage.create(content: 'Hi Group from faisal', is_threaded: false, chat_conversation_id: 2, sender_id: 1)
-  ChatMessage.create(content: 'Hi Group from arshad', is_threaded: false, chat_conversation_id: 2, sender_id: 2)
-  ChatMessage.create(content: 'Hi Group from muaz', is_threaded: false, chat_conversation_id: 2, sender_id: 3)
-  ChatConversation.create(conversationable_type: 'User', conversationable_id: 1, sender_id: 4)
-  ChatMessage.create(content: 'Hi User from john', is_threaded: false, chat_conversation_id: 3, sender_id: 4)
-  ChatMessage.create(content: 'Hi User from faisal', is_threaded: false, chat_conversation_id: 3, sender_id: 1)
+  ConversationMessage.create(content: 'Hi Group from faisal', is_threaded: false, bench_conversation_id: 2, sender_id: 1)
+  ConversationMessage.create(content: 'Hi Group from arshad', is_threaded: false, bench_conversation_id: 2, sender_id: 2)
+  ConversationMessage.create(content: 'Hi Group from muaz', is_threaded: false, bench_conversation_id: 2, sender_id: 3)
+  BenchConversation.create(conversationable_type: 'User', conversationable_id: 1, sender_id: 4)
+  ConversationMessage.create(content: 'Hi User from john', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
+  ConversationMessage.create(content: 'Hi User from faisal', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
   AccountUser.create!(
     account_id: account.id,
     user_id: user.id,
