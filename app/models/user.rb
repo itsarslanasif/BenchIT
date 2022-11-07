@@ -102,7 +102,7 @@ class User < ApplicationRecord
            source: :portal
   has_many :macros, foreign_key: 'created_by_id', dependent: :destroy_async
   has_many :user_bench_channels
-  has_many :channel_participants
+  has_many :channel_participants, dependent: :destroy
   has_many :bench_channels, through: :channel_participants
   has_many :bench_channels, foreign_key: :creator_id, inverse_of: :user
   has_many :user_groups

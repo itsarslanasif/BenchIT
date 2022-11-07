@@ -169,6 +169,7 @@ Rails.application.routes.draw do
             resources :categories
             resources :articles
           end
+
           get :get_channels_list, to: "mention#get_channels_list"
           get :get_users_list, to: "mention#get_users_list"
         end
