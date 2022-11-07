@@ -6,10 +6,15 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
-import workspace from './Workspace/workspace.routes';
+import workspace from '../modules/Workspace/workspace.routes';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
-const routes = [...login.routes, ...dashboard.routes, ...authRoute.routes, ...workspace.routes];
+const routes = [
+  ...login.routes,
+  ...dashboard.routes,
+  ...authRoute.routes,
+  ...workspace.routes,
+];
 
 window.roleWiseRoutes = {
   agent: [],
@@ -47,6 +52,8 @@ const authIgnoreRoutes = [
   'workspace_info',
   'company_info',
   'workspace_url',
+  'workspace_creation',
+  'new_workspace',
 ];
 
 const routeValidators = [
