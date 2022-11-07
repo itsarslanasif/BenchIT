@@ -290,6 +290,20 @@ export default {
     padding: 0;
     word-break: break-word;
   }
+
+  .ProseMirror-menubar {
+    background-color: rgba(241, 238, 238, 0.915);
+    border-color: rgb(212, 212, 212);
+    border-bottom: 1px solid;
+    margin-top: -3px;
+    margin-left: -1rem;
+    margin-right: -0.8rem;
+  }
+
+  .ProseMirror-menubar .ProseMirror-menuitem {
+    font-size: small;
+    margin-right: 15px;
+  }
 }
 
 .editor-root {
