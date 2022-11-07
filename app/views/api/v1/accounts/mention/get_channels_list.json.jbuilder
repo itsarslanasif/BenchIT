@@ -1,9 +1,6 @@
-json.array! @private_channels do |private_channel|
-  json.id = private_channel.id
-  json.name = private_channel.name
+json.public_channels do
+  json.partial! 'api/v1/accounts/mention/partials/channel.json.jbuilder', channels: @public_channels
 end
-
-json.array! @public_channels do |public_channel|
-  json.id = public_channel.id
-  json.name = public_channel.name
+json.private_channels do
+  json.partial! 'api/v1/accounts/mention/partials/channel.json.jbuilder', channels: @private_channels
 end
