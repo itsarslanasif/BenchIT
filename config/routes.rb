@@ -177,14 +177,7 @@ Rails.application.routes.draw do
       namespace :integrations do
         resources :webhooks, only: [:create]
       end
-
-      # resource :profile, only: [:show, :update] do
-      #   delete :avatar, on: :collection
-      #   member do
-      #     post :availability
-      #   end
-      # end
-
+      
       resource :notification_subscriptions, only: [:create, :destroy]
 
       namespace :widget do
@@ -373,7 +366,7 @@ Rails.application.routes.draw do
   # Routes for profiles
   # identity will be later added through devise using invite functionlaity
   resources :identities do
-    resources :profiles 
+    resources :profiles
   end
   # ----------------------------------------------------------------------
   # Routes for testing

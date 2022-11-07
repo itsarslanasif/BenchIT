@@ -5,12 +5,15 @@ class ApplicationController < ActionController::Base
   include SwitchLocale
 
   skip_before_action :verify_authenticity_token
-
   before_action :set_current_user, unless: :devise_controller?
   around_action :switch_locale
-  around_action :handle_with_exception, unless: :devise_controller?
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   private
+
+  def record_not_found
+    render json: { error: 'Record not found' }, status: :not_found
+  end
 
   def set_current_user
     @user ||= current_user

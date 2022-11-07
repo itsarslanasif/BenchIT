@@ -21,7 +21,7 @@
 #
 class Profile < ApplicationRecord
   belongs_to :identity
-  has_one_attached :profile_image
+  has_one_attached :profile_image, dependent: :destroy
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
 end
