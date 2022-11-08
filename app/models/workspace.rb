@@ -4,10 +4,10 @@
 #
 #  id                :bigint           not null, primary key
 #  admin_role        :integer          not null
+#  benchIT_URL       :string           not null
 #  capacity          :integer          not null
 #  company_name      :string           not null
 #  organization_type :integer          default("consumer_goods"), not null
-#  slack_URL         :string           not null
 #  workspace_type    :integer          default("work"), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
@@ -42,7 +42,7 @@ class Workspace < ApplicationRecord
   }
 
   validates :company_name, presence: true
-  validates :slack_URL , presence: true
+  validates :benchIT_URL , presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 
 

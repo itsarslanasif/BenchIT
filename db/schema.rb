@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_10_28_184600) do
+ActiveRecord::Schema.define(version: 2022_11_08_064704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
@@ -867,7 +867,7 @@ ActiveRecord::Schema.define(version: 2022_10_28_184600) do
   create_table "workspaces", force: :cascade do |t|
     t.string "company_name", null: false
     t.integer "workspace_type", default: 0, null: false
-    t.string "slack_URL", null: false
+    t.string "benchIT_URL", null: false
     t.integer "capacity", null: false
     t.integer "organization_type", default: 0, null: false
     t.integer "admin_role", null: false

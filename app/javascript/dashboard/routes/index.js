@@ -6,7 +6,7 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
-import workspace from '../modules/Workspace/workspace.routes';
+import workspace from '../modules/workspace/workspace.routes';
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
 const routes = [
@@ -47,12 +47,6 @@ const authIgnoreRoutes = [
   'auth_confirmation',
   'pushBack',
   'auth_password_edit',
-  'name_form',
-  'password_form',
-  'workspace_info',
-  'company_info',
-  'workspace_url',
-  'workspace_creation',
   'new_workspace',
 ];
 
