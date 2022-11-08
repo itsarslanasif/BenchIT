@@ -15,7 +15,6 @@
 class Workspace < ApplicationRecord
   has_one_attached :workspace_avatar
 
-
   enum workspace_type: {
     work: 0,
     school: 1,
@@ -30,7 +29,6 @@ class Workspace < ApplicationRecord
     healthCare_pharmacutical: 3,
     media: 4,
     non_profit: 5
-
   }
 
   enum admin_role: {
@@ -44,6 +42,4 @@ class Workspace < ApplicationRecord
   validates :company_name, presence: true
   validates :benchIT_URL , presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
-
-
 end

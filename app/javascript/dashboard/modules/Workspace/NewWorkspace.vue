@@ -28,7 +28,6 @@
         class="form-input-select"
       />
       <div v-if="capacityError" class="error">{{ capacityError }}</div>
-
       <label class="form-label">What is your role there?</label>
       <select v-model="workspace.admin_role" class="form-input-select">
         <option value="administrative">Administrative/Facilities</option>
@@ -167,6 +166,7 @@ export default {
   letter-spacing: 1px;
   margin: 25px 0 15px;
 }
+
 .form-input-select {
   border: 1px solid #ddd;
   box-sizing: border-box;
@@ -176,6 +176,7 @@ export default {
   padding: 10px 6px;
   width: 100%;
 }
+
 .form-btn {
   background: rgb(36, 35, 35);
   border-radius: 5px;
@@ -186,9 +187,11 @@ export default {
   margin-top: 20px;
   padding: 10px 20px;
 }
+
 .next-btn {
   text-align: center;
 }
+
 .image-preview-wrapper {
   background-position: center center;
   background-repeat: no-repeat;
@@ -200,6 +203,7 @@ export default {
   margin: 30px auto 30px;
   width: 100%;
 }
+
 .error {
   color: rgb(151, 23, 23);
   font-size: 1.5em;
