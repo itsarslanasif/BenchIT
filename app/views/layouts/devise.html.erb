@@ -1,0 +1,13 @@
+<html data-theme="dark">
+  <head>
+    <title>BenchIT</title>
+    <%= csrf_meta_tags %>
+    <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.min.css">
+    <%= stylesheet_link_tag 'front/application' %>
+
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>

@@ -1,0 +1,64 @@
+en:
+  time:
+    formats:
+      default: "%B %d %Y %H:%M"
+  bands:
+    rolling_stones: "The Rolling Stones"
+    beatles: "The Beatles"
+    acdc: "AC/DC"
+  vue:
+    front:
+      title: "Front end"
+      nav:
+        homepage: "Home"
+        pages: "Pages"
+      home:
+        title: "Musicians"
+        breadcrumb: "All musicians"
+      pages:
+        title: "Pages"
+        server_404: "This link triggers a Server side routing 404"
+        client_404: "This link triggers a Client side routing 404"
+        server_401: "This link performs an API call that responds a 401"
+        server_500: "This link performs an API call that responds a 500"
+      musicians:
+        title: "Details about this musician"
+        id: "Id"
+        name: "Name"
+        band: "Band"
+      errors:
+        title: "Error pages"
+    admin:
+      title: "Admin"
+      save: "Save"
+      cancel: "Cancel"
+      filter: "Filter"
+      reset_filters: "Reset filters"
+      delete: "Delete"
+      no_result: "No result :-/"
+      any: "Any"
+      nav:
+        dashboard: "Dashboard"
+        musicians: "Musicians"
+        websockets: "Websockets"
+        logout: "Logout"
+      dashboard:
+        title: "Dashboard"
+        musicians: "No musician | 1 musician | musicians"
+      musicians:
+        create: "+ Add a new musician"
+        new: "New musician"
+        form:
+          id: "Id"
+          name: "Name"
+          band: "Band"
+      confirm: "Are you sure?"
+  activerecord:
+    errors:
+      models:
+        musician:
+          attributes:
+            name:
+              blank: "Mandatory field"
+            band:
+              blank: "Please select a band"
