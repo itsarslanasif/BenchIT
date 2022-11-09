@@ -177,7 +177,7 @@ Rails.application.routes.draw do
       namespace :integrations do
         resources :webhooks, only: [:create]
       end
-      
+
       resource :notification_subscriptions, only: [:create, :destroy]
 
       namespace :widget do
@@ -365,9 +365,16 @@ Rails.application.routes.draw do
   # ---------------------------------------------------------------------
   # Routes for profiles
   # identity will be later added through devise using invite functionlaity
-  resources :identities do
-    resources :profiles
+  namespace :workspace, defaults: { format: 'json' } do
+    namespace :api do
+      namespace :v1 do
+        resources :identities, only: %i[index] do
+          resources :profiles, except: %i[edit new]
+        end
+      end
+    end
   end
+
   # ----------------------------------------------------------------------
   # Routes for testing
   resources :widget_tests, only: [:index] unless Rails.env.production?
