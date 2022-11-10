@@ -247,7 +247,6 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (1.4.2)
     strscan (3.0.1)
     thor (1.2.1)
     tilt (2.0.10)
@@ -312,7 +311,6 @@ DEPENDENCIES
   selenium-webdriver
   spring
   sprockets-rails
-  sqlite3 (~> 1.4)
   tzinfo-data
   vite_rails
   warden
@@ -320,4 +318,4 @@ DEPENDENCIES
   webdrivers
 
 BUNDLED WITH
-   2.3.16
+   2.3.17
