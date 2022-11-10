@@ -7,11 +7,16 @@
     <hr />
 
     <div class="main">
-      <Threads />
-      <DirectMessags />
-      <Mentions />
-      <Drafts />
-      <More />
+      <IconElement icon="&#8860;" space="&nbsp;" name="Threads" />
+      <IconElement icon="&#8704;" space="&nbsp;" name="Direct messages" />
+      <IconElement icon="&#64;" space="&nbsp;" name="Mentions & reactions" />
+      <IconElement icon="&#8634;" space="&nbsp;" name="Draft & sent" />
+      <IconElement icon="&#8285;" space="&nbsp; &nbsp;" name="More" />
+      <p>&#8860; &nbsp; Threads</p>
+      <p>&#8704; &nbsp; Direct messages</p>
+      <p>&#64; &nbsp;Mentions & reactions</p>
+      <p>&#8634; &nbsp; Draft & sent</p>
+      <p>&#8285; &nbsp; &nbsp; More</p>
     </div>
 
     <hr />
@@ -30,14 +35,10 @@
 
 <script>
 import Accordion from './Accordion.vue';
-import Drafts from './Drafts.vue';
-import DirectMessags from './DirectMessages.vue';
-import Mentions from './Mentions.vue';
-import More from './More.vue';
-import Threads from './Threads.vue';
+import IconElement from './IconElement.vue';
 
 export default {
-  components: { Accordion, Drafts, DirectMessags, Mentions, More, Threads },
+  components: { Accordion, IconElement },
 };
 </script>
 
