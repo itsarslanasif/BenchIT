@@ -31,5 +31,7 @@ class BenchChannel < ApplicationRecord
   # Scopes
   scope :private_channels, -> { where(is_private: true) }
   scope :public_channels, -> { where(is_private: false) }
-  scope :user_joined_private_channels, -> (user_id) { joins(:channel_participants).where("user_id = #{user_id} AND is_private = true").distinct }
+  scope :user_joined_private_channels, -> (user_id) {
+    joins(:channel_participants).where("user_id = #{user_id} AND is_private = true").distinct
+  }
 end

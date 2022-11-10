@@ -1,5 +1,1 @@
-json.array! channels do |channel|
-  json.id = channel.id
-  json.name = channel.name
-  json.is_private = channel.is_private
-end
+json.array! channels, :id, :name, :is_private
