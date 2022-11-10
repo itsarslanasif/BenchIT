@@ -170,8 +170,12 @@ Rails.application.routes.draw do
             resources :articles
           end
 
-          get :get_channels_list, to: 'mention#get_channels_list'
-          get :get_users_list, to: 'mention#get_users_list'
+          resources :mention, only: [] do
+            collection do
+              get :get_channels_list
+              get :get_users_list
+            end
+          end
         end
       end
       # end of account scoped api routes
