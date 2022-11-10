@@ -6,9 +6,15 @@ import authRoute from './auth/auth.routes';
 import dashboard from './dashboard/dashboard.routes';
 import login from './login/login.routes';
 import store from '../store';
+import members from '../modules/members/members.routes.js'
 import { validateLoggedInRoutes } from '../helper/routeHelpers';
 
-const routes = [...login.routes, ...dashboard.routes, ...authRoute.routes];
+const routes = [
+  ...login.routes,
+  ...dashboard.routes,
+  ...authRoute.routes,
+  ...members.routes,
+];
 
 window.roleWiseRoutes = {
   agent: [],
@@ -41,6 +47,7 @@ const authIgnoreRoutes = [
   'auth_confirmation',
   'pushBack',
   'auth_password_edit',
+  'members',
 ];
 
 const routeValidators = [
