@@ -10,18 +10,17 @@
 }
 
 .image-preview-wrapper {
-  background-position: center center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background: rgb(208, 202, 202);
-  border-radius: 5px;
-  border: 1px solid rgb(23, 22, 22);
-  cursor: pointer;
-  display: block;
-  height: 200px;
-  margin: 30px auto 30px;
-  width: 100%;
-}
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    border: 1px solid rgb(30, 28, 28);
+    border-radius: 6px;
+    cursor: pointer;
+    display: block;
+    height: 200px;
+    margin: 30px auto 30px;
+    width: 100%;
+  }
 
 .form-h3,
 .form-h {

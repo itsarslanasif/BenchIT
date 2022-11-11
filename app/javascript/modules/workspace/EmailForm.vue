@@ -3,7 +3,7 @@
     <h3 class="form-h3">What's your email?</h3>
     <label>Email</label>
     <input
-      v-model="email"
+      v-model="user.email"
       type="email"
       placeholder="Email"
       required
@@ -21,13 +21,15 @@ import axios from './axios';
 export default {
   data() {
     return {
-     email: ''
+      user: {
+        email: '',
+      },
     };
   },
   methods: {
     handleSubmit() {
       axios
-        .post('users/invitation', this.email)
+        .post('users/invitation', this.user)
         .then(response => {
           return response.data;
         })

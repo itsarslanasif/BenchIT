@@ -4,7 +4,7 @@
     <h5 class="form-h">Create a password for signing in</h5>
     <label>Password</label>
     <input
-      v-model="password"
+      v-model="user.password"
       class="form-input-select"
       type="password"
       placeholder="Password"
@@ -14,7 +14,7 @@
     <p class="form-h">Password must be at least 6 characters long</p>
     <label>Confirm Password</label>
     <input
-      v-model="confirm_password"
+      v-model="user.password_confirmation"
       class="form-input-select"
       type="password"
       placeholder="Confirm Password"
@@ -31,24 +31,36 @@
 
 <script>
 import './style.css';
+import axios from './axios';
 export default {
   data() {
     return {
-      confirm_password: '',
-      confirmPasswordError: '',
-      password: '',
       passwordError: '',
+      confirmPasswordError: '',
+      user: {
+      password: '',
+      password_confirmation: '',
+      }
     };
   },
   methods: {
     handleSubmit() {
-      this.passwordError =
-        this.password.length > 6
-          ? ''
-          : 'Password must be at least 6 chars long';
-      this.confirmPasswordError =
-        this.password === this.confirm_password ? '' : 'Passwords do not match';
+      // this.passwordError =
+      //   this.password.length > 6
+      //     ? ''
+      //     : 'Password must be at least 6 chars long';
+      // this.confirmPasswordError =
+      //   this.password === this.confirm_password ? '' : 'Passwords do not match';
+      axios
+        .put('users/invitation', this.user)
+        .then(response => {
+          return response.data;
+        })
+        .catch(error => {
+          return error;
+        });
     },
   },
 };
 </script>
+
