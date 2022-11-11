@@ -4,7 +4,6 @@ class User < ApplicationRecord
   devise :database_authenticatable
 
   validates_presence_of :email
-
   has_many :user_bench_channels
   has_many :channel_participants, dependent: :destroy
   has_many :bench_channels, foreign_key: :creator_id, inverse_of: :user, through: :channel_participants
