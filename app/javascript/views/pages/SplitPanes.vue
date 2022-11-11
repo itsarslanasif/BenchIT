@@ -12,7 +12,7 @@
   </splitpanes>
 </template>
 
- <script>
+<script>
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import Chat from '../components/chatPane/Chat.vue';
@@ -22,9 +22,14 @@ export default {
 };
 </script>
 
- <style scoped>
+<style scoped>
 splitpanes {
   height: 100vh;
 }
 </style>
 
+<style scoped>
+splitpanes {
+  height: 100vh;
+}
+</style>
