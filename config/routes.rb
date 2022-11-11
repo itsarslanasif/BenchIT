@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+
+
   mount ActionCable.server => '/cable'
 
   localized do
@@ -8,9 +10,10 @@ Rails.application.routes.draw do
       # devise_for :users
 
     end
-
     resources :workspaces, only: [:index,:create]
+
     root :to => "application#index"
     match "*path", to: "application#index", format: false, via: :get
   end
+
 end

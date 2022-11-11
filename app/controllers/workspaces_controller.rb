@@ -1,12 +1,20 @@
 class WorkspacesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+  def index
+    render json: Workspace.all
+  end
+
   def create
-    byebug
     @workspace = Workspace.new(workspace_params)
+    puts @workspace.errors
     if @workspace.save
-      render json: @workspace
+      puts "in create"
+
+      render json: @workspace, status: 200
     else
+      puts "in create"
+
       render json: @workspace.errors
     end
   end
@@ -14,6 +22,6 @@ class WorkspacesController < ApplicationController
   private
 
     def workspace_params
-      params.require(:workspace).permit(:company_name, :benchIT_URL, :organization_type, :capacity, :admin_role, :workspace_type)
+      params.permit(:company_name, :benchIT_URL, :organization_type, :capacity, :admin_role, :workspace_type)
     end
 end
