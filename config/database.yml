@@ -9,13 +9,15 @@ development:
   <<: *default
   database: <%= ENV.fetch('POSTGRES_DATABASE', 'benchit_dev') %>
   username: <%= ENV.fetch('POSTGRES_USERNAME', 'postgres') %>
-  password: <%= ENV.fetch('POSTGRES_PASSWORD', '') %>
+  password: <%= ENV.fetch('POSTGRES_PASSWORD', 'postgres') %>
+
 
 test:
   <<: *default
   database: <%= ENV.fetch('POSTGRES_DATABASE', 'benchit_test') %>
   username: <%= ENV.fetch('POSTGRES_USERNAME', 'postgres') %>
-  password: <%= ENV.fetch('POSTGRES_PASSWORD', '') %>
+  password: <%= ENV.fetch('POSTGRES_PASSWORD', 'postgres') %>
+
 
 production:
   <<: *default
