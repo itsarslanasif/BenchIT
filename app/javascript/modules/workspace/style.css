@@ -1,0 +1,63 @@
+.form {
+  background: rgb(208, 202, 202);
+  border-radius: 10px;
+  color: black;
+  font-family: 'inherit';
+  margin: 30px auto;
+  max-width: 500px;
+  padding: 40px;
+  text-align: left;
+}
+
+.image-preview-wrapper {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background: rgb(208, 202, 202);
+  border-radius: 5px;
+  border: 1px solid rgb(23, 22, 22);
+  cursor: pointer;
+  display: block;
+  height: 200px;
+  margin: 30px auto 30px;
+  width: 100%;
+}
+
+.form-h3,
+.form-h {
+  color: black;
+  font-family: 'inherit';
+}
+
+.form-h3 {
+  text-align: center;
+}
+
+.error {
+  color: rgb(151, 23, 23);
+  font-size: 0.9em;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.form-input-select {
+  background-color: rgb(208, 202, 202);
+  border: 1px solid black;
+  color: black;
+}
+
+.form-btn {
+  background-color: black;
+  border: 0;
+  color: rgb(235, 229, 229);
+  margin-top: 20px;
+  padding: 10px 20px;
+  width: 70%;
+}
+
+.btn-div {
+  display: flex;
+  justify-content: center;
+}
+
+

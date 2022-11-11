@@ -1,29 +1,41 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="password-form">
-    <h1>Set your password</h1>
-    <h4>Create a password for signing in</h4>
+  <form @submit.prevent="handleSubmit" class="form">
+    <h3 class="form-h3">Set Your Password</h3>
+    <h5 class="form-h">Create a password for signing in</h5>
     <label>Password</label>
     <input
       v-model="password"
-      type="text"
+      class="form-input-select"
+      type="password"
       placeholder="Password"
       required
     />
     <div v-if="passwordError" class="error">{{ passwordError }}</div>
-    <h4>
-      Password must be at least 6 characters long and can't be things like
-      "password", "123456" or "abcdef"
-    </h4>
-    <div>
-      <button>Save</button>
+    <p class="form-h">Password must be at least 6 characters long</p>
+    <label>Confirm Password</label>
+    <input
+      v-model="confirm_password"
+      class="form-input-select"
+      type="password"
+      placeholder="Confirm Password"
+      required
+    />
+    <div v-if="confirmPasswordError" class="error">
+      {{ confirmPasswordError }}
+    </div>
+    <div class="btn-div">
+      <button class="form-btn">Save</button>
     </div>
   </form>
 </template>
 
 <script>
+import './style.css';
 export default {
   data() {
     return {
+      confirm_password: '',
+      confirmPasswordError: '',
       password: '',
       passwordError: '',
     };
@@ -34,25 +46,9 @@ export default {
         this.password.length > 6
           ? ''
           : 'Password must be at least 6 chars long';
+      this.confirmPasswordError =
+        this.password === this.confirm_password ? '' : 'Passwords do not match';
     },
   },
 };
 </script>
-
-<style scoped>
-.password-form {
-  background: rgb(94, 92, 92);
-  border-radius: 10px;
-  margin: 30px auto;
-  max-width: 500px;
-  padding: 40px;
-  text-align: left;
-}
-
-.error {
-  color: rgb(151, 23, 23);
-  font-size: 1.5em;
-  font-weight: bold;
-  margin-top: 10px;
-}
-</style>

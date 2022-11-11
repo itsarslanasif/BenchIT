@@ -1,28 +1,33 @@
 <template>
-  <form @submit.prevent="handleSubmit" class='email-form'>
-    <h1>What's your email?</h1>
+  <form @submit.prevent="handleSubmit" class="form">
+    <h3 class="form-h3">What's your email?</h3>
     <label>Email</label>
-    <input v-model="user.email" type="email" placeholder="Email" required />
-    <div>
-      <button>Send Invitation</button>
+    <input
+      v-model="email"
+      type="email"
+      placeholder="Email"
+      required
+      class="form-input-select"
+    />
+    <div class="btn-div">
+      <button class="form-btn">Send Invitation</button>
     </div>
   </form>
 </template>
 
 <script>
+import './style.css';
 import axios from './axios';
 export default {
   data() {
     return {
-      user: {
-        email: '',
-      },
+     email: ''
     };
   },
   methods: {
     handleSubmit() {
       axios
-        .post('users/invitation', this.user)
+        .post('users/invitation', this.email)
         .then(response => {
           return response.data;
         })
@@ -33,14 +38,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.email-form {
-  background: rgb(94, 92, 92);
-  border-radius: 10px;
-  margin: 30px auto;
-  max-width: 500px;
-  padding: 40px;
-  text-align: left;
-}
-</style>
