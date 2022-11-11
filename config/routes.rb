@@ -4,9 +4,6 @@ Rails.application.routes.draw do
   localized do
     devise_for :users, only: [:sessions]
 
-    root to: 'application#index'
-    get '*path', to: 'application#index', format: false
-
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
         resources :mentions, only: [] do
@@ -17,5 +14,8 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    root to: 'application#index'
+    get '*path', to: 'application#index', format: false
   end
 end
