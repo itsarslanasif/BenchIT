@@ -5,11 +5,16 @@ Rails.application.routes.draw do
     devise_for :users
 
     namespace :api, :defaults => { :format => 'json' } do
+      resources :workspaces do
+        resources :profiles, only: [:index,:create]
+      end
       # devise_for :users
-
     end
 
     resources :workspaces, only: [:index,:create]
+
+
+
     root :to => "application#index"
     match "*path", to: "application#index", format: false, via: :get
   end

@@ -1,19 +1,8 @@
-# == Schema Information
-#
-# Table name: workspaces
-#
-#  id                :bigint           not null, primary key
-#  admin_role        :integer          not null
-#  benchIT_URL       :string           not null
-#  capacity          :integer          not null
-#  company_name      :string           not null
-#  organization_type :integer          default("consumer_goods"), not null
-#  workspace_type    :integer          default("work"), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#
 class Workspace < ApplicationRecord
   has_one_attached :workspace_avatar
+
+  has_many :profiles, dependent: :destroy
+  has_many :users, through: :profiles , dependent: :destroy
 
   enum workspace_type: {
     work: 0,
@@ -40,6 +29,6 @@ class Workspace < ApplicationRecord
   }
 
   validates :company_name, presence: true
-  validates :benchIT_URL , presence: true
+  validates :slack_URL , presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 end
