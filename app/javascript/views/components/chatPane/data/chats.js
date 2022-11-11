@@ -14,3 +14,4 @@ const chats = [
     status: 'wfh',
   },
 ];
+export default chats;
