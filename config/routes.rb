@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
     end
 
-
+    resources :workspaces, only: [:index,:create]
     root :to => "application#index"
     match "*path", to: "application#index", format: false, via: :get
   end
