@@ -4,10 +4,18 @@ Rails.application.routes.draw do
   localized do
     devise_for :users, only: [:sessions]
 
-    namespace :api, defaults: { format: 'json' } do
-    end
-
     root to: 'application#index'
     get '*path', to: 'application#index', format: false
+
+    namespace :api, defaults: { format: 'json' } do
+      namespace :v1 do
+        resources :mentions, only: [] do
+          collection do
+            get :channels_list
+            get :users_list
+          end
+        end
+      end
+    end
   end
 end
