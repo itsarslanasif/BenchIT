@@ -28,7 +28,7 @@ Pinia.use(({ store }) => {
 });
 
 // I18n loader
-import { createI18n } from 'vue-i18n/index'; // Need the /index to avoid warning in console
+import { createI18n } from 'vue-i18n'; // Need the /index to avoid warning in console
 const I18n = createI18n({ locale: 'current', messages: translations });
 
 app
