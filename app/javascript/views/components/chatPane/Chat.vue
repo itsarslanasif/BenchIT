@@ -1,20 +1,15 @@
 <template>
-  <ChatHeader :chat="chat" />
+  <div>
+    <ChatBody />
+  </div>
 </template>
 
 <script>
-import ChatHeader from './ChatHeader.vue';
-import chats from './data/chats';
+import ChatBody from './ChatBody.vue';
 export default {
   name: 'Chat',
   components: {
-    ChatHeader,
-  },
-  data() {
-    return {
-      chat: chats[1],
-    };
+    ChatBody,
   },
 };
 </script>
-Footer
