@@ -6,9 +6,8 @@ Rails.application.routes.draw do
 
     namespace :api, :defaults => { :format => 'json' } do
       resources :workspaces do
-        resources :profiles, only: [:index,:create]
+        resources :profiles, only: [:index]
       end
-      # devise_for :users
     end
 
     resources :workspaces, only: [:index,:create]

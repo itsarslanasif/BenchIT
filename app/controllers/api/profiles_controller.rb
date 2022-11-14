@@ -1,4 +1,4 @@
-class Api::ProfilesController < ApplicationController
+class Api::ProfilesController < Api::ApiController
   before_action :set_workspace, only: %i[index ]
 
   def index
@@ -11,7 +11,4 @@ class Api::ProfilesController < ApplicationController
     @workspace = Workspace.find_by(id: params[:workspace_id])
   end
 
-  def profile_params
-    params.require(:profile).permit(:username, :description, :profile_image)
-  end
 end
