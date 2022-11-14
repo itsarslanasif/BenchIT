@@ -5,6 +5,7 @@ import Error404 from '@/views/pages/error_404.vue';
 import NewWorkspace from '@/modules/workspace/NewWorkspace.vue';
 import EmailForm from '@/modules/user/EmailForm.vue';
 import PasswordForm from '@/modules/user/PasswordForm.vue';
+import WorkspaceDashboard from '@/modules/workspace/WorkspaceDashboard.vue';
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -16,6 +17,7 @@ const router = createRouter({
     { path: '/new_workspace', component: NewWorkspace, name: 'new_workspace' },
     { path: '/invite_user', component: EmailForm, name: 'invite_user' },
     { path: '/password_form', component: PasswordForm, name: 'password_form' },
+    { path: '/workspace_dashboard', component: WorkspaceDashboard, name: 'workspace_dashboard' },
   ]
 });
 

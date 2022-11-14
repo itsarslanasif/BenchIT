@@ -5,25 +5,26 @@
     <WorkspaceURL v-else-if="workspaceStore.activePhase === 3" />
     <div class="btn-div">
       <button v-if="workspaceStore.activePhase === 1" class="form-btn">
-        {{ $t ('workspaces.continue_company_button')}}
+        {{ $t('workspaces.continue_company_button') }}
       </button>
       <button v-else-if="workspaceStore.activePhase === 2" class="form-btn">
-        {{ $t ('company.continue_url_button')}}
+        {{ $t('company.continue_url_button') }}
       </button>
       <button v-else-if="workspaceStore.activePhase === 3" class="form-btn">
-        {{ $t ('url.create_workspace_button')}}
+        {{ $t('url.create_workspace_button') }}
       </button>
     </div>
   </form>
 </template>
 
 <script>
-import axios from './axios';
+import axios from '../axios';
 import WorkspaceInfo from './WorkspaceInfo.vue';
 import CompanyInfo from './CompanyInfo.vue';
 import WorkspaceURL from './WorkspaceURL.vue';
 import { WorkspaceStore } from '../../stores/workspace_store';
 import './style.css';
+
 export default {
   data() {
     return {

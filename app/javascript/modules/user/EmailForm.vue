@@ -10,15 +10,16 @@
       class="form-input-select"
     />
     <div class="btn-div">
-      <button class="form-btn">{{ $t ('invite.send_button')}}</button>
+      <button class="form-btn">{{ $t('invite.send_button') }}</button>
     </div>
   </form>
 </template>
 
 <script>
-import '../workspace/style.css';
-import axios from '../workspace/axios';
+import axios from '../axios';
 import { UserStore } from '../../stores/user_store.js';
+import '../workspace/style.css';
+
 export default {
   data() {
     return {

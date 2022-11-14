@@ -40,17 +40,16 @@ en:
         create_workspace_button: 'Create Workspace'
       invite:
         title: 'What is your email?'
-        email: 'Enter your Email'
+        email: 'Enter email'
         send_button: 'Send Invitation'
       confirmation:
         title: 'Set Your Password'
-        password: 'Enter Your Password'
+        password: 'Enter Password'
         description: 'Password must be at least 6 characters long'
         confirm_password: 'Confirm Password'
         password_save: 'Save'
       errors:
         title: 'Error pages'
-
 
     admin:
       title: 'Admin'

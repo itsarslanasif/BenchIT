@@ -30,5 +30,4 @@ class UsersInvitationsController < Devise::InvitationsController
   def accept_invitation_params
     params.permit(:password, :password_confirmation, :invitation_token)
   end
-
 end

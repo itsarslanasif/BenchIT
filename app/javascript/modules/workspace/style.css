@@ -13,8 +13,8 @@
     background-position: center center;
     background-repeat: no-repeat;
     background-size: contain;
-    border: 1px solid rgb(30, 28, 28);
     border-radius: 6px;
+    border: 1px solid rgb(30, 28, 28);
     cursor: pointer;
     display: block;
     height: 200px;
@@ -59,4 +59,7 @@
   justify-content: center;
 }
 
+.dashboard-btn {
+  width: 300px;
+}
 

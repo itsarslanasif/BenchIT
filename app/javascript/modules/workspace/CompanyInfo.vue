@@ -9,8 +9,7 @@
       placeholder="Ex. Acme or Acme Marketing"
       required
     />
-    <p class="form-h">{{ $t('company.description') }}
-    </p>
+    <p class="form-h">{{ $t('company.description') }}</p>
   </div>
 </template>
 

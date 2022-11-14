@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit" class="form">
     <h3 class="form-h3">{{ $t('confirmation.title') }}</h3>
-    <label>{{$t ('confirmation.password') }}</label>
+    <label>{{ $t('confirmation.password') }}</label>
     <input
       v-model="userStore.user_password.password"
       class="form-input-select"
@@ -12,8 +12,8 @@
     <div v-if="userStore.passwordError" class="error">
       {{ userStore.passwordError }}
     </div>
-    <p class="form-h">{{$t ('confirmation.description') }}</p>
-    <label>{{$t ('confirmation.confirm_password') }}</label>
+    <p class="form-h">{{ $t('confirmation.description') }}</p>
+    <label>{{ $t('confirmation.confirm_password') }}</label>
     <input
       v-model="userStore.user_password.password_confirmation"
       class="form-input-select"
@@ -25,15 +25,16 @@
       {{ userStore.confirmPasswordError }}
     </div>
     <div class="btn-div">
-      <button class="form-btn">{{$t ('confirmation.password_save') }}</button>
+      <button class="form-btn">{{ $t('confirmation.password_save') }}</button>
     </div>
   </form>
 </template>
 
 <script>
-import '../workspace/style.css';
-import axios from '../workspace/axios';
+import axios from '../axios';
 import { UserStore } from '../../stores/user_store.js';
+import '../workspace/style.css';
+
 export default {
   data() {
     return {
@@ -57,7 +58,7 @@ export default {
             .catch(error => {
               return error;
             });
-        this.$router.push('/new_workspace');
+        this.$router.push('/workspace_dashboard');
       } else {
         this.userStore.confirmPasswordError = 'Passwords do not match';
       }
@@ -65,4 +66,3 @@ export default {
   },
 };
 </script>
-
