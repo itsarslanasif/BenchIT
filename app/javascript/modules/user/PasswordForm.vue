@@ -4,24 +4,26 @@
     <h5 class="form-h">Create a password for signing in</h5>
     <label>Password</label>
     <input
-      v-model="user.password"
+      v-model="userStore.user_password.password"
       class="form-input-select"
       type="password"
       placeholder="Password"
       required
     />
-    <div v-if="passwordError" class="error">{{ passwordError }}</div>
+    <div v-if="userStore.passwordError" class="error">
+      {{ userStore.passwordError }}
+    </div>
     <p class="form-h">Password must be at least 6 characters long</p>
     <label>Confirm Password</label>
     <input
-      v-model="user.password_confirmation"
+      v-model="userStore.user_password.password_confirmation"
       class="form-input-select"
       type="password"
       placeholder="Confirm Password"
       required
     />
-    <div v-if="confirmPasswordError" class="error">
-      {{ confirmPasswordError }}
+    <div v-if="userStore.confirmPasswordError" class="error">
+      {{ userStore.confirmPasswordError }}
     </div>
     <div class="btn-div">
       <button class="form-btn">Save</button>
@@ -30,35 +32,32 @@
 </template>
 
 <script>
-import './style.css';
-import axios from './axios';
+import '../workspace/style.css';
+import axios from '../workspace/axios';
+import { UserStore } from '../../stores/user_store.js';
 export default {
   data() {
     return {
-      passwordError: '',
-      confirmPasswordError: '',
-      user: {
-      password: '',
-      password_confirmation: '',
-      }
+      userStore: UserStore(),
     };
   },
   methods: {
     handleSubmit() {
-      // this.passwordError =
-      //   this.password.length > 6
-      //     ? ''
-      //     : 'Password must be at least 6 chars long';
-      // this.confirmPasswordError =
-      //   this.password === this.confirm_password ? '' : 'Passwords do not match';
+    if (this.userStore.user_password.password === this.userStore.user_password.password_confirmation) {
+      this.userStore.confirmPasswordError = '',
+      this.userStore.user_password.invitation_token = this.$route.query.invitation_token,
       axios
-        .put('users/invitation', this.user)
+        .patch('users/invitation', this.userStore.user_password)
         .then(response => {
           return response.data;
         })
         .catch(error => {
           return error;
         });
+    } else {
+      this.userStore.confirmPasswordError = 'Passwords do not match'
+    }
+
     },
   },
 };

@@ -1,5 +1,6 @@
 class UsersInvitationsController < Devise::InvitationsController
   skip_before_action :verify_authenticity_token
+  skip_before_action :require_no_authentication, only: [:update ]
 
   def create
     User.invite!(invite_params)
@@ -13,12 +14,12 @@ class UsersInvitationsController < Devise::InvitationsController
 
   def update
     user = User.accept_invitation!(accept_invitation_params)
-    if @user.errors.empty?
+    # if @user.errors.empty?
       render json: { success: ['User updated.'] }, status: :accepted
-    else
-      render json: { errors: user.errors.full_messages },
-             status: :unprocessable_entity
-    end
+    # else
+      # render json: { errors: user.errors.full_messages },
+            #  status: :unprocessable_entity
+    # end
   end
 
   private

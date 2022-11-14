@@ -3,8 +3,8 @@ import { createWebHistory, createRouter } from 'vue-router'
 import PageIndex from '@/views/pages/index.vue';
 import Error404 from '@/views/pages/error_404.vue';
 import NewWorkspace from '@/modules/workspace/NewWorkspace.vue';
-import EmailForm from '@/modules/workspace/EmailForm.vue';
-import PasswordForm from '@/modules/workspace/PasswordForm.vue';
+import EmailForm from '@/modules/user/EmailForm.vue';
+import PasswordForm from '@/modules/user/PasswordForm.vue';
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),

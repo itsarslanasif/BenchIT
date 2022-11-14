@@ -3,7 +3,7 @@
     <h3 class="form-h3">What's your email?</h3>
     <label>Email</label>
     <input
-      v-model="user.email"
+      v-model="userStore.user_email.email"
       type="email"
       placeholder="Email"
       required
@@ -16,20 +16,19 @@
 </template>
 
 <script>
-import './style.css';
-import axios from './axios';
+import '../workspace/style.css';
+import axios from '../workspace/axios';
+import { UserStore } from '../../stores/user_store.js';
 export default {
   data() {
     return {
-      user: {
-        email: '',
-      },
+      userStore: UserStore(),
     };
   },
   methods: {
     handleSubmit() {
       axios
-        .post('users/invitation', this.user)
+        .post('users/invitation', this.userStore.user_email)
         .then(response => {
           return response.data;
         })
