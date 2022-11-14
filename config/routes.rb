@@ -7,10 +7,13 @@ Rails.application.routes.draw do
     devise_for :users, controllers: { invitations: 'users_invitations' }
 
     namespace :api, :defaults => { :format => 'json' } do
-      namespace :v1 do
-      resources :workspaces, only: [:index,:create]
+      resources :workspaces do
+        resources :profiles, only: [:index]
       end
     end
+
+
+
 
     root :to => "application#index"
     match "*path", to: "application#index", format: false, via: :get

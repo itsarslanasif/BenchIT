@@ -1,17 +1,4 @@
-# == Schema Information
-#
-# Table name: workspaces
-#
-#  id                :bigint           not null, primary key
-#  admin_role        :integer          not null
-#  benchIT_URL       :string           not null
-#  capacity          :integer          not null
-#  company_name      :string           not null
-#  organization_type :integer          default("consumer_goods"), not null
-#  workspace_type    :integer          default("work"), not null
-#  created_at        :datetime         not null
-#  updated_at        :datetime         not null
-#
+
 class Workspace < ApplicationRecord
   has_one_attached :workspace_avatar
 

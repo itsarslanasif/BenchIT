@@ -298,6 +298,7 @@ DEPENDENCIES
   capybara-email
   debug
   devise
+  devise_invitable
   dotenv-rails
   devise_invitable
   foreman
