@@ -1,4 +1,4 @@
-module Api::V1
+module Api
   class WorkspacesController < Api::ApiController
     skip_before_action :verify_authenticity_token
 
