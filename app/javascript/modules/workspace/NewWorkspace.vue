@@ -5,13 +5,13 @@
     <WorkspaceURL v-else-if="workspaceStore.activePhase === 3" />
     <div class="btn-div">
       <button v-if="workspaceStore.activePhase === 1" class="form-btn">
-        Continue to Company Name
+        {{ $t ('workspaces.continue_company_button')}}
       </button>
       <button v-else-if="workspaceStore.activePhase === 2" class="form-btn">
-        Continue to Workspace URL
+        {{ $t ('company.continue_url_button')}}
       </button>
       <button v-else-if="workspaceStore.activePhase === 3" class="form-btn">
-        Create Workspace
+        {{ $t ('url.create_workspace_button')}}
       </button>
     </div>
   </form>

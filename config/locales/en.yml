@@ -1,64 +1,88 @@
 en:
   time:
     formats:
-      default: "%B %d %Y %H:%M"
+      default: '%B %d %Y %H:%M'
   bands:
-    rolling_stones: "The Rolling Stones"
-    beatles: "The Beatles"
-    acdc: "AC/DC"
+    rolling_stones: 'The Rolling Stones'
+    beatles: 'The Beatles'
+    acdc: 'AC/DC'
   vue:
     front:
-      title: "Front end"
+      title: 'Front end'
       nav:
-        homepage: "Home"
-        pages: "Pages"
+        homepage: 'Home'
+        pages: 'Pages'
       home:
-        title: "Musicians"
-        breadcrumb: "All musicians"
+        title: 'Musicians'
+        breadcrumb: 'All musicians'
       pages:
-        title: "Pages"
-        server_404: "This link triggers a Server side routing 404"
-        client_404: "This link triggers a Client side routing 404"
-        server_401: "This link performs an API call that responds a 401"
-        server_500: "This link performs an API call that responds a 500"
-      musicians:
-        title: "Details about this musician"
-        id: "Id"
-        name: "Name"
-        band: "Band"
+        title: 'Pages'
+        server_404: 'This link triggers a Server side routing 404'
+        client_404: 'This link triggers a Client side routing 404'
+        server_401: 'This link performs an API call that responds a 401'
+        server_500: 'This link performs an API call that responds a 500'
+      workspaces:
+        title: 'Details About Your Workspace'
+        usage: 'What will your team use it for?'
+        company_type_info: 'What kind of company is it?'
+        company_size_info: 'How big is your company?'
+        admin_role_type: 'What is your role there?'
+        continue_company_button: 'Continue to Company Name'
+      company:
+        title: 'What is your Company called?'
+        description: 'We will use this to name your workspace which you can always change later'
+        name: 'Company Name'
+        continue_url_button: 'Continue to Workspace URL'
+      url:
+        title: 'What URL do you want for your workspace?'
+        description: 'Choose the address you will use to sign in'
+        name: 'Your workspace URL'
+        create_workspace_button: 'Create Workspace'
+      invite:
+        title: 'What is your email?'
+        email: 'Enter your Email'
+        send_button: 'Send Invitation'
+      confirmation:
+        title: 'Set Your Password'
+        password: 'Enter Your Password'
+        description: 'Password must be at least 6 characters long'
+        confirm_password: 'Confirm Password'
+        password_save: 'Save'
       errors:
-        title: "Error pages"
+        title: 'Error pages'
+
+
     admin:
-      title: "Admin"
-      save: "Save"
-      cancel: "Cancel"
-      filter: "Filter"
-      reset_filters: "Reset filters"
-      delete: "Delete"
-      no_result: "No result :-/"
-      any: "Any"
+      title: 'Admin'
+      save: 'Save'
+      cancel: 'Cancel'
+      filter: 'Filter'
+      reset_filters: 'Reset filters'
+      delete: 'Delete'
+      no_result: 'No result :-/'
+      any: 'Any'
       nav:
-        dashboard: "Dashboard"
-        musicians: "Musicians"
-        websockets: "Websockets"
-        logout: "Logout"
+        dashboard: 'Dashboard'
+        musicians: 'Musicians'
+        websockets: 'Websockets'
+        logout: 'Logout'
       dashboard:
-        title: "Dashboard"
-        musicians: "No musician | 1 musician | musicians"
+        title: 'Dashboard'
+        musicians: 'No musician | 1 musician | musicians'
       musicians:
-        create: "+ Add a new musician"
-        new: "New musician"
+        create: '+ Add a new musician'
+        new: 'New musician'
         form:
-          id: "Id"
-          name: "Name"
-          band: "Band"
-      confirm: "Are you sure?"
+          id: 'Id'
+          name: 'Name'
+          band: 'Band'
+      confirm: 'Are you sure?'
   activerecord:
     errors:
       models:
         musician:
           attributes:
             name:
-              blank: "Mandatory field"
+              blank: 'Mandatory field'
             band:
-              blank: "Please select a band"
+              blank: 'Please select a band'

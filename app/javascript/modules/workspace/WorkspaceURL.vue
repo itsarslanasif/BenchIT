@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h4 class="form-h">What URL do you want for your workspace?</h4>
-    <h6 class="form-h">Choose the address you'll use to sign in</h6>
-    <label>Your workspace URL</label>
+    <h4 class="form-h">{{ $t('url.title') }}</h4>
+    <h6 class="form-h">{{ $t('url.description') }}</h6>
+    <label>{{ $t('url.name') }}</label>
     <input
       v-model="workspaceStore.workspace.benchIT_URL"
       class="form-input-select"

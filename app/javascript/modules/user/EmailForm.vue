@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="handleSubmit" class="form">
-    <h3 class="form-h3">What's your email?</h3>
-    <label>Email</label>
+    <h3 class="form-h3">{{ $t('invite.title') }}</h3>
+    <label>{{ $t('invite.email') }}</label>
     <input
       v-model="userStore.user_email.email"
       type="email"
@@ -10,7 +10,7 @@
       class="form-input-select"
     />
     <div class="btn-div">
-      <button class="form-btn">Send Invitation</button>
+      <button class="form-btn">{{ $t ('invite.send_button')}}</button>
     </div>
   </form>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h3 class="form-h3">{{ $t("messages.tellUs")}}</h3>
-    <label>What will your team use it for?</label>
+    <h3 class="form-h3">{{ $t('workspaces.title') }}</h3>
+    <label>{{ $t('workspaces.usage') }}</label>
     <select
       v-model="workspaceStore.workspace.workspace_type"
       class="form-input-select"
@@ -14,7 +14,7 @@
         {{ option.text }}
       </option>
     </select>
-    <label>What kind of company is it?</label>
+    <label>{{ $t('workspaces.company_type_info') }}</label>
     <select
       v-model="workspaceStore.workspace.organization_type"
       class="form-input-select"
@@ -27,7 +27,7 @@
         {{ option.text }}
       </option>
     </select>
-    <label class="form-label">How big is your company?</label>
+    <label class="form-label">{{ $t('workspaces.company_size_info') }}</label>
     <input
       v-model="workspaceStore.workspace.capacity"
       class="form-input-select"
@@ -35,7 +35,7 @@
       required
     />
     <div v-if="workspaceStore.capacityError" class="error">{{ workspaceStore.capacityError }}</div>
-    <label>What is your role there?</label>
+    <label>{{ $t('workspaces.admin_role') }}</label>
     <select
       v-model="workspaceStore.workspace.admin_role"
       class="form-input-select"
