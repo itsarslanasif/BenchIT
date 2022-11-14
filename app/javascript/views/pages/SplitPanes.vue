@@ -9,8 +9,10 @@
 	api-key="v69g5pnxcpt0m2kmjntucft1sek0y2g7qw17n2scwu0pi76w"
   :init="{
       menubar: false,
-      plugins: 'lists link image emoticons',
-      toolbar: 'styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist | link image emoticons'
+      statusbar:false,
+
+      plugins: 'lists link code',
+      toolbar: 'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
     }"
   />
 </div>
