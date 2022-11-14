@@ -1,4 +1,5 @@
-class Api::WorkspacesController < ApplicationController
+module Api::V1
+class WorkspacesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
@@ -24,4 +25,5 @@ class Api::WorkspacesController < ApplicationController
     def workspace_params
       params.permit(:company_name, :benchIT_URL, :organization_type, :capacity, :admin_role, :workspace_type)
     end
+end
 end

@@ -8,18 +8,17 @@ class UsersInvitationsController < Devise::InvitationsController
   end
 
   def edit
-    # redirect_to "#{client_api_url}?invitation_token=#{params[:invitation_token]}"
     redirect_to "http://127.0.0.1:5100/password_form?invitation_token=#{params[:invitation_token]}"
   end
 
   def update
     user = User.accept_invitation!(accept_invitation_params)
-    # if @user.errors.empty?
+    if @user.errors.empty?
       render json: { success: ['User updated.'] }, status: :accepted
-    # else
-      # render json: { errors: user.errors.full_messages },
-            #  status: :unprocessable_entity
-    # end
+    else
+      render json: { errors: user.errors.full_messages },
+             status: :unprocessable_entity
+    end
   end
 
   private

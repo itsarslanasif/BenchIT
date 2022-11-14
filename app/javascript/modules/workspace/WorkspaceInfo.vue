@@ -35,7 +35,7 @@
       required
     />
     <div v-if="workspaceStore.capacityError" class="error">{{ workspaceStore.capacityError }}</div>
-    <label>{{ $t('workspaces.admin_role') }}</label>
+    <label>{{ $t('workspaces.admin_role_type') }}</label>
     <select
       v-model="workspaceStore.workspace.admin_role"
       class="form-input-select"
