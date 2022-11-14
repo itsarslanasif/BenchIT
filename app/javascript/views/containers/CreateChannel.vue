@@ -2,78 +2,102 @@
   <transition name="modal-fade">
     <div class="modal-backdrop">
       <div
-        class="modal"
+        class="modal roundbox boxshadow"
         role="dialog"
         aria-labelledby="Channel Name"
         aria-describedby="Channel Description"
       >
-        <header class="modal-header" id="modalTitle">
-          <h1 name="header"> Create New Channel </h1>
-          <button
-            type="button"
-            class="btn-close"
-            @click="closeModal"
-            aria-label="Close modal"
-          >
-            x
-          </button>
-        </header>
+        <div class="modal-style">
+          <header class="modal-header" id="modalTitle">
+            <h1 name="header">Create a channel</h1>
+            <button
+              type="button"
+              class="btn-close"
+              @click="closeModal"
+              aria-label="Close modal"
+            >
+              x
+            </button>
+          </header>
 
-        <form @submit="onSubmit">
-          <section class="modal-body" id="modalDescription">
-            <label name="body"> Channel Name </label>
-            <input
-              class="form-control"
-              type="text"
-              v-model="form.channelName"
-              required
-            />
-            <br />
-            <label name="footer"> Channel Description </label>
-            <input
-              class="form-control"
-              type="text"
-              v-model="form.channelDesc"
-            />
-          </section>
+          <Form @submit="onSubmit">
+            <section class="modal-body" id="modalDescription">
+              <p>
+                Channels are where your team communicates. They’re best when
+                organized around a topic — #marketing, for example.
+              </p>
+              <label> Name </label>
+              <ErrorMessage name="Name" class="danger" />
+              <Field
+                class="form-control"
+                type="text"
+                name="Name"
+                placeholder="e.g. plan-budget"
+                :rules="validateName"
+              />
+              <br />
+              <label> Description </label>
+              <Field
+                class="form-control"
+                type="text"
+                name="Description"
+                placeholder="Description is optional"
+              />
+            </section>
 
-          <footer class="modal-footer">
-            <button type="submit"  class="btn btn-primary" :disabled="form.channelName === ''" @click="closeModal">Create</button>
-          </footer>
-        </form>
+            <footer class="modal-footer">
+              <button type="submit">Create</button>
+            </footer>
+          </Form>
+        </div>
       </div>
     </div>
   </transition>
 </template>
 <script>
+import { Form, Field, ErrorMessage, defineRule } from 'vee-validate';
+
 export default {
-  name: "CreateChannel",
+  name: 'CreateChannel',
   data() {
     return {
       form: {
-        channelName: "",
-        channelDesc: "",
+        Name: '',
+        Description: '',
       },
     };
   },
-  props: [
-    "closeModal"
-  ],
+  props: ['closeModal'],
+  components: {
+    Form,
+    Field,
+    ErrorMessage,
+  },
   methods: {
-    onSubmit(event) {
-      event.preventDefault();
-      console.log(JSON.stringify(this.form));
+    onSubmit(values) {
+      console.log(values, null, 2);
     },
-    close() {
-      this.$emit("input", !this.value);
+
+    validateName(value) {
+      if (!value) {
+        return 'Don’t forget to name your channel.';
+      }
+      const regex = /^[a-zA-Z0-9-_]+$/;
+
+      if (!regex.test(value)) {
+        return 'Channel names can’t contain spaces, periods, or most punctuation. Try again?';
+      }
+
+      return true;
     },
   },
 };
 </script>
 <style>
-*{
+* {
   padding: 0;
   box-sizing: border-box;
+  box-shadow: #000;
 }
 .modal-backdrop {
   position: fixed;
@@ -85,7 +109,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-}  
+}
 
 .modal {
   background: #ffffff;
@@ -94,57 +118,55 @@ export default {
   width: 30%;
 }
 
-.modal-header{
+.modal-header {
   padding: 15px;
-  display: flex !important;;
+  display: flex !important;
 }
 
 .modal-header {
   max-height: 100px;
-  border-bottom: 1px solid #eeeeee;
-  align-items: center !important;;
-  color:#000;
-  justify-content: space-between !important;;
+  align-items: center !important;
+  color: #000;
+  justify-content: space-between !important;
 }
-.modal-header p{
+.modal-header p {
   color: #000;
   margin-top: 1.6rem !important;
   font-size: 20px;
   font-weight: 600;
 }
 
-.modal-header h1
-{
+.modal-header h1 {
   color: #000;
-  font-size: 30px;
+  font-size: 35px;
+  font-weight: 900;
   margin-top: 3.3rem !important;
-
 }
 .modal-footer {
-  border-top: 1px solid #eeeeee;
   flex-direction: column;
 }
-.modal-footer button{
-  width: 200px;
+.modal-footer button {
+  width: 120px;
+  height: 60px;
   text-transform: none;
-  margin:auto;
+  margin: auto;
+  background-color: green;
 }
 .modal-body {
   position: relative;
   padding: 10px 10px;
-  margin:0;
+  margin: 0;
 }
 
 .btn-close {
   border: none;
   font-size: 30px;
   cursor: pointer;
-  font-weight: bold;
-  color: #4aae9b;
-  width: 40px;
+  width: 50px;
   margin: 0px;
   padding: 0px;
   background: transparent;
+  color: rgb(59, 58, 58);
 }
 
 .btn-green {
@@ -153,13 +175,14 @@ export default {
   border: 1px solid #4aae9b;
   border-radius: 2px;
 }
-.modal label{
-  color:#000;
-  font-weight:400;
+.modal label {
+  color: #000;
+  font-weight: bold;
 }
-.modal input{
+.modal input {
   background-color: #ffffff;
-  color:#4d4d4d;
+  color: #4d4d4d;
+  box-sizing: border-box;
 }
 .modal-fade-enter,
 .modal-fade-leave-to {
@@ -169,5 +192,30 @@ export default {
 .modal-fade-enter-active,
 .modal-fade-leave-active {
   transition: opacity 0.5s ease;
+}
+
+.danger {
+  color: #dd6600;
+  font-size: medium;
+}
+
+.modal-style {
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+.modal-body p {
+  font-size: 17px;
+  color: rgba(0, 0, 0, 0.534);
+}
+.boxshadow {
+  -moz-box-shadow: 3px 3px 5px #535353;
+  -webkit-box-shadow: 3px 3px 5px #535353;
+  box-shadow: 3px 3px 5px #535353;
+}
+.roundbox {
+  -moz-border-radius: 6px 6px 6px 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px 6px 6px 6px;
 }
 </style>

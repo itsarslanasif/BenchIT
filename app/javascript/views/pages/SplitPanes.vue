@@ -8,7 +8,6 @@
         <div v-if="modalOpen">
           <CreateChannel :closeModal="closeModal"/>
         </div>
-        <!-- <modal-direction v-model="modalOpen"></modal-direction> -->
       </div>
     </pane>
 
