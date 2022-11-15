@@ -8,20 +8,20 @@
         aria-describedby="Channel Description"
       >
         <div class="modal-style">
-          <header class="modal-header" id="modalTitle">
+          <header id="modalTitle" class="modal-header">
             <h1 name="header">Create a channel</h1>
             <button
               type="button"
               class="btn-close"
-              @click="closeModal"
               aria-label="Close modal"
+              @click="closeModal"
             >
               x
             </button>
           </header>
 
           <Form @submit="onSubmit">
-            <section class="modal-body" id="modalDescription">
+            <section id="modalDescription" class="modal-body">
               <p>
                 Channels are where your team communicates. They’re best when
                 organized around a topic — #marketing, for example.
@@ -29,6 +29,7 @@
               <label> Name </label>
               <ErrorMessage name="Name" class="danger" />
               <Field
+                v-model="channelName"
                 class="form-control"
                 type="text"
                 name="Name"
@@ -46,7 +47,7 @@
             </section>
 
             <footer class="modal-footer">
-              <button type="submit">Create</button>
+              <button type="submit" :disabled="!channelName">Create</button>
             </footer>
           </Form>
         </div>
@@ -55,27 +56,29 @@
   </transition>
 </template>
 <script>
-import { Form, Field, ErrorMessage, defineRule } from 'vee-validate';
+import { Form, Field, ErrorMessage } from 'vee-validate';
 
 export default {
   name: 'CreateChannel',
-  data() {
-    return {
-      form: {
-        Name: '',
-        Description: '',
-      },
-    };
-  },
-  props: ['closeModal'],
   components: {
     Form,
     Field,
     ErrorMessage,
   },
+  props: ['closeModal'],
+  data() {
+    return {
+      form: {
+        channelName: '',
+        Description: '',
+      },
+    };
+  },
+
   methods: {
     onSubmit(values) {
       console.log(values, null, 2);
+      this.closeModal();
     },
 
     validateName(value) {
@@ -152,6 +155,14 @@ export default {
   margin: auto;
   background-color: green;
 }
+
+button:disabled,
+button[disabled] {
+  border: 1px solid #999999;
+  background-color: #cccccc;
+  color: #666666;
+}
+
 .modal-body {
   position: relative;
   padding: 10px 10px;
