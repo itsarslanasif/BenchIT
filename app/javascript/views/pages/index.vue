@@ -26,8 +26,6 @@ export default {
     SampleStore();
     UserStore();
     ChannelStore();
-
-    // return { store }
   },
 
   methods: {

@@ -6,13 +6,13 @@
           <nav>
             <ul>
               <li :class="activeOn(['root_path', 'musicians_path', 'musician_path'])">
-                <router-link to="/" >{{ $t('nav.homepage') }}</router-link>
+                <router-link to="/">{{ $t('nav.homepage') }}</router-link>
               </li>
               <li :class="activeOn(['root_path'])">
-                <router-link :to="{name: 'root_path'}">{{ $t('nav.pages') }}</router-link>
+                <router-link :to="{ name: 'root_path' }">{{ $t('nav.pages') }}</router-link>
               </li>
               <li :class="activeOn(['search'])">
-                <router-link :to="{name: 'search'}">{{ $t('Search') }}</router-link>
+                <router-link :to="{ name: 'search' }">{{ $t('Search') }}</router-link>
               </li>
             </ul>
           </nav>
@@ -45,9 +45,9 @@ export default {
   },
 
   watch: {
-    locale: function(locale) {
+    locale: function (locale) {
       let redirectTo = `/${locale}${this.$route.path}`;
-      if(locale == this.availableLocales[0]) {
+      if (locale == this.availableLocales[0]) {
         redirectTo = `${this.$route.path}`
       }
       window.location.href = redirectTo;
