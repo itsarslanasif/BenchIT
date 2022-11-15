@@ -13,8 +13,8 @@
             <div class="text-left p-6">
                 <p class="mb-1 text-xs">I'm looking for:</p>
                 <div class=" flex gap-2">
-                    <button class="bg-slate-500 px-3 py-1 w-auto" @click="addPeople">People</button>
-                    <button class="bg-slate-500 px-3 py-1 w-auto" @click="addChannel">Channels</button>
+                    <button class="bg-slate-500 px-3 py-1 w-auto" @click="searchPeopleOnly">People</button>
+                    <button class="bg-slate-500 px-3 py-1 w-auto" @click="searchChannelsOnly">Channels</button>
                 </div>
                 <div class="mt-6">
                     <div v-if="usersFlag">
@@ -23,7 +23,7 @@
                     <div v-if="channelsFlag">
                         <span class="py-1 w-auto text-xl font-semibold">Channels</span>
                     </div>
-                    <div v-for="item in filteredList" :key="item.id">
+                    <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
                         {{ item.name }}
                     </div>
                 </div>
@@ -43,44 +43,45 @@ export default {
             searchModalToggle: false,
             search: '',
             filteredList: [],
-            filteredUser: [],
-            filteredChannel: [],
+            allUsers: [],
+            allChannels: [],
             usersFlag: false,
             channelsFlag: false
         }
     },
     methods: {
-        addPeople() {
+        searchPeopleOnly() {
             this.usersFlag = true
             this.channelsFlag = false
-            this.filteredList = this.filteredUser
+            this.filteredList = this.allUsers
         },
-        addChannel() {
+        searchChannelsOnly() {
             this.usersFlag = false
             this.channelsFlag = true
-            this.filteredList = this.filteredChannel
+            this.filteredList = this.allChannels
+        },
+        filterData() {
+            this.filteredList = this.filteredList.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()))
         }
     },
     watch: {
         search() {
             if (this.usersFlag) {
-                this.filteredList = this.filteredUser
-                this.filteredList = this.filteredList.filter((user) => user.name.toLowerCase().includes(this.search.toLowerCase()))
+                this.filteredList = this.allUsers
             } else if (this.channelsFlag) {
-                this.filteredList = this.filteredChannel
-                this.filteredList = this.filteredList.filter((channel) => channel.name.toLowerCase().includes(this.search.toLowerCase()))
+                this.filteredList = this.allChannels
             } else {
-                this.filteredList = [...this.filteredUser, ...this.filteredChannel]
-                this.filteredList = this.filteredList.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()))
+                this.filteredList = [...this.allUsers, ...this.allChannels]
             }
+            this.filterData()
         }
     },
     setup() {
         const users = UserStore()
         const channels = ChannelStore()
         return {
-            filteredUser: Object.values(users.getUsers),
-            filteredChannel: Object.values(channels.getChannels),
+            allUsers: Object.values(users.getUsers),
+            allChannels: Object.values(channels.getChannels),
         }
     }
 }
