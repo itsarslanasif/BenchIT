@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  admin_role: 1
+  benchIT_URL: MyString
+  capacity: 1
+  company_name: MyString
+  organization_type: 1
+  workspace_type: 1
+
+two:
+  admin_role: 1
+  benchIT_URL: MyString
+  capacity: 1
+  company_name: MyString
+  organization_type: 1
+  workspace_type: 1
