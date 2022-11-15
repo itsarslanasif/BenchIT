@@ -97,6 +97,9 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
+    devise_invitable (2.0.6)
+      actionmailer (>= 5.0)
+      devise (>= 4.6)
     digest (3.1.0)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
@@ -284,6 +287,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
   x86_64-linux
@@ -294,6 +298,7 @@ DEPENDENCIES
   capybara-email
   debug
   devise
+  devise_invitable
   dotenv-rails
   foreman
   jbuilder
@@ -323,4 +328,4 @@ DEPENDENCIES
   webdrivers
 
 BUNDLED WITH
-   2.3.16
+   2.3.17
