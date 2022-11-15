@@ -3,7 +3,9 @@
     <h1>{{ $t('pages.title') }}</h1>
 
     <p><a href="/dead-link">{{ $t('pages.server_404') }}</a></p>
-    <p><router-link to="/dead-link">{{ $t('pages.client_404') }}</router-link></p>
+    <p>
+      <router-link to="/dead-link">{{ $t('pages.client_404') }}</router-link>
+    </p>
     <p><a @click.prevent="unauthorized" href="#">{{ $t('pages.server_401') }}</a></p>
     <p><a @click.prevent="crash" href="#">{{ $t('pages.server_500') }}</a></p>
     <br />
@@ -16,12 +18,16 @@
 
 <script>
 import { SampleStore } from "@/stores/sample_store";
+import { UserStore } from "../../stores/users";
+import { ChannelStore } from "../../stores/channels"
 
 export default {
   setup() {
-    const store = SampleStore();
+    SampleStore();
+    UserStore();
+    ChannelStore();
 
-    return { store }
+    // return { store }
   },
 
   methods: {

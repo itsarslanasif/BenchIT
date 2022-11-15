@@ -11,6 +11,9 @@
               <li :class="activeOn(['root_path'])">
                 <router-link :to="{name: 'root_path'}">{{ $t('nav.pages') }}</router-link>
               </li>
+              <li :class="activeOn(['search'])">
+                <router-link :to="{name: 'search'}">{{ $t('Search') }}</router-link>
+              </li>
             </ul>
           </nav>
         </div>
