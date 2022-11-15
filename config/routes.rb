@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
     namespace :api, :defaults => { :format => 'json' } do
       resources :workspaces do
-        resources :profiles, only: [:index]
+        resources :profiles, only: [:index, :create]
       end
     end
 
