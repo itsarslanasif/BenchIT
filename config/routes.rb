@@ -8,6 +8,9 @@ Rails.application.routes.draw do
       resources :workspaces do
         resources :profiles, only: [:index]
       end
+      resources :users
+      resources :channels
+      resources :groups
     end
 
     resources :workspaces, only: [:index,:create]

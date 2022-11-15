@@ -42,21 +42,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_115919) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "profiles", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "workspace_id", null: false
-    t.string "username", null: false
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_profiles_on_user_id"
-    t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
-    t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
-    
-ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "bench_channels", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -107,6 +92,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "workspace_id", null: false
+    t.string "username", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+    t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
+    t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
+  end
+
   create_table "user_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -129,6 +126,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
     t.datetime "last_sign_in_at"
     t.string "current_sign_in_ip"
     t.string "last_sign_in_ip"
+    t.string "name"
     t.string "invitation_token"
     t.datetime "invitation_created_at"
     t.datetime "invitation_sent_at"
@@ -137,7 +135,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
     t.string "invited_by_type"
     t.bigint "invited_by_id"
     t.integer "invitations_count", default: 0
-    t.string "name"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
@@ -158,14 +155,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "profiles", "users"
-  add_foreign_key "profiles", "workspaces"
   add_foreign_key "bench_channels", "users", column: "creator_id"
   add_foreign_key "bench_conversations", "users", column: "sender_id"
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "users"
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "users", column: "sender_id"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "profiles", "workspaces"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
 end

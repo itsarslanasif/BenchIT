@@ -1,4 +1,3 @@
-User.create!(email: "admin@domain.com", password: "password", password_confirmation: "password")
 
   user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!')
 
@@ -29,3 +28,8 @@ User.create!(email: "admin@domain.com", password: "password", password_confirmat
   BenchConversation.create(conversationable_type: 'User', conversationable_id: 1, sender_id: 4)
   ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
   ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
+
+  Workspace.create(company_name: 'Kudo',slack_URL: '1csfd123',capacity: 10, admin_role: 'administrative', organization_type: 'government', workspace_type: 'work')
+
+  Profile.create( user_id:1, workspace_id:1, username:"Faiza", description:"SSE")
+
