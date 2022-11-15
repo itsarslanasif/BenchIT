@@ -9,5 +9,4 @@ class ConversationMessage < ApplicationRecord
   belongs_to :parent_message, class_name: 'ConversationMessage', foreign_key: :parent_message_id, optional: true
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
-
 end

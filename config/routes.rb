@@ -4,17 +4,23 @@ Rails.application.routes.draw do
   localized do
     devise_for :users
 
-    namespace :api, :defaults => { :format => 'json' } do
+    root to: 'application#index'
+    get '*path', to: 'application#index', format: false
+
+    namespace :api, defaults: { format: 'json' } do
+      namespace :v1 do
+        resources :mentions, only: [] do
+          collection do
+            get :channels_list
+            get :users_list
+          end
+        end
+      end
       resources :workspaces do
         resources :profiles, only: [:index]
       end
     end
-
+    
     resources :workspaces, only: [:index,:create]
-
-
-
-    root :to => "application#index"
-    match "*path", to: "application#index", format: false, via: :get
   end
 end

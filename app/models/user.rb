@@ -7,13 +7,11 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable
 
   validates_presence_of :email
-
   has_many :user_bench_channels
-  has_many :bench_channels, through: :channel_participants
-  has_many :bench_channels, foreign_key: :creator_id, inverse_of: :user
+  has_many :channel_participants, dependent: :destroy
+  has_many :bench_channels, foreign_key: :creator_id, inverse_of: :user, through: :channel_participants
   has_many :user_groups
   has_many :groups, through: :user_groups
-  has_many :bench_conversations, foreign_key: :sender_id, inverse_of: :user
   has_many :conversation_messages, dependent: :destroy, foreign_key: :sender_id, inverse_of: :user
-  has_many :bench_conversations, as: :conversationable
+  has_many :bench_conversations, as: :conversationable, foreign_key: :sender_id, inverse_of: :user
 end
