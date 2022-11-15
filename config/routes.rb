@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   localized do
-    devise_for :users, only: [:sessions]
+    devise_for :users
 
     root to: 'application#index'
     get '*path', to: 'application#index', format: false
@@ -16,6 +16,11 @@ Rails.application.routes.draw do
           end
         end
       end
+      resources :workspaces do
+        resources :profiles, only: [:index]
+      end
     end
+    
+    resources :workspaces, only: [:index,:create]
   end
 end
