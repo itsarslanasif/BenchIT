@@ -5,7 +5,6 @@ Rails.application.routes.draw do
     devise_for :users
 
     root to: 'application#index'
-    get '*path', to: 'application#index', format: false
 
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
@@ -21,7 +20,8 @@ Rails.application.routes.draw do
       end
       resources :bench_channels, only: [:create]
     end
-    
+
     resources :workspaces, only: [:index, :create]
+    get '*path', to: 'application#index', format: false
   end
 end
