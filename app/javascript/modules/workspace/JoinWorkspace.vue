@@ -49,18 +49,22 @@ export default {
       description: '',
       workspace_name: 'Devsinc',
       response: '',
+      workspace_id: '',
     };
+  },
+  mounted() {
+    this.workspace_id = window.location.pathname.split('/')[2];
   },
   methods: {
     handleSubmit() {
       axios
         .post(
-          `api/workspaces/${window.location.pathname.split('/')[2]}/profiles`,
+          `api/workspaces/${this.workspace_id}/profiles`,
 
           {
             username: this.username,
             description: this.description,
-            workspace_id: window.location.pathname.split('/')[2],
+            workspace_id: this.workspace_id,
           }
         )
         .then(response => {
