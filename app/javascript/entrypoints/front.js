@@ -1,6 +1,8 @@
 import { createApp } from 'vue';
 const app = createApp(Layout);
 
+import './application.scss';
+
 import Router from '@/routes.js';
 import Layout from '@/views/shared/layout.vue';
 import Axios from 'axios';
