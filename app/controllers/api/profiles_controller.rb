@@ -6,11 +6,15 @@ class Api::ProfilesController < Api::ApiController
   end
 
   def create
-    @profile = current_user.profiles.new(profile_params) # assuming that the user is already logged in
-    if @profile.save
-      render json: "Profile Added to #{@workspace.company_name}"
+    if current_user
+      @profile = current_user.profiles.new(profile_params) # assuming that the user is already logged in
+      if @profile.save
+        render json: "Profile Added to #{@workspace.company_name}"
+      else
+        render json: @profile.errors
+      end
     else
-      render json: @profile.errors
+      render json: {message: "user not logged in"} , status:401
     end
   end
 
