@@ -24,7 +24,7 @@
                         <span class="py-1 w-auto text-xl font-semibold">Channels</span>
                     </div>
                     <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
-                        {{ item.name }}
+                        <strong>{{ item.username }}</strong> <span class="text-sm">{{item.description}}</span>
                     </div>
                 </div>
             </div>

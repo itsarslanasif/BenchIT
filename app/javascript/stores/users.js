@@ -2,24 +2,7 @@ import { defineStore } from 'pinia'
 
 export const UserStore = defineStore('userStore', {
   state: () => ({
-    users: [
-      {
-        id: 1,
-        name: 'John Doe'
-      },
-      {
-        id: 2,
-        name: 'Jane'
-      },
-      {
-        id: 3,
-        name: 'Daniel'
-      },
-      {
-        id: 4,
-        name: 'Vicky'
-      },
-    ]
+    users: []
   }),
 
   getters: {
@@ -28,9 +11,14 @@ export const UserStore = defineStore('userStore', {
 
   actions: {
     async index() {
-      return this.axios.get('/user').then(response => {
-        this.users = response.data.users;
-      })
+      return this.axios
+        .get('workspaces/3/profiles')
+        .then(response => {
+          this.users = [...response.data.profiles];
+        })
+        .catch(error => {
+          return error;
+        });
     },
     async show(id) {
       return this.axios.get(`/user/${id}`).then(response => {

@@ -25,12 +25,16 @@
 import { SampleStore } from "@/stores/sample_store";
 import { UserStore } from "../../stores/users";
 import { ChannelStore } from "../../stores/channels"
+import { onMounted } from "vue";
 
 export default {
   setup() {
     SampleStore();
-    UserStore();
+    const usersStore = UserStore();
     ChannelStore();
+    onMounted(() => {
+      usersStore.index()
+    })
   },
 
   methods: {
@@ -41,5 +45,7 @@ export default {
       this.$api.call(this.store.show('this-will-trigger-a-500'));
     },
   },
+
+  
 };
 </script>
