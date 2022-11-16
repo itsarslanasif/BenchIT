@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_many :profiles, dependent: :destroy
   has_many :workspaces, through: :profiles, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
 
   paginates_per 10
 

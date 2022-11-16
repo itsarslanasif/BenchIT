@@ -8,6 +8,10 @@ Rails.application.routes.draw do
       resources :workspaces do
         resources :profiles, only: [:index]
       end
+
+      resources :bench_channels do
+        resources :bookmarks, only: [:create,:index]
+      end
     end
 
     resources :workspaces, only: [:index,:create]

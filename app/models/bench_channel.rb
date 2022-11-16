@@ -3,6 +3,7 @@ class BenchChannel < ApplicationRecord
   has_many :channel_participants, dependent: :destroy
   has_many :users, through: :channel_participants
   has_one :bench_conversation, as: :conversationable, dependent: :destroy
+  has_many :bookmarks, dependent: :destroy
 
   validates :name, uniqueness: true, presence: true, length: { minimum: 1, maximum: 80 }
   validates :description, length: { maximum: 500}
