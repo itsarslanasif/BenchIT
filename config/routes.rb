@@ -17,7 +17,7 @@ Rails.application.routes.draw do
         end
       end
       resources :workspaces do
-        resources :profiles, only: [:index]
+        resources :profiles, only: [:index, :create]
       end
     end
     
