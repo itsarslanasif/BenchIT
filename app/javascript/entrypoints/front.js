@@ -1,6 +1,8 @@
 import { createApp } from 'vue';
 const app = createApp(Layout);
 
+import './application.scss';
+
 import { library } from '@fortawesome/fontawesome-svg-core';
 import Router from '@/routes.js';
 import Layout from '@/views/shared/layout.vue';
