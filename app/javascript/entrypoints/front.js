@@ -1,17 +1,10 @@
 import { createApp } from 'vue';
 const app = createApp(Layout);
 
-import { library } from '@fortawesome/fontawesome-svg-core';
 import Router from '@/routes.js';
 import Layout from '@/views/shared/layout.vue';
 import Axios from 'axios';
 
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { faHouseLaptop } from '@fortawesome/free-solid-svg-icons';
-import { faPhone } from '@fortawesome/free-solid-svg-icons';
-import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
-
-library.add(faHouseLaptop, faPhone, faChevronDown);
 // ActionCable setup
 import { createCable } from '@/plugins/cable';
 const Cable = createCable({ channel: 'ChatChannel' });
@@ -37,5 +30,4 @@ app
   .use(I18n)
   .use(Api)
   .use(Cable)
-  .component('font-awesome-icon', FontAwesomeIcon)
   .mount('#app');
