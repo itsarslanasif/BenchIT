@@ -7,8 +7,8 @@ class User < ApplicationRecord
   devise :invitable, :database_authenticatable
 
   validates_presence_of :email
-  has_many :user_bench_channels
-  has_many :channel_participants, dependent: :destroy
+  has_many :channel_participants
+  has_many :bench_channels, dependent: :destroy
   has_many :bench_channels, foreign_key: :creator_id, inverse_of: :user, through: :channel_participants
   has_many :user_groups
   has_many :groups, through: :user_groups

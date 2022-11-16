@@ -20,6 +20,11 @@ Rails.application.routes.draw do
         resources :bookmarks, only: %i[create index]
       end
 
+      namespace :v2 do
+        resources :channels
+        resources :groups
+        resources :groups
+      end
       resources :workspaces do
         resources :profiles, only: [:index, :create]
       end
