@@ -18,7 +18,8 @@ Rails.application.routes.draw do
       namespace :v2 do
         resources :channels
         resources :groups
-        resources :groups
+        resources :users
+        resources :conversation_messages, only: :create
       end
       resources :workspaces do
         resources :profiles, only: [:index, :create]
