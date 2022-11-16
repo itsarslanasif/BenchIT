@@ -1,4 +1,7 @@
 <template>
+     <div class="loading" v-show="loading"  >
+      <img  src="./bookmark/loading.gif"/>
+    </div>
   <div v-if="chat.id">
     <div class="header">
       <div class="headerContainer">
@@ -18,17 +21,73 @@
     </div>
     <div class="header">
       <div class="headerContainer">
-        <p class="bookmarkText">+ Add a bookmark</p>
+        <AddBookMarkBtn @clicked="onClickChild"> </AddBookMarkBtn>
+
+        <p class="bookmarkText" v-for="bm in bookmarks" :key="bm.name">
+          <bookmark :data="bm" @clicked="onClickChild"> </bookmark>
+
+        </p>
+
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
+
+import AddBookMarkBtn from './bookmark/popup.vue'
+import bookmark from './bookmark/bookmarkShow.vue'
+import axios from './bookmark/axios/index.js'
 export default {
+
   name: 'ChatHeader',
-  components: {},
+  components: {AddBookMarkBtn,bookmark,},
   props: ['chat'],
+  data() {
+    return {
+      bookmarks:[],
+      loading:true,
+      user_id:1,
+    }},
+    mounted() {
+
+    axios
+      .get('bookmarks',)
+      .then(response => {
+
+        this.bookmarks =response.data.bookmarks;
+        console.log(this.bookmarks[0])
+        this.loading=false;
+      })
+      .catch(error => {
+        this.loading=false;
+        return error;
+      });
+  },
+  methods:{
+    onClickChild (value) {
+      this.loading=true;
+      this.bookmarks.push({name:value.name ,url:value.url})
+      axios
+      .post('bookmarks',
+        {
+          "name": value.name,
+          "bookmark_URL": value.url,
+          "user_id": this.user_id,
+        })
+      .then(response => {
+       this.members = response.data.profiles;
+       this.loading=false;
+      })
+      .catch(error => {
+        this.loading=false;
+        return error;
+
+      });
+
+      },
+  }
 };
 </script>
 <style scoped>
@@ -40,20 +99,29 @@ export default {
   justify-content: space-between;
   padding: 5px;
 }
+.loading {
+  width: 80%;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+
+}
 .headerContainer {
   align-items: center;
   display: flex;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  text-overflow: ellipsis;
+  scrollbar-color: dark;
   padding: 5px;
 }
 .bookmarkText {
   margin: 0px;
-  color: black;
+  padding: 10px;
 }
-.headerContainer:hover {
-  background-color: rgb(219, 213, 213);
-  border-radius: 3px;
-  cursor: pointer;
-}
+
 .phone-btn {
   align-items: center;
   border-radius: 3px;
@@ -64,7 +132,7 @@ export default {
   width: 30px;
 }
 .phone-btn:hover {
-  background-color: rgb(219, 213, 213);
+  background-color: rgb(138, 130, 130);
   cursor: pointer;
 }
 .avatar {
@@ -74,6 +142,10 @@ export default {
   margin-right: 5px;
   width: fit-content;
 }
+.loading>img{
+    width: 50px;
+    height: 50px;
+  }
 .avatar__badge {
   background-color: rgb(54, 151, 54);
   border-radius: 50%;

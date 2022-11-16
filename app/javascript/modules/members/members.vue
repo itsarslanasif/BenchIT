@@ -20,13 +20,14 @@
         />
       </div>
     </div>
-
+<!-- <popupVue @clicked="onClickChild" ></popupVue> -->
   </div>
 </template>
 
 <script>
 import member from './member.vue';
 import axios from './axios';
+// import popupVue from './bookmark/popup.vue'
 export default {
   components: {
     member,
@@ -49,7 +50,11 @@ export default {
       workspaceId: 1,
     };
   },
-  methods: {},
+  methods: {
+    onClickChild (value) {
+          console.log(value) // someValue
+      },
+  },
   computed: {
     filterMember: function() {
       return this.members.filter(m => {

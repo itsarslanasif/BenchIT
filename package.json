@@ -31,6 +31,7 @@
     "@vitejs/plugin-vue": "^2.3.1",
     "axios": "^0.26.1",
     "babel-eslint": "^10.1.0",
+    "ciao-vue-popup": "^1.0.20",
     "mitt": "^3.0.0",
     "moment": "^2.29.4",
     "pinia": "^2.0.13",

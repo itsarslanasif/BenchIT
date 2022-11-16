@@ -3,10 +3,11 @@
     <pane
       max-size="33"
       min-size="10.45"
-      style="background-color:#3f0e40;"
+      style="background-color: #3f0e40"
     ></pane>
 
     <pane max-size="100" min-size="67">
+      <Chat />
       <div class="editor">
         <editor
           api-key="v69g5pnxcpt0m2kmjntucft1sek0y2g7qw17n2scwu0pi76w"
@@ -27,16 +28,18 @@
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import Editor from '@tinymce/tinymce-vue';
+import Chat from '../components/chatPane/Chat.vue';
 export default {
   components: {
     Splitpanes,
     Pane,
+    Chat,
     editor: Editor,
   },
 };
 </script>
 
-<style>
+<style scoped>
 splitpanes {
   height: 100vh;
 }
@@ -47,6 +50,6 @@ splitpanes {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 75vh;
+  margin-top: 100vh;
 }
 </style>

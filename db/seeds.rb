@@ -1,4 +1,4 @@
-User.create!(email: "admin@domain.com", password: "password", password_confirmation: "password")
+
 
   user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!')
 
