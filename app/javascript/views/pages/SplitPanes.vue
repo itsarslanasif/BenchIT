@@ -6,6 +6,7 @@
       style="background-color: #3f0e40;"
     ><LeftPane /></pane>
     <pane class="chatpane" max-size="100" min-size="67">
+      <ChannelElement />
       <Chat />
     </pane>
   </splitpanes>
@@ -16,15 +17,15 @@ import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 
 import Chat from '../components/chatPane/Chat.vue';
-import Editor from '@tinymce/tinymce-vue';
 import LeftPane from './LeftPane.vue';
+import ChannelElement from './ChannelElement.vue';
 export default {
   components: {
     Splitpanes,
     Pane,
     Chat,
-    editor: Editor,
     LeftPane,
+    ChannelElement,
   },
 };
 </script>

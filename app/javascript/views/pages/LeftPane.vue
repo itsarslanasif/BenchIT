@@ -52,8 +52,10 @@ background-color:#3f0e40;
 }
 
 .bottom_div{
-  margin-top: 70vh;
+  margin-top: 52vh;
   height: 50px;
+  margin-bottom: auto;
+  z-index: +1;
 }
 
 p,label,b{
