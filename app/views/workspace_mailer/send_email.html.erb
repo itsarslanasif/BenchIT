@@ -1,0 +1,13 @@
+<h1>Welcome to your new workspace!</h1>
+<p>
+Here are the details for your new Slack workspace, <%= @workspace.company_name %>.
+<p>
+<strong>Workspace Name: </strong>
+<%= @workspace.company_name %><br/>
+<strong>Workspace URL: </strong>
+<%= @workspace.benchIT_URL %>
+<div>
+<%= link_to button_tag('Open Workspace', class: 'btn btn-dark mt-3'), "/join_workspace/#{@workspace.id}" %>
+</div>
+
+

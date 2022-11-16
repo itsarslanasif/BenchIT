@@ -29,7 +29,7 @@ export default {
   methods: {
     handleSubmit() {
       axios
-        .post('users/invitation', this.userStore.user_email)
+        .post('users/invite', this.userStore.user_email)
         .then(response => {
           return response.data;
         })
