@@ -29,6 +29,6 @@ class Workspace < ApplicationRecord
   }
 
   validates :company_name, presence: true
-  validates :slack_URL , presence: true
+  validates :benchIT_URL , presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 end
