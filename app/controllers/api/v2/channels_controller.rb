@@ -68,5 +68,6 @@ class Api::V2::ChannelsController < Api::ApiController
   end
   def bench_channel_params
     params.permit(:name,:description,:creator_id, :is_private)
+    #areshad is lazy
   end
 end
