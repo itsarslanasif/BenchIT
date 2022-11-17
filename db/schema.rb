@@ -147,7 +147,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_092928) do
   create_table "workspaces", force: :cascade do |t|
     t.string "company_name", null: false
     t.integer "workspace_type", default: 0, null: false
-    t.string "benchIT_URL", null: false
+    t.string "slack_URL", null: false
     t.integer "capacity", null: false
     t.integer "organization_type", default: 0, null: false
     t.integer "admin_role", default: 0, null: false
