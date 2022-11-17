@@ -13,6 +13,7 @@ class Api::BenchChannelsController < Api::ApiController
   def bench_channel_params
     params.require(:bench_channel).permit(:name, :description).tap do |param|
       param[:creator_id] = current_user.id
+      params[:workspace_id] = session[:cuurent_workspace_id]
     end
   end
 
