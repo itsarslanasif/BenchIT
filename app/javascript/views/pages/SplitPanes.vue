@@ -5,7 +5,7 @@
       min-size="10.45"
       style="background-color: #3f0e40"
     >
-    <WorkspaceDropdown />
+    <WorkspaceDropdown title="BenchIT" :items="options" />
   </pane>
     <pane class="chatpane" max-size="100" min-size="67">
       <Chat />
@@ -25,6 +25,49 @@ export default {
     Chat,
     WorkspaceDropdown,
   },
+  data () {
+    return {
+      options: [
+        {
+          title: 'BenchIT',
+          link: '#'
+        },
+        {
+          title: 'Terms & Conditions',
+          link:'#'
+        },
+        {
+          title: 'Invite People',
+          link: '/invite_to_workspace'
+        },
+        {
+          title: 'Create Channel',
+          link: '#'
+        },
+        {
+          title: 'Preferences',
+          link: '#'
+        },
+        {
+          title: 'Administration',
+          link: '#'
+        },
+        {
+          title: 'Tools',
+          link: '#'
+        },
+        {
+          title: 'Sign in to BenchIT on mobile',
+          link: '#'
+        },
+        {
+          title: 'Sign Out of BenchIT',
+          link: '#'
+        }
+      ]
+    }
+  }
+
 };
 </script>
 

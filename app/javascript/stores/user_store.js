@@ -11,6 +11,10 @@ export const UserStore = defineStore('user', {
         password_confirmation: '',
         invitation_token: '',
       },
+      workspace_invite: {
+        email:'',
+        token_type: 'workspace_invitation',
+      },
       confirmPasswordError: '',
     }
   }
