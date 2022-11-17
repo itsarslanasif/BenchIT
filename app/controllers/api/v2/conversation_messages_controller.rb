@@ -25,15 +25,3 @@ class Api::V2::ConversationMessagesController < Api::ApiController
     params.permit(:content,:is_threaded,:parent_message_id, :sender_id,:bench_conversation_id)
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-

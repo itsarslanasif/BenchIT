@@ -16,9 +16,9 @@ Rails.application.routes.draw do
         end
       end
       namespace :v2 do
-        resources :channels
-        resources :groups
-        resources :users
+        resources :channels, only: [:index, :show, :create, :destroy]
+        resources :groups, only: [:index, :show]
+        resources :users, only: [:index, :show]
         resources :conversation_messages, only: [:create, :destroy]
       end
       resources :workspaces do

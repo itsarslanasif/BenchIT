@@ -13,6 +13,7 @@ class Api::V2::GroupsController < Api::ApiController
       @messages.each do |message|
         response = {
           message_id: message.id,
+          group_id: @group.id,
           content:message.content,
           is_threaded:message.is_threaded,
           parent_message_id:message.parent_message_id,

@@ -19,6 +19,7 @@ gem "sassc-rails"
 gem 'pg'
 gem 'redis-namespace'
 gem 'devise_invitable'
+gem 'rack-cors'
 
 gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
 
