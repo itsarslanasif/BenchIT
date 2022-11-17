@@ -1,16 +1,16 @@
 <template>
  <div >
-  <a  class="button" href="#popup2">{{data["name"]}}</a>
+  <a  class="button" v-bind:href="'#'+data['name']">{{data["name"]}}</a>
 </div>
 
-<div id="popup2" class="overlay">
+<div v-bind:id="data['name']" class="overlay">
   <div class="popup">
   <div>
     <h2>Bookmark</h2>
     <a class="close" href="#">×</a>
     <div class="content">
         <h5>Please enter URL :</h5>
-        <input v-model="data['bookmark_URL']" type="text"  required/>
+        <input v-model="data.bookmark_URL"  required/>
     </div>
     <div class="content">
         <h5>Please enter name :</h5>
@@ -38,6 +38,7 @@
       },
     }},
     methods :{
+
       // handleUpdate(event) {
       //   this.$emit('clicked',this.bookmark)
       //   },
@@ -77,7 +78,10 @@
     margin: 0px;
   color: black;
   padding: 10px;
+  overflow: auto;
   border-radius: 10px;
+  width: max-content;
+  display: inline-block;
   margin-right: 5px;
   background-color: rgb(234, 234, 234);
   border: 1px solid rgb(212, 212, 212);
