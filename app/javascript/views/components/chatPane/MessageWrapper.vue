@@ -67,6 +67,12 @@ export default {
     return {
       message: this.currMessage,
       oldMessage: this.prevMessage,
+    };
+  },
+  data() {
+    return {
+      message: this.currMessage,
+      oldMessage: this.prevMessage,
       emojiModalStatus: false,
       openEmojiModal: false,
       allReactions: [],
@@ -99,7 +105,6 @@ p {
   font-size: 14px;
   margin: 0px;
 }
-
 .messageContent {
   color: rgb(52, 51, 51);
   font-size: 14px;
@@ -135,19 +140,16 @@ p {
   cursor: pointer;
   text-decoration: underline;
 }
-
 .time-on-left {
   color: grey;
   font-size: x-small;
   margin-left: 16px;
   margin-right: 8px;
 }
-
 .time-on-left:hover {
   cursor: pointer;
   text-decoration: underline;
 }
-
 .messageInfo {
   align-items: center;
   display: flex;

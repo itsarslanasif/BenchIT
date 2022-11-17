@@ -37,12 +37,12 @@ import { createI18n } from 'vue-i18n'; // Need the /index to avoid warning in co
 const I18n = createI18n({ locale: 'current', messages: translations });
 
 app.use(Router)
-   .use(Pinia)
-   .use(I18n)
-   .use(Api)
-   .use(Cable)
-   .component('font-awesome-icon', FontAwesomeIcon)
-   .mount('#app')
+  .use(Pinia)
+  .use(I18n)
+  .use(Api)
+  .use(Cable)
+  .component('font-awesome-icon', FontAwesomeIcon)
+  .mount('#app')
 
 
 

@@ -136,6 +136,7 @@ export default {
   margin: 0px;
 }
 .headerContainer:hover {
+  background-color: rgb(230, 232, 234);
   border-radius: 3px;
   cursor: pointer;
 }

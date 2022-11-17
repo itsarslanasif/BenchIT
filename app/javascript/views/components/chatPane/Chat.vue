@@ -39,7 +39,7 @@ export default {
     NSpace,
     editor: Editor,
   },
-mounted() {
+  mounted() {
     axios
       .get(`${this.conversation_type}/${this.id}`)
       .then(response => {
