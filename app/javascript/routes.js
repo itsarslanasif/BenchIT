@@ -1,14 +1,14 @@
-import { createWebHistory, createRouter } from 'vue-router';
+import { createWebHistory, createRouter } from 'vue-router'
 
-import PageIndex from '@/views/pages/index.vue';
-import Error404 from '@/views/pages/error_404.vue';
+import PageIndex from '@/views/pages/index.vue'
+import Error404 from '@/views/pages/error_404.vue'
 import SearchPage from '@/views/pages/search.vue'
-import NewWorkspace from '@/modules/workspace/NewWorkspace.vue';
-import JoinWorkspace from '@/modules/workspace/JoinWorkspace.vue';
-import Members from '@/modules/members/members.vue';
-import EmailForm from '@/modules/workspace/EmailForm.vue';
-import PasswordForm from '@/modules/workspace/PasswordForm.vue';
-import SplitPanes from './views/pages/SplitPanes.vue';
+import NewWorkspace from '@/modules/workspace/NewWorkspace.vue'
+import JoinWorkspace from '@/modules/workspace/JoinWorkspace.vue'
+import Members from '@/modules/members/members.vue'
+import EmailForm from '@/modules/workspace/EmailForm.vue'
+import PasswordForm from '@/modules/workspace/PasswordForm.vue'
+import SplitPanes from './views/pages/SplitPanes.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
