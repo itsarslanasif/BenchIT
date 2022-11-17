@@ -19,6 +19,7 @@ Rails.application.routes.draw do
         resources :profiles, only: [:index, :create]
       end
       resources :bench_channels, only: [:create]
+      match "/workspaces/:workspace_id/invite", :to => "workspaces#invite", :via => "post"
     end
 
     get '*path', to: 'application#index', format: false

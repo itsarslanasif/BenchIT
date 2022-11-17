@@ -87,6 +87,7 @@ GEM
       mail
     childprocess (4.1.0)
     concurrent-ruby (1.1.10)
+    connection_pool (2.3.0)
     crass (1.0.6)
     debug (1.5.0)
       irb (>= 1.3.6)
@@ -246,6 +247,10 @@ GEM
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2)
+    sidekiq (6.5.8)
+      connection_pool (>= 2.2.5, < 3)
+      rack (~> 2.0)
+      redis (>= 4.5.0, < 5)
     spring (4.0.0)
     sprockets (4.0.3)
       concurrent-ruby (~> 1.0)
@@ -319,6 +324,7 @@ DEPENDENCIES
   route_translator
   sassc-rails
   selenium-webdriver
+  sidekiq (< 7)
   spring
   sprockets-rails
   tzinfo-data
