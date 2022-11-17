@@ -38,7 +38,7 @@ export default {
         },
         {
           title: 'Invite People',
-          link: '/invite_to_workspace'
+          link: '/invite_to_workspace/:id'
         },
         {
           title: 'Create Channel',

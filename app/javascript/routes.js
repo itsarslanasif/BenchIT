@@ -26,7 +26,7 @@ const router = createRouter({
     { path: '/password_form', component: PasswordForm, name: 'password_form' },
     { path: '/screen', component: SplitPanes, name: 'screen' },
     { path: '/workspace_dashboard', component: WorkspaceDashboard, name: 'workspace_dashboard' },
-    { path: '/invite_to_workspace', component: UserInviteForm, name: 'user_invite_form' },
+    { path: '/invite_to_workspace/:id', component: UserInviteForm, name: 'user_invite_form' },
 
 
   ]
