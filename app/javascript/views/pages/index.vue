@@ -29,9 +29,9 @@ import { onMounted } from 'vue'
 
 export default {
   setup() {
-    SampleStore();
-    const usersStore = UserStore();
-    ChannelStore();
+    SampleStore()
+    const usersStore = UserStore()
+    ChannelStore()
     onMounted(() => {
       usersStore.index()
     })
@@ -39,10 +39,10 @@ export default {
 
   methods: {
     unauthorized() {
-      this.$api.call(this.store.show('this-will-trigger-a-401'));
+      this.$api.call(this.store.show('this-will-trigger-a-401'))
     },
     crash() {
-      this.$api.call(this.store.show('this-will-trigger-a-500'));
+      this.$api.call(this.store.show('this-will-trigger-a-500'))
     },
   },
 
