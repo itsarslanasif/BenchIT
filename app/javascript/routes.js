@@ -21,6 +21,9 @@ const router = createRouter({
     { path: '/invite_user', component: EmailForm, name: 'invite_user' },
     { path: '/password_form', component: PasswordForm, name: 'password_form' },
     { path: '/screen', component: SplitPanes, name: 'screen' },
+    { path: '/users/:id', component: SplitPanes, name: 'user_chat' },
+    { path: '/channels/:id', component: SplitPanes, name: 'channel_chat' },
+    { path: '/groups/:id', component: SplitPanes, name: 'group_chat' },
   ],
 });
 
