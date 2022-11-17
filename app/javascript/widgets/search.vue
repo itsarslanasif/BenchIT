@@ -87,6 +87,6 @@ export default {
 }
 </script>
 
-<style scoped src="../entrypoints/application.scss">
+<style scoped src='../entrypoints/application.scss'>
 
 </style>
