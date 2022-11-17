@@ -3,13 +3,13 @@
 </template>
 
 <script>
- export default {
-  name : "IconElement",
+export default {
+  name: "IconElement",
 
   props: {
     icon: String,
     space: String,
     name: String
   }
- }
+}
 </script>
