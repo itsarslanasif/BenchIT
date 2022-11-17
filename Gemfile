@@ -45,4 +45,5 @@ group :test do
   gem 'warden'
   gem 'selenium-webdriver'
   gem 'webdrivers'
+  gem 'byebug'
 end
