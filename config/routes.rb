@@ -19,7 +19,7 @@ Rails.application.routes.draw do
         resources :channels
         resources :groups
         resources :users
-        resources :conversation_messages, only: :create
+        resources :conversation_messages, only: [:create, :destroy]
       end
       resources :workspaces do
         resources :profiles, only: [:index, :create]

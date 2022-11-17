@@ -35,6 +35,7 @@ class Api::V2::ChannelsController < Api::ApiController
     @channel = BenchChannel.new(bench_channel_params)
     if @channel.save
       ChannelParticipant.create(bench_channel_id:@channel.id, user_id:current_user.id)
+      BenchConversation.create(conversationable_id:@channel.id, conversationable_type: "BenchChannel")
       render json: { status: :ok, message: 'Success' }
     else
       render json: { json: @channel.errors, status: :unprocessable_entity }
