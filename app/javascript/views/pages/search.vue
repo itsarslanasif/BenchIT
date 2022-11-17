@@ -5,7 +5,7 @@
 <script>
 import SearchWidget from '../../widgets/search.vue'
 export default {
-    name: "Search",
+    name: 'Search',
     components: {
         SearchWidget
     }
