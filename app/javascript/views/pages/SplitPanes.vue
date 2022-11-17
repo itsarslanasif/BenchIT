@@ -17,8 +17,8 @@ import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 
 import Chat from '../components/chatPane/Chat.vue';
-import LeftPane from './LeftPane.vue';
-import ChannelElement from './ChannelElement.vue';
+import LeftPane from '../components/LeftPane.vue';
+import ChannelElement from '../components/ChannelElement.vue';
 export default {
   components: {
     Splitpanes,

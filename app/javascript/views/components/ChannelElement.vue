@@ -4,6 +4,7 @@
 
 <script>
 import {useRoute} from 'vue-router';
+
 export default {
   name: "channel",
 
@@ -13,7 +14,7 @@ export default {
       name:''
     }
   },
-  mounted()
+ async mounted()
   {
     const route=useRoute();
     this.name=route.params.name;

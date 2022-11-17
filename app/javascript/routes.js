@@ -10,7 +10,7 @@ import EmailForm from '@/modules/user/EmailForm.vue'
 import PasswordForm from '@/modules/user/PasswordForm.vue'
 import SplitPanes from './views/pages/SplitPanes.vue'
 import WorkspaceDashboard from '@/modules/workspace/WorkspaceDashboard.vue'
-import ChannelElement from './views/pages/ChannelElement.vue'
+import ChannelElement from './views/components/ChannelElement.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -25,8 +25,8 @@ const router = createRouter({
     { path: '/invite_user', component: EmailForm, name: 'invite_user' },
     { path: '/password_form', component: PasswordForm, name: 'password_form' },
     { path: '/screen', component: SplitPanes, name:'screen'},
-    { path: '/screen/:name', component: ChannelElement, name:'channel'},
     { path: '/workspace_dashboard', component: WorkspaceDashboard, name: 'workspace_dashboard' },
+    { path: '/channel/:name', component: ChannelElement, name:'channel-id'},
   ]
 });
 
