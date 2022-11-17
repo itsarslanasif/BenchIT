@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <template v-for="message in messages" :key="message.id">
-      {{ setMessageTime(message.sentAt) }}
+      {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <p class="messageTimestamp">
-          {{ isToday ? 'Today' : new Date(messageTime).toDateString() }}
-        </p>
+        <n-divider>
+          <p class="messageTimestamp">
+            {{ isToday ? 'Today' : new Date(message.sentAt).toDateString() }}
+          </p>
+        </n-divider>
       </div>
-      <MessageWrapper :message="message" />
+      <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
     </template>
   </div>
 </template>
@@ -15,35 +17,41 @@
 <script>
 import MessageWrapper from './MessageWrapper.vue';
 import messages from './data/messages';
+import { NButton, NSpace, NDivider } from 'naive-ui';
+
 export default {
   name: 'ChatBody',
   components: {
     MessageWrapper,
+    NButton,
+    NSpace,
+    NDivider,
   },
   data() {
     return {
       messages: messages,
-      messageTime: null,
-      prevMessageTime: null,
+      message: null,
+      prevMessage: null,
     };
   },
   computed: {
     isToday() {
       return (
-        new Date(this.messageTime).toDateString() === new Date().toDateString()
+        new Date(this.message?.sentAt).toDateString() ===
+        new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.messageTime).toDateString() ===
-        new Date(this.prevMessageTime).toDateString()
+        new Date(this.message?.sentAt).toDateString() ===
+        new Date(this.prevMessage?.sentAt).toDateString()
       );
     },
   },
   methods: {
-    setMessageTime(time) {
-      this.prevMessageTime = this.messageTime;
-      this.messageTime = time;
+    setMessage(message) {
+      this.prevMessage = this.message;
+      this.message = message;
     },
   },
 };
@@ -51,9 +59,8 @@ export default {
 <style scoped>
 .container {
   float: left;
-  height: 100vh;
-  margin-top: 10px;
-  overflow: auto;
+  height: 60vh;
+  overflow-y: auto;
   width: 100%;
 }
 .messageTimestamp {
@@ -61,10 +68,5 @@ export default {
   font-size: small;
   margin: 0px;
   text-align: center;
-}
-hr {
-  border-top: 1px solid rgb(108, 107, 107);
-  border: 20px;
-  margin: 0px 0px 5px 0px;
 }
 </style>

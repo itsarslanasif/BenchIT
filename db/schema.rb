@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_11_115919) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_17_092928) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -42,21 +42,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_11_115919) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "profiles", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "workspace_id", null: false
-    t.string "username", null: false
-    t.text "description"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_profiles_on_user_id"
-    t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
-    t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
-    
-ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
-  # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
-
   create_table "bench_channels", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
@@ -64,8 +49,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "creator_id"
+    t.bigint "workspace_id", null: false
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
     t.index ["name"], name: "index_bench_channels_on_name", unique: true
+    t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
   end
 
   create_table "bench_conversations", force: :cascade do |t|
@@ -105,6 +92,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
   create_table "groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "workspace_id", null: false
+    t.string "username", null: false
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+    t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
+    t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
   end
 
   create_table "user_groups", force: :cascade do |t|
@@ -148,7 +147,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
   create_table "workspaces", force: :cascade do |t|
     t.string "company_name", null: false
     t.integer "workspace_type", default: 0, null: false
-    t.string "slack_URL", null: false
+    t.string "benchIT_URL", null: false
     t.integer "capacity", null: false
     t.integer "organization_type", default: 0, null: false
     t.integer "admin_role", default: 0, null: false
@@ -158,14 +157,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_10_163315) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "profiles", "users"
-  add_foreign_key "profiles", "workspaces"
   add_foreign_key "bench_channels", "users", column: "creator_id"
+  add_foreign_key "bench_channels", "workspaces"
   add_foreign_key "bench_conversations", "users", column: "sender_id"
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "users"
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "users", column: "sender_id"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "profiles", "workspaces"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
 end

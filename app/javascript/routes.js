@@ -1,25 +1,31 @@
 import { createWebHistory, createRouter } from 'vue-router'
 
-import PageIndex from '@/views/pages/index.vue';
-import Error404 from '@/views/pages/error_404.vue';
-import NewWorkspace from '@/modules/workspace/NewWorkspace.vue';
-import Members from '@/modules/members/members.vue';
-import EmailForm from '@/modules/workspace/EmailForm.vue';
-import PasswordForm from '@/modules/workspace/PasswordForm.vue';
+import PageIndex from '@/views/pages/index.vue'
+import Error404 from '@/views/pages/error_404.vue'
+import SearchPage from '@/views/pages/search.vue'
+import NewWorkspace from '@/modules/workspace/NewWorkspace.vue'
+import JoinWorkspace from '@/modules/workspace/JoinWorkspace.vue'
+import Members from '@/modules/members/members.vue'
+import EmailForm from '@/modules/user/EmailForm.vue'
+import PasswordForm from '@/modules/user/PasswordForm.vue'
 import SplitPanes from './views/pages/SplitPanes.vue'
+import WorkspaceDashboard from '@/modules/workspace/WorkspaceDashboard.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
   routes: [
     { path: '/', component: PageIndex, name: 'root_path' },
+    { path: '/search', component: SearchPage, name: 'search' },
     { path: '/404', component: Error404 },
     { path: '/:catchAll(.*)', redirect: '/404' },
     { path: '/new_workspace', component: NewWorkspace, name: 'new_workspace' },
+    { path: '/join_workspace/:workspace_id', component: JoinWorkspace, name: 'join_workspace' },
     { path: '/members', component: Members, name: 'members' },
     { path: '/invite_user', component: EmailForm, name: 'invite_user' },
     { path: '/password_form', component: PasswordForm, name: 'password_form' },
-    { path: '/screen', component: SplitPanes, name:'screen'}
+    { path: '/screen', component: SplitPanes, name: 'screen' },
+    { path: '/workspace_dashboard', component: WorkspaceDashboard, name: 'workspace_dashboard' },
   ]
-});
+})
 
-export default router;
+export default router
