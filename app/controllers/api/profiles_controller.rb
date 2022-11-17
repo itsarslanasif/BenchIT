@@ -14,7 +14,7 @@ class Api::ProfilesController < Api::ApiController
         render json: @profile.errors
       end
     else
-      render json: {message: "user not logged in"} , status:401
+      render json: { message: 'user not logged in' }, status: :unauthorized
     end
   end
 
@@ -22,10 +22,10 @@ class Api::ProfilesController < Api::ApiController
 
   def set_workspace
     @workspace = Workspace.find_by(id: params[:workspace_id])
+    return render json: { message: 'Workspace Not Found.' }, status: :not_found if @workspace.nil?
   end
 
   def profile_params
     params.require(:profile).permit(:workspace_id, :username, :description)
   end
-
 end
