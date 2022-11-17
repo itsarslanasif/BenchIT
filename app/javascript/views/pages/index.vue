@@ -22,22 +22,30 @@
 </template>
 
 <script>
-import { SampleStore } from '@/stores/sample_store';
+import { SampleStore } from '@/stores/sample_store'
+import { UserStore } from '../../stores/users'
+import { ChannelStore } from '../../stores/channels'
+import { onMounted } from 'vue'
 
 export default {
   setup() {
-    const store = SampleStore();
-
-    return { store };
+    SampleStore()
+    const usersStore = UserStore()
+    ChannelStore()
+    onMounted(() => {
+      usersStore.index()
+    })
   },
 
   methods: {
     unauthorized() {
-      this.$api.call(this.store.show('this-will-trigger-a-401'));
+      this.$api.call(this.store.show('this-will-trigger-a-401'))
     },
     crash() {
-      this.$api.call(this.store.show('this-will-trigger-a-500'));
+      this.$api.call(this.store.show('this-will-trigger-a-500'))
     },
   },
+
+  
 };
 </script>
