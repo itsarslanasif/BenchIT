@@ -22,10 +22,10 @@
 </template>
 
 <script>
-import { SampleStore } from "@/stores/sample_store"
-import { UserStore } from "../../stores/users"
-import { ChannelStore } from "../../stores/channels"
-import { onMounted } from "vue"
+import { SampleStore } from '@/stores/sample_store'
+import { UserStore } from '../../stores/users'
+import { ChannelStore } from '../../stores/channels'
+import { onMounted } from 'vue'
 
 export default {
   setup() {
