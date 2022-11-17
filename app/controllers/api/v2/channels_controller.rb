@@ -13,6 +13,7 @@ class Api::V2::ChannelsController < Api::ApiController
       @messages.each do |message|
         response = {
           message_id: message.id,
+          channel_name: @channel.name,
           content:message.content,
           is_threaded:message.is_threaded,
           parent_message_id:message.parent_message_id,
@@ -34,9 +35,17 @@ class Api::V2::ChannelsController < Api::ApiController
     current_user = User.first
     @channel = BenchChannel.new(bench_channel_params)
     if @channel.save
-      ChannelParticipant.create(bench_channel_id:@channel.id, user_id:current_user.id)
-      BenchConversation.create(conversationable_id:@channel.id, conversationable_type: "BenchChannel")
-      render json: { status: :ok, message: 'Success' }
+      @participant = ChannelParticipant.new(bench_channel_id:@channel.id, user_id:current_user.id)
+      if @participant.save
+        @conversation = BenchConversation.new(conversationable_id:@channel.id, conversationable_type: "BenchChannel")
+        if @conversation.save
+          render json: { status: :ok, message: 'Success' }
+        else
+          render json: { json: @conversation.errors, status: :unprocessable_entity }
+        end
+      else
+        render json: { json: @participant.errors, status: :unprocessable_entity }
+      end
     else
       render json: { json: @channel.errors, status: :unprocessable_entity }
     end
