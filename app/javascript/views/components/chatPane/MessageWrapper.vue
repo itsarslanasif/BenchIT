@@ -1,54 +1,84 @@
 <template>
   <div class="messageWrapper">
-    <img :src="message.sender.avatar" class="avatar" />
+    <n-avatar
+      v-show="!isSameUser"
+      class="avatar"
+      size="large"
+      :src="message.sender.avatar"
+    />
     <span class="message">
       <span class="messageInfo">
-        <p class="name">
+        <p v-show="!isSameUser" class="name">
           <b>{{ message.sender.name }}</b>
         </p>
-        <p class="time">
-          {{ time }}
+        <p v-bind:class="{ 'time': !isSameUser, 'time-on-left': isSameUser }">
+          {{ isSameUser ? timeWithoutAMPM : time }}
         </p>
+        <span
+          v-show="isSameUser"
+          class="messageContent"
+          v-html="message.content"
+        />
       </span>
-      <span class="messageContent" v-html="message.content" />
+      <span
+        v-show="!isSameUser"
+        class="messageContent"
+        v-html="message.content"
+      />
     </span>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import { NAvatar } from 'naive-ui';
 export default {
   name: 'MessageWrapper',
+  components: { NAvatar },
   props: {
-    message: {
+    currMessage: {
+      type: Object,
+      default: undefined,
+    },
+    prevMessage: {
       type: Object,
       default: undefined,
     },
   },
+  data() {
+    return {
+      message: this.currMessage,
+      oldMessage: this.prevMessage,
+    };
+  },
   computed: {
     time() {
-      return moment().format('hh:mm A');
+      return moment(new Date(this.message.sentAt).getTime()).format('h:mm A');
+    },
+    timeWithoutAMPM() {
+      return moment(new Date(this.message.sentAt).getTime()).format('h:mm');
+    },
+    isSameUser() {
+      if (this.oldMessage === undefined) return false;
+      return this.message?.sender.id === this.oldMessage?.sender.id;
     },
   },
 };
 </script>
-
 <style scoped>
 p {
-  color: rgb(69, 68, 68);
+  color: rgb(52, 51, 51);
   font-size: 14px;
   margin: 0px;
 }
-
 .messageContent {
-  color: rgb(69, 68, 68);
+  color: rgb(52, 51, 51);
   font-size: 14px;
   word-wrap: normal;
 }
 .messageWrapper {
   align-items: center;
   display: flex;
-  margin-bottom: 5px;
   padding: 5px;
 }
 .messageWrapper:hover {
@@ -69,16 +99,24 @@ p {
   cursor: pointer;
   text-decoration: underline;
 }
+.time-on-left {
+  color: grey;
+  font-size: x-small;
+  margin-left: 16px;
+  margin-right: 8px;
+}
+.time-on-left:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
 .messageInfo {
   align-items: center;
   display: flex;
 }
 .avatar {
-  background: rgb(171, 170, 170);
-  border-radius: 3px;
+  align-self: baseline;
   height: 40px;
   margin-right: 5px;
-  width: fit-content;
-  align-self: baseline;
+  min-width: fit-content;
 }
 </style>
