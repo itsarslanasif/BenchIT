@@ -9,7 +9,7 @@
       />
     </div>
     <div class="loading" v-show="members.length == 0">
-      <img  src="./loading.gif"/>
+      <img  src="../../assets/images/loading.gif"/>
     </div>
     <div class="render-member-row">
       <div v-for="member in filterMember" :key="member.id" >
@@ -20,14 +20,12 @@
         />
       </div>
     </div>
-<!-- <popupVue @clicked="onClickChild" ></popupVue> -->
   </div>
 </template>
 
 <script>
 import member from './member.vue';
 import axios from './axios';
-// import popupVue from './bookmark/popup.vue'
 export default {
   components: {
     member,
@@ -46,8 +44,6 @@ export default {
     return {
       searchQuery: '',
       members: [],
-      search: '',
-      workspaceId: 1,
     };
   },
   methods: {

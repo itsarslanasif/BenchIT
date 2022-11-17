@@ -10,13 +10,13 @@
     <a class="close" href="#">×</a>
     <div class="content">
         <h5>Please enter URL :</h5>
-        <input v-model="bookmark.url" placeholder="url" required/>
+        <input v-model="bookmark.url" type="email" placeholder="url" required/>
     </div>
     <div class="content">
         <h5>Please enter name :</h5>
         <input v-model="bookmark.name" placeholder="name" required/>
     </div>
-    <a v-show="bookmark.url!=='' &&  bookmark.name!==''" class="  save-btn" @click="handleSave()"  href="#" > Save </a>
+    <a v-show="bookmark.name!=='' &&  validURL(bookmark.url)" class="  save-btn" @click="handleSave()"  href="#" > Save </a>
   </div>
   </div>
 
@@ -37,6 +37,15 @@ export default {
       handleSave(event) {
         this.$emit('clicked',this.bookmark)
         },
+      validURL(str) {
+        var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|'+ // domain name
+        '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+        '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+        '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+      return !!pattern.test(str);
+      },
     },
 };
 </script>

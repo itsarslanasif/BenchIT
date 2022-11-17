@@ -1,6 +1,6 @@
 <template>
      <div class="loading" v-show="loading"  >
-      <img  src="./bookmark/loading.gif"/>
+      <img  src="../../../assets/images/loading.gif"/>
     </div>
   <div v-if="chat.id">
     <div class="header">
