@@ -1,11 +1,13 @@
 <template>
   <div class="container">
-    <template v-for="message in messages" :key="message.id">
+    <template v-for="message in messages" :key="message.message_id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
         <n-divider>
           <p class="messageTimestamp">
-            {{ isToday ? 'Today' : new Date(message.sentAt).toDateString() }}
+            {{
+              isToday ? 'Today' : new Date(message.created_at).toDateString()
+            }}
           </p>
         </n-divider>
       </div>
@@ -13,12 +15,9 @@
     </template>
   </div>
 </template>
-
 <script>
 import MessageWrapper from './MessageWrapper.vue';
-import messages from './data/messages';
 import { NButton, NSpace, NDivider } from 'naive-ui';
-
 export default {
   name: 'ChatBody',
   components: {
@@ -27,9 +26,9 @@ export default {
     NSpace,
     NDivider,
   },
+  props: ['messages'],
   data() {
     return {
-      messages: messages,
       message: null,
       prevMessage: null,
     };
@@ -37,14 +36,14 @@ export default {
   computed: {
     isToday() {
       return (
-        new Date(this.message?.sentAt).toDateString() ===
+        new Date(this.message?.created_at).toDateString() ===
         new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.sentAt).toDateString() ===
-        new Date(this.prevMessage?.sentAt).toDateString()
+        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },

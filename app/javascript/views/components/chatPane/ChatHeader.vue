@@ -3,9 +3,9 @@
     <div class="header">
       <div class="headerContainer">
         <n-avatar class="avatar" size="small" :src="chat.avatar" />
-        <span v-if="chat.isOnline" class="avatar__badge" />
+        <span v-if="chat.isActive" class="avatar__badge" />
         <p class="name">{{ chat.name }}</p>
-        <n-icon size="25">
+        <n-icon v-if="chat.status" size="25">
           <svg viewBox="0 0 24 24">
             <g>
               <path
