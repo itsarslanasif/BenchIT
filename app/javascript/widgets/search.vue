@@ -33,11 +33,11 @@
 </template>
 
 <script>
-import { UserStore } from '../stores/users';
-import { ChannelStore } from '../stores/channels';
+import { UserStore } from '../stores/users'
+import { ChannelStore } from '../stores/channels'
 
 export default {
-    name: "SearchWidget",
+    name: 'SearchWidget',
     data() {
         return {
             searchModalToggle: false,
