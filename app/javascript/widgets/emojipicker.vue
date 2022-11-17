@@ -1,6 +1,6 @@
 <template>
 	<div class="emojiModalStyle">
-		<emojiModal @select="onSelectEmoji" :native="true" class="emojiModalStyle" />
+		<emojiModal @select="addReaction" :native="true" class="emojiModalStyle" />
 	</div>
 </template>
 <script>
@@ -11,15 +11,11 @@ export default {
 	components: {
 		emojiModal
 	},
-	methods: {
-		onSelectEmoji(emoji) {
-			console.log(emoji)
-		}
-	}
+	props: ["addReaction"],
 }
 </script>
 <style>
-	.emojiModalStyle{
-		font-size: 3px;
-	}
+.emojiModalStyle {
+	font-size: 3px;
+}
 </style>

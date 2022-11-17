@@ -1,7 +1,6 @@
 <template>
   <section class="container">
     
-    <sampleMessage />
 
     <h1>{{ $t('pages.title') }}</h1>
 
@@ -31,9 +30,6 @@ import { ChannelStore } from '../../stores/channels'
 import { onMounted } from 'vue'
 
 export default {
-  components: {
-    sampleMessage
-  },
   setup() {
     SampleStore()
     const usersStore = UserStore()
