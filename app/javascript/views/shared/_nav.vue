@@ -50,7 +50,7 @@ export default {
   watch: {
     locale: function (locale) {
       let redirectTo = `/${locale}${this.$route.path}`;
-      if (locale == this.availableLocales[0]) {
+      if (locale === this.availableLocales[0]) {
         redirectTo = `${this.$route.path}`
       }
       window.location.href = redirectTo;
