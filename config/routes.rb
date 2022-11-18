@@ -15,6 +15,11 @@ Rails.application.routes.draw do
           end
         end
       end
+
+      resources :bench_channels do
+        resources :bookmarks, only: [:create,:index]
+      end
+      
       resources :workspaces do
         resources :profiles, only: [:index, :create]
       end

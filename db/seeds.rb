@@ -1,6 +1,6 @@
 workspace = Workspace.create!(company_name: 'BenchIT',
                               workspace_type: :work,
-                              slack_URL: 'https://www.benchit.com',
+                              benchIT_URL: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
 
@@ -40,3 +40,15 @@ ConversationMessage.create(content: 'Hi Group from Arthur', is_threaded: false, 
 BenchConversation.create(conversationable_type: 'User', conversationable_id: 1, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
+
+
+  # For Workspace
+
+  Workspace.create(company_name: 'Devsinc',slack_URL: '1csfd123',capacity: 10, admin_role: 'administrative', organization_type: 'government', workspace_type: 'work')
+
+  # For all members
+  Profile.create(user_id:1, workspace_id:1, username:"Alina", description:"ASE")
+  Profile.create(user_id:3, workspace_id:1, username:"Arslan Asif", description:"ATL")
+  Profile.create(user_id:2, workspace_id:1, username:"AsadUllah", description:"ASE")
+  Profile.create(user_id:4, workspace_id:1, username:"Wajeeha Asif", description:"SE")
+
