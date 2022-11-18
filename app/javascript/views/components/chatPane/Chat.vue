@@ -19,6 +19,9 @@
       toolbar:
         'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
     }" />
+    <div @click="sendMessage" class="sendBtn">
+      Send
+    </div>
   </div>
 </template>
 
@@ -31,6 +34,7 @@ import { NInput, NSpace } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
 import axios from './axios';
 import { createCable } from '@/plugins/cable';
+import { conversation } from '../../../api/editor/editorapi'
 
 export default {
   name: 'Chat',
@@ -44,6 +48,7 @@ export default {
   data() {
     return {
       chat: {},
+      textMessage: '',
       messages: [],
       conversation_type: window.location.pathname.split('/')[1],
       id: window.location.pathname.split('/')[2],
@@ -60,8 +65,8 @@ export default {
           name: this.messages[0]?.channel_name
             ? this.messages[0]?.channel_name
             : this.messages[0]?.group_id
-            ? 'Group Chat ' + this.messages[0]?.group_id
-            : this.messages[0]?.receiver_name,
+              ? 'Group Chat ' + this.messages[0]?.group_id
+              : this.messages[0]?.receiver_name,
           isActive: true,
           status: '',
           avatar:
@@ -123,6 +128,19 @@ export default {
   },
 
   methods: {
+    sendMessage() {
+      const payload = {
+        sender_id: 1,
+        content: this.textMessage.replace(/<[^>]+>/g, ''),
+        is_threaded: false,
+        parent_message_id: null,
+        conversation_type: this.conversation_type,
+        bench_conversation_id: 2,
+        conversation_id: this.id
+      }
+      conversation(payload)
+    },
+
     enableMention() {
       this.hasMentionCommand = true;
       this.showMentions = true;
@@ -176,14 +194,25 @@ export default {
 };
 </script>
 <style>
-    .editor {
-      bottom: 0;
-      float: left;
-      width: 100%;
-    }
+  .editor {
+    bottom: 0;
+    float: left;
+    width: 100%;
+  }
 
-    .mentions {
-      background-color: white;
-      color: black;
-    }
+  .mentions {
+    background-color: white;
+    color: black;
+  }
+
+  .sendBtn{
+    background-color: #401A40;
+    float: right;
+    margin-right: 2%;
+    margin-top: 5px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+    color: white;
+  }
 </style>
