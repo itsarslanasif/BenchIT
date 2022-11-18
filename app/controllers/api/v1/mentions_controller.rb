@@ -5,6 +5,6 @@ class Api::V1::MentionsController < Api::ApiController
   end
 
   def users_list
-    @users = User.all
+    @users = User.workspace_users(session[:cuurent_workspace_id]).all
   end
 end
