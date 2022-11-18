@@ -21,6 +21,8 @@ import ChatBody from './ChatBody.vue';
 import { NInput, NSpace } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
 import axios from './axios';
+import { createCable } from '@/plugins/cable';
+
 export default {
   name: 'Chat',
   components: {
