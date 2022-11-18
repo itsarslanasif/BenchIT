@@ -1,9 +1,10 @@
 <template>
-  <AccordionList>
-    <AccordionItem>
-      <h5 v-for="channel in this.channels" v-bind:key="channel">
-        <router-link :to="`/channel/${channel.name}`"
-          ># {{ channel.name }}
+  <AccordionList class="mt-4">
+    <AccordionItem default-opened="true">
+      <template #summary>Channels</template>
+      <h5 class="ml-3 text-slate-100" v-for="channel in this.channels" v-bind:key="channel">
+        <router-link :to="`/channel/${channel.name}`">
+          <i class="fa fa-hashtag mr-3">#</i>{{ channel.name }}
         </router-link>
       </h5>
     </AccordionItem>

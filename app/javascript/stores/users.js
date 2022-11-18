@@ -11,8 +11,10 @@ export const UserStore = defineStore('userStore', {
 
   actions: {
     async index() {
+      const workSpaceId = 1;
+
       return this.axios
-        .get('workspaces/3/profiles')
+        .get(`workspaces/${workSpaceId}/profiles`)
         .then(response => {
           this.users = [...response.data.profiles];
         })

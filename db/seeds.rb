@@ -1,8 +1,9 @@
 workspace = Workspace.create!(company_name: 'BenchIT',
-  workspace_type: :work,
-  benchIT_URL: 'https://www.benchit.com',
-  capacity: 2000,
-  organization_type: :financial_services)
+                              workspace_type: :work,
+                              benchIT_URL: 'https://www.benchit.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
+
 admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password')
 admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: workspace.id)
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!')
