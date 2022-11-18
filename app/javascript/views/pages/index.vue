@@ -7,7 +7,6 @@
       </div>
     </div>
     <h1>{{ $t('pages.title') }}</h1>
-
     <p>
       <a href="/dead-link">{{ $t('pages.server_404') }}</a>
     </p>
@@ -29,17 +28,14 @@
 
 <script>
 import Modal from '../../widgets/modal.vue'
-
 import { SampleStore } from '@/stores/sample_store'
 import { UserStore } from '../../stores/users'
 import { ChannelStore } from '../../stores/channels'
 import { onMounted } from 'vue'
-
 export default {
   components: {
     Modal
   },
-
   data() {
     return {
       showModal: false,
@@ -62,7 +58,6 @@ export default {
       }
     }
   },
-
   setup() {
     SampleStore()
     const usersStore = UserStore()
@@ -71,7 +66,6 @@ export default {
       usersStore.index()
     })
   },
-
   methods: {
     unauthorized() {
       this.$api.call(this.store.show('this-will-trigger-a-401'))
@@ -89,6 +83,5 @@ export default {
       console.log('Invite People')
     },
   }
-
 }
 </script>
