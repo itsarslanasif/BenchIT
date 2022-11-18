@@ -17,6 +17,9 @@
               <li :class="activeOn(['screen'])">
                 <router-link :to="{name: 'screen'}">{{ $t('Screen') }}</router-link>
               </li>
+              <li :class="activeOn(['members'])">
+                <router-link :to="{name: 'members'}">{{ $t('Members') }}</router-link>
+              </li>
             </ul>
           </nav>
         </div>
