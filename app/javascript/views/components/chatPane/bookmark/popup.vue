@@ -86,6 +86,7 @@ h1 {
 
 .overlay {
   position: absolute;
+  z-index: 1;
   top: -300px;
   bottom: 0;
   left: 0;
