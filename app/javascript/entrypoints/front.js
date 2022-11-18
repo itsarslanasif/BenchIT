@@ -18,18 +18,31 @@ const Api = createApi({ handler: Axios, namespace: '' });
 // Pinia + Axios setup
 import { createPinia } from 'pinia';
 const Pinia = createPinia();
-Pinia.use(({ store }) => {
-  store.axios = Axios;
-});
+Pinia.use(({ store }) => { store.axios = Axios })
+
+/* import the fontawesome core */
+import { library } from '@fortawesome/fontawesome-svg-core'
+
+/* import font awesome icon component */
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+
+/* import specific icons */
+import { faUserSecret, faFaceSmileWink } from '@fortawesome/free-solid-svg-icons'
+
+/* add icons to the library */
+library.add(faFaceSmileWink)
 
 // I18n loader
 import { createI18n } from 'vue-i18n'; // Need the /index to avoid warning in console
 const I18n = createI18n({ locale: 'current', messages: translations });
 
-app
-  .use(Router)
-  .use(Pinia)
-  .use(I18n)
-  .use(Api)
-  .use(Cable)
-  .mount('#app');
+app.use(Router)
+   .use(Pinia)
+   .use(I18n)
+   .use(Api)
+   .use(Cable)
+   .component('font-awesome-icon', FontAwesomeIcon)
+   .mount('#app')
+
+
+
