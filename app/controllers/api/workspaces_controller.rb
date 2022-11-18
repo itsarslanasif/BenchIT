@@ -15,7 +15,7 @@ module Api
 
     def invite
       if @user && @workspace
-        @token = Tokens::Token.new.generate
+        @token = Token.new.generate
         @invitable = Invitable.create!(user_id: @user.id,
                                       workspace_id: @workspace.id,
                                       token: @token, token_type: 'workspace_invitation')
