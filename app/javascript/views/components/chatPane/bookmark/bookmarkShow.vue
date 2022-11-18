@@ -191,7 +191,7 @@ h1 {
   transform: rotate(90deg);
 }
 
-.popup .content {
+.popup.content {
   max-height: 30%;
   overflow: auto;
 }
