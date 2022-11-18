@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <template v-for="message in messages" :key="message.message_id">
+    <template v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
         <n-divider>

@@ -12,14 +12,14 @@ class Api::V2::ChannelsController < Api::ApiController
       message_data = []
       @messages.each do |message|
         response = {
-          message_id: message.id,
+          id: message.id,
           channel_name: @channel.name,
           content:message.content,
           is_threaded:message.is_threaded,
           parent_message_id:message.parent_message_id,
           sender_id:message.sender_id,
           sender_name:message.user.name,
-          conversation_id: message.bench_conversation_id,
+          bench_conversation_id: message.bench_conversation_id,
           created_at: message.created_at,
           updated_at: message.updated_at
         }
@@ -68,6 +68,5 @@ class Api::V2::ChannelsController < Api::ApiController
   end
   def bench_channel_params
     params.permit(:name,:description,:creator_id, :is_private)
-    #areshad is lazy
   end
 end

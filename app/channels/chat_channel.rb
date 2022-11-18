@@ -1,7 +1,7 @@
 class ChatChannel < ApplicationCable::Channel
 
   def subscribed
-    stream_from "ChatChannel"
+    stream_from "ChatChannel#{params[:id]}"
   end
 
   def receive(data)

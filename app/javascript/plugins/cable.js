@@ -22,9 +22,12 @@ Cable.prototype.install = function(app) {
 }
 
 export function createCable(options) {
-  channel = consumer.subscriptions.create({ channel: options.channel}, {
-    received(data) {    
-      emitter.emit('chat', data)
+  channel = consumer.subscriptions.create(
+    { channel: options.channel, id: options.id },
+    {
+      received(data) {
+        emitter.emit('chat', data);
+      },
     }
   })
 
