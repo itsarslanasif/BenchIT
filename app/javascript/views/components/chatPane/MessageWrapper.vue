@@ -11,7 +11,7 @@
         <p v-show="!isSameUser" class="name">
           <b>{{ message.sender.name }}</b>
         </p>
-        <p v-bind:class="{ 'time': !isSameUser, 'time-on-left': isSameUser }">
+        <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
           {{ isSameUser ? timeWithoutAMPM : time }}
         </p>
         <span

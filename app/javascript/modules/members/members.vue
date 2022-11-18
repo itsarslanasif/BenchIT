@@ -9,10 +9,10 @@
       />
     </div>
     <div class="loading" v-show="members.length == 0">
-      <img  src="../../assets/images/loading.gif"/>
+      <Spinner />
     </div>
     <div class="render-member-row">
-      <div v-for="member in filterMember" :key="member.id" >
+      <div v-for="member in filterMember" :key="member.id">
         <member
           :name="member.username"
           :description="member.description"
@@ -20,22 +20,23 @@
         />
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
 import member from './member.vue';
 import axios from './axios';
+import Spinner from '../../views/shared/spinner.vue';
 export default {
   components: {
     member,
+    Spinner,
   },
   mounted() {
     axios
-      .get('profiles', this.workspace)
+      .get(`workspaces/${this.CurrentWorkspaceId}/profiles`, this.workspace)
       .then(response => {
-       this.members = response.data.profiles;
+        this.members = response.data.profiles;
       })
       .catch(error => {
         return error;
@@ -46,12 +47,12 @@ export default {
       searchQuery: '',
       members: [],
       search: '',
-      workspaceId: 1,
+      CurrentWorkspaceId: 1,
     };
   },
   methods: {},
   computed: {
-    filterMember: function() {
+    filterMember: function () {
       return this.members.filter(m => {
         return m.username.toLowerCase().match(this.searchQuery.toLowerCase());
       });
@@ -62,24 +63,22 @@ export default {
 
 <style scoped>
 .render-member-row {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-    align-items: flex-start;
-
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: flex-start;
 }
 .loading {
   width: 100%;
   height: 100%;
   display: flex;
   justify-content: center;
-
 }
-.search_bar{
+.search_bar {
   padding: 0px 35px;
 }
-.loading>img{
-    width: 50px;
-    height: 50px;
-  }
+.loading > img {
+  width: 50px;
+  height: 50px;
+}
 </style>

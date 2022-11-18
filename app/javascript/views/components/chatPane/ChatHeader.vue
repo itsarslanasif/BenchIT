@@ -1,7 +1,7 @@
 <template>
   <div v-if="chat.id">
-    <div class="loading" v-show="loading"  >
-      <img  src="../../../assets/images/loading.gif"/>
+    <div class="loading" v-show="loading">
+      <Spinner />
     </div>
     <div class="header">
       <div class="headerContainer">
@@ -42,70 +42,75 @@
         </n-icon>
       </div>
     </div>
-
+  </div>
+  <div class="header">
+    <div class="headerContainer">
+      <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
+      <p class="bookmarkText" v-for="bm in bookmarks" :key="bm.name">
+        <BookmarkShowVue :data="bm" @clicked="onClickChild"> </BookmarkShowVue>
+      </p>
     </div>
-    <div class="header">
-      <div class="headerContainer">
-        <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
-        <p class="bookmarkText" v-for="bm in bookmarks" :key="bm.name">
-          <BookmarkShowVue :data="bm" @clicked="onClickChild"> </BookmarkShowVue>
-        </p>
-      </div>
   </div>
 </template>
 
 <script>
-import { NAvatar, NIcon } from 'naive-ui';
+import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
 import BookmarkPopUpVue from './bookmark/popup.vue';
 import BookmarkShowVue from './bookmark/bookmarkShow.vue';
-import axios from './bookmark/axios/index.js'
+import Spinner from '../../shared/spinner.vue';
+import axios from './bookmark/axios/index.js';
 export default {
   name: 'ChatHeader',
-  components: { NAvatar, NIcon,BookmarkPopUpVue,BookmarkShowVue },
+  components: {
+    NAvatar,
+    NIcon,
+    BookmarkPopUpVue,
+    BookmarkShowVue,
+    NSpace,
+    NSpin,
+    Spinner,
+  },
   props: ['chat'],
   data() {
     return {
-      bookmarks:[],
-      loading:true,
-      user_id:1,
-    }},
-    mounted() {
-axios
-  .get('bookmarks',)
-  .then(response => {
-
-    this.bookmarks =response.data.bookmarks;
-    console.log(this.bookmarks[0])
-    this.loading=false;
-  })
-  .catch(error => {
-    this.loading=false;
-    return error;
-  });
-},
-methods:{
-onClickChild (value) {
-  this.loading=true;
-  this.bookmarks.push({name:value.name ,url:value.url})
-  axios
-  .post('bookmarks',
-    {
-      "name": value.name,
-      "bookmark_URL": value.url,
-      "user_id": this.user_id,
-    })
-  .then(response => {
-   this.members = response.data.profiles;
-   this.loading=false;
-  })
-  .catch(error => {
-    this.loading=false;
-    return error;
-
-  });
-
+      bookmarks: [],
+      loading: true,
+      user_id: 1,
+    };
   },
-}
+  mounted() {
+    axios
+      .get('bookmarks')
+      .then(response => {
+        this.bookmarks = response.data.bookmarks;
+        console.log(this.bookmarks[0]);
+        this.loading = false;
+      })
+      .catch(error => {
+        this.loading = false;
+        return error;
+      });
+  },
+  methods: {
+    onClickChild(value) {
+      this.loading = true;
+      this.bookmarks.push({ name: value.name, url: value.url });
+      axios
+        .post('bookmarks', {
+          name: value.name,
+          bookmark_URL: value.url,
+          user_id: this.user_id,
+        })
+        .then(response => {
+          this.members = response.data.profiles;
+          this.loading = false;
+        })
+        .catch(error => {
+          this.loading = false;
+          return error;
+        });
+    },
+  },
 };
 </script>
 <style scoped>
@@ -131,7 +136,6 @@ onClickChild (value) {
   margin: 0px;
 }
 .headerContainer:hover {
-  background-color: rgb(230, 232, 234);
   border-radius: 3px;
   cursor: pointer;
 }
@@ -175,10 +179,9 @@ onClickChild (value) {
   justify-content: center;
   align-items: center;
   position: fixed;
-
 }
-.loading>img{
-    width: 50px;
-    height: 50px;
-  }
+.loading > img {
+  width: 50px;
+  height: 50px;
+}
 </style>
