@@ -19,13 +19,17 @@
                 <div class="mt-6">
                     <div v-if="usersFlag">
                         <span class="py-1 w-auto text-xl font-semibold">People</span>
+                        <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
+                            <strong>{{ item.username }}</strong> <span class="text-sm">{{ item.description }}</span>
+                        </div>
                     </div>
                     <div v-if="channelsFlag">
                         <span class="py-1 w-auto text-xl font-semibold">Channels</span>
+                        <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
+                            {{ item.name }}
+                        </div>
                     </div>
-                    <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
-                        <strong>{{ item.username }}</strong> <span class="text-sm">{{item.description}}</span>
-                    </div>
+
                 </div>
             </div>
         </div>
