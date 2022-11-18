@@ -43,8 +43,7 @@
   margin-top: 22px;
 }
 
-.menu
-{
+.menu {
   position: relative;
 }
 
