@@ -23,6 +23,8 @@
 </template>
 
 <script>
+
+
 import { UserStore } from '../../../stores/users';
 import { ChannelStore } from '../../../stores/channels';
 import ChatHeader from './ChatHeader.vue';
@@ -112,7 +114,10 @@ export default {
     };
   },
 };
+
+
 </script>
+
 <style>
 .editor {
   bottom: 0;

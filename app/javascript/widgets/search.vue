@@ -58,7 +58,6 @@ export default {
             this.usersFlag = true
             this.channelsFlag = false
             this.filteredList = this.allUsers
-            console.log(this.usersFlag)
         },
         searchChannelsOnly() {
             this.usersFlag = false
