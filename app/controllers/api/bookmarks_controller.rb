@@ -3,7 +3,7 @@ class Api::BookmarksController < Api::ApiController
 
   def create
     @bookmark = @channel.bookmarks.create(bookmark_params)
-    
+
     render json: @bookmark.errors if @bookmark.errors.any?
   end
 
@@ -14,7 +14,7 @@ class Api::BookmarksController < Api::ApiController
   private
 
   def set_channel
-    @channel = BenchChannel.find_by(id: params[:bench_channel_id])
+    @channel = BenchChannel.find_by!(id: params[:bench_channel_id])
   end
 
   def bookmark_params

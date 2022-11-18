@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
 
   def render_error(e)
     if e.instance_of?(ActiveRecord::RecordNotFound)
-      render json: { success: false, error: 'Not found' }.to_json, status: :not_found
+      render json: { success: false, error: 'Record Not found' }.to_json, status: :not_found
     else
       render json: { success: false, error: 'Internal server error' }.to_json, status: :internal_server_error
     end
