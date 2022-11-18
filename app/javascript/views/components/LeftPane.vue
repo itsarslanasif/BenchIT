@@ -1,11 +1,11 @@
 <template>
-  <div class='container'>
+  <div class='container text-lg'>
     <hr>
     <div class='workplace'>
       <b>Devsinc</b>
     </div>
     <hr>
-    <div class='menu'>
+    <div class='menu mt-4 mb-4 ml-2 '>
       <IconElement icon='&#8860;' space='&nbsp;' name='Threads' />
       <IconElement icon='&#8704;' space='&nbsp;' name='Direct messages' />
       <IconElement icon='&#64;' space='&nbsp;' name='Mentions & reactions' />
@@ -18,9 +18,9 @@
       <p><ChannelsAccordion /></p>
     </div>
     <div class='bottom_div'>
-      <hr>
-      <p>selected channel</p>
-    </div>
+    <hr>
+    <p>selected channel</p>
+   </div>
   </div>
 </template>
 
@@ -43,11 +43,13 @@
   margin-top: 22px;
 }
 
+.menu {
+  position: relative;
+}
+
 .bottom_div {
-  margin-top: 52vh;
-  height: 50px;
-  margin-bottom: auto;
-  z-index: +1;
+  bottom: 15px;
+  position: absolute;
 }
 
 p,b {
