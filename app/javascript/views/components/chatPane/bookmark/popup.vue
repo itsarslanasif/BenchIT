@@ -61,13 +61,15 @@ h1 {
 
 .button {
   margin: 0px;
-  text-decoration: none;
-  color: #fff;
+  color: rgb(255, 255, 255);
   padding: 10px;
+  overflow: auto;
   border-radius: 10px;
+  width: max-content;
+  display: inline-block;
   margin-right: 5px;
-  background-color: rgb(3, 3, 2);
-  border: 1px solid rgb(212, 212, 212);
+  background-color: rgb(4, 4, 4);
+  border: 1px solid rgb(117, 116, 116);
 }
 .save-btn{
  max-width: 30%;
