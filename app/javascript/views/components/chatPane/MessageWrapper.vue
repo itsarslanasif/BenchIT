@@ -1,40 +1,45 @@
 <template>
-  <div class="messageWrapper">
-    <n-avatar
-      v-show="!isSameUser"
-      class="avatar"
-      size="large"
-      :src="message.sender.avatar"
-    />
+  <div class="messageWrapper" @mouseover="emojiModalStatus = true" @mouseleave="emojiModalStatus = false">
+    <n-avatar v-show="!isSameUser" class="avatar" size="large" :src="message.sender.avatar" />
     <span class="message">
-      <span class="messageInfo">
-        <p v-show="!isSameUser" class="name">
-          <b>{{ message.sender.name }}</b>
-        </p>
-        <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
-          {{ isSameUser ? timeWithoutAMPM : time }}
-        </p>
-        <span
-          v-show="isSameUser"
-          class="messageContent"
-          v-html="message.content"
-        />
-      </span>
-      <span
-        v-show="!isSameUser"
-        class="messageContent"
-        v-html="message.content"
-      />
+      <div>
+        <span class="messageInfo">
+          <p v-show="!isSameUser" class="name">
+            <b>{{ message.sender.name }}</b>
+          </p>
+          <div>
+
+          </div>
+          <p v-bind:class="{ 'time': !isSameUser, 'time-on-left': isSameUser }">
+            {{ isSameUser ? timeWithoutAMPM : time }}
+          </p>
+          <span v-show="isSameUser" class="messageContent" v-html="message.content" />
+        </span>
+        <span v-show="!isSameUser" class="messageContent" v-html="message.content" />
+        <div v-for="emoji in allReactions">
+          <span class="emoji">{{ emoji.i }}</span>
+        </div>
+      </div>
+
+      <div class="emojiModalToggle" v-if="emojiModalStatus || openEmojiModal" @click="openEmojiModal = !openEmojiModal">
+        <font-awesome-icon icon="fa-solid fa-face-smile-wink" />
+      </div>
+ 
     </span>
+  </div>
+
+  <div v-if="openEmojiModal" class="emojiModal">
+    <EmojiPicker :addReaction="addReaction" />
   </div>
 </template>
 
 <script>
 import moment from 'moment';
 import { NAvatar } from 'naive-ui';
+import EmojiPicker from '../../../widgets/emojipicker.vue'
 export default {
   name: 'MessageWrapper',
-  components: { NAvatar },
+  components: { NAvatar, EmojiPicker },
   props: {
     currMessage: {
       type: Object,
@@ -49,6 +54,9 @@ export default {
     return {
       message: this.currMessage,
       oldMessage: this.prevMessage,
+      emojiModalStatus: false,
+      openEmojiModal: false,
+      allReactions: []
     };
   },
   computed: {
@@ -63,6 +71,11 @@ export default {
       return this.message?.sender.id === this.oldMessage?.sender.id;
     },
   },
+  methods: {
+    addReaction(emoji) {
+      this.allReactions.push(emoji)
+    }
+  }
 };
 </script>
 <style scoped>
@@ -71,52 +84,83 @@ p {
   font-size: 14px;
   margin: 0px;
 }
+
 .messageContent {
   color: rgb(52, 51, 51);
   font-size: 14px;
   word-wrap: normal;
 }
+
 .messageWrapper {
   align-items: center;
   display: flex;
   padding: 5px;
+  position: relative;
 }
+
 .messageWrapper:hover {
   background-color: rgb(230, 232, 234);
 }
+
 .name {
   margin-right: 5px;
 }
+
 .name:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
 .time {
   color: grey;
   font-size: x-small;
 }
+
 .time:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
 .time-on-left {
   color: grey;
   font-size: x-small;
   margin-left: 16px;
   margin-right: 8px;
 }
+
 .time-on-left:hover {
   cursor: pointer;
   text-decoration: underline;
 }
+
 .messageInfo {
   align-items: center;
   display: flex;
 }
+
 .avatar {
   align-self: baseline;
   height: 40px;
   margin-right: 5px;
   min-width: fit-content;
+}
+
+.emojiModal {
+  float: right;
+}
+
+.emojiModalToggle {
+  background-color: #151f25;
+  padding: 5px;
+  border-radius: 4px;
+  position: absolute;
+  right: 30px;
+  top: -10px;
+}
+
+.emoji {
+  background-color: #151f25;
+  padding: 5px 8px;
+  border-radius: 5px;
 }
 </style>
