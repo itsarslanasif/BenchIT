@@ -68,7 +68,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_100008) do
   create_table "bookmarks", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "bench_channel_id", null: false
-    t.string "name"
+    t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
