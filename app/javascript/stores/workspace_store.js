@@ -4,13 +4,13 @@ export const WorkspaceStore = defineStore('workspace', {
   state: () => {
     return {
       workspace: {
-        admin_role: '',
+        admin_role: null,
         capacity: 1,
-        company_name: '',
-        organization_type: '',
+        company_name: null,
+        organization_type: null,
         workspace_avatar: null,
-        benchIT_URL: '',
-        workspace_type: '',
+        bench_it_url: null,
+        workspace_type: null,
       },
       capacityError: '',
       activePhase: 1,

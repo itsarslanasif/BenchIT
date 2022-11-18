@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import axios from '../../modules/axios'
+import axios from '../../modules/axios';
 import { UserStore } from '../../stores/user_store.js';
 import '../../modules/workspace/style.css';
 
@@ -35,7 +35,10 @@ export default {
   methods: {
     handleSubmit() {
       axios
-        .post(`api/workspaces/${window.location.pathname.split('/')[2]}/invite`, this.userStore.workspace_invite)
+        .post(
+          `api/workspaces/${this.$route.params.id}/invite`,
+          this.userStore.workspace_invite
+        )
         .then(response => {
           return response.data;
         })

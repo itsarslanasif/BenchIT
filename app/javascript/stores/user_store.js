@@ -4,18 +4,17 @@ export const UserStore = defineStore('user', {
   state: () => {
     return {
       user_email: {
-        email: '',
+        email: null,
       },
       user_password: {
-        password: '',
-        password_confirmation: '',
-        invitation_token: '',
+        password: null,
+        password_confirmation: null,
+        invitation_token: null,
       },
       workspace_invite: {
-        email:'',
-        token_type: 'workspace_invitation',
+        email: null,
       },
-      confirmPasswordError: '',
+      confirmPasswordError: null,
     }
   }
 })

@@ -5,7 +5,7 @@ Here are the details for your new workspace, <%= @workspace.company_name %>.
 <strong>Workspace Name: </strong>
 <%= @workspace.company_name %><br/>
 <strong>Workspace URL: </strong>
-<%= @workspace.benchIT_URL %>
+<%= @workspace.bench_it_url %>
 <div>
 <%= link_to button_tag('Open Workspace', class: 'btn btn-dark mt-3'), "http://127.0.0.1:5100/join_workspace/#{@workspace.id}?invitation_token=#{@token}" %>
 </div>

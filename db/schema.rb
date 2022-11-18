@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_17_182029) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_18_074918) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -98,10 +98,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_182029) do
     t.string "token"
     t.integer "user_id"
     t.integer "workspace_id"
-    t.string "user_email"
     t.string "token_type"
-    t.datetime "invitation_sent_at"
-    t.string "invitation_sent_by"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_invitables_on_token"
@@ -160,7 +157,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_17_182029) do
   create_table "workspaces", force: :cascade do |t|
     t.string "company_name", null: false
     t.integer "workspace_type", default: 0, null: false
-    t.string "benchIT_URL", null: false
+    t.string "bench_it_url", null: false
     t.integer "capacity", null: false
     t.integer "organization_type", default: 0, null: false
     t.integer "admin_role", default: 0, null: false

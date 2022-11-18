@@ -2,7 +2,7 @@
 
 one:
   admin_role: 1
-  benchIT_URL: MyString
+  bench_it_url: MyString
   capacity: 1
   company_name: MyString
   organization_type: 1
@@ -10,7 +10,7 @@ one:
 
 two:
   admin_role: 1
-  benchIT_URL: MyString
+  bench_it_url: MyString
   capacity: 1
   company_name: MyString
   organization_type: 1

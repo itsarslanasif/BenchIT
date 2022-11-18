@@ -324,7 +324,7 @@ DEPENDENCIES
   route_translator
   sassc-rails
   selenium-webdriver
-  sidekiq (< 7)
+  sidekiq (~> 6.0)
   spring
   sprockets-rails
   tzinfo-data
