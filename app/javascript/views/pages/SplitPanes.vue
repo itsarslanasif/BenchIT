@@ -53,7 +53,6 @@ export default {
 <style scoped>
 .splitpanes {
   height: 89vh;
-  /* margin-top: -5%; */
 }
 .chatpane {
   overflow: hidden;
