@@ -20,7 +20,5 @@ module BenchIt
     # config.eager_load_paths << Rails.root.join("extras")
     config.active_job.queue_adapter = :sidekiq
     require './lib/tasks/token'
-    # config.autoload_paths << '../lib/tasks/token'
-    # config.autoload_paths += Dir["#{config.root}/lib/tasks/token"]
   end
 end
