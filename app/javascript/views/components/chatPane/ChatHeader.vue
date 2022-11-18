@@ -58,7 +58,7 @@ import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
 import BookmarkPopUpVue from './bookmark/popup.vue';
 import BookmarkShowVue from './bookmark/bookmarkShow.vue';
 import Spinner from '../../shared/spinner.vue';
-import axios from './bookmark/axios/index.js';
+import axios from '../../../entrypoints/axios/index';
 export default {
   name: 'ChatHeader',
   components: {
@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     axios
-      .get('bookmarks')
+      .get(`bench_channels/${1}/bookmarks`)
       .then(response => {
         this.bookmarks = response.data.bookmarks;
         console.log(this.bookmarks[0]);
@@ -96,7 +96,7 @@ export default {
       this.loading = true;
       this.bookmarks.push({ name: value.name, url: value.url });
       axios
-        .post('bookmarks', {
+        .post(`bench_channels/${1}/bookmarks`, {
           name: value.name,
           bookmark_URL: value.url,
           user_id: this.user_id,
@@ -180,8 +180,5 @@ export default {
   align-items: center;
   position: fixed;
 }
-.loading > img {
-  width: 50px;
-  height: 50px;
-}
+
 </style>

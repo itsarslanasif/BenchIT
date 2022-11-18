@@ -11,11 +11,11 @@
         <h2>Bookmark</h2>
         <a class="close" href="#">×</a>
         <div class="content">
-          <h5>Please enter URL :</h5>
+          <h5>Please enter Url</h5>
           <input v-model="data.bookmark_URL" required />
         </div>
         <div class="content">
-          <h5>Please enter name :</h5>
+          <h5>Please enter name</h5>
           <input v-model="data.name" required />
         </div>
         <div class="buttons">

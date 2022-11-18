@@ -1,30 +1,34 @@
 <template>
-  <div class="messageWrapper" @mouseover="emojiModalStatus = true" @mouseleave="emojiModalStatus = false">
-    <n-avatar v-show="!isSameUser" class="avatar" size="large" :src="message.sender.avatar" />
+  <div
+    class="messageWrapper"
+    @mouseover="emojiModalStatus = true"
+    @mouseleave="emojiModalStatus = false"
+  >
+    <n-avatar
+      v-show="!isSameUser"
+      class="avatar"
+      size="large"
+      :src="message.sender.avatar"
+    />
     <span class="message">
-      <div>
-        <span class="messageInfo">
-          <p v-show="!isSameUser" class="name">
-            <b>{{ message.sender.name }}</b>
-          </p>
-          <div>
-
-          </div>
-          <p v-bind:class="{ 'time': !isSameUser, 'time-on-left': isSameUser }">
-            {{ isSameUser ? timeWithoutAMPM : time }}
-          </p>
-          <span v-show="isSameUser" class="messageContent" v-html="message.content" />
-        </span>
-        <span v-show="!isSameUser" class="messageContent" v-html="message.content" />
-        <div v-for="emoji in allReactions">
-          <span class="emoji">{{ emoji.i }}</span>
-        </div>
-      </div>
-
-      <div class="emojiModalToggle" v-if="emojiModalStatus || openEmojiModal" @click="openEmojiModal = !openEmojiModal">
-        <font-awesome-icon icon="fa-solid fa-face-smile-wink" />
-      </div>
- 
+      <span class="messageInfo">
+        <p v-show="!isSameUser" class="name">
+          <b>{{ message.sender.name }}</b>
+        </p>
+        <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
+          {{ isSameUser ? timeWithoutAMPM : time }}
+        </p>
+        <span
+          v-show="isSameUser"
+          class="messageContent"
+          v-html="message.content"
+        />
+      </span>
+      <span
+        v-show="!isSameUser"
+        class="messageContent"
+        v-html="message.content"
+      />
     </span>
   </div>
 
@@ -36,7 +40,7 @@
 <script>
 import moment from 'moment';
 import { NAvatar } from 'naive-ui';
-import EmojiPicker from '../../../widgets/emojipicker.vue'
+import EmojiPicker from '../../../widgets/emojipicker.vue';
 export default {
   name: 'MessageWrapper',
   components: { NAvatar, EmojiPicker },
@@ -56,7 +60,7 @@ export default {
       oldMessage: this.prevMessage,
       emojiModalStatus: false,
       openEmojiModal: false,
-      allReactions: []
+      allReactions: [],
     };
   },
   computed: {
@@ -73,9 +77,9 @@ export default {
   },
   methods: {
     addReaction(emoji) {
-      this.allReactions.push(emoji)
-    }
-  }
+      this.allReactions.push(emoji);
+    },
+  },
 };
 </script>
 <style scoped>

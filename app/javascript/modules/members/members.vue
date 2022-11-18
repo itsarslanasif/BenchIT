@@ -25,7 +25,7 @@
 
 <script>
 import member from './member.vue';
-import axios from './axios';
+import axios from '../../entrypoints/axios/index';
 import Spinner from '../../views/shared/spinner.vue';
 export default {
   components: {
