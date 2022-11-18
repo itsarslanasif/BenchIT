@@ -64,6 +64,7 @@ export default {
   width: 100%;
 }
 .messageTimestamp {
+  position: absolute;
   color: grey;
   font-size: small;
   margin: 0px;

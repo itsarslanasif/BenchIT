@@ -9,7 +9,7 @@
       />
     </div>
     <div class="loading" v-show="members.length == 0">
-      <img  src="./loading.gif"/>
+      <img  src="../../assets/images/loading.gif"/>
     </div>
     <div class="render-member-row">
       <div v-for="member in filterMember" :key="member.id" >
