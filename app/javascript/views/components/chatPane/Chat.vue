@@ -135,7 +135,6 @@ export default {
         is_threaded: false,
         parent_message_id: null,
         conversation_type: this.conversation_type,
-        bench_conversation_id: 2,
         conversation_id: this.id
       }
       conversation(payload)
@@ -190,6 +189,19 @@ export default {
       allUsers: Object.values(users.getUsers),
       allChannels: Object.values(channels.getChannels),
     };
+  },
+
+  updated() {
+    this.Cable.on('chat', data => {
+      if (this.conversation_type === 'channels') {
+        data.message.channel_name = this.messages[0].channel_name;
+      } else if (this.conversation_type === 'groups') {
+        data.message.group_id = this.messages[0].group_id;
+      } else {
+        data.message.receiver_name = this.messages[0].receiver_name;
+      }
+      this.messages.push(data.message);
+    });
   },
 };
 </script>
