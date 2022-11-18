@@ -2,26 +2,27 @@
   <ChatHeader :chat="chat" />
   <ChatBody :messages="messages" />
   <div class="editor">
-    <editor
-      api-key="v69g5pnxcpt0m2kmjntucft1sek0y2g7qw17n2scwu0pi76w"
-      :init="{
-        menubar: false,
-        statusbar: false,
-        plugins: 'lists link code',
-        toolbar:
-          'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
-      }"
-    />
+    <editor api-key="v69g5pnxcpt0m2kmjntucft1sek0y2g7qw17n2scwu0pi76w" v-model="textMessage" :init="{
+      menubar: false,
+      statusbar: false,
+      plugins: 'lists link code',
+      toolbar:
+        'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
+    }" />
+    <div @click="sendMessage" class="sendBtn">
+      Send
+    </div>
   </div>
 </template>
 
 <script>
-import ChatHeader from './ChatHeader.vue';
-import ChatBody from './ChatBody.vue';
-import { NInput, NSpace } from 'naive-ui';
-import Editor from '@tinymce/tinymce-vue';
-import axios from './axios';
-import { createCable } from '@/plugins/cable';
+import ChatHeader from './ChatHeader.vue'
+import ChatBody from './ChatBody.vue'
+import { NInput, NLi, NSpace } from 'naive-ui'
+import Editor from '@tinymce/tinymce-vue'
+import axios from './axios'
+import { createCable } from '@/plugins/cable'
+import { conversation } from '../../../api/editor/editorapi'
 
 export default {
   name: 'Chat',
@@ -35,6 +36,7 @@ export default {
   data() {
     return {
       chat: {},
+      textMessage: '',
       messages: [],
       conversation_type: window.location.pathname.split('/')[1],
       id: window.location.pathname.split('/')[2],
@@ -51,8 +53,8 @@ export default {
           name: this.messages[0]?.channel_name
             ? this.messages[0]?.channel_name
             : this.messages[0]?.group_id
-            ? 'Group Chat ' + this.messages[0]?.group_id
-            : this.messages[0]?.receiver_name,
+              ? 'Group Chat ' + this.messages[0]?.group_id
+              : this.messages[0]?.receiver_name,
           isActive: true,
           status: '',
           avatar:
@@ -80,6 +82,21 @@ export default {
       this.messages.push(data.message);
     });
   },
+
+  methods: {
+    sendMessage() {
+      const payload = {
+        sender_id: 1,
+        content: this.textMessage.replace(/<[^>]+>/g, ''),
+        is_threaded: false,
+        parent_message_id: null,
+        conversation_type: this.conversation_type,
+        bench_conversation_id: 2,
+        conversation_id: this.id
+      }
+      conversation(payload)
+    }
+  }
 };
 </script>
 <style>
@@ -87,5 +104,16 @@ export default {
   bottom: 0;
   float: left;
   width: 100%;
+}
+
+.sendBtn{
+  background-color: #401A40;
+  float: right;
+  margin-right: 2%;
+  margin-top: 5px;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-weight: bold;
+  color: white;
 }
 </style>
