@@ -1,6 +1,7 @@
 <template>
   <splitpanes class="default-theme">
     <pane max-size="33" min-size="10.45" style="background-color: #3f0e40">
+      <LeftPane />
       <div>
         <div class="modalStyle">
           <CreateChannelVue />
@@ -13,6 +14,7 @@
     </pane>
 
     <pane max-size="100" min-size="67">
+      <ChannelElement />
       <div class="modalBack"><Chat /></div>
     </pane>
   </splitpanes>
@@ -24,12 +26,16 @@ import CreateChannel from '../containers/CreateChannel.vue';
 
 import Chat from '../components/chatPane/Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
+import LeftPane from '../components/LeftPane.vue';
+import ChannelElement from '../components/ChannelElement.vue';
 export default {
   components: {
     Splitpanes,
     Pane,
     CreateChannel,
     Chat,
+    LeftPane,
+    ChannelElement,
   },
   data() {
     return {
@@ -47,11 +53,10 @@ export default {
 <style scoped>
 .splitpanes {
   height: 89vh;
-  margin-top: -5%;
+  /* margin-top: -5%; */
 }
 .chatpane {
   overflow: hidden;
   position: relative;
 }
-
 </style>
