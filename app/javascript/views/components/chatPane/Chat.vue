@@ -12,7 +12,7 @@
         {{ channel.name }}
       </div>
     </div>
-    <editor api-key="v69g5pnxcpt0m2kmjntucft1sek0y2g7qw17n2scwu0pi76w" v-model="message" :init="{
+    <editor api-key="{{process.env.VITE_EDITOR_API}}" v-model="message" :init="{
       menubar: false,
       statusbar: false,
       plugins: 'lists link code',
@@ -23,8 +23,6 @@
 </template>
 
 <script>
-
-
 import { UserStore } from '../../../stores/users';
 import { ChannelStore } from '../../../stores/channels';
 import ChatHeader from './ChatHeader.vue';
@@ -32,6 +30,7 @@ import chats from './data/chats';
 import ChatBody from './ChatBody.vue';
 import { NInput, NSpace } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
+
 export default {
   name: 'Chat',
   components: {
@@ -41,6 +40,7 @@ export default {
     NSpace,
     editor: Editor,
   },
+
   data() {
     return {
       chat: chats[1],
@@ -51,9 +51,10 @@ export default {
       showMentions: false,
       showChannels: false,
       allUsers: [],
-      allChannels: []
+      allChannels: [],
     };
   },
+
   watch: {
     message() {
       this.plainText = this.message.replace(/<[^>]+>/g, '');
@@ -68,6 +69,7 @@ export default {
       }
     },
   },
+
   methods: {
     enableMention() {
       this.hasMentionCommand = true;
@@ -75,36 +77,42 @@ export default {
       this.hasChannelCommand = false;
       this.showChannels = false;
     },
+
     enableChannels() {
       this.hasChannelCommand = true;
       this.showChannels = true;
       this.hasMentionCommand = false;
       this.showMentions = false;
     },
+
     disableAll() {
       this.hasMentionCommand = false;
       this.showMentions = false;
       this.hasChannelCommand = false;
       this.showChannels = false;
     },
+
     addMentionToText(e) {
-      e.preventDefault()
-      this.ignoreHTML()
-      this.message += e.target.outerText + ' '
-      this.showMentions = false
-      this.hasMentionCommand = false
+      e.preventDefault();
+      this.ignoreHTML();
+      this.message += e.target.outerText + ' ';
+      this.showMentions = false;
+      this.hasMentionCommand = false;
     },
+
     addChannelToText(e) {
-      e.preventDefault()
-      this.ignoreHTML()
-      this.message += e.target.outerText + ' '
-      this.showChannels = false
-      this.hasChannelCommand = false
+      e.preventDefault();
+      this.ignoreHTML();
+      this.message += e.target.outerText + ' ';
+      this.showChannels = false;
+      this.hasChannelCommand = false;
     },
+
     ignoreHTML() {
       this.message = this.message.replace(/<[^>]+>/g, '');
-    }
+    },
   },
+
   setup() {
     const users = UserStore();
     const channels = ChannelStore();
@@ -114,19 +122,16 @@ export default {
     };
   },
 };
-
-
 </script>
-
 <style>
-.editor {
-  bottom: 0;
-  float: left;
-  width: 100%;
-}
+    .editor {
+      bottom: 0;
+      float: left;
+      width: 100%;
+    }
 
-.mentions {
-  background-color: white;
-  color: black
-}
+    .mentions {
+      background-color: white;
+      color: black;
+    }
 </style>
