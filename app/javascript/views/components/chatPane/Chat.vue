@@ -39,13 +39,22 @@ export default {
     NSpace,
     editor: Editor,
   },
+  data() {
+    return {
+      chat: {},
+      messages: [],
+      conversation_type: window.location.pathname.split('/')[1],
+      id: window.location.pathname.split('/')[2],
+      Cable: null,
+    };
+  },
   mounted() {
     axios
       .get(`${this.conversation_type}/${this.id}`)
       .then(response => {
         this.messages = response.data;
         this.chat = {
-          id: this.messages[0]?.conversation_id,
+          id: this.messages[0]?.bench_conversation_id,
           name: this.messages[0]?.channel_name
             ? this.messages[0]?.channel_name
             : this.messages[0]?.group_id
@@ -60,6 +69,10 @@ export default {
       .catch(error => {
         this.error = error;
       });
+    this.Cable = createCable({
+      channel: 'ChatChannel',
+      id: this.id,
+    });
   },
   data() {
     return {
@@ -77,6 +90,19 @@ export default {
       conversation_type: window.location.pathname.split('/')[1],
       id: window.location.pathname.split('/')[2],
     };
+  },
+
+  updated() {
+    this.Cable.on('chat', data => {
+      if (this.conversation_type === 'channels') {
+        data.message.channel_name = this.messages[0].channel_name;
+      } else if (this.conversation_type === 'groups') {
+        data.message.group_id = this.messages[0].group_id;
+      } else {
+        data.message.receiver_name = this.messages[0].receiver_name;
+      }
+      this.messages.push(data.message);
+    });
   },
 
   watch: {
