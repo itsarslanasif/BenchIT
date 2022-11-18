@@ -14,4 +14,7 @@ class User < ApplicationRecord
   has_many :groups, through: :user_groups
   has_many :conversation_messages, dependent: :destroy, foreign_key: :sender_id, inverse_of: :user
   has_many :bench_conversations, as: :conversationable, foreign_key: :sender_id, inverse_of: :user
+
+  # Scopes
+  scope :workspace_users, ->(workspace_id) { joins(:profiles).where("workspace_id = #{workspace_id}").distinct }
 end
