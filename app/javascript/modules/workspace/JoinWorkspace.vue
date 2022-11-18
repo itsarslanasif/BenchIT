@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="flex flex-col items-center justify-center">
-    <form @submit.prevent="handleSubmit" class="max-w-md">
+    <form class="max-w-md" @submit.prevent="handleSubmit">
       <h1 class="text-center text-2xl">Join Workspace</h1>
       <h1 class="mb-5 text-center text-2xl">
         <b>{{ workspace_name }}</b>
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from './axios';
+import axios from '../axios';
 import { NSpace, NAlert } from 'naive-ui';
 export default {
   components: {

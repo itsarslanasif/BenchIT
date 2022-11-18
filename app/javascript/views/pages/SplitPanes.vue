@@ -1,26 +1,45 @@
 <template>
-  <splitpanes class="default-theme splitpanes">
-    <pane
-      max-size="33"
-      min-size="10.45"
-      style="background-color: #3f0e40"
-    ></pane>
-    <pane class="chatpane" max-size="100" min-size="67">
-      <Chat />
+  <splitpanes class="default-theme">
+    <pane max-size="33" min-size="10.45" style="background-color: #3f0e40">
+      <div>
+        <div class="modalStyle">
+          <CreateChannelVue />
+        </div>
+        <button class="btn" @click="modalOpen = !modalOpen">Open Modal</button>
+        <div v-if="modalOpen">
+          <CreateChannel :close-modal="closeModal" />
+        </div>
+      </div>
+    </pane>
+
+    <pane max-size="100" min-size="67">
+      <div class="modalBack"><Chat /></div>
     </pane>
   </splitpanes>
 </template>
 
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
-import 'splitpanes/dist/splitpanes.css';
+import CreateChannel from '../containers/CreateChannel.vue';
 
 import Chat from '../components/chatPane/Chat.vue';
+import 'splitpanes/dist/splitpanes.css';
 export default {
   components: {
     Splitpanes,
     Pane,
+    CreateChannel,
     Chat,
+  },
+  data() {
+    return {
+      modalOpen: false,
+    };
+  },
+  methods: {
+    closeModal() {
+      this.modalOpen = !this.modalOpen;
+    },
   },
 };
 </script>
@@ -34,4 +53,5 @@ export default {
   overflow: hidden;
   position: relative;
 }
+
 </style>
