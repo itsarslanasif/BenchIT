@@ -101,6 +101,7 @@
     position: absolute;
     top: -300px;
     bottom: 0;
+    z-index: 1;
     left: 0;
     right: 0;
     background: rgba(0, 0, 0, 0.7);
