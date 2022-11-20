@@ -1,6 +1,7 @@
 <template>
   <splitpanes class="default-theme">
     <pane max-size="33" min-size="10.45" style="background-color: #3f0e40">
+      <WorkspaceDropdown title="BenchIT" :items="options" />
       <LeftPane />
       <div>
         <div class="modalStyle">
@@ -22,8 +23,9 @@
 
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css';
+import WorkspaceDropdown from '../components/WorkspaceDropdown.vue'
 import CreateChannel from '../containers/CreateChannel.vue';
-
 import Chat from '../components/chatPane/Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/LeftPane.vue';
@@ -34,19 +36,59 @@ export default {
     Pane,
     CreateChannel,
     Chat,
+    WorkspaceDropdown,
     LeftPane,
     ChannelElement,
-  },
-  data() {
-    return {
-      modalOpen: false,
-    };
   },
   methods: {
     closeModal() {
       this.modalOpen = !this.modalOpen;
     },
   },
+  data () {
+    return {
+      modalOpen: false,
+      options: [
+        {
+          title: 'BenchIT',
+          link: '#'
+        },
+        {
+          title: 'Terms & Conditions',
+          link:'#'
+        },
+        {
+          title: 'Invite People',
+          link: '/invite_to_workspace/:id'
+        },
+        {
+          title: 'Create Channel',
+          link: '#'
+        },
+        {
+          title: 'Preferences',
+          link: '#'
+        },
+        {
+          title: 'Administration',
+          link: '#'
+        },
+        {
+          title: 'Tools',
+          link: '#'
+        },
+        {
+          title: 'Sign in to BenchIT on mobile',
+          link: '#'
+        },
+        {
+          title: 'Sign Out of BenchIT',
+          link: '#'
+        }
+      ]
+    }
+  }
+
 };
 </script>
 

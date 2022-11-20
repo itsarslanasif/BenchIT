@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h4 class="form-h">{{ $t('url.title') }}</h4>
+    <h4 class="form-h3">{{ $t('url.title') }}</h4>
     <h6 class="form-h">{{ $t('url.description') }}</h6>
     <label>{{ $t('url.name') }}</label>
     <input
-      v-model="workspaceStore.workspace.benchIT_URL"
+      v-model="workspaceStore.workspace.bench_it_url"
       class="form-input-select"
       type="email"
       placeholder="acme@benchit.com"
