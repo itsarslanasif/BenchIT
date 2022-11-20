@@ -79,6 +79,7 @@ export default {
     this.Cable = createCable({
       channel: 'ChatChannel',
       id: this.id,
+      type: this.conversation_type,
     });
   },
   data() {
@@ -200,7 +201,14 @@ export default {
       } else {
         data.message.receiver_name = this.messages[0].receiver_name;
       }
-      this.messages.push(data.message);
+
+      const findMessage = this.messages.find((m) => m.id === data.message.id);
+
+      if (findMessage == undefined) {
+        this.messages.push(data.message);
+        this.textMessage = '';
+      }
+
     });
   },
 };
