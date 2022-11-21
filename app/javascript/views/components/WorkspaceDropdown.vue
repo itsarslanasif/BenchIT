@@ -1,18 +1,26 @@
 <template>
   <div class="menu-item" @click="isOpen = !isOpen">
     <div class="main-bar">
-    <a  href="#">
-      {{ title }}
-    </a>
-    <svg class="icon-style" viewBox="0 0 1060 638" width="10">
-      <path d="M1017 68L541 626q-11 12-26 12t-26-12L13 68Q-3 49 6 24.5T39 0h952q24 0 33 24.5t-7 43.5z" fill="#FFF"></path>
-    </svg>
+      <a href="#">
+        {{ title }}
+      </a>
+      <svg class="icon-style" viewBox="0 0 1060 638" width="10">
+        <path
+          d="M1017 68L541 626q-11 12-26 12t-26-12L13 68Q-3 49 6 24.5T39 0h952q24 0 33 24.5t-7 43.5z"
+          fill="#FFF"
+        ></path>
+      </svg>
     </div>
 
     <transition name="fade" appear>
       <div class="sub-menu" v-if="isOpen">
-        <div v-for="(item, i) in items" :key="i" class="menu-item">
-          <a :href="item.link">{{ item.title }}</a>
+        <div
+          v-for="item in items"
+          :key="item"
+          class="menu-item"
+          @click="item.func"
+        >
+          {{ item.title }}
         </div>
       </div>
     </transition>
@@ -23,43 +31,60 @@
 export default {
   name: 'dropdown',
   props: ['title', 'items'],
-  data () {
+  data() {
     return {
-      isOpen: false
-    }
-  }
-}
+      isOpen: false,
+      UserInviteFormFlag: false,
+    };
+  },
+  methods: {
+    displayItem(e) {
+      switch (e.target.outerText) {
+        case 'Invite People':
+          this.UserInviteFormFlag = true;
+          break;
+        default:
+          break;
+      }
+    },
+  },
+};
 </script>
 
 <style>
- .menu-item{
+.menu-item {
   width: 300px;
-  margin-left: 20px;
-
 }
-.icon-style{
-  margin-left:40%;
+.icon-style {
+  padding: 1px;
 }
-.menu-item{
+.menu-item {
   height: 55px;
-
 }
-.main-bar{
-  font-size: 30px;
+.main-bar {
+  border-bottom: 2px solid;
+  border-style: solid;
   display: flex;
+  font-size: 25px;
 }
 
 .sub-menu {
   background-color: white;
+  border-radius: 10px;
   color: black;
-  width: 350px;
-  height:500px;
+  height: 500px;
+  margin-left: 10px;
   opacity: 1;
-
+  padding-left: 10px;
+  padding-top: 10px;
+  position: fixed;
+  width: 300px;
+  z-index: 1;
 }
+
 .fade-enter-active,
 .fade-leave-active {
-  transition: all .3s ease-out;
+  transition: all 0.3s ease-out;
 }
 .fade-enter,
 .fade-leave-to {

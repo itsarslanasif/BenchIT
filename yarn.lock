@@ -239,11 +239,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/hash/-/hash-0.8.0.tgz#bbbff68978fefdbe68ccb533bc8cbe1d1afb5413"
   integrity sha512-kBJtf7PH6aWwZ6fka3zQ0p6SBYzx4fl1LoZXE2RrnYST9Xljm7WfKJrU4g/Xr3Beg72MLrp1AWNUmuYJTL7Cow==
 
-"@esbuild/android-arm@0.15.13":
-  version "0.15.13"
-  resolved "https://registry.yarnpkg.com/@esbuild/android-arm/-/android-arm-0.15.13.tgz#ce11237a13ee76d5eae3908e47ba4ddd380af86a"
-  integrity sha512-RY2fVI8O0iFUNvZirXaQ1vMvK0xhCcl0gqRj74Z6yEiO1zAUa7hbsdwZM1kzqbxHK7LFyMizipfXT3JME+12Hw==
-
 "@esbuild/android-arm@0.15.14":
   version "0.15.14"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm/-/android-arm-0.15.14.tgz#5d0027f920eeeac313c01fd6ecb8af50c306a466"
@@ -740,7 +735,6 @@ async-validator@^4.0.7:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/async-validator/-/async-validator-4.2.5.tgz#c96ea3332a521699d0afaaceed510a54656c6339"
   integrity sha512-7HhHjtERjqlNbZtqNqy2rckN/SpOOlmDliet+lP7k+eKZEjPk3DgyeU9lIXLdeLz0uBbbVp+9Qdow9wJWgwwfg==
-
 
 autoprefixer@^10.4.13:
   version "10.4.13"
@@ -3558,19 +3552,6 @@ vue@^3.2.23, vue@^3.2.33:
     "@vue/runtime-dom" "3.2.33"
     "@vue/server-renderer" "3.2.33"
     "@vue/shared" "3.2.33"
-
-vueuc@^0.4.47:
-  version "0.4.49"
-  resolved "https://registry.yarnpkg.com/vueuc/-/vueuc-0.4.49.tgz#913e6fd629bdfd5bbed79bf108aec605720af2db"
-  integrity sha512-WarAC44a/Yx78CxkAgROYLq+LkAeCGA/6wHidVoFmHLbzyF3SiP2nzRNGD/8zJeJInXv18EnWK6A//eGgMMq8w==
-  dependencies:
-    "@css-render/vue3-ssr" "^0.15.10"
-    "@juggle/resize-observer" "^3.3.1"
-    css-render "^0.15.10"
-    evtd "^0.2.4"
-    seemly "^0.3.6"
-    vdirs "^0.1.4"
-    vooks "^0.2.4"
 
 vueuc@^0.4.47:
   version "0.4.49"
