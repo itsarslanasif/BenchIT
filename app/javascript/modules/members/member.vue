@@ -1,6 +1,10 @@
 <template>
   <div class="card">
-    <img class="Avatar" src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg" alt="Avatar" />
+    <img
+      class="Avatar"
+      src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
+      alt="Avatar"
+    />
     <h6 class="username">{{ name }}</h6>
     <p class="description">{{ description }}</p>
   </div>
@@ -29,10 +33,10 @@ export default {
   color: grey;
   font-size: 12px;
 }
-.username{
+.username {
   font-size: 12px;
   height: 20%;
-  margin-top: .3rem;
+  margin-top: 0.3rem;
 }
 .Avatar {
   height: 50%;
