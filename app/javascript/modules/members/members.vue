@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div >
     <div class="search_bar">
       <input
-        class="searchbar"
+        class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
         v-model="searchQuery"
         placeholder="Search by name"
@@ -75,10 +75,12 @@ export default {
   justify-content: center;
 }
 .search_bar {
-  padding: 0px 35px;
+  padding: 20px 35px;
 }
 .loading > img {
   width: 50px;
   height: 50px;
+
 }
+
 </style>
