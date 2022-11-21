@@ -55,17 +55,22 @@ export default {
 .menu-item {
   width: 300px;
 }
+
 .icon-style {
   padding: 1px;
 }
+
 .menu-item {
   height: 55px;
 }
+
 .main-bar {
-  border-bottom: 2px solid;
+  color: white;
   border-style: solid;
   display: flex;
   font-size: 25px;
+  margin-left: 15px;
+  margin-top: 15px;
 }
 
 .sub-menu {
@@ -86,6 +91,7 @@ export default {
 .fade-leave-active {
   transition: all 0.3s ease-out;
 }
+
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
