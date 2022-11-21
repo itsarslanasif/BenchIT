@@ -8,8 +8,8 @@ import Layout from '@/views/shared/layout.vue';
 import Axios from 'axios';
 
 // ActionCable setup
-// import { createCable } from '@/plugins/cable';
-// const Cable = createCable({ channel: 'ChatChannel' });
+import { createCable } from '@/plugins/cable';
+const Cable = createCable({ channel: 'ChatChannel' });
 
 // From animations + Axios
 import { createApi } from '@/plugins/api';
