@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h4 class="form-h">{{ $t('company.title') }}</h4>
+    <h4 class="form-h3">{{ $t('company.title') }}</h4>
     <label>{{ $t('company.name') }}</label>
     <input
       v-model="workspaceStore.workspace.company_name"

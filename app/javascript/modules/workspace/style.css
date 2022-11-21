@@ -29,6 +29,9 @@
 }
 
 .form-h3 {
+  font-size: x-large;
+  font-weight: bolder;
+  margin-bottom: 25px;
   text-align: center;
 }
 

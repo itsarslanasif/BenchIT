@@ -105,6 +105,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_100008) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "invitables", force: :cascade do |t|
+    t.string "token"
+    t.integer "user_id"
+    t.integer "workspace_id"
+    t.string "token_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_invitables_on_token"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "workspace_id", null: false
@@ -158,7 +168,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_18_100008) do
   create_table "workspaces", force: :cascade do |t|
     t.string "company_name", null: false
     t.integer "workspace_type", default: 0, null: false
-    t.string "benchIT_URL", null: false
+    t.string "bench_it_url", null: false
     t.integer "capacity", null: false
     t.integer "organization_type", default: 0, null: false
     t.integer "admin_role", default: 0, null: false

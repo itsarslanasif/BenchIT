@@ -1,0 +1,19 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  token: MyString
+  user_id: 1
+  workspace_id: 1
+  user_email: MyString
+  token_type: MyString
+  invitation_sent_at: 2022-11-17 23:20:29
+  invitation_sent_by: MyString
+
+two:
+  token: MyString
+  user_id: 1
+  workspace_id: 1
+  user_email: MyString
+  token_type: MyString
+  invitation_sent_at: 2022-11-17 23:20:29
+  invitation_sent_by: MyString
