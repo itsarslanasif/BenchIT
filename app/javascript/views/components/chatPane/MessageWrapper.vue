@@ -26,6 +26,12 @@
             v-html="message.content"
           />
         </span>
+          <span
+            v-show="!isSameUser"
+            class="messageContent"
+            v-html="message.content"
+          />
+        
         <div v-for="emoji in allReactions">
           <span class="emoji">{{ emoji.i }}</span>
         </div>

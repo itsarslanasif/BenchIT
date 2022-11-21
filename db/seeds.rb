@@ -4,8 +4,7 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               capacity: 2000,
                               organization_type: :financial_services)
 
-admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password')
-admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: workspace.id)
+
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!')
 user1.save!
 user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: workspace.id)
@@ -18,6 +17,8 @@ user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: work
 user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!')
 user.save!
 user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: workspace.id)
+admin = User.create!(name: "admin",email: 'admin@domain.com', password: 'password', password_confirmation: 'password')
+admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: workspace.id)
 BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1, workspace_id: workspace.id)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, user_id: 1, bench_channel_id: 1)

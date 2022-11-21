@@ -45,16 +45,6 @@ export default {
     NSpace,
     editor: Editor,
   },
-  data() {
-    return {
-      chat: {},
-      textMessage: '',
-      messages: [],
-      conversation_type: window.location.pathname.split('/')[1],
-      id: window.location.pathname.split('/')[2],
-      Cable: null,
-    };
-  },
   mounted() {
     axios
       .get(`${this.conversation_type}/${this.id}`)
@@ -84,7 +74,7 @@ export default {
   },
   data() {
     return {
-      chat: chats[1],
+      //chat: chats[1],
       message: '',
       plainText: '',
       hasMentionCommand: false,
@@ -95,24 +85,11 @@ export default {
       allChannels: [],
       chat: {},
       messages: [],
+      Cable: null,
       conversation_type: window.location.pathname.split('/')[1],
       id: window.location.pathname.split('/')[2],
     };
   },
-
-  updated() {
-    this.Cable.on('chat', data => {
-      if (this.conversation_type === 'channels') {
-        data.message.channel_name = this.messages[0].channel_name;
-      } else if (this.conversation_type === 'groups') {
-        data.message.group_id = this.messages[0].group_id;
-      } else {
-        data.message.receiver_name = this.messages[0].receiver_name;
-      }
-      this.messages.push(data.message);
-    });
-  },
-
   watch: {
     message() {
       this.plainText = this.message.replace(/<[^>]+>/g, '');
@@ -132,12 +109,13 @@ export default {
     sendMessage() {
       const payload = {
         sender_id: 1,
-        content: this.textMessage.replace(/<[^>]+>/g, ''),
+        content: this.message.replace(/<[^>]+>/g, ''),
         is_threaded: false,
         parent_message_id: null,
         conversation_type: this.conversation_type,
         conversation_id: this.id
       }
+      console.log(payload);
       conversation(payload)
     },
 
@@ -206,7 +184,7 @@ export default {
 
       if (findMessage == undefined) {
         this.messages.push(data.message);
-        this.textMessage = '';
+        this.message = '';
       }
 
     });
