@@ -1,10 +1,6 @@
 <template>
   <div class='container text-lg'>
     <hr>
-    <div class='workplace'>
-      <b>Devsinc</b>
-    </div>
-    <hr>
     <div class='menu mt-4 mb-4 ml-2 '>
       <IconElement icon='&#8860;' space='&nbsp;' name='Threads' />
       <IconElement icon='&#8704;' space='&nbsp;' name='Direct messages' />

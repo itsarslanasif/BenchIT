@@ -1,37 +1,27 @@
 <template>
   <div class="form-background">
-
-  <form @submit.prevent="handleSubmit" class="form ">
-    <button
-      type="button"
-      class="btn-close"
-      @click="closeModal"
-    >
-      x
-    </button>
-    <h3 class="form-h3">Requesting invitations to BenchIT</h3>
-    <label>To</label>
-    <br />
-    <input
-      v-model="userStore.workspace_invite.email"
-      type="email"
-      placeholder="Email"
-      required
-      class="form-input-select"
-    />
-    <br />
-    <label>Reason for request (optional)</label>
-    <br />
-    <input
-      type="text"
-      placeholder="Add a note for your admin"
-      class="form-input-select"
-    />
-    <div class="btn-div">
-      <button class="form-btn">Send Request</button>
-    </div>
-  </form>
-</div>
+    <form @submit.prevent="handleSubmit" class="form">
+      <button type="button" class="btn-close" @click="closeModal">x</button>
+      <h3 class="form-h3">Requesting invitations to BenchIT</h3>
+      <label>To</label>
+      <input
+        v-model="userStore.workspace_invite.email"
+        type="email"
+        placeholder="Email"
+        required
+        class="form-input-select"
+      />
+      <label>Reason for request (optional)</label>
+      <input
+        type="text"
+        placeholder="Add a note for your admin"
+        class="form-input-select"
+      />
+      <div class="btn-div">
+        <button class="form-btn">Send Request</button>
+      </div>
+    </form>
+  </div>
 </template>
 
 <script>
@@ -79,6 +69,7 @@ export default {
   width: 800px;
   z-index: 1;
 }
+
 .form-background {
   position: fixed;
   top: 0;
@@ -91,6 +82,7 @@ export default {
   align-items: center;
   z-index: 1;
 }
+
 .form-input-select {
   background-color: rgb(208, 202, 202);
   border: 1px solid black;
