@@ -11,24 +11,38 @@
       :src="message.sender.avatar"
     />
     <span class="message">
-      <span class="messageInfo">
-        <p v-show="!isSameUser" class="name">
-          <b>{{ message.sender.name }}</b>
-        </p>
-        <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
-          {{ isSameUser ? timeWithoutAMPM : time }}
-        </p>
+      <div>
+        <span class="messageInfo">
+          <p v-show="!isSameUser" class="name">
+            <b>{{ message.sender.name }}</b>
+          </p>
+          <div></div>
+          <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
+            {{ isSameUser ? timeWithoutAMPM : time }}
+          </p>
+          <span
+            v-show="isSameUser"
+            class="messageContent"
+            v-html="message.content"
+          />
+        </span>
         <span
-          v-show="isSameUser"
+          v-show="!isSameUser"
           class="messageContent"
           v-html="message.content"
         />
-      </span>
-      <span
-        v-show="!isSameUser"
-        class="messageContent"
-        v-html="message.content"
-      />
+        <div v-for="emoji in allReactions">
+          <span class="emoji">{{ emoji.i }}</span>
+        </div>
+      </div>
+
+      <div
+        class="emojiModalToggle"
+        v-if="emojiModalStatus || openEmojiModal"
+        @click="openEmojiModal = !openEmojiModal"
+      >
+        <font-awesome-icon icon="fa-solid fa-face-smile-wink" />
+      </div>
     </span>
   </div>
 

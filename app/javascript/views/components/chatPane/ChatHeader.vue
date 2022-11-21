@@ -180,5 +180,4 @@ export default {
   align-items: center;
   position: fixed;
 }
-
 </style>

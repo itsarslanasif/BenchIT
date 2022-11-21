@@ -1,5 +1,5 @@
 <template>
-  <div >
+  <div>
     <div class="search_bar">
       <input
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -80,7 +80,5 @@ export default {
 .loading > img {
   width: 50px;
   height: 50px;
-
 }
-
 </style>
