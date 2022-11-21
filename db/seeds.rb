@@ -1,6 +1,6 @@
 workspace = Workspace.create!(company_name: 'BenchIT',
                               workspace_type: :work,
-                              benchIT_URL: 'https://www.benchit.com',
+                              bench_it_url: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
 
