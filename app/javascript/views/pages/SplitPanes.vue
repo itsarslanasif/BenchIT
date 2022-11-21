@@ -19,7 +19,7 @@
       <div class="modalBack"><Chat /></div>
     </pane>
     <div v-if="UserInviteFormFlag" class="modal-styling">
-      <UserInviteFormVue />
+      <UserInviteFormVue :close-modal="closeForm"  />
     </div>
   </splitpanes>
 </template>
@@ -48,6 +48,9 @@ export default {
   methods: {
     closeModal() {
       this.modalOpen = !this.modalOpen;
+    },
+    closeForm() {
+      this.UserInviteFormFlag= !this.UserInviteFormFlag;
     },
     enableInviteModal() {
       this.UserInviteFormFlag = !this.UserInviteFormFlag;

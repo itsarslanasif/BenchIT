@@ -1,8 +1,17 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="form">
+  <div class="form-background">
+
+  <form @submit.prevent="handleSubmit" class="form ">
+    <button
+      type="button"
+      class="btn-close"
+      @click="closeModal"
+    >
+      x
+    </button>
     <h3 class="form-h3">Requesting invitations to BenchIT</h3>
     <label>To</label>
-     <br>
+    <br />
     <input
       v-model="userStore.workspace_invite.email"
       type="email"
@@ -10,9 +19,9 @@
       required
       class="form-input-select"
     />
-    <br>
+    <br />
     <label>Reason for request (optional)</label>
-     <br>
+    <br />
     <input
       type="text"
       placeholder="Add a note for your admin"
@@ -22,6 +31,7 @@
       <button class="form-btn">Send Request</button>
     </div>
   </form>
+</div>
 </template>
 
 <script>
@@ -30,6 +40,7 @@ import { UserStore } from '../../stores/user_store.js';
 
 export default {
   name: 'UserInviteForm',
+  props: ['closeModal'],
   data() {
     return {
       userStore: UserStore(),
@@ -68,11 +79,34 @@ export default {
   width: 800px;
   z-index: 1;
 }
-
+.form-background {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
 .form-input-select {
   background-color: rgb(208, 202, 202);
   border: 1px solid black;
   color: black;
   width: 400px;
+}
+
+.btn-close {
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  width: 50px;
+  margin: 0px;
+  padding: 0px;
+  background: transparent;
+  color: rgb(59, 58, 58);
+  margin-left: 90%;
 }
 </style>
