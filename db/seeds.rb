@@ -4,18 +4,18 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               capacity: 2000,
                               organization_type: :financial_services)
 
-admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password')
+admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password', jti: SecureRandom.uuid)
 admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: workspace.id)
-user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!')
+user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
 user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: workspace.id)
-user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!')
+user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user2.save!
 user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: workspace.id)
-user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!')
+user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user3.save!
 user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: workspace.id)
-user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!')
+user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user.save!
 user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: workspace.id)
 BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1, workspace_id: workspace.id)
