@@ -6,8 +6,8 @@ class Api::ProfilesController < Api::ApiController
   end
 
   def create
-    if @current_user
-      @profile = @current_user.profiles.new(profile_params) # assuming that the user is already logged in
+    if current_user
+      @profile = current_user.profiles.new(profile_params)
       if @profile.save
         render json: "Profile Added to #{@workspace.company_name}"
       else

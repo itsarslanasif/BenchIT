@@ -22,7 +22,8 @@ class Api::ApiController < ApplicationController
     token = request.headers['Authorization'].split(' ')[1]
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
     @current_user = User.find(jwt_payload[0]['sub'])
-    render json: { message: 'You need to sign in before to access this.' }, status: :unauthorized unless @current_user
+
+    render json: { message: 'You need to sign in before to access this.' }, status: :unauthorized unless current_user
   rescue StandardError
     render json: { message: 'You need to sign in before to access this.' }, status: :unauthorized
   end
