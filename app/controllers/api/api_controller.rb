@@ -1,10 +1,10 @@
 class Api::ApiController < ApplicationController
-  attr_reader :current_user
-
   skip_before_action :verify_authenticity_token
   before_action :set_workspace_in_session
   before_action :presence_of_api_token
   before_action :authenticate_api_with_token
+
+  attr_reader :current_user
 
   private
 
