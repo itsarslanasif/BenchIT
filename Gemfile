@@ -1,49 +1,50 @@
-source "https://rubygems.org"
+source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem "rails", "~> 7.0.2"
+gem 'rails', '~> 7.0.2'
 
-gem 'dotenv-rails'
-gem "sprockets-rails"
-gem "puma", "~> 5.0"
-gem "jbuilder"
-gem "redis", "~> 4.0"
-gem "bootsnap", require: false
-gem 'vite_rails'
-gem 'foreman'
-gem 'route_translator'
-gem 'kaminari'
-gem 'ransack'
+gem 'bootsnap', require: false
 gem 'devise'
-gem "sassc-rails"
-gem 'pg'
-gem 'redis-namespace'
 gem 'devise_invitable'
+gem 'devise-jwt'
+gem 'dotenv-rails'
+gem 'foreman'
+gem 'jbuilder'
+gem 'kaminari'
+gem 'pg'
+gem 'puma', '~> 5.0'
+gem 'rack-cors'
+gem 'ransack'
+gem 'redis', '~> 4.0'
+gem 'redis-namespace'
+gem 'route_translator'
+gem 'sassc-rails'
 gem 'sidekiq', '~>6.0'
+gem 'sprockets-rails'
+gem 'vite_rails'
 
-gem "tzinfo-data", platforms: %i[ mingw mswin x64_mingw jruby ]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 group :development, :test do
-  gem "debug", platforms: %i[ mri mingw x64_mingw ]
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
 end
 
 group :development do
-
-  gem "web-console"
-  gem "spring"
+  gem 'spring'
+  gem 'web-console'
 end
 
 group :test do
-  gem "capybara"
+  gem 'capybara'
+  gem 'capybara-email'
+  gem 'json-schema'
   gem 'minitest'
-  gem 'minitest-rails'
   gem 'minitest-focus'
   gem 'minitest-matchers'
   gem 'minitest-metadata'
   gem 'minitest-profiler'
-  gem 'capybara-email'
-  gem 'json-schema'
-  gem 'warden'
+  gem 'minitest-rails'
   gem 'selenium-webdriver'
+  gem 'warden'
   gem 'webdrivers'
 end
