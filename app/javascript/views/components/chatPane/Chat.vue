@@ -47,7 +47,9 @@ export default {
   },
   mounted() {
     axios
-      .get(`${this.conversation_type}/${this.id}`)
+      .get(`${this.conversation_type}/${this.id}`,{ headers: {
+    Authorization: ''
+  }})
       .then(response => {
         this.messages = response.data;
         this.chat = {
@@ -113,9 +115,9 @@ export default {
         is_threaded: false,
         parent_message_id: null,
         conversation_type: this.conversation_type,
-        conversation_id: this.id
+        conversation_id: this.id,
+
       }
-      console.log(payload);
       conversation(payload)
     },
 

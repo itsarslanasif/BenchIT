@@ -1,10 +1,12 @@
 class User < ApplicationRecord
+  include Devise::JWT::RevocationStrategies::JTIMatcher
+
   has_many :profiles, dependent: :destroy
   has_many :workspaces, through: :profiles, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
   paginates_per 10
 
-  devise :invitable, :database_authenticatable
+  devise :invitable, :database_authenticatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
   validates_presence_of :email
   has_many :channel_participants
