@@ -1,6 +1,4 @@
 Rails.application.routes.draw do
-
-
   mount ActionCable.server => '/cable'
 
   localized do
@@ -14,20 +12,20 @@ Rails.application.routes.draw do
             get :users_list
           end
         end
-      end
 
-      resources :bench_channels do
-        resources :bookmarks, only: %i[create index]
-      end
+        resources :bench_channels, only: %i[create] do
+          resources :bookmarks, only: %i[create index]
+        end
 
-      resources :workspaces do
-        resources :profiles, only: [:index, :create]
+        resources :workspaces, only: %i[create] do
+          member do
+            post :invite
+          end
+          resources :profiles, only: %i[index create]
+        end
       end
-      resources :bench_channels, only: [:create]
-      match "/workspaces/:workspace_id/invite", :to => "workspaces#invite", :via => "post"
     end
 
     get '*path', to: 'application#index', format: false
   end
-
 end

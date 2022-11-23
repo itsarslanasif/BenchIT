@@ -1,4 +1,4 @@
-class Api::BenchChannelsController < Api::ApiController
+class Api::V1::BenchChannelsController < Api::ApiController
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
     if @bench_channel.save
