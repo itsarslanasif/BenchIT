@@ -120,11 +120,47 @@ GEM
     dry-core (0.9.1)
       concurrent-ruby (~> 1.0)
       zeitwerk (~> 2.6)
+    elasticsearch (7.17.7)
+      elasticsearch-api (= 7.17.7)
+      elasticsearch-transport (= 7.17.7)
+    elasticsearch-api (7.17.7)
+      multi_json
+    elasticsearch-model (7.2.1)
+      activesupport (> 3)
+      elasticsearch (~> 7)
+      hashie
+    elasticsearch-transport (7.17.7)
+      faraday (~> 1)
+      multi_json
     erubi (1.11.0)
+    faraday (1.10.2)
+      faraday-em_http (~> 1.0)
+      faraday-em_synchrony (~> 1.0)
+      faraday-excon (~> 1.1)
+      faraday-httpclient (~> 1.0)
+      faraday-multipart (~> 1.0)
+      faraday-net_http (~> 1.0)
+      faraday-net_http_persistent (~> 1.0)
+      faraday-patron (~> 1.0)
+      faraday-rack (~> 1.0)
+      faraday-retry (~> 1.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-em_http (1.0.0)
+    faraday-em_synchrony (1.0.0)
+    faraday-excon (1.1.0)
+    faraday-httpclient (1.0.1)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (1.0.1)
+    faraday-net_http_persistent (1.2.0)
+    faraday-patron (1.0.0)
+    faraday-rack (1.0.0)
+    faraday-retry (1.0.3)
     ffi (1.15.5)
     foreman (0.87.2)
     globalid (1.0.0)
       activesupport (>= 5.0)
+    hashie (5.0.0)
     i18n (1.12.0)
       concurrent-ruby (~> 1.0)
     io-console (0.5.11)
@@ -171,6 +207,8 @@ GEM
       minitest (~> 5.10)
       railties (~> 7.0.0)
     msgpack (1.5.1)
+    multi_json (1.15.0)
+    multipart-post (2.2.3)
     net-imap (0.2.3)
       digest
       net-protocol
@@ -250,6 +288,7 @@ GEM
       actionpack (>= 5.2, < 7.1)
       activesupport (>= 5.2, < 7.1)
       addressable (~> 2.7)
+    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sassc (2.4.0)
       ffi (~> 1.9)
@@ -327,6 +366,7 @@ DEPENDENCIES
   devise-jwt
   devise_invitable
   dotenv-rails
+  elasticsearch-model
   foreman
   jbuilder
   json-schema

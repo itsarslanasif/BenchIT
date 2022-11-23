@@ -8,10 +8,10 @@ admin = User.create!(email: 'admin@domain.com', password: 'password', password_c
 admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: workspace.id)
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
-user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: workspace.id)
+user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: workspace.id, account_type: :owners)
 user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user2.save!
-user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: workspace.id)
+user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: workspace.id, account_type: :deactivated_accounts)
 user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user3.save!
 user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: workspace.id)
