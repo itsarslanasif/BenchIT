@@ -3,10 +3,15 @@ class ChatChannel < ApplicationCable::Channel
   def subscribed
     if params[:type] == "users"
       current_user = User.first
-      conversation = BenchConversation.where(conversationable_type: "User", sender_id: current_user.id, conversationable_id: params[:id].to_i).or(BenchConversation.where(conversationable_type: "User", sender_id: params[:id].to_i, conversationable_id: current_user.id)).last
-      stream_from "ChatChannel#{conversation.conversationable_id}"
+      conversation = BenchConversation.user_to_user_conversation(current_user.id,params[:id]).last
+      if conversation.nil?
+        conversation = BenchConversation.user_to_user_conversation(params[:id],current_user.id).last
+      end
+      stream_from "ChatChannelUser#{conversation.conversationable_id}#{conversation.sender_id}"
+    elsif params[:type] == "groups"
+      stream_from "ChatChannelGroup#{params[:id]}"
     else
-      stream_from "ChatChannel#{params[:id]}"
+      stream_from "ChatChannelBenchChannel#{params[:id]}"
     end
   end
 

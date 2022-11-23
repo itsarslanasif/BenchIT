@@ -48,7 +48,7 @@ export default {
   mounted() {
     axios
       .get(`${this.conversation_type}/${this.id}`,{ headers: {
-    Authorization: ''
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJqdGkiOiI0MjI2YTBiZi0wYWRjLTQ1NTAtYjFiZS02NmU4OWQyNzlhZWIiLCJzdWIiOiIxIiwic2NwIjoidXNlciIsImF1ZCI6bnVsbCwiaWF0IjoxNjY5MjA4MjYyLCJleHAiOjE2NjkyMTU0NjJ9.5G4NydLqTdMw3yQNd2jEyMMNCh-mhEotH_kvx5s2Wgo'
   }})
       .then(response => {
         this.messages = response.data;
@@ -76,7 +76,6 @@ export default {
   },
   data() {
     return {
-      //chat: chats[1],
       message: '',
       plainText: '',
       hasMentionCommand: false,
@@ -88,8 +87,8 @@ export default {
       chat: {},
       messages: [],
       Cable: null,
-      conversation_type: window.location.pathname.split('/')[1],
-      id: window.location.pathname.split('/')[2],
+      conversation_type: this.getIndexByParams(1),
+      id: this.getIndexByParams(2),
     };
   },
   watch: {
@@ -108,6 +107,10 @@ export default {
   },
 
   methods: {
+    getIndexByParams(param) {
+      return window.location.pathname.split('/')[param]
+    },
+
     sendMessage() {
       const payload = {
         sender_id: 1,
@@ -116,7 +119,6 @@ export default {
         parent_message_id: null,
         conversation_type: this.conversation_type,
         conversation_id: this.id,
-
       }
       conversation(payload)
     },

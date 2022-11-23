@@ -11,7 +11,7 @@
           </p>
         </n-divider>
       </div>
-      <MessageWrapper :curr-message="message" :prev-message="prevMessage" />
+      <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
     </template>
   </div>
 </template>

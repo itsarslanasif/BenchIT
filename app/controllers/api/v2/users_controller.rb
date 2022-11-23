@@ -1,9 +1,11 @@
 class Api::V2::UsersController < Api::ApiController
   before_action :set_user, only: [:show]
+
   def index
     @users = User.all
     render json: @users
   end
+
   def show
     current_user = User.first
     @conversation = BenchConversation.where(conversationable_type: "User", sender_id: current_user, conversationable_id: @receiver.id).or(BenchConversation.where(conversationable_type: "User", sender_id: @receiver.id, conversationable_id: current_user)).last
@@ -45,11 +47,13 @@ class Api::V2::UsersController < Api::ApiController
     end
     render json: message_data
   end
+
   private
+
   def set_user
     @receiver = User.find_by_id(params[:id])
-    puts "\n\tName : #{@receiver.name}\n"
     return if @receiver.present?
+
     render json: { json: @receiver.errors, status: :unprocessable_entity }
   end
 end

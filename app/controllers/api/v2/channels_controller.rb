@@ -47,26 +47,6 @@ class Api::V2::ChannelsController < Api::ApiController
     end
   end
 
-  def create
-    current_user = User.first
-    @channel = BenchChannel.new(bench_channel_params)
-    if @channel.save
-      @participant = ChannelParticipant.new(bench_channel_id:@channel.id, user_id:current_user.id)
-      if @participant.save
-        @conversation = BenchConversation.new(conversationable_id:@channel.id, conversationable_type: "BenchChannel")
-        if @conversation.save
-          render json: { status: :ok, message: 'Success' }
-        else
-          render json: { json: @conversation.errors, status: :unprocessable_entity }
-        end
-      else
-        render json: { json: @participant.errors, status: :unprocessable_entity }
-      end
-    else
-      render json: { json: @channel.errors, status: :unprocessable_entity }
-    end
-  end
-
   def destroy
     if @channel.destroy
       render json: { json: 'Channel was successfully deleted.'}
@@ -76,12 +56,12 @@ class Api::V2::ChannelsController < Api::ApiController
   end
 
   private
+
   def set_channel
     @channel = BenchChannel.find_by_id(params[:id])
     return if @channel.present?
-
-    render json: { json: @channel.errors, status: :unprocessable_entity }
   end
+
   def bench_channel_params
     params.permit(:name,:description,:creator_id, :is_private)
   end
