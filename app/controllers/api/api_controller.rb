@@ -10,6 +10,7 @@ class Api::ApiController < ApplicationController
 
   def set_workspace_in_session
     session[:current_workspace_id] = Workspace.first.id
+    Current.workspace = Workspace.first
   end
 
   def presence_of_api_token
@@ -19,11 +20,12 @@ class Api::ApiController < ApplicationController
   end
 
   def authenticate_api_with_token
-    token = request.headers['Authorization'].split(' ')[1]
+    token = request.headers['Authorization'].split[1]
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
     @current_user = User.find(jwt_payload[0]['sub'])
 
     render json: { message: 'You need to sign in before to access this.' }, status: :unauthorized unless current_user
+    Current.user = @current_user
   rescue StandardError
     render json: { message: 'You need to sign in before to access this.' }, status: :unauthorized
   end
