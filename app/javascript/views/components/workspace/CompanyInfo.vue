@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import { WorkspaceStore } from '../../stores/workspace_store';
+import { WorkspaceStore } from '../../../stores/workspace_store';
 import './style.css';
 
 export default {

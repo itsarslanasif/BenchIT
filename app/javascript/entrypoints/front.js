@@ -1,34 +1,14 @@
-import { createApp } from 'vue';
-const app = createApp(Layout);
-
 import './application.scss';
-
+import axios from 'axios';
 import Router from '@/routes.js';
 import Layout from '@/views/shared/layout.vue';
-import Axios from 'axios';
-
-// ActionCable setup
+import { createApp } from 'vue';
+import { createI18n } from 'vue-i18n';
 import { createCable } from '@/plugins/cable';
-const Cable = createCable({ channel: 'ChatChannel' });
-
-// From animations + Axios
 import { createApi } from '@/plugins/api';
-const Api = createApi({ handler: Axios, namespace: '' });
-
-// Pinia + Axios setup
 import { createPinia } from 'pinia';
-const Pinia = createPinia();
-Pinia.use(({ store }) => {
-  store.axios = Axios;
-});
-
-/* import the fontawesome core */
-import { library } from '@fortawesome/fontawesome-svg-core';
-
-/* import font awesome icon component */
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-
-/* import specific icons */
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   faIcons,
   faSquareCheck,
@@ -40,8 +20,14 @@ import {
   faEllipsisVertical,
   faFaceSmile,
 } from '@fortawesome/free-solid-svg-icons';
+import '@fortawesome/fontawesome-free/css/all.css'
+import '@fortawesome/fontawesome-free/js/all.js'
+const Cable = createCable({ channel: 'ChatChannel' });
+const app = createApp(Layout);
+const Api = createApi({ handler: axios, namespace: '' });
+const Pinia = createPinia();
 
-/* add icons to the library */
+Pinia.use(({ store }) => { store.axios = axios })
 library.add(
   faIcons,
   faSquareCheck,
@@ -53,16 +39,12 @@ library.add(
   faEllipsisVertical,
   faFaceSmile
 );
-
-// I18n loader
-import { createI18n } from 'vue-i18n'; // Need the /index to avoid warning in console
 const I18n = createI18n({ locale: 'current', messages: translations });
 
-app
-  .use(Router)
+app.use(Router)
   .use(Pinia)
   .use(I18n)
   .use(Api)
   .use(Cable)
   .component('font-awesome-icon', FontAwesomeIcon)
-  .mount('#app');
+  .mount('#app')

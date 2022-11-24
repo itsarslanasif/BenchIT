@@ -31,9 +31,9 @@
 </template>
 
 <script>
-import axios from '../axios';
-import { UserStore } from '../../stores/user_store.js';
-import '../workspace/style.css';
+import axios from '../../../modules/axios';
+import { UserStore } from '../../../stores/user_store.js';
+import '../../components/workspace/style.css'
 
 export default {
   data() {

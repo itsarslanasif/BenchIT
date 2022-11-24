@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const ChannelStore = defineStore('channelStore', {
+export const useChannelStore = defineStore('channelStore', {
   state: () => ({
     channels: [
       {

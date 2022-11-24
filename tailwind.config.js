@@ -12,6 +12,18 @@ module.exports = {
   },
   theme: {
     colors: {
+      primary: '#1E293B',
+      primaryHover: '#475569',
+      secondary: '#1F2937',
+      secondaryHover: '#4B5563',
+      danger: '#B91C1C',
+      dangerHover: '#991B1B',
+      success: '#15803D',
+      successHover: '#166534',
+      info: '#0369A1',
+      infoHover: '#075985',
+      warning: '#FACC15',
+      warningHover: '#EAB308',
       white: colors.white,
       woot: {
         50: '#E3F2FF',
@@ -85,6 +97,10 @@ module.exports = {
         800: '#D11320',
         900: '#C30011',
       },
+      gray: {
+        600: '#4B5563',
+        800: '#1F2937'
+      }
     },
     extend: {
       screens: {

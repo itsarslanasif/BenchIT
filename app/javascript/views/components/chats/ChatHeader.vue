@@ -1,5 +1,5 @@
 <template>
-  <div v-if="chat.id">
+  <div v-if="chat.id" class="p-1">
     <div class="loading" v-show="loading">
       <Spinner />
     </div>
@@ -55,10 +55,10 @@
 
 <script>
 import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
-import BookmarkPopUpVue from './bookmark/popup.vue';
-import BookmarkShowVue from './bookmark/bookmarkShow.vue';
+import BookmarkPopUpVue from '../bookmark/popup.vue';
+import BookmarkShowVue from '../bookmark/bookmarkShow.vue';
 import Spinner from '../../shared/spinner.vue';
-import axios from '../../../entrypoints/axios/index';
+import axios from '../../../modules/axios';
 export default {
   name: 'ChatHeader',
   components: {
@@ -83,7 +83,6 @@ export default {
       .get(`bench_channels/${1}/bookmarks`)
       .then(response => {
         this.bookmarks = response.data.bookmarks;
-        console.log(this.bookmarks[0]);
         this.loading = false;
       })
       .catch(error => {
@@ -124,7 +123,6 @@ export default {
 }
 .headerContainer {
   display: flex;
-  overflow-x: scroll;
   overflow-y: hidden;
   text-overflow: ellipsis;
   scrollbar-color: dark;

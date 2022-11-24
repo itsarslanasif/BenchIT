@@ -25,8 +25,8 @@
 
 <script>
 import member from './member.vue';
-import axios from '../../entrypoints/axios/index';
-import Spinner from '../../views/shared/spinner.vue';
+import axios from '../../../modules/axios';
+import Spinner from '../../shared/spinner.vue';
 export default {
   components: {
     member,
@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`workspaces/${this.CurrentWorkspaceId}/profiles`, this.workspace)
+      .get(`/workspaces/${this.CurrentWorkspaceId}/profiles`, this.workspace)
       .then(response => {
         this.members = response.data.profiles;
       })

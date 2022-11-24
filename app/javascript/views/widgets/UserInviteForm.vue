@@ -2,23 +2,14 @@
   <div class="form-background">
     <form @submit.prevent="handleSubmit" class="form">
       <button type="button" class="btn-close" @click="closeModal">x</button>
-      <h3 class="form-h3">Requesting invitations to BenchIT</h3>
-      <label>To</label>
-      <input
-        v-model="userStore.workspace_invite.email"
-        type="email"
-        placeholder="Email"
-        required
-        class="form-input-select"
-      />
-      <label>Reason for request (optional)</label>
-      <input
-        type="text"
-        placeholder="Add a note for your admin"
-        class="form-input-select"
-      />
+      <h3 class="form-h3">{{ CONSTANTS.REQUESTING_INVITATION }}</h3>
+      <label>{{ CONSTANTS.TO }}</label>
+      <input v-model="userStore.workspace_invite.email" type="email" placeholder="Email" required
+        class="form-input-select" />
+      <label>{{ CONSTANTS.REASON_FOR_REQUEST }}</label>
+      <input type="text" placeholder="Add a note for your admin" class="form-input-select" />
       <div class="btn-div">
-        <button class="form-btn">Send Request</button>
+        <button class="form-btn">{{ CONSTANTS.SEND_REQUEST }}</button>
       </div>
     </form>
   </div>
@@ -27,13 +18,14 @@
 <script>
 import axios from '../../modules/axios';
 import { UserStore } from '../../stores/user_store.js';
-
+import { CONSTANTS } from '../../constants';
 export default {
   name: 'UserInviteForm',
   props: ['closeModal'],
   data() {
     return {
       userStore: UserStore(),
+      CONSTANTS: CONSTANTS
     };
   },
   methods: {

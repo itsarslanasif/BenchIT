@@ -1,25 +1,19 @@
 <template>
-  <div class="menu-item" @click="isOpen = !isOpen">
-    <div class="main-bar">
-      <a href="#">
-        {{ title }}
-      </a>
+  <div class="flex p-2 pl-4" @click="isOpen = !isOpen">
+    <div class="text-white text-xl flex">
+      <div class="mr-1">
+        <strong>{{ title }}</strong>
+      </div>
       <svg class="icon-style" viewBox="0 0 1060 638" width="10">
-        <path
-          d="M1017 68L541 626q-11 12-26 12t-26-12L13 68Q-3 49 6 24.5T39 0h952q24 0 33 24.5t-7 43.5z"
-          fill="#FFF"
-        ></path>
+        <path d="M1017 68L541 626q-11 12-26 12t-26-12L13 68Q-3 49 6 24.5T39 0h952q24 0 33 24.5t-7 43.5z" fill="#FFF">
+        </path>
       </svg>
     </div>
 
     <transition name="fade" appear>
-      <div class="sub-menu" v-if="isOpen">
-        <div
-          v-for="item in items"
-          :key="item"
-          class="menu-item"
-          @click="item.func"
-        >
+      <div class="bg-white rounded-md text-black-900 opacity-100 fixed z-10 p-3 ml-10 -mt-1" v-if="isOpen">
+        <div v-for="item in items" :key="item" class="p-4 hover:bg-primaryHover hover:text-white rounded-md"
+          @click="item.func">
           {{ item.title }}
         </div>
       </div>
@@ -62,15 +56,6 @@ export default {
 
 .menu-item {
   height: 55px;
-}
-
-.main-bar {
-  color: white;
-  border-style: solid;
-  display: flex;
-  font-size: 25px;
-  margin-left: 15px;
-  margin-top: 15px;
 }
 
 .sub-menu {

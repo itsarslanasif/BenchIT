@@ -1,11 +1,5 @@
 <template>
   <section class="container">
-    <div>
-      <h3 @click="showModal = !showModal">Modal</h3>
-      <div v-if="showModal" :style="modalStyle">
-        <Modal :modalArray="modalArray" />
-      </div>
-    </div>
     <h1>{{ $t('pages.title') }}</h1>
     <p>
       <a href="/dead-link">{{ $t('pages.server_404') }}</a>
@@ -27,15 +21,11 @@
 </template>
 
 <script>
-import Modal from '../../widgets/modal.vue'
 import { SampleStore } from '@/stores/sample_store'
-import { UserStore } from '../../stores/users'
-import { ChannelStore } from '../../stores/channels'
+import { useUserStore } from '../../stores/useUserStore'
+import { useChannelStore } from '../../stores/useChannelStore'
 import { onMounted } from 'vue'
 export default {
-  components: {
-    Modal
-  },
   data() {
     return {
       showModal: false,
@@ -60,10 +50,10 @@ export default {
   },
   setup() {
     SampleStore()
-    const usersStore = UserStore()
-    ChannelStore()
+    const userStore = useUserStore()
+    useChannelStore()
     onMounted(() => {
-      usersStore.index()
+      userStore.index()
     })
   },
   methods: {

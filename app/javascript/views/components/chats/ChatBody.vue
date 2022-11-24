@@ -1,10 +1,10 @@
 <template>
-  <div class="container">
+  <div class="overflow-auto chatBody">
     <template v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <n-divider>
-          <p class="messageTimestamp">
+        <n-divider class="w-full">
+          <p class="absolute text-gray-600 text-sm m-0 text-center">
             {{ isToday ? 'Today' : new Date(message.sentAt).toDateString() }}
           </p>
         </n-divider>
@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import MessageWrapper from './MessageWrapper.vue';
-import messages from './data/messages';
+import MessageWrapper from '../messages/MessageWrapper.vue';
+import messages from '../../../modules/data/messages';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 
 export default {
@@ -59,15 +59,12 @@ export default {
 <style scoped>
 .container {
   float: left;
-  height: 60vh;
+  /* height: 100vh; */
   overflow-y: auto;
-  width: 100%;
 }
-.messageTimestamp {
-  position: absolute;
-  color: grey;
-  font-size: small;
-  margin: 0px;
-  text-align: center;
+
+.chatBody{
+  height: 57vh;
 }
+
 </style>

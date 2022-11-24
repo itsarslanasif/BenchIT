@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import axios from '../axios';
+import axios from '../../../modules/axios';
 import WorkspaceInfo from './WorkspaceInfo.vue';
 import CompanyInfo from './CompanyInfo.vue';
 import WorkspaceURL from './WorkspaceURL.vue';
-import { WorkspaceStore } from '../../stores/workspace_store';
+import { WorkspaceStore } from '../../../stores/workspace_store';
 import './style.css';
 
 export default {

@@ -1,19 +1,19 @@
 <template>
   <div>
-    <a class="AddBookmarkButton" href="#popup1">Add Bookmark</a>
+    <a class="AddBookmarkButton bg-primary hover:bg-primaryHover" href="#popup1">Add Bookmark</a>
   </div>
 
   <div id="popup1" class="overlay">
     <div class="popup">
       <div>
-        <h2>Bookmark</h2>
+        <h2>{{CONSTANTS.BOOKMARK}}</h2>
         <a class="close" href="#">×</a>
         <div class="content">
-          <h5>Please enter URL</h5>
+          <h5>{{CONSTANTS.ENTER_URL}}</h5>
           <input v-model="bookmark.url" placeholder="url" required />
         </div>
         <div class="content">
-          <h5>Please enter name</h5>
+          <h5>{{CONSTANTS.ENTER_NAME}}</h5>
           <input v-model="bookmark.name" placeholder="name" required />
         </div>
         <div class="save_button">
@@ -23,7 +23,7 @@
             @click="handleSave()"
             href="#"
           >
-            Save
+            {{CONSTANTS.SAVE}}
           </a>
         </div>
       </div>
@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import { CONSTANTS } from '../../../constants'
 export default {
   data() {
     return {
@@ -40,6 +41,7 @@ export default {
         url: '',
         name: '',
       },
+      CONSTANTS: CONSTANTS
     };
   },
   methods: {
@@ -83,7 +85,7 @@ h1 {
   width: max-content;
   display: inline-block;
   margin-right: 5px;
-  background-color: rgb(4, 4, 4);
+  /* background-color: rgb(4, 4, 4); */
   border: 1px solid rgb(117, 116, 116);
 }
 .save-btn {
@@ -104,11 +106,11 @@ h1 {
   color: #fff;
 }
 
-.AddBookmarkButton:hover {
+/* .AddBookmarkButton:hover {
   background-color: rgb(78, 119, 231);
   cursor: pointer;
   color: #fff;
-}
+} */
 
 .overlay {
   position: absolute;
