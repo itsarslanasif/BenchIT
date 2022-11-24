@@ -39,9 +39,18 @@
         class="emojiModalToggle"
         v-if="emojiModalStatus || openEmojiModal || showOptions"
       >
-        <EmojiModalButton icon="fa-solid fa-square-check" btnText="Completed" />
-        <EmojiModalButton icon="fa-solid fa-thumbs-up" btnText="Liked it" />
-        <EmojiModalButton icon="fa-solid fa-heart" btnText="Loved it" />
+        <EmojiModalButton
+          icon="fa-solid fa-square-check"
+          btnText="Completed"
+          />
+        <EmojiModalButton
+          icon="fa-solid fa-thumbs-up"
+          btnText="Liked it"
+          />
+        <EmojiModalButton
+          icon="fa-solid fa-heart"
+          btnText="Loved it"
+          />
         <EmojiModalButton
           icon="fa-solid fa-icons"
           btnText="Find another reaction"
@@ -51,7 +60,10 @@
           icon="fa-solid fa-comment-dots"
           btnText="Reply in thread"
         />
-        <EmojiModalButton icon="fa-solid fa-share" btnText="Share message..." />
+        <EmojiModalButton
+        icon="fa-solid fa-share"
+        btnText="Share message..."
+        />
         <EmojiModalButton
           icon="fa-solid fa-bookmark"
           btnText="Add to saved items"
@@ -124,98 +136,75 @@ export default {
     },
     setOptionsModal() {
       this.showOptions = !this.showOptions;
-      console.log(this.openEmojiModal);
     },
   },
 };
 </script>
-<style scoped>
+<style>
 p {
-  color: rgb(52, 51, 51);
-  font-size: 14px;
-  margin: 0px;
+  @apply text-black-800 text-xs m-0;
 }
 
 .messageContent {
-  color: rgb(52, 51, 51);
-  font-size: 14px;
-  word-wrap: normal;
+  @apply text-black-800 text-xs flex-wrap;
 }
 
 .messageWrapper {
-  align-items: center;
-  display: flex;
-  padding: 5px;
-  position: relative;
+  @apply items-center flex p-1 relative;
 }
 
 .messageWrapper:hover {
-  background-color: rgb(230, 232, 234);
+  @apply bg-black-200;
 }
 
 .name {
-  margin-right: 5px;
+  @apply mr-1;
+  font-size: 14px;
 }
 
 .name:hover {
-  cursor: pointer;
-  text-decoration: underline;
+  @apply cursor-pointer underline;
 }
 
 .time {
-  color: grey;
+  @apply text-black-500;
   font-size: x-small;
 }
 
 .time:hover {
-  cursor: pointer;
-  text-decoration: underline;
+  @apply cursor-pointer underline;
 }
 
 .time-on-left {
-  color: grey;
+  @apply ml-2 mr-3 text-black-500;
   font-size: x-small;
-  margin-left: 16px;
-  margin-right: 8px;
 }
 
 .time-on-left:hover {
-  cursor: pointer;
-  text-decoration: underline;
+  @apply cursor-pointer underline;
 }
 
 .messageInfo {
-  align-items: center;
-  display: flex;
+  @apply items-center flex;
 }
 
 .avatar {
+  @apply h-8 mr-1;
   align-self: baseline;
-  height: 40px;
-  margin-right: 5px;
   min-width: fit-content;
 }
 
 .emojiModal {
-  position: absolute;
-  right: 0;
-  z-index: 98;
+  @apply absolute right-0 z-50;
 }
 
 .emojiModalToggle {
-  background-color: #ffffff;
-  color: rgb(131, 130, 130);
-  padding: 5px;
-  border-radius: 4px;
-  position: absolute;
+  @apply bg-white text-black-500 p-1 rounded absolute;
   right: 30px;
   top: -22px;
 }
 
 .emoji {
-  background-color: #151f252c;
-  padding: 5px 8px;
-  margin-right: 2px;
-  border-radius: 5px;
+  @apply bg-black-300 p-1 mr-1 rounded;
 }
 </style>
