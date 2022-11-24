@@ -16,7 +16,6 @@
           <p v-show="!isSameUser" class="name">
             <b>{{ message.sender.name }}</b>
           </p>
-          <div></div>
           <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
             {{ isSameUser ? timeWithoutAMPM : time }}
           </p>
@@ -31,17 +30,37 @@
           class="messageContent"
           v-html="message.content"
         />
-        <div v-for="emoji in allReactions">
-          <span class="emoji">{{ emoji.i }}</span>
-        </div>
       </div>
+      <template v-for="emoji in allReactions" :key="emoji.id">
+        <span class="emoji">{{ emoji.i }}</span>
+      </template>
 
       <div
         class="emojiModalToggle"
-        v-if="emojiModalStatus || openEmojiModal"
-        @click="openEmojiModal = !openEmojiModal"
+        v-if="emojiModalStatus || openEmojiModal || showOptions"
       >
-        <font-awesome-icon icon="fa-solid fa-face-smile-wink" />
+        <EmojiModalButton icon="fa-solid fa-square-check" btnText="Completed" />
+        <EmojiModalButton icon="fa-solid fa-thumbs-up" btnText="Liked it" />
+        <EmojiModalButton icon="fa-solid fa-heart" btnText="Loved it" />
+        <EmojiModalButton
+          icon="fa-solid fa-icons"
+          btnText="Find another reaction"
+          :action="setEmojiModal"
+        />
+        <EmojiModalButton
+          icon="fa-solid fa-comment-dots"
+          btnText="Reply in thread"
+        />
+        <EmojiModalButton icon="fa-solid fa-share" btnText="Share message..." />
+        <EmojiModalButton
+          icon="fa-solid fa-bookmark"
+          btnText="Add to saved items"
+        />
+        <EmojiModalButton
+          icon="fa-solid fa-ellipsis-vertical"
+          btnText="More actions"
+          :action="setOptionsModal"
+        />
       </div>
     </span>
   </div>
@@ -55,9 +74,15 @@
 import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../../widgets/emojipicker.vue';
+import EmojiModalButton from '../../../widgets/EmojiModalButton/index.vue';
+
 export default {
   name: 'MessageWrapper',
-  components: { NAvatar, EmojiPicker },
+  components: {
+    NAvatar,
+    EmojiPicker,
+    EmojiModalButton,
+  },
   props: {
     currMessage: {
       type: Object,
@@ -75,6 +100,7 @@ export default {
       emojiModalStatus: false,
       openEmojiModal: false,
       allReactions: [],
+      showOptions: false,
     };
   },
   computed: {
@@ -92,6 +118,13 @@ export default {
   methods: {
     addReaction(emoji) {
       this.allReactions.push(emoji);
+    },
+    setEmojiModal() {
+      this.openEmojiModal = !this.openEmojiModal;
+    },
+    setOptionsModal() {
+      this.showOptions = !this.showOptions;
+      console.log(this.openEmojiModal);
     },
   },
 };
@@ -164,21 +197,25 @@ p {
 }
 
 .emojiModal {
-  float: right;
+  position: absolute;
+  right: 0;
+  z-index: 98;
 }
 
 .emojiModalToggle {
-  background-color: #151f25;
+  background-color: #ffffff;
+  color: rgb(131, 130, 130);
   padding: 5px;
   border-radius: 4px;
   position: absolute;
   right: 30px;
-  top: -10px;
+  top: -22px;
 }
 
 .emoji {
-  background-color: #151f25;
+  background-color: #151f252c;
   padding: 5px 8px;
+  margin-right: 2px;
   border-radius: 5px;
 }
 </style>
