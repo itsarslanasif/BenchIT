@@ -34,7 +34,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`workspaces/${this.CurrentWorkspaceId}/profiles`, this.workspace)
+      .get(`v1/workspaces/${this.CurrentWorkspaceId}/profiles`, this.workspace)
       .then(response => {
         this.members = response.data.profiles;
       })

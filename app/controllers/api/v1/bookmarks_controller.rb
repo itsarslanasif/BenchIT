@@ -1,4 +1,4 @@
-class Api::BookmarksController < Api::ApiController
+class Api::V1::BookmarksController < Api::ApiController
   before_action :set_channel, only: %i[index create]
 
   def create
@@ -14,11 +14,12 @@ class Api::BookmarksController < Api::ApiController
   private
 
   def set_channel
-    @channel = BenchChannel.find_by!(id: params[:bench_channel_id])
+    @channel = BenchChannel.find_by(id: params[:bench_channel_id])
+
+    return render json: { message: 'Bench Channel Not Found.' }, status: :not_found if @channel.nil?
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name, :bookmark_URL, :user_id, :bench_channel_id)
+    params.require(:bookmark).permit(:name, :bookmark_URL)
   end
-
 end

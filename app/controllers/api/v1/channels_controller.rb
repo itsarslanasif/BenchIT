@@ -1,25 +1,25 @@
-class Api::V2::GroupsController < Api::ApiController
-  before_action :set_group, only: [:show]
+class Api::V1::ChannelsController < Api::ApiController
+  before_action :set_channel, only: [:show, :destroy, :update]
   def index
     current_user = User.first
-    render json: current_user.groups
+    render json: current_user.bench_channels
   end
 
   def show
     current_user = User.first
-    if current_user.group_ids.include?(@group.id)
-      @messages = @group.bench_conversation.conversation_messages
+    if current_user.bench_channel_ids.include?(@channel.id)
+      @messages = @channel.bench_conversation.conversation_messages
       message_data = []
       if @messages.empty?
         response = {
           id: 0,
-          group_id: @group.id,
+          channel_name: @channel.name,
           content: nil,
           is_threaded: false,
           parent_message_id: nil,
           sender_id: nil,
           sender_name: nil,
-          bench_conversation_id: @group.bench_conversation.id,
+          bench_conversation_id: @channel.bench_conversation.id,
           created_at: nil,
           updated_at: nil
         }
@@ -28,7 +28,7 @@ class Api::V2::GroupsController < Api::ApiController
         @messages.each do |message|
           response = {
             id: message.id,
-            group_id: @group.id,
+            channel_name: @channel.name,
             content:message.content,
             is_threaded:message.is_threaded,
             parent_message_id:message.parent_message_id,
@@ -43,15 +43,26 @@ class Api::V2::GroupsController < Api::ApiController
       end
       render json: message_data
     else
-      render json: { json: "nooo", status: :unprocessable_entity }
+      render json: { json: "no data found", status: :unprocessable_entity }
+    end
+  end
+
+  def destroy
+    if @channel.destroy
+      render json: { json: 'Channel was successfully deleted.'}
+    else
+      render json: { json: @channel.errors, status: :unprocessable_entity }
     end
   end
 
   private
-  def set_group
-    @group = Group.find_by_id(params[:id])
-    return if @group.present?
 
-    render json: { json: @group.errors, status: :unprocessable_entity }
+  def set_channel
+    @channel = BenchChannel.find_by_id(params[:id])
+    return if @channel.present?
+  end
+
+  def bench_channel_params
+    params.permit(:name,:description,:creator_id, :is_private)
   end
 end

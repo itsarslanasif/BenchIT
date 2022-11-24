@@ -1,4 +1,4 @@
-class Api::V2::ConversationMessagesController < Api::ApiController
+class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: [:create]
   before_action :set_message, only: [:destroy]
 
