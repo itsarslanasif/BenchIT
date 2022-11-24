@@ -23,12 +23,7 @@ class ConversationMessage < ApplicationRecord
       created_at: self.created_at,
       updated_at: self.updated_at
     }
-    if self.bench_conversation.conversationable_type == "User"
-      broadcast_id = self.bench_conversation.conversationable_id.to_s + self.bench_conversation.sender_id.to_s
-    else
-      broadcast_id = self.bench_conversation.conversationable_id
-    end
-      ActionCable.server.broadcast("ChatChannel#{self.bench_conversation.conversationable_type}#{broadcast_id}", {
+      ActionCable.server.broadcast("ChatChannel#{self.bench_conversation.conversationable_type}#{self.bench_conversation.conversationable_id}", {
       message: response
     })
   end

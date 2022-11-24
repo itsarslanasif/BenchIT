@@ -7,7 +7,7 @@ class ChatChannel < ApplicationCable::Channel
       if conversation.nil?
         conversation = BenchConversation.user_to_user_conversation(params[:id],current_user.id).last
       end
-      stream_from "ChatChannelUser#{conversation.conversationable_id}#{conversation.sender_id}"
+      stream_from "ChatChannelUser#{conversation.conversationable_id}"
     elsif params[:type] == "groups"
       stream_from "ChatChannelGroup#{params[:id]}"
     else
