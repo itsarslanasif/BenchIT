@@ -30,6 +30,7 @@ import { UserStore } from '../../stores/user_store.js';
 import { CONSTANTS } from '../../constants';
 export default {
   name: 'UserInviteForm',
+  // eslint-disable-next-line vue/require-prop-types
   props: ['closeModal'],
   data() {
     return {
