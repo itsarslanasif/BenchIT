@@ -1,3 +1,7 @@
+<!-- eslint-disable vue/require-v-for-key -->
+<!-- eslint-disable vue/no-template-key -->
+<!-- eslint-disable vue/no-template-shadow -->
+<!-- eslint-disable vue/valid-v-for -->
 <template>
   <div class="overflow-auto chatBody">
     <template v-for="message in messages" :key="message.id">
@@ -9,7 +13,7 @@
           </p>
         </n-divider>
       </div>
-      <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
+      <MessageWrapper :curr-message="message" :prev-message="prevMessage" />
     </template>
   </div>
 </template>
@@ -17,14 +21,12 @@
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import messages from '../../../modules/data/messages';
-import { NButton, NSpace, NDivider } from 'naive-ui';
+import { NDivider } from 'naive-ui';
 
 export default {
   name: 'ChatBody',
   components: {
     MessageWrapper,
-    NButton,
-    NSpace,
     NDivider,
   },
   data() {
@@ -63,8 +65,7 @@ export default {
   overflow-y: auto;
 }
 
-.chatBody{
+.chatBody {
   height: 57vh;
 }
-
 </style>

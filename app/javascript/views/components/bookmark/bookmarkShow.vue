@@ -1,48 +1,49 @@
 <template>
   <div>
-    <a class="BoookmarkButton" v-bind:href="'#' + data['name']">{{
-      data['name']
-    }}</a>
-  </div>
-
-  <div v-bind:id="data['name']" class="overlay">
-    <div class="popup">
-      <div>
-        <h2>Bookmark</h2>
-        <a class="close" href="#">×</a>
-        <div class="content">
-          <h5>Please enter Url</h5>
-          <input v-model="data.bookmark_URL" required />
-        </div>
-        <div class="content">
-          <h5>Please enter name</h5>
-          <input v-model="data.name" required />
-        </div>
-        <div class="buttons">
-          <a
-            v-show="data.bookmark_URL !== '' && data.name !== ''"
-            class="btn"
-            @click="handleUpdate()"
-            href="#"
-          >
-            Update
-          </a>
-          <a
-            v-show="data.bookmark_URL !== '' && data.name !== ''"
-            class="btn"
-            @click="handleDelete()"
-            href="#"
-          >
-            Delete
-          </a>
-          <a
-            v-show="data.bookmark_URL !== '' && data.name !== ''"
-            class="btn"
-            @click="handleCancel()"
-            href="#"
-          >
-            Cancel
-          </a>
+    <div>
+      <a class="BoookmarkButton" :href="'#' + data['name']">{{
+        data['name']
+      }}</a>
+    </div>
+    <div :id="data['name']" class="overlay">
+      <div class="popup">
+        <div>
+          <h2>Bookmark</h2>
+          <a class="close" href="#">×</a>
+          <div class="content">
+            <h5>Please enter Url</h5>
+            <input v-model="data.bookmark_URL" required />
+          </div>
+          <div class="content">
+            <h5>Please enter name</h5>
+            <input v-model="data.name" required />
+          </div>
+          <div class="buttons">
+            <a
+              v-show="data.bookmark_URL !== '' && data.name !== ''"
+              class="btn"
+              href="#"
+              @click="handleUpdate()"
+            >
+              Update
+            </a>
+            <a
+              v-show="data.bookmark_URL !== '' && data.name !== ''"
+              class="btn"
+              href="#"
+              @click="handleDelete()"
+            >
+              Delete
+            </a>
+            <a
+              v-show="data.bookmark_URL !== '' && data.name !== ''"
+              class="btn"
+              href="#"
+              @click="handleCancel()"
+            >
+              Cancel
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -74,6 +75,7 @@ export default {
   position: fixed;
   border-radius: 10px;
 }
+
 .btn {
   margin: 0px;
   color: rgb(0, 0, 0);
@@ -86,11 +88,13 @@ export default {
   background-color: rgb(234, 234, 234);
   border: 1px solid rgb(212, 212, 212);
 }
+
 .btn:hover {
   background-color: rgb(78, 119, 231);
   cursor: pointer;
   color: #fff;
 }
+
 .buttons {
   display: flex;
   align-items: center;
@@ -98,6 +102,7 @@ export default {
   overflow-x: scroll;
   overflow-y: hidden;
 }
+
 h1 {
   text-align: center;
   font-family: Tahoma, Arial, sans-serif;
@@ -117,6 +122,7 @@ h1 {
   background-color: rgb(234, 234, 234);
   border: 1px solid rgb(212, 212, 212);
 }
+
 .next-btn {
   max-width: 30%;
   text-align: center;
@@ -169,6 +175,7 @@ h1 {
   color: #333;
   font-family: Tahoma, Arial, sans-serif;
 }
+
 .popup h3 {
   margin-top: 0;
   color: rgb(38, 37, 37);

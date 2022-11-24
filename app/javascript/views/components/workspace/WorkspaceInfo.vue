@@ -8,8 +8,8 @@
     >
       <option
         v-for="option in workspaceStore.workspace_type_options"
-        :value="option.value"
         :key="option.value"
+        :value="option.value"
       >
         {{ option.text }}
       </option>
@@ -21,8 +21,8 @@
     >
       <option
         v-for="option in workspaceStore.organization_type_options"
-        :value="option.value"
         :key="option.value"
+        :value="option.value"
       >
         {{ option.text }}
       </option>
@@ -44,8 +44,8 @@
     >
       <option
         v-for="option in workspaceStore.admin_role_options"
-        :value="option.value"
         :key="option.value"
+        :value="option.value"
       >
         {{ option.text }}
       </option>
@@ -60,8 +60,8 @@
     <input
       ref="fileInput"
       type="file"
-      @input="pickFile"
       class="form-input-select"
+      @input="pickFile"
     />
   </div>
 </template>

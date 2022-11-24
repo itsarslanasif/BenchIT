@@ -1,19 +1,19 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useUserStore = () => {
   const userStore = defineStore('userStore', {
     state: () => ({
-      users: []
+      users: [],
     }),
-  
+
     getters: {
-      getUsers: (state) => state.users
+      getUsers: state => state.users,
     },
-  
+
     actions: {
       async index() {
         const workSpaceId = 1;
-  
+
         return this.axios
           .get(`workspaces/${workSpaceId}/profiles`)
           .then(response => {
@@ -26,17 +26,19 @@ export const useUserStore = () => {
       async show(id) {
         return this.axios.get(`/user/${id}`).then(response => {
           this.user = response.data.user;
-        })
-      }
+        });
+      },
     },
-  })
-  const store = userStore()
-  if (!store.users){
-    store.index()
+  });
+  const store = userStore();
+  if (!store.users) {
+    store.index();
   }
 
-  return store
-}
+  return store;
+};
+
+// IT WILL BE USED IN FUTURE
 
 // export const useUserStore = defineStore('userStore', {
 //   state: () => ({

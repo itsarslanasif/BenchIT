@@ -1,13 +1,22 @@
 <template>
   <div class="form-background">
-    <form @submit.prevent="handleSubmit" class="form">
+    <form class="form" @submit.prevent="handleSubmit">
       <button type="button" class="btn-close" @click="closeModal">x</button>
       <h3 class="form-h3">{{ CONSTANTS.REQUESTING_INVITATION }}</h3>
       <label>{{ CONSTANTS.TO }}</label>
-      <input v-model="userStore.workspace_invite.email" type="email" placeholder="Email" required
-        class="form-input-select" />
+      <input
+        v-model="userStore.workspace_invite.email"
+        type="email"
+        placeholder="Email"
+        required
+        class="form-input-select"
+      />
       <label>{{ CONSTANTS.REASON_FOR_REQUEST }}</label>
-      <input type="text" placeholder="Add a note for your admin" class="form-input-select" />
+      <input
+        type="text"
+        placeholder="Add a note for your admin"
+        class="form-input-select"
+      />
       <div class="btn-div">
         <button class="form-btn">{{ CONSTANTS.SEND_REQUEST }}</button>
       </div>
@@ -25,7 +34,7 @@ export default {
   data() {
     return {
       userStore: UserStore(),
-      CONSTANTS: CONSTANTS
+      CONSTANTS: CONSTANTS,
     };
   },
   methods: {

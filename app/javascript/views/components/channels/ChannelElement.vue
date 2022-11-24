@@ -1,23 +1,21 @@
 <template>
-  <h1>{{name}}</h1>
+  <h1>{{ name }}</h1>
 </template>
 
 <script>
-import {useRoute} from 'vue-router';
+import { useRoute } from 'vue-router';
 
 export default {
-  name: "channel",
+  name: 'Channel',
 
-  data()
-  {
+  data() {
     return {
-      name:''
-    }
+      name: '',
+    };
   },
- async mounted()
-  {
-    const route=useRoute();
-    this.name=route.params.name;
-  }
-}
+  async mounted() {
+    const route = useRoute();
+    this.name = route.params.name;
+  },
+};
 </script>

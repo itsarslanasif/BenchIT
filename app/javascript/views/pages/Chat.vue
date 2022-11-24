@@ -8,31 +8,50 @@
     </div>
     <div class="h-3/4">
       <div class="m-4 pt-6">
-        <div v-if="showMentions || showChannels"
-          class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
-          <div v-if="showMentions && hasMentionCommand" class="hover:bg-secondaryHover">
-            <div v-for="user in allUsers" :key="user.username" @click="addMentionToText"
-              class="p-1 rounded-md hover:bg-secondaryHover">
+        <div
+          v-if="showMentions || showChannels"
+          class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
+        >
+          <div
+            v-if="showMentions && hasMentionCommand"
+            class="hover:bg-secondaryHover"
+          >
+            <div
+              v-for="user in allUsers"
+              :key="user.username"
+              class="p-1 rounded-md hover:bg-secondaryHover"
+              @click="addMentionToText"
+            >
               {{ user.username }}
             </div>
           </div>
           <div v-if="showChannels && hasChannelCommand">
-            <div v-for="channel in allChannels" :key="channel.name" @click="addChannelToText"
-              class="p-1 rounded-sm hover:bg-secondaryHover">
+            <div
+              v-for="channel in allChannels"
+              :key="channel.name"
+              class="p-1 rounded-sm hover:bg-secondaryHover"
+              @click="addChannelToText"
+            >
               {{ channel.name }}
             </div>
           </div>
         </div>
         <div class="relative">
-          <editor api-key="{{process.env.VITE_EDITOR_API}}" v-model="message" :init="{
-            menubar: false,
-            statusbar: false,
-            plugins: 'lists link code',
-            toolbar:
-              'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
-          }" />
+          <editor
+            v-model="message"
+            api-key="{{process.env.VITE_EDITOR_API}}"
+            :init="{
+              menubar: false,
+              statusbar: false,
+              plugins: 'lists link code',
+              toolbar:
+                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
+            }"
+          />
         </div>
-        <button class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover">
+        <button
+          class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover"
+        >
           {{ CONSTANTS.SEND }}
         </button>
       </div>
@@ -44,9 +63,8 @@
 import { useUserStore } from '../../stores/useUserStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import ChatHeader from '../components/chats/ChatHeader.vue';
-import chats from '../../modules/data/chats'
+import chats from '../../modules/data/chats';
 import ChatBody from '../components/chats/ChatBody.vue';
-import { NInput, NSpace } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
 import { CONSTANTS } from '../../constants';
 
@@ -55,11 +73,8 @@ export default {
   components: {
     ChatHeader,
     ChatBody,
-    NInput,
-    NSpace,
     editor: Editor,
   },
-
   data() {
     return {
       chat: chats[1],
@@ -71,7 +86,7 @@ export default {
       showChannels: false,
       allUsers: [],
       allChannels: [],
-      CONSTANTS: CONSTANTS
+      CONSTANTS: CONSTANTS,
     };
   },
 
