@@ -30,7 +30,7 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def check_profile_already_exists
-    return if Profile.find_by(workspace_id: params[:workspace_id], user_id: current_user.id).nil?
+    return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
     render json: { message: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
   end

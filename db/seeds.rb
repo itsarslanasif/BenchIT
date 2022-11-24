@@ -18,6 +18,8 @@ user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: work
 user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user.save!
 user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: workspace.id)
+Current.user = admin
+Current.workspace = workspace
 BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1, workspace_id: workspace.id)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, user_id: 1, bench_channel_id: 1)

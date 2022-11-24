@@ -14,8 +14,14 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def invite
     @token = Token.new.generate
-    @invitable = Invitable.create!(user_id: @user.id, workspace_id: @workspace.id,
-                                   token: @token, token_type: 'workspace_invitation')
+    @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id,
+                                  token: @token, token_type: 'workspace_invitation')
+    if @invitable.errors.any?
+      render json: {
+        message: 'There was an error in inviting the user to workspace',
+        errors: @invitable.errors
+      }, status: :unprocessable_entity
+    end
     SendWorkspaceInvitationEmailJob.perform_later(@user.email, @workspace, @token)
 
     render json: { message: "#{@user.email} is sucessfully invited to #{@workspace.company_name}" }, status: :ok

@@ -20,8 +20,6 @@ class Api::V1::BookmarksController < Api::ApiController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name, :bookmark_URL).tap do |param|
-      param[:user_id] = current_user.id
-    end
+    params.require(:bookmark).permit(:name, :bookmark_URL)
   end
 end
