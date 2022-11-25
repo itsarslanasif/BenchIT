@@ -10,7 +10,7 @@
           <p v-show="!isSameUser" class="mr-1 hover:underline cursor-pointer">
             <b>{{ message.sender.name }}</b>
           </p>
-          <p v-bind:class="{ time: !isSameUser, 'text-sm text-primary ml-4 mr-2 hover:underline cursor-pointer': isSameUser }">
+          <p v-bind:class="{ time: !isSameUser, 'text-sm text-primary ml-2 mr-2 hover:underline cursor-pointer': isSameUser }">
             {{ isSameUser ? timeWithoutAMPM : time }}
           </p>
           <span v-show="isSameUser" class="word-break text-sm" v-html="message.content" />
