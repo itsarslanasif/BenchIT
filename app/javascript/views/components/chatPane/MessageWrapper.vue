@@ -39,38 +39,33 @@
         class="emojiModalToggle"
         v-if="emojiModalStatus || openEmojiModal || showOptions"
       >
-        <EmojiModalButton
-          icon="fa-solid fa-square-check"
-          btnText="Completed"
+        <template v-for="emoji in topReactions" :key="emoji">
+          <EmojiModalButton
+            :emoji="emoji"
+            :actionText="emoji.n"
+            :action="addReaction"
           />
-        <EmojiModalButton
-          icon="fa-solid fa-thumbs-up"
-          btnText="Liked it"
-          />
-        <EmojiModalButton
-          icon="fa-solid fa-heart"
-          btnText="Loved it"
-          />
+        </template>
         <EmojiModalButton
           icon="fa-solid fa-icons"
-          btnText="Find another reaction"
+          actionText="Find another reaction"
           :action="setEmojiModal"
         />
         <EmojiModalButton
           icon="fa-solid fa-comment-dots"
-          btnText="Reply in thread"
+          actionText="Reply in thread"
         />
         <EmojiModalButton
-        icon="fa-solid fa-share"
-        btnText="Share message..."
+          icon="fa-solid fa-share"
+          actionText="Share message..."
         />
         <EmojiModalButton
           icon="fa-solid fa-bookmark"
-          btnText="Add to saved items"
+          actionText="Add to saved items"
         />
         <EmojiModalButton
           icon="fa-solid fa-ellipsis-vertical"
-          btnText="More actions"
+          actionText="More actions"
           :action="setOptionsModal"
         />
       </div>
@@ -107,6 +102,20 @@ export default {
   },
   data() {
     return {
+      topReactions: [
+        {
+          i: '✅',
+          n: 'Completed',
+        },
+        {
+          i: '👍',
+          n: 'Liked it',
+        },
+        {
+          i: '👀',
+          n: 'Taking a look',
+        },
+      ],
       message: this.currMessage,
       oldMessage: this.prevMessage,
       emojiModalStatus: false,
@@ -130,6 +139,7 @@ export default {
   methods: {
     addReaction(emoji) {
       this.allReactions.push(emoji);
+      console.log(this.allReactions[0]);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
