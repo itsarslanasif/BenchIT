@@ -26,7 +26,6 @@ const Cable = createCable({ channel: 'ChatChannel' });
 const app = createApp(Layout);
 const Api = createApi({ handler: axios, namespace: '' });
 const Pinia = createPinia();
-
 Pinia.use(({ store }) => { store.axios = axios })
 library.add(
   faIcons,

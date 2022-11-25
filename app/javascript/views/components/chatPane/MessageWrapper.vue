@@ -1,15 +1,6 @@
 <template>
-  <div
-    class="messageWrapper"
-    @mouseover="emojiModalStatus = true"
-    @mouseleave="emojiModalStatus = false"
-  >
-    <n-avatar
-      v-show="!isSameUser"
-      class="avatar"
-      size="large"
-      :src="message.sender.avatar"
-    />
+  <div class="messageWrapper" @mouseover="emojiModalStatus = true" @mouseleave="emojiModalStatus = false">
+    <n-avatar v-show="!isSameUser" class="avatar" size="large" :src="message.sender.avatar" />
     <span class="message">
       <div>
         <span class="messageInfo">
@@ -19,55 +10,22 @@
           <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
             {{ isSameUser ? timeWithoutAMPM : time }}
           </p>
-          <span
-            v-show="isSameUser"
-            class="messageContent"
-            v-html="message.content"
-          />
+          <span v-show="isSameUser" class="messageContent" v-html="message.content" />
         </span>
-        <span
-          v-show="!isSameUser"
-          class="messageContent"
-          v-html="message.content"
-        />
+        <span v-show="!isSameUser" class="messageContent" v-html="message.content" />
       </div>
       <template v-for="emoji in allReactions" :key="emoji.id">
         <span class="emoji">{{ emoji.i }}</span>
       </template>
-
-      <div
-        class="emojiModalToggle"
-        v-if="emojiModalStatus || openEmojiModal || showOptions"
-      >
+      <div class="emojiModalToggle" v-if="emojiModalStatus || openEmojiModal || showOptions">
         <template v-for="emoji in topReactions" :key="emoji">
-          <EmojiModalButton
-            :emoji="emoji"
-            :actionText="emoji.n"
-            :action="addReaction"
-          />
+          <EmojiModalButton :emoji="emoji" :actionText="emoji.n" :action="addReaction" />
         </template>
-        <EmojiModalButton
-          icon="fa-solid fa-icons"
-          actionText="Find another reaction"
-          :action="setEmojiModal"
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-comment-dots"
-          actionText="Reply in thread"
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-share"
-          actionText="Share message..."
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-bookmark"
-          actionText="Add to saved items"
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-ellipsis-vertical"
-          actionText="More actions"
-          :action="setOptionsModal"
-        />
+        <EmojiModalButton icon="fa-solid fa-icons" actionText="Find another reaction" :action="setEmojiModal" />
+        <EmojiModalButton icon="fa-solid fa-comment-dots" actionText="Reply in thread" />
+        <EmojiModalButton icon="fa-solid fa-share" actionText="Share message..." />
+        <EmojiModalButton icon="fa-solid fa-bookmark" actionText="Add to saved items" />
+        <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" />
       </div>
     </span>
   </div>

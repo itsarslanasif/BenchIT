@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import options from './options.js';
+import options from '../../widgets/EmojiModalButton/options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 export default {
   name: 'EmojiModalButton',
