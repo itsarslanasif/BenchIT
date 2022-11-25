@@ -14,6 +14,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def leave
     @channel_participant.left_on = DateTime.current
+
     if @channel_participant.save
       @channel_participant.destroy
       render json: { message: "You successfully leaves ##{@bench_channel.name}." }, status: :ok
