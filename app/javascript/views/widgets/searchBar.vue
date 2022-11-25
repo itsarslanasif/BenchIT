@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { useUserStore } from '../../stores/useUserStore';
+import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 export default {
   name: 'SearchBar',
@@ -81,22 +81,15 @@ export default {
       this.filteredList = this.allChannels;
     },
     filterData() {
-      if (this.usersFlag) {
-        this.filteredList = this.filteredList.filter(item =>
-          item.username.toLowerCase().includes(this.search.toLowerCase())
-        );
-      } else if (this.channelsFlag) {
-        this.filteredList = this.filteredList.filter(item =>
-          item.name.toLowerCase().includes(this.search.toLowerCase())
-        );
-      }
+      this.filteredList = this.filteredList.filter(item =>
+        item[this.usersFlag ? "username" : "name"].toLowerCase().includes(this.search.toLowerCase()))
     },
   },
   setup() {
-    const userStore = useUserStore();
+    const profileStore = useProfileStore();
     const channelStore = useChannelStore();
     return {
-      allUsers: Object.values(userStore.getUsers),
+      allUsers: Object.values(profileStore.getUsers),
       allChannels: Object.values(channelStore.getChannels),
     };
   },

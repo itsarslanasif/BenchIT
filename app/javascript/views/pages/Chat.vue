@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { useUserStore } from '../../stores/useUserStore';
+import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import ChatHeader from '../components/chats/ChatHeader.vue';
 import chats from '../../modules/data/chats';
@@ -130,10 +130,10 @@ export default {
   },
 
   setup() {
-    const userStore = useUserStore();
+    const profileStore = useProfileStore();
     const channelStore = useChannelStore();
     return {
-      allUsers: Object.values(userStore.getUsers),
+      allUsers: Object.values(profileStore.getUsers),
       allChannels: Object.values(channelStore.getChannels),
     };
   },

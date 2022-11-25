@@ -22,7 +22,7 @@
 
 <script>
 import { SampleStore } from '@/stores/sample_store'
-import { useUserStore } from '../../stores/useUserStore'
+import { useProfileStore } from '../../stores/useProfileStore'
 import { useChannelStore } from '../../stores/useChannelStore'
 import { onMounted } from 'vue'
 export default {
@@ -50,7 +50,7 @@ export default {
   },
   setup() {
     SampleStore()
-    const userStore = useUserStore()
+    const userStore = useProfileStore()
     useChannelStore()
     onMounted(() => {
       userStore.index()

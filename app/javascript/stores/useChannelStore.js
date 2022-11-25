@@ -27,15 +27,10 @@ export const useChannelStore = defineStore('channelStore', {
   },
 
   actions: {
-    async index() {
+    index() {
       return this.axios.get('/channels').then(response => {
         this.users = response.data.users;
       })
     },
-    async show(id) {
-      return this.axios.get(`/channels/${id}`).then(response => {
-        this.user = response.data.user;
-      })
-    }
   },
 })

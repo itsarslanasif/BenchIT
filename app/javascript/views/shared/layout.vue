@@ -8,7 +8,7 @@
 <script>
 import NavBar from './_nav.vue';
 import searchBarVue from './searchBar.vue';
-import { useUserStore } from '../../stores/useUserStore';
+import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { onMounted } from 'vue'
 
@@ -17,12 +17,5 @@ export default {
     'nav-bar': NavBar,
     'search-bar': searchBarVue
   },
-  // setup() {
-  //   const userStore = useUserStore()
-  //   useChannelStore()
-  //   onMounted(() => {
-  //     userStore.index()
-  //   })
-  // },
 }
 </script>

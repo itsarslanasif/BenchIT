@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 
-export const useUserStore = () => {
+export const useProfileStore = () => {
   const userStore = defineStore('userStore', {
     state: () => ({
       users: [],
@@ -11,7 +11,7 @@ export const useUserStore = () => {
     },
 
     actions: {
-      async index() {
+      index() {
         const workSpaceId = 1;
 
         return this.axios
@@ -23,15 +23,10 @@ export const useUserStore = () => {
             return error;
           });
       },
-      async show(id) {
-        return this.axios.get(`/user/${id}`).then(response => {
-          this.user = response.data.user;
-        });
-      },
     },
   });
   const store = userStore();
-  if (!store.users) {
+  if (!store.users.length) {
     store.index();
   }
 
