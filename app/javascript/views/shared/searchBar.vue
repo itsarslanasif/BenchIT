@@ -64,11 +64,8 @@ export default {
       this.filteredList = this.allChannels
     },
     filterData() {
-      if (this.usersFlag) {
-        this.filteredList = this.filteredList.filter((item) => item.username.toLowerCase().includes(this.search.toLowerCase()))
-      } else if (this.channelsFlag) {
-        this.filteredList = this.filteredList.filter((item) => item.name.toLowerCase().includes(this.search.toLowerCase()))
-      }
+      this.filteredList = this.filteredList.filter(item =>
+        item[this.usersFlag ? "username" : "name"].toLowerCase().includes(this.search.toLowerCase()))
     }
   },
   watch: {
