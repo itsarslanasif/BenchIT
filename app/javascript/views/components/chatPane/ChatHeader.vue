@@ -5,7 +5,7 @@
     </div>
     <div class="header">
       <div class="headerContainer">
-        <n-avatar class="avatar" size="small" :src="chat.avatar" />
+        <n-avatar class="mr-1" size="small" :src="chat.avatar" />
         <span v-if="chat.isOnline" class="avatar__badge" />
         <p class="name">{{ chat.name }}</p>
         <n-icon size="25">
@@ -152,17 +152,13 @@ export default {
   background-color: rgb(230, 232, 234);
   cursor: pointer;
 }
-.avatar {
-  margin-right: 5px;
-  width: fit-content;
-}
 .avatar__badge {
   background-color: rgb(54, 151, 54);
   border-radius: 50%;
   border: 2px solid white;
   height: 12px;
   margin-left: -12px;
-  margin-top: 20px;
+  margin-top: 18px;
   position: relative;
   width: 12px;
 }
