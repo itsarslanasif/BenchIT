@@ -2,12 +2,14 @@ class Api::ProfilesController < Api::ApiController
   before_action :set_workspace, only: %i[index create]
 
   def index
-    @profiles = @workspace.profiles
-    @profiles = @workspace.profiles.all if params[:account_type] == 'all_types'
-    @profiles = @workspace.profiles.filter_by_account_type(params[:account_type]) if params[:account_type].present? && params[:account_type] != 'all_types'
-    # query = params["query"] || ""
-    # res = Profile.search(query)
-    # render json: res.response["hits"]["hits"]
+    query = params[:query].present? ? params[:query] : nil
+    @profiles = if query
+      Profile.search( query, where: { workspace_id: @workspace.id }, match: :word_start, misspellings: false)
+    else
+      @workspace.profiles.all
+    end
+    @profiles = @profiles.reorder(username: :asc) if params[:sort] == 'asc'
+    @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
   end
 
   def create

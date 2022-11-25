@@ -125,10 +125,6 @@ GEM
       elasticsearch-transport (= 7.17.7)
     elasticsearch-api (7.17.7)
       multi_json
-    elasticsearch-model (7.2.1)
-      activesupport (> 3)
-      elasticsearch (~> 7)
-      hashie
     elasticsearch-transport (7.17.7)
       faraday (~> 1)
       multi_json
@@ -298,6 +294,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    searchkick (5.1.0)
+      activemodel (>= 5.2)
+      hashie
     selenium-webdriver (4.1.0)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -366,7 +365,7 @@ DEPENDENCIES
   devise-jwt
   devise_invitable
   dotenv-rails
-  elasticsearch-model
+  elasticsearch (~> 7.0)
   foreman
   jbuilder
   json-schema
@@ -386,6 +385,7 @@ DEPENDENCIES
   redis-namespace
   route_translator
   sassc-rails
+  searchkick
   selenium-webdriver
   sidekiq (~> 6.0)
   spring

@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card bg-white shadow-md rounded mb-4 p-0 ml-5">
     <img
       class="Avatar"
       src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
@@ -18,31 +18,31 @@ export default {
 
 <style scoped>
 .card {
-  box-shadow: 0 4px 8px 0 rgba(84, 78, 78, 0.2);
-  width: 250px;
-  height: 250px;
-  margin: auto;
-  text-align: center;
-  margin: 0rem 1rem;
-  border-radius: 4px;
-  min-width: 250px;
-  margin-bottom: 1rem;
+  height: 300px;
+  width: 200px;
 }
 
 .description {
-  color: grey;
-  font-size: 12px;
+  color: rgb(96, 96, 96);
+  font-size: 15px;
+  text-align: left;
+  margin-left: 15px;
+  margin-top: -2rem;
 }
 .username {
-  font-size: 12px;
+  color: black;
+  font-size: 15px;
   height: 20%;
-  margin-top: 0.3rem;
+  margin-top: 0.7rem;
+  text-align: left;
+  margin-left: 15px;
+  font-weight: bolder;
+  margin-bottom: 0;
 }
 .Avatar {
-  height: 50%;
-  border-radius: 50%;
+  height: 200px;
   text-align: center;
-  margin: auto;
-  border: 1px solid rgb(0, 0, 0);
+  border: 1px solid rgb(198, 196, 196);
+  border-radius: 5px;
 }
 </style>

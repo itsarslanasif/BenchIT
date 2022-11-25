@@ -1,6 +1,14 @@
 class Profile < ApplicationRecord
-  include Searchable
-  
+  searchkick word_start: [:username, :description]
+
+  def search_data
+    {
+      username: username,
+      description: description,
+      workspace_id: workspace_id,
+    }
+  end
+
   after_commit :add_default_image, on: %i[create]
 
   belongs_to :user
@@ -9,18 +17,6 @@ class Profile < ApplicationRecord
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
-
-  enum account_type: {
-    all_types: 0,
-    owners: 1,
-    admins: 2,
-    full_members: 3,
-    guests: 4,
-    deactivated_accounts: 5,
-    not_on_slack: 6
-  }
-
-  scope :filter_by_account_type, -> (account_type) { where account_type: account_type }
 
   def add_default_image
     return if profile_image.attached?
