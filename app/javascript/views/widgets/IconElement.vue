@@ -7,11 +7,11 @@
 
 <script>
 export default {
-  name: "IconElement",
+  name: 'IconElement',
 
   props: {
     icon: String,
-    name: String
-  }
-}
+    name: String,
+  },
+};
 </script>

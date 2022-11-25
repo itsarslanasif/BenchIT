@@ -5,7 +5,6 @@
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-
       <pane max-size="81" min-size="75" class="bg-white">
         <ChannelElement />
         <div>
