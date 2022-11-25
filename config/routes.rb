@@ -14,6 +14,9 @@ Rails.application.routes.draw do
         end
 
         resources :bench_channels, only: %i[create] do
+          member do
+            delete :leave
+          end
           resources :bookmarks, only: %i[create index]
         end
 
