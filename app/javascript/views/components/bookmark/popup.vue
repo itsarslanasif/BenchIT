@@ -6,24 +6,19 @@
   <div id="popup1" class="overlay">
     <div class="popup">
       <div>
-        <h2>{{CONSTANTS.BOOKMARK}}</h2>
+        <h2>{{ $t(CONSTANTS.BOOKMARK) }}</h2>
         <a class="close" href="#">×</a>
         <div class="content">
-          <h5>{{CONSTANTS.ENTER_URL}}</h5>
+          <h5>{{ $t(CONSTANTS.ENTER_URL) }}</h5>
           <input v-model="bookmark.url" placeholder="url" required />
         </div>
         <div class="content">
-          <h5>{{CONSTANTS.ENTER_NAME}}</h5>
+          <h5>{{ $t(CONSTANTS.ENTER_NAME) }}</h5>
           <input v-model="bookmark.name" placeholder="name" required />
         </div>
         <div class="save_button">
-          <a
-            v-show="bookmark.url !== '' && bookmark.name !== ''"
-            class="save-btn"
-            @click="handleSave()"
-            href="#"
-          >
-            {{CONSTANTS.SAVE}}
+          <a v-show="bookmark.url !== '' && bookmark.name !== ''" class="save-btn" @click="handleSave()" href="#">
+            {{ $t(CONSTANTS.SAVE) }}
           </a>
         </div>
       </div>
@@ -32,7 +27,7 @@
 </template>
 
 <script>
-import { CONSTANTS } from '../../../constants'
+import { CONSTANTS } from '../../../assets/constants'
 export default {
   data() {
     return {
@@ -62,12 +57,14 @@ export default {
   position: fixed;
   border-radius: 10px;
 }
+
 h1 {
   text-align: center;
   font-family: Tahoma, Arial, sans-serif;
   color: orange;
   margin: 100px 0;
 }
+
 .save_button {
   display: flex;
   align-items: center;
@@ -88,6 +85,7 @@ h1 {
   /* background-color: rgb(4, 4, 4); */
   border: 1px solid rgb(117, 116, 116);
 }
+
 .save-btn {
   margin: 0px;
   color: black;
@@ -100,6 +98,7 @@ h1 {
   background-color: rgb(234, 234, 234);
   border: 1px solid rgb(212, 212, 212);
 }
+
 .save-btn:hover {
   background-color: rgb(78, 119, 231);
   cursor: pointer;
@@ -149,6 +148,7 @@ h1 {
   color: #333;
   font-family: Tahoma, Arial, sans-serif;
 }
+
 .popup h3 {
   margin-top: 0;
   color: rgb(38, 37, 37);

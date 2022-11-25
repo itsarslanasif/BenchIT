@@ -2,23 +2,14 @@
   <div class="form-background">
     <form class="form" @submit.prevent="handleSubmit">
       <button type="button" class="btn-close" @click="closeModal">x</button>
-      <h3 class="form-h3">{{ CONSTANTS.REQUESTING_INVITATION }}</h3>
-      <label>{{ CONSTANTS.TO }}</label>
-      <input
-        v-model="userStore.workspace_invite.email"
-        type="email"
-        placeholder="Email"
-        required
-        class="form-input-select"
-      />
-      <label>{{ CONSTANTS.REASON_FOR_REQUEST }}</label>
-      <input
-        type="text"
-        placeholder="Add a note for your admin"
-        class="form-input-select"
-      />
+      <h3 class="form-h3">{{ $t(CONSTANTS.REQUESTING_INVITATION) }}</h3>
+      <label>{{ $t(CONSTANTS.TO) }}</label>
+      <input v-model="userStore.workspace_invite.email" type="email" placeholder="Email" required
+        class="form-input-select" />
+      <label>{{ $t(CONSTANTS.REASON_FOR_REQUEST) }}</label>
+      <input type="text" placeholder="Add a note for your admin" class="form-input-select" />
       <div class="btn-div">
-        <button class="form-btn">{{ CONSTANTS.SEND_REQUEST }}</button>
+        <button class="form-btn">{{ $t(CONSTANTS.SEND_REQUEST) }}</button>
       </div>
     </form>
   </div>
@@ -27,7 +18,7 @@
 <script>
 import axios from '../../modules/axios';
 import { UserStore } from '../../stores/user_store.js';
-import { CONSTANTS } from '../../constants';
+import { CONSTANTS } from '../../assets/constants';
 export default {
   name: 'UserInviteForm',
   // eslint-disable-next-line vue/require-prop-types
