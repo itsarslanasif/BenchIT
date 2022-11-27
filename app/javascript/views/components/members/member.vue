@@ -21,6 +21,9 @@ export default {
   height: 300px;
   width: 200px;
 }
+.card:hover {
+  cursor: pointer;
+}
 
 .description {
   color: rgb(96, 96, 96);
