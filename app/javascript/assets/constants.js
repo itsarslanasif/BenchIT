@@ -42,4 +42,5 @@ export const CONSTANTS = {
   HUDDLE:"Huddle",
   PRPFILE:"Profile",
   LOCAL_TIME:"local time",
+  SEARCH_BY_NAME_OR_ROLE:"Search by name or role",
 };
