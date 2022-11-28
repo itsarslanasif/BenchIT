@@ -14,9 +14,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def leave
     @channel_participant.destroy
-    render json: { message: "You successfully leaves ##{@bench_channel.name}." }, status: :ok
+
+    render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
-    render json: { message: 'Database error while destroing.' }, status: :unprocessable_entity
+    render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
   private
@@ -29,6 +30,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, user_id: current_user.id)
   rescue StandardError
     @bench_channel.destroy
+
     render json: { status: false, message: 'There was an error creating the channel.' }
   end
 
@@ -46,6 +48,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def set_left_on
     @channel_participant.left_on = DateTime.current
+
     return if @channel_participant.save
 
     render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
