@@ -17,6 +17,7 @@ Rails.application.routes.draw do
           member do
             delete :leave
           end
+
           resources :bookmarks, only: %i[create index]
         end
 
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
           member do
             post :invite
           end
+
           resources :profiles, only: %i[index create]
         end
       end

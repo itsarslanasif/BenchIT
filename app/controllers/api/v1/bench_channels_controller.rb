@@ -1,6 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, only: %i[leave]
-  before_action :set_channel_participant, only: %i[leave]
+  before_action :set_channel_participant, :set_left_on, only: %i[leave]
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
@@ -13,14 +13,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def leave
-    @channel_participant.left_on = DateTime.current
-
-    if @channel_participant.save
-      @channel_participant.destroy
-      render json: { message: "You successfully leaves ##{@bench_channel.name}." }, status: :ok
-    else
-      render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
-    end
+    @channel_participant.destroy
+    render json: { message: "You successfully leaves ##{@bench_channel.name}." }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
     render json: { message: 'Database error while destroing.' }, status: :unprocessable_entity
   end
@@ -45,8 +39,15 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_channel_participant
-    @channel_participant = ChannelParticipant.find_by(user_id: Current.user.id, bench_channel_id: @bench_channel.id)
+    @channel_participant = Current.user.channel_participants.find_by(bench_channel_id: @bench_channel.id)
 
     render json: { message: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
+  end
+
+  def set_left_on
+    @channel_participant.left_on = DateTime.current
+    return if @channel_participant.save
+
+    render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
   end
 end
