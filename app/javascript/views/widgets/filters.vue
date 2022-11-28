@@ -20,31 +20,31 @@
     </div>
     <div class="content-container py-2 px-2">
       <div v-show="toggleSort">
-        <label class="w-40">Sort</label>
+        <label class="w-40">{{CONSTANTS.SORT}}</label>
         <select
           v-model="sort_filter"
           class="w-40"
           @change="emitSortFilter(sort_filter)"
         >
-          <option value="">Most recommended</option>
-          <option value="asc">A to Z</option>
-          <option value="desc">Z to A</option>
+          <option value="">{{CONSTANTS.MOST_RECOMMENDED}}</option>
+          <option value="asc">{{CONSTANTS.A_TO_Z}}</option>
+          <option value="desc">{{CONSTANTS.Z_TO_A}}</option>
         </select>
       </div>
       <div v-show="toggleFilters">
-        <label class="w-40">Account Type</label>
+        <label class="w-40">{{CONSTANTS.ACCOUNT_TYPE}}</label>
         <select
           v-model="account_type"
           class="w-40 "
           @change="emitAccountType(account_type)"
         >
-          <option value="all_types">All types</option>
-          <option value="owners">Owners</option>
-          <option value="admins">Admins</option>
-          <option value="full_members">Full Members</option>
-          <option value="guests">Guests</option>
-          <option value="deactivated_accounts">Deactivated accounts</option>
-          <option value="not_on_slack">Not on slack</option>
+          <option value="all_types">{{CONSTANTS.ALL_TYPES}}</option>
+          <option value="owners">{{CONSTANTS.OWNERS}}</option>
+          <option value="admins">{{CONSTANTS.ADMINS}}</option>
+          <option value="full_members">{{CONSTANTS.FULL_MEMBERS}}</option>
+          <option value="guests">{{CONSTANTS.GUESTS}}</option>
+          <option value="deactivated_accounts">{{CONSTANTS.DEACTIVATED_ACCOUNTS}}</option>
+          <option value="not_on_slack">{{CONSTANTS.NOT_ON_SLACK}}</option>
         </select>
       </div>
     </div>
@@ -53,7 +53,7 @@
 
 <script>
 import IconElement from './IconElement.vue';
-
+import { CONSTANTS } from '../../assets/constants';
 export default {
   components: {
     IconElement,
@@ -64,6 +64,7 @@ export default {
       sort_filter: '',
       toggleSort: false,
       toggleFilters: false,
+      CONSTANTS: CONSTANTS,
     };
   },
   methods: {

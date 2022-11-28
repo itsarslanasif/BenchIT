@@ -10,7 +10,7 @@
       <IconElement
         icon="&#128101;"
         space="&nbsp;"
-        :name="$t(CONSTANTS.People_And_User_Groups)"
+        :name="$t(CONSTANTS.PEOPLE_AND_USER_GROUPS)"
       />
       <IconElement icon="&#8285;" :name="$t(CONSTANTS.MORE)" />
     </div>
@@ -50,11 +50,6 @@ export default {
     return {
       CONSTANTS: CONSTANTS,
     };
-  },
-  method: {
-    memberScreen(value) {
-      console.log(value);
-    },
   },
 };
 </script>

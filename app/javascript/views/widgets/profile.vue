@@ -1,8 +1,7 @@
 <template>
-  <!-- This is an example component -->
   <div class="profile_container">
     <div class="px-5 header justify-items-start aline_item_horizontally">
-      <p class="font-bold text-white ">Profile</p>
+      <p class="font-bold text-white ">{{CONSTANTS.PRPFILE}}</p>
       <p class="font-bold right text-white  cursor-pointer" @click="exitClicked">X</p>
     </div>
     <div
@@ -25,23 +24,23 @@
       <div class="justify-items-start aline_item_horizontally">
         <p class="mt_8px font-light">&#128338;</p>
         <p class="mt_8px ml-2 font-light text-white ">6:10 AM</p>
-        <p class="mt_8px ml-1 font-light text-white ">Local Time</p>
+        <p class="mt_8px ml-1 font-light text-white ">{{CONSTANTS.LOCAL_TIME}}</p>
       </div>
 
       <div class="justify-items-start mt-3 aline_item_horizontally">
-        <button class="button mr-1">&#x2709; Message</button>
-        <button class="button mr-1">&#x1F3A7; Huddle</button>
+        <button class="button mr-1">&#x2709; {{CONSTANTS.MESSAGE}}</button>
+        <button class="button mr-1">&#x1F3A7; {{CONSTANTS.HUDDLE}}</button>
         <dropdownVue @dropDownOption="dropDownOptionSelected" />
       </div>
       <div class="separator mt-5"></div>
 
-      <div class="font-bold mt-2">Contact Information</div>
+      <div class="font-bold mt-2">{{CONSTANTS.CONTACT_INFORMATION}}</div>
       <div
         class="mt-5 hover-trigger justify-items-start aline_item_horizontally"
       >
         <div class="icon_card flex mr-5">&#x2709;</div>
         <div class="mt_8px font-light">
-          <div>Email Address</div>
+          <div>{{CONSTANTS.EMAIL_ADDRESS}}</div>
           <div id="email" class="blue_text">asad@gmail.com</div>
         </div>
         <div @click="copyEmail" class="icon_card flex ml-10 hover-target right">
@@ -54,7 +53,7 @@
       >
         <div class="icon_card flex mr-5">&phone;</div>
         <div class="mt_8px group font-light">
-          <div>Phone</div>
+          <div>{{CONSTANTS.PHONE}}</div>
           <div id="phoneNo" class="blue_text">03315687779</div>
         </div>
         <div
@@ -70,11 +69,14 @@
 
 <script>
 import dropdownVue from './dropdown.vue';
+import {CONSTANTS} from '../../assets/constants'
 export default {
   components: { dropdownVue },
   props: ['username', 'description', 'img-url', 'userId'],
   data() {
-    return {};
+    return {
+      CONSTANTS: CONSTANTS,
+    };
   },
   methods: {
     exitClicked() {

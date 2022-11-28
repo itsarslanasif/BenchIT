@@ -1,17 +1,17 @@
 class Api::ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :set_workspace_in_session
-  before_action :presence_of_api_token
-  before_action :authenticate_api_with_token
+  # before_action :set_workspace_in_session
+  # before_action :presence_of_api_token
+  # before_action :authenticate_api_with_token
 
   attr_reader :current_user
 
   private
 
-  def set_workspace_in_session
-    session[:current_workspace_id] = Workspace.first.id
-    Current.workspace = Workspace.first
-  end
+  # def set_workspace_in_session
+  #   session[:current_workspace_id] = Workspace.first.id
+  #   Current.workspace = Workspace.first
+  # end
 
   def presence_of_api_token
     return unless request.headers['Authorization'].nil?

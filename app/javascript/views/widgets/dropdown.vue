@@ -5,19 +5,22 @@
       class="dropDown"
       @change="emitDropDownSelection(option)"
     >
-      <option value="copy_display_name">Copy display name</option>
-      <option value="View_files">View Files</option>
-      <option value="copy_member_id">Copy member ID</option>
+      <option value="copy_display_name">{{CONSTANTS.COPY_DISPLAY_NAME}}</option>
+      <option value="View_files">{{CONSTANTS.VIEW_FILES}}</option>
+      <option value="copy_member_id">{{CONSTANTS.COPY_MEMBER_ID}}</option>
     </select>
   </div>
 </template>
 
 <script>
+import { CONSTANTS } from '../../assets/constants';
 export default {
+
   components: {},
   data() {
     return {
       option: '',
+      CONSTANTS: CONSTANTS,
     };
   },
   methods: {

@@ -1,21 +1,8 @@
 <template>
-  <div class="m">
+  <div>
     <div class="search_bar">
       <input
-        class="
-          searchbar
-          shadow
-          bg-neutral-900
-          appearance-none
-          border
-          rounded
-          w-full
-          py-2
-          px-3
-          text-gray-700
-          leading-tight
-          focus:outline-none focus:shadow-outline
-        "
+        class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
         v-model="query"
         placeholder="Search by name or role"
@@ -57,17 +44,18 @@
       </div>
     </div>
     <div class="flex justify-center" v-show="members.length == 0">
-      <p>No results</p>
+      <p>{{ CONSTANTS.NO_RESULT_FOUND }}</p>
     </div>
   </div>
 </template>
 
 <script>
 import member from './member.vue';
-import axios from '../../../modules/axios';
 import Spinner from '../../shared/spinner.vue';
 import filters from '../../widgets/filters.vue';
 import profile from '../../widgets/profile.vue';
+import { CONSTANTS } from '../../../assets/constants';
+import { getMembers } from '../../../api/members/membersApi';
 export default {
   props: ['filterComponentData'],
   components: {
@@ -89,41 +77,28 @@ export default {
       showProfile: false,
       selectedMember: '',
       showSpinner: true,
+      CONSTANTS: CONSTANTS,
     };
   },
   methods: {
-    searchQuery() {
-      this.showSpinner = true;
-      axios
-        .get(`v1/workspaces/${this.CurrentWorkspaceId}/profiles`, {
-          params: {
-            workspace: this.workspace,
-            query: this.query,
-            sort: this.sort,
-          },
-        })
-        .then(response => {
-          this.members = response.data.profiles;
-          this.showSpinner = false;
-        })
-        .catch(error => {
-          return error;
-        });
+    async searchQuery() {
+      this.members = await getMembers(
+        this.CurrentWorkspaceId,
+        this.query,
+        this.sort
+      );
+      this.showSpinner = false;
     },
-    getAccountType(value) {
-      console.log(value);
-    },
+    getAccountType(value) {},
     getSortFilter(value) {
       this.sort = value;
     },
     profileClickListener(member) {
       this.showProfile = true;
       this.selectedMember = member;
-      console.log(this.selectedMember);
     },
     exitProfile(value) {
       this.showProfile = value;
-      clipboard.writeText('Text to get copied');
     },
   },
   watch: {
