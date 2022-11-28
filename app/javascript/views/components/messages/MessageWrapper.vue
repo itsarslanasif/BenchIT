@@ -198,7 +198,7 @@ p {
 }
 
 .avatar {
-  @apply h-8 mr-1;
+  @apply mr-1;
   align-self: baseline;
   min-width: fit-content;
 }

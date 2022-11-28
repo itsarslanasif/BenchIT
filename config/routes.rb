@@ -19,6 +19,10 @@ Rails.application.routes.draw do
         resources :conversation_messages, only: [:create, :destroy]
 
         resources :bench_channels, only: %i[create] do
+          member do
+            delete :leave
+          end
+
           resources :bookmarks, only: %i[create index]
         end
 
@@ -26,6 +30,7 @@ Rails.application.routes.draw do
           member do
             post :invite
           end
+
           resources :profiles, only: %i[index create]
         end
       end

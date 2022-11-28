@@ -4,10 +4,8 @@
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
         <n-divider>
-          <p class="messageTimestamp">
-            {{
-              isToday ? 'Today' : new Date(message.created_at).toDateString()
-            }}
+          <p class="text-gray-600">
+            {{ isToday ? 'Today' : new Date(message.created_at).toDateString() }}
           </p>
         </n-divider>
       </div>
