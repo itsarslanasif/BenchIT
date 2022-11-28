@@ -35,7 +35,7 @@
         <label class="w-40">Account Type</label>
         <select
           v-model="account_type"
-          class="w-40"
+          class="w-40 "
           @change="emitAccountType(account_type)"
         >
           <option value="all_types">All types</option>
@@ -87,6 +87,7 @@ export default {
 }
 .selected {
   background-color: #475569;
+  color: white;
 }
 .content-container {
   width: 100%;
@@ -99,11 +100,13 @@ export default {
   width: 95px;
   margin-right: 20px;
   text-align: center;
+  color: black;
   font-size: 15px;
   border-radius: 5%;
   height: auto;
 }
 .button:hover {
   background-color: #475569;
+  color: white;
 }
 </style>

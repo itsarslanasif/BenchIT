@@ -6,13 +6,13 @@
       <IconElement icon="&#8704;" :name="$t(CONSTANTS.DIRECT_MESSAGES)" />
       <IconElement icon="&#64;" :name="$t(CONSTANTS.MENTIONS_AND_REACTIONS)" />
       <IconElement icon="&#8634;" :name="$t(CONSTANTS.DRAFT_AND_SEND)" />
-      <IconElement icon="&#8285;" :name="$t(CONSTANTS.MORE)" />
+
       <IconElement
         icon="&#128101;"
         space="&nbsp;"
-        name="People & user groups"
+        :name="$t(CONSTANTS.People_And_User_Groups)"
       />
-      <IconElement icon="&#8285;" space="&nbsp; &nbsp;" name="More" />
+      <IconElement icon="&#8285;" :name="$t(CONSTANTS.MORE)" />
     </div>
     <hr class="text-slate-400" />
     <div>

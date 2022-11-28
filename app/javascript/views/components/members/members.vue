@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="m">
     <div class="search_bar">
       <input
         class="
@@ -94,8 +94,6 @@ export default {
   methods: {
     searchQuery() {
       this.showSpinner = true;
-      // this.users = UserStore().getUsers;
-      console.log(this.users);
       axios
         .get(`v1/workspaces/${this.CurrentWorkspaceId}/profiles`, {
           params: {
@@ -151,7 +149,7 @@ export default {
   justify-content: center;
 }
 .search_bar {
-  padding: 0px 35px;
+  padding: 10px 35px;
 }
 .loading > img {
   width: 50px;

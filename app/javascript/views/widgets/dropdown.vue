@@ -30,8 +30,9 @@ export default {
 
 <style scoped>
 .dropDown {
-  max-width: 5px;
+  max-width: 20px;
   height: 35px;
+  border-radius: 20%;
   border: solid 1px rgb(146, 146, 146);
   background-color: #252d34;
 }

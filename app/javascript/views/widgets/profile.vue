@@ -2,8 +2,8 @@
   <!-- This is an example component -->
   <div class="profile_container">
     <div class="px-5 header justify-items-start aline_item_horizontally">
-      <p class="font-bold">Profile</p>
-      <p class="font-bold right cursor-pointer" @click="exitClicked">X</p>
+      <p class="font-bold text-white ">Profile</p>
+      <p class="font-bold right text-white  cursor-pointer" @click="exitClicked">X</p>
     </div>
     <div
       class="card min-w-sm text-gray-50 transition-shadow shadow-xl hover:shadow-xl min-w-max"
@@ -15,17 +15,17 @@
         />
       </div>
       <div class="mt-5">
-        <p id="username" class="font-bold">{{ username }}</p>
-        <p class="text-sm font-light">{{ description }}</p>
+        <p id="username" class="font-bold text-white  ">{{ username }}</p>
+        <p class="text-sm font-light text-white ">{{ description }}</p>
       </div>
       <div class="mt-5 justify-items-start aline_item_horizontally">
         <div class="active_tag items-center"></div>
-        <p class="mt_8px ml-3 font-light">Active</p>
+        <p class="mt_8px ml-3 font-light text-white ">Active</p>
       </div>
       <div class="justify-items-start aline_item_horizontally">
         <p class="mt_8px font-light">&#128338;</p>
-        <p class="mt_8px ml-2 font-light">6:10 AM</p>
-        <p class="mt_8px ml-1 font-light">Local Time</p>
+        <p class="mt_8px ml-2 font-light text-white ">6:10 AM</p>
+        <p class="mt_8px ml-1 font-light text-white ">Local Time</p>
       </div>
 
       <div class="justify-items-start mt-3 aline_item_horizontally">
@@ -83,12 +83,10 @@ export default {
     dropDownOptionSelected(value) {
       switch (value) {
         case 'copy_display_name':
-          console.log(value);
           let element = document.getElementById('username');
           this.copyTextClipBoard(element.textContent);
           break;
         case 'copy_member_id':
-          console.log(value);
           this.copyTextClipBoard(this['userId']);
           break;
         default:
@@ -118,6 +116,7 @@ export default {
   max-width: 500px;
   background-color: #252d34;
   border: solid 0.1px rgb(146, 146, 146);
+  color: white;
 }
 .flex {
   display: flex;
@@ -141,7 +140,7 @@ export default {
   border: solid 1px white;
 }
 .button {
-  width: 400px;
+  width: 300px;
   height: 35px;
   border: solid 1px rgb(146, 146, 146);
 }
