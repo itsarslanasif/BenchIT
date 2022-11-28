@@ -1,11 +1,11 @@
 <template>
   <div>
-    <div class="search_bar">
+    <div class="px-5 py-5">
       <input
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
         v-model="query"
-        :placeholder= "CONSTANTS.SEARCH_BY_NAME_OR_ROLE"
+        :placeholder="CONSTANTS.SEARCH_BY_NAME_OR_ROLE"
         @keyup.enter="searchQuery()"
       />
     </div>
@@ -15,15 +15,15 @@
       @sort_filter="getSortFilter"
     ></filters>
 
-    <div class="loading" v-show="showSpinner">
+    <div class="justify-center flex h-full w-full" v-show="showSpinner">
       <Spinner />
     </div>
 
-    <div
-      class="justify-items-start aline_item_horizontally"
-      v-show="members.length > 0"
-    >
-      <div class="render-member-row" style="min-width: 725px">
+    <div class="justify-items-start flex align-top" v-show="members.length > 0">
+      <div
+        class="render-member-row items-start flex-wrap flex"
+        style="min-width: 725px"
+      >
         <div v-for="member in members" :key="member.id">
           <member
             :name="member.username"
@@ -111,27 +111,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.render-member-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-}
-.loading {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-}
-.search_bar {
-  padding: 10px 35px;
-}
-.loading > img {
-  width: 50px;
-  height: 50px;
-}
-.aline_item_horizontally {
-  display: flex;
-  align-items: top;
-}
-</style>
+<style scoped></style>
