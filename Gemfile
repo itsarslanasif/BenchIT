@@ -24,7 +24,6 @@ gem 'sprockets-rails'
 gem 'vite_rails'
 gem 'elasticsearch', '~> 7.0'
 gem 'searchkick'
-gem 'byebug'
 
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 

@@ -2,7 +2,20 @@
   <div>
     <div class="search_bar">
       <input
-        class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+        class="
+          searchbar
+          shadow
+          bg-neutral-900
+          appearance-none
+          border
+          rounded
+          w-full
+          py-2
+          px-3
+          text-gray-700
+          leading-tight
+          focus:outline-none focus:shadow-outline
+        "
         type="text"
         v-model="query"
         placeholder="Search by name or role"
@@ -84,7 +97,7 @@ export default {
       // this.users = UserStore().getUsers;
       console.log(this.users);
       axios
-        .get(`workspaces/${this.CurrentWorkspaceId}/profiles`, {
+        .get(`v1/workspaces/${this.CurrentWorkspaceId}/profiles`, {
           params: {
             workspace: this.workspace,
             query: this.query,

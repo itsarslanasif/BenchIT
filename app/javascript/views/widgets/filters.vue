@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import IconElement from '../views/components/IconElement.vue';
+import IconElement from './IconElement.vue';
 
 export default {
   components: {

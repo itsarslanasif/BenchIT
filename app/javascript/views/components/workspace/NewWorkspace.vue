@@ -35,7 +35,7 @@ export default {
     handleSubmit() {
       if (this.workspaceStore.activePhase === 3) {
         axios
-          .post('api/workspaces', this.workspaceStore.workspace)
+          .post('/workspaces', this.workspaceStore.workspace)
           .then(response => {
             return response.data;
           })

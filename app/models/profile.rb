@@ -8,7 +8,6 @@ class Profile < ApplicationRecord
       workspace_id: workspace_id,
     }
   end
-
   after_commit :add_default_image, on: %i[create]
 
   belongs_to :user
@@ -17,6 +16,7 @@ class Profile < ApplicationRecord
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
+
 
   def add_default_image
     return if profile_image.attached?
