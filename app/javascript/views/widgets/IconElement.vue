@@ -17,7 +17,6 @@
 <script>
 export default {
   name: 'IconElement',
-
   props: {
     icon: String,
     name: String,
@@ -26,10 +25,10 @@ export default {
     elementClicked() {
       switch (this.name) {
         case 'People & user groups':
-          window.location.replace('http://127.0.0.1:5100/members');
+          window.location.replace(
+            `${import.meta.env.VITE_APP_SERVER_URL}members`
+          );
           break;
-        default:
-        // code block
       }
     },
   },

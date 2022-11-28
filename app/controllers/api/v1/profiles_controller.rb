@@ -3,9 +3,8 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
 
   def index
-    query = params[:query].present? ? params[:query] : nil
-    @profiles = if query
-      Profile.search( query, where: { workspace_id: @workspace.id }, match: :word_start, misspellings: false)
+    @profiles = if params[:query].presence
+      Profile.search( params[:query], where: { workspace_id: @workspace.id }, match: :word_start, misspellings: false)
     else
       @workspace.profiles.all
     end
