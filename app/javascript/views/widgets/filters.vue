@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="button-container">
+    <div class="button-container justify-end flex items-center">
       <IconElement
-        class="button"
+        class="button text-sm text-center "
         @click="toggleSort = !toggleSort"
         icon="&#8661;"
         space="&nbsp;"
@@ -10,7 +10,7 @@
         v-bind:class="{ selected: toggleSort == true }"
       />
       <IconElement
-        class="button"
+        class="button text-sm text-center  "
         @click="toggleFilters = !toggleFilters"
         icon="&#8860;"
         space="&nbsp;"
@@ -18,7 +18,7 @@
         v-bind:class="{ selected: toggleFilters == true }"
       />
     </div>
-    <div class="content-container py-2 px-2">
+    <div class="content-container justify-end flex items-center py-2 px-2">
       <div v-show="toggleSort">
         <label class="w-40">{{CONSTANTS.SORT}}</label>
         <select
@@ -82,9 +82,6 @@ export default {
 .button-container {
   width: 100%;
   height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }
 .selected {
   background-color: #475569;
@@ -93,17 +90,12 @@ export default {
 .content-container {
   width: 100%;
   height: auto;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
 }
 .button {
   width: 95px;
   margin-right: 20px;
-  text-align: center;
   color: black;
-  font-size: 15px;
-  border-radius: 5%;
+  border-radius: 5px;
   height: auto;
 }
 .button:hover {
