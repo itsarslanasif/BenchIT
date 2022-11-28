@@ -7,8 +7,8 @@
     <template v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <n-divider class="w-full">
-          <p class="absolute text-gray-600 text-sm m-0 text-center">
+        <n-divider>
+          <p class="text-gray-600">
             {{ isToday ? 'Today' : new Date(message.sentAt).toDateString() }}
           </p>
         </n-divider>
@@ -61,7 +61,6 @@ export default {
 <style scoped>
 .container {
   float: left;
-  /* height: 100vh; */
   overflow-y: auto;
 }
 
