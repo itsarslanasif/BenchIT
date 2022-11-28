@@ -1,44 +1,36 @@
 <template>
-  <splitpanes class="default-theme">
-    <pane max-size="33" min-size="10.45" style="background-color: #3f0e40">
-      <WorkspaceDropdown title="BenchIT" :items="options" />
-      <LeftPane />
-      <div>
-        <div class="modalStyle">
-          <CreateChannelVue />
+  <div class="bg-primary text-sm">
+    <splitpanes>
+      <pane max-size="25" min-size="11">
+        <WorkspaceDropdown title="BenchIT" :items="options" />
+        <LeftPane />
+      </pane>
+      <pane max-size="81" min-size="75" class="bg-white">
+        <ChannelElement />
+        <div>
+          <Chat />
         </div>
-        <button class="btn" @click="modalOpen = !modalOpen">Open Modal</button>
-        <div v-if="modalOpen">
-          <CreateChannel :close-modal="closeModal" />
-        </div>
+      </pane>
+      <div v-if="UserInviteFormFlag" class="modal-styling">
+        <UserInviteFormVue :close-modal="closeForm" />
       </div>
-    </pane>
-
-    <pane max-size="100" min-size="67">
-      <ChannelElement />
-      <div class="modalBack"><Chat /></div>
-    </pane>
-    <div v-if="UserInviteFormFlag" class="modal-styling">
-      <UserInviteFormVue :close-modal="closeForm"  />
-    </div>
-  </splitpanes>
+    </splitpanes>
+  </div>
 </template>
 
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
-import WorkspaceDropdown from '../components/WorkspaceDropdown.vue';
-import CreateChannel from '../containers/CreateChannel.vue';
-import Chat from '../components/chatPane/Chat.vue';
+import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
+import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
-import LeftPane from '../components/LeftPane.vue';
-import ChannelElement from '../components/ChannelElement.vue';
-import UserInviteFormVue from '../components/UserInviteForm.vue';
+import LeftPane from '../components/leftPane/LeftPane.vue';
+import ChannelElement from '../components/channels/ChannelElement.vue';
+import UserInviteFormVue from '../widgets/UserInviteForm.vue';
 export default {
   components: {
     Splitpanes,
     Pane,
-    CreateChannel,
     Chat,
     WorkspaceDropdown,
     LeftPane,
@@ -46,11 +38,8 @@ export default {
     UserInviteFormVue,
   },
   methods: {
-    closeModal() {
-      this.modalOpen = !this.modalOpen;
-    },
     closeForm() {
-      this.UserInviteFormFlag= !this.UserInviteFormFlag;
+      this.UserInviteFormFlag = !this.UserInviteFormFlag;
     },
     enableInviteModal() {
       this.UserInviteFormFlag = !this.UserInviteFormFlag;
@@ -107,10 +96,10 @@ export default {
 };
 </script>
 
-<style scoped>
-.splitpanes {
+<style>
+/* .splitpanes {
   height: 89vh;
-}
+} */
 
 .chatpane {
   overflow: hidden;

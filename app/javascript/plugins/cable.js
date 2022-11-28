@@ -30,6 +30,5 @@ export function createCable(options) {
       },
     }
   );
-
   return new Cable();
 }
