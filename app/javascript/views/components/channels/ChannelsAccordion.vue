@@ -25,7 +25,7 @@
 import { getChannels } from '../../../api/channels/channels.js';
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import { CONSTANTS } from '../../../assets/constants';
-import CreateChannel from '../../containers/CreateChannel.vue';
+import CreateChannel from './CreateChannel.vue';
 
 export default {
   components: { AccordionList, AccordionItem, CreateChannel },

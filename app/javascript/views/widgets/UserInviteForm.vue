@@ -1,15 +1,15 @@
 <template>
-  <div class="form-background">
-    <form class="form" @submit.prevent="handleSubmit">
-      <button type="button" class="btn-close" @click="closeModal">x</button>
-      <h3 class="form-h3">{{ $t(CONSTANTS.REQUESTING_INVITATION) }}</h3>
+  <div class="fixed top-0 bottom-0 right-0 left-0 bg-backgroundTransparent flex justify-center items-center z-10">
+    <form class="bg-slate-50 rounded-md my-8 mx-auto opacity-100 p-10 fixed text-left w-2/4 z-10" @submit.prevent="handleSubmit">
+      <button type="button" class="border-0 cursor-pointer text-base w-12 m-0 p-0 right-0 bg-backgroundTransparent" @click="closeModal">x</button>
+      <h3>{{ $t(CONSTANTS.REQUESTING_INVITATION) }}</h3>
       <label>{{ $t(CONSTANTS.TO) }}</label>
-      <input v-model="userStore.workspace_invite.email" type="email" placeholder="Email" required
-        class="form-input-select" />
+      <input v-model="userStore.workspace_invite.email" type="email" placeholder="Email" required      
+        class="bg-slate-50 border border-primary w-auto text-black-900" />
       <label>{{ $t(CONSTANTS.REASON_FOR_REQUEST) }}</label>
-      <input type="text" placeholder="Add a note for your admin" class="form-input-select" />
-      <div class="btn-div">
-        <button class="form-btn">{{ $t(CONSTANTS.SEND_REQUEST) }}</button>
+      <input type="text" placeholder="Add a note for your admin" class="bg-slate-50 border border-primary w-auto text-black-900" />
+      <div>
+        <button>{{ $t(CONSTANTS.SEND_REQUEST) }}</button>
       </div>
     </form>
   </div>
@@ -21,7 +21,6 @@ import { UserStore } from '../../stores/user_store.js';
 import { CONSTANTS } from '../../assets/constants';
 export default {
   name: 'UserInviteForm',
-  // eslint-disable-next-line vue/require-prop-types
   props: ['closeModal'],
   data() {
     return {
@@ -74,24 +73,5 @@ export default {
   justify-content: center;
   align-items: center;
   z-index: 1;
-}
-
-.form-input-select {
-  background-color: rgb(208, 202, 202);
-  border: 1px solid black;
-  color: black;
-  width: 400px;
-}
-
-.btn-close {
-  border: none;
-  font-size: 20px;
-  cursor: pointer;
-  width: 50px;
-  margin: 0px;
-  padding: 0px;
-  background: transparent;
-  color: rgb(59, 58, 58);
-  margin-left: 90%;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
-  <div class="btn-div">
-    <button class="dashboard-btn" @click="createWorkspace">
+  <div class="flex justify-center">
+    <button class="w-64" @click="createWorkspace">
       Create New Workspace
     </button>
   </div>

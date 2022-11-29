@@ -1,7 +1,7 @@
 <template>
   <div class="container bg-primary">
     <hr class="text-slate-400" />
-    <div class="menu mt-4 mb-4 text-white">
+    <div class="relative mt-4 mb-4 text-white">
       <IconElement icon="&#8860;" :name="$t(CONSTANTS.THREADS)" />
       <IconElement icon="&#8704;" :name="$t(CONSTANTS.DIRECT_MESSAGES)" />
       <IconElement icon="&#64;" :name="$t(CONSTANTS.MENTIONS_AND_REACTIONS)" />
@@ -45,9 +45,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.menu {
-  position: relative;
-}
-</style>

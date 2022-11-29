@@ -62,11 +62,6 @@ export default {
 };
 </script>
 <style scoped>
-.container {
-  float: left;
-  overflow-y: auto;
-}
-
 .chatBody {
   height: 57vh;
 }

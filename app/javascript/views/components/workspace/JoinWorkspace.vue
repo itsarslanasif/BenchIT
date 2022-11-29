@@ -22,7 +22,7 @@
         <input v-model="description" type="text" placeholder="Description" required />
         <div>
           <button
-            class="bg-green-900 border-0 h-10 hover:bg-green-800 text-zinc-500"
+            class="bg-success border-0 h-10 hover:bg-successHover text-zinc-500"
           >
             Join
           </button>

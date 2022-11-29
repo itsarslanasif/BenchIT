@@ -1,16 +1,16 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="form">
-    <h3 class="form-h3">{{ $t('invite.title') }}</h3>
+  <form @submit.prevent="handleSubmit" class="bg-slate-50 rounded-xl my-8 mx-auto text-left p-64">
+    <h3>{{ $t('invite.title') }}</h3>
     <label>{{ $t('invite.email') }}</label>
     <input
       v-model="userStore.user_email.email"
       type="email"
       placeholder="Email"
       required
-      class="form-input-select"
+      class="border"
     />
-    <div class="btn-div">
-      <button class="form-btn">{{ $t('invite.send_button') }}</button>
+    <div class="flex justify-center">
+      <button class="border-0 mt-5 py-3 px-5 w-3/4">{{ $t('invite.send_button') }}</button>
     </div>
   </form>
 </template>
