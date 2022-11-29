@@ -7,10 +7,11 @@
         <div class="p-8">
           <header id="modalTitle" class="flex w-full">
             <div class="w-5/6 text-lg">
-              <h1>Create a channel</h1>
+              <h1>{{ $t('channels.create_channel') }}</h1>
             </div>
-            <button type="button" class="w-1/6 bg-none py-1 px-3 text-base float-right rounded" aria-label="Close modal" @click="closeModal">
-              Close
+            <button type="button" class="w-1/6 bg-none py-1 px-3 text-base float-right rounded" aria-label="Close modal"
+              @click="closeModal">
+              {{ $t('actions.close') }}
             </button>
           </header>
 
@@ -18,29 +19,31 @@
             <section id="modalDescription" class="m-0 relative mt-3">
               <div class="mb-1">
                 <p>
-                  Channels are where your team communicates. They’re best when
-                  organized around a topic — #marketing, for example.
+                  {{ $t('channels.add_channel_dialog') }}
                 </p>
               </div>
               <div class="text-base">
-                <label> Name </label>
+                <label> {{ $t('channels.new_channel_name') }} </label>
               </div>
               <div class="mb-3">
                 <Field v-model="channelName" class="form-control w-full p-2 rounded bg-none" type="text" name="Name"
-                  placeholder="e.g. plan-budget" :rules="validateName" />
+                  :placeholder="$t('channels.new_channel_name_placeholder')" :rules="validateName" />
                 <ErrorMessage name="Name" class="text-danger text-sm" />
               </div>
               <div>
-                <label> Description </label>
+                <label> {{ $t('channels.new_channel_description') }} </label>
               </div>
               <div class="mb-3">
                 <Field class="form-control w-full p-2 rounded bg-none" type="text" name="Description"
-                  placeholder="Description is optional" />
+                  :placeholder="$t('channels.new_channel_desc_placeholder')" />
               </div>
             </section>
 
             <footer class="mb-4">
-              <button type="submit" :disabled="!channelName" class="bg-success text-white py-2 px-5 text-base float-right my-3 rounded">Create</button>
+              <button type="submit" :disabled="!channelName"
+                class="bg-success text-white py-2 px-5 text-base float-right my-3 rounded">
+                {{ $t('actions.create') }}
+              </button>
             </footer>
           </Form>
         </div>

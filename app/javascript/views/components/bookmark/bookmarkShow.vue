@@ -8,14 +8,14 @@
     <div :id="data['name']" class="overlay">
       <div class="popup">
         <div>
-          <h2>Bookmark</h2>
+          <h2>{{$t('bookmark.title')}}</h2>
           <a class="close" href="#">×</a>
           <div class="content">
-            <h5>Please enter Url</h5>
+            <h5>{{$t('bookmark.url')}}</h5>
             <input v-model="data.bookmark_URL" required />
           </div>
           <div class="content">
-            <h5>Please enter name</h5>
+            <h5>{{$t('bookmark.name')}}</h5>
             <input v-model="data.name" required />
           </div>
           <div class="buttons">

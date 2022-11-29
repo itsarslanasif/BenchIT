@@ -6,19 +6,19 @@
   <div id="popup1" class="overlay">
     <div class="popup">
       <div>
-        <h2>{{ $t(CONSTANTS.BOOKMARK) }}</h2>
+        <h2>{{ $t('bookmark.title') }}</h2>
         <a class="close" href="#">×</a>
         <div class="content">
-          <h5>{{ $t(CONSTANTS.ENTER_URL) }}</h5>
-          <input v-model="bookmark.url" placeholder="url" required />
+          <h5>{{ $t('bookmark.url') }}</h5>
+          <input v-model="bookmark.url" :placeholder="$t('bookmark.url_placeholder')" required />
         </div>
         <div class="content">
-          <h5>{{ $t(CONSTANTS.ENTER_NAME) }}</h5>
-          <input v-model="bookmark.name" placeholder="name" required />
+          <h5>{{ $t('bookmark.name') }}</h5>
+          <input v-model="bookmark.name" :placeholder="$t('bookmark.name_placeholder')" required />
         </div>
         <div class="save_button">
           <a v-show="bookmark.url !== '' && bookmark.name !== ''" class="save-btn" @click="handleSave()" href="#">
-            {{ $t(CONSTANTS.SAVE) }}
+            {{ $t('actions.save') }}
           </a>
         </div>
       </div>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import { CONSTANTS } from '../../../assets/constants'
 export default {
   data() {
     return {
@@ -36,7 +35,6 @@ export default {
         url: '',
         name: '',
       },
-      CONSTANTS: CONSTANTS
     };
   },
   methods: {

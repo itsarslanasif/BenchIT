@@ -6,12 +6,7 @@
       <IconElement icon="&#8704;" :name="$t(CONSTANTS.DIRECT_MESSAGES)" />
       <IconElement icon="&#64;" :name="$t(CONSTANTS.MENTIONS_AND_REACTIONS)" />
       <IconElement icon="&#8634;" :name="$t(CONSTANTS.DRAFT_AND_SEND)" />
-
-      <IconElement
-        icon="&#128101;"
-        space="&nbsp;"
-        :name="$t(CONSTANTS.PEOPLE_AND_USER_GROUPS)"
-      />
+      <IconElement icon="&#128101;" space="&nbsp;" :name="$t(CONSTANTS.PEOPLE_AND_USER_GROUPS)" />
       <IconElement icon="&#8285;" :name="$t(CONSTANTS.MORE)" />
     </div>
     <hr class="text-slate-400" />
@@ -23,10 +18,8 @@
         <ChannelsAccordion />
       </p>
     </div>
-    <div
-      class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover"
-    >
-      {{ $t(CONSTANTS.SELECTED_CHANNELS) }}
+    <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
+      {{ $t('channels.selected_channels') }}
     </div>
   </div>
 </template>
@@ -34,14 +27,8 @@
 <script>
 import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
-import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   components: { ChannelsAccordion, IconElement },
-  data() {
-    return {
-      CONSTANTS: CONSTANTS,
-    };
-  },
 };
 </script>

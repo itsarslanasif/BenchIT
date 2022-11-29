@@ -54,6 +54,52 @@ en:
         people: 'People'
         channels: 'Channels'
         tagline: "I'm looking for"
+      workspace:
+        title: 'Bench IT'
+        join_workspace: 'Join Workspace'
+        username_placeholder: 'Username'
+        description_placehodler: 'Desciption'
+        create_new_workspace: 'Create New Workspace'
+      sidebar:
+        threads: 'Threads'
+        direct_messages: 'Direct Messages'
+        mentions_and_reactions: 'Mentions & Reactions'
+        draft_and_sent: 'Draft & Sent'
+        more: 'More'
+      channels:
+        selected_channels: 'Selected Channels'
+        title: 'Channels'
+        add_new_channel: 'Add New Channel'
+        create_channel: 'Create a channel'
+        add_channel_dialog:
+          'Channels are where your team communicates. They’re best when
+          organized around a topic — #marketing, for example.'
+        new_channel_name: 'Name'
+        new_channel_name_placeholder: 'e.g plan-budget'
+        new_channel_desc_placeholder: 'Description is optional'
+        new_channel_description: 'Description'
+      bookmark:
+        title: 'Bookmark'
+        url: 'Enter URL'
+        name: 'Enter Name'
+        url_placeholder: 'facebook.com'
+        name_placeholder: 'Facebook'
+      request:
+        send_request: 'Send Request'
+        reason_for_request: 'Reason for request (optional)'
+        to: 'To'
+        requesting_invitation: 'Requestion invitation to BenchIT'
+        request_reason_placeholder: 'Add a note for your admin'
+      actions:
+        save: 'Save'
+        send: 'Send'
+        close: 'Close'
+        create: 'Create'
+        join: 'Join'
+      members:
+        search_by_name: 'Search By Name'
+      placeholder:
+        email: 'Email'
 
     admin:
       title: 'Admin'
