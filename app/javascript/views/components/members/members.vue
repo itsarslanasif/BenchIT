@@ -1,46 +1,27 @@
 <template>
   <div>
-    <div class="px-5 py-5">
+    <div class="py-5 px-8">
       <input
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="text"
-        v-model="query"
-        :placeholder="CONSTANTS.SEARCH_BY_NAME_OR_ROLE"
-        @keyup.enter="searchQuery()"
-      />
+        type="text" v-model="query" :placeholder="CONSTANTS.SEARCH_BY_NAME_OR_ROLE" @keyup.enter="searchQuery()" />
     </div>
-    <filters
-      v-if="!showProfile"
-      @account_type="getAccountType"
-      @sort_filter="getSortFilter"
-    ></filters>
+    <filters v-if="!showProfile" @account_type="getAccountType" @sort_filter="getSortFilter"></filters>
 
     <div class="justify-center flex h-full w-full" v-show="showSpinner">
       <Spinner />
     </div>
 
     <div class="justify-items-start flex align-top" v-show="members.length > 0">
-      <div
-        class="render-member-row items-start flex-wrap flex"
-        style="min-width: 725px"
-      >
+      <div class="render-member-row items-start flex-wrap flex" style="min-width: 725px">
         <div v-for="member in members" :key="member.id">
-          <member
-            :name="member.username"
-            :description="member.description"
-            :img-url="member.image_url"
-            @click="profileClickListener(member)"
-          />
+          <member :name="member.username" :description="member.description" :img-url="member.image_url"
+            @click="profileClickListener(member)" />
         </div>
       </div>
       <div class="ml-10" v-if="showProfile">
-        <profile
-          @exitProfileView="exitProfile"
-          :username="this.selectedMember.username"
-          :description="this.selectedMember.description"
-          :img-url="this.selectedMember.image_url"
-          :userId="this.selectedMember.user_id"
-        ></profile>
+        <profile @exitProfileView="exitProfile" :username="this.selectedMember.username"
+          :description="this.selectedMember.description" :img-url="this.selectedMember.image_url"
+          :userId="this.selectedMember.user_id"></profile>
       </div>
     </div>
     <div class="flex justify-center" v-show="members.length == 0">
@@ -89,7 +70,7 @@ export default {
       );
       this.showSpinner = false;
     },
-    getAccountType(value) {},
+    getAccountType(value) { },
     getSortFilter(value) {
       this.sort = value;
     },
