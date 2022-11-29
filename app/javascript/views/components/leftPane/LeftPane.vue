@@ -14,7 +14,7 @@
         <ChannelsAccordion />
       </p>
       <p>
-        <ChannelsAccordion />
+        <DirectMessageAccordian />
       </p>
     </div>
     <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
@@ -25,11 +25,12 @@
 
 <script>
 import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
+import DirectMessageAccordian from '../directMessages/dmAccordion.vue'
 import IconElement from '../../widgets/IconElement.vue';
 import { CONSTANTS } from '../../../assets/constants';
 
 export default {
-  components: { ChannelsAccordion, IconElement },
+  components: { ChannelsAccordion, IconElement,DirectMessageAccordian },
   data() {
     return {
       CONSTANTS: CONSTANTS,
