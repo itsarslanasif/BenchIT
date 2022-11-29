@@ -3,14 +3,13 @@
     <div class="py-5 px-8">
       <input
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="text" v-model="query" :placeholder="CONSTANTS.SEARCH_BY_NAME_OR_ROLE" @keyup.enter="searchQuery()" />
+        type="text" v-model="query" :placeholder="$t('members.search_by_name')" @keyup.enter="searchQuery()" />
     </div>
     <filters v-if="!showProfile" @account_type="getAccountType" @sort_filter="getSortFilter"></filters>
 
     <div class="justify-center flex h-full w-full" v-show="showSpinner">
       <Spinner />
     </div>
-
     <div class="justify-items-start flex align-top" v-show="members.length > 0">
       <div class="render-member-row items-start flex-wrap flex" style="min-width: 725px">
         <div v-for="member in members" :key="member.id">

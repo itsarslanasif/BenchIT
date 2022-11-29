@@ -2,12 +2,12 @@
   <div class="container bg-primary">
     <hr class="text-slate-400" />
     <div class="relative mt-4 mb-4 text-white">
-      <IconElement icon="&#8860;" :name="$t(CONSTANTS.THREADS)" />
-      <IconElement icon="&#8704;" :name="$t(CONSTANTS.DIRECT_MESSAGES)" />
-      <IconElement icon="&#64;" :name="$t(CONSTANTS.MENTIONS_AND_REACTIONS)" />
-      <IconElement icon="&#8634;" :name="$t(CONSTANTS.DRAFT_AND_SEND)" />
+      <IconElement icon="&#8860;" :name="$t('sidebar.threads')" />
+      <IconElement icon="&#8704;" :name="$t('sidebar.direct_messages')" />
+      <IconElement icon="&#64;" :name="$t('sidebar.mentions_and_reactions')" />
+      <IconElement icon="&#8634;" :name="$t('sidebar.draft_and_sent')" />
       <IconElement icon="&#128101;" space="&nbsp;" :name="$t(CONSTANTS.PEOPLE_AND_USER_GROUPS)" />
-      <IconElement icon="&#8285;" :name="$t(CONSTANTS.MORE)" />
+      <IconElement icon="&#8285;" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />
     <div>
