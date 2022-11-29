@@ -14,6 +14,14 @@
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
       </div>
+      <pane
+        v-if="threadStore.showThread"
+        max-size="50"
+        min-size="20"
+        class="bg-white"
+      >
+        <RightPane />
+      </pane>
     </splitpanes>
   </div>
 </template>
@@ -25,9 +33,15 @@ import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
+import RightPane from '../components/rightPane/RightPane.vue';
 import ChannelElement from '../components/channels/ChannelElement.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
+import { useThreadStore } from '../../stores/ThreadStore';
 export default {
+  setup() {
+    const threadStore = useThreadStore();
+    return { threadStore };
+  },
   components: {
     Splitpanes,
     Pane,
@@ -36,6 +50,7 @@ export default {
     LeftPane,
     ChannelElement,
     UserInviteFormVue,
+    RightPane,
   },
   methods: {
     closeForm() {
@@ -97,10 +112,6 @@ export default {
 </script>
 
 <style>
-/* .splitpanes {
-  height: 89vh;
-} */
-
 .chatpane {
   overflow: hidden;
   position: relative;

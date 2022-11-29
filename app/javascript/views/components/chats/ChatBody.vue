@@ -4,16 +4,23 @@
 <!-- eslint-disable vue/valid-v-for -->
 <template>
   <div class="overflow-auto chatBody">
-    <template v-for="message in messages" :key="message.id">
+    <template v-for="(message, index) in messages" :key="index">
       {{ setMessage(message) }}
-      <div v-if="!isSameDayMessage">
+      <div
+        v-if="!isSameDayMessage(messages[index - 1]?.sentAt, message?.sentAt)"
+      >
         <n-divider>
           <p class="text-gray-600">
-            {{ isToday ? 'Today' : new Date(message.sentAt).toDateString() }}
+            {{
+              isToday(message.sentAt) ? 'Today' : new Date(message.sentAt).toDateString()
+            }}
           </p>
         </n-divider>
       </div>
-      <MessageWrapper :curr-message="message" :prev-message="prevMessage" />
+      <MessageWrapper
+        :curr-message="message"
+        :prev-message="messages[index - 1]"
+      />
     </template>
   </div>
 </template>
@@ -32,28 +39,24 @@ export default {
   data() {
     return {
       messages: messages,
-      message: null,
-      prevMessage: null,
     };
   },
-  computed: {
-    isToday() {
-      return (
-        new Date(this.message?.sentAt).toDateString() ===
-        new Date().toDateString()
-      );
-    },
-    isSameDayMessage() {
-      return (
-        new Date(this.message?.sentAt).toDateString() ===
-        new Date(this.prevMessage?.sentAt).toDateString()
-      );
-    },
-  },
+
   methods: {
     setMessage(message) {
       this.prevMessage = this.message;
       this.message = message;
+    },
+
+    isToday(sentAt) {
+      return new Date(sentAt).toDateString() === new Date().toDateString();
+    },
+
+    isSameDayMessage(prevSentAt, currSentAt) {
+      return (
+        new Date(prevSentAt).toDateString() ===
+        new Date(currSentAt).toDateString()
+      );
     },
   },
 };

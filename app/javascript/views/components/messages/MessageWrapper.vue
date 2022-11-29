@@ -1,31 +1,82 @@
 <template>
-  <div class="messageWrapper" @mouseover="emojiModalStatus = true" @mouseleave="emojiModalStatus = false">
-    <n-avatar v-show="!isSameUser" class="avatar" size="large" :src="message.sender.avatar" />
+  <div
+    class="messageWrapper"
+    @mouseover="emojiModalStatus = true"
+    @mouseleave="emojiModalStatus = false"
+  >
+    <n-avatar
+      v-show="!isSameUser"
+      class="avatar"
+      size="large"
+      :src="currMessage.sender.avatar"
+    />
     <span class="message">
       <div>
         <span class="messageInfo">
           <p v-show="!isSameUser" class="name">
-            <b>{{ message.sender.name }}</b>
+            <b>{{ currMessage.sender.name }}</b>
           </p>
           <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
             {{ isSameUser ? timeWithoutAMPM : time }}
           </p>
-          <span v-show="isSameUser" class="messageContent" v-html="message.content" />
+          <span
+            v-show="isSameUser"
+            class="messageContent"
+            v-html="currMessage.content"
+          />
         </span>
-        <span v-show="!isSameUser" class="messageContent" v-html="message.content" />
+        <span
+          v-show="!isSameUser"
+          class="messageContent"
+          v-html="currMessage.content"
+        />
       </div>
       <template v-for="emoji in allReactions" :key="emoji.id">
         <span class="emoji">{{ emoji.i }}</span>
       </template>
-      <div class="emojiModalToggle" v-if="emojiModalStatus || openEmojiModal || showOptions">
+      <div
+        v-if="currMessage?.replies"
+        @click="toggleThread"
+        class="text-info text-xs cursor-pointer hover:underline"
+      >
+        {{ currMessage.replies?.length }} replies...
+      </div>
+      <div
+        class="emojiModalToggle"
+        v-if="emojiModalStatus || openEmojiModal || showOptions"
+      >
         <template v-for="emoji in topReactions" :key="emoji">
-          <EmojiModalButton :emoji="emoji" :actionText="emoji.n" :action="addReaction" />
+          <EmojiModalButton
+            :emoji="emoji"
+            :actionText="emoji.n"
+            :action="addReaction"
+          />
         </template>
-        <EmojiModalButton icon="fa-solid fa-icons" actionText="Find another reaction" :action="setEmojiModal" />
-        <EmojiModalButton icon="fa-solid fa-comment-dots" actionText="Reply in thread" />
-        <EmojiModalButton icon="fa-solid fa-share" actionText="Share message..." />
-        <EmojiModalButton icon="fa-solid fa-bookmark" actionText="Add to saved items" />
-        <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" />
+        <EmojiModalButton
+          icon="fa-solid fa-icons"
+          actionText="Find another reaction"
+          :action="setEmojiModal"
+        />
+
+        <EmojiModalButton
+          v-if="!currMessage.parent_message_id"
+          icon="fa-solid fa-comment-dots"
+          actionText="Reply in thread"
+          :action="toggleThread"
+        />
+        <EmojiModalButton
+          icon="fa-solid fa-share"
+          actionText="Share message..."
+        />
+        <EmojiModalButton
+          icon="fa-solid fa-bookmark"
+          actionText="Add to saved items"
+        />
+        <EmojiModalButton
+          icon="fa-solid fa-ellipsis-vertical"
+          actionText="More actions"
+          :action="setOptionsModal"
+        />
       </div>
     </span>
   </div>
@@ -40,9 +91,14 @@ import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
+import { useThreadStore } from '../../../stores/ThreadStore';
 
 export default {
   name: 'MessageWrapper',
+  setup() {
+    const threadStore = useThreadStore();
+    return { threadStore };
+  },
   components: {
     NAvatar,
     EmojiPicker,
@@ -74,8 +130,6 @@ export default {
           n: 'Taking a look',
         },
       ],
-      message: this.currMessage,
-      oldMessage: this.prevMessage,
       emojiModalStatus: false,
       openEmojiModal: false,
       allReactions: [],
@@ -84,26 +138,31 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.message.sentAt).getTime()).format('h:mm A');
+      return moment(new Date(this.currMessage.sentAt).getTime()).format(
+        'h:mm A'
+      );
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.message.sentAt).getTime()).format('h:mm');
+      return moment(new Date(this.currMessage.sentAt).getTime()).format('h:mm');
     },
     isSameUser() {
-      if (this.oldMessage === undefined) return false;
-      return this.message?.sender.id === this.oldMessage?.sender.id;
+      if (!this.prevMessage) return false;
+      return this.currMessage?.sender.id === this.prevMessage?.sender.id;
     },
   },
   methods: {
     addReaction(emoji) {
       this.allReactions.push(emoji);
-      console.log(this.allReactions[0]);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
     },
     setOptionsModal() {
       this.showOptions = !this.showOptions;
+    },
+    toggleThread() {
+      this.threadStore.setMessage(this.currMessage);
+      this.threadStore.toggleShow(true);
     },
   },
 };
@@ -118,7 +177,7 @@ p {
 }
 
 .messageWrapper {
-  @apply items-center flex p-1 relative;
+  @apply items-center flex p-3 relative;
 }
 
 .messageWrapper:hover {
@@ -168,8 +227,8 @@ p {
 
 .emojiModalToggle {
   @apply bg-white text-black-500 p-1 rounded absolute;
-  right: 30px;
-  top: -22px;
+  right: 5px;
+  top: -15px;
 }
 
 .emoji {
