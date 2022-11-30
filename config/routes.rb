@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
         resources :bench_channels, only: %i[create] do
           member do
+            post :join_public_channel
             delete :leave
           end
 

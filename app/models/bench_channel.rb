@@ -24,4 +24,13 @@ class BenchChannel < ApplicationRecord
     self.creator_id = Current.user.id
     self.workspace_id = Current.workspace.id
   end
+
+  searchkick word_middle: [:name ], word_middle: [:description]
+  def search_data
+    {
+      name: name,
+      description: description,
+    }
+  end
+
 end

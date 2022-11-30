@@ -22,6 +22,8 @@ gem 'sassc-rails'
 gem 'sidekiq', '~>6.0'
 gem 'sprockets-rails'
 gem 'vite_rails'
+gem 'searchkick'
+gem  "elasticsearch", "< 7.14"
 
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
