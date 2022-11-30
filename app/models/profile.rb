@@ -1,6 +1,5 @@
 class Profile < ApplicationRecord
   after_commit :add_default_image, on: %i[create]
-  after_create :assign_default_role
 
   belongs_to :user
   belongs_to :workspace
@@ -16,7 +15,6 @@ class Profile < ApplicationRecord
     member: 3
   }
 
-
   def add_default_image
     return if profile_image.attached?
 
@@ -24,7 +22,4 @@ class Profile < ApplicationRecord
                  filename: 'default_image.png', content_type: 'image/png')
   end
 
-  def assign_default_role
-    self.member!
-  end
 end

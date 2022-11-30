@@ -122,7 +122,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_131254) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "role"
+    t.integer "role", default: 3
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
