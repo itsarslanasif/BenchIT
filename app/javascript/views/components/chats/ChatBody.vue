@@ -1,21 +1,26 @@
 <template>
   <div class="overflow-auto chatBody">
-    <template v-for="message in messages" :key="message.id">
+    <div v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <n-divider>
+        <!-- <n-divider> -->
           <p class="text-gray-600">
-            {{ isToday ? 'Today' : new Date(message.created_at).toDateString() }}
+            {{
+              isToday ? 'Today' : new Date(message.created_at).toDateString()
+            }}
           </p>
-        </n-divider>
+        <!-- </n-divider> -->
       </div>
       <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
-    </template>
+    </div>
   </div>
 </template>
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
+import { storeToRefs } from 'pinia';
+
 export default {
   name: 'ChatBody',
   components: {
@@ -24,11 +29,11 @@ export default {
     NButton,
     NSpace,
   },
-  props: ['messages'],
   data() {
     return {
       message: null,
       prevMessage: null,
+      messages: [],
     };
   },
   computed: {
@@ -44,6 +49,13 @@ export default {
         new Date(this.prevMessage?.created_at).toDateString()
       );
     },
+  },
+  setup() {
+    const messageStore = useMessageStore();
+    const { messages } = storeToRefs(messageStore);
+    return {
+      messages
+    };
   },
   methods: {
     setMessage(message) {
