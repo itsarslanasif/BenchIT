@@ -1,5 +1,6 @@
 class Api::V1::ChannelsController < Api::ApiController
-  before_action :set_channel, only: [:show, :destroy, :update]
+  before_action :set_channel, only: %i[show destroy update]
+
   def index
     current_user = User.first
     render json: current_user.bench_channels
@@ -43,16 +44,12 @@ class Api::V1::ChannelsController < Api::ApiController
       end
       render json: message_data
     else
-      render json: { json: "no data found", status: :unprocessable_entity }
+      render json: { message: 'no data found', status: :unprocessable_entity }
     end
   end
 
   def destroy
-    if @channel.destroy
-      render json: { json: 'Channel was successfully deleted.'}
-    else
-      render json: { json: @channel.errors, status: :unprocessable_entity }
-    end
+    render json: @channel.destroy ? { message: 'Channel was successfully deleted.'} : { message: @channel.errors, status: :unprocessable_entity }
   end
 
   private

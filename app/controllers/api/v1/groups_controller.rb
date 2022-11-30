@@ -1,5 +1,6 @@
 class Api::V1::GroupsController < Api::ApiController
-  before_action :set_group, only: [:show]
+  before_action :set_group, only: %i[show]
+
   def index
     current_user = User.first
     render json: current_user.groups
@@ -43,15 +44,16 @@ class Api::V1::GroupsController < Api::ApiController
       end
       render json: message_data
     else
-      render json: { json: "nooo", status: :unprocessable_entity }
+      render json: { message: 'nooo', status: :unprocessable_entity }
     end
   end
 
   private
+
   def set_group
     @group = Group.find_by_id(params[:id])
     return if @group.present?
 
-    render json: { json: @group.errors, status: :unprocessable_entity }
+    render json: { message: @group.errors, status: :unprocessable_entity }
   end
 end

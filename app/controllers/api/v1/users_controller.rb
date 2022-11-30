@@ -1,5 +1,5 @@
 class Api::V1::UsersController < Api::ApiController
-  before_action :set_user, only: [:show]
+  before_action :set_user, only: %i[show]
 
   def index
     @users = User.all
@@ -8,9 +8,9 @@ class Api::V1::UsersController < Api::ApiController
 
   def show
     current_user = User.first
-    @conversation = BenchConversation.where(conversationable_type: "User", sender_id: current_user, conversationable_id: @receiver.id).or(BenchConversation.where(conversationable_type: "User", sender_id: @receiver.id, conversationable_id: current_user)).last
+    @conversation = BenchConversation.where(conversationable_type: 'User', sender_id: current_user, conversationable_id: @receiver.id).or(BenchConversation.where(conversationable_type: "User", sender_id: @receiver.id, conversationable_id: current_user)).last
     if @conversation.nil?
-      @conversation = BenchConversation.create(conversationable_type: "User",conversationable_id: @receiver.id, sender_id: current_user.id)
+      @conversation = BenchConversation.create(conversationable_type: 'User',conversationable_id: @receiver.id, sender_id: current_user.id)
     end
     @messages = @conversation.conversation_messages
     message_data = []
@@ -54,6 +54,6 @@ class Api::V1::UsersController < Api::ApiController
     @receiver = User.find_by_id(params[:id])
     return if @receiver.present?
 
-    render json: { json: @receiver.errors, status: :unprocessable_entity }
+    render json: { message: @receiver.errors, status: :unprocessable_entity }
   end
 end
