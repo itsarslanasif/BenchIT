@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         resources :groups, only: [:index, :show]
         resources :users, only: [:index, :show]
         resources :conversation_messages, only: [:create, :destroy]
+        resources :favourites, only: [:create, :destroy]
 
         resources :bench_channels, only: %i[create] do
           member do
