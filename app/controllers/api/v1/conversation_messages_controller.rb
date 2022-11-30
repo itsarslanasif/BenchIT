@@ -4,28 +4,19 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def create
     @message = ConversationMessage.new(conversation_messages_params)
-    @message.bench_conversation_id = @bench_conversation_id
-    if @message.save
-      render json: { status: :ok, message: 'Success' }
-    else
-      render json: { message: @message.errors, status: :unprocessable_entity }
-    end
+    @message.bench_conversation_id = @bench_conversation.id
+    response = @message.save ? { message: 'Message sent.' } : { message: @message.errors, status: :unprocessable_entity }
+    render json: response
   end
 
   def destroy
-    if @message.destroy
-      render json: { message: 'Message was successfully deleted.'}
-    else
-      render json: { message: @message.errors, status: :unprocessable_entity }
-    end
+    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
   end
 
   private
 
   def set_message
-    @message = ConversationMessage.find_by_id(params[:id])
-    return if @message.present?
-    render json: { message: @message.errors, status: :unprocessable_entity }
+    @message = ConversationMessage.find(params[:id])
   end
 
   def conversation_messages_params
@@ -33,22 +24,17 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def fetch_conversation
-    type = params[:conversation_type]
-    id = params[:conversation_id]
-    case type
-    when 'channels'
-      channel = BenchChannel.find_by_id(id)
-      @bench_conversation_id = channel.bench_conversation.id
-    when 'groups'
-      @bench_conversation_id = Group.find_by_id(id).bench_conversation.id
-    when 'users'
-      sender_id = params[:sender_id]
-      conversation = BenchConversation.user_to_user_conversation(sender_id,id).last
-      conversation = BenchConversation.user_to_user_conversation(id,sender_id).last if conversation.nil?
-      @bench_conversation_id = conversation.id
-    else
-      render json: { message: 'wrong type', status: :unprocessable_entity }
-    end
-  end
+    conversation_id = params[:conversation_id]
 
+    @bench_conversation = case params[:conversation_type]
+                          when 'channels'
+                            BenchChannel.find_by(id: conversation_id)&.bench_conversation
+                          when 'groups'
+                            Group.find_by(id: conversation_id)&.bench_conversation
+                          when 'users'
+                            BenchConversation.user_to_user_conversation(params[:sender_id], conversation_id)
+                          end
+
+    render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?
+  end
 end

@@ -1,7 +1,7 @@
 class ConversationMessage < ApplicationRecord
   belongs_to :bench_conversation
   belongs_to :user, foreign_key: :sender_id, inverse_of: :conversation_messages
-  after_commit :message_creation
+  after_commit :broadcast_message
 
   has_many_attached :message_attachments, dependent: :purge_later
 
@@ -11,7 +11,7 @@ class ConversationMessage < ApplicationRecord
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
-  def message_creation
+  def broadcast_message
     response = {
       id: self.id,
       content: self.content,

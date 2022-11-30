@@ -8,13 +8,15 @@ class Api::V1::UsersController < Api::ApiController
 
   def show
     current_user = User.first
-    @conversation = BenchConversation.where(conversationable_type: 'User', sender_id: current_user, conversationable_id: @receiver.id).or(BenchConversation.where(conversationable_type: "User", sender_id: @receiver.id, conversationable_id: current_user)).last
-    if @conversation.nil?
-      @conversation = BenchConversation.create(conversationable_type: 'User',conversationable_id: @receiver.id, sender_id: current_user.id)
+    @conversation = BenchConversation.user_to_user_conversation(current_user.id, @receiver.id)
+
+    if @conversation.blank?
+      @conversation = BenchConversation.create(conversationable_type: 'User', conversationable_id: @receiver.id, sender_id: current_user.id)
     end
+
     @messages = @conversation.conversation_messages
     message_data = []
-    if @messages.empty?
+    if @messages.blank?
       response = {
         id: 0,
         receiver_name: @receiver.name,

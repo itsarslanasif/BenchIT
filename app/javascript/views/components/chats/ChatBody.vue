@@ -29,22 +29,20 @@ export default {
   },
   data() {
     return {
+      messages: [],
       message: null,
       prevMessage: null,
-      messages: [],
     };
   },
   computed: {
     isToday() {
       return (
-        new Date(this.message?.created_at).toDateString() ===
-        new Date().toDateString()
+        new Date(this.message?.created_at).toDateString() === new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.created_at).toDateString() ===
-        new Date(this.prevMessage?.created_at).toDateString()
+        new Date(this.message?.created_at).toDateString() === new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },

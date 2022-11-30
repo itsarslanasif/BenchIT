@@ -8,20 +8,20 @@ let channel = null;
 
 function Cable() {}
 
-Cable.prototype.on = function (channel, callback) {
+Cable.prototype.on = (channel, callback) => {
   return emitter.on(channel, callback);
 };
 
-Cable.prototype.send = function (message) {
+Cable.prototype.send = (message) => {
   channel.send({ message: message });
 };
 
-Cable.prototype.install = function (app) {
+Cable.prototype.install = (app) => {
   app.plugin = this;
   app.config.globalProperties.$cable = this;
 };
 
-export function createCable(options) {
+export const createCable = (options) => {
   channel = consumer.subscriptions.create(
     { channel: options.channel, id: options.id, type: options.type },
     {
