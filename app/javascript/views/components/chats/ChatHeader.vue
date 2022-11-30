@@ -45,6 +45,7 @@
   </div>
   <div class="header">
     <div class="headerContainer">
+      <pinnedConversation > </pinnedConversation>
       <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
       <p class="bookmarkText" v-for="bm in bookmarks" :key="bm.name">
         <BookmarkShowVue :data="bm" @clicked="onClickChild"> </BookmarkShowVue>
@@ -57,8 +58,10 @@
 import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
 import BookmarkPopUpVue from '../bookmark/popup.vue';
 import BookmarkShowVue from '../bookmark/bookmarkShow.vue';
+import pinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import Spinner from '../../shared/spinner.vue';
 import axios from '../../../modules/axios';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 export default {
   name: 'ChatHeader',
   components: {
@@ -69,8 +72,13 @@ export default {
     NSpace,
     NSpin,
     Spinner,
+    pinnedConversation,
   },
   props: ['chat'],
+  setup() {
+    const pinnedConversationStore = usePinnedConversation();
+    return {pinnedConversationStore };
+  },
   data() {
     return {
       bookmarks: [],
@@ -126,7 +134,6 @@ export default {
   overflow-y: hidden;
   text-overflow: ellipsis;
   scrollbar-color: dark;
-  padding: 5px;
 }
 .bookmarkText {
   color: rgb(99, 98, 98);

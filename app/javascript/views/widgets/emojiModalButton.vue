@@ -2,6 +2,7 @@
   <n-popover style="backgroundcolor: #1e293b" trigger="hover">
     <template #trigger>
       <template v-if="actionText == 'More actions'">
+
         <n-dropdown
           placement="bottom-start"
           trigger="click"
@@ -34,14 +35,12 @@ import { NPopover, NDropdown } from 'naive-ui';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
-  props: ['icon', 'emoji', 'actionText', 'action'],
+  props: ['icon', 'emoji', 'actionText', 'action','handleSelect'],
   data() {
     return {
       options,
-      handleSelect(key) {
-        message.info(String(key));
-      },
     };
   },
 };
 </script>
+

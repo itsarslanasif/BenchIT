@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a class="AddBookmarkButton bg-primary hover:bg-primaryHover" href="#popup1">Add Bookmark</a>
+    <a class="AddBookmarkButton  bg-primary hover:bg-primaryHover" href="#popup1">Add Bookmark</a>
   </div>
 
   <div id="popup1" class="overlay">
@@ -76,12 +76,13 @@ h1 {
 .AddBookmarkButton {
   margin: 0px;
   color: rgb(255, 255, 255);
-  padding: 10px;
+  padding: 3px;
   overflow: auto;
   border-radius: 10px;
   width: max-content;
   display: inline-block;
   margin-right: 5px;
+  font-size: xx-small;
   /* background-color: rgb(4, 4, 4); */
   border: 1px solid rgb(117, 116, 116);
 }
