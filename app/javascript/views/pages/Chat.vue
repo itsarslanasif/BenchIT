@@ -41,11 +41,11 @@
             v-model="message"
             api-key="{{process.env.VITE_EDITOR_API}}"
             :init="{
-              menubar: false,
+              menubar: true,
               statusbar: false,
               plugins: 'lists link code codesample',
               toolbar:
-                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code codesample ',
+                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code codesample  myCustomToolbarButton ',
               codesample_languages: [none],
 
               formats: {
@@ -63,7 +63,7 @@
                     'border-bottom':
                       '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
                     'border-radius': '3px',
-                    'font-size': '12px',
+                    'font-size': '10px',
                     'font-variant-ligatures': 'none',
                     'line-height': '1.5',
                     'margin-bottom': '14px',
