@@ -13,7 +13,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :bench_channels, only: %i[create] do
+        resources :bench_channels, only: %i[create index] do
           member do
             post :join_public_channel
             delete :leave
