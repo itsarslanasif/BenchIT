@@ -43,20 +43,32 @@
             :init="{
               menubar: false,
               statusbar: false,
-              plugins: 'lists link code',
+              plugins: 'lists link code codesample',
               toolbar:
-                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
+                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code codesample ',
               codesample_languages: [none],
               formats: {
                 code: {
-                  inline: 'false',
                   selector: 'p',
                   styles: {
-                    'background-color': '#D3D3D3',
+                    background:
+                      'rgba(var(--sk_foreground_min_solid,248,248,248),1)',
+                    'border-left':
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
+                    'border-right':
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
+                    'border-top':
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
+                    'border-bottom':
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
                     'border-radius': '3px',
-                    padding: '5px',
-                    'left-padding': '10px',
-                    margin: '0',
+                    'font-size': '12px',
+                    'font-variant-ligatures': 'none',
+                    'line-height': '1.5',
+                    'margin-bottom': '14px',
+                    'padding-left': '8px',
+                    'padding-right': '8px',
+                    position: 'relative',
                     'font-family': 'monospace',
                   },
                 },
@@ -240,5 +252,12 @@ export default {
   bottom: 0;
   float: left;
   width: 100%;
+}
+.mce-i-codesample:before {
+    content: "\e603";
+}
+.mce-i-codesample {
+    color:black!important;
+    background-image: fa-file-code ;
 }
 </style>
