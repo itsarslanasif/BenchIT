@@ -13,7 +13,11 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :bench_channels, only: %i[create] do
+        resources :groups, only: %i[index show]
+        resources :users, only: %i[index show]
+        resources :conversation_messages, only: %i[create destroy]
+
+        resources :bench_channels, only: %i[create index show destroy] do
           member do
             delete :leave
           end
