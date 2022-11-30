@@ -1,88 +1,98 @@
 <template>
-  <div
-    class="messageWrapper"
-    @mouseover="emojiModalStatus = true"
-    @mouseleave="emojiModalStatus = false"
-  >
-    <n-avatar
-      v-show="!isSameUser"
-      class="avatar"
-      size="large"
-      :src="currMessage.sender.avatar"
-    />
-    <span class="message ">
-      <div>
-        <span class="messageInfo">
-          <p v-show="!isSameUser" class="name">
-            <b>{{ currMessage.sender.name }}</b>
-          </p>
-          <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
-            {{ isSameUser ? timeWithoutAMPM : time }}
-          </p>
+  <div>
+    <div v-if="pinnedConversationStore.isPinned(currMessage)">
+      <span
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+        >&#128204; Pinned by {{ currMessage.pinned_by.name }}
+      </span>
+    </div>
+    <div
+      class="messageWrapper"
+      :class="{
+        messageContentpinned: pinnedConversationStore.isPinned(currMessage),
+      }"
+      @mouseover="emojiModalStatus = true"
+      @mouseleave="emojiModalStatus = false"
+    >
+      <n-avatar
+        v-show="!isSameUser"
+        class="avatar"
+        size="large"
+        :src="currMessage.sender.avatar"
+      />
+      <span class="message">
+        <div>
+          <span class="messageInfo">
+            <p v-show="!isSameUser" class="name">
+              <b>{{ currMessage.sender.name }}</b>
+            </p>
+            <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
+              {{ isSameUser ? timeWithoutAMPM : time }}
+            </p>
+            <span
+              v-show="isSameUser"
+              class="messageContent"
+              v-html="currMessage.content"
+            />
+          </span>
           <span
-            v-show="isSameUser"
+            v-show="!isSameUser"
             class="messageContent"
             v-html="currMessage.content"
           />
-        </span>
-        <span
-          v-show="!isSameUser"
-          class="messageContent"
-          v-html="currMessage.content"
-        />
-      </div>
-      <template v-for="emoji in allReactions" :key="emoji.id">
-        <span class="emoji">{{ emoji.i }}</span>
-      </template>
-      <div
-        v-if="currMessage?.replies"
-        @click="toggleThread"
-        class="text-info text-xs cursor-pointer hover:underline"
-      >
-        {{ currMessage.replies?.length }} replies...
-      </div>
-      <div
-        class="emojiModalToggle"
-        v-if="emojiModalStatus || openEmojiModal || showOptions"
-      >
-        <template v-for="emoji in topReactions" :key="emoji">
-          <EmojiModalButton
-            :emoji="emoji"
-            :actionText="emoji.n"
-            :action="addReaction"
-          />
+        </div>
+        <template v-for="emoji in allReactions" :key="emoji.id">
+          <span class="emoji">{{ emoji.i }}</span>
         </template>
-        <EmojiModalButton
-          icon="fa-solid fa-icons"
-          actionText="Find another reaction"
-          :action="setEmojiModal"
-        />
+        <div
+          v-if="currMessage?.replies"
+          @click="toggleThread"
+          class="text-info text-xs cursor-pointer hover:underline"
+        >
+          {{ currMessage.replies?.length }} replies...
+        </div>
+        <div
+          class="emojiModalToggle"
+          v-if="emojiModalStatus || openEmojiModal || showOptions"
+        >
+          <template v-for="emoji in topReactions" :key="emoji">
+            <EmojiModalButton
+              :emoji="emoji"
+              :actionText="emoji.n"
+              :action="addReaction"
+            />
+          </template>
+          <EmojiModalButton
+            icon="fa-solid fa-icons"
+            actionText="Find another reaction"
+            :action="setEmojiModal"
+          />
 
-        <EmojiModalButton
-          v-if="!currMessage.parent_message_id"
-          icon="fa-solid fa-comment-dots"
-          actionText="Reply in thread"
-          :action="toggleThread"
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-share"
-          actionText="Share message..."
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-bookmark"
-          actionText="Add to saved items"
-        />
-        <EmojiModalButton
-          icon="fa-solid fa-ellipsis-vertical"
-          actionText="More actions"
-          pinned="true"
-          :handleSelect="handleSelect"
-          :action="setOptionsModal"
-        />
-      </div>
-    </span>
+          <EmojiModalButton
+            v-if="!currMessage.parent_message_id"
+            icon="fa-solid fa-comment-dots"
+            actionText="Reply in thread"
+            :action="toggleThread"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-share"
+            actionText="Share message..."
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-bookmark"
+            actionText="Add to saved items"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-ellipsis-vertical"
+            actionText="More actions"
+            pinned="true"
+            :handleSelect="handleSelect"
+            :action="setOptionsModal"
+          />
+        </div>
+      </span>
+    </div>
   </div>
-
   <div v-if="openEmojiModal" class="emojiModal">
     <EmojiPicker :addReaction="addReaction" />
   </div>
@@ -184,7 +194,9 @@ p {
 .messageContent {
   @apply text-black-800 text-xs flex-wrap;
 }
-
+.messageContentpinned {
+  @apply bg-yellow-100;
+}
 .messageWrapper {
   @apply items-center flex p-3 relative;
 }

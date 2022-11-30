@@ -62,6 +62,7 @@ import pinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import Spinner from '../../shared/spinner.vue';
 import axios from '../../../modules/axios';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import pinnedConversationModelVue from '../pinnedConversation/pinnedConversationModel.vue';
 export default {
   name: 'ChatHeader',
   components: {
@@ -73,6 +74,7 @@ export default {
     NSpin,
     Spinner,
     pinnedConversation,
+    pinnedConversationModelVue,
   },
   props: ['chat'],
   setup() {

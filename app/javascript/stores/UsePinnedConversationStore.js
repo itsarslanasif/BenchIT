@@ -5,6 +5,7 @@ import {
 export const usePinnedConversation = defineStore('pinnedConversationStore', {
   state: () => ({
     pinnedConversation: [],
+    pinToggle :false,
   }),
 
   getters: {
@@ -13,6 +14,9 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     },
     getCount(){
       return this.pinnedConversation.length;
+    },
+    getPinToggle(){
+      return this.pinToggle;
     },
   },
 
@@ -30,6 +34,8 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
         return item !== message
       })
     },
-
+    togglePin(){
+      this.pinToggle= !this.pinToggle;
+    }
   },
 });

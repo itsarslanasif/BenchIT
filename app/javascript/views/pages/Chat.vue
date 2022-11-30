@@ -4,6 +4,7 @@
       <ChatHeader :chat="chat" />
     </div>
     <div class="h-1/2 break-words">
+      <pinnedConversation > </pinnedConversation>
       <ChatBody />
     </div>
     <div class="h-3/4">
@@ -48,6 +49,7 @@ import chats from '../../modules/data/chats';
 import ChatBody from '../components/chats/ChatBody.vue';
 import Editor from '@tinymce/tinymce-vue';
 import { CONSTANTS } from '../../assets/constants';
+import pinnedConversation from '../components/pinnedConversation/pinnedConversationModel.vue'
 
 export default {
   name: 'Chat',
@@ -55,6 +57,7 @@ export default {
     ChatHeader,
     ChatBody,
     editor: Editor,
+    pinnedConversation,
   },
   data() {
     return {
