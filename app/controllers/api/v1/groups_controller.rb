@@ -51,9 +51,6 @@ class Api::V1::GroupsController < Api::ApiController
   private
 
   def set_group
-    @group = Group.find_by_id(params[:id])
-    return if @group.present?
-
-    render json: { message: @group.errors, status: :unprocessable_entity }
+    @group = Group.find(params[:id])
   end
 end

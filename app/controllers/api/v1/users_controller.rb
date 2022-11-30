@@ -51,9 +51,6 @@ class Api::V1::UsersController < Api::ApiController
   private
 
   def set_user
-    @receiver = User.find_by_id(params[:id])
-    return if @receiver.present?
-
-    render json: { message: @receiver.errors, status: :unprocessable_entity }
+    @receiver = User.find(params[:id])
   end
 end

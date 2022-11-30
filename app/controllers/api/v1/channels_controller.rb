@@ -55,8 +55,7 @@ class Api::V1::ChannelsController < Api::ApiController
   private
 
   def set_channel
-    @channel = BenchChannel.find_by_id(params[:id])
-    return if @channel.present?
+    @channel = BenchChannel.find(params[:id])
   end
 
   def bench_channel_params
