@@ -17,4 +17,18 @@ export const CONSTANTS = {
   REASON_FOR_REQUEST: 'Reason for Request (Optional)',
   TO: 'To',
   REQUESTING_INVITATION: 'Requesting invitations to BenchIT',
+  PROJECT_NAME: 'Bench IT',
+  SIGN_IN_TO_BENCH_IT: 'Sign in to Bench IT',
+  INSTRUCTION_ON_SIGN_IN_PAGE_1: 'We suggest using the ',
+  INSTRUCTION_ON_SIGN_IN_PAGE_2: 'email address that you use at work.',
+  EMAIL_PLACEHOLDER: 'name@work-email.com',
+  SIGN_IN_WITH_EMAIL: 'Sign in with Email',
+  OR: 'OR',
+  CODE_FOR_PASSWORD_FREE_SIGN_IN:
+    'We’ll email you a magic code for a password-free sign in. Or you can',
+  SIGN_IN_MANUALLY_INSTEAD: 'sign in manually instead.',
+  CONTINUE_WITH_APPLE: 'Continue with Apple',
+  CONTINUE_WITH_GOOGLE: 'Continue with Google',
+  NEW_TO_BENCH_IT: 'New to Bench IT?',
+  CREATE_YOUR_ACCOUNT: 'Create your account'
 };

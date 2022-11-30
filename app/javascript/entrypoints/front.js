@@ -20,6 +20,10 @@ import {
   faEllipsisVertical,
   faFaceSmile,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGoogle,
+  faApple,
+} from '@fortawesome/free-brands-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 const Cable = createCable({ channel: 'ChatChannel' });
@@ -36,7 +40,9 @@ library.add(
   faCommentDots,
   faBookmark,
   faEllipsisVertical,
-  faFaceSmile
+  faFaceSmile,
+  faGoogle,
+  faApple,
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
