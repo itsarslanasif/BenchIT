@@ -4,7 +4,7 @@
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
         >&#128204; {{ $t('pinconversation.pinnedby') }}
-        {{ currMessage.pinned_by.name }}
+        you
       </span>
     </div>
     <div
@@ -15,17 +15,17 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <n-avatar
+      <!-- <n-avatar
         v-show="!isSameUser"
         class="avatar"
         size="large"
         :src="currMessage.sender.avatar"
-      />
+      /> -->
       <span class="message">
         <div>
           <span class="messageInfo">
             <p v-show="!isSameUser" class="name">
-              <b>{{ currMessage.sender.name }}</b>
+              <b>{{ currMessage.sender_name }}</b>
             </p>
             <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
               {{ isSameUser ? timeWithoutAMPM : time }}
@@ -144,16 +144,18 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.currMessage.sentAt).getTime()).format(
+      return moment(new Date(this.currMessage.created_at).getTime()).format(
         'h:mm A'
       );
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.currMessage.sentAt).getTime()).format('h:mm');
+      return moment(new Date(this.currMessage.created_at).getTime()).format(
+        'h:mm'
+      );
     },
     isSameUser() {
-      if (!this.prevMessage) return false;
-      return this.currMessage?.sender.id === this.prevMessage?.sender.id;
+      if (this.oldMessage === undefined) return false;
+      return this.currMessage?.sender_id === this.oldMessage?.sender_id;
     },
   },
   methods: {
@@ -172,6 +174,12 @@ export default {
           this.pinnedConversationStore.pinMessage(this.currMessage);
         } else {
           this.pinnedConversationStore.unPinMessage(this.currMessage);
+          if (
+            this.pinnedConversationStore.getCount == 0 &&
+            this.pinnedConversationStore.getPinToggle
+          ) {
+            this.pinnedConversationStore.togglePin();
+          }
         }
       }
     },

@@ -1,9 +1,9 @@
 <template>
   <div class="">
-    <div>
-      <ChatHeader :chat="chat" />
+    <div v-if="chat">
+      <ChatHeader />
     </div>
-    <div class="h-1/2 break-words">
+    <div v-if="messages" class="h-1/2 break-words">
       <pinnedConversation> </pinnedConversation>
       <ChatBody />
     </div>
@@ -51,6 +51,7 @@
           />
         </div>
         <button
+          @click="sendMessage"
           class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover"
         >
           {{ $t(CONSTANTS.SEND) }}
@@ -64,23 +65,28 @@
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import ChatHeader from '../components/chats/ChatHeader.vue';
-import chats from '../../modules/data/chats';
+import { NInput, NSpace } from 'naive-ui';
 import ChatBody from '../components/chats/ChatBody.vue';
 import Editor from '@tinymce/tinymce-vue';
 import { CONSTANTS } from '../../assets/constants';
 import pinnedConversation from '../components/pinnedConversation/pinnedConversationModel.vue';
+import { createCable } from '@/plugins/cable';
+import { conversation } from '../../modules/axios/editorapi';
+import { useMessageStore } from '../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   name: 'Chat',
   components: {
     ChatHeader,
     ChatBody,
+    NInput,
+    NSpace,
     editor: Editor,
     pinnedConversation,
   },
   data() {
     return {
-      chat: chats[1],
       message: '',
       plainText: '',
       hasMentionCommand: false,
@@ -90,9 +96,39 @@ export default {
       allUsers: [],
       allChannels: [],
       CONSTANTS: CONSTANTS,
+      chat: {},
+      messages: [],
+      Cable: null,
+      conversation_type: null,
+      id: null,
     };
   },
-
+  setup() {
+    function getIndexByParams(param) {
+      return window.location.pathname.split('/')[param];
+    }
+    const profileStore = useProfileStore();
+    const channelStore = useChannelStore();
+    const messageStore = useMessageStore();
+    const conversation_type = getIndexByParams(1)
+    const id = getIndexByParams(2)
+    messageStore.index(conversation_type, id);
+    const { messages } = storeToRefs(messageStore);
+    return {
+      allUsers: Object.values(profileStore.getUsers),
+      allChannels: Object.values(channelStore.getChannels),
+      messages,
+      conversation_type,
+      id
+    };
+  },
+  mounted() {
+    this.Cable = createCable({
+      channel: 'ChatChannel',
+      id: this.id,
+      type: this.conversation_type,
+    });
+  },
   watch: {
     message() {
       this.plainText = this.message.replace(/<[^>]+>/g, '');
@@ -108,7 +144,37 @@ export default {
     },
   },
 
+  updated() {
+    this.Cable.on('chat', data => {
+      if (this.conversation_type === 'channels') {
+        data.message.channel_name = this.messages[0].channel_name;
+      } else if (this.conversation_type === 'groups') {
+        data.message.group_id = this.messages[0].group_id;
+      } else {
+        data.message.receiver_name = this.messages[0].receiver_name;
+      }
+      const findMessage = this.messages.find(m => m.id === data.message.id);
+
+      if (findMessage == undefined) {
+        this.messages.push(data.message);
+        this.message = '';
+      }
+    });
+  },
+
   methods: {
+    sendMessage() {
+      const payload = {
+        sender_id: 1,
+        content: this.message.replace(/<[^>]+>/g, ''),
+        is_threaded: false,
+        parent_message_id: null,
+        conversation_type: this.conversation_type,
+        conversation_id: this.id,
+      };
+      conversation(payload);
+    },
+
     enableMention() {
       this.hasMentionCommand = true;
       this.showMentions = true;
@@ -150,17 +216,9 @@ export default {
       this.message = this.message.replace(/<[^>]+>/g, '');
     },
   },
-
-  setup() {
-    const profileStore = useProfileStore();
-    const channelStore = useChannelStore();
-    return {
-      allUsers: Object.values(profileStore.getUsers),
-      allChannels: Object.values(channelStore.getChannels),
-    };
-  },
 };
 </script>
+
 <style>
 .editor {
   bottom: 0;
