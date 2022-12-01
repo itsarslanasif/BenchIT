@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import axios from '../../../modules/axios';
 import WorkspaceInfo from './WorkspaceInfo.vue';
 import CompanyInfo from './CompanyInfo.vue';
 import WorkspaceURL from './WorkspaceURL.vue';
 import { WorkspaceStore } from '../../../stores/workspace_store';
+import { createWorkspace } from '../../../api/workspaces/workspacesApi';
 import './style.css';
 
 export default {
@@ -32,16 +32,9 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       if (this.workspaceStore.activePhase === 3) {
-        axios
-          .post('/workspaces', this.workspaceStore.workspace)
-          .then(response => {
-            return response.data;
-          })
-          .catch(error => {
-            return error;
-          });
+        await createWorkspace(this.workspaceStore.workspace);
       } else if (
         this.workspaceStore.workspace.capacity <= 0 ||
         this.workspaceStore.workspace.capacity > 5000
