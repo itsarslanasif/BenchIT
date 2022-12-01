@@ -17,5 +17,4 @@ class Api::V1::GroupsController < Api::ApiController
     current_user = User.first
     render json: { message: 'User is not part of this group', status: :not_found } if !current_user.group_ids.include?(@group.id)
   end
-
 end
