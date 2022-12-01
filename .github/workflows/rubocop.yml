@@ -1,0 +1,13 @@
+name: "Rubocop Checks"
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+jobs:
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Rubocop
+        run: bin/rubocop --parallel
