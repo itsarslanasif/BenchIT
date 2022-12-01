@@ -5,7 +5,7 @@ class ChatChannel < ApplicationCable::Channel
               when 'users'
                 current_user = User.first
                 conversation = BenchConversation.user_to_user_conversation(params[:id], current_user.id)
-                "ChatChannelUser#{conversation.conversationable_id}"
+                "ChatChannelUser#{conversation.conversationable_id}#{conversation.sender_id}"
               when 'groups'
                 "ChatChannelGroup#{params[:id]}"
               when 'channels'
