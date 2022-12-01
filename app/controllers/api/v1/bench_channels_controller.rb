@@ -1,7 +1,7 @@
 class Api::V1::BenchChannelsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[leave show destroy make_private]
+  before_action :set_bench_channel, except: %i[index create]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
-  before_action :set_bench_channel_private, only: %i[make_private]
+  before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
     current_user = User.first
@@ -77,14 +77,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
-  def make_private
-    if @bench_channel.save
-      render json: {
-        message: "Successfully make ##{@bench_channel.name} private. Now, it can only be viewed or joined by invitation."
-      }, status: :ok
-    else
-      render json: { message: 'Error while making channel private!', errors: @bench_channel.errors }, status: :unprocessable_entity
-    end
+  def update
+    return if @bench_channel.update(bench_channel_params)
+
+    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   private
@@ -121,7 +117,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
   end
 
-  def set_bench_channel_private
-    @bench_channel.is_private = true
+  def bench_channel_cannot_be_public_again
+    return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
+
+    render json: { message: "You cannot change ##{@bench_channel.name} to public again." }, status: :unprocessable_entity
   end
 end
