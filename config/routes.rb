@@ -15,7 +15,14 @@ Rails.application.routes.draw do
 
         resources :groups, only: %i[index show]
         resources :users, only: %i[index show]
-        resources :conversation_messages, only: %i[create destroy]
+        resources :conversation_messages, only: %i[create destroy] do
+          collection do
+            get :index_saved_messages
+          end
+          member do
+            post :save_message
+          end
+        end
 
         resources :bench_channels, only: %i[create index show destroy] do
           member do

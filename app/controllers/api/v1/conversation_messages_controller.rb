@@ -1,6 +1,7 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, only: %i[destroy]
+  before_action :set_profile, only: [:index_saved_messages, :save_message]
 
   def create
     @message = ConversationMessage.new(conversation_messages_params)
@@ -11,6 +12,26 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def destroy
     render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
+  end
+
+  def index_saved_messages
+    @saved_items = @profile.saved_items
+    render "api/v1/saved_items/index"
+  end
+
+  def save_message
+    @saved_item = @profile.saved_items.find_by(conversation_message_id:params[:id])
+    if @saved_item
+      @saved_item.destroy
+      render json: { json: 'removed from saved items'}
+    else
+      @saved_item = @profile.saved_items.new(conversation_message_id:params[:id])
+      if @saved_item.save
+        render json: { json: 'added to saved items'}
+      else
+        render json: @saved_item.errors
+      end
+    end
   end
 
   private
@@ -36,5 +57,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           end
 
     render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?
+  end
+
+  def set_profile
+    @profile = current_user.profiles.find_by(workspace_id:Current.workspace)
+    render json: { message: 'profile not found' }, status: :not_found if @profile.nil?
   end
 end
