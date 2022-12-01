@@ -18,17 +18,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def show
-    current_user = User.first
-    if current_user.bench_channel_ids.include?(@bench_channel.id)
       @messages = @bench_channel.bench_conversation.conversation_messages
-      if @messages.empty?
-        render status: 200, json: {message: 'chat does not exist',status_code:"1"}
-      else
-        render "api/v1/bench_channels/show"
-      end
-    else
-      render json: { json: "no data found", status: :unprocessable_entity }
-    end
   end
 
   def destroy
@@ -58,9 +48,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
+    current_user = User.first
     @bench_channel = BenchChannel.find_by(id: params[:id])
-
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
+    render json: { json: 'user is not part of this channel', status: :not_found } if !current_user.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_channel_participant
@@ -76,4 +67,5 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
     render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
   end
+
 end
