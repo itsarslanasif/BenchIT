@@ -3,14 +3,14 @@
     <template #trigger>
       <template v-if="actionText == 'More actions'">
         <n-dropdown
+          class="rounded-md border border-slate-100"
           placement="bottom-start"
-          trigger="click"
           size="medium"
+          trigger="click"
           :message="message"
           :options="options"
-          @select="handleSelect($event, message)"
           @mouseleave="action"
-          class="rounded-md border border-slate-100"
+          @select="handleSelect($event, message)"
         >
           <span @click="action" class="p-1 hover:bg-slate-100 rounded">
             <font-awesome-icon :icon="icon" />
@@ -42,14 +42,12 @@ export default {
       options,
       handleSelect(key, message) {
         if (key === 'copy-link') {
-          var TempText = document.createElement('input');
-          TempText.value = `${import.meta.env.VITE_APP_SERVER_URL}channels/${
-            message.bench_conversation_id}/${message.id
-          }`;
-          document.body.appendChild(TempText);
-          TempText.select();
+          let tempText = document.createElement('input');
+          tempText.value = `${import.meta.env.VITE_APP_SERVER_URL}channels/${message.bench_conversation_id}/${message.id}`;
+          document.body.appendChild(tempText);
+          tempText.select();
           document.execCommand('copy');
-          document.body.removeChild(TempText);
+          document.body.removeChild(tempText);
         }
       },
     };

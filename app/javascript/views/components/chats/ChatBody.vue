@@ -1,18 +1,17 @@
 <template>
   <div class="overflow-auto chatBody">
-    <div v-for="message in messages" :key="message.id" :id="message.id"  >
+    <div v-for="message in messages" :key="message.id" :id="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-          <p class="text-gray-600">
-            {{
-              isToday ? 'Today' : new Date(message.created_at).toDateString()
-            }}
-          </p>
+        <p class="text-gray-600">
+          {{ isToday ? 'Today' : new Date(message.created_at).toDateString() }}
+        </p>
       </div>
       <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
     </div>
   </div>
 </template>
+
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
@@ -37,12 +36,14 @@ export default {
   computed: {
     isToday() {
       return (
-        new Date(this.message?.created_at).toDateString() === new Date().toDateString()
+        new Date(this.message?.created_at).toDateString() ===
+        new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.created_at).toDateString() === new Date(this.prevMessage?.created_at).toDateString()
+        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },
@@ -50,7 +51,7 @@ export default {
     const messageStore = useMessageStore();
     const { messages } = storeToRefs(messageStore);
     return {
-      messages
+      messages,
     };
   },
   methods: {
@@ -60,26 +61,28 @@ export default {
     },
   },
   updated() {
-    const message_id = this.$route.params.message_id
-    if(message_id){
-    const message = document.getElementById(message_id)
-    message.scrollIntoView()
-    message.classList.add('highlight')
+    const message_id = this.$route.params.message_id;
+    if (message_id) {
+      const message = document.getElementById(message_id);
+      message.scrollIntoView();
+      message.classList.add('highlight');
     }
-  }
+  },
 };
+
 </script>
 <style scoped>
 .chatBody {
   height: 57vh;
 }
-.highlight{
+
+.highlight {
   animation: background-fade 7s;
 }
-@keyframes background-fade {
-    0% {
-        background: rgba(253,245,221,255);
-    }
-}
 
+@keyframes background-fade {
+  0% {
+    background: rgba(253, 245, 221, 255);
+  }
+}
 </style>

@@ -1,10 +1,8 @@
 import { NIcon } from 'naive-ui'
-import { h, defineComponent } from 'vue'
-import {
-  RocketOutline as PollyIcon,
-  CardOutline as CardOutlineIcon,
-  PersonAddOutline as PersonAddIcon
-} from '@vicons/ionicons5'
+import { h,  } from 'vue'
+import { RocketOutline as PollyIcon, CardOutline as CardOutlineIcon, PersonAddOutline as PersonAddIcon } from '@vicons/ionicons5'
+import { CONSTANTS } from '../../assets/constants';
+
 const renderIcon = (icon) => {
   return () => {
     return h(NIcon, null, {
@@ -15,7 +13,7 @@ const renderIcon = (icon) => {
 
 export default [
   {
-    label: 'Turn off notifications for replies',
+    label: CONSTANTS.OFF_NOTIFICATIONS,
     key: 'turn-off-notifications-for-replies',
   },
   {
@@ -23,35 +21,35 @@ export default [
     key: 'd1',
   },
   {
-    label: 'Mark unread',
+    label: CONSTANTS.MARK_UNREAD,
     key: 'mark-unread',
   },
   {
-    label: 'Remind me about this',
+    label: CONSTANTS.REMIND_LATER,
     key: 'remind-me-about-this',
     children: [
       {
-        label: 'In 20 minutes',
+        label: CONSTANTS.TWENTY_MINUTES,
         key: 'in-20-minutes',
       },
       {
-        label: 'In 1 hour',
+        label: CONSTANTS.ONE_HOUR,
         key: 'in-1-hour',
       },
       {
-        label: 'In 3 hours',
+        label: CONSTANTS.THREE_HOURS,
         key: 'in-3-hours',
       },
       {
-        label: 'Tommorow',
+        label: CONSTANTS.TOMORROW,
         key: '8',
       },
       {
-        label: 'Next week',
+        label: CONSTANTS.NEXT_WEEK,
         key: 'tommorow',
       },
       {
-        label: 'Custom',
+        label: CONSTANTS.CUSTOM,
         key: 'custom',
       },
     ],
@@ -61,7 +59,7 @@ export default [
     key: 'd2',
   },
   {
-    label: 'Copy link',
+    label: CONSTANTS.COPY_LINK,
     key: 'copy-link',
   },
   {
@@ -69,7 +67,7 @@ export default [
     key: 'd3',
   },
   {
-    label: 'Pin to this conversation',
+    label: CONSTANTS.PIN_TO_CONVERSATION,
     key: 'pin-to-this-conversation',
   },
   {
@@ -77,11 +75,11 @@ export default [
     key: 'd4',
   },
   {
-    label: 'Edit message',
+    label: CONSTANTS.EDIT,
     key: 'edit-message',
   },
   {
-    label: 'Delete message',
+    label: CONSTANTS.DELETE,
     key: 'delete-message',
   },
   {
@@ -89,22 +87,22 @@ export default [
     key: 'd5',
   },
   {
-    label: 'Create a polly',
+    label: CONSTANTS.POLLY,
     key: 'create-a-polly',
     icon: renderIcon(PollyIcon)
   },
   {
-    label: 'Create card from message',
+    label: CONSTANTS.CARD_FROM_MESSAGE,
     key: 'create-card-from-message',
     icon: renderIcon(CardOutlineIcon)
   },
   {
-    label: 'Self assign as task',
+    label: CONSTANTS.ASSIGN_AS_TASK,
     key: 'self-assign-as-task',
     icon: renderIcon(PersonAddIcon)
   },
   {
-    label: 'More messages shortcuts...',
+    label: CONSTANTS.MORE_SHORTCUTS,
     key: 'more-shortcuts',
   },
 ];
