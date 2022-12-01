@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import axios from '../modules/axios/index';
 import { getMessageHistory } from '../modules/socket/messageHistory';
 
 export const useMessageStore = () => {

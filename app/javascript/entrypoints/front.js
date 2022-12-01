@@ -19,6 +19,9 @@ import {
   faBookmark,
   faEllipsisVertical,
   faFaceSmile,
+  faHashtag,
+  faUser,
+  faLock,
 } from '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
@@ -36,7 +39,10 @@ library.add(
   faCommentDots,
   faBookmark,
   faEllipsisVertical,
-  faFaceSmile
+  faFaceSmile,
+  faHashtag,
+  faUser,
+  faLock
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
