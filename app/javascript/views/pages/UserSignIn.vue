@@ -68,7 +68,6 @@
 </template>
 
 <script>
-import { CONSTANTS } from '../../assets/constants.js';
 import { NForm, NFormItem, NInput, NButton, NDivider } from 'naive-ui';
 import { userSignIn } from '../../api/user_sign_in/user_sign_in_api';
 export default {
@@ -76,7 +75,6 @@ export default {
   components: { NForm, NFormItem, NInput, NButton, NDivider },
   data() {
     return {
-      CONSTANTS: CONSTANTS,
       user: {
         email: '',
       },
