@@ -24,15 +24,7 @@
       </p>
     </div>
     <div
-      class="
-        absolute
-        bottom-0
-        text-sm text-white
-        ml-3
-        p-2
-        rounded-md
-        hover:bg-primaryHover
-      "
+      class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover"
     >
       {{ $t(CONSTANTS.SELECTED_CHANNELS) }}
     </div>
