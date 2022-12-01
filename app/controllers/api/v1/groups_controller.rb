@@ -10,39 +10,11 @@ class Api::V1::GroupsController < Api::ApiController
     current_user = User.first
     if current_user.group_ids.include?(@group.id)
       @messages = @group.bench_conversation.conversation_messages
-      message_data = []
       if @messages.empty?
-        response = {
-          id: 0,
-          group_id: @group.id,
-          content: nil,
-          is_threaded: false,
-          parent_message_id: nil,
-          sender_id: nil,
-          sender_name: nil,
-          bench_conversation_id: @group.bench_conversation.id,
-          created_at: nil,
-          updated_at: nil
-        }
-        message_data.push(response)
+        render status: 200, json: {message: 'chat does not exist',status_code:"1"}
       else
-        @messages.each do |message|
-          response = {
-            id: message.id,
-            group_id: @group.id,
-            content:message.content,
-            is_threaded:message.is_threaded,
-            parent_message_id:message.parent_message_id,
-            sender_id:message.sender_id,
-            sender_name:message.user.name,
-            bench_conversation_id: message.bench_conversation_id,
-            created_at: message.created_at,
-            updated_at: message.updated_at
-          }
-          message_data.push(response)
-        end
+        render "api/v1/bench_channels/show"
       end
-      render json: message_data
     else
       render json: { message: 'nooo', status: :unprocessable_entity }
     end
