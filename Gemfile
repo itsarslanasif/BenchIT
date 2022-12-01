@@ -4,6 +4,8 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 7.0.2'
 
 gem 'bootsnap', require: false
+gem 'brakeman'
+gem 'bundler-audit'
 gem 'devise'
 gem 'devise_invitable'
 gem 'dotenv-rails'
