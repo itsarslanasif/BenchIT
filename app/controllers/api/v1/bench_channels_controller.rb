@@ -63,7 +63,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     current_user = User.first
     @bench_channel = BenchChannel.find_by(id: params[:id])
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
-    render json: { json: 'user is not part of this channel', status: :not_found } if !current_user.bench_channel_ids.include?(@bench_channel.id)
+    render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_channel_participant
