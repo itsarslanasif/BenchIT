@@ -14,10 +14,12 @@
         <ChannelsAccordion />
       </p>
       <p>
-        <ChannelsAccordion />
+        <DirectMessageAccordian />
       </p>
     </div>
-    <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
+    <div
+      class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover"
+    >
       {{ $t(CONSTANTS.SELECTED_CHANNELS) }}
     </div>
   </div>
@@ -27,9 +29,10 @@
 import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
 import { CONSTANTS } from '../../../assets/constants';
+import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vue';
 
 export default {
-  components: { ChannelsAccordion, IconElement },
+  components: { ChannelsAccordion, IconElement, DirectMessageAccordian },
   data() {
     return {
       CONSTANTS: CONSTANTS,

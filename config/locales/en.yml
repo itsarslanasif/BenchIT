@@ -28,6 +28,9 @@ en:
         company_size_info: 'How big is your company?'
         admin_role_type: 'What is your role there?'
         continue_company_button: 'Continue to Company Name'
+      directmessages:
+        direct_messages: 'Direct Messages'
+        add_teammates: 'Add Teammates'
       company:
         title: 'What is your Company called?'
         description: 'We will use this to name your workspace which you can always change later'
