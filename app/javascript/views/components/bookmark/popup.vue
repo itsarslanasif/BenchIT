@@ -103,12 +103,6 @@ h1 {
   color: #fff;
 }
 
-/* .AddBookmarkButton:hover {
-  background-color: rgb(78, 119, 231);
-  cursor: pointer;
-  color: #fff;
-} */
-
 .overlay {
   position: absolute;
   z-index: 1;

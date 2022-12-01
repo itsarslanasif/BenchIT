@@ -6,7 +6,7 @@
       <IconElement icon="&#8704;" :name="$t('sidebar.direct_messages')" />
       <IconElement icon="&#64;" :name="$t('sidebar.mentions_and_reactions')" />
       <IconElement icon="&#8634;" :name="$t('sidebar.draft_and_sent')" />
-      <IconElement icon="&#128101;" space="&nbsp;" :name="$t(CONSTANTS.PEOPLE_AND_USER_GROUPS)" />
+      <IconElement icon="&#128101;" :name="$t('sidebar.people_and_user_group')" />
       <IconElement icon="&#8285;" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />

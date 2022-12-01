@@ -65,6 +65,7 @@ en:
         direct_messages: 'Direct Messages'
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Draft & Sent'
+        people_and_user_group: 'People & User Group'
         more: 'More'
       channels:
         selected_channels: 'Selected Channels'
@@ -96,10 +97,39 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        update: 'Update'
+        delete: 'Delete'
+        cancel: 'Cancel'
+        message: 'Message'
+        huddle: 'Huddle'
+        copy_display_name: 'Copy display name'
+        copy_member_id: 'Copy member ID'
+        view_files: 'View Files'
       members:
         search_by_name: 'Search By Name'
       placeholder:
         email: 'Email'
+      profile:
+        contact_information: 'Contact Information'
+        email: 'Email Address'
+        phone: 'Phone'
+      filters:
+        all_types: 'All types'
+        owners: "Owners"
+        admins: "Admins",
+        full_members: "Full Members",
+        guests: "Guests",
+        deactivated_accounts: "Deactivated accounts",
+        not_on_slack: "Not on slack",
+        most_recommended: "Most recommended",
+        a_to_z: "A to Z",
+        z_to_a: "Z to A",
+        copy_display_name: "Copy display name",
+        view_files: "View Files",
+        copy_member_id: "Copy member ID",
+        no_results_found: "No Results Found !",
+        sort: "Sort",
+        account_type: "Account Type",
 
     admin:
       title: 'Admin'
