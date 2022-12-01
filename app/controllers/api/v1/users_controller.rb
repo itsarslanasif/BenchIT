@@ -14,8 +14,7 @@ class Api::V1::UsersController < Api::ApiController
       @conversation = BenchConversation.create(conversationable_type: 'User', conversationable_id: @receiver.id, sender_id: current_user.id)
     end
 
-    @messages = @conversation.conversation_messages
-    "show.json.jbuilder"
+    return @messages = @conversation.conversation_messages
   end
 
   private

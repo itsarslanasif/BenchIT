@@ -8,7 +8,6 @@ class Api::V1::GroupsController < Api::ApiController
 
   def show
       @messages = @group.bench_conversation.conversation_messages
-      "show.json.jbuilder"
   end
 
   private
