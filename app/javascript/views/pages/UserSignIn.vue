@@ -4,21 +4,25 @@
       <div class="left-col"></div>
       <div class="center-col">
         <a href="#" class="text-3xl font-semibold">
-          {{ CONSTANTS.PROJECT_NAME }}
+          {{ $t('project.title') }}
         </a>
       </div>
       <div class="right-col justify-items-end text-right pr-5">
-        <p class="text-md font-thin">{{ CONSTANTS.NEW_TO_BENCH_IT }}</p>
-        <a class="text-md text-woot-800" href="#">{{ CONSTANTS.CREATE_YOUR_ACCOUNT }}</a>
+        <p class="text-md font-thin">
+          {{ $t('pages.sign_in.new_to_bench_it') }}
+        </p>
+        <a class="text-md text-woot-800" href="#">{{
+          $t('pages.sign_in.create_your_account')
+        }}</a>
       </div>
     </header>
     <p class="text-4xl max-w-4xl font-semibold leading-none text-center p-2">
-      {{ CONSTANTS.SIGN_IN_TO_BENCH_IT }}
+      {{ $t('pages.sign_in.title') }}
     </p>
     <p class="text-xl font-thin p-1 mb-5">
-      {{ CONSTANTS.INSTRUCTION_ON_SIGN_IN_PAGE_1 }}
+      {{ $t('pages.sign_in.instructions_1') }}
       <b>
-        {{ CONSTANTS.INSTRUCTION_ON_SIGN_IN_PAGE_2 }}
+        {{ $t('pages.sign_in.instructions_2') }}
       </b>
     </p>
     <button class="google-btn">
@@ -28,34 +32,36 @@
           class="h-5 w-5 mr-3 text-woot-600"
         />
         <p class="text-woot-600 text-lg font-semibold">
-          {{ CONSTANTS.CONTINUE_WITH_GOOGLE }}
+          {{ $t('pages.sign_in.continue_with_google') }}
         </p>
       </span>
     </button>
     <button class="apple-btn">
       <span class="flex items-center justify-items-center justify-center">
         <font-awesome-icon icon="fa-brands fa-apple" class="w-5 h-5 mr-3" />
-        <p class="text-lg font-semibold">{{ CONSTANTS.CONTINUE_WITH_APPLE }}</p>
+        <p class="text-lg font-semibold">
+          {{ $t('pages.sign_in.continue_with_apple') }}
+        </p>
       </span>
     </button>
     <n-divider class="w-100">
-      <p class="text-m font-normal w-10">{{ CONSTANTS.OR }}</p>
+      <p class="text-m font-normal w-10">{{ $t('pages.sign_in.or') }}</p>
     </n-divider>
     <form class="flex flex-col" @submit.prevent="handleSubmit">
       <input
         v-model="user.email"
         type="email"
-        :placeholder="CONSTANTS.EMAIL_PLACEHOLDER"
+        :placeholder="$t('pages.sign_in.email_placeholder')"
         required
       />
       <button class="sign-in-btn">
-        {{ CONSTANTS.SIGN_IN_WITH_EMAIL }}
+        {{ $t('pages.sign_in.sign_in_with_email') }}
       </button>
     </form>
     <p class="magic-code-text">
-      {{ CONSTANTS.CODE_FOR_PASSWORD_FREE_SIGN_IN }}
+      {{ $t('pages.sign_in.code_for_password_free_sign_in') }}
       <a href="#" class="text-woot-900">
-        {{ CONSTANTS.SIGN_IN_MANUALLY_INSTEAD }}</a
+        {{ $t('pages.sign_in.sign_in_manually_instead') }}</a
       >
     </p>
   </div>
@@ -83,7 +89,13 @@ export default {
         authenticity_token: document.querySelector('meta[name="csrf-token"]')
           .content,
       });
-      console.log(response);
+      if (response.headers.Authorization) {
+        sessionStorage.setItem(
+          'authenticity_token',
+          response.headers?.Authorization
+        );
+      }
+      console.log(response.status);
     },
   },
 };
