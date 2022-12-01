@@ -1,5 +1,5 @@
 class Api::V1::BenchChannelsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[leave show destroy update]
+  before_action :set_bench_channel, only: %i[leave show destroy make_private]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
 
   def index
@@ -41,11 +41,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
           response = {
             id: message.id,
             channel_name: @bench_channel.name,
-            content:message.content,
-            is_threaded:message.is_threaded,
-            parent_message_id:message.parent_message_id,
-            sender_id:message.sender_id,
-            sender_name:message.user.name,
+            content: message.content,
+            is_threaded: message.is_threaded,
+            parent_message_id: message.parent_message_id,
+            sender_id: message.sender_id,
+            sender_name: message.user.name,
             bench_conversation_id: message.bench_conversation_id,
             created_at: message.created_at,
             updated_at: message.updated_at
@@ -60,7 +60,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def destroy
-    render json: @bench_channel.destroy ? { message: 'Channel was successfully deleted.'} : { message: @bench_channel.errors, status: :unprocessable_entity }
+    render json: if @bench_channel.destroy
+                   { message: 'Channel was successfully deleted.' }
+                 else
+                   { message: @bench_channel.errors,
+                     status: :unprocessable_entity }
+                 end
   end
 
   def leave
@@ -71,10 +76,22 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
+  def make_private
+    @bench_channel.is_private = true
+
+    if @bench_channel.save
+      render json: {
+        message: "Successfully make ##{@bench_channel.name} private. Now, it can only be viewed or joined by invitation."
+      }, status: :ok
+    else
+      render json: { message: 'Error while making channel private!', errors: @bench_channel.errors }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def bench_channel_params
-    params.require(:bench_channel).permit(:name, :description, :creator_id, :is_private)
+    params.require(:bench_channel).permit(:name, :description, :is_private)
   end
 
   def create_first_bench_channel_participant

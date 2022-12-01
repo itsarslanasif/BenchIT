@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
         resources :bench_channels, only: %i[create index show destroy] do
           member do
+            patch :make_private
             delete :leave
           end
 
