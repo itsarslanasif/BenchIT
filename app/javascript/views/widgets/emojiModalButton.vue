@@ -9,6 +9,7 @@
           :message="message"
           :options="options"
           @select="handleSelect($event, message)"
+          @mouseleave="action"
           class="rounded-md border border-slate-100"
         >
           <span @click="action" class="p-1 hover:bg-slate-100 rounded">
