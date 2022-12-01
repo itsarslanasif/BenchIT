@@ -3,7 +3,8 @@
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
-        >&#128204; Pinned by {{ currMessage.pinned_by.name }}
+        >&#128204; {{ $t('pinconversation.pinnedby') }}
+        {{ currMessage.pinned_by.name }}
       </span>
     </div>
     <div
@@ -44,13 +45,6 @@
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="emoji">{{ emoji.i }}</span>
         </template>
-        <div
-          v-if="currMessage?.replies"
-          @click="toggleThread"
-          class="text-info text-xs cursor-pointer hover:underline"
-        >
-          {{ currMessage.replies?.length }} replies...
-        </div>
         <div
           class="emojiModalToggle"
           v-if="emojiModalStatus || openEmojiModal || showOptions"
@@ -176,10 +170,8 @@ export default {
       if (key == 'pin-to-this-conversation') {
         if (!this.pinnedConversationStore.isPinned(this.currMessage)) {
           this.pinnedConversationStore.pinMessage(this.currMessage);
-          console.log(this.pinnedConversationStore.getPinnedConversation);
         } else {
           this.pinnedConversationStore.unPinMessage(this.currMessage);
-          console.log(this.pinnedConversationStore.getPinnedConversation);
         }
       }
     },

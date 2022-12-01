@@ -1,6 +1,13 @@
-<template >
-  <div @click="pinnedConversationStore.togglePin()" v-if="pinnedConversationStore.getCount>0" class=" container  text-xs bg-inherit mr-1 hover:text-white hover:bg-slate-900 rounded-lg">
-   <span  class="p-1">&#128204; {{pinnedConversationStore.getCount}} Pinned </span>
+<template>
+  <div
+    @click="pinnedConversationStore.togglePin()"
+    v-if="pinnedConversationStore.getCount > 0"
+    class="container text-xs bg-inherit mr-1 hover:text-white hover:bg-slate-900 rounded-lg"
+  >
+    <span class="p-1"
+      >&#128204; {{ pinnedConversationStore.getCount }}
+      {{ $t('pinconversation.pinned') }}
+    </span>
   </div>
 </template>
 
@@ -10,24 +17,18 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 export default {
   setup() {
     const pinnedConversationStore = usePinnedConversation();
-    return {pinnedConversationStore };
+    return { pinnedConversationStore };
   },
   data() {
     return {
       CONSTANTS: CONSTANTS,
     };
   },
-  methods: {
-    handleSave(event) {
-      // this.$emit('clicked', this.bookmark);
-    },
-  },
 };
 </script>
 
 <style scoped>
-.container{
+.container {
   height: 22px;
 }
-
 </style>

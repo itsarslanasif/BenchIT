@@ -1,8 +1,15 @@
 <template>
   <div
     v-show="pinnedConversationStore.pinToggle"
-    class="flex overflow-auto z-10 px-2 py-2 flex-col bg-slate-900 rounded-lg bb"
+    class="flex overflow-auto z-10 px-2 py-2 ml-1 fixed flex-col border-slate-700 bg-slate-900 w-6/12 maxHight border-2 rounded-lg bb"
   >
+    <div class="w-100 flex justify-end">
+      <span
+        class="bg-slate-400 text-xs rounded-lg cursor-pointer p-1"
+        @click="pinnedConversationStore.togglePin"
+        >X</span
+      >
+    </div>
     <template
       v-for="message in pinnedConversationStore.getPinnedConversation"
       :key="message.id"
@@ -29,9 +36,7 @@ export default {
 </script>
 
 <style scoped>
-.bb {
-  width: 500px;
-  position: fixed;
+.maxHight {
   max-height: 300px;
 }
 </style>
