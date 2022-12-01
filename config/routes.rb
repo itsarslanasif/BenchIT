@@ -24,7 +24,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :bench_channels, only: %i[create index show destroy] do
+        resources :bench_channels, except: %i[new edit] do
           member do
             delete :leave
           end

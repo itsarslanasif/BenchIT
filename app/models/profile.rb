@@ -1,4 +1,13 @@
 class Profile < ApplicationRecord
+  searchkick word_start: [:username, :description]
+
+  def search_data
+    {
+      username: username,
+      description: description,
+      workspace_id: workspace_id,
+    }
+  end
   after_commit :add_default_image, on: %i[create]
 
   belongs_to :user

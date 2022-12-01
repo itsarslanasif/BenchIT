@@ -1,6 +1,7 @@
 class Api::V1::BenchChannelsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[leave show destroy update]
+  before_action :set_bench_channel, except: %i[index create]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
+  before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
     current_user = User.first
@@ -41,11 +42,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
           response = {
             id: message.id,
             channel_name: @bench_channel.name,
-            content:message.content,
-            is_threaded:message.is_threaded,
-            parent_message_id:message.parent_message_id,
-            sender_id:message.sender_id,
-            sender_name:message.user.name,
+            content: message.content,
+            is_threaded: message.is_threaded,
+            parent_message_id: message.parent_message_id,
+            sender_id: message.sender_id,
+            sender_name: message.user.name,
             bench_conversation_id: message.bench_conversation_id,
             created_at: message.created_at,
             updated_at: message.updated_at
@@ -60,7 +61,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def destroy
-    render json: @bench_channel.destroy ? { message: 'Channel was successfully deleted.'} : { message: @bench_channel.errors, status: :unprocessable_entity }
+    render json: if @bench_channel.destroy
+                   { message: 'Channel was successfully deleted.' }
+                 else
+                   { message: @bench_channel.errors,
+                     status: :unprocessable_entity }
+                 end
   end
 
   def leave
@@ -71,10 +77,16 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
+  def update
+    return if @bench_channel.update(bench_channel_params)
+
+    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
+  end
+
   private
 
   def bench_channel_params
-    params.require(:bench_channel).permit(:name, :description, :creator_id, :is_private)
+    params.require(:bench_channel).permit(:name, :description, :is_private)
   end
 
   def create_first_bench_channel_participant
@@ -103,5 +115,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
     return if @channel_participant.save
 
     render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
+  end
+
+  def bench_channel_cannot_be_public_again
+    return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
+
+    render json: { message: "You cannot change ##{@bench_channel.name} to public again." }, status: :unprocessable_entity
   end
 end
