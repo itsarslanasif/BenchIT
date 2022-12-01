@@ -1,6 +1,7 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, only: %i[leave show destroy make_private]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
+  before_action :set_bench_channel_private, only: %i[make_private]
 
   def index
     current_user = User.first
@@ -77,8 +78,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def make_private
-    @bench_channel.is_private = true
-
     if @bench_channel.save
       render json: {
         message: "Successfully make ##{@bench_channel.name} private. Now, it can only be viewed or joined by invitation."
@@ -120,5 +119,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
     return if @channel_participant.save
 
     render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
+  end
+
+  def set_bench_channel_private
+    @bench_channel.is_private = true
   end
 end
