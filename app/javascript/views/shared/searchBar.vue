@@ -29,7 +29,22 @@
               <div v-else-if="channelsFlag">{{ $t('search_bar.channels') }}</div>
             </div>
             <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
-              {{ item.name }}
+              <div class="flex">
+                <div v-if="isUser(item)" class="mx-3">
+                  <font-awesome-icon icon="fa-user" />
+                </div>
+                <div v-if="isChannel(item)" class="mx-3">
+                  <div v-if="isPrivateChannel(item)">
+                    <font-awesome-icon icon="fa-lock" />
+                  </div>
+                  <div v-else>
+                    <font-awesome-icon icon="fa-hashtag" />
+                  </div>
+                </div>
+                <div>
+                  {{ item.name }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -41,6 +56,7 @@
 <script>
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { storeToRefs } from 'pinia';
 export default {
   name: 'SearchBar',
@@ -69,11 +85,37 @@ export default {
     filterData() {
       this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()));
     },
+    isUser(item) {
+      if (item.email) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isChannel(item) {
+      if (item.description) {
+        return true
+      } else {
+        return false
+      }
+    },
+    isPrivateChannel(item) {
+      if (item.isPrivateChannel) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   watch: {
     search() {
+      if (this.search === '') {
+        this.usersFlag = false
+        this.channelsFlag = false
+        this.filteredList = [...this.allUsers, ...this.allChannels]
+      }
       if (this.usersFlag) {
-        this.filteredList = this.allUsers.filter(user => user.name !== null);
+        this.filteredList = this.allUsers;
       } else if (this.channelsFlag) {
         this.filteredList = this.allChannels;
       } else {
@@ -81,6 +123,9 @@ export default {
       }
       this.filterData();
     },
+    allUsers() {
+      this.allUsers = this.allUsers.filter(user => user.name !== null);
+    }
   },
   setup() {
     const profileStore = useProfileStore();
