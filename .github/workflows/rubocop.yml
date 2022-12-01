@@ -6,7 +6,7 @@ on:
     branches: [ "develop" ]
 jobs:
 
-  lint:
+  cops:
     runs-on: ubuntu-latest
     steps:
       - name: Rubocop
