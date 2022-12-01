@@ -1,12 +1,14 @@
 <template>
-  <div class="card">
+  <div class="card bg-white cursor-pointer shadow-md rounded mb-4 p-0 ml-5">
     <img
-      class="Avatar"
+      class="Avatar rounded"
       src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
       alt="Avatar"
     />
-    <h6 class="username">{{ name }}</h6>
-    <p class="description">{{ description }}</p>
+    <h6 class="text-black ml-3 mt-3 text-sm font-bold text-left">{{ name }}</h6>
+    <p class="text-sm ml-3 text-slate-400 text-left">
+      {{ description }}
+    </p>
   </div>
 </template>
 
@@ -18,31 +20,11 @@ export default {
 
 <style scoped>
 .card {
-  box-shadow: 0 4px 8px 0 rgba(84, 78, 78, 0.2);
-  width: 250px;
-  height: 250px;
-  margin: auto;
-  text-align: center;
-  margin: 0rem 1rem;
-  border-radius: 4px;
-  min-width: 250px;
-  margin-bottom: 1rem;
-}
-
-.description {
-  color: grey;
-  font-size: 12px;
-}
-.username {
-  font-size: 12px;
-  height: 20%;
-  margin-top: 0.3rem;
+  height: 300px;
+  width: 200px;
 }
 .Avatar {
-  height: 50%;
-  border-radius: 50%;
-  text-align: center;
-  margin: auto;
-  border: 1px solid rgb(0, 0, 0);
+  height: 200px;
+  border: 1px solid rgb(198, 196, 196);
 }
 </style>

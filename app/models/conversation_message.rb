@@ -12,19 +12,21 @@ class ConversationMessage < ApplicationRecord
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
   def broadcast_message
-    response = {
-      id: self.id,
-      content: self.content,
-      is_threaded: self.is_threaded,
-      parent_message_id: self.parent_message_id,
-      sender_id: self.sender_id,
-      sender_name: self.user.name,
-      bench_conversation_id: self.bench_conversation_id,
-      created_at: self.created_at,
-      updated_at: self.updated_at
+    message = {
+      id: id,
+      content: content,
+      is_threaded: is_threaded,
+      parent_message_id: parent_message_id,
+      sender_id: sender_id,
+      sender_name: user.name,
+      bench_conversation_id: bench_conversation_id,
+      created_at: created_at,
+      updated_at: updated_at
     }
-      ActionCable.server.broadcast("ChatChannel#{self.bench_conversation.conversationable_type}#{self.bench_conversation.conversationable_id}", {
-      message: response
-    })
+
+    channel_key = "ChatChannel#{self.bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
+    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
+
+    ActionCable.server.broadcast(channel_key, { message: message })
   end
 end

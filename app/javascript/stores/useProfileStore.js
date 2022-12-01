@@ -1,34 +1,23 @@
 import { defineStore } from 'pinia';
+import { getAllProfiles } from '../api/profiles/profiles';
 
 export const useProfileStore = () => {
-  const userStore = defineStore('userStore', {
+  const profileStore = defineStore('profileStore', {
     state: () => ({
-      users: [],
+      profiles: [],
     }),
 
     getters: {
-      getUsers: state => state.users,
+      getProfiles: state => state.profiles,
     },
 
     actions: {
-      index() {
-        const workSpaceId = 1;
-
-        return this.axios
-          .get(`workspaces/${workSpaceId}/profiles`)
-          .then(response => {
-            this.users = [...response.data.profiles];
-          })
-          .catch(error => {
-            return error;
-          });
+      async index() {
+        this.profiles = await getAllProfiles()
       },
     },
   });
-  const store = userStore();
-  if (!store.users.length) {
-    store.index();
-  }
+  const store = profileStore();
 
   return store;
 };
