@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-auto chatBody">
-    <div v-for="message in messages" :key="message.id">
+    <div v-for="message in messages" :key="message.id" :id="message.id"  >
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
           <p class="text-gray-600">
@@ -59,10 +59,27 @@ export default {
       this.message = message;
     },
   },
+  updated() {
+    const message_id = this.$route.params.message_id
+    if(message_id){
+    const message = document.getElementById(message_id)
+    message.scrollIntoView()
+    message.classList.add('highlight')
+    }
+  }
 };
 </script>
 <style scoped>
 .chatBody {
   height: 57vh;
 }
+.highlight{
+  animation: background-fade 7s;
+}
+@keyframes background-fade {
+    0% {
+        background: rgba(253,245,221,255);
+    }
+}
+
 </style>

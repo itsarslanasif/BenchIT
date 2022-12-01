@@ -1,3 +1,18 @@
+import { NIcon } from 'naive-ui'
+import { h, defineComponent } from 'vue'
+import {
+  RocketOutline as PollyIcon,
+  CardOutline as CardOutlineIcon,
+  PersonAddOutline as PersonAddIcon
+} from '@vicons/ionicons5'
+const renderIcon = (icon) => {
+  return () => {
+    return h(NIcon, null, {
+      default: () => h(icon)
+    })
+  }
+}
+
 export default [
   {
     label: 'Turn off notifications for replies',
@@ -69,4 +84,28 @@ export default [
     label: 'Delete message',
     key: 'delete-message',
   },
+  {
+    type: 'divider',
+    key: 'd5',
+  },
+  {
+    label: 'Create a polly',
+    key: 'create-a-polly',
+    icon: renderIcon(PollyIcon)
+  },
+  {
+    label: 'Create card from message',
+    key: 'create-card-from-message',
+    icon: renderIcon(CardOutlineIcon)
+  },
+  {
+    label: 'Self assign as task',
+    key: 'self-assign-as-task',
+    icon: renderIcon(PersonAddIcon)
+  },
+  {
+    label: 'More messages shortcuts...',
+    key: 'more-shortcuts',
+  },
 ];
+

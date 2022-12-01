@@ -2,8 +2,15 @@
   <n-popover style="backgroundcolor: #1e293b" trigger="hover">
     <template #trigger>
       <template v-if="actionText == 'More actions'">
-        <n-dropdown placement="bottom-start" trigger="click" size="medium" :options="options" @select="handleSelect"
-          @mouseleave="action">
+        <n-dropdown
+          placement="bottom-start"
+          trigger="click"
+          size="medium"
+          :message="message"
+          :options="options"
+          @select="handleSelect($event, message)"
+          class="rounded-md border border-slate-100"
+        >
           <span @click="action" class="p-1 hover:bg-slate-100 rounded">
             <font-awesome-icon :icon="icon" />
           </span>
@@ -28,12 +35,21 @@ import { NPopover, NDropdown } from 'naive-ui';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
-  props: ['icon', 'emoji', 'actionText', 'action'],
+  props: ['icon', 'emoji', 'actionText', 'action', 'message'],
   data() {
     return {
       options,
-      handleSelect(key) {
-        message.info(String(key));
+      handleSelect(key, message) {
+        if (key === 'copy-link') {
+          var TempText = document.createElement('input');
+          TempText.value = `${import.meta.env.VITE_APP_SERVER_URL}channels/${
+            message.bench_conversation_id}/${message.id
+          }`;
+          document.body.appendChild(TempText);
+          TempText.select();
+          document.execCommand('copy');
+          document.body.removeChild(TempText);
+        }
       },
     };
   },

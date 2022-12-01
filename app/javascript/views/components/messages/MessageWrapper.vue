@@ -34,7 +34,7 @@
           <EmojiModalButton icon="fa-solid fa-comment-dots" actionText="Reply in thread" />
           <EmojiModalButton icon="fa-solid fa-share" actionText="Share message..." />
           <EmojiModalButton icon="fa-solid fa-bookmark" actionText="Add to saved items" />
-          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" />
+          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" :message="message" />
         </div>
       </span>
     </div>
