@@ -37,4 +37,10 @@ ConversationMessage.create(content: 'Hi Group from Arthur', is_threaded: false, 
 BenchConversation.create(conversationable_type: 'User', conversationable_id: 1, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
-
+BenchChannel.create(name: 'amazing_life', description: 'amazing_life channel', creator_id: 1, workspace_id: workspace.id)
+BenchChannel.create(name: 'watercooler', description: 'memes channel', creator_id: 1, workspace_id: workspace.id)
+BenchChannel.create(name: 'announcements', description: 'channel for important announcements', creator_id: 1, workspace_id: workspace.id)
+BenchChannel.create(name: 'birthdays', description: 'channel for birthday announcements', creator_id: 1, workspace_id: workspace.id)
+BenchChannel.create(name: 'cricket-scene', description: 'channel for cricket events', creator_id: 1, workspace_id: workspace.id)
+BenchChannel.create(name: 'cyclingclub', description: 'channel for cycling club', creator_id: 1, workspace_id: workspace.id)
+BenchChannel.create(name: 'gaming', description: 'channel for gaming announcements', creator_id: 1, workspace_id: workspace.id)

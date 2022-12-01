@@ -15,6 +15,7 @@ Rails.application.routes.draw do
 
         resources :groups, only: %i[index show]
         resources :users, only: %i[index show]
+        resources :channel_participants, only: %i[create]
         resources :conversation_messages, only: %i[create destroy]
 
         resources :bench_channels, only: %i[create index show destroy] do
