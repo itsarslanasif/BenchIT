@@ -62,6 +62,7 @@ export default {
   },
   updated() {
     const message_id = this.$route.params.message_id;
+    
     if (message_id) {
       const message = document.getElementById(message_id);
       message.scrollIntoView();

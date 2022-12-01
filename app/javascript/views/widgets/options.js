@@ -1,20 +1,24 @@
-import { NIcon } from 'naive-ui'
-import { h,  } from 'vue'
-import { RocketOutline as PollyIcon, CardOutline as CardOutlineIcon, PersonAddOutline as PersonAddIcon } from '@vicons/ionicons5'
+import { NIcon } from 'naive-ui';
+import { h } from 'vue';
+import { RocketOutline as PollyIcon, CardOutline as CardOutlineIcon, PersonAddOutline as PersonAddIcon } from '@vicons/ionicons5';
 import { CONSTANTS } from '../../assets/constants';
 
-const renderIcon = (icon) => {
+const renderIcon = icon => {
   return () => {
     return h(NIcon, null, {
-      default: () => h(icon)
-    })
-  }
-}
+      default: () => h(icon),
+    });
+  };
+};
+
+const generateKey = label => {
+  return label.toLowerCase().replace(/ /g, '-');
+};
 
 export default [
   {
     label: CONSTANTS.OFF_NOTIFICATIONS,
-    key: 'turn-off-notifications-for-replies',
+    key: generateKey(CONSTANTS.OFF_NOTIFICATIONS),
   },
   {
     type: 'divider',
@@ -22,35 +26,35 @@ export default [
   },
   {
     label: CONSTANTS.MARK_UNREAD,
-    key: 'mark-unread',
+    key: generateKey(CONSTANTS.MARK_UNREAD),
   },
   {
     label: CONSTANTS.REMIND_LATER,
-    key: 'remind-me-about-this',
+    key: generateKey(CONSTANTS.REMIND_LATER),
     children: [
       {
         label: CONSTANTS.TWENTY_MINUTES,
-        key: 'in-20-minutes',
+        key: generateKey(CONSTANTS.TWENTY_MINUTES),
       },
       {
         label: CONSTANTS.ONE_HOUR,
-        key: 'in-1-hour',
+        key: generateKey(CONSTANTS.ONE_HOUR),
       },
       {
         label: CONSTANTS.THREE_HOURS,
-        key: 'in-3-hours',
+        key: generateKey(CONSTANTS.THREE_HOURS),
       },
       {
         label: CONSTANTS.TOMORROW,
-        key: '8',
+        key: generateKey(CONSTANTS.TOMORROW),
       },
       {
         label: CONSTANTS.NEXT_WEEK,
-        key: 'tommorow',
+        key: generateKey(CONSTANTS.NEXT_WEEK),
       },
       {
         label: CONSTANTS.CUSTOM,
-        key: 'custom',
+        key: generateKey(CONSTANTS.CUSTOM),
       },
     ],
   },
@@ -60,7 +64,7 @@ export default [
   },
   {
     label: CONSTANTS.COPY_LINK,
-    key: 'copy-link',
+    key: generateKey(CONSTANTS.COPY_LINK),
   },
   {
     type: 'divider',
@@ -68,7 +72,7 @@ export default [
   },
   {
     label: CONSTANTS.PIN_TO_CONVERSATION,
-    key: 'pin-to-this-conversation',
+    key: generateKey(CONSTANTS.PIN_TO_CONVERSATION),
   },
   {
     type: 'divider',
@@ -76,11 +80,11 @@ export default [
   },
   {
     label: CONSTANTS.EDIT,
-    key: 'edit-message',
+    key: generateKey(CONSTANTS.EDIT),
   },
   {
     label: CONSTANTS.DELETE,
-    key: 'delete-message',
+    key: generateKey(CONSTANTS.DELETE),
   },
   {
     type: 'divider',
@@ -88,22 +92,21 @@ export default [
   },
   {
     label: CONSTANTS.POLLY,
-    key: 'create-a-polly',
-    icon: renderIcon(PollyIcon)
+    key: generateKey(CONSTANTS.POLLY),
+    icon: renderIcon(PollyIcon),
   },
   {
     label: CONSTANTS.CARD_FROM_MESSAGE,
-    key: 'create-card-from-message',
-    icon: renderIcon(CardOutlineIcon)
+    key: generateKey(CONSTANTS.CARD_FROM_MESSAGE),
+    icon: renderIcon(CardOutlineIcon),
   },
   {
     label: CONSTANTS.ASSIGN_AS_TASK,
-    key: 'self-assign-as-task',
-    icon: renderIcon(PersonAddIcon)
+    key: generateKey(CONSTANTS.ASSIGN_AS_TASK),
+    icon: renderIcon(PersonAddIcon),
   },
   {
     label: CONSTANTS.MORE_SHORTCUTS,
-    key: 'more-shortcuts',
+    key: generateKey(CONSTANTS.MORE_SHORTCUTS),
   },
 ];
-
