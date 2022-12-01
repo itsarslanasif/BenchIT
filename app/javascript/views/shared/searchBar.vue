@@ -3,42 +3,45 @@
     <div class="flex w-1/2">
       <div class="w-full" @click="searchModalToggle = true">
         <input type="text" placeholder="Search"
-          class="text-center border-2 rounded-t w-full h-8 bg-primary border-primaryHover text-white" v-model="search" />
+          class="text-center border-2 rounded-t w-full h-8 bg-primary border-primaryHover text-white"
+          v-model="search" />
       </div>
       <div class="w-1/6 text-center text-white" v-if="searchModalToggle" @click="searchModalToggle = false">
         <span class="inline-block align-middle">Close</span>
       </div>
-      <div v-if="searchModalToggle" class="w-1/2 bg-primaryHover text-center rounded-b absolute z-10 mt-8 shadow-2xl text-white">
+      <div v-if="searchModalToggle"
+        class="w-1/2 bg-primary text-center rounded-b absolute z-10 mt-8 shadow-2xl text-white">
         <div class="text-left p-6">
-          <p class="mb-1 text-xs">I'm looking for:</p>
-          <div class=" flex gap-2">
-            <button class="bg-slate-500 px-3 py-1 w-auto" @click="searchPeopleOnly">People</button>
-            <button class="bg-slate-500 px-3 py-1 w-auto" @click="searchChannelsOnly">Channels</button>
+          <p class="mb-1 text-xs text-white">{{ $t('search_bar.tagline') }}</p>
+          <div class="flex gap-2">
+            <button class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover"
+              @click="searchPeopleOnly">
+              {{ $t('search_bar.people') }}
+            </button>
+            <button class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover"
+              @click="searchChannelsOnly">
+              {{ $t('search_bar.channels') }}
+            </button>
           </div>
           <div class="mt-6">
-            <div v-if="usersFlag">
-              <span class="py-1 w-auto text-xl font-semibold">People</span>
-              <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
-                <strong>{{ item.username }}</strong> <span class="text-sm">{{ item.description }}</span>
-              </div>
+            <div w-auto text-xl font-semibold class="py-1 w-auto text-xl font-semibold">
+              <div v-if="usersFlag">{{ $t('search_bar.people') }}</div>
+              <div v-else-if="channelsFlag">{{ $t('search_bar.channels') }}</div>
             </div>
-            <div v-if="channelsFlag">
-              <span class="py-1 w-auto text-xl font-semibold">Channels</span>
-              <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
-                {{ item.name }}
-              </div>
+            <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
+              {{ item.name }}
             </div>
           </div>
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import { useProfileStore } from '../../stores/useProfileStore'
-import { useChannelStore } from '../../stores/useChannelStore'
+import { useProfileStore } from '../../stores/useProfileStore';
+import { useChannelStore } from '../../stores/useChannelStore';
+import { storeToRefs } from 'pinia';
 export default {
   name: 'SearchBar',
   data() {
@@ -49,44 +52,47 @@ export default {
       allUsers: [],
       allChannels: [],
       usersFlag: false,
-      channelsFlag: false
-    }
+      channelsFlag: false,
+    };
   },
   methods: {
     searchPeopleOnly() {
-      this.usersFlag = true
-      this.channelsFlag = false
-      this.filteredList = this.allUsers
+      this.usersFlag = true;
+      this.channelsFlag = false;
+      this.filteredList = this.allUsers;
     },
     searchChannelsOnly() {
-      this.usersFlag = false
-      this.channelsFlag = true
-      this.filteredList = this.allChannels
+      this.usersFlag = false;
+      this.channelsFlag = true;
+      this.filteredList = this.allChannels;
     },
     filterData() {
-      this.filteredList = this.filteredList.filter(item =>
-        item[this.usersFlag ? "username" : "name"].toLowerCase().includes(this.search.toLowerCase()))
-    }
+      this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()));
+    },
   },
   watch: {
     search() {
       if (this.usersFlag) {
-        this.filteredList = this.allUsers
+        this.filteredList = this.allUsers.filter(user => user.name !== null);
       } else if (this.channelsFlag) {
-        this.filteredList = this.allChannels
+        this.filteredList = this.allChannels;
       } else {
-        this.filteredList = [...this.allUsers, ...this.allChannels]
+        this.filteredList = [...this.allUsers, ...this.allChannels];
       }
-      this.filterData()
+      this.filterData();
     },
   },
   setup() {
-    const profileStore = useProfileStore()
-    const channelStore = useChannelStore()
+    const profileStore = useProfileStore();
+    const channelStore = useChannelStore();
+    const { profiles } = storeToRefs(profileStore);
+    const { channels } = storeToRefs(channelStore);
+    profileStore.index();
+    channelStore.index();
     return {
-      allUsers: Object.values(profileStore.getUsers),
-      allChannels: Object.values(channelStore.getChannels),
-    }
-  }
-}
+      allUsers: profiles,
+      allChannels: channels,
+    };
+  },
+};
 </script>
