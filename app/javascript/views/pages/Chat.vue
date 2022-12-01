@@ -116,6 +116,7 @@ export default {
       } else {
         this.disableAll();
       }
+      this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase()))
     },
   },
 
