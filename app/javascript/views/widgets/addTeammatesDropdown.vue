@@ -53,7 +53,7 @@ export default {
 
 <style>
 .menu-item {
-  width: 300px;
+  width: 100px;
 }
 
 .icon-style {
