@@ -53,6 +53,10 @@ en:
         password_save: 'Save'
       errors:
         title: 'Error pages'
+      search_bar:
+        people: 'People'
+        channels: 'Channels'
+        tagline: "I'm looking for"
 
     admin:
       title: 'Admin'

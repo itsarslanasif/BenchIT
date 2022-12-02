@@ -1,6 +1,7 @@
 class Api::V1::BenchChannelsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[leave show destroy update]
+  before_action :set_bench_channel, except: %i[index create]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
+  before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
     current_user = User.first
@@ -18,49 +19,16 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def show
-    current_user = User.first
-    if current_user.bench_channel_ids.include?(@bench_channel.id)
       @messages = @bench_channel.bench_conversation.conversation_messages
-      message_data = []
-      if @messages.empty?
-        response = {
-          id: 0,
-          channel_name: @bench_channel.name,
-          content: nil,
-          is_threaded: false,
-          parent_message_id: nil,
-          sender_id: nil,
-          sender_name: nil,
-          bench_conversation_id: @bench_channel.bench_conversation.id,
-          created_at: nil,
-          updated_at: nil
-        }
-        message_data.push(response)
-      else
-        @messages.each do |message|
-          response = {
-            id: message.id,
-            channel_name: @bench_channel.name,
-            content:message.content,
-            is_threaded:message.is_threaded,
-            parent_message_id:message.parent_message_id,
-            sender_id:message.sender_id,
-            sender_name:message.user.name,
-            bench_conversation_id: message.bench_conversation_id,
-            created_at: message.created_at,
-            updated_at: message.updated_at
-          }
-          message_data.push(response)
-        end
-      end
-      render json: message_data
-    else
-      render json: { message: 'no data found', status: :unprocessable_entity }
-    end
   end
 
   def destroy
-    render json: @bench_channel.destroy ? { message: 'Channel was successfully deleted.'} : { message: @bench_channel.errors, status: :unprocessable_entity }
+    render json: if @bench_channel.destroy
+                   { message: 'Channel was successfully deleted.' }
+                 else
+                   { message: @bench_channel.errors,
+                     status: :unprocessable_entity }
+                 end
   end
 
   def leave
@@ -71,10 +39,16 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
+  def update
+    return if @bench_channel.update(bench_channel_params)
+
+    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
+  end
+
   private
 
   def bench_channel_params
-    params.require(:bench_channel).permit(:name, :description, :creator_id, :is_private)
+    params.require(:bench_channel).permit(:name, :description, :is_private)
   end
 
   def create_first_bench_channel_participant
@@ -86,9 +60,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
+    current_user = User.first
     @bench_channel = BenchChannel.find_by(id: params[:id])
-
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
+    render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_channel_participant
@@ -103,5 +78,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
     return if @channel_participant.save
 
     render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
+  end
+
+  def bench_channel_cannot_be_public_again
+    return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
+
+    render json: { message: "You cannot change ##{@bench_channel.name} to public again." }, status: :unprocessable_entity
   end
 end

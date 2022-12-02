@@ -3,7 +3,13 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
 
   def index
-    @profiles = @workspace.profiles
+    @profiles = if params[:query].presence
+      Profile.search( params[:query], where: { workspace_id: @workspace.id }, match: :word_start, misspellings: false)
+    else
+      @workspace.profiles.all
+    end
+    @profiles = @profiles.reorder(username: :asc) if params[:sort] == 'asc'
+    @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
   end
 
   def create
