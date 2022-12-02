@@ -13,7 +13,15 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :bench_channels, only: %i[create] do
+        resources :groups, only: %i[index show]
+        resources :users, only: %i[index show]
+        resources :conversation_messages, only: %i[create destroy]
+
+        resources :bench_channels, except: %i[new edit] do
+          member do
+            delete :leave
+          end
+
           resources :bookmarks, only: %i[create index]
         end
 
@@ -21,6 +29,7 @@ Rails.application.routes.draw do
           member do
             post :invite
           end
+
           resources :profiles, only: %i[index create]
         end
       end

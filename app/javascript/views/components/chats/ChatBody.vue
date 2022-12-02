@@ -1,7 +1,3 @@
-<!-- eslint-disable vue/require-v-for-key -->
-<!-- eslint-disable vue/no-template-key -->
-<!-- eslint-disable vue/no-template-shadow -->
-<!-- eslint-disable vue/valid-v-for -->
 <template>
   <div class="overflow-auto chatBody">
     <template v-for="(message, index) in messages" :key="index">
@@ -24,24 +20,46 @@
     </template>
   </div>
 </template>
-
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
-import messages from '../../../modules/data/messages';
-import { NDivider } from 'naive-ui';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { NButton, NSpace, NDivider } from 'naive-ui';
+import { storeToRefs } from 'pinia';
 
 export default {
   name: 'ChatBody',
   components: {
     MessageWrapper,
     NDivider,
+    NButton,
+    NSpace,
   },
   data() {
     return {
-      messages: messages,
+      messages: [],
+      message: null,
+      prevMessage: null,
     };
   },
-
+  computed: {
+    isToday() {
+      return (
+        new Date(this.message?.created_at).toDateString() === new Date().toDateString()
+      );
+    },
+    isSameDayMessage() {
+      return (
+        new Date(this.message?.created_at).toDateString() === new Date(this.prevMessage?.created_at).toDateString()
+      );
+    },
+  },
+  setup() {
+    const messageStore = useMessageStore();
+    const { messages } = storeToRefs(messageStore);
+    return {
+      messages
+    };
+  },
   methods: {
     setMessage(message) {
       this.prevMessage = this.message;
