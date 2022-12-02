@@ -12,7 +12,7 @@
             @click="goToChannelChat(`/channels/${channel.id}`)"
             class="-ml-3 pl-3 hover:bg-primaryHover"
           >
-            <i class="fa fa-hashtag mr-2 font-bold">#</i>{{ channel.name }}
+            <i class="fa fa-hashtag mr-2 font-bold"></i>{{ channel.name }}
           </div>
         </h5>
         <div
