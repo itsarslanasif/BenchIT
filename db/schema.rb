@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_02_141834) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_02_171721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -200,6 +200,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_02_141834) do
   add_foreign_key "conversation_messages", "users", column: "sender_id"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
+  add_foreign_key "reactions", "users"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
 end

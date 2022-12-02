@@ -1,23 +1,27 @@
 class Api::V1::ReactionsController < Api::ApiController
+  before_action :set_reaction, only: :destroy
   def create
     @reaction = User.first.reactions.new(reaction_params)
     if @reaction.save
-      render json: "reaction added"
+      render json: "Reaction added."
     else
       render json: @reaction.errors
     end
   end
 
   def destroy
-    @reaction = Reaction.find(params[:id])
     if @reaction.destroy
-      render json: "reaction removed"
+      render json: "Reaction removed."
     else
       render json: { json: @reaction.errors }
     end
   end
 
   private
+
+  def set_reaction
+    @reaction = Reaction.find(params[:id])
+  end
 
   def reaction_params
     params.require(:reaction).permit(:conversation_message_id, :emoji)
