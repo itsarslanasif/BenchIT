@@ -4,6 +4,8 @@ class User < ApplicationRecord
   has_many :profiles, dependent: :destroy
   has_many :workspaces, through: :profiles, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
+  has_many :reactions
+
   paginates_per 10
 
   devise :invitable, :database_authenticatable, :jwt_authenticatable, jwt_revocation_strategy: self

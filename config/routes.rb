@@ -32,6 +32,7 @@ Rails.application.routes.draw do
 
           resources :profiles, only: %i[index create]
         end
+        resources :reactions, only:[:create, :destroy]
       end
     end
 
