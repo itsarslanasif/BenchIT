@@ -44,7 +44,7 @@ export default {
       handleSelect(key, message) {
         if (key === 'copy-link') {
           let tempText = document.createElement('input');
-          tempText.value = `${import.meta.env.VITE_APP_SERVER_URL}channels/${message.bench_conversation_id}/${message.id}`;
+          tempText.value = `${import.meta.env.VITE_APP_SERVER_URL}channels/${`${window.location.pathname.split('/')[2]}`}/${message.id}`;
           document.body.appendChild(tempText);
           tempText.select();
           document.execCommand('copy');
