@@ -4,7 +4,11 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def index
     @profiles = if params[:query].presence
-                  Profile.search(params[:query], where: { workspace_id: @workspace.id }, match: :word_start, misspellings: false)
+                  Profile.search(
+                    params[:query],
+                    where: { workspace_id: @workspace.id },
+                    match: :word_start, misspellings: false
+                  )
                 else
                   @workspace.profiles.all
                 end

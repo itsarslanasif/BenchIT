@@ -15,8 +15,11 @@ class ChatChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    ActionCable.server.broadcast('ChatChannel', {
-                                   message: data['message'].upcase
-                                 })
+    ActionCable.server.broadcast(
+      'ChatChannel',
+      {
+        message: data['message'].upcase
+      }
+    )
   end
 end
