@@ -1,9 +1,8 @@
-require File.expand_path('../../config/environment', __FILE__)
+require File.expand_path('../config/environment', __dir__)
 require 'rails/test_help'
 
 ENV['RAILS_ENV'] ||= 'test'
 
-require 'rails/test_help'
 require 'rack/test'
 require 'capybara/rails'
 require 'minitest'
@@ -22,7 +21,7 @@ Rails.logger.level = 5
 Dir[Rails.root.join('test/support/**/*.rb')].each { |f| require f }
 
 class ActiveSupport::TestCase
-  extend Minitest::Spec::DSL 
+  extend Minitest::Spec::DSL
   parallelize(workers: 1)
   ActiveJob::Base.queue_adapter = :test
 
@@ -42,9 +41,9 @@ class ActionController::TestCase
   include Rails.application.routes.url_helpers
   include Devise::Test::ControllerHelpers
   include ActionCable::TestHelper
- 
+
   self.use_transactional_tests = true
-  
+
   Capybara.default_driver = :headless_chrome
   Capybara.javascript_driver = :headless_chrome
   Capybara.default_max_wait_time = 5 # seconds

@@ -5,9 +5,10 @@ class ConversationMessage < ApplicationRecord
 
   has_many_attached :message_attachments, dependent: :purge_later
 
-  has_many :replies, class_name: 'ConversationMessage', foreign_key: :parent_message_id
+  has_many :replies, class_name: 'ConversationMessage',
+                     foreign_key: :parent_message_id, dependent: :destroy
 
-  belongs_to :parent_message, class_name: 'ConversationMessage', foreign_key: :parent_message_id, optional: true
+  belongs_to :parent_message, class_name: 'ConversationMessage', optional: true
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
@@ -24,7 +25,7 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at
     }
 
-    channel_key = "ChatChannel#{self.bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
+    channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
     channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
 
     ActionCable.server.broadcast(channel_key, { message: message })
