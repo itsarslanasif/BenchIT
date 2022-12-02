@@ -16,15 +16,18 @@
     </div>
     <hr class="text-slate-400" />
     <div>
-      <p>
-        <ChannelsAccordion />
-      </p>
-      <p>
-        <ChannelsAccordion />
-      </p>
+      <ChannelsAccordion />
     </div>
     <div
-      class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover"
+      class="
+        absolute
+        bottom-0
+        text-sm text-white
+        ml-3
+        p-2
+        rounded-md
+        hover:bg-primaryHover
+      "
     >
       {{ $t(CONSTANTS.SELECTED_CHANNELS) }}
     </div>
