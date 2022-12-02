@@ -26,7 +26,7 @@
                 <label> {{ $t('channels.new_channel_name') }} </label>
               </div>
               <div class="mb-3">
-                <Field v-model="channelName" class="form-control w-full p-2 rounded bg-none" type="text" name="Name"
+                <Field v-model="channelName" class="form-control w-full p-2 rounded bg-none" type="text"
                   :placeholder="$t('channels.new_channel_name_placeholder')" :rules="validateName" />
                 <ErrorMessage name="Name" class="text-danger text-sm" />
               </div>
@@ -34,7 +34,7 @@
                 <label> {{ $t('channels.new_channel_description') }} </label>
               </div>
               <div class="mb-3">
-                <Field class="form-control w-full p-2 rounded bg-none" type="text" name="Description"
+                <Field class="form-control w-full p-2 rounded bg-none" type="text"
                   :placeholder="$t('channels.new_channel_desc_placeholder')" />
               </div>
             </section>
@@ -73,7 +73,6 @@ export default {
 
   methods: {
     onSubmit(values) {
-      console.log(values, null, 2);
       this.closeModal();
     },
 

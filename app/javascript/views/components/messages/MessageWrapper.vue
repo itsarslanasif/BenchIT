@@ -68,9 +68,6 @@ export default {
       default: undefined,
     },
   },
-  mounted() {
-    console.log(user)
-  },
   data() {
     return {
       topReactions: [
@@ -112,7 +109,6 @@ export default {
   methods: {
     addReaction(emoji) {
       this.allReactions.push(emoji);
-      console.log(this.allReactions[0]);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;

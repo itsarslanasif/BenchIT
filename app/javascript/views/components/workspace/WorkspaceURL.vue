@@ -7,7 +7,7 @@
       v-model="workspaceStore.workspace.bench_it_url"
       class="border"
       type="email"
-      placeholder="acme@benchit.com"
+      :placeholder="$t('placeholder.workspace')"
       required
     />
   </div>

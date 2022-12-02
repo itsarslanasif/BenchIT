@@ -109,6 +109,7 @@ en:
         search_by_name: 'Search By Name'
       placeholder:
         email: 'Email'
+        workspace: 'acme@benchit.com'
       profile:
         contact_information: 'Contact Information'
         email: 'Email Address'
@@ -116,20 +117,20 @@ en:
       filters:
         all_types: 'All types'
         owners: "Owners"
-        admins: "Admins",
-        full_members: "Full Members",
-        guests: "Guests",
-        deactivated_accounts: "Deactivated accounts",
-        not_on_slack: "Not on slack",
-        most_recommended: "Most recommended",
-        a_to_z: "A to Z",
-        z_to_a: "Z to A",
-        copy_display_name: "Copy display name",
-        view_files: "View Files",
-        copy_member_id: "Copy member ID",
-        no_results_found: "No Results Found !",
-        sort: "Sort",
-        account_type: "Account Type",
+        admins: "Admins"
+        full_members: "Full Members"
+        guests: "Guests"
+        deactivated_accounts: "Deactivated accounts"
+        not_on_slack: "Not on slack"
+        most_recommended: "Most recommended"
+        a_to_z: "A to Z"
+        z_to_a: "Z to A"
+        copy_display_name: "Copy display name"
+        view_files: "View Files"
+        copy_member_id: "Copy member ID"
+        no_results_found: "No Results Found !"
+        sort: "Sort"
+        account_type: "Account Type"
 
     admin:
       title: 'Admin'

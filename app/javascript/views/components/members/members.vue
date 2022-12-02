@@ -5,7 +5,7 @@
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="text" v-model="query" :placeholder="$t('members.search_by_name')" @keyup.enter="searchQuery()" />
     </div>
-    <filters v-if="!showProfile" @account_type="getAccountType" @sort_filter="getSortFilter"></filters>
+    <filters v-if="!showProfile" @sort_filter="getSortFilter"></filters>
 
     <div class="justify-center flex h-full w-full" v-show="showSpinner">
       <Spinner />
@@ -69,7 +69,6 @@ export default {
       );
       this.showSpinner = false;
     },
-    getAccountType(value) { },
     getSortFilter(value) {
       this.sort = value;
     },
