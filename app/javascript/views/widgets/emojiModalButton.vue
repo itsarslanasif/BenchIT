@@ -2,14 +2,8 @@
   <n-popover style="backgroundcolor: #1e293b" trigger="hover">
     <template #trigger>
       <template v-if="actionText == 'More actions'">
-        <n-dropdown
-          placement="bottom-start"
-          trigger="click"
-          size="medium"
-          :options="options"
-          @select="handleSelect"
-          @mouseleave="action"
-        >
+        <n-dropdown placement="bottom-start" trigger="click" size="medium" :options="options" @select="handleSelect"
+          @mouseleave="action">
           <span @click="action" class="p-1 hover:bg-slate-100 rounded">
             <font-awesome-icon :icon="icon" />
           </span>
