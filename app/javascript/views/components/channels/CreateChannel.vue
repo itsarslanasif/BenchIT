@@ -2,14 +2,13 @@
   <transition name="modal-fade">
     <div
       class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent">
-      <div class="modal rounded-md shadow-md bg-slate-50" role="dialog" aria-labelledby="Channel Name"
-        aria-describedby="Channel Description">
+      <div class="modal rounded-md shadow-md bg-slate-50" role="dialog">
         <div class="p-8">
           <header id="modalTitle" class="flex w-full">
             <div class="w-5/6 text-lg">
               <h1>{{ $t('channels.create_channel') }}</h1>
             </div>
-            <button type="button" class="w-1/6 bg-none py-1 px-3 text-base float-right rounded" aria-label="Close modal"
+            <button type="button" class="w-1/6 bg-none py-1 px-3 text-base float-right rounded"
               @click="closeModal">
               {{ $t('actions.close') }}
             </button>
