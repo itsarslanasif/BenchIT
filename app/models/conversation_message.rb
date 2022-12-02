@@ -7,7 +7,7 @@ class ConversationMessage < ApplicationRecord
 
   has_many :replies, class_name: 'ConversationMessage', foreign_key: :parent_message_id
 
-  has_many :reactions
+  has_many :reactions, dependent: :destroy
 
   belongs_to :parent_message, class_name: 'ConversationMessage', foreign_key: :parent_message_id, optional: true
 

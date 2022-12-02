@@ -1,7 +1,7 @@
 class Api::V1::ReactionsController < Api::ApiController
   before_action :set_reaction, only: :destroy
   def create
-    @reaction = User.first.reactions.new(reaction_params)
+    @reaction = current_user.reactions.new(reaction_params)
     if @reaction.save
       render json: "Reaction added."
     else
