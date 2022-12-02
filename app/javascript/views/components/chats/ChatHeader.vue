@@ -43,8 +43,8 @@
   <div class="flex items-center h-fit justify-between p-1 border-b border-primary">
     <div class="flex overflow-y-hidden text-ellipsis p-1 cursor-pointer">
       <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
-      <p class="bookmarkText" v-for="bm in bookmarks" :key="bm.name">
-        <BookmarkShowVue :data="bm" @clicked="onClickChild"> </BookmarkShowVue>
+      <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bm.name">
+        <BookmarkShowVue :data="bookmark" @clicked="onClickChild"> </BookmarkShowVue>
       </p>
     </div>
   </div>
@@ -96,8 +96,8 @@ export default {
         name: msg[0]?.channel_name
           ? msg[0]?.channel_name
           : msg[0]?.group_id
-          ? 'Group Chat ' + msg[0]?.group_id
-          : msg[0]?.receiver_name,
+            ? 'Group Chat ' + msg[0]?.group_id
+            : msg[0]?.receiver_name,
         isActive: true,
         status: '',
         avatar:
