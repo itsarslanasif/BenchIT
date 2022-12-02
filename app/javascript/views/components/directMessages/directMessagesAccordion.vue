@@ -8,24 +8,22 @@
           :key="userId"
           class="hover:bg-primaryHover"
         >
-          <router-link :to="`/users/${userId}`">
-            <div class="-ml-3 pl-3 flex items-start py-1 hover:bg-primaryHover">
-              <img
-                class="w-5 h-5 rounded-md"
-                src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
-              />
-              <p class="ml-3 text-white">{{ userId }}</p>
-            </div>
-          </router-link>
+          <div
+            @click="goToChat(`/users/${userId}`)"
+            class="-ml-3 pl-3 flex items-start py-1 hover:bg-primaryHover"
+          >
+            <img
+              class="w-5 h-5 rounded-md"
+              src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
+            />
+            <p class="ml-3 text-white">{{ userId }}</p>
+          </div>
         </h5>
         <div
           class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
           @click="modalOpen = !modalOpen"
         >
-          <addTeammatesDropdown
-            title="Add Teammates"
-            :items="options"
-          ></addTeammatesDropdown>
+          <addTeammatesDropdown :items="options"></addTeammatesDropdown>
         </div>
       </AccordionItem>
     </AccordionList>
@@ -34,14 +32,12 @@
 
 <script>
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
-import { CONSTANTS } from '../../../assets/constants';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { getDirectMessagesList } from '../../../api/directMessages/directMessages';
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {
     return {
-      CONSTANTS: CONSTANTS,
       dmList: [],
       modalOpen: false,
       options: [
@@ -65,6 +61,9 @@ export default {
     },
     async getDmList() {
       this.dmList = await getDirectMessagesList('1');
+    },
+    goToChat(chatURL) {
+      window.location.href = chatURL;
     },
   },
 };

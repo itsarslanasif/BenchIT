@@ -19,6 +19,11 @@ gem 'route_translator'
 gem 'sassc-rails'
 gem 'sprockets-rails'
 gem 'vite_rails'
+gem 'devise-jwt'
+gem 'rack-cors'
+gem 'sidekiq', '~>6.0'
+gem 'elasticsearch', '~> 7.0'
+gem 'searchkick'
 
 gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
 

@@ -1,10 +1,7 @@
-import axios from "axios";
+import axios from "../../modules/axios/index";
 
-export const getDirectMessagesList = async (currentUser) => {
-  let result = axios.get(`${import.meta.env.VITE_APP_SERVER_URL}/api/v1/users/previous_direct_messages`, {
-    params: {
-      id: currentUser,
-    },
+export const getDirectMessagesList = async () => {
+  let result = axios.get(`v1/users/previous_direct_messages`, {
   });
   return ((await result).data.users_ids);
 }
