@@ -33,6 +33,7 @@
 <script>
 import options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
+
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
