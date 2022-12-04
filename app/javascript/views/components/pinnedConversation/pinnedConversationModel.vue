@@ -5,7 +5,7 @@
   >
     <div class="w-100 flex justify-end">
       <span
-        class="bg-slate-400 text-xs rounded-lg cursor-pointer p-1"
+        class="text-slate-400 text-xs rounded-lg cursor-pointer p-1"
         @click="pinnedConversationStore.togglePin"
         >X</span
       >

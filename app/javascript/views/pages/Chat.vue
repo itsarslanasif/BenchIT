@@ -4,7 +4,6 @@
       <ChatHeader />
     </div>
     <div v-if="messages" class="h-1/2 break-words">
-      <pinnedConversation> </pinnedConversation>
       <ChatBody />
     </div>
     <div class="h-3/4">
@@ -47,7 +46,6 @@ import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
-import pinnedConversation from '../components/pinnedConversation/pinnedConversationModel.vue';
 
 export default {
   name: 'Chat',
