@@ -1,6 +1,6 @@
 <template>
-	<div class="emojiModalStyle">
-		<emojiModal @select="addReaction" :native="true" class="emojiModalStyle" />
+	<div>
+		<emojiModal @select="addReaction" :native="true" class="text-sm" />
 	</div>
 </template>
 <script>
@@ -14,8 +14,3 @@ export default {
 	props: ["addReaction"],
 }
 </script>
-<style>
-.emojiModalStyle {
-	font-size: 3px;
-}
-</style>

@@ -7,7 +7,6 @@ import { useRoute } from 'vue-router';
 
 export default {
   name: 'Channel',
-
   data() {
     return {
       name: '',

@@ -1,12 +1,12 @@
 <template>
   <div class="flex py-2" @click="isOpen = !isOpen">
-    <div class="text-white text-xl hover:bg-primaryHover flex">
+    <div class="text-white  text-xl hover:bg-primaryHover flex">
       <p
-        class="w-5 h-5 ml-3 text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid"
+        class="w-5 h-5 ml-3 text-xs cursor-pointer  text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid"
       >
         +
       </p>
-      <p class="ml-3 text-white">{{ $t('directMessages.add_teammates') }}</p>
+      <p class="ml-3 text-xs text-white">{{ $t('directMessages.add_teammates') }}</p>
     </div>
 
     <transition name="fade" appear>

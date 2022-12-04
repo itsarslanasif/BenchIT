@@ -10,13 +10,13 @@
         >
           <div
             @click="goToChat(`/users/${userId}`)"
-            class="-ml-3 pl-3 flex items-start py-1 hover:bg-primaryHover"
+            class="-ml-3 pl-3 flex items-start py-1 cursor-pointer hover:bg-primaryHover"
           >
             <img
               class="w-5 h-5 rounded-md"
               src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
             />
-            <p class="ml-3 text-white">{{ userId }}</p>
+            <p class="ml-3 text-xs  text-white">{{ userId }}</p>
           </div>
         </h5>
         <div
