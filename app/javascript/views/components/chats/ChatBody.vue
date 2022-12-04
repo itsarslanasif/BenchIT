@@ -1,5 +1,6 @@
 <template>
   <div class="overflow-auto chatBody">
+    <pinnedConversationModel></pinnedConversationModel>
     <div v-for="message in messages" :key="message.id" :id="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
@@ -17,6 +18,7 @@ import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
+import pinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue'
 
 export default {
   name: 'ChatBody',
@@ -25,6 +27,7 @@ export default {
     NDivider,
     NButton,
     NSpace,
+    pinnedConversationModel,
   },
   data() {
     return {
@@ -62,7 +65,7 @@ export default {
   },
   updated() {
     const message_id = this.$route.params.message_id;
-    
+
     if (message_id) {
       const message = document.getElementById(message_id);
       message.scrollIntoView();

@@ -1,6 +1,13 @@
 <template>
   <div>
-    <div class="items-center flex p-1 relative hover:bg-slate-100" @mouseover="emojiModalStatus = true"
+    <div v-if="pinnedConversationStore.isPinned(currMessage)">
+      <span
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+        >&#128204; {{ $t("pinconversation.pinned_by") }}
+        {{ $t("pinconversation.you") }}
+      </span>
+    </div>
+    <div class="items-center flex p-1 relative hover:bg-slate-100"  :class="{ messageContentpinned: pinnedConversationStore.isPinned(currMessage)}" @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false">
       <div class="min-w-fit ml-1">
         <n-avatar v-show="!isSameUser" class="mr-1 self-baseline" size="large" src="../../../assets/images/user.png" />
@@ -34,7 +41,7 @@
           <EmojiModalButton icon="fa-solid fa-comment-dots" actionText="Reply in thread" />
           <EmojiModalButton icon="fa-solid fa-share" actionText="Share message..." />
           <EmojiModalButton icon="fa-solid fa-bookmark" actionText="Add to saved items" />
-          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" :message="message" />
+          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions"  :action="setOptionsModal" :message="message" :pinnedConversationStore="usePinnedConversation" />
         </div>
       </span>
     </div>
@@ -50,9 +57,14 @@ import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import user from '../../../assets/images/user.png';
+import { usePinnedConversation } from '../../../stores/usePinnedConversationStore';
 
 export default {
   name: 'MessageWrapper',
+  setup() {
+    const pinnedConversationStore = usePinnedConversation();
+    return { pinnedConversationStore };
+  },
   components: {
     NAvatar,
     EmojiPicker,
@@ -119,3 +131,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.messageContentpinned {
+  @apply bg-yellow-100;
+}
+</style>

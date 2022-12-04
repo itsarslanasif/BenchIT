@@ -1,6 +1,6 @@
 <template>
   <div>
-    <a class="m-0 text-white p-2 overflow-auto rounded-md bg-primary hover:bg-primaryHover w-max inline-block -mr-1"
+    <a class="m-0 ml-3 text-xs text-white p-2 overflow-auto rounded-md bg-primary hover:bg-primaryHover w-max inline-block -mr-1"
       href="#popup1">Add Bookmark</a>
   </div>
   <div id="popup1"
