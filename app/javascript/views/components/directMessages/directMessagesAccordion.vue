@@ -2,7 +2,7 @@
   <div>
     <AccordionList class="my-5 ml-3 text-base text-slate-50">
       <AccordionItem default-opened="true">
-        <template #summary>{{ $t('directmessages.direct_messages') }}</template>
+        <template #summary>{{ $t('directMessages.direct_messages') }}</template>
         <h5
           v-for="userId in dmList"
           :key="userId"

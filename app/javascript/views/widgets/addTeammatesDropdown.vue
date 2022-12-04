@@ -6,7 +6,7 @@
       >
         +
       </p>
-      <p class="ml-3 text-white">{{ $t('directmessages.add_teammates') }}</p>
+      <p class="ml-3 text-white">{{ $t('directMessages.add_teammates') }}</p>
     </div>
 
     <transition name="fade" appear>
@@ -42,8 +42,6 @@ export default {
       switch (e.target.outerText) {
         case 'Invite People':
           this.UserInviteFormFlag = true;
-          break;
-        default:
           break;
       }
     },

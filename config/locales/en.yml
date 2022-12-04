@@ -28,7 +28,7 @@ en:
         company_size_info: 'How big is your company?'
         admin_role_type: 'What is your role there?'
         continue_company_button: 'Continue to Company Name'
-      directmessages:
+      directMessages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'
       company:
