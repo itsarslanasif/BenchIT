@@ -42,7 +42,7 @@
   </div>
   <div class="flex items-center h-fit justify-between p-1 border-b border-primary">
     <div class="flex overflow-y-hidden text-ellipsis p-1 cursor-pointer">
-      <pinnedConversation > </pinnedConversation>
+      <pinnedConversation />
       <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
       <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bm.name">
         <BookmarkShowVue :data="bookmark" @clicked="onClickChild"> </BookmarkShowVue>

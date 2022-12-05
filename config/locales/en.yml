@@ -87,6 +87,7 @@ en:
         title: 'Bookmark'
         url: 'Enter URL'
         name: 'Enter Name'
+        add_bookmark: 'Add bookmark'
         url_placeholder: 'facebook.com'
         name_placeholder: 'Facebook'
       request:

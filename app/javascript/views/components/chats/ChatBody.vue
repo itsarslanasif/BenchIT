@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-auto chatBody">
-    <pinnedConversationModel></pinnedConversationModel>
+    <pinnedConversationModel/>
     <div v-for="message in messages" :key="message.id" :id="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">

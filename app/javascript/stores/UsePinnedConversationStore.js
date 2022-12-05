@@ -36,7 +36,6 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     },
     togglePin() {
       this.pinToggle = !this.pinToggle;
-      console.log("asaishiwehiuuwehcwncinwecninwecniunewc:",this.pinToggle)
     }
   },
 });

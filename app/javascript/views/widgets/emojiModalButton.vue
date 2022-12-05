@@ -10,7 +10,7 @@
           :message="message"
           :options="options"
           @mouseleave="action"
-          @select="handleSelect($event, message,pinnedConversationStore)"
+          @select="handleSelect($event, message, pinnedConversationStore)"
         >
           <span @click="action" class="p-1 hover:bg-slate-100 rounded">
             <font-awesome-icon :icon="icon" />
@@ -33,12 +33,19 @@
 <script>
 import options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
-import { usePinnedConversation } from "../../stores/UsePinnedConversationStore";
+import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
-  props: ['icon', 'emoji', 'actionText', 'action', 'message','pinnedConversationStore'],
+  props: [
+    'icon',
+    'emoji',
+    'actionText',
+    'action',
+    'message',
+    'pinnedConversationStore',
+  ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
     return { pinnedConversationStore };
@@ -46,7 +53,7 @@ export default {
   data() {
     return {
       options,
-      handleSelect(key, message,pinnedConversationStore) {
+      handleSelect(key, message, pinnedConversationStore) {
         switch (key) {
           case 'copy-link':
             let tempText = document.createElement('input');
@@ -60,7 +67,7 @@ export default {
             document.execCommand('copy');
             document.body.removeChild(tempText);
             break;
-          case'pin-to-this-conversation':
+          case 'pin-to-this-conversation':
             if (!pinnedConversationStore.isPinned(message)) {
               pinnedConversationStore.pinMessage(message);
             } else {
