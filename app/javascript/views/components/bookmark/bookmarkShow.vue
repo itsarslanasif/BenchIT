@@ -2,46 +2,31 @@
   <div>
     <div>
       <a class="BoookmarkButton" :href="'#' + data['name']">{{
-        data['name']
+          data['name']
       }}</a>
     </div>
     <div :id="data['name']" class="overlay">
       <div class="popup">
         <div>
-          <h2>Bookmark</h2>
+          <h2>{{ $t('bookmark.title') }}</h2>
           <a class="close" href="#">×</a>
           <div class="content">
-            <h5>Please enter Url</h5>
+            <h5>{{ $t('bookmark.url') }}</h5>
             <input v-model="data.bookmark_URL" required />
           </div>
           <div class="content">
-            <h5>Please enter name</h5>
+            <h5>{{ $t('bookmark.name') }}</h5>
             <input v-model="data.name" required />
           </div>
           <div class="buttons">
-            <a
-              v-show="data.bookmark_URL !== '' && data.name !== ''"
-              class="btn"
-              href="#"
-              @click="handleUpdate()"
-            >
-              Update
+            <a v-show="data.bookmark_URL !== '' && data.name !== ''" class="btn" href="#" @click="handleUpdate()">
+              {{ $t('actions.update') }}
             </a>
-            <a
-              v-show="data.bookmark_URL !== '' && data.name !== ''"
-              class="btn"
-              href="#"
-              @click="handleDelete()"
-            >
-              Delete
+            <a v-show="data.bookmark_URL !== '' && data.name !== ''" class="btn" href="#" @click="handleDelete()">
+              {{ $t('actions.delete') }}
             </a>
-            <a
-              v-show="data.bookmark_URL !== '' && data.name !== ''"
-              class="btn"
-              href="#"
-              @click="handleCancel()"
-            >
-              Cancel
+            <a v-show="data.bookmark_URL !== '' && data.name !== ''" class="btn" href="#" @click="handleCancel()">
+              {{ $t('actions.cancel') }}
             </a>
           </div>
         </div>

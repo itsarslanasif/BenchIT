@@ -68,6 +68,7 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    ast (2.4.2)
     bcrypt (3.1.17)
     bindex (0.8.1)
     bootsnap (1.11.1)
@@ -165,6 +166,7 @@ GEM
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
+    json (2.6.2)
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.5.0)
@@ -189,7 +191,6 @@ GEM
     matrix (0.4.2)
     method_source (1.0.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.0)
     minitest (5.16.3)
     minitest-focus (1.3.1)
       minitest (>= 4, < 6)
@@ -221,9 +222,6 @@ GEM
       net-protocol
       timeout
     nio4r (2.5.8)
-    nokogiri (1.13.9)
-      mini_portile2 (~> 2.8.0)
-      racc (~> 1.4)
     nokogiri (1.13.9-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.13.9-x86_64-darwin)
@@ -231,6 +229,9 @@ GEM
     nokogiri (1.13.9-x86_64-linux)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    parallel (1.22.1)
+    parser (3.1.3.0)
+      ast (~> 2.4.1)
     pg (1.4.4)
     public_suffix (4.0.7)
     puma (5.6.4)
@@ -269,6 +270,7 @@ GEM
       rake (>= 12.2)
       thor (~> 1.0)
       zeitwerk (~> 2.5)
+    rainbow (3.1.1)
     rake (13.0.6)
     ransack (3.1.0)
       activerecord (>= 6.0.4)
@@ -288,6 +290,28 @@ GEM
       actionpack (>= 5.2, < 7.1)
       activesupport (>= 5.2, < 7.1)
       addressable (~> 2.7)
+    rubocop (1.39.0)
+      json (~> 2.3)
+      parallel (~> 1.10)
+      parser (>= 3.1.2.1)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8, < 3.0)
+      rexml (>= 3.2.5, < 4.0)
+      rubocop-ast (>= 1.23.0, < 2.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 3.0)
+    rubocop-ast (1.24.0)
+      parser (>= 3.1.1.0)
+    rubocop-performance (1.15.1)
+      rubocop (>= 1.7.0, < 2.0)
+      rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.17.3)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.33.0, < 2.0)
+    rubocop-rspec (2.15.0)
+      rubocop (~> 1.33)
+    ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     sassc (2.4.0)
@@ -323,6 +347,7 @@ GEM
     timeout (0.2.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
+    unicode-display_width (2.3.0)
     vite_rails (3.0.12)
       railties (>= 5.1, < 8)
       vite_ruby (~> 3.0, >= 3.2.2)
@@ -355,7 +380,6 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
-  ruby
   x86_64-darwin-19
   x86_64-darwin-20
   x86_64-darwin-21
@@ -389,6 +413,10 @@ DEPENDENCIES
   redis (~> 4.0)
   redis-namespace
   route_translator
+  rubocop
+  rubocop-performance
+  rubocop-rails
+  rubocop-rspec
   sassc-rails
   searchkick
   selenium-webdriver
@@ -402,4 +430,4 @@ DEPENDENCIES
   webdrivers
 
 BUNDLED WITH
-   2.3.18
+   2.3.16
