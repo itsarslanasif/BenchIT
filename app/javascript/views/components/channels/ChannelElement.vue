@@ -5,7 +5,7 @@
     <i class="fa-solid fa-chevron-down mt-3"></i>
   </div>
   <div v-if="modalopen">
-    <ChannelDetailModel :channelname = "this.channelname" :detailsopen = "this.OpenChannelDetailModal" />
+    <ChannelDetailModel :channelname = "this.channelname" :detailsopen = "this.OpenChannelDetailModal" class="m-auto absolute inset-x-0" />
   </div>
 </template>
 
@@ -38,3 +38,4 @@ export default {
   },
 };
 </script>
+
