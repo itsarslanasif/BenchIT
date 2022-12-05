@@ -11,12 +11,8 @@
     </div>
     <hr class="text-slate-400" />
     <div>
-      <p>
-        <ChannelsAccordion />
-      </p>
-      <p>
-        <DirectMessageAccordian />
-      </p>
+      <ChannelsAccordion />
+      <DirectMessageAccordian />
     </div>
     <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
       {{ $t('channels.selected_channels') }}

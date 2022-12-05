@@ -9,7 +9,6 @@ import PasswordForm from '@/views/widgets/form/PasswordForm.vue'
 import SplitPanes from './views/pages/SplitPanes.vue'
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue'
 import UserInviteFormVue from './views/widgets/UserInviteForm.vue'
-import ChannelElement from './views/components/channels/ChannelElement.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -33,7 +32,6 @@ const router = createRouter({
       ]
     },
     { path: '/workspace_dashboard', component: WorkspaceDashboard, name: 'workspace_dashboard' },
-    { path: '/channel/:name', component: ChannelElement, name: 'channel-id' },
     { path: '/users/:id', component: SplitPanes, name: 'user_chat' },
     { path: '/channels/:id/:message_id?', component: SplitPanes, name: 'channel_chat' },
     { path: '/groups/:id', component: SplitPanes, name: 'group_chat' },
