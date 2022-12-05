@@ -23,6 +23,7 @@
       />
     </div>
     <button
+      @click="sendMessage"
       class="
         float-right
         px-6
@@ -34,7 +35,7 @@
         hover:bg-successHover
       "
     >
-      {{ $t(CONSTANTS.SEND) }}
+      {{ $t('rightpane.send') }}
     </button>
   </div>
 </template>
@@ -43,8 +44,8 @@
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { NDivider } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
-import { CONSTANTS } from '../../../assets/constants';
 import { useThreadStore } from '../../../stores/ThreadStore';
+import { conversation } from '../../../modules/axios/editorapi';
 export default {
   name: 'RightPane',
   components: {
@@ -59,12 +60,26 @@ export default {
   data() {
     return {
       newMessage: '',
-      CONSTANTS: CONSTANTS,
+      id: window.location.pathname.split('/')[2],
+      conversation_type: window.location.pathname.split('/')[1],
     };
   },
   computed: {
     replies() {
-      return this.threadStore.message.replies.length + ' replies'
+      return this.threadStore.message.replies.length + ' replies';
+    },
+  },
+  methods: {
+    sendMessage() {
+      const payload = {
+        sender_id: 1,
+        content: this.newMessage,
+        is_threaded: false,
+        parent_message_id: this.threadStore.message.id,
+        conversation_type: this.conversation_type,
+        conversation_id: this.id,
+      };
+      conversation(payload);
     },
   },
 };

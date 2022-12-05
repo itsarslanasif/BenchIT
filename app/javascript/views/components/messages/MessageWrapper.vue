@@ -14,7 +14,7 @@
       <div>
         <span class="messageInfo">
           <p v-show="!isSameUser" class="name">
-            <b>{{ message.sender_name }}</b>
+            <b>{{ currMessage.sender_name }}</b>
           </p>
           <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
             {{ isSameUser ? timeWithoutAMPM : time }}
@@ -22,24 +22,24 @@
           <span
             v-show="isSameUser"
             class="messageContent"
-            v-html="message.content"
+            v-html="currMessage.content"
           />
         </span>
         <span
           v-show="!isSameUser"
           class="messageContent"
-          v-html="message.content"
+          v-html="currMessage.content"
         />
       </div>
       <template v-for="emoji in allReactions" :key="emoji.id">
         <span class="emoji">{{ emoji.i }}</span>
       </template>
-      <div
-        v-if="message?.replies"
+        <div
+        v-if="currMessage?.is_threaded"
         @click="toggleThread"
         class="text-info text-xs cursor-pointer hover:underline"
       >
-        {{ message.replies?.length }} replies...
+        {{ currMessage.replies?.length }} replies...
       </div>
       <div
         class="emojiModalToggle"
@@ -57,8 +57,7 @@
           actionText="Find another reaction"
           :action="setEmojiModal"
         />
-
-        <EmojiModalButton
+       <EmojiModalButton
           v-if="!currMessage.parent_message_id"
           icon="fa-solid fa-comment-dots"
           actionText="Reply in thread"
@@ -95,7 +94,7 @@ import { useThreadStore } from '../../../stores/ThreadStore';
 
 export default {
   name: 'MessageWrapper',
-  setup() {
+    setup() {
     const threadStore = useThreadStore();
     return { threadStore };
   },
@@ -138,14 +137,14 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.message.created_at).getTime()).format('h:mm A');
+      return moment(new Date(this.currMessage.created_at).getTime()).format('h:mm A');
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.message.created_at).getTime()).format('h:mm');
+      return moment(new Date(this.currMessage.created_at).getTime()).format('h:mm');
     },
     isSameUser() {
-      if (this.oldMessage === undefined) return false;
-      return this.message?.sender_id === this.oldMessage?.sender_id;
+      if (this.prevMessage === undefined) return false;
+      return this.currMessage?.sender_id === this.prevMessage?.sender_id;
     },
   },
   methods: {
@@ -175,7 +174,7 @@ p {
 }
 
 .messageWrapper {
-  @apply items-center flex p-3 relative;
+  @apply items-center flex p-1 relative;
 }
 
 .messageWrapper:hover {
@@ -225,11 +224,12 @@ p {
 
 .emojiModalToggle {
   @apply bg-white text-black-500 p-1 rounded absolute;
-  right: 5px;
-  top: -15px;
+  right: 30px;
+  top: -22px;
 }
 
 .emoji {
   @apply bg-black-300 p-1 mr-1 rounded;
 }
 </style>
+

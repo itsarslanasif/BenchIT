@@ -1,23 +1,23 @@
 <template>
   <div class="overflow-auto chatBody">
-    <template v-for="(message, index) in messages" :key="index">
+    <div v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
-      <div
-        v-if="!isSameDayMessage(messages[index - 1]?.sentAt, message?.sentAt)"
-      >
+      <div v-if="!isSameDayMessage">
         <n-divider>
           <p class="text-gray-600">
             {{
-              isToday(message.sentAt) ? 'Today' : new Date(message.sentAt).toDateString()
+              isToday ? 'Today' : new Date(message.created_at).toDateString()
             }}
           </p>
         </n-divider>
       </div>
+
       <MessageWrapper
-        :curr-message="message"
-        :prev-message="messages[index - 1]"
+        v-if="!message.parent_message_id"
+        :currMessage="message"
+        :prevMessage="prevMessage"
       />
-    </template>
+    </div>
   </div>
 </template>
 <script>
@@ -44,12 +44,14 @@ export default {
   computed: {
     isToday() {
       return (
-        new Date(this.message?.created_at).toDateString() === new Date().toDateString()
+        new Date(this.message?.created_at).toDateString() ===
+        new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.created_at).toDateString() === new Date(this.prevMessage?.created_at).toDateString()
+        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },
@@ -57,24 +59,13 @@ export default {
     const messageStore = useMessageStore();
     const { messages } = storeToRefs(messageStore);
     return {
-      messages
+      messages,
     };
   },
   methods: {
     setMessage(message) {
       this.prevMessage = this.message;
       this.message = message;
-    },
-
-    isToday(sentAt) {
-      return new Date(sentAt).toDateString() === new Date().toDateString();
-    },
-
-    isSameDayMessage(prevSentAt, currSentAt) {
-      return (
-        new Date(prevSentAt).toDateString() ===
-        new Date(currSentAt).toDateString()
-      );
     },
   },
 };
