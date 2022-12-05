@@ -1,22 +1,22 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="form">
-    <h3 class="form-h3">{{ $t('confirmation.title') }}</h3>
+  <form @submit.prevent="handleSubmit" class="bg-slate-50 rounded-xl my-8 mx-auto text-left p-64">
+    <h3>{{ $t('confirmation.title') }}</h3>
     <label>{{ $t('confirmation.password') }}</label>
     <input
       v-model="userStore.user_password.password"
-      class="form-input-select"
+      class="border"
       type="password"
       placeholder="Password"
       required
     />
-    <div v-if="userStore.passwordError" class="error">
+    <div v-if="userStore.passwordError" class="text-danger font-bold mt-2 text-sm">
       {{ userStore.passwordError }}
     </div>
-    <p class="form-h">{{ $t('confirmation.description') }}</p>
+    <p>{{ $t('confirmation.description') }}</p>
     <label>{{ $t('confirmation.confirm_password') }}</label>
     <input
       v-model="userStore.user_password.password_confirmation"
-      class="form-input-select"
+      class="border"
       type="password"
       placeholder="Confirm Password"
       required
@@ -24,8 +24,8 @@
     <div v-if="userStore.confirmPasswordError" class="error">
       {{ userStore.confirmPasswordError }}
     </div>
-    <div class="btn-div">
-      <button class="form-btn">{{ $t('confirmation.password_save') }}</button>
+    <div class="flex justify-center">
+      <button class="border-0 mt-5 py-3 px-5 w-3/4">{{ $t('confirmation.password_save') }}</button>
     </div>
   </form>
 </template>

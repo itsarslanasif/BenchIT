@@ -32,6 +32,8 @@ Rails.application.routes.draw do
 
           resources :profiles, only: %i[index create]
         end
+
+        resources :reactions, only: %i[create destroy]
       end
     end
 
