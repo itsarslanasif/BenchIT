@@ -30,13 +30,14 @@ class Api::V1::UsersController < Api::ApiController
   end
 
   def set_previous_direct_messages
+    current_user = User.first
     conversation_ids = BenchConversation.set_previous_dms
     if conversation_ids.empty?
-      return render json: { message: "No DMs Found", status: :unprocessable_entity }
+      return render json: {users_ids: [current_user.id]}
     else
       @bench_converations_ids = ConversationMessage.set_previous_dms(conversation_ids)
       if @bench_converations_ids.empty?
-        return render json: { message: "No DMs Found in 2 Weaks", status: :unprocessable_entity }
+        return render json: {users_ids: [current_user.id]}
       end
     end
   end
