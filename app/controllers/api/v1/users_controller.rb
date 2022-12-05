@@ -20,7 +20,7 @@ class Api::V1::UsersController < Api::ApiController
 
   def previous_direct_messages
     dm_users_ids = BenchConversation.where(id: @bench_converations_ids).pluck(:conversationable_id,:sender_id).flatten.uniq
-    render json: {users_ids: dm_users_ids,status_code: 2}
+    render json: {users_ids: dm_users_ids}
   end
 
   private
@@ -32,11 +32,11 @@ class Api::V1::UsersController < Api::ApiController
   def set_previous_direct_messages
     conversation_ids = BenchConversation.set_previous_dms
     if conversation_ids.empty?
-      return render json: { message: "No DMs Found", status_code: 1, status: :unprocessable_entity }
+      return render json: { message: "No DMs Found", status: :unprocessable_entity }
     else
       @bench_converations_ids = ConversationMessage.set_previous_dms(conversation_ids)
       if @bench_converations_ids.empty?
-        return render json: { message: "No DMs Found in 2 Weaks", status_code: 1, status: :unprocessable_entity }
+        return render json: { message: "No DMs Found in 2 Weaks", status: :unprocessable_entity }
       end
     end
   end

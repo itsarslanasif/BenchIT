@@ -33,7 +33,7 @@ class ConversationMessage < ApplicationRecord
   end
 
   def self.set_previous_dms(conversation_ids)
-    two_weaks_ago_time = DateTimeLibrary.new.get_two_weeks_time
+    two_weaks_ago_time = DateTimeLibrary.new.get_two_weeks_ago_time
     return ConversationMessage.where(bench_conversation_id: conversation_ids).where("created_at > ?", two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
   end
 end
