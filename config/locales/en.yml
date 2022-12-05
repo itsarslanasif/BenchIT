@@ -38,7 +38,7 @@ en:
         pinned_by: 'Pinned by'
         you: 'you'
         pinned: 'pinned'
-      directMessages:
+      direct_messages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'
       company:

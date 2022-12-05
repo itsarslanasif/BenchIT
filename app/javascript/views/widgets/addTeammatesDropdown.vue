@@ -6,7 +6,7 @@
       >
         +
       </p>
-      <p class="ml-3 text-xs text-white">{{ $t('directMessages.add_teammates') }}</p>
+      <p class="ml-3 text-xs text-white">{{ $t('direct_messages.add_teammates') }}</p>
     </div>
 
     <transition name="fade" appear>
