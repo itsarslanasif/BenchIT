@@ -31,4 +31,9 @@ class ConversationMessage < ApplicationRecord
 
     ActionCable.server.broadcast(channel_key, { message: message })
   end
+
+  def self.set_previous_dms(conversation_ids)
+    two_weaks_ago_time = Time.now.utc-86800*14
+    return ConversationMessage.where(bench_conversation_id: conversation_ids).where("created_at > ?", two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
+  end
 end

@@ -30,11 +30,14 @@ class Api::V1::UsersController < Api::ApiController
   end
 
   def set_previous_direct_messages
-    current_user = User.first
-    two_weaks_ago_time = Time.now.utc-86800*14
-    conversation_ids = BenchConversation.where(conversationable_type: "User", sender_id: current_user).or(BenchConversation.where(conversationable_type: "User", conversationable_id: current_user)).pluck(:id)
-    return render json: {message: "No DMs Found",status_code: 1, status: :unprocessable_entity } if conversation_ids.empty?
-    @bench_converations_ids = ConversationMessage.where(bench_conversation_id: conversation_ids).where("created_at > ?", two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
-    return render json: {message: "No DMs Found in 2 Weaks",status_code: 1, status: :unprocessable_entity } if @bench_converations_ids.empty?
+    conversation_ids = BenchConversation.set_previous_dms
+    if conversation_ids.empty?
+      return render json: { message: "No DMs Found", status_code: 1, status: :unprocessable_entity }
+    else
+      @bench_converations_ids = ConversationMessage.set_previous_dms(conversation_ids)
+      if @bench_converations_ids.empty?
+        return render json: { message: "No DMs Found in 2 Weaks", status_code: 1, status: :unprocessable_entity }
+      end
+    end
   end
 end

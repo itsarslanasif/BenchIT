@@ -8,4 +8,11 @@ class BenchConversation < ApplicationRecord
     find_by(conversationable_type: 'User', sender_id: receiver_id, conversationable_id: sender_id) ||
     none
   }
+
+  private
+
+  def self.set_previous_dms
+    current_user = User.first
+    return BenchConversation.where(conversationable_type: "User", sender_id: current_user).or(BenchConversation.where(conversationable_type: "User", conversationable_id: current_user)).pluck(:id)
+  end
 end
