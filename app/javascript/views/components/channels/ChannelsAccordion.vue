@@ -2,7 +2,7 @@
   <div>
     <AccordionList class="my-5 ml-3 text-base text-slate-50">
       <AccordionItem default-opened="true">
-        <template #summary>{{ $t('channels.channels') }}</template>
+        <template #summary>{{ $t('channels.title') }}</template>
         <h5
           v-for="channel in channels"
           :key="channel.id"
@@ -32,7 +32,7 @@
 <script>
 import { getChannels } from '../../../api/channels/channels.js';
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
-import CreateChannel from '../../containers/CreateChannel.vue';
+import CreateChannel from './CreateChannel.vue';
 
 export default {
   components: { AccordionList, AccordionItem, CreateChannel },

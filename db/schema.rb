@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_30_131254) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_02_171721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -128,6 +128,14 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_131254) do
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
   end
 
+  create_table "reactions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "conversation_message_id"
+    t.string "emoji"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -192,6 +200,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_30_131254) do
   add_foreign_key "conversation_messages", "users", column: "sender_id"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
+  add_foreign_key "reactions", "users"
   add_foreign_key "user_groups", "groups"
   add_foreign_key "user_groups", "users"
 end

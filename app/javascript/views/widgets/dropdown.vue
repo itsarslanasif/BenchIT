@@ -1,26 +1,20 @@
 <template>
   <div>
-    <select
-      v-model="option"
-      class="dropDown"
-      @change="emitDropDownSelection(option)"
-    >
-      <option value="copy_display_name">{{CONSTANTS.COPY_DISPLAY_NAME}}</option>
-      <option value="View_files">{{CONSTANTS.VIEW_FILES}}</option>
-      <option value="copy_member_id">{{CONSTANTS.COPY_MEMBER_ID}}</option>
+    <select v-model="option" class="dropDown" @change="emitDropDownSelection(option)">
+      <option value="copy_display_name">{{ $t('actions.copy_display_name') }}</option>
+      <option value="View_files">{{ $t('actions.view_files') }}</option>
+      <option value="copy_member_id">{{ $t('actions.copy_member_id') }}</option>
     </select>
   </div>
 </template>
 
 <script>
-import { CONSTANTS } from '../../assets/constants';
 export default {
 
   components: {},
   data() {
     return {
       option: '',
-      CONSTANTS: CONSTANTS,
     };
   },
   methods: {
@@ -39,6 +33,7 @@ export default {
   border: solid 1px rgb(146, 146, 146);
   background-color: #252d34;
 }
+
 .dropDown:hover {
   background-color: #475569;
 }

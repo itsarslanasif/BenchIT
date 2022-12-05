@@ -33,7 +33,7 @@ const router = createRouter({
     },
     { path: '/workspace_dashboard', component: WorkspaceDashboard, name: 'workspace_dashboard' },
     { path: '/users/:id', component: SplitPanes, name: 'user_chat' },
-    { path: '/channels/:id', component: SplitPanes, name: 'channel_chat' },
+    { path: '/channels/:id/:message_id?', component: SplitPanes, name: 'channel_chat' },
     { path: '/groups/:id', component: SplitPanes, name: 'group_chat' },
   ],
 });

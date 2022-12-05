@@ -29,23 +29,6 @@ export default {
   data() {
     return {
       showModal: false,
-      modalArray: [
-        {
-          title: 'Invite People to Workspace',
-          func: this.invitePeople
-        },
-        {
-          title: 'Create a channel',
-          func: this.createChannel
-        },
-        {
-          title: 'Sign Out of Workspace',
-          func: this.signOut
-        }
-      ],
-      modalStyle: {
-        marginBottom: 40,
-      }
     }
   },
   setup() {
@@ -62,15 +45,6 @@ export default {
     },
     crash() {
       this.$api.call(this.store.show('this-will-trigger-a-500'))
-    },
-    signOut() {
-      console.log('Signed Out')
-    },
-    createChannel() {
-      console.log('Create Channel')
-    },
-    invitePeople() {
-      console.log('Invite People')
     },
   }
 }

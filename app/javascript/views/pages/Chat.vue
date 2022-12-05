@@ -28,7 +28,7 @@
         </div>
         <button @click="sendMessage"
           class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover">
-          {{ $t(CONSTANTS.SEND) }}
+          {{ $t('actions.send') }}
         </button>
       </div>
     </div>
@@ -42,7 +42,6 @@ import ChatHeader from '../components/chats/ChatHeader.vue';
 import { NInput, NSpace } from 'naive-ui';
 import ChatBody from '../components/chats/ChatBody.vue';
 import Editor from '@tinymce/tinymce-vue';
-import { CONSTANTS } from '../../assets/constants';
 import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
@@ -67,7 +66,6 @@ export default {
       showChannels: false,
       allProfiles: [],
       allChannels: [],
-      CONSTANTS: CONSTANTS,
       chat: {},
       messages: [],
       Cable: null,
