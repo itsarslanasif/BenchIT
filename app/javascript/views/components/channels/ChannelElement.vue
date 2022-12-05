@@ -34,8 +34,7 @@ export default {
   async mounted() {
     const route = useRoute();
     const result = await getChannels();
-    this.channelname = (result[route.params.id-1].name)
-    console.log(route.params.id);
+    this.channelname = (result[route.params.id-1].name);
   },
 };
 </script>
