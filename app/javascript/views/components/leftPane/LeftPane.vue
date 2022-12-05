@@ -12,6 +12,7 @@
     <hr class="text-slate-400" />
     <div>
       <ChannelsAccordion />
+      <DirectMessageAccordian />
     </div>
     <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
       {{ $t('channels.selected_channels') }}
@@ -22,8 +23,9 @@
 <script>
 import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
+import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vue';
 
 export default {
-  components: { ChannelsAccordion, IconElement },
+  components: { ChannelsAccordion, IconElement, DirectMessageAccordian },
 };
 </script>

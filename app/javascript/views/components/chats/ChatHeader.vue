@@ -132,7 +132,7 @@ export default {
     const messageStore = useMessageStore();
     const { messages } = storeToRefs(messageStore);
     const pinnedConversationStore = usePinnedConversation();
-    
+
     return {
       messages,
       pinnedConversationStore,
