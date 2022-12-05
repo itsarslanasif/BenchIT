@@ -46,6 +46,27 @@ bundle exec rails db:create
 bundle exec rails db:migrate
 bundle exec rails db:seed
 ```
+## ElasticSearch Installation
+
+```
+The MacOS archive for Elasticsearch v8.1.3 can be downloaded and installed as follows:
+
+curl -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.1.3-darwin-x86_64.tar.gz
+curl https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-8.1.3-darwin-x86_64.tar.gz.sha512 | shasum -a 512 -c -
+tar -xzf elasticsearch-8.1.3-darwin-x86_64.tar.gz
+cd elasticsearch-8.1.3/
+
+And run ElasticSearch from command line
+./bin/elasticsearch
+
+Alternative commands to install and run elasticSearch on MacOS
+brew tap elastic/tap
+brew install elastic/tap/elasticsearch-full
+elasticsearch
+
+If you are using Ubuntu 20.04
+follow this link https://ourcodeworld.com/articles/read/1508/how-to-install-elasticsearch-7-in-ubuntu-2004
+```
 
 ## Booting the app
 
