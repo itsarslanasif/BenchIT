@@ -12,17 +12,11 @@
 </template>
 
 <script>
-import { CONSTANTS } from '../../../assets/constants';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 export default {
   setup() {
     const pinnedConversationStore = usePinnedConversation();
     return { pinnedConversationStore };
-  },
-  data() {
-    return {
-      CONSTANTS: CONSTANTS,
-    };
   },
 };
 </script>
