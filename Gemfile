@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '>= 7.0.3.1'
+gem 'rails', '~> 7.0.3.1'
 
 gem 'bootsnap', require: false
 gem 'devise'
