@@ -33,7 +33,7 @@
 <script>
 import options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
-import { usePinnedConversation } from '../../stores/usePinnedConversationStore';
+import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'EmojiModalButton',

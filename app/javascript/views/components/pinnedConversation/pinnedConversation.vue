@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { usePinnedConversation } from '../../../stores/usePinnedConversationStore';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 export default {
   setup() {
     const pinnedConversationStore = usePinnedConversation();

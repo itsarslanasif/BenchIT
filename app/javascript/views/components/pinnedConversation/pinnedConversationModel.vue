@@ -22,7 +22,7 @@
   </div>
 </template>
 <script>
-import { usePinnedConversation } from '../../../stores/usePinnedConversationStore';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import MessageWrapper from '../messages/MessageWrapper.vue';
 
 export default {
