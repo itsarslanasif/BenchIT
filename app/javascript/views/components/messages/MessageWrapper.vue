@@ -3,7 +3,9 @@
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
-        >&#128204; {{ $t('pinconversation.pinned_by') }}
+      >
+        <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
+        {{ $t('pinconversation.pinned_by') }}
         {{ $t('pinconversation.you') }}
       </span>
     </div>

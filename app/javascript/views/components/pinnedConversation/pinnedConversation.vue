@@ -4,7 +4,7 @@
       @click="pinnedConversationStore.togglePin()"
       class="text-xs hover:text-white hover:bg-primary hover:border-transparent text-slate-1000 font-bold py-2 px-4 rounded-md border-white"
     >
-      &#128204;
+      <font-awesome-icon icon="fa-solid fa-thumbtack" />
       {{ pinnedConversationStore.getCount }}
       {{ $t('pinconversation.pinned') }}
     </button>
