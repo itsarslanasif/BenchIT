@@ -54,6 +54,12 @@
         :placeholder="$t('pages.sign_in.email_placeholder')"
         required
       />
+      <input
+        v-model="user.password"
+        type="password"
+        :placeholder="$t('pages.sign_in.password_placeholder')"
+        required
+      />
       <button class="sign-in-btn">
         {{ $t('pages.sign_in.sign_in_with_email') }}
       </button>
@@ -77,23 +83,22 @@ export default {
     return {
       user: {
         email: '',
+        password: '',
       },
     };
   },
+
   methods: {
-    async handleSubmit() {
-      const response = await userSignIn({
+    handleSubmit() {
+      userSignIn({
         user: this.user,
         authenticity_token: document.querySelector('meta[name="csrf-token"]')
           .content,
+        commit: 'Log in',
+      }).then((response) => {
+        console.log(response.headers['Authorization'])
+        localStorage.setItem('token', response.headers['Authorization']);
       });
-      if (response.headers.Authorization) {
-        sessionStorage.setItem(
-          'authenticity_token',
-          response.headers?.Authorization
-        );
-      }
-      console.log(response.status);
     },
   },
 };
