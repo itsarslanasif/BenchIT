@@ -75,7 +75,7 @@ import Spinner from '../../shared/spinner.vue';
 import axios from '../../../modules/axios/index';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import { usePinnedConversation } from '../../../stores/usePinnedConversationStore';
 import pinnedConversationModelVue from '../pinnedConversation/pinnedConversationModel.vue';
 import pinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 export default {
@@ -132,7 +132,7 @@ export default {
     const messageStore = useMessageStore();
     const { messages } = storeToRefs(messageStore);
     const pinnedConversationStore = usePinnedConversation();
-    
+
     return {
       messages,
       pinnedConversationStore,
