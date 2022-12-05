@@ -72,24 +72,24 @@
           </template>
           <EmojiModalButton
             icon="fa-solid fa-icons"
-            actionText="Find another reaction"
+            :actionText="$t('emojiModalButton.find_another_reaction')"
             :action="setEmojiModal"
           />
           <EmojiModalButton
             icon="fa-solid fa-comment-dots"
-            actionText="Reply in thread"
+            :actionText="$t('emojiModalButton.reply_in_thread')"
           />
           <EmojiModalButton
             icon="fa-solid fa-share"
-            actionText="Share message..."
+            :actionText="$t('emojiModalButton.share_message')"
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
-            actionText="Add to saved items"
+            :actionText="$t('emojiModalButton.add_to_saved_items')"
           />
           <EmojiModalButton
             icon="fa-solid fa-ellipsis-vertical"
-            actionText="More actions"
+            :actionText="$t('emojiModalButton.more_actions')"
             :action="setOptionsModal"
             :message="message"
             :pinnedConversationStore="usePinnedConversation"

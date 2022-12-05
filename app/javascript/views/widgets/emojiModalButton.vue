@@ -57,11 +57,7 @@ export default {
         switch (key) {
           case 'copy-link':
             let tempText = document.createElement('input');
-            tempText.value = `${
-              import.meta.env.VITE_APP_SERVER_URL
-            }channels/${`${window.location.pathname.split('/')[2]}`}/${
-              message.id
-            }`;
+            tempText.value = `${ import.meta.env.VITE_APP_SERVER_URL }channels/${`${window.location.pathname.split('/')[2]}`}/${ message.id }`;
             document.body.appendChild(tempText);
             tempText.select();
             document.execCommand('copy');
@@ -72,10 +68,7 @@ export default {
               pinnedConversationStore.pinMessage(message);
             } else {
               pinnedConversationStore.unPinMessage(message);
-              if (
-                pinnedConversationStore.getCount == 0 &&
-                pinnedConversationStore.getPinToggle
-              ) {
+              if ( pinnedConversationStore.getCount == 0 && pinnedConversationStore.getPinToggle ) {
                 pinnedConversationStore.togglePin();
               }
             }

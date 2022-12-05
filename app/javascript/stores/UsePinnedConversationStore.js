@@ -1,6 +1,4 @@
-import {
-  defineStore
-} from 'pinia';
+import { defineStore } from 'pinia';
 
 export const usePinnedConversation = defineStore('pinnedConversationStore', {
   state: () => ({
@@ -25,17 +23,15 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
       this.pinnedConversation.push(message);
     },
     isPinned(message) {
-      if (this.pinnedConversation.includes(message)) {
-        return true
-      }
+      return this.pinnedConversation.includes(message);
     },
     unPinMessage(message) {
-      this.pinnedConversation = this.pinnedConversation.filter(function (item) {
-        return item !== message
-      })
+      this.pinnedConversation = this.pinnedConversation.filter(
+        msg => msg !== message
+      );
     },
     togglePin() {
       this.pinToggle = !this.pinToggle;
-    }
+    },
   },
 });
