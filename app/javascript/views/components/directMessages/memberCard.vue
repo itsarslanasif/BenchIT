@@ -7,13 +7,15 @@
       />
     </div>
     <div class="ml-5 text-slate-300">
-      <p>Asad ullah Siddiqui</p>
-      <p>asad@gmail.com</p>
+      <p>{{ name }}</p>
+      <p>{{ name }}@gmail.com</p>
     </div>
-    <hr/>
+    <hr />
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: ['name', 'email', 'img-url'],
+};
 </script>
