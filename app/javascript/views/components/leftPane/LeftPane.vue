@@ -10,8 +10,11 @@
       <IconElement icon="&#8285;" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />
+    <div v-if="channels.length">
+      <ChannelsAccordion :list="channels" :heading="$t('channels.title')" />
+    </div>
     <div>
-      <ChannelsAccordion />
+      <ChannelsAccordion :list="profiles" :heading="$t('sidebar.direct_messages')" />
     </div>
     <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
       {{ $t('channels.selected_channels') }}
@@ -22,8 +25,22 @@
 <script>
 import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
-
+import { useProfileStore } from '../../../stores/useProfileStore';
+import { useChannelStore } from '../../../stores/useChannelStore';
+import { storeToRefs } from 'pinia';
 export default {
   components: { ChannelsAccordion, IconElement },
+  setup() {
+    const profileStore = useProfileStore();
+    const channelStore = useChannelStore();
+    const { profiles } = storeToRefs(profileStore);
+    const { channels } = storeToRefs(channelStore);
+    profileStore.index();
+    channelStore.index();
+    return {
+      profiles,
+      channels,
+    };
+  },
 };
 </script>
