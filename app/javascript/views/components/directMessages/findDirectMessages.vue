@@ -1,13 +1,13 @@
 <template>
   <div class="container bg-primary text-white border border-slate-600">
     <div class="grid text-slate-600 grid-cols-1 divide-y">
-      <div class="p-2 text-white text-xl">Direct messages</div>
+      <div class="p-2 text-white text-xl">{{$t('direct_messages.direct_messages')}}</div>
       <div class="h">
         <div class="flex p-3">
-          <p>To:</p>
+          <p>{{$t('request.to')}}:</p>
           <input
             type="text"
-            placeholder=" @Somebody or somebody@example.com"
+            :placeholder="$t('find_direct_messages.somebody')"
             ouline="none"
             class="bg-primary w-full ml-1"
             v-model="query"
@@ -18,7 +18,7 @@
         <hr />
         <div class="w-full bg-slate-800 maxHeight p-5">
           <div v-for="member in members" :key="member.id">
-            <memberCard :name="member.username" :description="member.description" :img-url="member.image_url"></memberCard>
+            <memberCard class="cursor-pointer" :name="member.username" :description="member.description" :img-url="member.image_url"></memberCard>
         </div>
 
         </div>
