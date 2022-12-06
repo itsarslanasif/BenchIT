@@ -25,12 +25,11 @@
               :name="member.username"
               :description="member.description"
               :img-url="member.image_url"
-            ></memberCard>
+            />
           </div>
         </div>
       </div>
     </div>
-    <div></div>
   </div>
 </template>
 
