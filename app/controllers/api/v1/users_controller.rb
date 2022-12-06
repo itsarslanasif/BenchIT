@@ -33,11 +33,11 @@ class Api::V1::UsersController < Api::ApiController
     current_user = User.first
     conversation_ids = BenchConversation.set_previous_dms
     if conversation_ids.empty?
-      return render json: {users_ids: [current_user.id]}
+      return render json: { users: [current_user] }
     else
       @bench_converations_ids = ConversationMessage.set_previous_dms(conversation_ids)
       if @bench_converations_ids.empty?
-        return render json: {users_ids: [current_user.id]}
+        return render json: { users: [current_user] }
       end
     end
   end
