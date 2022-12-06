@@ -96,8 +96,7 @@ export default {
           .content,
         commit: 'Log in',
       }).then((response) => {
-        console.log(response.headers['Authorization'])
-        localStorage.setItem('token', response.headers['Authorization']);
+        sessionStorage.setItem('token', response.headers.authorization);
       });
     },
   },
