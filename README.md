@@ -42,6 +42,7 @@ cd BenchIT
 cp .env.example .env
 bundle install
 yarn install
+npm install
 bundle exec rails db:create
 bundle exec rails db:migrate
 bundle exec rails db:seed
