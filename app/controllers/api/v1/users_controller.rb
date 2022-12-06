@@ -20,7 +20,7 @@ class Api::V1::UsersController < Api::ApiController
 
   def previous_direct_messages
     dm_users_ids = BenchConversation.where(id: @bench_converations_ids).pluck(:conversationable_id,:sender_id).flatten.uniq
-    @users = User.where(id: dm_users_ids)
+    @users = User.users_from_ids_array(dm_users_ids)
   end
 
   private
