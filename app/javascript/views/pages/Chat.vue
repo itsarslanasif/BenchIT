@@ -45,7 +45,7 @@
               statusbar: false,
               plugins: 'lists link code codesample',
               toolbar:
-                'bold italic underline strikethrough | link | bullist numlist | alignleft | code codesample',
+                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code codesample  myCustomToolbarButton ',
               codesample_languages: [none],
               formats: {
                 code: {
