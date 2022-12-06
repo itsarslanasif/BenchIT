@@ -6,7 +6,8 @@
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
-        <Chat />
+        <Chat v-show="screenStore.getSekectedScreen=='chat'" />
+        <searchDmscreen v-show="screenStore.getSekectedScreen=='search-dm'" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
@@ -23,6 +24,8 @@ import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
+import { useSelectedScreenStore } from '../../stores/userSelectedScreen';
+import searchDmscreen from '../components/directMessages/findDirectMessages.vue'
 export default {
   components: {
     Splitpanes,
@@ -31,6 +34,11 @@ export default {
     WorkspaceDropdown,
     LeftPane,
     UserInviteFormVue,
+    searchDmscreen,
+  },
+  setup() {
+    const screenStore = useSelectedScreenStore();
+    return { screenStore };
   },
   methods: {
     closeForm() {
