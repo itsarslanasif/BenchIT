@@ -5,6 +5,7 @@
     <div class="flex ml-10">
       <p class="font-black text-2xl ml-1"> <i class="fas fa-hashtag mr-2"></i>{{ this.channelname }} </p>
     </div>
+    <StarUnstar />
     <div class="flex ml-4">
       <p class="ml-3 hover:font-black cursor-pointer">
         {{ $t('channeldetail.about') }}
@@ -25,9 +26,10 @@
 
 <script>
 import About from '../components/channeldetail/About.vue';
+import StarUnstar from '../components/channeldetail/StarUnstar.vue';
 export default {
   name: 'ChannelDetailModal',
-  components: { About },
+  components: { About, StarUnstar },
 
   props: {
     channelname: String,

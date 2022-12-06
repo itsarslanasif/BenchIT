@@ -27,7 +27,6 @@ export default {
   methods: {
     OpenChannelDetailModal(open) {
       this.modalopen = open;
-      console.log('open modal');
     }
   },
 

@@ -109,7 +109,7 @@ import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import user from '../../../assets/images/user.png';
-import { usePinnedConversation } from '../../../stores/usePinnedConversationStore';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'MessageWrapper',
