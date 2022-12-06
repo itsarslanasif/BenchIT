@@ -25,6 +25,7 @@ module.exports = {
       warning: '#FACC15',
       warningHover: '#EAB308',
       white: colors.white,
+      backgroundTransparent: 'rgba(0, 0, 0, 0.3)',
       woot: {
         50: '#E3F2FF',
         100: '#BBDDFF',
@@ -72,6 +73,7 @@ module.exports = {
         700: '#40546B',
         800: '#314155',
         900: '#1F2D3D',
+        1000: '#252d34'
       },
       black: {
         50: '#F8F9FE',

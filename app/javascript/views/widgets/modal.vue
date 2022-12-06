@@ -1,6 +1,6 @@
 <template>
-  <div class="modalListStyle">
-    <div v-for="modal in modalArray" :key="modal.title" class="modalItem" @click="modal.func">
+  <div class="bg-primary w-1/3 rounded-md">
+    <div v-for="modal in modalArray" :key="modal.title" class="rounded p-5 hover:bg-primaryHover" @click="modal.func">
       {{ modal.title }}
     </div>
   </div>
@@ -14,20 +14,3 @@ export default {
   ],
 }
 </script>
-
-<style scoped>
-.modalListStyle {
-  border-radius: 4%;
-  background-color: #18232bce;
-  width: 30%;
-}
-.modalItem {
-  padding: 20px;
-  border-radius: 2%;
-  transition-duration: 0.3s;
-}
-.modalItem:hover {
-  background-color: #141d24e5;
-  transition-duration: 0.3s;
-}
-</style>

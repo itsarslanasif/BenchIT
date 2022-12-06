@@ -8,52 +8,27 @@
     </div>
     <div class="h-3/4">
       <div class="m-4 pt-6">
-        <div
-          v-if="showMentions || showChannels"
-          class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
-        >
-          <div
-            v-if="showMentions && hasMentionCommand"
-            class="hover:bg-secondaryHover"
-          >
-            <div
-              v-for="user in allUsers"
-              :key="user.username"
-              class="p-1 rounded-md hover:bg-secondaryHover"
-              @click="addMentionToText"
-            >
-              {{ user.username }}
-            </div>
-          </div>
-          <div v-if="showChannels && hasChannelCommand">
-            <div
-              v-for="channel in allChannels"
-              :key="channel.name"
-              class="p-1 rounded-sm hover:bg-secondaryHover"
-              @click="addChannelToText"
-            >
-              {{ channel.name }}
+        <div v-if="showMentions || showChannels"
+          class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
+          <div v-if="(showMentions && hasMentionCommand) || (showChannels && hasChannelCommand)">
+            <div v-for="item in filteredList" :key="item.name" class="p-1 rounded-md hover:bg-secondaryHover"
+              @click="addMentionToText">
+              {{ item.name }}
             </div>
           </div>
         </div>
         <div class="relative">
-          <editor
-            v-model="message"
-            api-key="{{process.env.VITE_EDITOR_API}}"
-            :init="{
-              menubar: false,
-              statusbar: false,
-              plugins: 'lists link code',
-              toolbar:
-                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
-            }"
-          />
+          <editor v-model="message" api-key="{{import.meta.env.VITE_EDITOR_API}}" :init="{
+            menubar: false,
+            statusbar: false,
+            plugins: 'lists link code',
+            toolbar:
+              'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
+          }" />
         </div>
-        <button
-          @click="sendMessage"
-          class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover"
-        >
-          {{ $t(CONSTANTS.SEND) }}
+        <button @click="sendMessage"
+          class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover">
+          {{ $t('actions.send') }}
         </button>
       </div>
     </div>
@@ -67,7 +42,6 @@ import ChatHeader from '../components/chats/ChatHeader.vue';
 import { NInput, NSpace } from 'naive-ui';
 import ChatBody from '../components/chats/ChatBody.vue';
 import Editor from '@tinymce/tinymce-vue';
-import { CONSTANTS } from '../../assets/constants';
 import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
@@ -90,30 +64,32 @@ export default {
       hasChannelCommand: false,
       showMentions: false,
       showChannels: false,
-      allUsers: [],
+      allProfiles: [],
       allChannels: [],
-      CONSTANTS: CONSTANTS,
       chat: {},
       messages: [],
       Cable: null,
       conversation_type: null,
       id: null,
+      filteredList: []
     };
   },
   setup() {
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
     }
+    const messageStore = useMessageStore();
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
-    const messageStore = useMessageStore();
     const conversation_type = getIndexByParams(1)
     const id = getIndexByParams(2)
-    messageStore.index(conversation_type, id);
+    const { profiles } = storeToRefs(profileStore);
+    const { channels } = storeToRefs(channelStore);
     const { messages } = storeToRefs(messageStore);
+    messageStore.index(conversation_type, id);
     return {
-      allUsers: Object.values(profileStore.getUsers),
-      allChannels: Object.values(channelStore.getChannels),
+      allProfiles: profiles,
+      allChannels: channels,
       messages,
       conversation_type,
       id
@@ -138,6 +114,7 @@ export default {
       } else {
         this.disableAll();
       }
+      this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase()))
     },
   },
 
@@ -173,6 +150,8 @@ export default {
     },
 
     enableMention() {
+      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null)
+      this.filteredList = this.allProfiles
       this.hasMentionCommand = true;
       this.showMentions = true;
       this.hasChannelCommand = false;
@@ -180,6 +159,7 @@ export default {
     },
 
     enableChannels() {
+      this.filteredList = this.allChannels
       this.hasChannelCommand = true;
       this.showChannels = true;
       this.hasMentionCommand = false;

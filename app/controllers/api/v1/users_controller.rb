@@ -1,5 +1,6 @@
 class Api::V1::UsersController < Api::ApiController
-  before_action :set_user, only: [:show]
+  before_action :set_user, only: %i[show]
+  before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
 
   def index
     @users = User.all
@@ -8,52 +9,36 @@ class Api::V1::UsersController < Api::ApiController
 
   def show
     current_user = User.first
-    @conversation = BenchConversation.where(conversationable_type: "User", sender_id: current_user, conversationable_id: @receiver.id).or(BenchConversation.where(conversationable_type: "User", sender_id: @receiver.id, conversationable_id: current_user)).last
-    if @conversation.nil?
-      @conversation = BenchConversation.create(conversationable_type: "User",conversationable_id: @receiver.id, sender_id: current_user.id)
+    @conversation = BenchConversation.user_to_user_conversation(current_user.id, @receiver.id)
+
+    if @conversation.blank?
+      @conversation = BenchConversation.create(conversationable_type: 'User', conversationable_id: @receiver.id, sender_id: current_user.id)
     end
+
     @messages = @conversation.conversation_messages
-    message_data = []
-    if @messages.empty?
-      response = {
-        id: 0,
-        receiver_name: @receiver.name,
-        content: nil,
-        is_threaded: false,
-        parent_message_id: nil,
-        sender_id: nil,
-        sender_name: nil,
-        bench_conversation_id: @conversation.id,
-        created_at: nil,
-        updated_at: nil
-      }
-      message_data.push(response)
-    else
-      @messages.each do |message|
-        response = {
-          id: message.id,
-          receiver_name: @receiver.name,
-          content:message.content,
-          is_threaded:message.is_threaded,
-          parent_message_id:message.parent_message_id,
-          sender_id:message.sender_id,
-          sender_name:message.user.name,
-          bench_conversation_id: message.bench_conversation_id,
-          created_at: message.created_at,
-          updated_at: message.updated_at
-        }
-        message_data.push(response)
-      end
-    end
-    render json: message_data
+  end
+
+  def previous_direct_messages
+    dm_users_ids = BenchConversation.where(id: @bench_converations_ids).pluck(:conversationable_id,:sender_id).flatten.uniq
+    render json: {users_ids: dm_users_ids}
   end
 
   private
 
   def set_user
-    @receiver = User.find_by_id(params[:id])
-    return if @receiver.present?
+    @receiver = User.find(params[:id])
+  end
 
-    render json: { json: @receiver.errors, status: :unprocessable_entity }
+  def set_previous_direct_messages
+    current_user = User.first
+    conversation_ids = BenchConversation.set_previous_dms
+    if conversation_ids.empty?
+      return render json: {users_ids: [current_user.id]}
+    else
+      @bench_converations_ids = ConversationMessage.set_previous_dms(conversation_ids)
+      if @bench_converations_ids.empty?
+        return render json: {users_ids: [current_user.id]}
+      end
+    end
   end
 end

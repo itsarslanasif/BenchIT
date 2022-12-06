@@ -6,10 +6,7 @@
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
-        <ChannelElement />
-        <div>
-          <Chat />
-        </div>
+        <Chat />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
@@ -25,7 +22,6 @@ import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
-import ChannelElement from '../components/channels/ChannelElement.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
 export default {
   components: {
@@ -34,7 +30,6 @@ export default {
     Chat,
     WorkspaceDropdown,
     LeftPane,
-    ChannelElement,
     UserInviteFormVue,
   },
   methods: {

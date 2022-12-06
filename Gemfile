@@ -22,14 +22,19 @@ gem 'sassc-rails'
 gem 'sidekiq', '~>6.0'
 gem 'sprockets-rails'
 gem 'vite_rails'
-
-gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
+gem 'elasticsearch', '~> 7.0'
+gem 'searchkick'
+gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
 
 group :development, :test do
-  gem 'debug', platforms: %i[mri mingw x64_mingw]
+  gem 'debug', platforms: %i[ mri mingw x64_mingw ]
 end
 
 group :development do
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
+  gem 'rubocop-rspec', require: false
   gem 'spring'
   gem 'web-console'
 end
