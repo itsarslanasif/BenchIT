@@ -25,7 +25,7 @@
 <script>
 export default {
   name: 'About',
-  data(){
+  data() {
     return {
       topic: 'Add a topic',
       description: 'Add description',

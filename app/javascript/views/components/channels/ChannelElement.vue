@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { useRoute } from 'vue-router';
+import { useRoute } from 'vue-router'
 import ChannelDetailModel from '../../containers/ChannelDetailModal.vue'
 import { getChannels } from '../../../api/channels/channels'
 export default {
