@@ -6,7 +6,6 @@
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
-        <ChannelElement />
         <div>
           <Chat />
         </div>
@@ -25,8 +24,8 @@ import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
-import ChannelElement from '../components/channels/ChannelElement.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
+import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 export default {
   components: {
     Splitpanes,
@@ -34,7 +33,6 @@ export default {
     Chat,
     WorkspaceDropdown,
     LeftPane,
-    ChannelElement,
     UserInviteFormVue,
   },
   methods: {
@@ -48,11 +46,19 @@ export default {
         params: { id: 1 },
       });
     },
+    sign_out() {
+      let token = sessionStorage.getItem('token');
+      userSignOut(token).then(res => {
+        this.response = res;
+        this.$router.push('/sign_in');
+      });
+    },
   },
   data() {
     return {
       modalOpen: false,
       UserInviteFormFlag: false,
+      response: null,
       options: [
         {
           title: 'BenchIT',
@@ -88,7 +94,7 @@ export default {
         },
         {
           title: 'Sign Out of BenchIT',
-          link: '#',
+          func: this.sign_out,
         },
       ],
     };

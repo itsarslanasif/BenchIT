@@ -9,7 +9,6 @@ import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import SplitPanes from './views/pages/SplitPanes.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserInviteFormVue from './views/widgets/UserInviteForm.vue';
-import ChannelElement from './views/components/channels/ChannelElement.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
 
 const router = createRouter({
@@ -18,24 +17,47 @@ const router = createRouter({
     // { path: '/', component: PageIndex, name: 'root_path' },
     { path: '/404', component: Error404 },
     { path: '/:catchAll(.*)', redirect: '/404' },
-    { path: '/new_workspace', component: NewWorkspace, name: 'new_workspace' },
+    {
+      path: '/new_workspace',
+      component: NewWorkspace,
+      name: 'new_workspace',
+      meta: { auth: true },
+    },
     {
       path: '/join_workspace/:workspace_id',
       component: JoinWorkspace,
       name: 'join_workspace',
+      meta: { auth: true },
     },
-    { path: '/members', component: Members, name: 'members' },
-    { path: '/invite_user', component: EmailForm, name: 'invite_user' },
-    { path: '/password_form', component: PasswordForm, name: 'password_form' },
+    {
+      path: '/members',
+      component: Members,
+      name: 'members',
+      meta: { auth: true },
+    },
+    {
+      path: '/invite_user',
+      component: EmailForm,
+      name: 'invite_user',
+      meta: { auth: true },
+    },
+    {
+      path: '/password_form',
+      component: PasswordForm,
+      name: 'password_form',
+      meta: { auth: true },
+    },
     {
       path: '/',
       component: SplitPanes,
       name: 'screen',
+      meta: { auth: true },
       children: [
         {
           path: '/screen/invite_to_workspace/:id',
           component: UserInviteFormVue,
           name: 'user_invite_form',
+          meta: { auth: true },
         },
       ],
     },
@@ -43,10 +65,23 @@ const router = createRouter({
       path: '/workspace_dashboard',
       component: WorkspaceDashboard,
       name: 'workspace_dashboard',
+      meta: { auth: true },
     },
-    { path: '/channel/:name', component: ChannelElement, name: 'channel-id' },
-    { path: '/sign_in/', component: UserSignIn, name: 'user_sign_in' },
+    {
+      path: '/sign_in/',
+      component: UserSignIn,
+      name: 'user_sign_in',
+      meta: { auth: false },
+    },
+    { path: '/sign_out', name: 'user_sign_out', meta: { auth: true } },
   ],
+});
+router.beforeEach((to, from, next) => {
+  if (!sessionStorage.getItem('token') && to.meta.auth) {
+    next('/sign_in');
+  } else {
+    next();
+  }
 });
 
 export default router;

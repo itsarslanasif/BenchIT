@@ -1,4 +1,11 @@
 <template>
+  <div v-show="response" class="relative">
+    <benchit-alert
+      :errorMessage="$t('pages.sign_in.error_message')"
+      :successMessage="response?.message"
+      :success="response?.user"
+    />
+  </div>
   <div class="mt-8 flex flex-col items-center justify-items-center text-center">
     <header class="w-full p-4 items-center grid grid-cols-3">
       <div class="left-col"></div>
@@ -74,17 +81,27 @@
 </template>
 
 <script>
-import { NForm, NFormItem, NInput, NButton, NDivider } from 'naive-ui';
-import { userSignIn } from '../../api/user_sign_in/user_sign_in_api';
+import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
+import { userSignIn } from '../../api/user_auth/user_sign_in_api';
+import BenchitAlert from '../widgets/benchitAlert.vue';
 export default {
   name: 'UserSignIn',
-  components: { NForm, NFormItem, NInput, NButton, NDivider },
+  components: {
+    NForm,
+    NFormItem,
+    NInput,
+    NButton,
+    NDivider,
+    NSpace,
+    BenchitAlert,
+  },
   data() {
     return {
       user: {
         email: '',
         password: '',
       },
+      response: null,
     };
   },
 
@@ -95,9 +112,17 @@ export default {
         authenticity_token: document.querySelector('meta[name="csrf-token"]')
           .content,
         commit: 'Log in',
-      }).then((response) => {
-        sessionStorage.setItem('token', response.headers.authorization);
+      }).then(res => {
+        sessionStorage.setItem('token', res.headers.authorization);
+        this.response = res.data;
+        if (res.data?.user) {
+          this.goToHomepage();
+        }
       });
+    },
+
+    goToHomepage() {
+      window.location.href = import.meta.env.VITE_APP_SERVER_URL;
     },
   },
 };
