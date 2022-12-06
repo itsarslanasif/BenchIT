@@ -4,14 +4,14 @@ class Api::V1::FavouritesController < Api::ApiController
     current_user = User.first
     already_favourite = Favourite.where(user_id:current_user, favourable_type: params[:favourable_type], favourable_id: params[:favourable_id]).pluck(:id)
     if already_favourite.empty?
-      favourite = Favourite.new(user:current_user, favourable_type: params[:favourable_type], favourable_id:params[:favourable_id]).save
-      if favourite
-        return render status: 201, json: { success: 'Succesfully added to favourites' }
+      favourite = Favourite.new(user:current_user, favourable_type: params[:favourable_type], favourable_id:params[:favourable_id])
+      if favourite.save
+        return render status: 201, json: { success: 'Succesfully added to favourites', favourite_id: favourite.id}
       else
-        render json: { error: "Cannot Add to Favoruites", status: :unprocessable_entity }
+        render json: { error: 'Cannot Add to Favoruites', status: :unprocessable_entity }
       end
     else
-      render json: { error: "Already Favoruite", status: :unprocessable_entity }
+      render json: { error: 'Already Favoruite', status: :unprocessable_entity }
     end
   end
 
@@ -21,10 +21,10 @@ class Api::V1::FavouritesController < Api::ApiController
       if @favourite.destroy
         render status: 201, json: { success: 'Succesfully removed from favourites' }
       else
-        render json: { error: "Cannot Remove from favourites", status: :unprocessable_entity }
+        render json: { error: 'Cannot Remove from favourites', status: :unprocessable_entity }
       end
     else
-      render json: { error: "Cannot found in favourites", status: :unprocessable_entity }
+      render json: { error: 'Cannot found in favourites', status: :unprocessable_entity }
     end
   end
 
