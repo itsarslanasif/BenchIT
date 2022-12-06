@@ -150,6 +150,18 @@ en:
         no_results_found: "No Results Found !"
         sort: "Sort"
         account_type: "Account Type"
+      channeldetail:
+        about: 'About'
+        members: 'Members'
+        integrations: 'Integrations'
+        settings: 'Settings'
+        channelname: 'Channel name'
+        topic: 'Topic'
+        description: 'Description'
+        created_by: 'Created by'
+        leave: 'Leave Channel'
+        files: 'Files'
+        filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
 
     admin:
       title: 'Admin'
