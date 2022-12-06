@@ -6,8 +6,8 @@
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
-        <Chat v-show="screenStore.getSekectedScreen=='chat'" />
-        <searchDmscreen v-show="screenStore.getSekectedScreen=='search-dm'" />
+        <Chat v-show="screenStore.getSelectedScreen=='chat'" />
+        <searchDmscreen v-show="screenStore.getSelectedScreen=='search-dm'" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
