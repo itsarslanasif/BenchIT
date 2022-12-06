@@ -20,5 +20,4 @@ class User < ApplicationRecord
   has_many :bench_conversations, as: :conversationable, foreign_key: :sender_id, inverse_of: :user
 
   scope :workspace_users, ->(workspace_id) { joins(:profiles).where("workspace_id = #{workspace_id}").distinct }
-  scope :users_from_ids_array, ->(ids) {where(id: ids)}
 end
