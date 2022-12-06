@@ -1,7 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[leave]
+  before_action :set_bench_channel, only: %i[leave join_public_channel]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
-  before_action :set_channel, only: %i[join_public_channel]
   before_action :user_already_member, only: %i[join_public_channel]
 
   def index
@@ -9,7 +8,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel = if query
       render json: BenchChannel.search(query)
     else
-      render json: BenchChannel.all
+      render json: {
+        public_channels: BenchChannel.public_channels(Current.workspace.id) ,
+        private_channels: BenchChannel.user_joined_private_channels(Current.user.id , Current.workspace.id)
+      }
     end
   end
 
@@ -24,7 +26,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def join_public_channel
-    ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @channel.id)
+    ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
+
   end
 
   def leave
@@ -39,11 +42,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def bench_channel_params
     params.require(:bench_channel).permit(:name, :description)
-  end
-
-  def set_channel
-    @channel =  BenchChannel.find_by(id: params[:id])
-    render json: { message: 'Channel Not Found' }, status: :not_found if @channel.nil?
   end
 
   def user_already_member
