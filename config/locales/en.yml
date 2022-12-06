@@ -37,7 +37,7 @@ en:
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
-        pinned: 'pinned'
+        pinned: 'Pinned'
       direct_messages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'

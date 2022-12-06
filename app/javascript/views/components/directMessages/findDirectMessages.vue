@@ -4,7 +4,7 @@
       <div class="p-2 text-white text-xl">
         {{ $t('direct_messages.direct_messages') }}
       </div>
-      <div class="h">
+      <div >
         <div class="flex p-3">
           <p>{{ $t('request.to') }}:</p>
           <input
@@ -16,7 +16,6 @@
             @keyup.enter="searchQuery()"
           />
         </div>
-
         <hr />
         <div class="w-full bg-slate-800 maxHeight p-5">
           <div v-for="member in members" :key="member.id">
