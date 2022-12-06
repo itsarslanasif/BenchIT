@@ -1,40 +1,99 @@
 <template>
   <div>
-    <div class="items-center flex p-1 relative hover:bg-slate-100" @mouseover="emojiModalStatus = true"
-      @mouseleave="emojiModalStatus = false">
+    <div v-if="pinnedConversationStore.isPinned(currMessage)">
+      <span
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+      >
+        <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
+        {{ $t('pinconversation.pinned_by') }}
+        {{ $t('pinconversation.you') }}
+      </span>
+    </div>
+    <div
+      class="items-center flex p-1 relative hover:bg-slate-100"
+      :class="{
+        messageContentpinned: pinnedConversationStore.isPinned(currMessage),
+      }"
+      @mouseover="emojiModalStatus = true"
+      @mouseleave="emojiModalStatus = false"
+    >
       <div class="min-w-fit ml-1">
-        <n-avatar v-show="!isSameUser" class="mr-1 self-baseline" size="large" src="../../../assets/images/user.png" />
+        <n-avatar
+          v-show="!isSameUser"
+          class="mr-1 self-baseline"
+          size="large"
+          src="../../../assets/images/user.png"
+        />
       </div>
       <span class="message">
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
-            <p v-show="!isSameUser" class="mr-1 text-sm hover:underline cursor-pointer">
+            <p
+              v-show="!isSameUser"
+              class="mr-1 text-sm hover:underline cursor-pointer"
+            >
               <b>{{ message.sender_name }}</b>
             </p>
-            <p class="text-xs" v-bind:class="{
-              time: !isSameUser,
-              'ml-2 mr-3 text-black-500 hover:underline cursor-pointer':
-                isSameUser,
-            }">
+            <p
+              class="text-xs"
+              v-bind:class="{
+                time: !isSameUser,
+                'ml-2 mr-3 text-black-500 hover:underline cursor-pointer':
+                  isSameUser,
+              }"
+            >
               {{ isSameUser ? timeWithoutAMPM : time }}
             </p>
-            <span v-show="isSameUser" class="text-black-800 text-sm flex-wrap" v-html="message.content" />
+            <span
+              v-show="isSameUser"
+              class="text-black-800 text-sm flex-wrap"
+              v-html="message.content"
+            />
           </span>
-          <span v-show="!isSameUser" class="text-black-800 text-sm flex-wrap" v-html="message.content" />
+          <span
+            v-show="!isSameUser"
+            class="text-black-800 text-sm flex-wrap"
+            v-html="message.content"
+          />
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
         </template>
-        <div class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
-          v-if="emojiModalStatus || openEmojiModal || showOptions">
+        <div
+          class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
+          v-if="emojiModalStatus || openEmojiModal || showOptions"
+        >
           <template v-for="emoji in topReactions" :key="emoji">
-            <EmojiModalButton :emoji="emoji" :actionText="emoji.n" :action="addReaction" />
+            <EmojiModalButton
+              :emoji="emoji"
+              :actionText="emoji.n"
+              :action="addReaction"
+            />
           </template>
-          <EmojiModalButton icon="fa-solid fa-icons" actionText="Find another reaction" :action="setEmojiModal" />
-          <EmojiModalButton icon="fa-solid fa-comment-dots" actionText="Reply in thread" />
-          <EmojiModalButton icon="fa-solid fa-share" actionText="Share message..." />
-          <EmojiModalButton icon="fa-solid fa-bookmark" actionText="Add to saved items" />
-          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" :message="message" />
+          <EmojiModalButton
+            icon="fa-solid fa-icons"
+            :actionText="$t('emojiModalButton.find_another_reaction')"
+            :action="setEmojiModal"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-comment-dots"
+            :actionText="$t('emojiModalButton.reply_in_thread')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-share"
+            :actionText="$t('emojiModalButton.share_message')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-bookmark"
+            :actionText="$t('emojiModalButton.add_to_saved_items')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-ellipsis-vertical"
+            :actionText="$t('emojiModalButton.more_actions')"
+            :action="setOptionsModal"
+            :message="message"
+            :pinnedConversationStore="usePinnedConversation"
+          />
         </div>
       </span>
     </div>
@@ -50,9 +109,14 @@ import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import user from '../../../assets/images/user.png';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'MessageWrapper',
+  setup() {
+    const pinnedConversationStore = usePinnedConversation();
+    return { pinnedConversationStore };
+  },
   components: {
     NAvatar,
     EmojiPicker,
@@ -119,3 +183,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.messageContentpinned {
+  @apply bg-yellow-100;
+}
+</style>

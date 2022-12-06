@@ -14,8 +14,11 @@ Rails.application.routes.draw do
         end
 
         resources :groups, only: %i[index show]
-        resources :users, only: %i[index show]
-        resources :channel_participants, only: %i[create]
+        resources :users, only: %i[index show] do
+          collection do
+            get :previous_direct_messages
+          end
+        end
         resources :conversation_messages, only: %i[create destroy]
 
         resources :bench_channels, except: %i[new edit] do

@@ -28,6 +28,19 @@ en:
         company_size_info: 'How big is your company?'
         admin_role_type: 'What is your role there?'
         continue_company_button: 'Continue to Company Name'
+      emojiModalButton:
+        find_another_reaction: 'Find another reaction'
+        reply_in_thread: 'Reply in thread'
+        share_message: 'Share message...'
+        add_to_saved_items: 'Add to saved items'
+        more_actions: 'More actions'
+      pinconversation:
+        pinned_by: 'Pinned by'
+        you: 'you'
+        pinned: 'pinned'
+      direct_messages:
+        direct_messages: 'Direct Messages'
+        add_teammates: 'Add Teammates'
       company:
         title: 'What is your Company called?'
         description: 'We will use this to name your workspace which you can always change later'
@@ -86,8 +99,10 @@ en:
         title: 'Bookmark'
         url: 'Enter URL'
         name: 'Enter Name'
+        add_bookmark: 'Add bookmark'
         url_placeholder: 'facebook.com'
         name_placeholder: 'Facebook'
+
       request:
         send_request: 'Send Request'
         reason_for_request: 'Reason for request (optional)'
@@ -134,6 +149,18 @@ en:
         no_results_found: "No Results Found !"
         sort: "Sort"
         account_type: "Account Type"
+      channeldetail:
+        about: 'About'
+        members: 'Members'
+        integrations: 'Integrations'
+        settings: 'Settings'
+        channelname: 'Channel name'
+        topic: 'Topic'
+        description: 'Description'
+        created_by: 'Created by'
+        leave: 'Leave Channel'
+        files: 'Files'
+        filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
 
     admin:
       title: 'Admin'

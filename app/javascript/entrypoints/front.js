@@ -22,6 +22,8 @@ import {
   faHashtag,
   faUser,
   faLock,
+  faThumbtack,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
@@ -42,7 +44,9 @@ library.add(
   faFaceSmile,
   faHashtag,
   faUser,
-  faLock
+  faLock,
+  faThumbtack,
+  faXmark
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

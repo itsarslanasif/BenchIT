@@ -1,7 +1,7 @@
 <template>
   <div>
-    <a class="m-0 text-white p-2 overflow-auto rounded-md bg-primary hover:bg-primaryHover w-max inline-block -mr-1"
-      href="#popup1">Add Bookmark</a>
+    <a class="m-0 ml-3 text-xs text-white p-2 overflow-auto rounded-md bg-primary hover:bg-primaryHover w-max inline-block -mr-1"
+      href="#popup1">{{$t('bookmark.add_bookmark')}}</a>
   </div>
   <div id="popup1"
     class="bg-backgroundTransparent inset-0 invisible opacity-0 transition-all ease-linear duration-300 z-10 absolute">
