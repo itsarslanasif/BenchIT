@@ -1,10 +1,12 @@
 <template>
   <div class="container bg-primary text-white border border-slate-600">
     <div class="grid text-slate-600 grid-cols-1 divide-y">
-      <div class="p-2 text-white text-xl">{{$t('direct_messages.direct_messages')}}</div>
+      <div class="p-2 text-white text-xl">
+        {{ $t('direct_messages.direct_messages') }}
+      </div>
       <div class="h">
         <div class="flex p-3">
-          <p>{{$t('request.to')}}:</p>
+          <p>{{ $t('request.to') }}:</p>
           <input
             type="text"
             :placeholder="$t('find_direct_messages.somebody')"
@@ -18,9 +20,13 @@
         <hr />
         <div class="w-full bg-slate-800 maxHeight p-5">
           <div v-for="member in members" :key="member.id">
-            <memberCard class="cursor-pointer" :name="member.username" :description="member.description" :img-url="member.image_url"></memberCard>
-        </div>
-
+            <memberCard
+              class="cursor-pointer"
+              :name="member.username"
+              :description="member.description"
+              :img-url="member.image_url"
+            ></memberCard>
+          </div>
         </div>
       </div>
     </div>
@@ -34,7 +40,6 @@ import { getMembers } from '../../../api/members/membersApi';
 export default {
   mounted() {
     this.searchQuery();
-
   },
   components: {
     memberCard,
@@ -47,7 +52,7 @@ export default {
       users: [],
     };
   },
-  methods:{
+  methods: {
     async searchQuery() {
       this.members = await getMembers(
         this.CurrentWorkspaceId,
@@ -55,7 +60,7 @@ export default {
         this.sort
       );
     },
-  }
+  },
 };
 </script>
 

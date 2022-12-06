@@ -6,18 +6,26 @@
           {{ $t('direct_messages.direct_messages') }}
           <a
             @click="handleClick"
-            class="px-2 hover-target py-1 h-5 ml-10 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid"
-          > + </a>
+            class="px-2 hover-target py-1 h-5 ml-10 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid" >
+            +
+          </a>
         </template>
         <h5 v-for="user in dmList" :key="user.id" class="hover:bg-primaryHover">
-          <div @click="goToChat(`/users/${user.id}`)"
-            class="-ml-3 pl-3 flex items-start py-1 cursor-pointer hover:bg-primaryHover">
-            <img class="w-5 h-5 rounded-md"
-              src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg" />
+          <div
+            @click="goToChat(`/users/${user.id}`)"
+            class="-ml-3 pl-3 flex items-start py-1 cursor-pointer hover:bg-primaryHover"
+          >
+            <img
+              class="w-5 h-5 rounded-md"
+              src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
+            />
             <p class="ml-3 text-xs text-white">{{ user.name }}</p>
           </div>
         </h5>
-        <div class="-ml-3 flex items-start py-1 hover:bg-primaryHover" @click="modalOpen = !modalOpen">
+        <div
+          class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
+          @click="modalOpen = !modalOpen"
+        >
           <addTeammatesDropdown :items="options" />
         </div>
       </AccordionItem>
