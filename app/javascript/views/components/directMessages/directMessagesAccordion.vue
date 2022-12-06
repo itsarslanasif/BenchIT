@@ -40,7 +40,7 @@
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { getDirectMessagesList } from '../../../api/directMessages/directMessages';
-import { useSelectedScreenStore } from '../../../stores/userSelectedScreen';
+import { useSelectedScreenStore } from '../../../stores/useSelectedScreen';
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {

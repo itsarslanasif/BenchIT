@@ -24,7 +24,7 @@ import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
-import { useSelectedScreenStore } from '../../stores/userSelectedScreen';
+import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue'
 export default {
   components: {
