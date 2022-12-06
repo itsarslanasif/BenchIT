@@ -47,7 +47,6 @@
               toolbar:
                 'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code codesample ',
               codesample_languages: [none],
-
               formats: {
                 code: {
                   selector: 'p',
@@ -254,8 +253,11 @@ export default {
   float: left;
   width: 100%;
 }
+.mce-i-codesample:before {
+    content: "\e603";
+}
 .mce-i-codesample {
-  color: transparent !important;
-  background-image: url(../../assets/images/code-block.png)!important;
-  }
+    color:black!important;
+    background-image: fa-file-code ;
+}
 </style>
