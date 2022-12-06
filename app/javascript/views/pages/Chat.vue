@@ -41,12 +41,13 @@
             v-model="message"
             api-key="{{process.env.VITE_EDITOR_API}}"
             :init="{
-              menubar: false,
+              menubar: true,
               statusbar: false,
               plugins: 'lists link code codesample',
               toolbar:
                 'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code codesample  myCustomToolbarButton ',
               codesample_languages: [none],
+
               formats: {
                 code: {
                   selector: 'p',
@@ -255,6 +256,6 @@ export default {
 }
 .mce-i-codesample {
   color: transparent !important;
-  background-image: url(../../assets/images/code-block.png) !important;
-}
+  background-image: url(../../assets/images/code-block.png)!important;
+  }
 </style>
