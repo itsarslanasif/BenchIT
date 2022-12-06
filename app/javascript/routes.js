@@ -68,12 +68,29 @@ const router = createRouter({
       meta: { auth: true },
     },
     {
+      path: '/users/:id',
+      component: SplitPanes,
+      name: 'user_chat',
+      meta: { auth: true },
+    },
+    {
+      path: '/channels/:id/:message_id?',
+      component: SplitPanes,
+      name: 'channel_chat',
+      meta: { auth: true },
+    },
+    {
+      path: '/groups/:id',
+      component: SplitPanes,
+      name: 'group_chat',
+      meta: { auth: true },
+    },
+    {
       path: '/sign_in/',
       component: UserSignIn,
       name: 'user_sign_in',
       meta: { auth: false },
     },
-    { path: '/sign_out', name: 'user_sign_out', meta: { auth: true } },
   ],
 });
 router.beforeEach((to, from, next) => {

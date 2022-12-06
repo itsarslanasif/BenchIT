@@ -1,37 +1,105 @@
 <template>
-  <div class="messageWrapper" @mouseover="emojiModalStatus = true" @mouseleave="emojiModalStatus = false">
-    <n-avatar v-show="!isSameUser" class="avatar" size="large" :src="message.sender.avatar" />
-    <span class="message">
-      <div>
-        <span class="messageInfo">
-          <p v-show="!isSameUser" class="name">
-            <b>{{ message.sender.name }}</b>
-          </p>
-          <p v-bind:class="{ time: !isSameUser, 'time-on-left': isSameUser }">
-            {{ isSameUser ? timeWithoutAMPM : time }}
-          </p>
-          <span v-show="isSameUser" class="messageContent" v-html="message.content" />
-        </span>
-        <span v-show="!isSameUser" class="messageContent" v-html="message.content" />
+  <div>
+    <div v-if="pinnedConversationStore.isPinned(currMessage)">
+      <span
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+      >
+        <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
+        {{ $t('pinconversation.pinned_by') }}
+        {{ $t('pinconversation.you') }}
+      </span>
+    </div>
+    <div
+      class="items-center flex p-1 relative hover:bg-slate-100"
+      :class="{
+        messageContentpinned: pinnedConversationStore.isPinned(currMessage),
+      }"
+      @mouseover="emojiModalStatus = true"
+      @mouseleave="emojiModalStatus = false"
+    >
+      <div class="min-w-fit ml-1">
+        <n-avatar
+          v-show="!isSameUser"
+          class="mr-1 self-baseline"
+          size="large"
+          src="../../../assets/images/user.png"
+        />
       </div>
-      <template v-for="emoji in allReactions" :key="emoji.id">
-        <span class="emoji">{{ emoji.i }}</span>
-      </template>
-      <div class="emojiModalToggle" v-if="emojiModalStatus || openEmojiModal || showOptions">
-        <template v-for="emoji in topReactions" :key="emoji">
-          <EmojiModalButton :emoji="emoji" :actionText="emoji.n" :action="addReaction" />
+      <span class="message">
+        <div class="ml-1">
+          <span class="items-center flex text-black-800 text-lg m-0">
+            <p
+              v-show="!isSameUser"
+              class="mr-1 text-sm hover:underline cursor-pointer"
+            >
+              <b>{{ message.sender_name }}</b>
+            </p>
+            <p
+              class="text-xs"
+              v-bind:class="{
+                time: !isSameUser,
+                'ml-2 mr-3 text-black-500 hover:underline cursor-pointer':
+                  isSameUser,
+              }"
+            >
+              {{ isSameUser ? timeWithoutAMPM : time }}
+            </p>
+            <span
+              v-show="isSameUser"
+              class="text-black-800 text-sm flex-wrap"
+              v-html="message.content"
+            />
+          </span>
+          <span
+            v-show="!isSameUser"
+            class="text-black-800 text-sm flex-wrap"
+            v-html="message.content"
+          />
+        </div>
+        <template v-for="emoji in allReactions" :key="emoji.id">
+          <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
         </template>
-        <EmojiModalButton icon="fa-solid fa-icons" actionText="Find another reaction" :action="setEmojiModal" />
-        <EmojiModalButton icon="fa-solid fa-comment-dots" actionText="Reply in thread" />
-        <EmojiModalButton icon="fa-solid fa-share" actionText="Share message..." />
-        <EmojiModalButton icon="fa-solid fa-bookmark" actionText="Add to saved items" />
-        <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" actionText="More actions" :action="setOptionsModal" />
-      </div>
-    </span>
-  </div>
-
-  <div v-if="openEmojiModal" class="emojiModal">
-    <EmojiPicker :addReaction="addReaction" />
+        <div
+          class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
+          v-if="emojiModalStatus || openEmojiModal || showOptions"
+        >
+          <template v-for="emoji in topReactions" :key="emoji">
+            <EmojiModalButton
+              :emoji="emoji"
+              :actionText="emoji.n"
+              :action="addReaction"
+            />
+          </template>
+          <EmojiModalButton
+            icon="fa-solid fa-icons"
+            :actionText="$t('emojiModalButton.find_another_reaction')"
+            :action="setEmojiModal"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-comment-dots"
+            :actionText="$t('emojiModalButton.reply_in_thread')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-share"
+            :actionText="$t('emojiModalButton.share_message')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-bookmark"
+            :actionText="$t('emojiModalButton.add_to_saved_items')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-ellipsis-vertical"
+            :actionText="$t('emojiModalButton.more_actions')"
+            :action="setOptionsModal"
+            :message="message"
+            :pinnedConversationStore="usePinnedConversation"
+          />
+        </div>
+      </span>
+    </div>
+    <div v-if="openEmojiModal" class="absolute right-0 z-50">
+      <EmojiPicker :addReaction="addReaction" />
+    </div>
   </div>
 </template>
 
@@ -40,9 +108,15 @@ import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
+import user from '../../../assets/images/user.png';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'MessageWrapper',
+  setup() {
+    const pinnedConversationStore = usePinnedConversation();
+    return { pinnedConversationStore };
+  },
   components: {
     NAvatar,
     EmojiPicker,
@@ -84,20 +158,21 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.message.sentAt).getTime()).format('h:mm A');
+      return moment(new Date(this.message.created_at).getTime()).format(
+        'h:mm A'
+      );
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.message.sentAt).getTime()).format('h:mm');
+      return moment(new Date(this.message.created_at).getTime()).format('h:mm');
     },
     isSameUser() {
       if (this.oldMessage === undefined) return false;
-      return this.message?.sender.id === this.oldMessage?.sender.id;
+      return this.message?.sender_id === this.oldMessage?.sender_id;
     },
   },
   methods: {
     addReaction(emoji) {
       this.allReactions.push(emoji);
-      console.log(this.allReactions[0]);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
@@ -108,71 +183,8 @@ export default {
   },
 };
 </script>
-<style>
-p {
-  @apply text-black-800 text-xs m-0;
-}
-
-.messageContent {
-  @apply text-black-800 text-xs flex-wrap;
-}
-
-.messageWrapper {
-  @apply items-center flex p-1 relative;
-}
-
-.messageWrapper:hover {
-  @apply bg-black-200;
-}
-
-.name {
-  @apply mr-1;
-  font-size: 14px;
-}
-
-.name:hover {
-  @apply cursor-pointer underline;
-}
-
-.time {
-  @apply text-black-500;
-  font-size: x-small;
-}
-
-.time:hover {
-  @apply cursor-pointer underline;
-}
-
-.time-on-left {
-  @apply ml-2 mr-3 text-black-500;
-  font-size: x-small;
-}
-
-.time-on-left:hover {
-  @apply cursor-pointer underline;
-}
-
-.messageInfo {
-  @apply items-center flex;
-}
-
-.avatar {
-  @apply mr-1;
-  align-self: baseline;
-  min-width: fit-content;
-}
-
-.emojiModal {
-  @apply absolute right-0 z-50;
-}
-
-.emojiModalToggle {
-  @apply bg-white text-black-500 p-1 rounded absolute;
-  right: 30px;
-  top: -22px;
-}
-
-.emoji {
-  @apply bg-black-300 p-1 mr-1 rounded;
+<style scoped>
+.messageContentpinned {
+  @apply bg-yellow-100;
 }
 </style>

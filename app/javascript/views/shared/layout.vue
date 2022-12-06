@@ -8,9 +8,6 @@
 <script>
 import NavBar from './_nav.vue';
 import searchBarVue from './searchBar.vue';
-import { useProfileStore } from '../../stores/useProfileStore';
-import { useChannelStore } from '../../stores/useChannelStore';
-import { onMounted } from 'vue'
 
 export default {
   components: {

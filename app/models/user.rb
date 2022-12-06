@@ -4,13 +4,15 @@ class User < ApplicationRecord
   has_many :profiles, dependent: :destroy
   has_many :workspaces, through: :profiles, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
+  has_many :reactions, dependent: :destroy
+
   paginates_per 10
 
   devise :invitable, :database_authenticatable, :jwt_authenticatable, jwt_revocation_strategy: self
 
   validates_presence_of :email
-  has_many :user_bench_channels
-  has_many :channel_participants, dependent: :destroy
+  has_many :channel_participants
+  has_many :bench_channels, dependent: :destroy
   has_many :bench_channels, foreign_key: :creator_id, inverse_of: :user, through: :channel_participants
   has_many :user_groups
   has_many :groups, through: :user_groups

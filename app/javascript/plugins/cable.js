@@ -1,4 +1,4 @@
-import { createConsumer } from "@rails/actioncable"
+import { createConsumer } from '@rails/actioncable';
 import mitt from 'mitt';
 
 const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
@@ -8,25 +8,27 @@ let channel = null;
 
 function Cable() {}
 
-Cable.prototype.on = function(channel, callback) {
+Cable.prototype.on = (channel, callback) => {
   return emitter.on(channel, callback);
 };
 
-Cable.prototype.send = function(message) {
-  channel.send({message: message})
+Cable.prototype.send = (message) => {
+  channel.send({ message: message });
 };
 
-Cable.prototype.install = function(app) {
+Cable.prototype.install = (app) => {
   app.plugin = this;
   app.config.globalProperties.$cable = this;
-}
+};
 
-export function createCable(options) {
-  channel = consumer.subscriptions.create({ channel: options.channel}, {
-    received(data) {    
-      emitter.emit('chat', data)
+export const createCable = (options) => {
+  channel = consumer.subscriptions.create(
+    { channel: options.channel, id: options.id, type: options.type },
+    {
+      received(data) {
+        emitter.emit('chat', data);
+      },
     }
-  })
-
+  );
   return new Cable();
 }

@@ -19,6 +19,11 @@ import {
   faBookmark,
   faEllipsisVertical,
   faFaceSmile,
+  faHashtag,
+  faUser,
+  faLock,
+  faThumbtack,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -43,6 +48,11 @@ library.add(
   faFaceSmile,
   faGoogle,
   faApple,
+  faHashtag,
+  faUser,
+  faLock,
+  faThumbtack,
+  faXmark
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

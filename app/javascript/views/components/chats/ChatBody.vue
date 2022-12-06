@@ -1,37 +1,37 @@
-<!-- eslint-disable vue/require-v-for-key -->
-<!-- eslint-disable vue/no-template-key -->
-<!-- eslint-disable vue/no-template-shadow -->
-<!-- eslint-disable vue/valid-v-for -->
 <template>
   <div class="overflow-auto chatBody">
-    <template v-for="message in messages" :key="message.id">
+    <PinnedConversationModel />
+    <div v-for="message in messages" :key="message.id" :id="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <n-divider>
-          <p class="text-gray-600">
-            {{ isToday ? 'Today' : new Date(message.sentAt).toDateString() }}
-          </p>
-        </n-divider>
+        <p class="text-gray-600">
+          {{ isToday ? 'Today' : new Date(message.created_at).toDateString() }}
+        </p>
       </div>
-      <MessageWrapper :curr-message="message" :prev-message="prevMessage" />
-    </template>
+      <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
+    </div>
   </div>
 </template>
 
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
-import messages from '../../../modules/data/messages';
-import { NDivider } from 'naive-ui';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { NButton, NSpace, NDivider } from 'naive-ui';
+import { storeToRefs } from 'pinia';
+import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
 
 export default {
   name: 'ChatBody',
   components: {
     MessageWrapper,
     NDivider,
+    NButton,
+    NSpace,
+    PinnedConversationModel,
   },
   data() {
     return {
-      messages: messages,
+      messages: [],
       message: null,
       prevMessage: null,
     };
@@ -39,16 +39,23 @@ export default {
   computed: {
     isToday() {
       return (
-        new Date(this.message?.sentAt).toDateString() ===
+        new Date(this.message?.created_at).toDateString() ===
         new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.sentAt).toDateString() ===
-        new Date(this.prevMessage?.sentAt).toDateString()
+        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.prevMessage?.created_at).toDateString()
       );
     },
+  },
+  setup() {
+    const messageStore = useMessageStore();
+    const { messages } = storeToRefs(messageStore);
+    return {
+      messages,
+    };
   },
   methods: {
     setMessage(message) {
@@ -56,15 +63,29 @@ export default {
       this.message = message;
     },
   },
+  updated() {
+    const message_id = this.$route.params.message_id;
+
+    if (message_id) {
+      const message = document.getElementById(message_id);
+      message.scrollIntoView();
+      message.classList.add('highlight');
+    }
+  },
 };
 </script>
 <style scoped>
-.container {
-  float: left;
-  overflow-y: auto;
-}
-
 .chatBody {
   height: 57vh;
+}
+
+.highlight {
+  animation: background-fade 7s;
+}
+
+@keyframes background-fade {
+  0% {
+    background: rgba(253, 245, 221, 255);
+  }
 }
 </style>

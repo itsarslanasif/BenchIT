@@ -1,7 +1,7 @@
 <template>
-  <div class="btn-div">
-    <button class="dashboard-btn" @click="createWorkspace">
-      Create New Workspace
+  <div class="flex justify-center">
+    <button class="w-64" @click="createWorkspace">
+      {{ $t('workspace.create_new_workspace') }}
     </button>
   </div>
 </template>

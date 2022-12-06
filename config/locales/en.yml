@@ -45,6 +45,19 @@ en:
         company_size_info: 'How big is your company?'
         admin_role_type: 'What is your role there?'
         continue_company_button: 'Continue to Company Name'
+      emojiModalButton:
+        find_another_reaction: 'Find another reaction'
+        reply_in_thread: 'Reply in thread'
+        share_message: 'Share message...'
+        add_to_saved_items: 'Add to saved items'
+        more_actions: 'More actions'
+      pinconversation:
+        pinned_by: 'Pinned by'
+        you: 'you'
+        pinned: 'pinned'
+      direct_messages:
+        direct_messages: 'Direct Messages'
+        add_teammates: 'Add Teammates'
       company:
         title: 'What is your Company called?'
         description: 'We will use this to name your workspace which you can always change later'
@@ -67,6 +80,104 @@ en:
         password_save: 'Save'
       errors:
         title: 'Error pages'
+      search_bar:
+        people: 'People'
+        channels: 'Channels'
+        tagline: "I'm looking for"
+      channels:
+          channels: 'Channels'
+          add_new_channel: 'Add New Channel'
+      workspace:
+        title: 'Bench IT'
+        join_workspace: 'Join Workspace'
+        username_placeholder: 'Username'
+        description_placehodler: 'Desciption'
+        create_new_workspace: 'Create New Workspace'
+      sidebar:
+        threads: 'Threads'
+        direct_messages: 'Direct Messages'
+        mentions_and_reactions: 'Mentions & Reactions'
+        draft_and_sent: 'Draft & Sent'
+        people_and_user_group: 'People & User Group'
+        more: 'More'
+      channels:
+        selected_channels: 'Selected Channels'
+        title: 'Channels'
+        add_new_channel: 'Add New Channel'
+        create_channel: 'Create a channel'
+        add_channel_dialog:
+          'Channels are where your team communicates. They’re best when
+          organized around a topic — #marketing, for example.'
+        new_channel_name: 'Name'
+        new_channel_name_placeholder: 'e.g plan-budget'
+        new_channel_desc_placeholder: 'Description is optional'
+        new_channel_description: 'Description'
+      bookmark:
+        title: 'Bookmark'
+        url: 'Enter URL'
+        name: 'Enter Name'
+        add_bookmark: 'Add bookmark'
+        url_placeholder: 'facebook.com'
+        name_placeholder: 'Facebook'
+
+      request:
+        send_request: 'Send Request'
+        reason_for_request: 'Reason for request (optional)'
+        to: 'To'
+        requesting_invitation: 'Requestion invitation to BenchIT'
+        request_reason_placeholder: 'Add a note for your admin'
+      actions:
+        save: 'Save'
+        send: 'Send'
+        close: 'Close'
+        create: 'Create'
+        join: 'Join'
+        update: 'Update'
+        delete: 'Delete'
+        cancel: 'Cancel'
+        message: 'Message'
+        huddle: 'Huddle'
+        copy_display_name: 'Copy display name'
+        copy_member_id: 'Copy member ID'
+        view_files: 'View Files'
+      members:
+        search_by_name: 'Search By Name'
+      placeholder:
+        email: 'Email'
+        workspace: 'acme@benchit.com'
+      profile:
+        contact_information: 'Contact Information'
+        email: 'Email Address'
+        phone: 'Phone'
+      filters:
+        all_types: 'All types'
+        owners: "Owners"
+        admins: "Admins"
+        full_members: "Full Members"
+        guests: "Guests"
+        deactivated_accounts: "Deactivated accounts"
+        not_on_slack: "Not on slack"
+        most_recommended: "Most recommended"
+        a_to_z: "A to Z"
+        z_to_a: "Z to A"
+        copy_display_name: "Copy display name"
+        view_files: "View Files"
+        copy_member_id: "Copy member ID"
+        no_results_found: "No Results Found !"
+        sort: "Sort"
+        account_type: "Account Type"
+      channeldetail:
+        about: 'About'
+        members: 'Members'
+        integrations: 'Integrations'
+        settings: 'Settings'
+        channelname: 'Channel name'
+        topic: 'Topic'
+        description: 'Description'
+        created_by: 'Created by'
+        leave: 'Leave Channel'
+        files: 'Files'
+        filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
 
     admin:
       title: 'Admin'

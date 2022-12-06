@@ -16,7 +16,15 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :bench_channels, only: %i[create] do
+        resources :groups, only: %i[index show]
+        resources :users, only: %i[index show] do
+          collection do
+            get :previous_direct_messages
+          end
+        end
+        resources :conversation_messages, only: %i[create destroy]
+
+        resources :bench_channels, except: %i[new edit] do
           member do
             delete :leave
           end
@@ -31,6 +39,8 @@ Rails.application.routes.draw do
 
           resources :profiles, only: %i[index create]
         end
+
+        resources :reactions, only: %i[create destroy]
       end
     end
 
