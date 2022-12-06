@@ -133,6 +133,7 @@ en:
         contact_information: 'Contact Information'
         email: 'Email Address'
         phone: 'Phone'
+        title: 'Profile'
       filters:
         all_types: 'All types'
         owners: "Owners"
