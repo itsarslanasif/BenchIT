@@ -46,12 +46,16 @@
       <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bm.name">
         <BookmarkShowVue :data="bookmark" @clicked="onClickChild"> </BookmarkShowVue>
       </p>
+    <div>
+      <AddPeopleToChannel/>
+    </div>
     </div>
   </div>
 </template>
 
 <script>
 import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
+import AddPeopleToChannel from '../channels/AddPeopleToChannel.vue';
 import BookmarkPopUpVue from '../bookmark/popup.vue';
 import BookmarkShowVue from '../bookmark/bookmarkShow.vue';
 import Spinner from '../../shared/spinner.vue';
@@ -61,6 +65,7 @@ import { storeToRefs } from 'pinia';
 export default {
   name: 'ChatHeader',
   components: {
+    AddPeopleToChannel,
     NAvatar,
     NIcon,
     BookmarkPopUpVue,
