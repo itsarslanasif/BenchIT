@@ -54,7 +54,7 @@ en:
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
-        pinned: 'pinned'
+        pinned: 'Pinned'
       direct_messages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'
@@ -119,7 +119,8 @@ en:
         add_bookmark: 'Add bookmark'
         url_placeholder: 'facebook.com'
         name_placeholder: 'Facebook'
-
+      find_direct_messages:
+        somebody: '@Somebody or somebody@example.com'
       request:
         send_request: 'Send Request'
         reason_for_request: 'Reason for request (optional)'
@@ -149,6 +150,7 @@ en:
         contact_information: 'Contact Information'
         email: 'Email Address'
         phone: 'Phone'
+        title: 'Profile'
       filters:
         all_types: 'All types'
         owners: "Owners"
