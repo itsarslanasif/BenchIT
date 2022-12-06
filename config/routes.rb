@@ -2,7 +2,10 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   localized do
-    devise_for :users, controllers: { invitations: 'users_invitations' }
+    devise_for :users, controllers: {
+      invitations: 'users_invitations',
+      sessions: 'users/sessions'
+    }
     root to: 'application#index'
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
