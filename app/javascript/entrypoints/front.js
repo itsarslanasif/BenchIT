@@ -26,6 +26,10 @@ import {
   faXmark,
   faPlus,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGoogle,
+  faApple,
+} from '@fortawesome/free-brands-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 const Cable = createCable({ channel: 'ChatChannel' });
@@ -43,6 +47,8 @@ library.add(
   faBookmark,
   faEllipsisVertical,
   faFaceSmile,
+  faGoogle,
+  faApple,
   faHashtag,
   faUser,
   faLock,

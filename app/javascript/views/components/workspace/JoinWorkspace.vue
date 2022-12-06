@@ -1,16 +1,11 @@
 <template>
   <div>
     <div v-show="response" class="relative">
-      <div class="absolute top-0 right-0 mr-4">
-        <n-space vertical :size="12">
-          <n-alert v-if="response.status === 200" title="Success" type="success">
-            {{ response.data }}
-          </n-alert>
-          <n-alert v-else title="Error" type="error">
-            {{ response }}
-          </n-alert>
-        </n-space>
-      </div>
+      <benchit-alert
+        :errorMessage="response"
+        :successMessage="response?.data"
+        :success="response.status === 200"
+      />
     </div>
     <div class="flex flex-col items-center justify-center">
       <form class="max-w-md" @submit.prevent="handleSubmit">
@@ -33,10 +28,12 @@
 <script>
 import axios from '../../../modules/axios';
 import { NSpace, NAlert } from 'naive-ui';
+import benchitAlert from '../../widgets/benchitAlert.vue';
 export default {
   components: {
     NSpace,
     NAlert,
+    benchitAlert,
   },
   data() {
     return {

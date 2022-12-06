@@ -8,6 +8,8 @@ en:
     acdc: 'AC/DC'
   vue:
     front:
+      project:
+        title: 'BenchIT'
       title: 'Front end'
       nav:
         homepage: 'Home'
@@ -21,6 +23,21 @@ en:
         client_404: 'This link triggers a Client side routing 404'
         server_401: 'This link performs an API call that responds a 401'
         server_500: 'This link performs an API call that responds a 500'
+        sign_in:
+          title: 'Sign in to Bench IT'
+          instructions_1: 'We suggest using the'
+          instructions_2: 'email address that you use at work.'
+          continue_with_google: 'Continue with Google'
+          continue_with_apple: 'Continue with Apple'
+          email_placeholder: 'name@work-email.com'
+          password_placeholder: 'Password'
+          sign_in_with_email: 'Sign in with Email'
+          or: 'OR'
+          code_for_password_free_sign_in: 'We’ll email you a magic code for a password-free sign in. Or you can'
+          sign_in_manually_instead: 'sign in manually instead.'
+          new_to_bench_it: 'New to Bench IT?'
+          create_your_account: 'Create your account'
+          error_message: 'Invalid email or password'
       workspaces:
         title: 'Details About Your Workspace'
         usage: 'What will your team use it for?'
