@@ -52,15 +52,15 @@
                   selector: 'p',
                   styles: {
                     background:
-                      'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
+                      'rgba(var(--sk_foreground_min_solid,248,248,248),1)',
                     'border-left':
-                      '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
                     'border-right':
-                      '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
                     'border-top':
-                      '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
                     'border-bottom':
-                      '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      '1px solid rgba(var(--sk_foreground_low_solid,221,221,221),1)',
                     'border-radius': '3px',
                     'font-size': '10px',
                     'font-variant-ligatures': 'none',
@@ -107,7 +107,6 @@ export default {
     NSpace,
     editor: Editor,
   },
-
   data() {
     return {
       message: '',
@@ -123,10 +122,9 @@ export default {
       Cable: null,
       conversation_type: null,
       id: null,
-      filteredList: [],
+      filteredList: []
     };
   },
-
   setup() {
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
@@ -134,8 +132,8 @@ export default {
     const messageStore = useMessageStore();
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
-    const conversation_type = getIndexByParams(1);
-    const id = getIndexByParams(2);
+    const conversation_type = getIndexByParams(1)
+    const id = getIndexByParams(2)
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
     const { messages } = storeToRefs(messageStore);
@@ -145,10 +143,9 @@ export default {
       allChannels: channels,
       messages,
       conversation_type,
-      id,
+      id
     };
   },
-
   mounted() {
     this.Cable = createCable({
       channel: 'ChatChannel',
@@ -156,7 +153,6 @@ export default {
       type: this.conversation_type,
     });
   },
-
   watch: {
     message() {
       this.plainText = this.message.replace(/<[^>]+>/g, '');
@@ -169,9 +165,7 @@ export default {
       } else {
         this.disableAll();
       }
-      this.filteredList = this.filteredList.filter(item =>
-        item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase())
-      );
+      this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase()))
     },
   },
 
@@ -207,10 +201,8 @@ export default {
     },
 
     enableMention() {
-      this.allProfiles = this.allProfiles.filter(
-        profile => profile.name !== null
-      );
-      this.filteredList = this.allProfiles;
+      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null)
+      this.filteredList = this.allProfiles
       this.hasMentionCommand = true;
       this.showMentions = true;
       this.hasChannelCommand = false;
@@ -218,7 +210,7 @@ export default {
     },
 
     enableChannels() {
-      this.filteredList = this.allChannels;
+      this.filteredList = this.allChannels
       this.hasChannelCommand = true;
       this.showChannels = true;
       this.hasMentionCommand = false;
@@ -256,13 +248,11 @@ export default {
 </script>
 
 <style>
-
 .editor {
   bottom: 0;
   float: left;
   width: 100%;
 }
-
 .mce-i-codesample {
   color: transparent !important;
   background-image: url(../../assets/images/code-block.png) !important;
