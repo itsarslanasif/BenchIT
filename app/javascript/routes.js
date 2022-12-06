@@ -96,6 +96,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   if (!sessionStorage.getItem('token') && to.meta.auth) {
     next('/sign_in');
+  } else if (sessionStorage.getItem('token') && !to.meta.auth) {
+    next('/');
   } else {
     next();
   }

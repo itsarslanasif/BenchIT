@@ -10,7 +10,8 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def respond_to_on_destroy
-    log_out_success
+    log_out_success && return unless current_user
+    log_out_failure
   end
 
   def log_out_success
@@ -18,6 +19,6 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_failure
-    render json: { message: 'Hmm nothing happened.' }, status: :unauthorized
+    render json: { message: 'Something went wrong' }, status: :unauthorized
   end
 end
