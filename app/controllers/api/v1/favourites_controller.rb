@@ -33,4 +33,5 @@ class Api::V1::FavouritesController < Api::ApiController
   def favourites_params
     params.permit(:favourable_type,:favourable_id)
   end
+
 end
