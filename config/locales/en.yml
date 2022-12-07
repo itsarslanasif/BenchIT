@@ -180,6 +180,9 @@ en:
         leave: 'Leave Channel'
         files: 'Files'
         filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
+      welcome:
+        no_chat_selected: 'No Chat Selected'
+        tagline: 'Select any chat from sidebar to see messages'
 
     admin:
       title: 'Admin'

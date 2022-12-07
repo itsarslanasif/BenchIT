@@ -25,6 +25,7 @@ import {
   faThumbtack,
   faXmark,
   faPlus,
+  faMessage,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -54,7 +55,8 @@ library.add(
   faLock,
   faThumbtack,
   faXmark,
-  faPlus
+  faPlus,
+  faMessage
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
