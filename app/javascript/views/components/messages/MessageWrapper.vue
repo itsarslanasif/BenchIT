@@ -1,16 +1,7 @@
 <template>
   <div>
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
-      <span
-        class="
-          p-1
-          items-center
-          text-black-800 text-xs
-          flex
-          bg-yellow-100
-          relative
-        "
-      >
+      <span class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative">
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
         {{ $t('pinconversation.you') }}
@@ -41,16 +32,7 @@
             >
               <b>{{ message.sender_name }}</b>
             </p>
-            <p
-              class="
-                text-xs
-                ml-2
-                mr-3
-                text-black-500
-                hover:underline
-                cursor-pointer
-              "
-            >
+            <p class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer">
               {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
             </p>
             <span
@@ -69,18 +51,7 @@
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
         </template>
         <div
-          class="
-            bg-white
-            text-black-500
-            p-1
-            rounded
-            absolute
-            top-0
-            right-0
-            -mt-3
-            mr-3
-            shadow-2xl
-          "
+          class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
           v-if="emojiModalStatus || openEmojiModal || showOptions"
         >
           <template v-for="emoji in topReactions" :key="emoji">
