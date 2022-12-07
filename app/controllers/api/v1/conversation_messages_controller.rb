@@ -22,8 +22,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def save_message
     @saved_item = @profile.saved_items.find_by(conversation_message_id:params[:id])
     if @saved_item
-      @saved_item.destroy
-      render json: { json: 'removed from saved items'}
+      if @saved_item.destroy
+        render json: { json: 'removed from saved items'}
+      else
+        render json: @saved_item.errors
+      end
     else
       @saved_item = @profile.saved_items.new(conversation_message_id:params[:id])
       if @saved_item.save
