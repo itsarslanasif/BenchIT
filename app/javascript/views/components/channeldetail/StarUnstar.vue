@@ -47,11 +47,6 @@ export default {
       }
     }
   }
-  // this.favchannel = !this.favchannel;
-  //   axios.delete('http://127.0.0.1:5100/api/v1/favourites/' + this.favchannelid)
-  //     .then(response => console.log(response));
-  //   this.favchannelid = 0;
-  //   console.log(this.favchannelid);
 }
 
 </script>
