@@ -35,7 +35,7 @@
       </div>
     </div>
     <div v-else>
-      <welcome-vue />
+      <LandingPage />
     </div>
   </div>
 </template>
@@ -51,7 +51,7 @@ import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
-import welcomeVue from '../components/welcome/welcome.vue';
+import LandingPage from '../components/landingPage/landingPage.vue';
 export default {
   name: 'Chat',
   components: {
@@ -59,7 +59,7 @@ export default {
     ChatBody,
     NInput,
     NSpace,
-    welcomeVue,
+    LandingPage,
     editor: Editor,
   },
   data() {
