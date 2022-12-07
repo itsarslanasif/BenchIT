@@ -19,7 +19,7 @@
             </div>
           </div>
           <div class="relative">
-            <editor v-model="message" api-key="{{import.meta.env.VITE_EDITOR_API}}" :init="{
+            <editor v-model="message" api-key="{{ import.meta.env.VITE_EDITOR_API }}" :init="{
               menubar: false,
               statusbar: false,
               plugins: 'lists link code',
