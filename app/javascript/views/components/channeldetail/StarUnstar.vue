@@ -10,19 +10,49 @@
 </template>
 
 <script>
+import { star } from '../../../api/starunstar/star.js'
+import { unstar } from '../../../api/starunstar/unstar.js'
 export default {
   name: 'StarUnstar',
+
+  props: {
+    channelid: Number
+  },
 
   data() {
     return {
       favchannel: false,
+      favchannelid: 0,
     }
   },
   methods: {
     MarkStar() {
-      this.favchannel = !this.favchannel;
+      if (!this.favchannel) {
+        this.favchannel = !this.favchannel;
+        star(
+          {
+            favourable_type: "BenchChannel",
+            "favourable_id": this.channelid
+          }
+        ).then(response => {
+          this.favchannelid = response.data.favourite_id;
+          console.log(this.favchannelid);
+        }
+        )
+          .catch(err => console.log(err));
+      }
+      else {
+        this.favchannel = !this.favchannel;
+        unstar(this.favchannelid);
+      }
     }
   }
+  // this.favchannel = !this.favchannel;
+  //   axios.delete('http://127.0.0.1:5100/api/v1/favourites/' + this.favchannelid)
+  //     .then(response => console.log(response));
+  //   this.favchannelid = 0;
+  //   console.log(this.favchannelid);
 }
+
 </script>
 

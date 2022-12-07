@@ -5,7 +5,7 @@
     <i class="fa-solid fa-chevron-down mt-3"></i>
   </div>
   <div v-if="modalopen">
-    <ChannelDetailModel :channelname = "this.channelname" :detailsopen = "this.OpenChannelDetailModal" class="m-auto absolute inset-x-0" />
+    <ChannelDetailModel :channelname = "this.channelname" :channelid="this.id" :detailsopen = "this.OpenChannelDetailModal" class="m-auto absolute inset-x-0" />
   </div>
 </template>
 
@@ -20,7 +20,8 @@ export default {
   data() {
     return {
       channelname: '',
-      modalopen: false
+      modalopen: false,
+      id: 0,
     };
   },
 
@@ -34,6 +35,7 @@ export default {
     const route = useRoute();
     const result = await getChannels();
     this.channelname = (result[route.params.id-1].name);
+    this.id = route.params.id;
   },
 };
 </script>
