@@ -1,6 +1,6 @@
 <template>
   <div @click="MarkStar">
-    <div v-if="this.favchannel">
+    <div v-if="favchannel">
       <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
     </div>
     <div v-else>
@@ -36,10 +36,8 @@ export default {
           }
         ).then(response => {
           this.favchannelid = response.data.favourite_id;
-          console.log(this.favchannelid);
         }
         )
-          .catch(err => console.log(err));
       }
       else {
         this.favchannel = !this.favchannel;
