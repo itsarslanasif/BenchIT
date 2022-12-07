@@ -8,6 +8,8 @@ en:
     acdc: 'AC/DC'
   vue:
     front:
+      project:
+        title: 'BenchIT'
       title: 'Front end'
       nav:
         homepage: 'Home'
@@ -21,6 +23,21 @@ en:
         client_404: 'This link triggers a Client side routing 404'
         server_401: 'This link performs an API call that responds a 401'
         server_500: 'This link performs an API call that responds a 500'
+        sign_in:
+          title: 'Sign in to Bench IT'
+          instructions_1: 'We suggest using the'
+          instructions_2: 'email address that you use at work.'
+          continue_with_google: 'Continue with Google'
+          continue_with_apple: 'Continue with Apple'
+          email_placeholder: 'name@work-email.com'
+          password_placeholder: 'Password'
+          sign_in_with_email: 'Sign in with Email'
+          or: 'OR'
+          code_for_password_free_sign_in: 'We’ll email you a magic code for a password-free sign in. Or you can'
+          sign_in_manually_instead: 'sign in manually instead.'
+          new_to_bench_it: 'New to Bench IT?'
+          create_your_account: 'Create your account'
+          error_message: 'Invalid email or password'
       workspaces:
         title: 'Details About Your Workspace'
         usage: 'What will your team use it for?'
@@ -37,7 +54,7 @@ en:
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
-        pinned: 'pinned'
+        pinned: 'Pinned'
       direct_messages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'
@@ -102,7 +119,8 @@ en:
         add_bookmark: 'Add bookmark'
         url_placeholder: 'facebook.com'
         name_placeholder: 'Facebook'
-
+      find_direct_messages:
+        somebody: '@Somebody or somebody@example.com'
       request:
         send_request: 'Send Request'
         reason_for_request: 'Reason for request (optional)'
@@ -132,6 +150,7 @@ en:
         contact_information: 'Contact Information'
         email: 'Email Address'
         phone: 'Phone'
+        title: 'Profile'
       filters:
         all_types: 'All types'
         owners: "Owners"
@@ -149,6 +168,21 @@ en:
         no_results_found: "No Results Found !"
         sort: "Sort"
         account_type: "Account Type"
+      channeldetail:
+        about: 'About'
+        members: 'Members'
+        integrations: 'Integrations'
+        settings: 'Settings'
+        channelname: 'Channel name'
+        topic: 'Topic'
+        description: 'Description'
+        created_by: 'Created by'
+        leave: 'Leave Channel'
+        files: 'Files'
+        filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
+      welcome:
+        no_chat_selected: 'No Chat Selected'
+        tagline: 'Select any chat from sidebar to see messages'
 
     admin:
       title: 'Admin'

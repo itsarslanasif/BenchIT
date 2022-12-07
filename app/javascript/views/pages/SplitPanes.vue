@@ -6,7 +6,8 @@
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
-        <Chat />
+        <Chat v-if="screenStore.getSelectedScreen == 'chat'" />
+        <searchDmscreen v-if="screenStore.getSelectedScreen == 'search-dm'" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
@@ -23,6 +24,9 @@ import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
+import { userSignOut } from '../../api/user_auth/user_sign_out_api';
+import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
+import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
 export default {
   components: {
     Splitpanes,
@@ -31,6 +35,11 @@ export default {
     WorkspaceDropdown,
     LeftPane,
     UserInviteFormVue,
+    searchDmscreen,
+  },
+  setup() {
+    const screenStore = useSelectedScreenStore();
+    return { screenStore };
   },
   methods: {
     closeForm() {
@@ -43,11 +52,19 @@ export default {
         params: { id: 1 },
       });
     },
+    sign_out() {
+      let token = sessionStorage.getItem('token');
+      userSignOut(token).then(res => {
+        this.response = res;
+        this.$router.push('/sign_in');
+      });
+    },
   },
   data() {
     return {
       modalOpen: false,
       UserInviteFormFlag: false,
+      response: null,
       options: [
         {
           title: 'BenchIT',
@@ -83,7 +100,7 @@ export default {
         },
         {
           title: 'Sign Out of BenchIT',
-          link: '#',
+          func: this.sign_out,
         },
       ],
     };
