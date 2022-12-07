@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-primary text-white border border-slate-600">
+  <div class=" bg-secondary text-white border border-slate-600 h-screen -mb-12">
     <div class="grid text-slate-600 grid-cols-1 divide-y">
       <div class="p-2 text-white text-xl">
         {{ $t('direct_messages.direct_messages') }}
@@ -11,13 +11,13 @@
             type="text"
             :placeholder="$t('find_direct_messages.somebody')"
             ouline="none"
-            class="bg-primary w-full ml-1"
+            class="bg-secondary w-full ml-1"
             v-model="query"
             @keyup.enter="searchQuery()"
           />
         </div>
         <hr />
-        <div class="w-full bg-slate-800 maxHeight p-5">
+        <div class="w-full p-5">
           <div v-for="member in members" :key="member.id">
             <memberCard
               class="cursor-pointer"
@@ -63,9 +63,6 @@ export default {
 </script>
 
 <style scoped>
-.maxHeight {
-  height: 600px;
-}
 textarea:focus,
 input:focus {
   outline: none;
