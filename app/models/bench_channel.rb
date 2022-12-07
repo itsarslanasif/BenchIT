@@ -21,6 +21,14 @@ class BenchChannel < ApplicationRecord
     ).distinct
   }
 
+   searchkick word_start: [:name , :description]
+  def search_data
+    {
+      name: name,
+      description: description,
+    }
+  end
+
   private
 
   def set_user_and_workspace
