@@ -2,10 +2,24 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, except: %i[index create]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
+  before_action :user_already_member, only: %i[join_public_channel]
+  before_action :set_bench_channel, only: %i[leave join_public_channel]
 
   def index
     current_user = User.first
     render json: current_user.bench_channels
+  end
+
+  def index
+    query = params[:term].present? ? params[:term] : nil
+    @bench_channel = if query
+      render json: BenchChannel.search(query)
+    else
+      render json: {
+        public_channels: BenchChannel.public_channels(Current.workspace.id) ,
+        private_channels: BenchChannel.user_joined_private_channels(Current.user.id , Current.workspace.id)
+      }
+    end
   end
 
   def create
@@ -16,6 +30,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
     else
       render json: { status: false, message: 'There was an error creating the channel.', errors: @bench_channel.errors }
     end
+  end
+
+  def join_public_channel
+    ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
+
   end
 
   def show
@@ -37,6 +56,13 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
+  end
+
+  def user_already_member
+
+    return if ChannelParticipant.find_by(user_id: current_user.id, bench_channel_id: @channel.id).nil?
+
+    render json: { message: 'You alraedy joined this channel' }, status: :unprocessable_entity
   end
 
   def update

@@ -18,6 +18,14 @@ class BenchChannel < ApplicationRecord
     joins(:channel_participants).where("user_id = #{user_id} AND workspace_id = #{workspace_id}  AND is_private = true").distinct
   }
 
+   searchkick word_start: [:name , :description]
+  def search_data
+    {
+      name: name,
+      description: description,
+    }
+  end
+
   private
 
   def set_user_and_workspace
