@@ -5,7 +5,7 @@
     <div class="flex ml-10">
       <p class="font-black text-2xl ml-1"> <i class="fas fa-hashtag mr-2"></i>{{ this.channelname }} </p>
     </div>
-    <StarUnstar />
+    <StarUnstar :channelid="this.channelid"/>
     <div class="flex ml-4">
       <p class="ml-3 hover:font-black cursor-pointer">
         {{ $t('channeldetail.about') }}
@@ -33,6 +33,7 @@ export default {
 
   props: {
     channelname: String,
+    channelid: Number,
     detailsopen: Function
   }
 }
