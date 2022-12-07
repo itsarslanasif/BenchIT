@@ -5,10 +5,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :user_already_member, only: %i[join_public_channel]
   before_action :set_bench_channel, only: %i[leave join_public_channel]
 
-  def index
-    current_user = User.first
-    render json: current_user.bench_channels
-  end
+  # def index
+  #   current_user = User.first
+  #   render json: current_user.bench_channels
+  # end
 
   def index
     query = params[:term].present? ? params[:term] : nil
