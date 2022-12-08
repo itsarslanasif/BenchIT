@@ -10,13 +10,12 @@ import SplitPanes from './views/pages/SplitPanes.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserInviteFormVue from './views/widgets/UserInviteForm.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
-import LandingPage from './views/components/landingPage/landingPage.vue'
-import Chat from './views/pages/Chat.vue'
+import LandingPage from './views/components/landingPage/landingPage.vue';
+import Chat from './views/pages/Chat.vue';
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
   routes: [
-    // { path: '/', component: PageIndex, name: 'root_path' },
     { path: '/404', component: Error404 },
     { path: '/:catchAll(.*)', redirect: '/404' },
     {
@@ -64,23 +63,23 @@ const router = createRouter({
         {
           path: '',
           component: LandingPage,
-          name: 'landing_page'
+          name: 'landing_page',
         },
         {
           path: '/users/:id',
           component: Chat,
-          name: 'channel-chat'
+          name: 'channel-chat',
         },
         {
           path: '/channels/:id',
           component: Chat,
-          name: 'user-chat'
+          name: 'user-chat',
         },
         {
           path: '/groups/:id',
           component: Chat,
-          name: 'group-chat'
-        }
+          name: 'group-chat',
+        },
       ],
     },
     {
@@ -89,24 +88,6 @@ const router = createRouter({
       name: 'workspace_dashboard',
       meta: { auth: true },
     },
-    // {
-    //   path: '/users/:id',
-    //   component: SplitPanes,
-    //   name: 'user_chat',
-    //   meta: { auth: true },
-    // },
-    // {
-    //   path: '/channels/:id/:message_id?',
-    //   component: SplitPanes,
-    //   name: 'channel_chat',
-    //   meta: { auth: true },
-    // },
-    // {
-    //   path: '/groups/:id',
-    //   component: SplitPanes,
-    //   name: 'group_chat',
-    //   meta: { auth: true },
-    // },
     {
       path: '/sign_in/',
       component: UserSignIn,

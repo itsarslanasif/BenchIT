@@ -51,7 +51,6 @@ export default {
       this.modalOpen = !this.modalOpen;
     },
     goToChannelChat(chatURL) {
-      // window.location.href = chatURL;
       this.$router.push(chatURL);
     },
   },
