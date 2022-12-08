@@ -1,103 +1,117 @@
 <template>
   <div>
-    <button
-      class="text-indigo-500 font-bold focus:outline-none z-10"
-      @click="open = true"
-    >
-      <i class="fas fa-user-plus"></i>
-    </button>
-
+    <!-- Modal -->
     <div
-      class="inset-0 overflow-y-auto"
-     
+      class="fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center z-10"
+      v-if="showModal"
     >
-      <transition
-        name="modal"
-        :duration="{ enter: 100, leave: 100 }"
+      <div
+        class="relative bg-white rounded-lg overflow-hidden shadow-2xl w-2/3 sm:w-1/2 lg:w-1/3 xl:w-1/4 max-h-screen"
       >
-        <div
-          class="relative flex flex-col w-full max-w-md mt-10 mx-auto bg-white rounded-lg shadow-lg outline-none focus:outline-none"
-          v-if="open"
-        >
-          <div class="relative flex flex-col w-full px-6 py-4">
-            <h3 class="text-2xl font-semibold text-gray-800">
-              {{ title }}
-            </h3>
-
-            <multiselect
-              v-model="selectedOptions"
-              :options="options"
-              :multiple="true"
-              :taggable="true"
-              :custom-label="customLabel"
-              :close-on-select="false"
-              :clear-on-select="false"
-              :preserve-search="true"
-              @search-change="searchOptions"
-            >
-            </multiselect>
-
-            <div class="flex items-center justify-end mt-3">
-              <button
-                class="text-sm font-semibold bg-indigo-500 hover:bg-indigo-700 text-white py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"
-                @click="submit"
-              >
-                Submit
-              </button>
-            </div>
+        <!-- Header -->
+        <div class="flex items-center justify-between py-4 px-6 bg-gray-100">
+          <div class="text-xl font-medium text-gray-800">
+            {{ title }}
           </div>
+          <button
+            class="text-gray-400 hover:text-gray-500 focus:outline-none"
+            @click="closeModal()"
+          >
+            <i class="fas fa-times"></i>
+          </button>
         </div>
-      </transition>
+
+        <!-- Body -->
+        <div class="m-3 !bg-danger">
+          <n-select
+            vertical
+            v-model:value="selectedValues"
+            multiple
+            filterable
+            placeholder="ex. Nathalie, or james@acme.com"
+            :options="options"
+            :loading="loading"
+            clearable
+            remote
+            :clear-filter-after-select="true"
+            :show-arrow="false"
+            @search="handleSearch"
+            size="large"
+            @change="resetSelectedTag()"
+          />
+        </div>
+
+        <!-- Footer -->
+        <div class="flex items-center justify-end py-4 px-6 bg-gray-100">
+          <button class="btn btn-blue-400 btn-lg" @click="submit()">Add</button>
+        </div>
+      </div>
     </div>
+    <!-- Trigger -->
+    <button class="btn btn-blue-400" @click="showModal = true">
+      <i class="fas fa-user-plus fa-lg" />
+    </button>
   </div>
 </template>
+
 <script>
-import Multiselect from "vue-multiselect";
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { fas } from "@fortawesome/free-solid-svg-icons";
-import {getMembers} from '../../../api/members/membersApi'
+import { NSelect } from 'naive-ui';
+import { defineComponent, ref } from 'vue';
+import { getMembers } from '../../../api/members/membersApi';
 
-library.add(fas);
+let options = [];
 
-export default {
-  name: "Modal",
+export default defineComponent({
   components: {
-    Multiselect,
-  },
-  props: {
-    open: {
-      type: Boolean,
-      default: false,
-    },
-    title: {
-      type: String,
-      default: "Modal",
-    },
+    NSelect,
   },
   data() {
     return {
-      searchTerm: "",
-      selectedOptions: [],
-      options: [],
+      showModal: false,
+      title: 'Add people to #channel',
     };
   },
   methods: {
-    customLabel(option) {
-      return `${option.label}`;
-    },
-    async searchOptions(search) {
-      this.searchTerm = search;
-
-      const results = await getMembers(1,this.searchTerm);
-      this.options = results;
-    },
-    removeOption(index) {
-      this.selectedOptions.splice(index, 1);
-    },
     submit() {
-      this.$emit("submit", this.selectedOptions);
-      this.open = false;
+      this.closeModal();
     },
+    closeModal() {
+      this.selectedValues = []
+      this.showModal = false;
+    },
+    resetSelectedTag() {
+    this.value = '';
+  }
   },
-};
+  setup() {
+    const loadingRef = ref(false);
+    const optionsRef = ref([]);
+
+    return {
+      selectedValues: ref(null),
+      loading: loadingRef,
+      options: optionsRef,
+      handleSearch: query => {
+        if (!query.length) {
+          console.log(optionsRef);
+          optionsRef.username = [];
+          return;
+        }
+        loadingRef.value = true;
+        window.setTimeout(async () => {
+          options = await getMembers(1, query);
+
+          optionsRef.value = options.map(item => {
+            return {
+              label: item.username,
+              value: item.id,
+            };
+          });
+          console.log(optionsRef.value);
+          loadingRef.value = false;
+        }, 1e3);
+      },
+    };
+  },
+});
 </script>
