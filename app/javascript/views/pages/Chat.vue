@@ -34,9 +34,9 @@
         </div>
       </div>
     </div>
-    <div v-else>
+    <!-- <div v-else>
       <LandingPage />
-    </div>
+    </div> -->
   </div>
 </template>
 

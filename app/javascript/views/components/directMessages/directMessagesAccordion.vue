@@ -71,11 +71,10 @@ export default {
       this.dmList = await getDirectMessagesList('1');
     },
     goToChat(chatURL) {
-      window.location.href = chatURL;
+      this.$router.push(chatURL);
     },
     handleClick() {
       this.selectScreen.setSelectedScreen('search-dm');
-      console.log(this.selectScreen.selectScreen);
     },
   },
 };
