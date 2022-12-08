@@ -10,6 +10,7 @@ gem 'devise'
 gem 'devise_invitable'
 gem 'devise-jwt'
 gem 'dotenv-rails'
+gem 'elasticsearch', '~> 7.0'
 gem 'foreman'
 gem 'jbuilder'
 gem 'kaminari'
@@ -21,15 +22,14 @@ gem 'redis', '~> 4.0'
 gem 'redis-namespace'
 gem 'route_translator'
 gem 'sassc-rails'
+gem 'searchkick'
 gem 'sidekiq', '~>6.0'
 gem 'sprockets-rails'
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'vite_rails'
-gem 'elasticsearch', '~> 7.0'
-gem 'searchkick'
-gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
 
 group :development, :test do
-  gem 'debug', platforms: %i[ mri mingw x64_mingw ]
+  gem 'debug', platforms: %i[mri mingw x64_mingw]
 end
 
 group :development do

@@ -5,7 +5,7 @@ class BenchConversation < ApplicationRecord
 
   scope :user_to_user_conversation, lambda { |sender_id, receiver_id|
     find_by(conversationable_type: 'User', sender_id: sender_id, conversationable_id: receiver_id) ||
-    find_by(conversationable_type: 'User', sender_id: receiver_id, conversationable_id: sender_id) ||
-    none
+      find_by(conversationable_type: 'User', sender_id: receiver_id, conversationable_id: sender_id) ||
+      none
   }
 end

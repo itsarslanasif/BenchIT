@@ -1,6 +1,6 @@
-require_relative "boot"
+require_relative 'boot'
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -19,7 +19,7 @@ module BenchIt
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
     config.active_job.queue_adapter = :sidekiq
-    config.autoload_paths += Dir["#{Rails.root}/lib/"]
+    config.autoload_paths += Dir[Rails.root.join('lib/')]
     # config.autoload_paths << '../lib/tasks/token'
     # config.autoload_paths += Dir["#{config.root}/lib/tasks/token"]
   end
