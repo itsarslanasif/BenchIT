@@ -23,7 +23,7 @@ class Api::V1::FavouritesController < Api::ApiController
 
   def favourites_params
     params.require(:favourite).permit(:favourable_type, :favourable_id).tap do |param|
-      param[:user_id] = current_user.id
+      param[:user_id] = User.first.id
     end
   end
 

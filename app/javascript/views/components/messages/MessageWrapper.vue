@@ -1,16 +1,14 @@
 <template>
   <div>
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
-      <span
-        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
-      >
+      <span class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative">
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
         {{ $t('pinconversation.you') }}
       </span>
     </div>
     <div
-      class="items-center flex p-1 relative hover:bg-slate-100"
+      class="items-center flex p-1 relative hover:bg-transparent"
       :class="{
         messageContentpinned: pinnedConversationStore.isPinned(currMessage),
       }"
@@ -19,7 +17,7 @@
     >
       <div class="min-w-fit ml-1">
         <n-avatar
-          v-show="!isSameUser"
+          v-show="!isSameUser || !isSameDayMessage"
           class="mr-1 self-baseline"
           size="large"
           src="../../../assets/images/user.png"
@@ -29,29 +27,22 @@
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
-              v-show="!isSameUser"
+              v-show="!isSameUser || !isSameDayMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ message.sender_name }}</b>
             </p>
-            <p
-              class="text-xs"
-              v-bind:class="{
-                time: !isSameUser,
-                'ml-2 mr-3 text-black-500 hover:underline cursor-pointer':
-                  isSameUser,
-              }"
-            >
-              {{ isSameUser ? timeWithoutAMPM : time }}
+            <p class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer">
+              {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
             </p>
             <span
-              v-show="isSameUser"
+              v-show="isSameUser && isSameDayMessage"
               class="text-black-800 text-sm flex-wrap"
               v-html="message.content"
             />
           </span>
           <span
-            v-show="!isSameUser"
+            v-show="!isSameUser || !isSameDayMessage"
             class="text-black-800 text-sm flex-wrap"
             v-html="message.content"
           />
@@ -108,7 +99,6 @@ import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
-import user from '../../../assets/images/user.png';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
@@ -168,6 +158,12 @@ export default {
     isSameUser() {
       if (this.oldMessage === undefined) return false;
       return this.message?.sender_id === this.oldMessage?.sender_id;
+    },
+    isSameDayMessage() {
+      return (
+        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.oldMessage?.created_at).toDateString()
+      );
     },
   },
   methods: {

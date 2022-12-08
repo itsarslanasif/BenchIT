@@ -16,7 +16,7 @@ export default {
   name: 'StarUnstar',
 
   props: {
-    channelid: Number
+    channelId: Number
   },
 
   data() {
@@ -32,7 +32,7 @@ export default {
         star(
           {
             favourable_type: "BenchChannel",
-            "favourable_id": this.channelid
+            favourable_id: this.channelId
           }
         ).then(response => {
           this.favchannelid = response.data.favourite_id;
