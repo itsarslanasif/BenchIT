@@ -3,6 +3,7 @@ class Api::ApiController < ApplicationController
   before_action :set_workspace_in_session
   #before_action :presence_of_api_token
   #before_action :authenticate_api_with_token
+  before_action :set_profile
 
   attr_reader :current_user
 
@@ -11,6 +12,10 @@ class Api::ApiController < ApplicationController
   def set_workspace_in_session
     session[:current_workspace_id] = Workspace.first.id
     Current.workspace = Workspace.first
+  end
+
+  def set_profile
+    Current.profile = User.first.profiles.find_by(workspace_id:Workspace.first)
   end
 
   def presence_of_api_token

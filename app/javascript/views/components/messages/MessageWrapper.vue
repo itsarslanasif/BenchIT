@@ -28,12 +28,15 @@
       <span class="message">
         <div
           :style="
-            message.isSaved || savemessage
+            currMessage.isSaved || savemessage
               ? { 'background-color': '#fffff0' }
               : null
           "
         >
-          <div v-if="message.isSaved || savemessage" class="flex items-center">
+          <div
+            v-if="currMessage.isSaved || savemessage"
+            class="flex items-center"
+          >
             <i class="far fa-bookmark text-red-500"></i>
             <p class="ml-2">Added to your saved items</p>
           </div>
@@ -45,7 +48,7 @@
               v-show="!isSameUser || !isSameDayMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
-              <b>{{ message.sender_name }}</b>
+              <b>{{ currMessage.sender_name }}</b>
             </p>
             <p
               class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
@@ -55,13 +58,13 @@
             <span
               v-show="isSameUser && isSameDayMessage"
               class="text-black-800 text-sm flex-wrap"
-              v-html="message.content"
+              v-html="currMessage.content"
             />
           </span>
           <span
             v-show="!isSameUser || !isSameDayMessage"
             class="text-black-800 text-sm flex-wrap"
-            v-html="message.content"
+            v-html="currMessage.content"
           />
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
@@ -100,7 +103,7 @@
             icon="fa-solid fa-ellipsis-vertical"
             :actionText="$t('emojiModalButton.more_actions')"
             :action="setOptionsModal"
-            :message="message"
+            :message="currMessage"
             :pinnedConversationStore="usePinnedConversation"
           />
         </div>
@@ -167,21 +170,23 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.message.created_at).getTime()).format(
+      return moment(new Date(this.currMessage.created_at).getTime()).format(
         'h:mm A'
       );
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.message.created_at).getTime()).format('h:mm');
+      return moment(new Date(this.currMessage.created_at).getTime()).format(
+        'h:mm'
+      );
     },
     isSameUser() {
-      if (this.oldMessage === undefined) return false;
-      return this.message?.sender_id === this.oldMessage?.sender_id;
+      if (this.prevMessage === undefined) return false;
+      return this.currMessage?.sender_id === this.prevMessage?.sender_id;
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.created_at).toDateString() ===
-        new Date(this.oldMessage?.created_at).toDateString()
+        new Date(this.currMessage?.created_at).toDateString() ===
+        new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },

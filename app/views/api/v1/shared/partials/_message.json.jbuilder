@@ -7,5 +7,6 @@ json.sender_name message.user.name
 json.reactions message.reactions
 json.created_at message.created_at
 json.updated_at message.updated_at
+json.isSaved true if is_saved?(message)
 json.receiver_name @receiver.name if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
