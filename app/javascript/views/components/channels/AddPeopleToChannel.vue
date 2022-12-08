@@ -72,7 +72,7 @@ export default defineComponent({
   },
   methods: {
     async submit() {
-      let Success_msg = await addMemberstoChannel('dev', this.selectedValues)
+      let Success_msg = await addMemberstoChannel('dev', this.selectedValues)  //channel name is hard coded as currently I can not access the current_channel (subject to change)
       console.log(Success_msg)
       this.closeModal();
     },
