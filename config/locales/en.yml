@@ -143,7 +143,7 @@ en:
         view_files: 'View Files'
       members:
         search_by_name: 'Search By Name'
-        add_members_modal_title : "Add members to #"
+        add_members_modal_title : "Add members to #channel"
       placeholder:
         email: 'Email'
         workspace: 'acme@benchit.com'

@@ -11,7 +11,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between py-4 px-6 bg-gray-100">
           <div class="text-xl font-medium text-gray-800">
-            {{ $t(`members.add_members_modal_title`) }}channel
+            {{ $t(`members.add_members_modal_title`) }}
           </div>
           <button
             class="text-gray-400 hover:text-gray-500 focus:outline-none"
@@ -94,7 +94,6 @@ export default defineComponent({
       options: optionsRef,
       handleSearch: query => {
         if (!query.length) {
-          console.log(optionsRef);
           optionsRef.username = [];
           return;
         }
@@ -108,7 +107,6 @@ export default defineComponent({
               value: item.id,
             };
           });
-          console.log(optionsRef.value);
           loadingRef.value = false;
         }, 1e3);
       },
