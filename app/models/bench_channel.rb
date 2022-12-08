@@ -15,7 +15,10 @@ class BenchChannel < ApplicationRecord
   scope :private_channels, ->(workspace_id) { where(is_private: true, workspace_id: workspace_id) }
   scope :public_channels, ->(workspace_id) { where(is_private: false, workspace_id: workspace_id) }
   scope :user_joined_private_channels, lambda { |user_id, workspace_id|
-    joins(:channel_participants).where("user_id = #{user_id} AND workspace_id = #{workspace_id}  AND is_private = true").distinct
+    joins(:channel_participants).where(
+      'user_id = :user_id AND workspace_id = :workspace_id AND is_private = :is_private',
+      { user_id: user_id, workspace_id: workspace_id, is_private: true }
+    ).distinct
   }
 
   private

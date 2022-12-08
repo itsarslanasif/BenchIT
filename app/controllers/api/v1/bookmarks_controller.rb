@@ -1,14 +1,14 @@
 class Api::V1::BookmarksController < Api::ApiController
   before_action :set_channel, only: %i[index create]
 
+  def index
+    @bookmarks = @channel.bookmarks
+  end
+
   def create
     @bookmark = @channel.bookmarks.create(bookmark_params)
 
     render json: @bookmark.errors if @bookmark.errors.any?
-  end
-
-  def index
-    @bookmarks = @channel.bookmarks
   end
 
   private
