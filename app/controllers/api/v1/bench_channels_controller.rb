@@ -8,6 +8,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: current_user.bench_channels
   end
 
+  def show
+    @messages = @bench_channel.bench_conversation.conversation_messages
+  end
+
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
 
@@ -18,8 +22,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     end
   end
 
-  def show
-      @messages = @bench_channel.bench_conversation.conversation_messages
+  def update
+    return if @bench_channel.update(bench_channel_params)
+
+    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   def destroy
@@ -37,12 +43,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
-  end
-
-  def update
-    return if @bench_channel.update(bench_channel_params)
-
-    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   private
