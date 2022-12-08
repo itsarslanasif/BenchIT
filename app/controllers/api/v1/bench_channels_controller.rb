@@ -11,6 +11,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   # end
 
   def index
+    byebug
     query = params[:term].present? ? params[:term] : nil
     @bench_channel = if query
       render json: BenchChannel.search(query)
