@@ -86,7 +86,7 @@ import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
-
+import { saveMessage } from '../../../api/save_messages/save_messages'
 export default {
   name: 'MessageWrapper',
   components: {
@@ -152,10 +152,9 @@ export default {
     setOptionsModal() {
       this.showOptions = !this.showOptions;
     },
-    saveMessage() {
+    async saveMessage() {
       this.savemessage = !this.savemessage;
-      console.log(this.message.content);
-      console.log(this.savemessage);
+      await saveMessage(this.message)
     }
   },
 };
