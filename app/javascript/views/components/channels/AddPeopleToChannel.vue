@@ -11,7 +11,7 @@
         <!-- Header -->
         <div class="flex items-center justify-between py-4 px-6 bg-gray-100">
           <div class="text-xl font-medium text-gray-800">
-            {{ title }}
+            {{ $t(`members.add_members_modal_title`) }}channel
           </div>
           <button
             class="text-gray-400 hover:text-gray-500 focus:outline-none"
@@ -57,7 +57,7 @@
 <script>
 import { NSelect } from 'naive-ui';
 import { defineComponent, ref } from 'vue';
-import { getMembers } from '../../../api/members/membersApi';
+import { getMembers , addMemberstoChannel} from '../../../api/members/membersApi';
 
 let options = [];
 
@@ -68,11 +68,12 @@ export default defineComponent({
   data() {
     return {
       showModal: false,
-      title: 'Add people to #channel',
     };
   },
   methods: {
-    submit() {
+    async submit() {
+      let Success_msg = await addMemberstoChannel('dev', this.selectedValues)
+      console.log(Success_msg)
       this.closeModal();
     },
     closeModal() {

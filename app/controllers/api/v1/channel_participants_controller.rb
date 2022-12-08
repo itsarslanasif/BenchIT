@@ -3,7 +3,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def create
     @channel_participant_users = ChannelParticipant.where(user_id: params[:user_ids], bench_channel_id: @channel_id).pluck(:id)
-    p "Arshad Arshad"
     if @channel_participant_users.empty?
       params[:user_ids].map {|user|ChannelParticipant.new(bench_channel_id: @channel_id[0], user_id: user,permission: true).save}
       @users_joined = User.where(id: params[:user_ids]).pluck(:name)
