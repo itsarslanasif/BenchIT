@@ -8,7 +8,6 @@ class Api::V1::UsersController < Api::ApiController
   end
 
   def show
-    current_user = User.first
     @conversation = BenchConversation.user_to_user_conversation(current_user.id, @receiver.id)
 
     if @conversation.blank?
@@ -30,11 +29,10 @@ class Api::V1::UsersController < Api::ApiController
   end
 
   def set_previous_direct_messages
-    current_user = User.first
     conversation_ids = BenchConversation.last_dm_message
-    return render json: { users: [current_user] } if conversation_ids.empty?
+    return render json: [current_user] if conversation_ids.empty?
 
     @bench_converations_ids = ConversationMessage.last_dm_message(conversation_ids)
-    return render json: { users: [current_user] } if @bench_converations_ids.empty?
+    return render json: [current_user] if @bench_converations_ids.empty?
   end
 end

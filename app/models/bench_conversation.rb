@@ -10,7 +10,6 @@ class BenchConversation < ApplicationRecord
   }
 
   def self.last_dm_message
-    current_user = User.first
     BenchConversation.where(
       'conversationable_type = :conversationable_type AND (sender_id = :sender_id OR conversationable_id = :conversationable_id)',
       { conversationable_type: 'User', sender_id: current_user, conversationable_id: current_user }
