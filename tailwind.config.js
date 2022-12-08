@@ -25,6 +25,8 @@ module.exports = {
       warning: '#FACC15',
       warningHover: '#EAB308',
       white: colors.white,
+      transparent: 'rgba(234, 231, 231, 0.477)',
+      backgroundTransparent: 'rgba(0, 0, 0, 0.3)',
       woot: {
         50: '#E3F2FF',
         100: '#BBDDFF',
@@ -107,6 +109,9 @@ module.exports = {
       screens: {
         dark: { raw: '(prefers-color-scheme: dark)' },
       },
+      width: {
+        '100': '25rem',
+       }
     },
   },
   variants: {},

@@ -1,30 +1,23 @@
 <template>
   <div>
     <div v-show="response" class="relative">
-      <div class="absolute top-0 right-0 mr-4">
-        <n-space vertical :size="12">
-          <n-alert v-if="response.status === 200" title="Success" type="success">
-            {{ response.data }}
-          </n-alert>
-          <n-alert v-else title="Error" type="error">
-            {{ response }}
-          </n-alert>
-        </n-space>
-      </div>
+      <benchit-alert
+        :errorMessage="response"
+        :successMessage="response?.data"
+        :success="response.status === 200"
+      />
     </div>
     <div class="flex flex-col items-center justify-center">
       <form class="max-w-md" @submit.prevent="handleSubmit">
-        <h1 class="text-center text-2xl">Join Workspace</h1>
+        <h1 class="text-center text-2xl">{{ $t('workspace.join_workspace') }}</h1>
         <h1 class="mb-5 text-center text-2xl">
           <b>{{ workspace_name }}</b>
         </h1>
-        <input v-model="username" type="name" placeholder="Username" required />
-        <input v-model="description" type="text" placeholder="Description" required />
+        <input v-model="username" type="name" :placeholder="$t('workspace.username_placeholder')" required />
+        <input v-model="description" type="text" :placeholder="$t('workspace.description_placehodler')" required />
         <div>
-          <button
-            class="bg-green-900 border-0 h-10 hover:bg-green-800 text-zinc-500"
-          >
-            Join
+          <button class="bg-success border-0 h-10 hover:bg-successHover text-zinc-500">
+            {{ $t('actions.join') }}
           </button>
         </div>
       </form>
@@ -35,10 +28,12 @@
 <script>
 import axios from '../../../modules/axios';
 import { NSpace, NAlert } from 'naive-ui';
+import benchitAlert from '../../widgets/benchitAlert.vue';
 export default {
   components: {
     NSpace,
     NAlert,
+    benchitAlert,
   },
   data() {
     return {

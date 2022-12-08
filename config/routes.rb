@@ -2,7 +2,10 @@ Rails.application.routes.draw do
   mount ActionCable.server => '/cable'
 
   localized do
-    devise_for :users, controllers: { invitations: 'users_invitations' }
+    devise_for :users, controllers: {
+      invitations: 'users_invitations',
+      sessions: 'users/sessions'
+    }
     root to: 'application#index'
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
@@ -14,13 +17,17 @@ Rails.application.routes.draw do
         end
 
         resources :groups, only: %i[index show]
-        resources :users, only: %i[index show]
         resources :conversation_messages, only: %i[create destroy] do
           collection do
             get :index_saved_messages
           end
           member do
             post :save_message
+          end
+        end
+        resources :users, only: %i[index show] do
+          collection do
+            get :previous_direct_messages
           end
         end
 
@@ -39,6 +46,8 @@ Rails.application.routes.draw do
 
           resources :profiles, only: %i[index create]
         end
+
+        resources :reactions, only: %i[create destroy]
       end
     end
 

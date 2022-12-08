@@ -22,7 +22,15 @@ import {
   faHashtag,
   faUser,
   faLock,
+  faThumbtack,
+  faXmark,
+  faPlus,
+  faMessage,
 } from '@fortawesome/free-solid-svg-icons';
+import {
+  faGoogle,
+  faApple,
+} from '@fortawesome/free-brands-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.css'
 import '@fortawesome/fontawesome-free/js/all.js'
 const Cable = createCable({ channel: 'ChatChannel' });
@@ -40,9 +48,15 @@ library.add(
   faBookmark,
   faEllipsisVertical,
   faFaceSmile,
+  faGoogle,
+  faApple,
   faHashtag,
   faUser,
-  faLock
+  faLock,
+  faThumbtack,
+  faXmark,
+  faPlus,
+  faMessage
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

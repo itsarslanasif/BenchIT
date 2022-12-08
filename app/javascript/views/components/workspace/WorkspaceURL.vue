@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h4 class="form-h3">{{ $t('url.title') }}</h4>
-    <h6 class="form-h">{{ $t('url.description') }}</h6>
+    <h4>{{ $t('url.title') }}</h4>
+    <h6>{{ $t('url.description') }}</h6>
     <label>{{ $t('url.name') }}</label>
     <input
       v-model="workspaceStore.workspace.bench_it_url"
-      class="form-input-select"
+      class="border"
       type="email"
-      placeholder="acme@benchit.com"
+      :placeholder="$t('placeholder.workspace')"
       required
     />
   </div>
@@ -15,7 +15,6 @@
 
 <script>
 import { WorkspaceStore } from '../../../stores/workspace_store';
-import './style.css';
 
 export default {
   data() {

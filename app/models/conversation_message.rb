@@ -9,6 +9,7 @@ class ConversationMessage < ApplicationRecord
 
   has_many :saved_items
   has_many :profiles, through: :saved_items
+  has_many :reactions, dependent: :destroy
 
   belongs_to :parent_message, class_name: 'ConversationMessage', foreign_key: :parent_message_id, optional: true
 
@@ -31,5 +32,10 @@ class ConversationMessage < ApplicationRecord
     channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
 
     ActionCable.server.broadcast(channel_key, { message: message })
+  end
+
+  def self.set_previous_dms(conversation_ids)
+    two_weaks_ago_time = DateTimeLibrary.new.get_two_weeks_ago_time
+    return ConversationMessage.where(bench_conversation_id: conversation_ids).where("created_at > ?", two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
   end
 end

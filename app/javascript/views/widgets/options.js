@@ -1,43 +1,60 @@
+import { NIcon } from 'naive-ui';
+import { h } from 'vue';
+import { RocketOutline as PollyIcon, CardOutline as CardOutlineIcon, PersonAddOutline as PersonAddIcon } from '@vicons/ionicons5';
+import { CONSTANTS } from '../../assets/constants';
+
+const renderIcon = icon => {
+  return () => {
+    return h(NIcon, null, {
+      default: () => h(icon),
+    });
+  };
+};
+
+const generateKey = label => {
+  return label.toLowerCase().replace(/ /g, '-');
+};
+
 export default [
   {
-    label: 'Turn off notifications for replies',
-    key: 'turn-off-notifications-for-replies',
+    label: CONSTANTS.OFF_NOTIFICATIONS,
+    key: generateKey(CONSTANTS.OFF_NOTIFICATIONS),
   },
   {
     type: 'divider',
     key: 'd1',
   },
   {
-    label: 'Mark unread',
-    key: 'mark-unread',
+    label: CONSTANTS.MARK_UNREAD,
+    key: generateKey(CONSTANTS.MARK_UNREAD),
   },
   {
-    label: 'Remind me about this',
-    key: 'remind-me-about-this',
+    label: CONSTANTS.REMIND_LATER,
+    key: generateKey(CONSTANTS.REMIND_LATER),
     children: [
       {
-        label: 'In 20 minutes',
-        key: 'in-20-minutes',
+        label: CONSTANTS.TWENTY_MINUTES,
+        key: generateKey(CONSTANTS.TWENTY_MINUTES),
       },
       {
-        label: 'In 1 hour',
-        key: 'in-1-hour',
+        label: CONSTANTS.ONE_HOUR,
+        key: generateKey(CONSTANTS.ONE_HOUR),
       },
       {
-        label: 'In 3 hours',
-        key: 'in-3-hours',
+        label: CONSTANTS.THREE_HOURS,
+        key: generateKey(CONSTANTS.THREE_HOURS),
       },
       {
-        label: 'Tommorow',
-        key: '8',
+        label: CONSTANTS.TOMORROW,
+        key: generateKey(CONSTANTS.TOMORROW),
       },
       {
-        label: 'Next week',
-        key: 'tommorow',
+        label: CONSTANTS.NEXT_WEEK,
+        key: generateKey(CONSTANTS.NEXT_WEEK),
       },
       {
-        label: 'Custom',
-        key: 'custom',
+        label: CONSTANTS.CUSTOM,
+        key: generateKey(CONSTANTS.CUSTOM),
       },
     ],
   },
@@ -46,27 +63,50 @@ export default [
     key: 'd2',
   },
   {
-    label: 'Copy link',
-    key: 'copy-link',
+    label: CONSTANTS.COPY_LINK,
+    key: generateKey(CONSTANTS.COPY_LINK),
   },
   {
     type: 'divider',
     key: 'd3',
   },
   {
-    label: 'Pin to this conversation',
-    key: 'pin-to-this-conversation',
+    label: CONSTANTS.PIN_TO_CONVERSATION,
+    key: generateKey(CONSTANTS.PIN_TO_CONVERSATION),
   },
   {
     type: 'divider',
     key: 'd4',
   },
   {
-    label: 'Edit message',
-    key: 'edit-message',
+    label: CONSTANTS.EDIT,
+    key: generateKey(CONSTANTS.EDIT),
   },
   {
-    label: 'Delete message',
-    key: 'delete-message',
+    label: CONSTANTS.DELETE,
+    key: generateKey(CONSTANTS.DELETE),
+  },
+  {
+    type: 'divider',
+    key: 'd5',
+  },
+  {
+    label: CONSTANTS.POLLY,
+    key: generateKey(CONSTANTS.POLLY),
+    icon: renderIcon(PollyIcon),
+  },
+  {
+    label: CONSTANTS.CARD_FROM_MESSAGE,
+    key: generateKey(CONSTANTS.CARD_FROM_MESSAGE),
+    icon: renderIcon(CardOutlineIcon),
+  },
+  {
+    label: CONSTANTS.ASSIGN_AS_TASK,
+    key: generateKey(CONSTANTS.ASSIGN_AS_TASK),
+    icon: renderIcon(PersonAddIcon),
+  },
+  {
+    label: CONSTANTS.MORE_SHORTCUTS,
+    key: generateKey(CONSTANTS.MORE_SHORTCUTS),
   },
 ];

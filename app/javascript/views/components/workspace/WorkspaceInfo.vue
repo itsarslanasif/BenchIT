@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h3 class="form-h3">{{ $t('workspaces.title') }}</h3>
+    <h3>{{ $t('workspaces.title') }}</h3>
     <label>{{ $t('workspaces.usage') }}</label>
     <select
       v-model="workspaceStore.workspace.workspace_type"
-      class="form-input-select"
+      class="border"
     >
       <option
         v-for="option in workspaceStore.workspace_type_options"
@@ -17,7 +17,7 @@
     <label>{{ $t('workspaces.company_type_info') }}</label>
     <select
       v-model="workspaceStore.workspace.organization_type"
-      class="form-input-select"
+      class="border"
     >
       <option
         v-for="option in workspaceStore.organization_type_options"
@@ -27,20 +27,20 @@
         {{ option.text }}
       </option>
     </select>
-    <label class="form-label">{{ $t('workspaces.company_size_info') }}</label>
+    <label>{{ $t('workspaces.company_size_info') }}</label>
     <input
       v-model="workspaceStore.workspace.capacity"
-      class="form-input-select"
+      class="border"
       type="number"
       required
     />
-    <div v-if="workspaceStore.capacityError" class="error">
+    <div v-if="workspaceStore.capacityError" class="text-danger text-sm font-bold mt-2">
       {{ workspaceStore.capacityError }}
     </div>
     <label>{{ $t('workspaces.admin_role_type') }}</label>
     <select
       v-model="workspaceStore.workspace.admin_role"
-      class="form-input-select"
+      class="border"
     >
       <option
         v-for="option in workspaceStore.admin_role_options"
@@ -51,7 +51,7 @@
       </option>
     </select>
     <div
-      class="image-preview-wrapper"
+      class="bg-no-repeat rounded-md border cursor-pointer block h-48 my-8 mx-auto w-full bg-contain bg-center"
       :style="{
         'background-image': `url(${workspaceStore.workspace.workspace_avatar})`,
       }"
@@ -60,7 +60,7 @@
     <input
       ref="fileInput"
       type="file"
-      class="form-input-select"
+      class="border"
       @input="pickFile"
     />
   </div>
@@ -68,7 +68,6 @@
 
 <script>
 import { WorkspaceStore } from '../../../stores/workspace_store';
-import './style.css';
 
 export default {
   data() {

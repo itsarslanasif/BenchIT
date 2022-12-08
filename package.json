@@ -19,6 +19,7 @@
     "@rails/actioncable": "^7.0.2-4",
     "@tailwindcss/typography": "0.2.0",
     "@tinymce/tinymce-vue": "^4",
+    "@vicons/ionicons5": "^0.12.0",
     "@vitejs/plugin-vue": "^2.3.1",
     "axios": "^0.26.1",
     "babel-eslint": "^10.1.0",
@@ -31,7 +32,7 @@
     "vee-validate": "^4.7.3",
     "vue": "^3.2.33",
     "vue-axios": "^3.4.1",
-    "vue-i18n": "^9.1.9",
+    "vue-i18n": "^9.1.10",
     "vue-router": "^4.0.14",
     "vue3-emoji-picker": "^1.1.7",
     "vue3-rich-accordion": "^0.0.7"
