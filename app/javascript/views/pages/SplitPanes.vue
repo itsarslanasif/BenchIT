@@ -7,8 +7,6 @@
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
         <router-view :key="$route.fullPath"/>
-        <!-- <Chat v-if="screenStore.getSelectedScreen == 'chat'" />
-        <searchDmscreen v-if="screenStore.getSelectedScreen == 'search-dm'" /> -->
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
