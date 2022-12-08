@@ -5,7 +5,7 @@ class Profile < ApplicationRecord
     {
       username: username,
       description: description,
-      workspace_id: workspace_id,
+      workspace_id: workspace_id
     }
   end
   after_commit :add_default_image, on: %i[create]
@@ -27,8 +27,7 @@ class Profile < ApplicationRecord
   def add_default_image
     return if profile_image.attached?
 
-    profile_image.attach(io: File.open(Rails.root.join(*%w[app assets images default_image.png])),
-                 filename: 'default_image.png', content_type: 'image/png')
+    profile_image.attach(io: Rails.root.join(*%w[app assets images default_image.png]).open,
+                         filename: 'default_image.png', content_type: 'image/png')
   end
-
 end
