@@ -35,7 +35,7 @@ export default {
             "favourable_id": this.channelid
           }
         ).then(response => {
-          this.favchannelid = response.data.favourite_id;
+          this.favchannelid = response.data.favourite.id;
         }
         )
       }
