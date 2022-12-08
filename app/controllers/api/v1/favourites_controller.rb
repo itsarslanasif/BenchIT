@@ -3,11 +3,11 @@ class Api::V1::FavouritesController < Api::ApiController
   before_action :set_favourite, only: %i[destroy]
 
   def create
-    favourite = Favourite.new(user:@current_user, favourable_type: params[:favourable_type], favourable_id:params[:favourable_id])
+    favourite = Favourite.new(favourites_params)
     if favourite.save
-      return render status: 201, json: { success: 'Succesfully added to favourites', favourite_id: favourite.id}
+      return render status: 201, json: { success: 'Succesfully added to favourites', favourite: favourite}
     else
-      render json: { error: 'Cannot Add to Favoruites', status: :unprocessable_entity }
+      render json: { error: favourite.errors, status: :unprocessable_entity }
     end
   end
 
@@ -15,29 +15,29 @@ class Api::V1::FavouritesController < Api::ApiController
     if @favourite.destroy
       render status: 201, json: { success: 'Succesfully removed from favourites' }
     else
-      render json: { error: 'Cannot Remove from favourites', status: :unprocessable_entity }
+      render json: { error: favourite.errors, status: :unprocessable_entity }
     end
   end
 
   private
 
   def favourites_params
-    params.permit(:favourable_type,:favourable_id)
+    params.require(:favourite).permit(:favourable_type, :favourable_id).tap do |param|
+      param[:user_id] = current_user.id
+    end
   end
 
   def check_favourite
-    @current_user = Current.user
-    already_favourite = Favourite.where(user_id:@current_user, favourable_type: params[:favourable_type], favourable_id: params[:favourable_id]).pluck(:id)
-    if already_favourite.empty?
-    else
+    already_favourite = Favourite.already_favourite(favourites_params)
+    if already_favourite.present?
       render json: { error: 'Already Favoruite', status: :unprocessable_entity }
     end
   end
 
   def set_favourite
-    @favourite = Favourite.find_by_id(params[:id])
+    @favourite = Favourite.find_by(id: params[:id])
     if @favourite.nil?
-      render json: { error: 'Cannot found in favourites', status: :unprocessable_entity }
+      render json: { error: 'Cannot be found in favourites', status: :unprocessable_entity }
     end
   end
 end
