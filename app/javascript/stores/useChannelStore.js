@@ -1,36 +1,23 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
+import { getChannels } from '../api/channels/channels';
 
-export const useChannelStore = defineStore('channelStore', {
-  state: () => ({
-    channels: [
-      {
-        id: 1,
-        name: 'bench-it'
-      },
-      {
-        id: 2,
-        name: 'general'
-      },
-      {
-        id: 3,
-        name: 'dev-general',
-      },
-      {
-        id: 4,
-        name: 'watercooler'
-      }
-    ]
-  }),
+export const useChannelStore = () => {
+  const channelStore = defineStore('channelStore', {
+    state: () => ({
+      channels: [],
+    }),
 
-  getters: {
-    getChannels: (state) => state.channels
-  },
-
-  actions: {
-    index() {
-      return this.axios.get('/channels').then(response => {
-        this.users = response.data.users;
-      })
+    getters: {
+      getChannels: state => state.channels,
     },
-  },
-})
+
+    actions: {
+      async index() {
+        this.channels = await getChannels()
+      },
+    },
+  });
+  const store = channelStore();
+
+  return store;
+};
