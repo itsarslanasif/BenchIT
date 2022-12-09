@@ -14,10 +14,7 @@
             class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
           >
             <div
-              v-if="
-                (showMentions && hasMentionCommand) ||
-                (showChannels && hasChannelCommand)
-              "
+              v-if="(showMentions && hasMentionCommand) || (showChannels && hasChannelCommand)"
             >
               <div
                 v-for="item in filteredList"
@@ -46,14 +43,10 @@
                     styles: {
                       background:
                         'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                      'border-left':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-right':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-top':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-bottom':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-left':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-right':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-top':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-bottom':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
                       'border-radius': '3px',
                       'font-size': '10px',
                       'font-variant-ligatures': 'none',
@@ -205,9 +198,7 @@ export default {
     },
 
     enableMention() {
-      this.allProfiles = this.allProfiles.filter(
-        profile => profile.name !== null
-      );
+      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null);
       this.filteredList = this.allProfiles;
       this.hasMentionCommand = true;
       this.showMentions = true;
