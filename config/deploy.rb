@@ -12,13 +12,12 @@ set :use_sudo,        true
 set :stage,           :staging
 set :deploy_via,      :remote_cache
 set :deploy_to,       "/var/www/#{fetch(:application)}"
-# set :default_shell,   "/bin/bash -l"
-
+# set :default_shell,   '/bin/bash -l'
 
 set :log_level, :debug
 
 ## Linked Files & Directories (Default None):
-set :linked_files, %w{config/credentials.yml.enc config/master.key}
+# set :linked_files, %w{config/credentials.yml.enc config/master.key}
 set :linked_dirs,  %w{config/credentials log tmp/pids tmp/cache tmp/sockets vendor/bundle}
 
 namespace :deploy do
