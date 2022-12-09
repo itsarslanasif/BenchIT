@@ -4,7 +4,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    current_user = User.first
     render json: current_user.bench_channels
   end
 
@@ -60,7 +59,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
-    current_user = User.first
     @bench_channel = BenchChannel.find_by(id: params[:id])
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
     render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)
