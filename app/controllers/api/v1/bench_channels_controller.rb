@@ -54,7 +54,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
     render json: { message: "Joined channel successfully ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotSaved
-    render json: { message: 'Could not join channel!' ,errors:channelparticipant.errors}, status: :unprocessable_entity
+    render json: { message: 'Could not join channel!', errors: channelparticipant.errors }, status: :unprocessable_entity
   end
 
   def user_already_member
