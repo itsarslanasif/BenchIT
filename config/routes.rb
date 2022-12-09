@@ -24,7 +24,7 @@ Rails.application.routes.draw do
         end
         resources :conversation_messages, only: %i[create destroy]
 
-        resources :bench_channels, except: %i[new edit index] do
+        resources :bench_channels, except: %i[new edit] do
           member do
             post :join_public_channel
             delete :leave
