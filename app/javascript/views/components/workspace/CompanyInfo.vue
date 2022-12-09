@@ -1,15 +1,15 @@
 <template>
   <div>
-    <h4 class="form-h3">{{ $t('company.title') }}</h4>
+    <h4>{{ $t('company.title') }}</h4>
     <label>{{ $t('company.name') }}</label>
     <input
       v-model="workspaceStore.workspace.company_name"
       type="text"
-      class="form-input-select"
+      class="bg-slate-50 border border-primary"
       placeholder="Ex. Acme or Acme Marketing"
       required
     />
-    <p class="form-h">{{ $t('company.description') }}</p>
+    <p>{{ $t('company.description') }}</p>
   </div>
 </template>
 

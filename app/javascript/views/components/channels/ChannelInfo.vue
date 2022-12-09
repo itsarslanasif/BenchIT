@@ -1,18 +1,18 @@
 <template>
-  <div class="p-1 relative">
-    <div class="header items-center flex p-1 justify-between">
+  <div class="relative">
+    <div class="custom-border px-1 h-12 items-center flex justify-between">
       <div
         @click="OpenChannelDetailModal(true)"
-        class="flex p-1 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
+        class="flex px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
         <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
         <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>
-        <i class="fa-solid fa-chevron-down self-center fa-lg"></i>
+        <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
       </div>
       <div
         class="flex items-center justify-center mr-2 w-8 h-8 rounded hover:bg-transparent cursor-pointer"
       >
-        <i class="fas fa-user-plus self-center fa-lg"></i>
+        <i class="fas fa-user-plus self-center fa-sm"></i>
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@ export default {
 };
 </script>
 <style scoped>
-  .header {
+  .custom-border {
     border-bottom: 0.5px solid gray;
   }
 </style>

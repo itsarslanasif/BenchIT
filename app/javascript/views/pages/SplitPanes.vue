@@ -5,22 +5,20 @@
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-      <pane max-size="81" min-size="75" class="bg-white">
-        <ChannelElement />
-        <div>
-          <Chat />
-        </div>
+      <pane max-size="70" min-size="75" class="bg-white">
+        <Chat v-if="screenStore.getSelectedScreen == 'chat'" />
+        <searchDmscreen v-if="screenStore.getSelectedScreen == 'search-dm'" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
       </div>
       <pane
         v-if="threadStore.showThread"
-        max-size="50"
+        max-size="60"
         min-size="20"
         class="bg-white"
       >
-        <RightPane />
+        <Thread />
       </pane>
     </splitpanes>
   </div>
@@ -33,24 +31,27 @@ import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
-import RightPane from '../components/rightPane/RightPane.vue';
-import ChannelElement from '../components/channels/ChannelElement.vue';
+import Thread from '../components/rightPane/Thread.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
 import { useThreadStore } from '../../stores/ThreadStore';
+import { userSignOut } from '../../api/user_auth/user_sign_out_api';
+import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
+import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
 export default {
-  setup() {
-    const threadStore = useThreadStore();
-    return { threadStore };
-  },
   components: {
     Splitpanes,
     Pane,
     Chat,
     WorkspaceDropdown,
     LeftPane,
-    ChannelElement,
     UserInviteFormVue,
-    RightPane,
+    Thread,
+    searchDmscreen,
+  },
+  setup() {
+    const screenStore = useSelectedScreenStore();
+    const threadStore = useThreadStore();
+    return { screenStore, threadStore };
   },
   methods: {
     closeForm() {
@@ -63,11 +64,19 @@ export default {
         params: { id: 1 },
       });
     },
+    sign_out() {
+      let token = sessionStorage.getItem('token');
+      userSignOut(token).then(res => {
+        this.response = res;
+        this.$router.push('/sign_in');
+      });
+    },
   },
   data() {
     return {
       modalOpen: false,
       UserInviteFormFlag: false,
+      response: null,
       options: [
         {
           title: 'BenchIT',
@@ -103,7 +112,7 @@ export default {
         },
         {
           title: 'Sign Out of BenchIT',
-          link: '#',
+          func: this.sign_out,
         },
       ],
     };

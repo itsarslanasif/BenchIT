@@ -1,36 +1,41 @@
 <template>
-  <div class="">
-    <div v-if="chat">
-      <ChatHeader />
-    </div>
-    <div v-if="messages" class="h-1/2 break-words">
-      <ChatBody />
-    </div>
-    <div class="h-3/4">
-      <div class="m-4 pt-6">
-        <div v-if="showMentions || showChannels"
-          class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
-          <div v-if="(showMentions && hasMentionCommand) || (showChannels && hasChannelCommand)">
-            <div v-for="item in filteredList" :key="item.name" class="p-1 rounded-md hover:bg-secondaryHover"
-              @click="addMentionToText">
-              {{ item.name }}
+  <div>
+    <div v-if="(conversation_type && id)">
+      <div v-if="chat">
+        <ChatHeader />
+      </div>
+      <div v-if="messages" class="h-1/2 break-words">
+        <ChatBody />
+      </div>
+      <div class="h-3/4">
+        <div class="mx-4">
+          <div v-if="showMentions || showChannels"
+            class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
+            <div v-if="(showMentions && hasMentionCommand) || (showChannels && hasChannelCommand)">
+              <div v-for="item in filteredList" :key="item.name" class="p-1 rounded-md hover:bg-secondaryHover"
+                @click="addMentionToText">
+                {{ item.name }}
+              </div>
             </div>
           </div>
+          <div class="relative">
+            <editor v-model="message" api-key="{{ import.meta.env.VITE_EDITOR_API }}" :init="{
+              menubar: false,
+              statusbar: false,
+              plugins: 'lists link code',
+              toolbar:
+                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
+            }" />
+          </div>
+          <button @click="sendMessage"
+            class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover">
+            {{ $t('actions.send') }}
+          </button>
         </div>
-        <div class="relative">
-          <editor v-model="message" api-key="{{import.meta.env.VITE_EDITOR_API}}" :init="{
-            menubar: false,
-            statusbar: false,
-            plugins: 'lists link code',
-            toolbar:
-              'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
-          }" />
-        </div>
-        <button @click="sendMessage"
-          class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover">
-          {{ $t(CONSTANTS.SEND) }}
-        </button>
       </div>
+    </div>
+    <div v-else>
+      <LandingPage />
     </div>
   </div>
 </template>
@@ -42,12 +47,11 @@ import ChatHeader from '../components/chats/ChatHeader.vue';
 import { NInput, NSpace } from 'naive-ui';
 import ChatBody from '../components/chats/ChatBody.vue';
 import Editor from '@tinymce/tinymce-vue';
-import { CONSTANTS } from '../../assets/constants';
 import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
-
+import LandingPage from '../components/landingPage/landingPage.vue';
 export default {
   name: 'Chat',
   components: {
@@ -55,6 +59,7 @@ export default {
     ChatBody,
     NInput,
     NSpace,
+    LandingPage,
     editor: Editor,
   },
   data() {
@@ -67,7 +72,6 @@ export default {
       showChannels: false,
       allProfiles: [],
       allChannels: [],
-      CONSTANTS: CONSTANTS,
       chat: {},
       messages: [],
       Cable: null,

@@ -17,7 +17,7 @@ export default {
   methods: {
     elementClicked() {
       switch (this.name) {
-        case 'People & user groups':
+        case 'People & User Group':
           window.location.replace(
             `${import.meta.env.VITE_APP_SERVER_URL}members`
           );

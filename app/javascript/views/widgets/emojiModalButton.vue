@@ -1,22 +1,24 @@
 <template>
   <n-popover style="backgroundcolor: #1e293b" trigger="hover">
     <template #trigger>
-      <template v-if="actionText == 'More actions'">
+      <template v-if="actionText == $t('emojiModalButton.more_actions')">
         <n-dropdown
+          class="rounded-md border border-slate-100"
           placement="bottom-start"
-          trigger="click"
           size="medium"
+          trigger="click"
+          :message="message"
           :options="options"
-          @select="handleSelect"
           @mouseleave="action"
+          @select="handleSelect($event, message, pinnedConversationStore)"
         >
-          <span @click="action" class="p-1 hover:bg-slate-100 rounded">
+          <span @click="action" class="p-2 text-sm hover:bg-transparent px-3 rounded">
             <font-awesome-icon :icon="icon" />
           </span>
         </n-dropdown>
       </template>
       <template v-else>
-        <span @click="action(emoji)" class="p-1 hover:bg-slate-100 rounded">
+        <span @click="action(emoji)" class="p-2 text-sm hover:bg-transparent cursor-pointer rounded">
           <font-awesome-icon v-if="icon" :icon="icon" />
           <template v-if="emoji">
             {{ emoji.i }}
@@ -31,15 +33,47 @@
 <script>
 import options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
+import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
+
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
-  props: ['icon', 'emoji', 'actionText', 'action'],
+  props: [
+    'icon',
+    'emoji',
+    'actionText',
+    'action',
+    'message',
+    'pinnedConversationStore',
+  ],
+  setup() {
+    const pinnedConversationStore = usePinnedConversation();
+    return { pinnedConversationStore };
+  },
   data() {
     return {
       options,
-      handleSelect(key) {
-        message.info(String(key));
+      handleSelect(key, message, pinnedConversationStore) {
+        switch (key) {
+          case 'copy-link':
+            let tempText = document.createElement('input');
+            tempText.value = `${ import.meta.env.VITE_APP_SERVER_URL }channels/${`${window.location.pathname.split('/')[2]}`}/${ message.id }`;
+            document.body.appendChild(tempText);
+            tempText.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempText);
+            break;
+          case 'pin-to-this-conversation':
+            if (!pinnedConversationStore.isPinned(message)) {
+              pinnedConversationStore.pinMessage(message);
+            } else {
+              pinnedConversationStore.unPinMessage(message);
+              if ( pinnedConversationStore.getCount == 0 && pinnedConversationStore.getPinToggle ) {
+                pinnedConversationStore.togglePin();
+              }
+            }
+            break;
+        }
       },
     };
   },
