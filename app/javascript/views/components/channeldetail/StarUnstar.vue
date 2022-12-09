@@ -1,6 +1,6 @@
 <template>
   <div @click="MarkStar">
-    <div v-if="favchannel">
+    <div v-if="favChannel">
       <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
     </div>
     <div v-else>
@@ -21,23 +21,23 @@ export default {
 
   data() {
     return {
-      favchannel: false,
-      favchannelid: 0,
+      favChannel: false,
+      favChannelId: 0,
     };
   },
   methods: {
     MarkStar() {
-      this.favchannel = !this.favchannel;
+      this.favChannel = !this.favChannel;
 
-      if (this.favchannel) {
+      if (this.favChannel) {
         star({
           favourable_type: 'BenchChannel',
           favourable_id: this.channelId,
         }).then(response => {
-          this.favchannelid = response.data.favourite.id;
+          this.favChannelId = response.data.favourite.id;
         });
       } else {
-        unstar(this.favchannelid);
+        unstar(this.favChannelId);
       }
     },
   },
