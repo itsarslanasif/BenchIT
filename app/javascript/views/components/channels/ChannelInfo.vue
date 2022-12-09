@@ -19,6 +19,7 @@
   <ChannelDetailModal
     v-if="modalOpen"
     :channelName="channel.name"
+    :channelId="channel.id"
     :detailsopen="this.OpenChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />
