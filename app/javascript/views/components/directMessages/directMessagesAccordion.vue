@@ -68,14 +68,13 @@ export default {
       this.modalOpen = !this.modalOpen;
     },
     async getDmList() {
-      this.dmList = await getDirectMessagesList('1');
+      this.dmList = await getDirectMessagesList();
     },
     goToChat(chatURL) {
-      window.location.href = chatURL;
+      this.$router.push(chatURL);
     },
     handleClick() {
       this.selectScreen.setSelectedScreen('search-dm');
-      console.log(this.selectScreen.selectScreen);
     },
   },
 };

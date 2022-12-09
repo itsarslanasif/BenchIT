@@ -4,9 +4,12 @@
     <div v-for="message in messages" :key="message.id" :id="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <p class="text-gray-600">
-          {{ isToday ? 'Today' : new Date(message.created_at).toDateString() }}
-        </p>
+        <n-divider v-if="isToday" class="text-xs text-gray-600">
+          <p>Today</p>
+        </n-divider>
+        <n-divider v-else class="text-xs text-gray-600">
+          <p>{{ new Date(message.created_at).toDateString() }}</p>
+        </n-divider>
       </div>
       <MessageWrapper :currMessage="message" :prevMessage="prevMessage" />
     </div>
