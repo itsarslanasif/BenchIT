@@ -24,6 +24,7 @@ BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1, workspace_id
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, user_id: 1, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, user_id: 2, bench_channel_id: 1)
+ChannelParticipant.create(permission: true, user_id: 4, bench_channel_id: 1)
 ConversationMessage.create(content: 'Hi Dev Channel from Alva', is_threaded: false, bench_conversation_id: 1, sender_id: 1)
 ConversationMessage.create(content: 'Hi Dev Channel from Arnold', is_threaded: false, bench_conversation_id: 1, sender_id: 2)
 Group.create(id: 1)
