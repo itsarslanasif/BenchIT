@@ -1,7 +1,11 @@
-import axios from '../../modules/axios/index'
+import axios from '../../modules/axios/index';
 
 export const getAllProfiles = async () => {
-  return await axios.get(`/v1/users`).then(response => {
-    return response.data;
-  });
-}
+  return await axios
+    .get(`/v1/users`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
+};

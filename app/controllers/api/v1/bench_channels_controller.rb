@@ -10,12 +10,15 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel = if query
       render json: BenchChannel.search(query)
     else
-      # render json: {
-      #   public_channels: BenchChannel.public_channels(Current.workspace.id) ,
-      #   private_channels: BenchChannel.user_joined_private_channels(Current.user.id , Current.workspace.id)
-      # }
-      render json: BenchChannel.all
+      render json: {
+        public_channels: BenchChannel.public_channels(Current.workspace.id) ,
+        private_channels: BenchChannel.user_joined_private_channels(Current.user.id , Current.workspace.id)
+      }
     end
+  end
+
+  def show
+    @messages = @bench_channel.bench_conversation.conversation_messages
   end
 
   def create
@@ -82,7 +85,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
-    current_user = User.first
     @bench_channel = BenchChannel.find_by(id: params[:id])
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
     render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)

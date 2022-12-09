@@ -34,9 +34,6 @@
         </div>
       </div>
     </div>
-    <div v-else>
-      <LandingPage />
-    </div>
   </div>
 </template>
 
@@ -50,6 +47,7 @@ import Editor from '@tinymce/tinymce-vue';
 import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { useCurrentUserStore } from '../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
 import LandingPage from '../components/landingPage/landingPage.vue';
 export default {
@@ -77,6 +75,7 @@ export default {
       Cable: null,
       conversation_type: null,
       id: null,
+      currentUser: {},
       filteredList: []
     };
   },
@@ -87,17 +86,20 @@ export default {
     const messageStore = useMessageStore();
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
+    const currentUserStore = useCurrentUserStore();
     const conversation_type = getIndexByParams(1)
     const id = getIndexByParams(2)
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
     const { messages } = storeToRefs(messageStore);
+    const { currentUser } = storeToRefs(currentUserStore);
     messageStore.index(conversation_type, id);
     return {
       allProfiles: profiles,
       allChannels: channels,
       messages,
       conversation_type,
+      currentUser,
       id
     };
   },
@@ -106,6 +108,7 @@ export default {
       channel: 'ChatChannel',
       id: this.id,
       type: this.conversation_type,
+      current_user_id: this.currentUser.id
     });
   },
   watch: {
@@ -145,7 +148,7 @@ export default {
   methods: {
     sendMessage() {
       const payload = {
-        sender_id: 1,
+        sender_id: this.currentUser.id,
         content: this.message.replace(/<[^>]+>/g, ''),
         is_threaded: false,
         parent_message_id: null,

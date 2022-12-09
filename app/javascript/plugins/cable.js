@@ -12,18 +12,23 @@ Cable.prototype.on = (channel, callback) => {
   return emitter.on(channel, callback);
 };
 
-Cable.prototype.send = (message) => {
+Cable.prototype.send = message => {
   channel.send({ message: message });
 };
 
-Cable.prototype.install = (app) => {
+Cable.prototype.install = app => {
   app.plugin = this;
   app.config.globalProperties.$cable = this;
 };
 
-export const createCable = (options) => {
+export const createCable = options => {
   channel = consumer.subscriptions.create(
-    { channel: options.channel, id: options.id, type: options.type },
+    {
+      channel: options.channel,
+      id: options.id,
+      type: options.type,
+      current_user_id: options.current_user_id,
+    },
     {
       received(data) {
         emitter.emit('chat', data);
@@ -31,4 +36,4 @@ export const createCable = (options) => {
     }
   );
   return new Cable();
-}
+};
