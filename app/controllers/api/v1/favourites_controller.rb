@@ -1,19 +1,18 @@
 class Api::V1::FavouritesController < Api::ApiController
-  before_action :check_favourite, only: %i[create]
   before_action :set_favourite, only: %i[destroy]
 
   def create
-    favourite = Favourite.new(favourites_params)
-    if favourite.save
-      render status: :created, json: { success: 'Succesfully added to favourites', favourite: favourite }
+    @favourite = Favourite.find_or_create_by(favourites_params)
+    if @favourite.id
+      render json: { success: 'Channel successfully added to favourites', favourite: @favourite, status: :created }
     else
-      render json: { error: favourite.errors, status: :unprocessable_entity }
+      render json: { error: @favourite.errors, status: :unprocessable_entity }
     end
   end
 
   def destroy
     if @favourite.destroy
-      render json: { success: 'Succesfully removed from favourites' }
+      render json: { success: 'Channel successfully removed from favourites', status: :success }
     else
       render json: { error: favourite.errors, status: :unprocessable_entity }
     end
@@ -27,13 +26,8 @@ class Api::V1::FavouritesController < Api::ApiController
     end
   end
 
-  def check_favourite
-    already_favourite = Favourite.already_favourite(favourites_params)
-    render json: { error: 'Already Favoruite', status: :unprocessable_entity } if already_favourite.present?
-  end
-
   def set_favourite
     @favourite = Favourite.find_by(id: params[:id])
-    render json: { error: 'Cannot be found in favourites', status: :unprocessable_entity } if @favourite.nil?
+    render json: { error: 'Channel could not be found in favourites', status: :unprocessable_entity } if @favourite.nil?
   end
 end

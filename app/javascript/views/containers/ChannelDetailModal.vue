@@ -6,7 +6,7 @@
     <p class="font-bold text-2xl pl-8">
       <i class="fas fa-hashtag mr-1"></i>{{ this.channelName }}
     </p>
-    <StarUnstar :channelId="this.channelId"/>
+    <StarUnstar :channelId = "this.channelId"/>
     <div class="flex ml-4">
       <p class="ml-3 hover:bg-transparent hover:font-bold px-2 rounded cursor-pointer">
         {{ $t('channeldetail.about') }}

@@ -10,42 +10,36 @@
 </template>
 
 <script>
-import { star } from '../../../api/starunstar/star.js'
-import { unstar } from '../../../api/starunstar/unstar.js'
+import { star } from '../../../api/starunstar/star.js';
+import { unstar } from '../../../api/starunstar/unstar.js';
 export default {
   name: 'StarUnstar',
 
   props: {
-    channelId: Number
+    channelId: Number,
   },
 
   data() {
     return {
       favchannel: false,
       favchannelid: 0,
-    }
+    };
   },
   methods: {
     MarkStar() {
-      if (!this.favchannel) {
-        this.favchannel = !this.favchannel;
-        star(
-          {
-            favourable_type: "BenchChannel",
-            favourable_id: this.channelId
-          }
-        ).then(response => {
+      this.favchannel = !this.favchannel;
+
+      if (this.favchannel) {
+        star({
+          favourable_type: 'BenchChannel',
+          favourable_id: this.channelId,
+        }).then(response => {
           this.favchannelid = response.data.favourite.id;
-        }
-        )
-      }
-      else {
-        this.favchannel = !this.favchannel;
+        });
+      } else {
         unstar(this.favchannelid);
       }
-    }
-  }
-}
-
+    },
+  },
+};
 </script>
-

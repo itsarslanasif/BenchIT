@@ -1,4 +1,3 @@
 import axios from "../../modules/axios";
 
-export const star = data =>
-axios.post('/v1/favourites',data);
+export const star = data => axios.post('/v1/favourites', data);
