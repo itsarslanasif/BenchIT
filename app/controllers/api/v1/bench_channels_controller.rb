@@ -5,12 +5,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :user_already_member, only: %i[join_public_channel]
 
   def index
-    query = params[:term].present? ? params[:term] : nil
-    @bench_channel = if query
-      render json: BenchChannel.search(query)
-    else
-     render json: BenchChannel.all
-    end
+    query = params[:term].present?
+    @bench_channel =  if query
+                        render json: BenchChannel.search(query)
+                      else
+                        render json: BenchChannel.all
+                      end
   end
 
   def show
@@ -27,9 +27,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     end
   end
 
-  def join_public_channel
-    ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
+  def update
+    return if @bench_channel.update(bench_channel_params)
 
+    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   def destroy
@@ -49,17 +50,14 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
-  def user_already_member
+  def join_public_channel
+    ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
+  end
 
+  def user_already_member
     return if ChannelParticipant.find_by(user_id: current_user.id, bench_channel_id: @channel.id).nil?
 
     render json: { message: 'You alraedy joined this channel' }, status: :unprocessable_entity
-  end
-
-  def update
-    return if @bench_channel.update(bench_channel_params)
-
-    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   private
