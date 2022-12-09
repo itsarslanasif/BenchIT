@@ -6,7 +6,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def index
     query = params[:term].present?
-    @bench_channel =  if query
+    @bench_channel = if query
                         render json: BenchChannel.search(query)
                       else
                         render json: BenchChannel.all
