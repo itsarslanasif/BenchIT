@@ -5,12 +5,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :user_already_member, only: %i[join_public_channel]
 
   def index
-    query = params[:term].present?
-    @bench_channel = if query
-                        render json: BenchChannel.search(query)
-                      else
+    @bench_channel = if params[:query].presence
+                        render json: BenchChannel.search(params[:query])
+                     else
                         render json: BenchChannel.all
-                      end
+                     end
   end
 
   def show
