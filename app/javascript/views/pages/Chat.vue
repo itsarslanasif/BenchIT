@@ -156,6 +156,7 @@ export default {
         conversation_id: this.id,
       };
       conversation(payload);
+      this.message = ''
     },
 
     enableMention() {
