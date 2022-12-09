@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="(conversation_type && id)">
+    <div v-if="conversation_type && id">
       <div v-if="chat">
         <ChatHeader />
       </div>
@@ -9,26 +9,63 @@
       </div>
       <div class="h-3/4">
         <div class="m-4 pt-6">
-          <div v-if="showMentions || showChannels"
-            class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
-            <div v-if="(showMentions && hasMentionCommand) || (showChannels && hasChannelCommand)">
-              <div v-for="item in filteredList" :key="item.name" class="p-1 rounded-md hover:bg-secondaryHover"
-                @click="addMentionToText">
+          <div
+            v-if="showMentions || showChannels"
+            class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
+          >
+            <div
+              v-if="(showMentions && hasMentionCommand) || (showChannels && hasChannelCommand)"
+            >
+              <div
+                v-for="item in filteredList"
+                :key="item.name"
+                class="p-1 rounded-md hover:bg-secondaryHover"
+                @click="addMentionToText"
+              >
                 {{ item.name }}
               </div>
             </div>
           </div>
           <div class="relative">
-            <editor v-model="message" api-key="{{ import.meta.env.VITE_EDITOR_API }}" :init="{
-              menubar: false,
-              statusbar: false,
-              plugins: 'lists link code',
-              toolbar:
-                'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
-            }" />
+            <editor
+              v-model="message"
+              api-key="{{ import.meta.env.VITE_EDITOR_API }}"
+              :init="{
+                menubar: false,
+                statusbar: false,
+                plugins: 'lists link code codesample',
+                toolbar:
+                  'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
+                codesample_languages: [none],
+                formats: {
+                  code: {
+                    selector: 'p',
+                    styles: {
+                      background:
+                        'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
+                      'border-left':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-right':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-top':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-bottom':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                      'border-radius': '3px',
+                      'font-size': '10px',
+                      'font-variant-ligatures': 'none',
+                      'line-height': '1.5',
+                      'margin-bottom': '14px',
+                      'padding-left': '8px',
+                      'padding-right': '8px',
+                      position: 'relative',
+                      'font-family': 'monospace',
+                    },
+                  },
+                },
+              }"
+            />
           </div>
-          <button @click="sendMessage"
-            class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover">
+          <button
+            @click="sendMessage"
+            class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover"
+          >
             {{ $t('actions.send') }}
           </button>
         </div>
@@ -123,7 +160,9 @@ export default {
       } else {
         this.disableAll();
       }
-      this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase()))
+      this.filteredList = this.filteredList.filter(item =>
+        item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase())
+      );
     },
   },
 
@@ -160,8 +199,8 @@ export default {
     },
 
     enableMention() {
-      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null)
-      this.filteredList = this.allProfiles
+      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null);
+      this.filteredList = this.allProfiles;
       this.hasMentionCommand = true;
       this.showMentions = true;
       this.hasChannelCommand = false;
@@ -169,7 +208,7 @@ export default {
     },
 
     enableChannels() {
-      this.filteredList = this.allChannels
+      this.filteredList = this.allChannels;
       this.hasChannelCommand = true;
       this.showChannels = true;
       this.hasMentionCommand = false;
@@ -211,5 +250,10 @@ export default {
   bottom: 0;
   float: left;
   width: 100%;
+}
+
+.mce-i-codesample {
+  color: transparent !important;
+  background-image: url(../../assets/images/codeblock.png) !important;
 }
 </style>
