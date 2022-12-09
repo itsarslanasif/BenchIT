@@ -25,7 +25,8 @@ class BenchChannel < ApplicationRecord
   def search_data
     {
       name: name,
-      description: description
+      description: description,
+      workspace_id: workspace_id
     }
   end
 
