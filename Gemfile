@@ -25,9 +25,16 @@ gem 'vite_rails'
 gem 'elasticsearch', '~> 7.0'
 gem 'searchkick'
 gem 'tzinfo-data', platforms: %i[ mingw mswin x64_mingw jruby ]
+gem 'figaro'
 
 group :development, :test do
   gem 'debug', platforms: %i[ mri mingw x64_mingw ]
+  gem 'capistrano'
+  gem 'capistrano-bundler'
+  gem 'capistrano3-puma', github: "seuros/capistrano-puma"
+  gem 'capistrano-rails'
+  gem 'capistrano-rvm'
+  gem 'capistrano-figaro-yml', '~> 1.0.2'
 end
 
 group :development do
