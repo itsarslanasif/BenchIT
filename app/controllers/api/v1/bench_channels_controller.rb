@@ -5,21 +5,16 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :user_already_member, only: %i[join_public_channel]
   before_action :set_bench_channel, only: %i[leave join_public_channel]
 
-  # def index
-  #   current_user = User.first
-  #   render json: current_user.bench_channels
-  # end
-
   def index
-    byebug
     query = params[:term].present? ? params[:term] : nil
     @bench_channel = if query
       render json: BenchChannel.search(query)
     else
-      render json: {
-        public_channels: BenchChannel.public_channels(Current.workspace.id) ,
-        private_channels: BenchChannel.user_joined_private_channels(Current.user.id , Current.workspace.id)
-      }
+      # render json: {
+      #   public_channels: BenchChannel.public_channels(Current.workspace.id) ,
+      #   private_channels: BenchChannel.user_joined_private_channels(Current.user.id , Current.workspace.id)
+      # }
+      render json: BenchChannel.all
     end
   end
 
