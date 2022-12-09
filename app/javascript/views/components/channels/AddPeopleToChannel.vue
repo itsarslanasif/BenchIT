@@ -57,7 +57,10 @@
 <script>
 import { NSelect } from 'naive-ui';
 import { defineComponent, ref } from 'vue';
-import { getMembers , addMemberstoChannel} from '../../../api/members/membersApi';
+import {
+  getMembers,
+  addMemberstoChannel,
+} from '../../../api/members/membersApi';
 
 let options = [];
 
@@ -72,17 +75,17 @@ export default defineComponent({
   },
   methods: {
     async submit() {
-      let Success_msg = await addMemberstoChannel('dev', this.selectedValues)  //channel name is hard coded as currently I can not access the current_channel (subject to change)
-      console.log(Success_msg)
+      let Success_msg = await addMemberstoChannel('dev', this.selectedValues);
+      console.log(Success_msg);
       this.closeModal();
     },
     closeModal() {
-      this.selectedValues = []
+      this.selectedValues = [];
       this.showModal = false;
     },
     resetSelectedTag() {
-    this.value = '';
-  }
+      this.value = '';
+    },
   },
   setup() {
     const loadingRef = ref(false);
