@@ -28,15 +28,10 @@
       <span class="message">
         <div
           :style="
-            currMessage.isSaved || savemessage
-              ? { 'background-color': '#fffff0' }
-              : null
+            currMessage.isSaved ? { 'background-color': '#fffff0' } : null
           "
         >
-          <div
-            v-if="currMessage.isSaved || savemessage"
-            class="flex items-center"
-          >
+          <div v-if="currMessage.isSaved" class="flex items-center">
             <i class="far fa-bookmark text-red-500"></i>
             <p class="ml-2">Added to your saved items</p>
           </div>
@@ -192,7 +187,12 @@ export default {
   },
   methods: {
     addReaction(emoji) {
-      this.allReactions.push(emoji);
+      axios.post('http://127.0.0.1:5100/api/v1/reactions', {
+        conversation_message_id: this.currMessage.id,
+        emoji: emoji.i,
+      });
+      this.allReactions.push(this.currMessage.reactions[0].emoji);
+      console.log(this.currMessage.reactions[0].emoji);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
@@ -201,7 +201,7 @@ export default {
       this.showOptions = !this.showOptions;
     },
     async saveMessage() {
-      this.savemessage = !this.savemessage;
+      this.currMessage.isSaved = !this.currMessage.isSaved;
       await saveMessage(this.message);
     },
   },
