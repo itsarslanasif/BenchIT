@@ -63,7 +63,6 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "benchit_production"
 
   config.action_mailer.perform_caching = false
-  config.secret_key_base = 'efc281531041efdbb32b1dc533c34693b8bdb6325c8f89f63da2c6f7e0762361497438203d5b8f726d852aae2f700a380d614fe308a56ae7f94c5c5cab186a92'
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
