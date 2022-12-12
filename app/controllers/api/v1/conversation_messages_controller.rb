@@ -16,25 +16,23 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def index_saved_messages
     @saved_items = Current.profile.saved_items
-    render "api/v1/saved_items/index"
+    render 'api/v1/saved_items/index'
   end
 
   def save_message
-    @saved_item = Current.profile.saved_items.new(conversation_message_id:params[:id])
+    @saved_item = Current.profile.saved_items.new(conversation_message_id: params[:id])
     if @saved_item.save
-      render json: { json: 'added to saved items'}
+      render json: { json: 'added to saved items' }
     else
       render json: @saved_item.errors
     end
   end
 
   def unsave_message
-    if @saved_item
-      if @saved_item.destroy
-        render json: { json: 'removed from saved items'}
-      else
-        render json: @saved_item.errors
-      end
+    if @saved_item.destroy
+      render json: { json: 'removed from saved items' }
+    else
+      render json: @saved_item.errors
     end
   end
 
@@ -42,6 +40,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_saved_item
     @saved_item = Current.profile.saved_items.find_by(conversation_message_id:params[:id])
+
+    return render json: { message: 'Message Not Found.' }, status: :not_found if @saved_item.nil?
   end
 
   def set_message
