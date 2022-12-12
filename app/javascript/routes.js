@@ -12,6 +12,7 @@ import UserInviteFormVue from './views/widgets/UserInviteForm.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
+import NewDirectMessages from '@/views/components/directMessages/findDirectMessages.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -79,6 +80,11 @@ const router = createRouter({
           path: '/groups/:id',
           component: Chat,
           name: 'group-chat',
+        },
+        {
+          path: '/new_direct_message',
+          component: NewDirectMessages,
+          name: 'new-direct-message',
         },
       ],
     },
