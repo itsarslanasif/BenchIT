@@ -74,7 +74,7 @@ export default {
       this.$router.push(chatURL);
     },
     handleClick() {
-      this.selectScreen.setSelectedScreen('search-dm');
+      this.$router.push('/new_direct_message')
     },
   },
 };
