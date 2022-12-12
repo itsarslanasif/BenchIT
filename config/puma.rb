@@ -8,21 +8,35 @@ max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
 min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
 threads min_threads_count, max_threads_count
 
-# Specifies the `worker_timeout` threshold that Puma will use to wait before
-# terminating a worker in development environments.
-#
-worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
-
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-port ENV.fetch("PORT") { 3000 }
+port        ENV.fetch("PORT") { 3000 }
 
 # Specifies the `environment` that Puma will run in.
 #
-environment ENV.fetch("RAILS_ENV") { "development" }
+environment = ENV.fetch("RAILS_ENV") { "development" }
 
+environment environment
 # Specifies the `pidfile` that Puma will use.
 pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
+
+if environment != "development"
+
+	app_path = '/var/www/benchit'
+
+	# Set up socket location
+	bind "unix://#{app_path}/shared/tmp/sockets/puma.sock"
+
+	directory "#{app_path}/current"
+
+	rackup "#{app_path}/current/config.ru"
+
+	# daemonize true
+
+	pidfile "#{app_path}/shared/tmp/pids/puma.pid"
+
+	state_path "#{app_path}/shared/tmp/puma.state"
+end
 
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked web server processes. If using threads and workers together
@@ -39,5 +53,5 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 #
 # preload_app!
 
-# Allow puma to be restarted by `bin/rails restart` command.
+# Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart

@@ -1,10 +1,9 @@
 set :rvm_type, :user
 set :rvm_ruby_version, 'ruby-3.0.4'
-#set :rvm_custom_path, '/usr/share/rvm'
 
 set :repo_url,        'git@github.com:yoarslan/BenchIT.git'
 set :application,     'benchit'
-set :user,            'deploy'
+set :user,            'deployer'
 
 # Don't change these unless you know what you're doing
 set :pty,             true
@@ -17,7 +16,7 @@ set :deploy_to,       "/var/www/#{fetch(:application)}"
 set :log_level, :debug
 
 ## Linked Files & Directories (Default None):
-# set :linked_files, %w{config/credentials.yml.enc config/master.key}
+set :linked_files, %w{config/application.yml}
 set :linked_dirs,  %w{config/credentials log tmp/pids tmp/cache tmp/sockets vendor/bundle}
 
 namespace :deploy do

@@ -1,14 +1,11 @@
 #app
-server '65.1.194.133', user: 'deploy', roles: %w{app db web sidekiq cronjobs}
+server '65.1.194.133', user: 'deployer', roles: %w{app db web sidekiq cronjobs}
 
 set :branch,          'deployment'
 set :rvm_type,        :user
 set :deploy_to,       '/var/www/benchit'
 set :stage,           :staging
 set :rails_env,       'staging'
-# set :default_shell,   '/bin/bash -l'
-
-
 
 namespace :deploy do
   desc "Restart sidekiq"
