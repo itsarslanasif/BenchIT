@@ -9,11 +9,13 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   private
 
   def channel_participant_params
-    params.required(:channel_participant).permit(:bench_channel_name, :user_ids)
+    params.required(:channel_participant).permit(:bench_channel_id, :user_ids)
   end
 
   def check_channel_participants
-    @channel_id = BenchChannel.find_by(name: params[:bench_channel_name])
+    puts "Arshad"
+    p params[:bench_channel_id]
+    @channel_id = BenchChannel.find_by(id: params[:bench_channel_id])
     return render json: { error: 'Channel Not Found', status: :unprocessable_entity } if @channel_id.nil?
 
     @channel_members = ChannelParticipant.where(user_id: params[:user_ids], bench_channel_id: @channel_id.id).ids

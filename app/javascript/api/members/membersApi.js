@@ -17,11 +17,11 @@ export const getMembers = async (workspace, query, sort) => {
   return (await result).data.profiles;
 };
 
-export const addMemberstoChannel = async (channel, members) => {
+export const addMemberstoChannel = async (channel_id, members) => {
   return await axios.post(
     `/v1/channel_participants`,
     {
-      bench_channel_name: channel,
+      bench_channel_id: channel_id,
       user_ids: members,
     },
     { headers: { Authorization: sessionStorage.getItem('token') } }
