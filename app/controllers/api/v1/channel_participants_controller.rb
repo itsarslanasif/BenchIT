@@ -14,9 +14,11 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def check_channel_participants
     @channel_id = BenchChannel.find_by(name: params[:bench_channel_name])
-    render json: { error: 'Channel Not Found', status: :unprocessable_entity } if @channel_id.nil?
-    @channel_participants = ChannelParticipant.where(user_id: params[:user_ids], bench_channel_id: @channel_id.id).ids
-    render json: { error: 'One or Many Users already participant of this channel', status: :unprocessable_entity } if @channel_participants.present?
+    return render json: { error: 'Channel Not Found', status: :unprocessable_entity } if @channel_id.nil?
+
+    @channel_members = ChannelParticipant.where(user_id: params[:user_ids], bench_channel_id: @channel_id.id).ids
+    return render json: { error: 'One or Many Users already participant of this channel', status: :unprocessable_entity } if @channel_members.present?
+
     @users_joined = User.where(id: params[:user_ids]).pluck(:name)
   end
 end
