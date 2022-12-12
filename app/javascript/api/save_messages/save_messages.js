@@ -1,5 +1,7 @@
-import axios from "axios";
+import axios from '../../modules/axios';
 
-export const saveMessage = async (message) => {
-  axios.post(`${import.meta.env.VITE_APP_SERVER_URL}api/v1/conversation_messages/${message.id}/save_message`)
+export const saveMessage = async message => {
+  axios.post(`v1/conversation_messages/${message.id}/save_message`, {
+    headers: { Authorization: sessionStorage.getItem('token') },
+  });
 };

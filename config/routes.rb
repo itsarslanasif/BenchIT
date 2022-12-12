@@ -23,6 +23,7 @@ Rails.application.routes.draw do
           end
           member do
             post :save_message
+            delete :unsave_message
           end
         end
         resources :users, only: %i[index show] do
@@ -30,6 +31,7 @@ Rails.application.routes.draw do
             get :previous_direct_messages
           end
         end
+        resources :favourites, only: %i[create destroy]
 
         resources :bench_channels, except: %i[new edit] do
           member do

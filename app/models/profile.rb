@@ -18,7 +18,6 @@ class Profile < ApplicationRecord
   validates :description, length: { maximum: 150 }
 
   has_many :saved_items
-  has_many :conversation_messages, through: :saved_items
 
   enum role: {
     primary_owner: 0,

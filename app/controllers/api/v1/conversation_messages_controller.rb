@@ -1,6 +1,7 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, only: %i[destroy]
+  before_action :set_saved_item, only: %i[unsave_message]
 
   def create
     @message = ConversationMessage.new(conversation_messages_params)
@@ -19,17 +20,18 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def save_message
-    @saved_item = Current.profile.saved_items.find_by(conversation_message_id:params[:id])
+    @saved_item = Current.profile.saved_items.new(conversation_message_id:params[:id])
+    if @saved_item.save
+      render json: { json: 'added to saved items'}
+    else
+      render json: @saved_item.errors
+    end
+  end
+
+  def unsave_message
     if @saved_item
       if @saved_item.destroy
         render json: { json: 'removed from saved items'}
-      else
-        render json: @saved_item.errors
-      end
-    else
-      @saved_item = Current.profile.saved_items.new(conversation_message_id:params[:id])
-      if @saved_item.save
-        render json: { json: 'added to saved items'}
       else
         render json: @saved_item.errors
       end
@@ -37,6 +39,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   private
+
+  def set_saved_item
+    @saved_item = Current.profile.saved_items.find_by(conversation_message_id:params[:id])
+  end
 
   def set_message
     @message = ConversationMessage.find(params[:id])

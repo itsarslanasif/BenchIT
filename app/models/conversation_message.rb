@@ -9,7 +9,6 @@ class ConversationMessage < ApplicationRecord
                      foreign_key: :parent_message_id, dependent: :destroy
 
   has_many :saved_items
-  has_many :profiles, through: :saved_items
   has_many :reactions, dependent: :destroy
 
   belongs_to :parent_message, class_name: 'ConversationMessage', optional: true
