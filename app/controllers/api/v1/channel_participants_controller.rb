@@ -13,8 +13,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_channel_participants
-    puts "Arshad"
-    p params[:bench_channel_id]
     @channel_id = BenchChannel.find_by(id: params[:bench_channel_id])
     return render json: { error: 'Channel Not Found', status: :unprocessable_entity } if @channel_id.nil?
 
