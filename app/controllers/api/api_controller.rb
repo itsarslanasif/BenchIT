@@ -1,8 +1,8 @@
 class Api::ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
-  # before_action :set_workspace_in_session
-  # before_action :presence_of_api_token
-  # before_action :authenticate_api_with_token
+  before_action :set_workspace_in_session
+  before_action :presence_of_api_token
+  before_action :authenticate_api_with_token
   before_action :set_profile
 
   attr_reader :current_user
@@ -15,7 +15,7 @@ class Api::ApiController < ApplicationController
   end
 
   def set_profile
-    Current.profile = User.first.profiles.find_by(workspace_id:Workspace.first)
+    Current.profile = Current.user.profiles.find_by(workspace_id:Current.workspace)
   end
 
   def presence_of_api_token

@@ -1,13 +1,15 @@
 <template>
   <div class="bg-primary text-sm">
+    <div class="border-b border-slate-400 bg-secondary" >
+      <SearchBar />
+    </div>
     <splitpanes>
       <pane max-size="25" min-size="11">
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
-        <Chat v-if="screenStore.getSelectedScreen == 'chat'" />
-        <searchDmscreen v-if="screenStore.getSelectedScreen == 'search-dm'" />
+        <router-view :key="$route.fullPath"/>
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
@@ -20,6 +22,7 @@
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
+import SearchBar from '../shared/searchBar.vue'
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
@@ -36,6 +39,7 @@ export default {
     LeftPane,
     UserInviteFormVue,
     searchDmscreen,
+    SearchBar,
   },
   setup() {
     const screenStore = useSelectedScreenStore();

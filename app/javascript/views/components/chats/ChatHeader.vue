@@ -62,7 +62,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`v1/bench_channels/${1}/bookmarks`)
+      .get(`v1/bench_channels/${1}/bookmarks`, {headers: { Authorization: sessionStorage.getItem('token') },})
       .then(response => {
         this.bookmarks = response.data.bookmarks;
         this.loading = false;
@@ -103,7 +103,11 @@ export default {
       this.loading = true;
       this.bookmarks.push({ name: value.name, url: value.url });
       axios
-        .post(`v1/bench_channels/${1}/bookmarks`, {
+        .post(`v1/bench_channels/${1}/bookmarks`,
+        {
+          headers: { Authorization: sessionStorage.getItem('token') },
+        },
+        {
           name: value.name,
           bookmark_URL: value.url,
           user_id: this.user_id,
