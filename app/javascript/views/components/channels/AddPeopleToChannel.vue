@@ -58,6 +58,7 @@ export default defineComponent({
     async submit() {
       let channel_id = window.location.pathname.split('/')[2];
       let Success_msg = await addMemberstoChannel(channel_id, this.selectedValues);
+      alert(`${Success_msg.data.members[0]} added`)
       this.closeModal();
     },
     closeModal() {
