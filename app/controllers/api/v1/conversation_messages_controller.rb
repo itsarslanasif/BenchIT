@@ -39,7 +39,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   private
 
   def set_saved_item
-    @saved_item = Current.profile.saved_items.find_by(conversation_message_id:params[:id])
+    @saved_item = Current.profile.saved_items.find_by(conversation_message_id: params[:id])
 
     return render json: { message: 'Message Not Found.' }, status: :not_found if @saved_item.nil?
   end
@@ -66,5 +66,4 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
     render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?
   end
-
 end
