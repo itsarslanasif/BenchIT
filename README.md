@@ -73,9 +73,11 @@ If you are using Ubuntu 20.04
 ```
 follow this link https://ourcodeworld.com/articles/read/1508/how-to-install-elasticsearch-7-in-ubuntu-2004
 ```
-After installation and running instance of elasticsearch run following command to reindex profiles
+After installation and running instance of elasticsearch run following command to reindex profiles and BenchChannels
 ```
 rake searchkick:reindex CLASS=Profile
+````
+rake searchkick:reindex CLASS=BenchChannel
 ```
 You can check if instance of elasticsearch is running by using following command
 ```
