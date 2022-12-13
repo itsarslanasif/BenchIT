@@ -104,5 +104,3 @@ rails test
 ```
 yarn test
 ```
-
-

@@ -99,6 +99,7 @@ en:
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Draft & Sent'
         people_and_user_group: 'People & User Group'
+        all_channels : 'All Channels'
         more: 'More'
       channels:
         selected_channels: 'Selected Channels'
@@ -112,6 +113,7 @@ en:
         new_channel_name_placeholder: 'e.g plan-budget'
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
+        result: 'result(s)'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -143,6 +145,7 @@ en:
         view_files: 'View Files'
       members:
         search_by_name: 'Search By Name'
+        add_members_modal_title : 'Add members to #channel'
       placeholder:
         email: 'Email'
         workspace: 'acme@benchit.com'

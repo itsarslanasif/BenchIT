@@ -4,7 +4,7 @@ export const getChannels = async (query) => {
   return await axios
     .get(`/v1/bench_channels`, {
       headers: { Authorization: sessionStorage.getItem('token') }, params: {
-        term: query,
+        query: query,
       },
     })
     .then(response => {
