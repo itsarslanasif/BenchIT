@@ -6,7 +6,9 @@
         <LeftPane />
       </pane>
       <pane max-size="81" min-size="75" class="bg-white">
+
         <router-view :key="$route.fullPath"/>
+        
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
