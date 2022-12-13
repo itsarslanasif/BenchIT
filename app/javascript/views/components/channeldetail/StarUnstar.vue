@@ -1,6 +1,6 @@
 <template>
   <div @click="MarkStar">
-    <div v-if="this.favchannel">
+    <div v-if="favChannel">
       <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
     </div>
     <div v-else>
@@ -10,19 +10,36 @@
 </template>
 
 <script>
+import { star } from '../../../api/starunstar/star.js';
+import { unstar } from '../../../api/starunstar/unstar.js';
 export default {
   name: 'StarUnstar',
 
+  props: {
+    channelId: Number,
+  },
+
   data() {
     return {
-      favchannel: false,
-    }
+      favChannel: false,
+      favChannelId: 0,
+    };
   },
   methods: {
     MarkStar() {
-      this.favchannel = !this.favchannel;
-    }
-  }
-}
-</script>
+      this.favChannel = !this.favChannel;
 
+      if (this.favChannel) {
+        star({
+          favourable_type: 'BenchChannel',
+          favourable_id: this.channelId,
+        }).then(response => {
+          this.favChannelId = response.data.favourite.id;
+        });
+      } else {
+        unstar(this.favChannelId);
+      }
+    },
+  },
+};
+</script>

@@ -1,5 +1,8 @@
 <template>
   <div class="bg-primary text-sm">
+    <div class="border-b border-slate-400 bg-secondary" >
+      <SearchBar />
+    </div>
     <splitpanes>
       <pane max-size="25" min-size="11">
         <WorkspaceDropdown title="BenchIT" :items="options" />
@@ -27,6 +30,7 @@
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
+import SearchBar from '../shared/searchBar.vue'
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
@@ -46,6 +50,7 @@ export default {
     UserInviteFormVue,
     Thread,
     searchDmscreen,
+    SearchBar,
   },
   setup() {
     const screenStore = useSelectedScreenStore();

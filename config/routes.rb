@@ -23,6 +23,7 @@ Rails.application.routes.draw do
           end
         end
         resources :conversation_messages, only: %i[create destroy]
+        resources :favourites, only: %i[create destroy]
 
         resources :bench_channels, except: %i[new edit] do
           member do
@@ -41,6 +42,7 @@ Rails.application.routes.draw do
         end
 
         resources :reactions, only: %i[create destroy]
+        resources :channel_participants, only: %i[create]
       end
     end
 

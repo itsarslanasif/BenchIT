@@ -12,13 +12,14 @@
       <div
         class="flex items-center justify-center mr-2 w-8 h-8 rounded hover:bg-transparent cursor-pointer"
       >
-        <i class="fas fa-user-plus self-center fa-sm"></i>
+      <AddPeopleToChannel/>
       </div>
     </div>
   </div>
   <ChannelDetailModal
     v-if="modalOpen"
     :channelName="channel.name"
+    :channelId="channel.id"
     :detailsopen="this.OpenChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />
@@ -26,9 +27,11 @@
 
 <script>
 import ChannelDetailModal from '../../containers/ChannelDetailModal.vue';
+import AddPeopleToChannel from './AddPeopleToChannel.vue'
+
 export default {
   name: 'ChannelInfo',
-  components: { ChannelDetailModal },
+  components: { ChannelDetailModal, AddPeopleToChannel },
   props: ['channel'],
   data() {
     return {
