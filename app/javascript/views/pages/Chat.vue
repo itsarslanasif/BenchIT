@@ -50,6 +50,7 @@ import Editor from '@tinymce/tinymce-vue';
 import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { useCurrentUserStore } from '../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
 import LandingPage from '../components/landingPage/landingPage.vue';
 export default {
@@ -77,6 +78,7 @@ export default {
       Cable: null,
       conversation_type: null,
       id: null,
+      currentUser: {},
       filteredList: []
     };
   },
@@ -87,17 +89,20 @@ export default {
     const messageStore = useMessageStore();
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
+    const currentUserStore = useCurrentUserStore();
     const conversation_type = getIndexByParams(1)
     const id = getIndexByParams(2)
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
     const { messages } = storeToRefs(messageStore);
+    const { currentUser } = storeToRefs(currentUserStore);
     messageStore.index(conversation_type, id);
     return {
       allProfiles: profiles,
       allChannels: channels,
       messages,
       conversation_type,
+      currentUser,
       id
     };
   },
@@ -106,6 +111,7 @@ export default {
       channel: 'ChatChannel',
       id: this.id,
       type: this.conversation_type,
+      current_user_id: this.currentUser.id
     });
   },
   watch: {
@@ -120,7 +126,9 @@ export default {
       } else {
         this.disableAll();
       }
-      this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase()))
+      this.filteredList = this.filteredList.filter(item =>
+        item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase())
+      );
     },
   },
 
@@ -145,7 +153,7 @@ export default {
   methods: {
     sendMessage() {
       const payload = {
-        sender_id: 1,
+        sender_id: this.currentUser.id,
         content: this.message.replace(/<[^>]+>/g, ''),
         is_threaded: false,
         parent_message_id: null,
@@ -156,8 +164,8 @@ export default {
     },
 
     enableMention() {
-      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null)
-      this.filteredList = this.allProfiles
+      this.allProfiles = this.allProfiles.filter(profile => profile.name !== null);
+      this.filteredList = this.allProfiles;
       this.hasMentionCommand = true;
       this.showMentions = true;
       this.hasChannelCommand = false;
@@ -165,7 +173,7 @@ export default {
     },
 
     enableChannels() {
-      this.filteredList = this.allChannels
+      this.filteredList = this.allChannels;
       this.hasChannelCommand = true;
       this.showChannels = true;
       this.hasMentionCommand = false;
@@ -207,5 +215,10 @@ export default {
   bottom: 0;
   float: left;
   width: 100%;
+}
+
+.mce-i-codesample {
+  color: transparent !important;
+  background-image: url(../../assets/images/codeblock.png) !important;
 }
 </style>

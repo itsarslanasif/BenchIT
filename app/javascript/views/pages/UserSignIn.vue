@@ -84,6 +84,7 @@
 import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
 import BenchitAlert from '../widgets/benchitAlert.vue';
+import { useCurrentUserStore } from '../../stores/CurrentUserStore';
 export default {
   name: 'UserSignIn',
   components: {
@@ -116,13 +117,15 @@ export default {
         sessionStorage.setItem('token', res.headers.authorization);
         this.response = res.data;
         if (res.data?.user) {
+          const currentUser = useCurrentUserStore();
+          currentUser.setUser(res.data.user);
           this.goToHomepage();
         }
       });
     },
 
     goToHomepage() {
-      window.location.href = import.meta.env.VITE_APP_SERVER_URL;
+      this.$router.push('/');
     },
   },
 };

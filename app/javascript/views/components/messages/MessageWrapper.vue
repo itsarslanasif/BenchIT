@@ -23,7 +23,6 @@
         />
       </div>
       <span class="message">
-
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
@@ -53,6 +52,7 @@
         <div
           v-if="currMessage?.is_threaded"
           @click="toggleThread"
+          :class="{ 'ml-10': isSameUser && isSameDayMessage }"
           class="text-info text-xs cursor-pointer hover:underline"
         >
           {{ repliesCount }}
@@ -107,8 +107,8 @@ import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
-import { useThreadStore } from '../../../stores/ThreadStore';
-  import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import { useThreadStore } from '../../../stores/useThreadStore';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'MessageWrapper',
@@ -174,7 +174,7 @@ export default {
       );
     },
     repliesCount(){
-      return `${this.currMessage.replies?.length} replies...`
+      return `${this.currMessage.replies?.length} replies..`
     }
   },
   methods: {

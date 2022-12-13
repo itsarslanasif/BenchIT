@@ -28,6 +28,7 @@ import axios from '../../../modules/axios/index';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import PinnedConversationModelVue from '../pinnedConversation/pinnedConversationModel.vue';
 import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
@@ -43,6 +44,7 @@ export default {
     NSpin,
     Spinner,
     PinnedConversation,
+    PinnedConversationModelVue,
     ChannelInfo,
     UserChatInfo,
   },
@@ -57,7 +59,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`v1/bench_channels/${1}/bookmarks`)
+      .get(`v1/bench_channels/${1}/bookmarks`, {headers: { Authorization: sessionStorage.getItem('token') },})
       .then(response => {
         this.bookmarks = response.data.bookmarks;
         this.loading = false;
@@ -98,7 +100,11 @@ export default {
       this.loading = true;
       this.bookmarks.push({ name: value.name, url: value.url });
       axios
-        .post(`v1/bench_channels/${1}/bookmarks`, {
+        .post(`v1/bench_channels/${1}/bookmarks`,
+        {
+          headers: { Authorization: sessionStorage.getItem('token') },
+        },
+        {
           name: value.name,
           bookmark_URL: value.url,
           user_id: this.user_id,
@@ -123,6 +129,7 @@ export default {
 .custom-border {
   border-bottom: 0.5px solid gray;
 }
+
 .loading {
   width: 80%;
   height: 50%;

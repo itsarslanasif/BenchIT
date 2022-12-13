@@ -1,6 +1,9 @@
-import axios from "axios";
+import axios from 'axios';
 
-export const createWorkspace = async (workspace) => {
-  axios.post(`${import.meta.env.VITE_APP_SERVER_URL}api/v1/workspaces`, workspace)
+export const createWorkspace = async workspace => {
+  axios.post(
+    `${import.meta.env.VITE_APP_SERVER_URL}api/v1/workspaces`,
+    workspace,
+    { headers: { Authorization: sessionStorage.getItem('token') } }
+  );
 };
-

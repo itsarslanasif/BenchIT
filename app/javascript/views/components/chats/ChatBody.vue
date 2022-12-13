@@ -5,7 +5,7 @@
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage && !message.parent_message_id">
         <n-divider v-if="isToday" class="text-xs">
-          <p class="font-normal text-xs">Today</p>
+          <p class="font-normal text-xs">{{$t('chat.today')}}</p>
         </n-divider>
         <n-divider v-else class="text-xs text-black-500">
           <p class="font-normal text-xs text-black-500">{{ new Date(message.created_at).toDateString() }}</p>
@@ -13,7 +13,7 @@
       </div>
       <MessageWrapper
         v-if="!message.parent_message_id"
-        :currMessage="message"
+        :currMessage="currMessage"
         :prevMessage="prevMessage"
       />
     </div>
@@ -39,44 +39,46 @@ export default {
   data() {
     return {
       messages: [],
-      message: null,
       prevMessage: null,
     };
   },
   computed: {
     isToday() {
       return (
-        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.currMessage?.created_at).toDateString() ===
         new Date().toDateString()
       );
     },
     isSameDayMessage() {
       return (
-        new Date(this.message?.created_at).toDateString() ===
+        new Date(this.currMessage?.created_at).toDateString() ===
         new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages } = storeToRefs(messageStore);
+    const { messages, currMessage } = storeToRefs(messageStore);
     return {
       messages,
+      currMessage
     };
   },
   methods: {
     setMessage(message) {
-      this.prevMessage = this.message;
-      this.message = message;
+      this.prevMessage = this.currMessage;
+      this.currMessage = message
     },
   },
   updated() {
     const message_id = this.$route.params.message_id;
 
     if (message_id) {
-      const message = document.getElementById(message_id);
       message.scrollIntoView();
       message.classList.add('highlight');
+    } else {
+      const recent_message = document.getElementById(this.messages.pop().id);
+      recent_message.scrollIntoView()
     }
   },
 };

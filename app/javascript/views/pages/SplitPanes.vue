@@ -6,8 +6,7 @@
         <LeftPane />
       </pane>
       <pane max-size="70" min-size="75" class="bg-white">
-        <Chat v-if="screenStore.getSelectedScreen == 'chat'" />
-        <searchDmscreen v-if="screenStore.getSelectedScreen == 'search-dm'" />
+        <router-view :key="$route.fullPath"/>
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
@@ -33,7 +32,7 @@ import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
-import { useThreadStore } from '../../stores/ThreadStore';
+import { useThreadStore } from '../../stores/useThreadStore';
 import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';

@@ -87,6 +87,9 @@ en:
       rightpane:
         send: 'Send'
         replies: 'replies'
+      chat:
+        today: 'Today'
+        replies: 'replies'
       channels:
           channels: 'Channels'
           add_new_channel: 'Add New Channel'
