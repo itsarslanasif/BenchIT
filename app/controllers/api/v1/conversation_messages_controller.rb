@@ -3,6 +3,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_message, only: %i[destroy]
   before_action :set_saved_item, only: %i[unsave_message]
 
+  def send_message
+    @messages = current_user.conversation_messages.includes(:user).order(created_at: :desc)
+  end
+
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id

@@ -17,18 +17,19 @@ Rails.application.routes.draw do
         end
 
         resources :groups, only: %i[index show]
+        resources :users, only: %i[index show] do
+          collection do
+            get :previous_direct_messages
+          end
+        end
         resources :conversation_messages, only: %i[create destroy] do
           collection do
+            get :send_message
             get :index_saved_messages
           end
           member do
             post :save_message
             delete :unsave_message
-          end
-        end
-        resources :users, only: %i[index show] do
-          collection do
-            get :previous_direct_messages
           end
         end
         resources :favourites, only: %i[create destroy]
@@ -50,6 +51,7 @@ Rails.application.routes.draw do
         end
 
         resources :reactions, only: %i[create destroy]
+        resources :channel_participants, only: %i[create]
       end
     end
 
