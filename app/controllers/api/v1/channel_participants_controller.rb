@@ -1,6 +1,19 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :check_channel_participants, only: %i[create]
 
+  def index
+    @profiles = if params[:query].presence
+        Profile.search(
+        params[:query],
+        where: { user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.pluck(:user_id)},
+        match: :word_start, misspellings: false
+      )
+    else
+      Profile.where(user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.pluck(:user_id))
+    end
+    render 'api/v1/profiles/index'
+  end
+
   def create
     params[:user_ids].map { |user_id| ChannelParticipant.create(bench_channel_id: @channel_id.id, user_id: user_id, permission: true) }
     render status: :created, json: { members: @users_joined }
@@ -9,7 +22,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   private
 
   def channel_participant_params
-    params.required(:channel_participant).permit(:bench_channel_id, :user_ids)
+    params.required(:channel_participant).permit(:bench_channel_id, :user_ids, :query)
   end
 
   def check_channel_participants

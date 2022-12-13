@@ -42,7 +42,7 @@ Rails.application.routes.draw do
         end
 
         resources :reactions, only: %i[create destroy]
-        resources :channel_participants, only: %i[create]
+        resources :channel_participants, only: %i[create index]
       end
     end
 
