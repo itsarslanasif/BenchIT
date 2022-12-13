@@ -3,7 +3,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_message, only: %i[destroy]
 
   def send_message
-    @messages = current_user.conversation_messages.order(created_at: :asc)
+    @messages = current_user.conversation_messages.order(created_at: :desc).includes(:user)
   end
 
   def create
