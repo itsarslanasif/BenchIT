@@ -5,10 +5,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
-    puts 'message', @message
-    if @message.parent_message_id.present?
-      @message.parent_message.update(is_threaded:true)
-    end
+    Rails.logger.debug 'message', @message
+    @message.parent_message.update(is_threaded: true) if @message.parent_message_id.present?
     response = @message.save ? { message: 'Message sent.' } : { message: @message.errors, status: :unprocessable_entity }
     render json: response
   end
