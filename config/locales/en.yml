@@ -97,7 +97,7 @@ en:
         threads: 'Threads'
         direct_messages: 'Direct Messages'
         mentions_and_reactions: 'Mentions & Reactions'
-        draft_and_sent: 'Draft & Sent'
+        draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
         more: 'More'
       channels:

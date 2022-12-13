@@ -13,6 +13,8 @@ import UserSignIn from './views/pages/UserSignIn.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
 import NewDirectMessages from '@/views/components/directMessages/findDirectMessages.vue'
+import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue'
+import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -72,7 +74,7 @@ const router = createRouter({
           name: 'channel-chat',
         },
         {
-          path: '/channels/:id',
+          path: '/channels/:id/:message_id?',
           component: Chat,
           name: 'user-chat',
         },
@@ -85,6 +87,18 @@ const router = createRouter({
           path: '/new_direct_message',
           component: NewDirectMessages,
           name: 'new-direct-message',
+        },
+        {
+          path: '/drafts_sent_messages',
+          component: DraftsAndSentMessages,
+          name: 'drafts-sent-messages',
+          children: [
+            {
+            path: '/recently_sent_messages',
+            component: RecentlySentMessages,
+            name: 'recently-sent-messages',
+            }
+          ]
         },
       ],
     },

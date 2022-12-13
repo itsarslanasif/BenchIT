@@ -21,6 +21,8 @@ export default {
           window.location.replace(
             `${import.meta.env.VITE_APP_SERVER_URL}members`
           );
+        case 'Drafts & Sent':
+          this.$router.push('drafts_sent_messages');
           break;
       }
     },
