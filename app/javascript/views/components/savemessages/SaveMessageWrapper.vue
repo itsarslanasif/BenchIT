@@ -1,5 +1,5 @@
 <template>
-  <div :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null">
+  <div class="bg-transparent">
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
       <span class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative">
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
@@ -15,23 +15,16 @@
           src="../../../assets/images/user.png" />
       </div>
       <span class="message">
-        <div v-if="this.currMessage.isSaved" class="flex items-center">
-          <i class="far fa-bookmark text-red-500"></i>
-          <p class="ml-2">Added to your saved items</p>
-        </div>
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p v-show="!isSameUser || !isSameDayMessage" class="mr-1 text-sm hover:underline cursor-pointer">
-              <b>{{ currMessage.sender_name }}</b>
+              <b>{{ currMessage.profile.name }}</b>
             </p>
             <p class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer">
-              {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
+              {{ currMessage.message.created_at ? timeWithoutAMPM : time }}
             </p>
-            <span v-show="isSameUser && isSameDayMessage" class="text-black-800 text-sm flex-wrap"
-              v-html="currMessage.content" />
           </span>
-          <span v-show="!isSameUser || !isSameDayMessage" class="text-black-800 text-sm flex-wrap"
-            v-html="currMessage.content" />
+          <span class="text-black-800 text-sm flex-wrap" v-html="currMessage.message.content" />
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
@@ -64,14 +57,13 @@ import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js'
 
 export default {
   name: 'MessageWrapper',
   setup() {
     const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore, };
+    return { pinnedConversationStore };
   },
   components: {
     NAvatar,
@@ -80,10 +72,6 @@ export default {
   },
   props: {
     currMessage: {
-      type: Object,
-      default: undefined,
-    },
-    prevMessage: {
       type: Object,
       default: undefined,
     },
@@ -105,7 +93,6 @@ export default {
         },
       ],
       message: this.currMessage,
-      oldMessage: this.prevMessage,
       emojiModalStatus: false,
       openEmojiModal: false,
       allReactions: [],
@@ -114,23 +101,13 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
+      return moment(new Date(this.currMessage.message.created_at).getTime()).format(
         'h:mm A'
       );
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
+      return moment(new Date(this.currMessage.message.created_at).getTime()).format(
         'h:mm'
-      );
-    },
-    isSameUser() {
-      if (this.prevMessage === undefined) return false;
-      return this.currMessage?.sender_id === this.prevMessage?.sender_id;
-    },
-    isSameDayMessage() {
-      return (
-        new Date(this.currMessage?.created_at).toDateString() ===
-        new Date(this.prevMessage?.created_at).toDateString()
       );
     },
   },
@@ -150,15 +127,8 @@ export default {
       this.showOptions = !this.showOptions;
     },
     saveMessage() {
-      this.currMessage.isSaved = !this.currMessage.isSaved;
       if (this.currMessage.isSaved) {
-        save(this.message.id,
-          {
-            data: this.message
-          })
-      }
-      else {
-        unsave(this.message.id);
+        unsave(this.currMessage.message.id);
       }
     }
   },

@@ -100,6 +100,7 @@ en:
         draft_and_sent: 'Draft & Sent'
         people_and_user_group: 'People & User Group'
         more: 'More'
+        save_message: 'Save items'
       channels:
         selected_channels: 'Selected Channels'
         title: 'Channels'
