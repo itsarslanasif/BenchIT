@@ -3,14 +3,14 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def index
     @profiles = if params[:query].presence
-        Profile.search(
-        params[:query],
-        where: { user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.pluck(:user_id)},
-        match: :word_start, misspellings: false
-      )
-    else
-      Profile.where(user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.pluck(:user_id))
-    end
+                  Profile.search(
+                    params[:query],
+                    where: { user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.pluck(:user_id) },
+                    match: :word_start, misspellings: false
+                  )
+                else
+                  Profile.where(user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.select(:user_id))
+                end
     render 'api/v1/profiles/index'
   end
 
