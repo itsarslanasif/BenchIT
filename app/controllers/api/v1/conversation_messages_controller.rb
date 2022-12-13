@@ -2,6 +2,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, only: %i[destroy]
 
+  def send_message
+    @messages = current_user.conversation_messages.order(created_at: :asc)
+  end
+
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
