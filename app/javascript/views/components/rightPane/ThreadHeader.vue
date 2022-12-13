@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { useThreadStore } from '../../../stores/ThreadStore';
+import { useThreadStore } from '../../../stores/useThreadStore';
 export default {
   name: 'ThreadHeader',
   props: ['threadName', 'messageId'],

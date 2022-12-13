@@ -45,7 +45,7 @@
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { NDivider } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
-import { useThreadStore } from '../../../stores/ThreadStore';
+import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import ThreadHeader from './ThreadHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
@@ -75,12 +75,6 @@ export default {
       return this.threadStore.message.replies.length + ' replies';
     },
   },
-  async updated() {
-    const messages = await getMessageHistory(this.conversation_type, this.id);
-    this.threadStore.message = messages.find(
-      msg => msg.id === this.threadStore.message.id
-    );
-  },
   methods: {
     sendMessage() {
       const payload = {
@@ -91,8 +85,12 @@ export default {
         conversation_type: this.conversation_type,
         conversation_id: this.id,
       };
-      conversation(payload).then(() => {
+      conversation(payload).then( async () => {
         this.newMessage = '';
+        const messages = await getMessageHistory(this.conversation_type, this.id);
+        this.threadStore.message = messages.find(
+          msg => msg.id === this.threadStore.message.id
+        );
       });
     },
   },
