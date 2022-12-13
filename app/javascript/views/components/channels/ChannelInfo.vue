@@ -9,11 +9,7 @@
         <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>
         <i class="fa-solid fa-chevron-down self-center fa-lg"></i>
       </div>
-      <div
-        class="flex items-center justify-center mr-2 w-8 h-8 rounded hover:bg-transparent cursor-pointer"
-      >
-      <AddPeopleToChannel/>
-      </div>
+      <ChannelMembersInfoVue/>
     </div>
   </div>
   <ChannelDetailModal
@@ -27,11 +23,11 @@
 
 <script>
 import ChannelDetailModal from '../../containers/ChannelDetailModal.vue';
-import AddPeopleToChannel from './AddPeopleToChannel.vue'
+import ChannelMembersInfoVue from './ChannelMembersInfo.vue';
 
 export default {
   name: 'ChannelInfo',
-  components: { ChannelDetailModal, AddPeopleToChannel },
+  components: { ChannelDetailModal,ChannelMembersInfoVue },
   props: ['channel'],
   data() {
     return {
