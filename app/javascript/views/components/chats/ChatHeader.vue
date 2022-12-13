@@ -14,10 +14,10 @@
     <div class="flex overflow-y-hidden text-ellipsis p-1 cursor-pointer">
       <pinnedConversation />
       <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
-      <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bm.name">
+      <!-- <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bm.name">
         <BookmarkShowVue :data="bookmark" @clicked="onClickChild">
         </BookmarkShowVue>
-      </p>
+      </p> -->
     </div>
   </div>
 </template>
