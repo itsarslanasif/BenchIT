@@ -17,7 +17,7 @@
       <span class="message">
         <div v-if="this.currMessage.isSaved" class="flex items-center">
           <i class="far fa-bookmark text-red-500"></i>
-          <p class="ml-2">Added to your saved items</p>
+          <p class="ml-2">{{ $t('actions.save_items') }}</p>
         </div>
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
@@ -141,7 +141,6 @@ export default {
         emoji: emoji.i,
       });
       this.allReactions.push(this.currMessage.reactions[0].emoji);
-      console.log(this.currMessage.reactions[0].emoji);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;

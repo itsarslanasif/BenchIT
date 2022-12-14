@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getsavemessages } from '../../../api/save_messages/savemessages.js'
+import { getSaveMessages } from '../../../api/save_messages/savemessages.js'
 import SaveMessageWrapper from './SaveMessageWrapper.vue';
 import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
 
@@ -33,7 +33,7 @@ export default {
     };
   },
   async mounted() {
-    this.messages = await getsavemessages();
+    this.messages = await getSaveMessages();
   },
 };
 </script>
