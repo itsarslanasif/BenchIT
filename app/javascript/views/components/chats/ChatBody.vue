@@ -76,9 +76,6 @@ export default {
     if (message_id) {
       message.scrollIntoView();
       message.classList.add('highlight');
-    } else {
-      const recent_message = document.getElementById(this.messages.pop().id);
-      recent_message.scrollIntoView()
     }
   },
 };
