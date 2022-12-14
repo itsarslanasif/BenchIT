@@ -145,6 +145,7 @@ en:
         save_items: 'Added to your saved items'
       members:
         search_by_name: 'Search By Name'
+        add_members_modal_title : 'Add members to #channel'
       placeholder:
         email: 'Email'
         workspace: 'acme@benchit.com'
