@@ -8,12 +8,12 @@
           :key="channel.id"
           class="hover:bg-primaryHover"
         >
-          <div
-            @click="goToChannelChat(`/channels/${channel.id}`)"
-            class="-ml-3 pl-3 hover:bg-primaryHover"
-          >
-            <i class="fa fa-hashtag mr-2 font-bold"></i>{{ channel.name }}
-          </div>
+          <ChannelItem
+            :channel="channel"
+            :goTo="goToChannelChat"
+            :toggleShow="toggleChannelOptionShow"
+            :isShowOptions="showChannelOptions"
+          />
         </h5>
         <div
           class="mt-2 -ml-3 hover:bg-primaryHover"
@@ -33,14 +33,16 @@
 import { getChannels } from '../../../api/channels/channels.js';
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import CreateChannel from './CreateChannel.vue';
+import ChannelItem from './ChannelItem.vue';
 
 export default {
-  components: { AccordionList, AccordionItem, CreateChannel },
+  components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
 
   data() {
     return {
       channels: [],
       modalOpen: false,
+      showChannelOptions: false,
     };
   },
   async mounted() {
@@ -52,6 +54,9 @@ export default {
     },
     goToChannelChat(chatURL) {
       this.$router.push(chatURL);
+    },
+    toggleChannelOptionShow() {
+      this.showChannelOptions = !this.showChannelOptions;
     },
   },
 };

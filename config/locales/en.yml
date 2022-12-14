@@ -112,6 +112,17 @@ en:
         new_channel_name_placeholder: 'e.g plan-budget'
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
+      channel_options:
+        open_in_split_view: 'Open in split view'
+        view_channel_details: 'View channel details'
+        copy: 'Copy'
+        copy_name: 'Copy name'
+        copy_link: 'Copy link'
+        copy_huddle_link: 'Copy huddle link'
+        mute_channel: 'Mute channel'
+        change_notifications: 'Change notifications'
+        star_channel: 'Star channel'
+        leave_channel: 'Leave channel'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
