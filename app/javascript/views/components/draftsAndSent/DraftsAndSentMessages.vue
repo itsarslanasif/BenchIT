@@ -33,19 +33,16 @@ export default {
           id: 0,
           text: 'Drafts',
           page: '/drafts_sent_messages',
-          active: true,
         },
         {
           id: 1,
           text: 'Scheduled',
           page: '/',
-          active: false,
         },
         {
           id: 2,
           text: 'Sent',
           page: '/recently_sent_messages',
-          active: false,
         },
       ],
     };
