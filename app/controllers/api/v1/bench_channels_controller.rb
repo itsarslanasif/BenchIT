@@ -8,7 +8,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def show
-    @messages = @bench_channel.bench_conversation.conversation_messages
+    @messages = @bench_channel.bench_conversation.conversation_messages.includes(:message_attachments_blobs)
   end
 
   def create

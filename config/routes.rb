@@ -25,6 +25,7 @@ Rails.application.routes.draw do
         resources :conversation_messages, only: %i[create destroy] do
           collection do
             get :send_message
+            get :recent_files
           end
         end
         resources :favourites, only: %i[create destroy]

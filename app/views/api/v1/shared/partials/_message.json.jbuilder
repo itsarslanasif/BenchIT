@@ -9,3 +9,9 @@ json.created_at message.created_at
 json.updated_at message.updated_at
 json.receiver_name @receiver.name if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
+if message.message_attachments.present?
+  json.attachments message.message_attachments do |attachment|
+    json.attachment attachment.blob
+    json.attachment_link url_for(attachment)
+  end
+end
