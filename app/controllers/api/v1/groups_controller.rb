@@ -6,7 +6,7 @@ class Api::V1::GroupsController < Api::ApiController
   end
 
   def show
-    @messages = @group.bench_conversation.conversation_messages.includes(:message_attachments_blobs)
+    @messages = @group.bench_conversation.conversation_messages.includes(:user, :reactions).with_attached_message_attachments
   end
 
   private

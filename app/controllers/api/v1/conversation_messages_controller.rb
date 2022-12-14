@@ -14,7 +14,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = current_user.conversation_messages.includes(:message_attachments_blobs)
+    @messages = current_user.conversation_messages.with_attached_message_attachments
   end
 
   private
