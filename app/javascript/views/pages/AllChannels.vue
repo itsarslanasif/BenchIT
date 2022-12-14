@@ -1,7 +1,7 @@
 <template>
   <div class="screen-height">
     <div class="sticky w-full h-auto bg-blue-500 divide-y divide-slate-200">
-      <div class="px-5 py-3 text-xl font-bold">All channels</div>
+      <div class="px-5 py-3 text-xl font-bold">{{$t('channels.all_channels')}}</div>
       <div class="px-5 py-3">
         <n-space vertical class="w-full">
           <form @submit.prevent="handleSubmit">
@@ -10,7 +10,7 @@
               size="large"
               v-model:value="term"
               @keyup.enter="handleSubmit"
-              placeholder="Search by channel name or description"
+              :placeholder="$t('channels.search_by_name_or_desc')"
             />
           </form>
           <p class="text-small text-gray-100 font-thin">{{ channels?.query?.length}} {{$t('channels.result')}}</p>

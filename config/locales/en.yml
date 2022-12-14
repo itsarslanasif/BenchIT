@@ -84,9 +84,6 @@ en:
         people: 'People'
         channels: 'Channels'
         tagline: "I'm looking for"
-      channels:
-          channels: 'Channels'
-          add_new_channel: 'Add New Channel'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -102,6 +99,10 @@ en:
         all_channels : 'All Channels'
         more: 'More'
       channels:
+        channels: 'Channels'
+        add_new_channel: 'Add New Channel'
+        search_by_name_or_desc : 'Search by channel name or description'
+        all_channels: 'All channels'
         selected_channels: 'Selected Channels'
         title: 'Channels'
         add_new_channel: 'Add New Channel'
