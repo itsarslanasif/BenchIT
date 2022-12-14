@@ -7,6 +7,7 @@
       <IconElement icon="&#64;" :name="$t('sidebar.mentions_and_reactions')" />
       <IconElement icon="&#8634;" :name="$t('sidebar.draft_and_sent')" />
       <IconElement icon="&#128101;" :name="$t('sidebar.people_and_user_group')" />
+      <button class = "px-2 text-base font-normal	" @click="goToAllChannels"><i class="fas fa-hashtag px-1"></i>{{$t('sidebar.all_channels')}}</button>
       <IconElement icon="&#8285;" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />
@@ -27,5 +28,10 @@ import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vu
 
 export default {
   components: { ChannelsAccordion, IconElement, DirectMessageAccordian },
+  methods:{
+    goToAllChannels() {
+      this.$router.push('/browse-channels');
+    },
+  }
 };
 </script>

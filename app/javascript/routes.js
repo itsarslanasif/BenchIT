@@ -12,6 +12,7 @@ import UserInviteFormVue from './views/widgets/UserInviteForm.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
+import AllChannels from './views/pages/AllChannels.vue'
 import NewDirectMessages from '@/views/components/directMessages/findDirectMessages.vue'
 
 const router = createRouter({
@@ -70,6 +71,11 @@ const router = createRouter({
           path: '/users/:id',
           component: Chat,
           name: 'channel-chat',
+        },
+        {
+          path: '/browse-channels',
+          component: AllChannels,
+          name: 'browse-channels',
         },
         {
           path: '/channels/:id',
