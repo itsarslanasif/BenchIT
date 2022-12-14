@@ -30,11 +30,11 @@
 </template>
 
 <script>
-import { getChannels } from '../../../api/channels/channels.js';
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import CreateChannel from './CreateChannel.vue';
 import ChannelItem from './ChannelItem.vue';
-
+import { useChannelStore } from '../../../stores/useChannelStore';
+import { storeToRefs } from 'pinia';
 export default {
   components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
 
@@ -45,8 +45,12 @@ export default {
       showChannelOptions: false,
     };
   },
-  async mounted() {
-    this.channels = await getChannels();
+  setup() {
+    const channelStore = useChannelStore()
+    const { channels } = storeToRefs(channelStore)
+    return {
+      channels
+    }
   },
   methods: {
     closeModal() {
