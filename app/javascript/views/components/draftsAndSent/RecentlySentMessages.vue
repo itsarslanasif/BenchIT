@@ -24,8 +24,25 @@
             src="../../../assets/images/user.png"
           />
         </div>
-        <div class="ml-3">
-          {{ message.sender_name }}
+        <div class="ml-3 leading-3">
+          <div v-if="!message.is_threaded && message.conversationable_type == 'User'">
+            {{ message.receiver_name }}
+          </div>
+          <div v-else-if="!message.is_threaded && message.conversationable_type == 'BenchChannel'">
+            {{ message.channel_name }}
+          </div>
+          <div v-else-if="message.is_threaded && message.conversationable_type == 'BenchChannel'">
+            Thread in {{ message.channel_name }}
+          </div>
+           <div v-if="message.is_threaded && message.conversationable_type == 'User'">
+            Thread in {{ message.receiver_name }}
+          </div>
+          <div v-if="message.is_threaded && message.conversationable_type == 'Group'">
+            Thread in Group {{ message.group_id }}
+          </div>
+          <div v-if="!message.is_threaded && message.conversationable_type == 'Group'">
+            Message in Group {{ message.group_id }}
+          </div>
           <br />
           <span class="text-black-600">{{ message.content }}</span>
         </div>
@@ -66,6 +83,7 @@ export default {
   },
   async mounted() {
     this.messages = await getMessages();
+    console.log(this.messages);
   },
   computed: {
     isToday() {

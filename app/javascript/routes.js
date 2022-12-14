@@ -92,6 +92,7 @@ const router = createRouter({
           path: '/drafts_sent_messages',
           component: DraftsAndSentMessages,
           name: 'drafts-sent-messages',
+          meta: { auth: true },
           children: [
             {
             path: '/recently_sent_messages',
