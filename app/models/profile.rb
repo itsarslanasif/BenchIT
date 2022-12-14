@@ -3,6 +3,7 @@ class Profile < ApplicationRecord
 
   def search_data
     {
+      user_id: user_id,
       username: username,
       description: description,
       workspace_id: workspace_id
