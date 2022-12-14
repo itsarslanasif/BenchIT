@@ -6,6 +6,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def create
     @draft_message = DraftMessage.new(draft_messages_params)
+
     if @draft_message.save
       render json: { success: 'Draft Message successfully created', draft_message: @draft_message, status: :created }
     else
