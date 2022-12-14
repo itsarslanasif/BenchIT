@@ -11,7 +11,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
                 else
                   Profile.where(user_id: BenchChannel.find(params[:bench_channel_id]).channel_participants.select(:user_id))
                 end
-    render 'api/v1/profiles/index'
   end
 
   def create
