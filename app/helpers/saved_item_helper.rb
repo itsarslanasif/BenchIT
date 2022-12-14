@@ -1,9 +1,5 @@
 module SavedItemHelper
   def saved?(message)
-    if Current.profile.saved_items.find_by(conversation_message_id: message.id)
-      true
-    else
-      false
-    end
+    Current.profile.saved_items.exists?(conversation_message_id: message.id)
   end
 end
