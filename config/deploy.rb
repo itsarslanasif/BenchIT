@@ -1,4 +1,4 @@
-set :rvm_type, :user
+set :rvm_type, :system
 set :rvm_ruby_version, 'ruby-3.0.4'
 
 set :repo_url,        'git@github.com:yoarslan/BenchIT.git'
@@ -17,7 +17,7 @@ set :log_level, :debug
 
 ## Linked Files & Directories (Default None):
 set :linked_files, %w{config/application.yml}
-set :linked_dirs,  %w{config/credentials log tmp/pids tmp/cache tmp/sockets vendor/bundle}
+set :linked_dirs,  %w{config/credentials log tmp/pids tmp/cache tmp/sockets vendor/bundle node_modules}
 
 namespace :deploy do
   desc "Restart Puma"

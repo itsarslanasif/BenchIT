@@ -39,6 +39,7 @@ group :development, :test do
   gem 'capistrano3-puma', github: "seuros/capistrano-puma"
   gem 'capistrano-rails'
   gem 'capistrano-rvm'
+  gem 'capistrano-foreman', '~> 1.4'
   gem 'capistrano-figaro-yml', '~> 1.0.2'
 end
 

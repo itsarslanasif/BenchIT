@@ -2,7 +2,7 @@
 server '65.1.194.133', user: 'deployer', roles: %w{app db web sidekiq cronjobs}
 
 set :branch,          'deployment'
-set :rvm_type,        :user
+set :rvm_type,        :system
 set :deploy_to,       '/var/www/benchit'
 set :stage,           :staging
 set :rails_env,       'staging'
