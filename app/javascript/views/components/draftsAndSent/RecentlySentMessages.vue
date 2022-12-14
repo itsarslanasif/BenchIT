@@ -34,13 +34,13 @@
           <div v-else-if="message.is_threaded && message.conversationable_type == 'BenchChannel'">
             Thread in {{ message.channel_name }}
           </div>
-           <div v-if="message.is_threaded && message.conversationable_type == 'User'">
+           <div v-else-if="message.is_threaded && message.conversationable_type == 'User'">
             Thread in {{ message.receiver_name }}
           </div>
-          <div v-if="message.is_threaded && message.conversationable_type == 'Group'">
+          <div v-else-if="message.is_threaded && message.conversationable_type == 'Group'">
             Thread in Group {{ message.group_id }}
           </div>
-          <div v-if="!message.is_threaded && message.conversationable_type == 'Group'">
+          <div v-else-if="!message.is_threaded && message.conversationable_type == 'Group'">
             Message in Group {{ message.group_id }}
           </div>
           <br />
@@ -83,7 +83,6 @@ export default {
   },
   async mounted() {
     this.messages = await getMessages();
-    console.log(this.messages);
   },
   computed: {
     isToday() {
