@@ -1,8 +1,7 @@
 class Api::V1::DraftMessagesController < Api::ApiController
-
-  # def index
-  #   @bookmarks = @channel.bookmarks
-  # end
+  def index
+    @draft_messages = current_user.draft_messages
+  end
 
   def create
     @draft_message = DraftMessage.new(draft_messages_params)
