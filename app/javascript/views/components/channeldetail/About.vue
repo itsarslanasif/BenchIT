@@ -24,6 +24,7 @@
 
 <script>
 import { memberLeaveChannel } from '../../../api/channels/channels'
+import { useChannelStore } from '../../../stores/useChannelStore';
 export default {
   name: 'About',
   data() {
@@ -41,9 +42,11 @@ export default {
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
     }
+    const channelStore = useChannelStore()
     const id = getIndexByParams(2)
     return {
-      id
+      id,
+      channelStore
     }
   },
 
@@ -51,7 +54,8 @@ export default {
   {
     async leaveChannel() {
       const response = await memberLeaveChannel(this.id)
-      console.log(response)
+      this.channelStore.leaveChannel(this.id)
+      this.$router.push('/')
     }
   }
 }
