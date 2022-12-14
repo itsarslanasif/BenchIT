@@ -5,7 +5,7 @@
         @click="goToMessage"
         class="flex px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
         >
-        <p class="text-lg font-semibold self-center mr-2">Thread</p>
+        <p class="text-lg font-semibold self-center mr-2">{{$t('chat.thread')}}</p>
         <p class="text-md text-black-600 self-center mr-1">{{ threadName }}</p>
       </div>
       <div

@@ -90,6 +90,7 @@ en:
       chat:
         today: 'Today'
         replies: 'replies'
+        thread: 'Thread'
       channels:
           channels: 'Channels'
           add_new_channel: 'Add New Channel'
