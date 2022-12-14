@@ -10,11 +10,13 @@ import SplitPanes from './views/pages/SplitPanes.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserInviteFormVue from './views/widgets/UserInviteForm.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
+import LandingPage from './views/components/landingPage/landingPage.vue';
+import Chat from './views/pages/Chat.vue';
+import NewDirectMessages from '@/views/components/directMessages/findDirectMessages.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
   routes: [
-    // { path: '/', component: PageIndex, name: 'root_path' },
     { path: '/404', component: Error404 },
     { path: '/:catchAll(.*)', redirect: '/404' },
     {
@@ -59,30 +61,37 @@ const router = createRouter({
           name: 'user_invite_form',
           meta: { auth: true },
         },
+        {
+          path: '',
+          component: LandingPage,
+          name: 'landing_page',
+        },
+        {
+          path: '/users/:id',
+          component: Chat,
+          name: 'channel-chat',
+        },
+        {
+          path: '/channels/:id',
+          component: Chat,
+          name: 'user-chat',
+        },
+        {
+          path: '/groups/:id',
+          component: Chat,
+          name: 'group-chat',
+        },
+        {
+          path: '/new_direct_message',
+          component: NewDirectMessages,
+          name: 'new-direct-message',
+        },
       ],
     },
     {
       path: '/workspace_dashboard',
       component: WorkspaceDashboard,
       name: 'workspace_dashboard',
-      meta: { auth: true },
-    },
-    {
-      path: '/users/:id',
-      component: SplitPanes,
-      name: 'user_chat',
-      meta: { auth: true },
-    },
-    {
-      path: '/channels/:id/:message_id?',
-      component: SplitPanes,
-      name: 'channel_chat',
-      meta: { auth: true },
-    },
-    {
-      path: '/groups/:id',
-      component: SplitPanes,
-      name: 'group_chat',
       meta: { auth: true },
     },
     {

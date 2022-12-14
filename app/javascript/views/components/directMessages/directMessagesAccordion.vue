@@ -13,13 +13,13 @@
         <h5 v-for="user in dmList" :key="user.id" class="hover:bg-primaryHover">
           <div
             @click="goToChat(`/users/${user.id}`)"
-            class="-ml-3 pl-3 flex items-start py-1 cursor-pointer hover:bg-primaryHover"
+            class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
           >
             <img
               class="w-6 h-6 rounded-md"
               src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
             />
-            <p class="ml-3 text-xs text-white">{{ user.name }}</p>
+            <p class="ml-2 text-sm text-white">{{ user.name }}</p>
           </div>
         </h5>
         <div
@@ -68,14 +68,13 @@ export default {
       this.modalOpen = !this.modalOpen;
     },
     async getDmList() {
-      this.dmList = await getDirectMessagesList('1');
+      this.dmList = await getDirectMessagesList();
     },
     goToChat(chatURL) {
-      window.location.href = chatURL;
+      this.$router.push(chatURL);
     },
     handleClick() {
-      this.selectScreen.setSelectedScreen('search-dm');
-      console.log(this.selectScreen.selectScreen);
+      this.$router.push('/new_direct_message')
     },
   },
 };

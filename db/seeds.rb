@@ -24,6 +24,7 @@ BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1, workspace_id
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, user_id: 1, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, user_id: 2, bench_channel_id: 1)
+ChannelParticipant.create(permission: true, user_id: 4, bench_channel_id: 1)
 ConversationMessage.create(content: 'Hi Dev Channel from Alva', is_threaded: false, bench_conversation_id: 1, sender_id: 1)
 ConversationMessage.create(content: 'Hi Dev Channel from Arnold', is_threaded: false, bench_conversation_id: 1, sender_id: 2)
 Group.create(id: 1)
@@ -38,3 +39,7 @@ BenchConversation.create(conversationable_type: 'User', conversationable_id: 1, 
 ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
 
+BenchChannel.create(name: 'watercooler', description: 'memes', creator_id: 1, workspace_id: workspace.id)
+ChannelParticipant.create(permission: true, user_id: 1, bench_channel_id: 2)
+BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 2)
+ConversationMessage.create(content: 'Hi from watercooler', is_threaded: false, bench_conversation_id: 4, sender_id: 1)

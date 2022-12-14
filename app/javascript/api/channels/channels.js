@@ -1,7 +1,21 @@
-import axios from '../../modules/axios'
+import axios from '../../modules/axios';
 
 export const getChannels = async () => {
-  return await axios.get(`/v1/bench_channels`).then(response => {
-    return response.data;
-  });
+  return await axios
+    .get(`/v1/bench_channels`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const memberLeaveChannel = async (channel_id) => {
+  return await axios
+    .delete(`v1/bench_channels/${channel_id}/leave`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
 }

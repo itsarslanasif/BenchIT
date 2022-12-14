@@ -1,0 +1,44 @@
+name: "Code Integrity Checks"
+on:
+  push:
+    branches: [ "develop" ]
+  pull_request:
+    branches: [ "develop" ]
+jobs:
+
+  gem-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa
+        with:
+          bundler-cache: true
+      - name: Security audit dependencies
+        run: bundle exec bundler-audit --update
+
+  brakeman:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa
+        with:
+          bundler-cache: true
+      - name: Security audit application code
+        run: bundle exec brakeman -q -w2
+
+  rubo-cop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Install Ruby and gems
+        uses: ruby/setup-ruby@0a29871fe2b0200a17a4497bae54fe5df0d973aa
+        with:
+          bundler-cache: true
+      - name: Rubocop
+        run: bundle exec rubocop --parallel
+

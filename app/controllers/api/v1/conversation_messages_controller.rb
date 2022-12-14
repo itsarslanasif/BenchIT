@@ -2,6 +2,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, only: %i[destroy]
 
+  def send_message
+    @messages = current_user.conversation_messages.includes(:user).order(created_at: :desc)
+  end
+
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
@@ -20,7 +24,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content,:is_threaded,:parent_message_id, :sender_id)
+    params.permit(:content, :is_threaded, :parent_message_id, :sender_id)
   end
 
   def fetch_conversation

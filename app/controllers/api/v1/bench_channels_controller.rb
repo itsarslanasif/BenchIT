@@ -4,8 +4,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    current_user = User.first
     render json: current_user.bench_channels
+  end
+
+  def show
+    @messages = @bench_channel.bench_conversation.conversation_messages
   end
 
   def create
@@ -18,8 +21,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     end
   end
 
-  def show
-      @messages = @bench_channel.bench_conversation.conversation_messages
+  def update
+    return if @bench_channel.update(bench_channel_params)
+
+    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   def destroy
@@ -39,12 +44,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
 
-  def update
-    return if @bench_channel.update(bench_channel_params)
-
-    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
-  end
-
   private
 
   def bench_channel_params
@@ -60,7 +59,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
-    current_user = User.first
     @bench_channel = BenchChannel.find_by(id: params[:id])
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
     render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)
