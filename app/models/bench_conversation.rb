@@ -1,6 +1,6 @@
 class BenchConversation < ApplicationRecord
   belongs_to :conversationable, polymorphic: true
-  belongs_to :user, foreign_key: :sender_id, optional: true, inverse_of: :bench_conversations
+  belongs_to :sender, class_name: 'User', optional: true
   has_many :conversation_messages, dependent: :destroy
 
   scope :user_to_user_conversation, lambda { |sender_id, receiver_id|
