@@ -188,6 +188,7 @@ en:
         title: 'Attach'
         recent_files: 'Recent files'
         from_computer: 'Attach from your computer'
+        divider: '●'
 
     admin:
       title: 'Admin'

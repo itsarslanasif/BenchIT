@@ -37,20 +37,39 @@
     </div>
     <div
       v-if="openAttach && recentFiles"
-      class="bottom-0 ml-12 absolute w-1/4 bg-primary text-white rounded-md h-auto"
+      class="bottom-0 ml-12 absolute min-w-1/4 max-w-auto bg-primary text-white rounded-md h-auto"
     >
-    <div class="flex p-2 border-b border-slate-100">
-      <div class="mr-3 hover:bg-slate-100 px-3 py-2 hover:text-black-900 rounded-md" @click="recentFiles = false">
-        <font-awesome-icon icon="fa-arrow-left" />
+      <div class="flex p-2 border-b border-slate-100">
+        <div
+          class="mr-3 hover:bg-primaryHover px-3 py-2 rounded-md"
+          @click="recentFiles = false"
+        >
+          <font-awesome-icon icon="fa-arrow-left" />
+        </div>
+        <div class="text-center py-2">
+          {{ $t('send_attachments.recent_files') }}
+        </div>
       </div>
-      <div class="text-center py-2">
-        {{ $t('send_attachments.recent_files') }}
+      <div>
+        <div v-for="file in recentFilesData" :key="file" @click="selectFromRecent(file)">
+          <div class="flex p-2 hover:bg-primaryHover">
+            <div class="mr-2">
+              <img :src="file.attachment_link" class="w-10 h-10" />
+            </div>
+            <div>
+              {{ file.attachment.filename }}<br />
+              {{ getFileType(file.attachment.content_type) }}
+              {{ $t('send_attachments.divider') }}
+              {{ getDate(file.attachment.created_at) }}
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
     </div>
   </div>
 </template>
 <script>
+import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
 export default {
   props: ['getImages'],
   data() {
@@ -59,6 +78,13 @@ export default {
       file: null,
       imgSrc: '',
       recentFiles: false,
+    };
+  },
+  setup() {
+    const recentFilesStore = useRecentFilesStore();
+    recentFilesStore.index();
+    return {
+      recentFilesData: recentFilesStore.getRecentFiles,
     };
   },
   methods: {
@@ -70,7 +96,21 @@ export default {
     closeModal() {
       this.openAttach = false;
       this.recentFiles = false;
+      this.getDate('2022-12-13T13:55:56.292Z');
     },
+    getDate(currentTimestamp) {
+      const date = new Date(currentTimestamp);
+      var options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return date.toLocaleDateString('en-US', options);
+    },
+    getFileType(currentFile){
+      const content = currentFile.split('/')
+      return content[content.length - 1].toUpperCase()
+    },
+    selectFromRecent(file) {
+      this.getImages(file.attachment);
+      this.openAttach = false;
+    }
   },
 };
 </script>
