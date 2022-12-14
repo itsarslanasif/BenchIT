@@ -14,4 +14,4 @@ json.receiver_name User.find_by(id: message.bench_conversation.conversationable_
 json.channel_name BenchChannel.find_by(id: message.bench_conversation.conversationable_id).name if
   message.bench_conversation.conversationable_type == 'BenchChannel'
 json.group_id message.bench_conversation.conversationable_id if message.bench_conversation.conversationable_type == 'Group'
-json.bench_conversation_id message.bench_conversation_id
+json.receiver_id User.find_by(id: message.bench_conversation.conversationable_id).id if message.bench_conversation.conversationable_type == 'User'

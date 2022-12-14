@@ -76,9 +76,21 @@ export default {
       this.message = message;
     },
     handleClick(message) {
+      if (message.conversationable_type == 'BenchChannel') {
       this.$router.push(
-        `/channels/${this.message.bench_conversation_id}/${message.id}`
+        `/channels/${message.bench_conversation}/${message.id}`
       );
+      }
+      else if (message.conversationable_type == 'User') {
+         this.$router.push(
+        `/users/${message.receiver_id}/${message.id}`
+      );
+      }
+       else if (message.conversationable_type == 'Group') {
+         this.$router.push(
+        `/groups/${message.group_id}/${message.id}`
+      );
+      }
     },
   },
   async mounted() {

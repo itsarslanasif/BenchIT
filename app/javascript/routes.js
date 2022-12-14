@@ -69,7 +69,7 @@ const router = createRouter({
           name: 'landing_page',
         },
         {
-          path: '/users/:id',
+          path: '/users/:id/:message_id?',
           component: Chat,
           name: 'channel-chat',
         },
@@ -79,7 +79,7 @@ const router = createRouter({
           name: 'user-chat',
         },
         {
-          path: '/groups/:id',
+          path: '/groups/:id/:message_id?',
           component: Chat,
           name: 'group-chat',
         },
