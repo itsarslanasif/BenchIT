@@ -18,9 +18,8 @@ export default {
     elementClicked() {
       switch (this.name) {
         case 'People & User Group':
-          window.location.replace(
-            `${import.meta.env.VITE_APP_SERVER_URL}members`
-          );
+          this.$router.push('members');
+          break;
         case 'Drafts & Sent':
           this.$router.push('drafts_sent_messages');
           break;
