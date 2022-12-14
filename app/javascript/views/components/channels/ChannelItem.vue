@@ -1,13 +1,12 @@
 <template>
   <n-dropdown
-    class="rounded-md bg-primaryHover"
+    class="rounded-md"
     placement="bottom-end"
     size="medium"
     :show="isShowOptions"
     :options="channel_options"
     @mouseleave="toggleShow"
     :on-clickoutside="toggleShow"
-    :inverted= 'true'
   >
     <div
       oncontextmenu="return false;"
