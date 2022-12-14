@@ -60,13 +60,12 @@
 
 <script>
 import About from '../components/channeldetail/About.vue';
-import members from '../components/channeldetail/members.vue';
+import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
-import ChannelNavVue from '../shared/_channelNav.vue';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 export default {
   name: 'ChannelDetailModal',
-  components: { About, StarUnstar, ChannelNavVue, members },
+  components: { About, StarUnstar, Members },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     return { ChannelDetailStore };
