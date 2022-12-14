@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen scrollable bg-gray-100">
+  <div class="scrollable bg-gray-100 mb-1">
     <div v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
@@ -92,6 +92,7 @@ export default {
 <style scoped>
 .scrollable {
   overflow-y: scroll;
+  height: 85vh;
 }
 .margin-left {
   margin-left: auto;
