@@ -18,10 +18,10 @@ export default {
     elementClicked() {
       switch (this.name) {
         case 'People & User Group':
-          this.$router.push('members');
+          this.$router.replace({ path: '/members' })
           break;
         case 'Drafts & Sent':
-          this.$router.push('drafts_sent_messages');
+          this.$router.replace({ path: '/drafts_sent_messages' })
           break;
       }
     },
