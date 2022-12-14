@@ -24,6 +24,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
+    params[:sender_id] = current_user.id
     params.permit(:content, :is_threaded, :parent_message_id, :sender_id)
   end
 
