@@ -13,6 +13,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
   end
 
+  def recent_files
+    @messages = current_user.conversation_messages.includes(:message_attachments_blobs)
+  end
+
   private
 
   def set_message
