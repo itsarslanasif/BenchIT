@@ -26,6 +26,18 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at
     }
 
+    if message_attachments.present?
+      message[:attachments] = []
+      message_attachments.each do |attachment|
+        message[:attachments].push({
+                                     attachment: attachment.blob,
+                                     attachment_link: Rails.application.routes.url_helpers.rails_storage_proxy_url(attachment),
+                                     attachment_download_link: Rails.application.routes.url_helpers.rails_blob_url(attachment,
+                                                                                                                   disposition: 'attachment')
+                                   })
+      end
+    end
+
     channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
     channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
 
