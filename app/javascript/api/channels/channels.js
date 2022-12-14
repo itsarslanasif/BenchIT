@@ -9,3 +9,18 @@ export const getChannels = async () => {
       return response.data;
     });
 };
+
+
+export const getChannelMembers = async (query,bench_channel_id) => {
+  return await axios
+    .get(`/v1/channel_participants`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+      params:{
+        query: query,
+        bench_channel_id:bench_channel_id
+      }
+    })
+    .then(response => {
+      return response.data;
+    });
+};

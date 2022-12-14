@@ -9,7 +9,7 @@
         <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>
         <i class="fa-solid fa-chevron-down self-center fa-lg"></i>
       </div>
-      <ChannelMembersInfoVue/>
+      <ChannelMembersInfoVue :showMemberClickListener="this.OpenChannelDetailMemberModal" />
     </div>
   </div>
   <ChannelDetailModal
@@ -24,11 +24,16 @@
 <script>
 import ChannelDetailModal from '../../containers/ChannelDetailModal.vue';
 import ChannelMembersInfoVue from './ChannelMembersInfo.vue';
+import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 
 export default {
   name: 'ChannelInfo',
-  components: { ChannelDetailModal,ChannelMembersInfoVue },
+  components: { ChannelDetailModal, ChannelMembersInfoVue },
   props: ['channel'],
+  setup() {
+    const ChannelDetailStore = useChannelDetailStore();
+    return { ChannelDetailStore };
+  },
   data() {
     return {
       modalOpen: false,
@@ -38,12 +43,17 @@ export default {
   methods: {
     OpenChannelDetailModal(open) {
       this.modalOpen = open;
+      this.ChannelDetailStore.setSlectedOption('about');
+    },
+    OpenChannelDetailMemberModal(open) {
+      this.ChannelDetailStore.setSlectedOption('members');
+      this.modalOpen = open;
     },
   },
 };
 </script>
 <style scoped>
-  .header {
-    border-bottom: 0.5px solid gray;
-  }
+.header {
+  border-bottom: 0.5px solid gray;
+}
 </style>
