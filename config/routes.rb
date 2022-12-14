@@ -23,6 +23,7 @@ Rails.application.routes.draw do
           end
         end
         resources :conversation_messages, only: %i[create destroy]
+        resources :schedule_messages
         resources :favourites, only: %i[create destroy]
 
         resources :bench_channels, except: %i[new edit] do
