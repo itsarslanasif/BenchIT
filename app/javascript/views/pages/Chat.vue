@@ -235,8 +235,9 @@ export default {
     },
 
     removeFile(file) {
-      const reader = new FileReader();
-      this.files = this.files.filter(el => reader.readAsDataURL(el) !== file);
+      const index = this.readerFile.indexOf(file)
+      this.files.splice(index, 1)
+      this.readerFile.splice(index, 1)
     },
 
     getImages(files) {
