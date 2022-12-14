@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  default_url_options host: 'localhost', port: 5100 if Rails.env.development?
   mount ActionCable.server => '/cable'
 
   localized do
