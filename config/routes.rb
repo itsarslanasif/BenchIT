@@ -47,7 +47,7 @@ Rails.application.routes.draw do
 
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create]
-        resources :draft_messages, only: %i[index create]
+        resources :draft_messages, only: %i[index create update destroy]
       end
     end
 
