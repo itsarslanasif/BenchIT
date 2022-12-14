@@ -9,7 +9,10 @@
         <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>
         <i class="fa-solid fa-chevron-down self-center fa-lg"></i>
       </div>
-      <ChannelMembersInfoVue :showMemberClickListener="this.OpenChannelDetailMemberModal" />
+      <ChannelMembersInfoVue
+        :showMemberClickListener="this.OpenChannelDetailMemberModal"
+        :channelId="channel.id"
+      />
     </div>
   </div>
   <ChannelDetailModal

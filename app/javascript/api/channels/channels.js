@@ -21,6 +21,19 @@ export const getChannelMembers = async (query,bench_channel_id) => {
       }
     })
     .then(response => {
-      return response.data;
+      return response.data.profiles;
+    });
+};
+
+export const getChannelMemberCount = async (bench_channel_id) => {
+  return await axios
+    .get(`/v1/channel_participants`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+      params:{
+        bench_channel_id:bench_channel_id
+      }
+    })
+    .then(response => {
+      return response.data.profiles.length;
     });
 };
