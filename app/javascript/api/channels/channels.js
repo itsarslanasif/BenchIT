@@ -10,7 +10,6 @@ export const getChannels = async () => {
     });
 };
 
-
 export const getChannelMembers = async (query,bench_channel_id) => {
   return await axios
     .get(`/v1/channel_participants`, {
@@ -37,3 +36,12 @@ export const getChannelMemberCount = async (bench_channel_id) => {
       return response.data.profiles.length;
     });
 };
+export const memberLeaveChannel = async (channel_id) => {
+  return await axios
+    .delete(`v1/bench_channels/${channel_id}/leave`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
+}

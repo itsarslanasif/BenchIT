@@ -22,7 +22,11 @@ Rails.application.routes.draw do
             get :previous_direct_messages
           end
         end
-        resources :conversation_messages, only: %i[create destroy]
+        resources :conversation_messages, only: %i[create destroy] do
+          collection do
+            get :send_message
+          end
+        end
         resources :favourites, only: %i[create destroy]
 
         resources :bench_channels, except: %i[new edit] do
