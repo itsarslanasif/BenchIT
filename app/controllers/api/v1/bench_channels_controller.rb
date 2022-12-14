@@ -6,7 +6,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def index
     @bench_channel = if params[:query].presence
-                       render json: BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id })
+                       render json: BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id } , match: :word_middle)
                      else
                        render json: BenchChannel.all
                      end
