@@ -1,0 +1,170 @@
+<template>
+  <transition name="modal-fade">
+    <div
+      class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
+    >
+      <div
+        class="modal rounded-md w-2/5 h-2/5 shadow-md bg-slate-50"
+        role="dialog"
+      >
+        <div class="p-8">
+          <header id="modalTitle" class="flex w-full">
+            <div class="w-5/6 text-lg">
+              <h1>{{ title }}</h1>
+            </div>
+            <button
+              type="button"
+              class="w-1/6 bg-none py-1 px-3 text-base float-right rounded"
+              @click="toggleModel"
+            >
+              {{ $t('actions.close') }}
+            </button>
+          </header>
+          <div class="m-0 relative mt-5">
+            <div class="mb-6">
+              <p>
+                Bookmark important links for your team Add bookmarks for links
+                you want to find quickly. All channel members can see the
+                bookmarks you add.
+              </p>
+            </div>
+            <n-form
+              :label-width="80"
+              :model="formValue"
+              :rules="rules"
+              :size="size"
+            >
+              <n-form-item label="Title" path="bookMarkTitle">
+                <n-input
+                  v-model:value="formValue.bookMarkTitle"
+                  placeholder="e.g youtube"
+                />
+              </n-form-item>
+              <n-form-item class="mt-3" label="Link" path="bookMarkLink">
+                <n-input
+                  v-model:value="formValue.bookMarkLink"
+                  placeholder="e.g www.youtube.com"
+                />
+              </n-form-item>
+              <p v-if="error" class="mt-3 text-danger">{{ error }}</p>
+              <n-form-item v-if="newBookMark" class="float-right">
+                <n-button
+                  @click="handleCreate"
+                  class="bg-success text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
+                >
+                  Create
+                </n-button>
+              </n-form-item>
+              <n-form-item v-if="!newBookMark" class="float-right">
+                <n-button
+                  @click="handleUpdate"
+                  class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
+                >
+                  Update
+                </n-button>
+              </n-form-item>
+              <n-form-item v-if="!newBookMark" class="float-right">
+                <n-button
+                  @click="handleDelete"
+                  class="bg-danger text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
+                >
+                  Delete
+                </n-button>
+              </n-form-item>
+            </n-form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</template>
+<script>
+import { NForm, NFormItem, NButton, NInput } from 'naive-ui';
+import { useBookmarkStore } from '../../../stores/useBookmarkStore';
+export default {
+  name: 'CreateChannel',
+  components: {
+    NForm,
+    NFormItem,
+    NButton,
+    NInput,
+  },
+
+  data() {
+    return {
+      formValue: {
+        bookMarkTitle: '',
+        bookMarkLink: '',
+      },
+      error: '',
+    };
+  },
+  props: ['title', 'bookMarkObject', 'newBookMark', 'toggleModel', 'channelId'],
+  mounted() {
+    console.log('newBookMark:', this.newBookMark);
+    if (!this.newBookMark) {
+      this.setBookmarkObject(this.bookMarkObject);
+    }
+  },
+  setup() {
+    const bookmarkStore = useBookmarkStore();
+    return {
+      rules: {
+        bookMarkTitle: {
+          required: true,
+          message: "Don't forget to add bookmark title.",
+          trigger: ['input'],
+        },
+        bookMarkLink: {
+          required: true,
+          message: "Don't forget to to add bookmark link.",
+          trigger: ['input'],
+        },
+      },
+      bookmarkStore,
+    };
+  },
+  methods: {
+    setBookmarkObject(bookmark) {
+      this.formValue.bookMarkTitle = bookmark.name;
+      this.formValue.bookMarkLink = bookmark.bookmark_URL;
+      console.log(bookmark, this.formValue);
+    },
+    handleCreate() {
+      this.validations();
+      if (!this.error) {
+        this.toggleModel();
+        this.bookmarkStore.create_bookmark(
+          this.channelId,
+          this.formValue.bookMarkTitle,
+          this.formValue.bookMarkLink,
+          1
+        );
+      }
+    },
+    handleDelete() {
+      this.validations();
+      if (!this.error) {
+        this.toggleModel();
+        console.log('handleDelete: comming soon');
+      }
+    },
+    handleUpdate() {
+      this.validations();
+      if (!this.error) {
+        this.toggleModel();
+        console.log('handleUpdate: comming soon');
+      }
+    },
+    validations() {
+      if (this.formValue.bookMarkTitle == '') {
+        this.error = 'You forget to add bookmark title.';
+      } else if (this.formValue.bookMarkLink == '') {
+        this.error = 'You forget to add bookmark link.';
+      } else {
+        this.error = '';
+      }
+    },
+  },
+};
+</script>
