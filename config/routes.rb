@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  default_url_options host: 'localhost', port: 5100 if Rails.env.development?
   mount ActionCable.server => '/cable'
 
   localized do
@@ -25,6 +26,12 @@ Rails.application.routes.draw do
         resources :conversation_messages, only: %i[create destroy] do
           collection do
             get :send_message
+            get :index_saved_messages
+          end
+          member do
+            post :save_message
+            delete :unsave_message
+            get :recent_files
           end
         end
         resources :favourites, only: %i[create destroy]
@@ -52,6 +59,8 @@ Rails.application.routes.draw do
       end
     end
 
-    get '*path', to: 'application#index', format: false
+    get '*path', to: 'application#index', format: false, constraints: lambda { |req|
+      req.path.exclude? 'rails/active_storage'
+    }
   end
 end
