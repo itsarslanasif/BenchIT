@@ -11,6 +11,10 @@
         {{ $t('pinconversation.you') }}
       </span>
     </div>
+    <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">
+      <i class="far fa-bookmark text-red-500"></i>
+      <p class="ml-2">{{ $t('actions.save_items') }}</p>
+    </div>
     <div
       class="flex p-1 relative hover:bg-transparent"
       :class="{
@@ -28,10 +32,6 @@
         />
       </div>
       <span class="message">
-        <div v-if="this.currMessage.isSaved" class="flex items-center">
-          <i class="far fa-bookmark text-red-500"></i>
-          <p class="ml-2">{{ $t('actions.save_items') }}</p>
-        </div>
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
@@ -117,10 +117,9 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
-import { unsave } from '../../../api/save_messages/unsavemessage.js'
+import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
-
 
 export default {
   name: 'MessageWrapper',
@@ -207,19 +206,15 @@ export default {
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       if (this.currMessage.isSaved) {
-        save(this.message.id,
-          {
-            data: this.message
-          }).then(() => {
-            this.savedItemsStore.addSavedItem(this.message);
-          }
-          )
-      }
-      else {
+        save(this.message.id, {
+          data: this.message,
+        }).then(() => {
+          this.savedItemsStore.addSavedItem(this.message);
+        });
+      } else {
         unsave(this.message.id).then(() => {
           this.savedItemsStore.removeSavedItem(this.message);
-
-        })
+        });
       }
     },
   },
