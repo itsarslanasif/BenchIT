@@ -12,7 +12,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @message.bench_conversation_id = @bench_conversation.id
     if @message.save
       @message.parent_message.update(is_threaded: true) if @message.parent_message_id.present?
-      response =  { message: 'Message sent.' }
+      response = { message: 'Message sent.' }
     else
       response = { message: @message.errors, status: :unprocessable_entity }
     end
