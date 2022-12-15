@@ -1,3 +1,1 @@
-json.array! bench_channels do |_bench_channel|
-  json.partial! '/api/v1/bench_channels/partials/_bench_channel', message: message
-end
+json.array! @bench_channel, :id, :name, :description, :creator_id, :created_at, :updated_at

@@ -6,9 +6,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def index
     @bench_channel = if params[:query].presence
-                       render json: BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id }, match: :word_start)
+                        BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id }, match: :word_start)
                      else
-                       render json: BenchChannel.all
+                        BenchChannel.all
                      end
   end
 
@@ -50,11 +50,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def join_public_channel
-    channelparticipant = ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
+    channelParticipant = ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
 
     render json: { message: "Joined channel successfully ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotSaved
-    render json: { message: 'Could not join channel!', errors: channelparticipant.errors }, status: :unprocessable_entity
+    render json: { message: 'Could not join channel!', errors: channelParticipant.errors }, status: :unprocessable_entity
   end
 
   def user_already_member
