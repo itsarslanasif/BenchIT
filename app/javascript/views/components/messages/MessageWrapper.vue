@@ -191,10 +191,6 @@ export default {
   },
   methods: {
     addReaction(emoji) {
-      axios.post('http://127.0.0.1:5100/api/v1/reactions', {
-        conversation_message_id: this.currMessage.id,
-        emoji: emoji.i,
-      });
       this.allReactions.push(this.currMessage.reactions[0].emoji);
     },
     setEmojiModal() {

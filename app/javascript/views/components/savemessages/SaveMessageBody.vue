@@ -2,7 +2,7 @@
   <div>
     <div>
       <header>
-        <h1 class="ml-10 text-3xl">Saved Items</h1>
+        <h1 class="ml-10 text-3xl">{{ $t('actions.saved_items') }}</h1>
       </header>
     </div>
     <div class="overflow-auto chatBody">
