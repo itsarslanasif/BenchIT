@@ -16,7 +16,7 @@ class Api::V1::BookmarksController < Api::ApiController
   def set_channel
     @channel = BenchChannel.find_by(id: params[:bench_channel_id])
 
-    return render json: { message: 'Bench Channel Not Found.' }, status: :not_found if @channel.nil?
+    return render json: { message: 'Bench Channel Not Found' }, status: :not_found if @channel.nil?
   end
 
   def bookmark_params
