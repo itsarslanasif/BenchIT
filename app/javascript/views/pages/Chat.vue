@@ -82,7 +82,7 @@
             <div class="w-1/12">
               <button
                 @click="sendMessage"
-                class="px-6 py-2 bg-success my-3 rounded-md text-white hover:bg-successHover"
+                class="px-4 py-1 bg-success my-4 rounded-md text-white hover:bg-successHover"
               >
                 {{ $t('actions.send') }}
               </button>

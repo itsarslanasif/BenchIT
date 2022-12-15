@@ -205,7 +205,7 @@ export default {
   },
   methods: {
     addReaction(emoji) {
-      this.allReactions.push(this.currMessage.reactions[0].emoji);
+      this.allReactions.push(emoji);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
