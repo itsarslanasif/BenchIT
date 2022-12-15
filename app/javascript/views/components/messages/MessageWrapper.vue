@@ -1,13 +1,22 @@
 <template>
+  <div
+    :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
+  >
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
-      <span class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative">
+      <span
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+      >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
         {{ $t('pinconversation.you') }}
       </span>
     </div>
+    <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">
+      <i class="far fa-bookmark text-red-500"></i>
+      <p class="ml-2">{{ $t('actions.save_items') }}</p>
+    </div>
     <div
-      class="items-center flex p-1 relative hover:bg-transparent"
+      class="flex p-1 relative hover:bg-transparent"
       :class="{
         messageContentPinned: pinnedConversationStore.isPinned(currMessage),
       }"
@@ -31,7 +40,9 @@
             >
               <b>{{ currMessage.sender_name }}</b>
             </p>
-            <p class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer">
+            <p
+              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
+            >
               {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
             </p>
             <span
@@ -45,6 +56,11 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
+          <div v-if="message?.attachments" class="flex gap-2">
+            <div v-for="attachment in message?.attachments" class="w-64">
+              <img :src="attachment?.attachment_link" class="rounded" />
+            </div>
+          </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
@@ -86,6 +102,7 @@
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
             :actionText="$t('emojiModalButton.add_to_saved_items')"
+            :action="saveMessage"
           />
           <EmojiModalButton
             icon="fa-solid fa-ellipsis-vertical"
@@ -100,6 +117,7 @@
     <div v-if="openEmojiModal" class="absolute right-0 z-50">
       <EmojiPicker :addReaction="addReaction" />
     </div>
+  </div>
 </template>
 
 <script>
@@ -109,13 +127,18 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import { save } from '../../../api/save_messages/savemessage.js';
+import { unsave } from '../../../api/save_messages/unsavemessage.js';
+import { CONSTANTS } from '../../../assets/constants';
+import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
 
 export default {
   name: 'MessageWrapper',
     setup() {
     const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
-    return { threadStore, pinnedConversationStore };
+    const savedItemsStore = useSavedItemsStore();
+    return { threadStore, pinnedConversationStore, savedItemsStore };
   },
   components: {
     NAvatar,
@@ -136,16 +159,16 @@ export default {
     return {
       topReactions: [
         {
-          i: '✅',
-          n: 'Completed',
+          i: CONSTANTS.COMPLETED_EMOJI,
+          n: CONSTANTS.COMPLETED,
         },
         {
-          i: '👍',
-          n: 'Liked it',
+          i: CONSTANTS.LIKED_IT_EMOJI,
+          n: CONSTANTS.LIKED_IT,
         },
         {
-          i: '👀',
-          n: 'Taking a look',
+          i: CONSTANTS.TAKING_A_LOOK_EMOJI,
+          n: CONSTANTS.TAKING_A_LOOK,
         },
       ],
       emojiModalStatus: false,
@@ -161,7 +184,9 @@ export default {
       );
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format('h:mm');
+      return moment(new Date(this.currMessage.created_at).getTime()).format(
+        'h:mm'
+      );
     },
     isSameUser() {
       if (this.prevMessage === undefined) return false;
@@ -179,7 +204,7 @@ export default {
   },
   methods: {
     addReaction(emoji) {
-      this.allReactions.push(emoji);
+      this.allReactions.push(this.currMessage.reactions[0].emoji);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
@@ -190,6 +215,20 @@ export default {
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
       this.threadStore.toggleShow(true);
+    },
+    saveMessage() {
+      this.currMessage.isSaved = !this.currMessage.isSaved;
+      if (this.currMessage.isSaved) {
+        save(this.message.id, {
+          data: this.message,
+        }).then(() => {
+          this.savedItemsStore.addSavedItem(this.message);
+        });
+      } else {
+        unsave(this.message.id).then(() => {
+          this.savedItemsStore.removeSavedItem(this.message);
+        });
+      }
     },
   },
 };

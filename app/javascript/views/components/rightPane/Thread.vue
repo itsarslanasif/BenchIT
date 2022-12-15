@@ -72,6 +72,8 @@ import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import ThreadHeader from './ThreadHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
+import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   name: 'RightPane',
@@ -83,7 +85,9 @@ export default {
   },
   setup() {
     const threadStore = useThreadStore();
-    return { threadStore };
+    const currentUserStore = useCurrentUserStore()
+    const { currentUser } = storeToRefs(currentUserStore);
+    return { threadStore, currentUser };
   },
 
   data() {
