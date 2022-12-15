@@ -187,6 +187,11 @@ en:
       welcome:
         no_chat_selected: 'No Chat Selected'
         tagline: 'Select any chat from sidebar to see messages'
+      send_attachments:
+        title: 'Attach'
+        recent_files: 'Recent files'
+        from_computer: 'Attach from your computer'
+        divider: '●'
 
     admin:
       title: 'Admin'

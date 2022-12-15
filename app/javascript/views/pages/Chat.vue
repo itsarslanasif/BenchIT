@@ -46,7 +46,7 @@
                     styles: {
                       background:
                         'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                      'border':
+                      border:
                         '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
                       'border-radius': '3px',
                       'font-size': '10px',
@@ -62,13 +62,32 @@
                 },
               }"
             />
+            <div v-if="readerFile.length" class="flex mt-2">
+              <div
+                v-for="file in readerFile"
+                :key="file"
+                class="w-12 h-12 border-primary border mr-3 rounded-md"
+              >
+                <font-awesome-icon
+                  icon="fa-circle-xmark"
+                  class="float-right"
+                  @click="removeFile(file)"
+                />
+                <img :src="file" class="self-baseline" />
+              </div>
+            </div>
           </div>
-          <button
-            @click="sendMessage"
-            class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover"
-          >
-            {{ $t('actions.send') }}
-          </button>
+          <div class="flex w-full relative">
+            <Attachments :getImages="getImages" />
+            <div class="w-1/12">
+              <button
+                @click="sendMessage"
+                class="px-6 py-2 bg-success my-3 rounded-md text-white hover:bg-successHover"
+              >
+                {{ $t('actions.send') }}
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -88,6 +107,8 @@ import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentUserStore } from '../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
 import LandingPage from '../components/landingPage/landingPage.vue';
+import Attachments from '../components/attachments/Attachments.vue';
+import { forEach } from 'lodash';
 export default {
   name: 'Chat',
   components: {
@@ -97,6 +118,7 @@ export default {
     NSpace,
     LandingPage,
     editor: Editor,
+    Attachments,
   },
   data() {
     return {
@@ -115,6 +137,9 @@ export default {
       id: null,
       currentUser: {},
       filteredList: [],
+      openAttach: false,
+      files: [],
+      readerFile: [],
     };
   },
   setup() {
@@ -187,16 +212,32 @@ export default {
 
   methods: {
     sendMessage() {
-      const payload = {
-        sender_id: this.currentUser.id,
-        content: this.message.replace(/<[^>]+>/g, ''),
-        is_threaded: false,
-        parent_message_id: null,
-        conversation_type: this.conversation_type,
-        conversation_id: this.id,
-      };
-      conversation(payload);
+      let formData = new FormData();
+      formData.append('sender_id', this.currentUser.id);
+      formData.append('content', this.message.replace(/<[^>]+>/g, ''));
+      formData.append('is_threaded', false);
+      formData.append('parent_message_id', null);
+      formData.append('conversation_type', this.conversation_type);
+      formData.append('conversation_id', this.id);
+      this.files.forEach(file => {
+        formData.append('message_attachments[]', file);
+      });
+      conversation(formData);
       this.message = '';
+      (this.files = []), (this.readerFile = []);
+    },
+
+    removeFile(file) {
+      const index = this.readerFile.indexOf(file);
+      this.files.splice(index, 1);
+      this.readerFile.splice(index, 1);
+    },
+
+    getImages(files) {
+      this.files[this.files.length] = files;
+      const reader = new FileReader();
+      reader.readAsDataURL(files);
+      reader.onload = () => this.readerFile.push(reader.result);
     },
 
     enableMention() {

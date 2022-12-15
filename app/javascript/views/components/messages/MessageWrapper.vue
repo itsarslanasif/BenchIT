@@ -12,7 +12,7 @@
       </span>
     </div>
     <div
-      class="items-center flex p-1 relative hover:bg-transparent"
+      class="flex p-1 relative hover:bg-transparent"
       :class="{
         messageContentpinned: pinnedConversationStore.isPinned(currMessage),
       }"
@@ -56,6 +56,11 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
+          <div v-if="message.attachments" class="flex gap-2">
+            <div v-for="attachment in message.attachments" class="w-64">
+              <img :src="attachment.attachment_link" class="rounded" />
+            </div>
+          </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>

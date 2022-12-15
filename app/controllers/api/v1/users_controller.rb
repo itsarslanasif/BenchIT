@@ -14,7 +14,7 @@ class Api::V1::UsersController < Api::ApiController
       @conversation = BenchConversation.create(conversationable_type: 'User', conversationable_id: @receiver.id, sender_id: current_user.id)
     end
 
-    @messages = @conversation.conversation_messages
+    @messages = @conversation.conversation_messages.includes(:user, :reactions).with_attached_message_attachments
   end
 
   def previous_direct_messages

@@ -33,6 +33,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     render json: @saved_item.destroy ? { json: 'Removed from saved items' } : @saved_item.errors
   end
 
+  def recent_files
+    @messages = current_user.conversation_messages.with_attached_message_attachments
+  end
+
   private
 
   def set_saved_item
@@ -46,7 +50,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, :sender_id)
+    params.permit(:content, :is_threaded, :parent_message_id, :sender_id, message_attachments: [])
   end
 
   def fetch_conversation
