@@ -32,7 +32,7 @@
           {{ $t('send_attachments.from_computer') }}
         </div>
       </label>
-      <input type="file" id="getFile" @change="uploadFile" ref="file" />
+      <input type="file" id="getFile" @change="uploadFile" ref="file" class="hidden" />
       <img :src="imgSrc" v-if="imgSrc" />
     </div>
     <div
@@ -119,8 +119,3 @@ export default {
   },
 };
 </script>
-<style>
-input[type='file'] {
-  display: none;
-}
-</style>

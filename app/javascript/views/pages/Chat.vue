@@ -44,15 +44,9 @@
                   code: {
                     selector: 'p',
                     styles: {
-                      background:
+                      'background':
                         'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                      'border-left':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-right':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-top':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-bottom':
+                      'border':
                         '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
                       'border-radius': '3px',
                       'font-size': '10px',
@@ -219,25 +213,24 @@ export default {
   methods: {
     sendMessage() {
       let formData = new FormData();
-      formData.append('sender_id', this.currentUser.id)
-      formData.append('content', this.message.replace(/<[^>]+>/g, ''))
-      formData.append('is_threaded', false)
-      formData.append('parent_message_id', null)
-      formData.append('conversation_type', this.conversation_type)
-      formData.append('conversation_id', this.id)
+      formData.append('sender_id', this.currentUser.id);
+      formData.append('content', this.message.replace(/<[^>]+>/g, ''));
+      formData.append('is_threaded', false);
+      formData.append('parent_message_id', null);
+      formData.append('conversation_type', this.conversation_type);
+      formData.append('conversation_id', this.id);
       this.files.forEach(file => {
-        formData.append('message_attachments[]', file)
-      })
+        formData.append('message_attachments[]', file);
+      });
       conversation(formData);
       this.message = '';
-      this.files = [],
-      this.readerFile = []
+      (this.files = []), (this.readerFile = []);
     },
 
     removeFile(file) {
-      const index = this.readerFile.indexOf(file)
-      this.files.splice(index, 1)
-      this.readerFile.splice(index, 1)
+      const index = this.readerFile.indexOf(file);
+      this.files.splice(index, 1);
+      this.readerFile.splice(index, 1);
     },
 
     getImages(files) {
