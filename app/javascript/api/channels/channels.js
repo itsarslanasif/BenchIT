@@ -24,18 +24,6 @@ export const getChannelMembers = async (query,bench_channel_id) => {
     });
 };
 
-export const getChannelMemberCount = async (bench_channel_id) => {
-  return await axios
-    .get(`/v1/channel_participants`, {
-      headers: { Authorization: sessionStorage.getItem('token') },
-      params:{
-        bench_channel_id:bench_channel_id
-      }
-    })
-    .then(response => {
-      return response.data.profiles.length;
-    });
-};
 export const memberLeaveChannel = async (channel_id) => {
   return await axios
     .delete(`v1/bench_channels/${channel_id}/leave`, {
