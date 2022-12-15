@@ -143,6 +143,7 @@ en:
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
         save_items: 'Added to your saved items'
+        remove_from_saved_items: 'Remove from saved items'
       members:
         search_by_name: 'Search By Name'
         add_members_modal_title : 'Add members to #channel'

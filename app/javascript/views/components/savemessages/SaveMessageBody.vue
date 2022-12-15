@@ -19,12 +19,18 @@
 import { getSaveMessages } from '../../../api/save_messages/savemessages.js'
 import SaveMessageWrapper from './SaveMessageWrapper.vue';
 import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
+import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
+
 
 export default {
   name: 'SaveMessageBody',
   components: {
     SaveMessageWrapper,
     PinnedConversationModel,
+  },
+  setup() {
+    const savedItemsStore = useSavedItemsStore();
+    return { savedItemsStore };
   },
   data() {
     return {
@@ -34,12 +40,13 @@ export default {
   },
   async mounted() {
     this.messages = await getSaveMessages();
+    this.savedItemsStore.savedItems = this.messages;
   },
 };
 </script>
 <style scoped>
 .chatBody {
-  height: 57vh;
+  height: 87vh;
 }
 
 .highlight {

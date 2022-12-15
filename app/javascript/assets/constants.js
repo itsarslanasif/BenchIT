@@ -60,4 +60,11 @@ export const CONSTANTS = {
   CARD_FROM_MESSAGE: 'Create card from message',
   ASSIGN_AS_TASK: 'Self assign as task',
   MORE_SHORTCUTS: 'More messages shortcuts...',
+  COMPLETED: 'Completed',
+  COMPLETED_EMOJI: '✅',
+  LIKED_IT: 'Liked it',
+  LIKED_IT_EMOJI: '👍',
+  TAKING_A_LOOK_EMOJI: '👀',
+  TAKING_A_LOOK: 'Taking a look',
+
 };

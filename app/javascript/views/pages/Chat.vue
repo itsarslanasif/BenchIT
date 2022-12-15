@@ -46,13 +46,7 @@
                     styles: {
                       background:
                         'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                      'border-left':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-right':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-top':
-                        '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                      'border-bottom':
+                      'border':
                         '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
                       'border-radius': '3px',
                       'font-size': '10px',

@@ -66,12 +66,16 @@ import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js'
+import { CONSTANTS } from '../../../assets/constants';
+import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
+
 
 export default {
   name: 'MessageWrapper',
   setup() {
     const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore, };
+    const savedItemsStore = useSavedItemsStore();
+    return { pinnedConversationStore, savedItemsStore };
   },
   components: {
     NAvatar,
@@ -92,16 +96,16 @@ export default {
     return {
       topReactions: [
         {
-          i: '✅',
-          n: 'Completed',
+          i: CONSTANTS.COMPLETED_EMOJI,
+          n: CONSTANTS.COMPLETED,
         },
         {
-          i: '👍',
-          n: 'Liked it',
+          i: CONSTANTS.LIKED_IT_EMOJI,
+          n: CONSTANTS.LIKED_IT,
         },
         {
-          i: '👀',
-          n: 'Taking a look',
+          i: CONSTANTS.TAKING_A_LOOK_EMOJI,
+          n: CONSTANTS.TAKING_A_LOOK,
         },
       ],
       message: this.currMessage,
@@ -154,10 +158,16 @@ export default {
         save(this.message.id,
           {
             data: this.message
-          })
+          }).then(() => {
+            this.savedItemsStore.addSavedItem(this.message);
+          }
+          )
       }
       else {
-        unsave(this.message.id);
+        unsave(this.message.id).then(() => {
+          this.savedItemsStore.removeSavedItem(this.message);
+
+        })
       }
     }
   },

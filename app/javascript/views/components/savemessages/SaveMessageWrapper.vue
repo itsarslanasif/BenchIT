@@ -38,8 +38,8 @@
             :action="setEmojiModal" />
           <EmojiModalButton icon="fa-solid fa-comment-dots" :actionText="$t('emojiModalButton.reply_in_thread')" />
           <EmojiModalButton icon="fa-solid fa-share" :actionText="$t('emojiModalButton.share_message')" />
-          <EmojiModalButton icon="fa-solid fa-bookmark" :actionText="$t('emojiModalButton.add_to_saved_items')"
-            :action="saveMessage" />
+          <EmojiModalButton icon="fa-solid fa-bookmark" :actionText="$t('actions.remove_from_saved_items')"
+            :action="unSave" />
           <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" :actionText="$t('emojiModalButton.more_actions')"
             :action="setOptionsModal" :message="currMessage" :pinnedConversationStore="usePinnedConversation" />
         </div>
@@ -58,12 +58,15 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { unsave } from '../../../api/save_messages/unsavemessage.js'
+import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
+import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   name: 'MessageWrapper',
   setup() {
+    const savedItemsStore = useSavedItemsStore();
     const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore };
+    return { pinnedConversationStore, savedItemsStore };
   },
   components: {
     NAvatar,
@@ -80,16 +83,16 @@ export default {
     return {
       topReactions: [
         {
-          i: '✅',
-          n: 'Completed',
+          i: CONSTANTS.COMPLETED_EMOJI,
+          n: CONSTANTS.COMPLETED,
         },
         {
-          i: '👍',
-          n: 'Liked it',
+          i: CONSTANTS.LIKED_IT_EMOJI,
+          n: CONSTANTS.LIKED_IT,
         },
         {
-          i: '👀',
-          n: 'Taking a look',
+          i: CONSTANTS.TAKING_A_LOOK_EMOJI,
+          n: CONSTANTS.TAKING_A_LOOK,
         },
       ],
       message: this.currMessage,
@@ -126,9 +129,12 @@ export default {
     setOptionsModal() {
       this.showOptions = !this.showOptions;
     },
-    saveMessage() {
+    unSave() {
       if (this.currMessage.isSaved) {
-        unsave(this.currMessage.message.id);
+        unsave(this.currMessage.message.id).
+          then(() => {
+            this.savedItemsStore.removeSavedItem(this.message);
+          })
       }
     }
   },
