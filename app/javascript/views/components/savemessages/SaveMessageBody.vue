@@ -2,7 +2,7 @@
   <div>
     <div>
       <header>
-        <h1 class="ml-10 text-3xl"> Saved Items</h1>
+        <h1 class="ml-10 text-3xl">Saved Items</h1>
       </header>
     </div>
     <div class="overflow-auto chatBody">
@@ -11,12 +11,11 @@
         <SaveMessageWrapper :currMessage="message" />
       </div>
     </div>
-
   </div>
 </template>
 
 <script>
-import { getSaveMessages } from '../../../api/save_messages/savemessages.js'
+import { getSaveMessages } from '../../../api/save_messages/savemessages.js';
 import SaveMessageWrapper from './SaveMessageWrapper.vue';
 import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';

@@ -1,18 +1,31 @@
 <template>
-  <div :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null">
+  <div
+    :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
+  >
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
-      <span class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative">
+      <span
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+      >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
         {{ $t('pinconversation.you') }}
       </span>
     </div>
-    <div class="items-center flex p-1 relative hover:bg-transparent" :class="{
-      messageContentpinned: pinnedConversationStore.isPinned(currMessage),
-    }" @mouseover="emojiModalStatus = true" @mouseleave="emojiModalStatus = false">
+    <div
+      class="items-center flex p-1 relative hover:bg-transparent"
+      :class="{
+        messageContentpinned: pinnedConversationStore.isPinned(currMessage),
+      }"
+      @mouseover="emojiModalStatus = true"
+      @mouseleave="emojiModalStatus = false"
+    >
       <div class="min-w-fit ml-1">
-        <n-avatar v-show="!isSameUser || !isSameDayMessage" class="mr-1 self-baseline" size="large"
-          src="../../../assets/images/user.png" />
+        <n-avatar
+          v-show="!isSameUser || !isSameDayMessage"
+          class="mr-1 self-baseline"
+          size="large"
+          src="../../../assets/images/user.png"
+        />
       </div>
       <span class="message">
         <div v-if="this.currMessage.isSaved" class="flex items-center">
@@ -21,34 +34,68 @@
         </div>
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
-            <p v-show="!isSameUser || !isSameDayMessage" class="mr-1 text-sm hover:underline cursor-pointer">
+            <p
+              v-show="!isSameUser || !isSameDayMessage"
+              class="mr-1 text-sm hover:underline cursor-pointer"
+            >
               <b>{{ currMessage.sender_name }}</b>
             </p>
-            <p class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer">
+            <p
+              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
+            >
               {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
             </p>
-            <span v-show="isSameUser && isSameDayMessage" class="text-black-800 text-sm flex-wrap"
-              v-html="currMessage.content" />
+            <span
+              v-show="isSameUser && isSameDayMessage"
+              class="text-black-800 text-sm flex-wrap"
+              v-html="currMessage.content"
+            />
           </span>
-          <span v-show="!isSameUser || !isSameDayMessage" class="text-black-800 text-sm flex-wrap"
-            v-html="currMessage.content" />
+          <span
+            v-show="!isSameUser || !isSameDayMessage"
+            class="text-black-800 text-sm flex-wrap"
+            v-html="currMessage.content"
+          />
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
         </template>
-        <div class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
-          v-if="emojiModalStatus || openEmojiModal || showOptions">
+        <div
+          class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
+          v-if="emojiModalStatus || openEmojiModal || showOptions"
+        >
           <template v-for="emoji in topReactions" :key="emoji">
-            <EmojiModalButton :emoji="emoji" :actionText="emoji.n" :action="addReaction" />
+            <EmojiModalButton
+              :emoji="emoji"
+              :actionText="emoji.n"
+              :action="addReaction"
+            />
           </template>
-          <EmojiModalButton icon="fa-solid fa-icons" :actionText="$t('emojiModalButton.find_another_reaction')"
-            :action="setEmojiModal" />
-          <EmojiModalButton icon="fa-solid fa-comment-dots" :actionText="$t('emojiModalButton.reply_in_thread')" />
-          <EmojiModalButton icon="fa-solid fa-share" :actionText="$t('emojiModalButton.share_message')" />
-          <EmojiModalButton icon="fa-solid fa-bookmark" :actionText="$t('emojiModalButton.add_to_saved_items')"
-            :action="saveMessage" />
-          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" :actionText="$t('emojiModalButton.more_actions')"
-            :action="setOptionsModal" :message="currMessage" :pinnedConversationStore="usePinnedConversation" />
+          <EmojiModalButton
+            icon="fa-solid fa-icons"
+            :actionText="$t('emojiModalButton.find_another_reaction')"
+            :action="setEmojiModal"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-comment-dots"
+            :actionText="$t('emojiModalButton.reply_in_thread')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-share"
+            :actionText="$t('emojiModalButton.share_message')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-bookmark"
+            :actionText="$t('emojiModalButton.add_to_saved_items')"
+            :action="saveMessage"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-ellipsis-vertical"
+            :actionText="$t('emojiModalButton.more_actions')"
+            :action="setOptionsModal"
+            :message="currMessage"
+            :pinnedConversationStore="usePinnedConversation"
+          />
         </div>
       </span>
     </div>
@@ -169,7 +216,7 @@ export default {
 
         })
       }
-    }
+    },
   },
 };
 </script>
