@@ -10,6 +10,7 @@ json.updated_at message.updated_at
 json.isSaved saved?(message)
 json.receiver_name @receiver.name if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
+json.bench_conversation_id message.bench_conversation_id
 if message.message_attachments.present?
   json.attachments message.message_attachments do |attachment|
     json.attachment do
