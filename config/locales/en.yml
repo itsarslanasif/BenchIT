@@ -136,6 +136,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        view: 'View'
         update: 'Update'
         delete: 'Delete'
         cancel: 'Cancel'
