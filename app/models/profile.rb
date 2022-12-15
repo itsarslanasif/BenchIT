@@ -18,6 +18,8 @@ class Profile < ApplicationRecord
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
 
+  has_many :saved_items
+
   enum role: {
     primary_owner: 0,
     workspace_owner: 1,

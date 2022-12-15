@@ -10,7 +10,15 @@ json.updated_at message.updated_at
 json.bench_conversation message.bench_conversation_id
 json.conversationable_type message.bench_conversation.conversationable_type
 json.conversationable_id message.bench_conversation.conversationable_id
-json.receiver_name User.find_by(id: message.bench_conversation.conversationable_id).name if message.bench_conversation.conversationable_type == 'User'
-json.channel_name BenchChannel.find_by(id: message.bench_conversation.conversationable_id).name if
-  message.bench_conversation.conversationable_type == 'BenchChannel'
-json.group_id message.bench_conversation.conversationable_id if message.bench_conversation.conversationable_type == 'Group'
+json.channel_name message.bench_conversation.conversationable.name if
+  message.bench_conversation.conversationable_type.eql?('BenchChannel')
+json.group_id message.bench_conversation.conversationable_id if message.bench_conversation.conversationable_type.eql?('Group')
+if message.bench_conversation.conversationable_type.eql?('User')
+  if message.bench_conversation.conversationable_id == message.sender_id
+    json.receiver_id message.bench_conversation.sender_id
+    json.receiver_name message.bench_conversation.sender.name
+  else
+    json.receiver_id message.bench_conversation.conversationable_id
+    json.receiver_name message.bench_conversation.conversationable.name
+  end
+end
