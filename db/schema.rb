@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_09_114817) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -98,6 +98,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_09_114817) do
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
+  end
+
+  create_table "draft_messages", force: :cascade do |t|
+    t.text "content", null: false
+    t.bigint "user_id", null: false
+    t.bigint "bench_conversation_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
+    t.index ["user_id", "bench_conversation_id"], name: "index_draft_messages_on_user_id_and_bench_conversation_id", unique: true
+    t.index ["user_id"], name: "index_draft_messages_on_user_id"
   end
 
   create_table "favourites", force: :cascade do |t|
@@ -215,6 +226,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_09_114817) do
   add_foreign_key "channel_participants", "users"
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "users", column: "sender_id"
+  add_foreign_key "draft_messages", "users"
   add_foreign_key "favourites", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
