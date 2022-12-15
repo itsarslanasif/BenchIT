@@ -51,7 +51,11 @@
         </div>
       </div>
       <div>
-        <div v-for="file in recentFilesData" :key="file" @click="selectFromRecent(file)">
+        <div
+          v-for="file in recentFilesData"
+          :key="file"
+          @click="selectFromRecent(file)"
+        >
           <div class="flex p-2 hover:bg-primaryHover">
             <div class="mr-2">
               <img :src="file.attachment_link" class="w-10 h-10" />
@@ -70,6 +74,7 @@
 </template>
 <script>
 import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
+import { getFileFromURL } from '../../../api/attachments/attachments';
 export default {
   props: ['getImages'],
   data() {
@@ -103,14 +108,14 @@ export default {
       var options = { year: 'numeric', month: 'long', day: 'numeric' };
       return date.toLocaleDateString('en-US', options);
     },
-    getFileType(currentFile){
-      const content = currentFile.split('/')
-      return content[content.length - 1].toUpperCase()
+    getFileType(currentFile) {
+      const content = currentFile.split('/');
+      return content[content.length - 1].toUpperCase();
     },
-    selectFromRecent(file) {
-      this.getImages(file.attachment);
-      this.openAttach = false;
-    }
+    async selectFromRecent(attachment) {
+      const file = await getFileFromURL(attachment);
+      this.getImages(file);
+    },
   },
 };
 </script>
