@@ -25,23 +25,24 @@
 </template>
 
 <script>
+import { CONSTANTS } from '../../../assets/constants';
 export default {
   data() {
     return {
       links: [
         {
           id: 0,
-          text: 'Drafts',
+          text: CONSTANTS.DRAFTS,
           page: '/drafts_sent_messages',
         },
         {
           id: 1,
-          text: 'Scheduled',
+          text: CONSTANTS.SCHEDULED,
           page: '/',
         },
         {
           id: 2,
-          text: 'Sent',
+          text: CONSTANTS.SENT,
           page: '/recently_sent_messages',
         },
       ],
