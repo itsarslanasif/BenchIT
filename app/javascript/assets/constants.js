@@ -70,4 +70,7 @@ export const CONSTANTS = {
   OPEN_IN_SPLIT_VIEW: 'Open in split view',
   STAR_CHANNEL: 'Star channel',
   VIEW_CHANNEL_DETAILS: 'View channel details',
+  DRAFTS: 'Drafts',
+  SCHEDULED: 'Scheduled',
+  SENT: 'Sent'
 };
