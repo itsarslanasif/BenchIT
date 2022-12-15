@@ -81,11 +81,6 @@ const router = createRouter({
           name: 'browse-channels',
         },
         {
-          path: '/browse-channels',
-          component: AllChannels,
-          name: 'browse-channels',
-        },
-        {
           path: '/channels/:id/:message_id?',
           component: Chat,
           name: 'user-chat',
