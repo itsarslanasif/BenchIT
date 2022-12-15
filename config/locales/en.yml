@@ -100,6 +100,7 @@ en:
         draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
         more: 'More'
+        save_message: 'Save items'
       channels:
         selected_channels: 'Selected Channels'
         title: 'Channels'
@@ -141,6 +142,9 @@ en:
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
+        save_items: 'Added to your saved items'
+        remove_from_saved_items: 'Remove from saved items'
+        saved_items: 'Saved Items'
       members:
         search_by_name: 'Search By Name'
         add_members_modal_title : 'Add members to #channel'

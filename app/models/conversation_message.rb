@@ -9,6 +9,7 @@ class ConversationMessage < ApplicationRecord
 
   has_many :replies, class_name: 'ConversationMessage',
                      foreign_key: :parent_message_id, dependent: :destroy
+  has_many :saved_items
   has_many :reactions, dependent: :destroy
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }

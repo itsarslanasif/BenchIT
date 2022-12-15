@@ -15,6 +15,7 @@ import Chat from './views/pages/Chat.vue';
 import NewDirectMessages from '@/views/components/directMessages/findDirectMessages.vue'
 import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue'
 import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue'
+import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -101,6 +102,12 @@ const router = createRouter({
             }
           ]
         },
+        {
+          path: '/savemessages',
+          component: SaveMessageBody,
+          name: 'savemessage',
+          meta: { auth: true },
+        },
       ],
     },
     {
@@ -115,6 +122,7 @@ const router = createRouter({
       name: 'user_sign_in',
       meta: { auth: false },
     },
+
   ],
 });
 router.beforeEach((to, from, next) => {

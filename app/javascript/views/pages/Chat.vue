@@ -44,9 +44,9 @@
                   code: {
                     selector: 'p',
                     styles: {
-                      'background':
+                      background:
                         'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                      'border':
+                      border:
                         '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
                       'border-radius': '3px',
                       'font-size': '10px',
