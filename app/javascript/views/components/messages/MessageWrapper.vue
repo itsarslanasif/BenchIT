@@ -56,8 +56,9 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          <div v-if="message?.attachments" class="flex gap-2">
-            <div v-for="attachment in message?.attachments" class="w-64">
+          {{currMessage.attachment}}
+          <div v-if="currMessage?.attachments" class="flex gap-2">
+            <div v-for="attachment in currMessage?.attachments" :key="attachment.id" class="w-64">
               <img :src="attachment?.attachment_link" class="rounded" />
             </div>
           </div>
