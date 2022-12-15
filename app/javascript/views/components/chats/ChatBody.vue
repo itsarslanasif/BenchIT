@@ -82,7 +82,8 @@ export default {
 </script>
 <style scoped>
 .chatBody {
-  height: 57vh;
+  height: 60vh;
+  max-height: 60vh;
 }
 
 .highlight {

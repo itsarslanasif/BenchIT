@@ -1,6 +1,6 @@
 <template>
   <div class="bg-primary text-sm">
-    <div class="border-b border-slate-400 bg-secondary" >
+    <div class="border-b border-slate-400 bg-secondary">
       <SearchBar />
     </div>
     <splitpanes>
@@ -9,7 +9,7 @@
         <LeftPane />
       </pane>
       <pane max-size="70" min-size="75" class="bg-white">
-        <router-view :key="$route.fullPath"/>
+        <router-view :key="$route.fullPath" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
@@ -17,7 +17,7 @@
       <pane
         v-if="threadStore.showThread"
         max-size="60"
-        min-size="20"
+        min-size="40"
         class="bg-white"
       >
         <Thread />
@@ -30,7 +30,7 @@
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
-import SearchBar from '../shared/searchBar.vue'
+import SearchBar from '../shared/searchBar.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';

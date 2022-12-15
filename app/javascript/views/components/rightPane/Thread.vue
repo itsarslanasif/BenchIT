@@ -21,21 +21,44 @@
     </template>
   </div>
   <div class="relative mx-1">
-    <editor
-      v-model="newMessage"
-      api-key="{{process.env.VITE_EDITOR_API}}"
-      :init="{
-        menubar: false,
-        statusbar: false,
-        plugins: 'lists link code',
-        toolbar:
-          'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code',
-      }"
-    />
-  </div>
+      <editor
+        v-model="newMessage"
+        api-key="{{ import.meta.env.VITE_EDITOR_API }}"
+        :init="{
+          menubar: false,
+          statusbar: false,
+          plugins: 'lists link code codesample',
+          toolbar:
+            'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
+          codesample_languages: [none],
+          formats: {
+            code: {
+              selector: 'p',
+              styles: {
+                background:
+                  'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
+                'border-left':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-right':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-top':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-bottom':'1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-radius': '3px',
+                'font-size': '10px',
+                'font-variant-ligatures': 'none',
+                'line-height': '1.5',
+                'margin-bottom': '14px',
+                'padding-left': '8px',
+                'padding-right': '8px',
+                position: 'relative',
+                'font-family': 'monospace',
+              },
+            },
+          },
+        }"
+      />
+    </div>
   <button
     @click="sendMessage"
-    class="float-right px-6 py-2 bg-success m-3 rounded-md text-white hover:bg-successHover"
+    class="float-right px-6 py-1 bg-success m-2 rounded-md text-white hover:bg-successHover"
   >
     {{ $t('rightpane.send') }}
   </button>
@@ -98,6 +121,6 @@ export default {
 </script>
 <style scoped>
 .chatBody {
-  max-height: 62vh;
+  max-height: 64.5vh;
 }
 </style>

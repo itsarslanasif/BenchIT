@@ -4,11 +4,11 @@
       <div v-if="chat">
         <ChatHeader />
       </div>
-      <div v-if="messages" class="h-1/2 break-words">
+      <div v-if="messages" class="break-words">
         <ChatBody />
       </div>
       <div class="h-3/4">
-        <div class="m-4">
+        <div class="mx-4">
           <div
             v-if="showMentions || showChannels"
             class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
