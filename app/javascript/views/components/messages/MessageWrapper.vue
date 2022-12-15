@@ -56,10 +56,9 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          {{currMessage.attachment}}
           <div v-if="currMessage?.attachments" class="flex gap-2">
             <div v-for="attachment in currMessage?.attachments" :key="attachment.id" class="w-64">
-              <img :src="attachment?.attachment_link" class="rounded" />
+              <img :src="attachment?.attachment_link" class="rounded" :class="{ 'ml-12': isSameUser && isSameDayMessage }" />
             </div>
           </div>
         </div>
@@ -69,7 +68,7 @@
         <div
           v-if="currMessage?.is_threaded"
           @click="toggleThread"
-          :class="{ 'ml-10': isSameUser && isSameDayMessage }"
+          :class="{ 'ml-12': isSameUser && isSameDayMessage }"
           class="text-info text-xs cursor-pointer hover:underline"
         >
           {{ repliesCount }}
