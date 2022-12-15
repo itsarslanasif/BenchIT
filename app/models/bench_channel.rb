@@ -21,7 +21,7 @@ class BenchChannel < ApplicationRecord
     ).distinct
   }
 
-  searchkick word_middle: [:name, :description]
+  searchkick word_start: [:name, :description]
   def search_data
     {
       name: name,
