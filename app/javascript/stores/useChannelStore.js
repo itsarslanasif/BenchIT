@@ -15,6 +15,9 @@ export const useChannelStore = () => {
       async index() {
         this.channels = await getChannels()
       },
+      leaveChannel(id) {
+        this.channels = this.channels.filter((channel) => channel.id != id)
+      }
     },
   });
   const store = channelStore();

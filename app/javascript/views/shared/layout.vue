@@ -1,6 +1,5 @@
 <template>
   <div class="max-h-full">
-    <search-bar class="border-b border-slate-400 bg-secondary"/>
     <router-view class="relative"/>
   </div>
 </template>
