@@ -24,6 +24,7 @@ gem 'route_translator'
 gem 'sassc-rails'
 gem 'searchkick'
 gem 'sidekiq', '~>6.0'
+gem 'sidekiq-scheduler'
 gem 'sprockets-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'vite_rails'

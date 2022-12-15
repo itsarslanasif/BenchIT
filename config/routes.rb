@@ -22,7 +22,7 @@ Rails.application.routes.draw do
             get :previous_direct_messages
           end
         end
-        resources :schedule_messages
+        resources :schedule_messages , only: %i[index create  edit destroy]
         resources :conversation_messages, only: %i[create destroy] do
           collection do
             get :send_message

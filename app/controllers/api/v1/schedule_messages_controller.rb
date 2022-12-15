@@ -10,8 +10,8 @@ before_action :fetch_conversation, only: %i[create]
     @message = ScheduleMessage.new(schedule_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
     response = @message.save ? { message: 'Message sheduled.' } : { message: @message.errors, status: :unprocessable_entity }
+    # SendScheduleMessagesJob.perform_later(schedule_message)
     render json: response
-    # SendScheduleMessagesJob.perform_later(content, bench_conversation_id , sender_id, timedate)
   end
 
   def destroy

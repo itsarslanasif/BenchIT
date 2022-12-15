@@ -1,8 +1,7 @@
-class SendScheduleMessagesJob < ApplicationJob
-  queue_as :default
+class SceduelemessegeJob
+  include Sidekiq::Job
 
   def perform(schedule_message)
-    binding.irb
       if schedule_message.timedate == DateTime.current {
         ConversationMessages.create!(schedule_message)
       }
