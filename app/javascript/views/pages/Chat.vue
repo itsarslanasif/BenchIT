@@ -241,7 +241,6 @@ export default {
     },
 
     getImages(files) {
-      console.log(files)
       this.files[this.files.length] = files;
       const reader = new FileReader();
       reader.readAsDataURL(files);
