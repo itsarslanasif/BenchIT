@@ -25,7 +25,22 @@ class ConversationMessage < ApplicationRecord
       created_at: created_at,
       updated_at: updated_at
     }
+    message = attach_message_attachments(message)
+    channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
+    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
 
+    ActionCable.server.broadcast(channel_key, { message: message })
+  end
+
+  def self.last_dm_message(conversation_ids)
+    two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
+    ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
+                                                                             two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
+  end
+
+  private
+
+  def attach_message_attachments(message)
     if message_attachments.present?
       message[:attachments] = []
       message_attachments.each do |attachment|
@@ -37,16 +52,6 @@ class ConversationMessage < ApplicationRecord
                                    })
       end
     end
-
-    channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
-    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
-
-    ActionCable.server.broadcast(channel_key, { message: message })
-  end
-
-  def self.last_dm_message(conversation_ids)
-    two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
-    ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
-                                                                             two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
+    message
   end
 end
