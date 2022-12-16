@@ -8,15 +8,12 @@
   <div v-else-if="chat && conversation_type === 'users'">
     <UserChatInfo :chat="chat" />
   </div>
-  <div
-    class="flex items-center h-fit justify-between p-1 border-b border-primary"
-  >
-    <div class="flex overflow-y-hidden text-ellipsis p-1 cursor-pointer">
-      <pinnedConversation />
-      <BookmarkPopUpVue @clicked="onClickChild"> </BookmarkPopUpVue>
-      <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bm.name">
-        <BookmarkShowVue :data="bookmark" @clicked="onClickChild">
-        </BookmarkShowVue>
+  <div class="flex items-center h-8 justify-between px-1 mt-1 shadow-md custom-border">
+    <div class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer">
+      <PinnedConversation />
+      <BookmarkPopUp @clicked="onClickChild" />
+      <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bookmark.id">
+        <BookmarkShow :data="bookmark" @clicked="onClickChild" />
       </p>
     </div>
   </div>
@@ -24,15 +21,15 @@
 
 <script>
 import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
-import BookmarkPopUpVue from '../bookmark/popup.vue';
-import BookmarkShowVue from '../bookmark/bookmarkShow.vue';
+import BookmarkPopUp from '../bookmark/popup.vue';
+import BookmarkShow from '../bookmark/bookmarkShow.vue';
 import Spinner from '../../shared/spinner.vue';
 import axios from '../../../modules/axios/index';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import pinnedConversationModelVue from '../pinnedConversation/pinnedConversationModel.vue';
-import pinnedConversation from '../pinnedConversation/pinnedConversation.vue';
+import PinnedConversationModelVue from '../pinnedConversation/pinnedConversationModel.vue';
+import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 
@@ -41,13 +38,13 @@ export default {
   components: {
     NAvatar,
     NIcon,
-    BookmarkPopUpVue,
-    BookmarkShowVue,
+    BookmarkPopUp,
+    BookmarkShow,
     NSpace,
     NSpin,
     Spinner,
-    pinnedConversation,
-    pinnedConversationModelVue,
+    PinnedConversation,
+    PinnedConversationModelVue,
     ChannelInfo,
     UserChatInfo,
   },
@@ -125,66 +122,12 @@ export default {
 };
 </script>
 <style scoped>
-.header {
-  align-items: center;
-  border-bottom: 0.5px solid gray;
-  display: flex;
-  height: fit-content;
-  justify-content: space-between;
-  padding: 5px;
-}
-
-.headerContainer {
-  display: flex;
-  overflow-y: hidden;
-  text-overflow: ellipsis;
-  scrollbar-color: dark;
-  padding: 5px;
-}
-
 .bookmarkText {
   color: rgb(99, 98, 98);
   font-size: small;
-  margin: 0px;
 }
-
-.headerContainer:hover {
-  background-color: rgb(230, 232, 234);
-  border-radius: 3px;
-  cursor: pointer;
-}
-
-.phone-btn {
-  align-items: center;
-  border-radius: 3px;
-  display: flex;
-  height: 30px;
-  justify-content: center;
-  margin: 0px 10px 0px 10px;
-  width: 30px;
-}
-
-.phone-btn:hover {
-  background-color: rgb(230, 232, 234);
-  cursor: pointer;
-}
-
-.avatar__badge {
-  background-color: rgb(54, 151, 54);
-  border-radius: 50%;
-  border: 2px solid white;
-  height: 12px;
-  margin-left: -12px;
-  margin-top: 18px;
-  position: relative;
-  width: 12px;
-}
-
-.name {
-  color: rgb(52, 51, 51);
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 5px 0 0;
+.custom-border {
+  border-bottom: 0.5px solid gray;
 }
 
 .loading {
