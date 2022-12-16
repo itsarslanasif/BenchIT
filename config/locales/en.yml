@@ -87,6 +87,13 @@ en:
         people: 'People'
         channels: 'Channels'
         tagline: "I'm looking for"
+      rightpane:
+        send: 'Send'
+        replies: 'replies'
+      chat:
+        today: 'Today'
+        replies: 'replies'
+        thread: 'Thread'
       channels:
           channels: 'Channels'
           add_new_channel: 'Add New Channel'

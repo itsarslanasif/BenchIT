@@ -1,6 +1,6 @@
 <template>
   <div class="bg-primary text-sm">
-    <div class="border-b border-slate-400 bg-secondary" >
+    <div class="border-b border-slate-400 bg-secondary">
       <SearchBar />
     </div>
     <splitpanes>
@@ -8,12 +8,20 @@
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-      <pane max-size="81" min-size="75" class="bg-white">
-        <router-view :key="$route.fullPath"/>
+      <pane max-size="70" min-size="75" class="bg-white">
+        <router-view :key="$route.fullPath" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
       </div>
+      <pane
+        v-if="threadStore.showThread"
+        max-size="60"
+        min-size="40"
+        class="bg-white"
+      >
+        <Thread />
+      </pane>
     </splitpanes>
   </div>
 </template>
@@ -22,11 +30,13 @@
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
-import SearchBar from '../shared/searchBar.vue'
+import SearchBar from '../shared/searchBar.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
+import Thread from '../components/rightPane/Thread.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
+import { useThreadStore } from '../../stores/useThreadStore';
 import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
@@ -38,12 +48,14 @@ export default {
     WorkspaceDropdown,
     LeftPane,
     UserInviteFormVue,
+    Thread,
     searchDmscreen,
     SearchBar,
   },
   setup() {
     const screenStore = useSelectedScreenStore();
-    return { screenStore };
+    const threadStore = useThreadStore();
+    return { screenStore, threadStore };
   },
   methods: {
     closeForm() {
@@ -113,10 +125,6 @@ export default {
 </script>
 
 <style>
-/* .splitpanes {
-  height: 89vh;
-} */
-
 .chatpane {
   overflow: hidden;
   position: relative;

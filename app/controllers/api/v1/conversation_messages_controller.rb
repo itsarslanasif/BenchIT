@@ -10,7 +10,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
-    response = @message.save ? { message: 'Message sent.' } : { message: @message.errors, status: :unprocessable_entity }
+    if @message.save
+      @message.parent_message.update(is_threaded: true) if @message.parent_message_id.present?
+      response = { message: 'Message sent.' }
+    else
+      response = { message: @message.errors, status: :unprocessable_entity }
+    end
     render json: response
   end
 
