@@ -3,6 +3,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
   before_action :user_already_member, only: %i[join_public_channel]
+  before_action :member_status, except: %i[index create join_public_channel]
+  before_action :user_already_member, only: %i[join_public_channel]
 
   def index
     @bench_channel = if params[:query].presence
@@ -44,7 +46,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def leave
     @channel_participant.destroy
 
-    render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
+    render json: { message: "You successfully left ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
   end
@@ -52,7 +54,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def join_public_channel
     channel_participant = ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
 
-    render json: { message: "Joined channel successfully ##{@bench_channel.name}!" }, status: :o  k
+    render json: { message: "Joined channel successfully ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotSaved
     render json: { message: 'Could not join channel!', errors: channel_participant.errors }, status: :unprocessable_entity
   end
@@ -80,7 +82,16 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def set_bench_channel
     @bench_channel = BenchChannel.find_by(id: params[:id])
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
+  end
+
+  def member_status
     render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)
+  end
+
+  def channel_is_public
+    return unless @bench_channel.is_private?
+
+    render json: { status: false, messsage: 'cannot join because the channel is private.' }
   end
 
   def set_channel_participant
