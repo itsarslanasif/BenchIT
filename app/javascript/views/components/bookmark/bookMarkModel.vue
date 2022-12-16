@@ -103,7 +103,6 @@ export default {
   },
   props: ['title', 'bookMarkObject', 'newBookMark', 'toggleModel', 'channelId'],
   mounted() {
-    console.log('newBookMark:', this.newBookMark);
     if (!this.newBookMark) {
       this.setBookmarkObject(this.bookMarkObject);
     }
@@ -130,7 +129,6 @@ export default {
     setBookmarkObject(bookmark) {
       this.formValue.bookMarkTitle = bookmark.name;
       this.formValue.bookMarkLink = bookmark.bookmark_URL;
-      console.log(bookmark, this.formValue);
     },
     handleCreate() {
       this.validations();
