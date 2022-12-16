@@ -157,6 +157,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "saved_items", force: :cascade do |t|
+    t.integer "profile_id"
+    t.integer "conversation_message_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "user_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

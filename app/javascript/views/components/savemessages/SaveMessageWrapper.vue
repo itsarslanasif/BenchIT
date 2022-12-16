@@ -1,7 +1,5 @@
 <template>
-  <div
-    :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
-  >
+  <div class="bg-transparent">
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
@@ -11,12 +9,8 @@
         {{ $t('pinconversation.you') }}
       </span>
     </div>
-    <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">
-      <i class="far fa-bookmark text-red-500"></i>
-      <p class="ml-2">{{ $t('actions.save_items') }}</p>
-    </div>
     <div
-      class="flex p-1 relative hover:bg-transparent"
+      class="items-center flex p-1 relative hover:bg-transparent"
       :class="{
         messageContentpinned: pinnedConversationStore.isPinned(currMessage),
       }"
@@ -38,29 +32,18 @@
               v-show="!isSameUser || !isSameDayMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
-              <b>{{ currMessage.sender_name }}</b>
+              <b>{{ currMessage.profile.name }}</b>
             </p>
             <p
               class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
             >
-              {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
+              {{ currMessage.message.created_at ? timeWithoutAMPM : time }}
             </p>
-            <span
-              v-show="isSameUser && isSameDayMessage"
-              class="text-black-800 text-sm flex-wrap"
-              v-html="currMessage.content"
-            />
           </span>
           <span
-            v-show="!isSameUser || !isSameDayMessage"
             class="text-black-800 text-sm flex-wrap"
-            v-html="currMessage.content"
+            v-html="currMessage.message.content"
           />
-          <div v-if="message.attachments" class="flex gap-2">
-            <div v-for="attachment in message.attachments" class="w-64">
-              <img :src="attachment.attachment_link" class="rounded" />
-            </div>
-          </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
@@ -76,31 +59,14 @@
               :action="addReaction"
             />
           </template>
-          <EmojiModalButton
-            icon="fa-solid fa-icons"
-            :actionText="$t('emojiModalButton.find_another_reaction')"
-            :action="setEmojiModal"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-comment-dots"
-            :actionText="$t('emojiModalButton.reply_in_thread')"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-share"
-            :actionText="$t('emojiModalButton.share_message')"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-bookmark"
-            :actionText="$t('emojiModalButton.add_to_saved_items')"
-            :action="saveMessage"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-ellipsis-vertical"
-            :actionText="$t('emojiModalButton.more_actions')"
-            :action="setOptionsModal"
-            :message="currMessage"
-            :pinnedConversationStore="usePinnedConversation"
-          />
+          <EmojiModalButton icon="fa-solid fa-icons" :actionText="$t('emojiModalButton.find_another_reaction')"
+            :action="setEmojiModal" />
+          <EmojiModalButton icon="fa-solid fa-comment-dots" :actionText="$t('emojiModalButton.reply_in_thread')" />
+          <EmojiModalButton icon="fa-solid fa-share" :actionText="$t('emojiModalButton.share_message')" />
+          <EmojiModalButton icon="fa-solid fa-bookmark" :actionText="$t('actions.remove_from_saved_items')"
+            :action="unSave" />
+          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" :actionText="$t('emojiModalButton.more_actions')"
+            :action="setOptionsModal" :message="currMessage" :pinnedConversationStore="usePinnedConversation" />
         </div>
       </span>
     </div>
@@ -116,16 +82,15 @@ import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import { save } from '../../../api/save_messages/savemessage.js';
-import { unsave } from '../../../api/save_messages/unsavemessage.js';
+import { unsave } from '../../../api/save_messages/unsavemessage.js'
+import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
 import { CONSTANTS } from '../../../assets/constants';
-import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
 
 export default {
   name: 'MessageWrapper',
   setup() {
-    const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
+    const pinnedConversationStore = usePinnedConversation();
     return { pinnedConversationStore, savedItemsStore };
   },
   components: {
@@ -135,10 +100,6 @@ export default {
   },
   props: {
     currMessage: {
-      type: Object,
-      default: undefined,
-    },
-    prevMessage: {
       type: Object,
       default: undefined,
     },
@@ -160,7 +121,6 @@ export default {
         },
       ],
       message: this.currMessage,
-      oldMessage: this.prevMessage,
       emojiModalStatus: false,
       openEmojiModal: false,
       allReactions: [],
@@ -169,24 +129,14 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
-        'h:mm A'
-      );
+      return moment(
+        new Date(this.currMessage.message.created_at).getTime()
+      ).format('h:mm A');
     },
     timeWithoutAMPM() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
-        'h:mm'
-      );
-    },
-    isSameUser() {
-      if (this.prevMessage === undefined) return false;
-      return this.currMessage?.sender_id === this.prevMessage?.sender_id;
-    },
-    isSameDayMessage() {
-      return (
-        new Date(this.currMessage?.created_at).toDateString() ===
-        new Date(this.prevMessage?.created_at).toDateString()
-      );
+      return moment(
+        new Date(this.currMessage.message.created_at).getTime()
+      ).format('h:mm');
     },
   },
   methods: {
@@ -199,18 +149,12 @@ export default {
     setOptionsModal() {
       this.showOptions = !this.showOptions;
     },
-    saveMessage() {
-      this.currMessage.isSaved = !this.currMessage.isSaved;
+    unSave() {
       if (this.currMessage.isSaved) {
-        save(this.message.id, {
-          data: this.message,
-        }).then(() => {
-          this.savedItemsStore.addSavedItem(this.message);
-        });
-      } else {
-        unsave(this.message.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.message);
-        });
+        unsave(this.currMessage.message.id).
+          then(() => {
+            this.savedItemsStore.removeSavedItem(this.message);
+          })
       }
     },
   },

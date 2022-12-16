@@ -26,6 +26,9 @@
     <div class="flex justify-center" v-show="members.length == 0">
       <p>{{ CONSTANTS.NO_RESULT_FOUND }}</p>
     </div>
+    <div v-if="members.length == 0 && query == ''">
+      {{ searchQuery() }}
+    </div>
   </div>
 </template>
 
