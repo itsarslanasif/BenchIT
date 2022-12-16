@@ -1,10 +1,10 @@
 <template>
-  <div v-if="pinnedConversationStore.getCount > 0">
+  <div v-if="pinnedConversationStore.getCount">
     <button
       @click="pinnedConversationStore.togglePin()"
-      class="text-xs hover:text-white hover:bg-primary hover:border-transparent text-slate-1000 font-bold py-2 px-4 rounded-md border-white"
+      class="text-xs px-2 py-1 mb-1 mr-1 rounded-md text-black-600 hover:bg-transparent"
     >
-      <font-awesome-icon icon="fa-solid fa-thumbtack" />
+      <font-awesome-icon icon="fa-solid fa-thumbtack fa-xs self-center" />
       {{ pinnedConversationStore.getCount }}
       {{ $t('pinconversation.pinned') }}
     </button>

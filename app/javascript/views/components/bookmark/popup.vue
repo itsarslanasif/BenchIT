@@ -1,7 +1,10 @@
 <template>
   <div>
-    <a class="m-0 ml-3 text-xs text-white p-2 overflow-auto rounded-md bg-primary hover:bg-primaryHover w-max inline-block -mr-1"
-      href="#popup1">{{$t('bookmark.add_bookmark')}}</a>
+    <a class="text-xs px-2 py-1 mr-2 overflow-auto rounded-md text-black-600 hover:bg-transparent w-max inline-block"
+      href="#popup1">
+      <i class="fa-solid fa-add"></i>
+      {{$t('bookmark.add_bookmark')}}
+    </a>
   </div>
   <div id="popup1"
     class="bg-backgroundTransparent inset-0 invisible opacity-0 transition-all ease-linear duration-300 z-10 absolute">
@@ -48,3 +51,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.border1 {
+  border-bottom: 0.5px solid gray;
+}
+</style>
