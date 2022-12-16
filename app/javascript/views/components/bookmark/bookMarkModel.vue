@@ -1,10 +1,10 @@
 <template>
   <transition name="modal-fade">
     <div
-      class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
+      class="flex justify-center text-black-800 items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
     >
       <div
-        class="modal rounded-md w-2/5 h-2/5 shadow-md bg-slate-50"
+        class="modal rounded-md w-2/5 h-2/5 shadow-md bg-white"
         role="dialog"
       >
         <div class="p-8">
@@ -23,9 +23,7 @@
           <div class="m-0 relative mt-5">
             <div class="mb-6">
               <p>
-                Bookmark important links for your team Add bookmarks for links
-                you want to find quickly. All channel members can see the
-                bookmarks you add.
+                {{ $t('bookmark.add_bookmark_note') }}
               </p>
             </div>
             <n-form
@@ -34,16 +32,20 @@
               :rules="rules"
               :size="size"
             >
-              <n-form-item label="Title" path="bookMarkTitle">
+              <n-form-item :label="$t('bookmark.title')" path="bookMarkTitle">
                 <n-input
                   v-model:value="formValue.bookMarkTitle"
-                  placeholder="e.g youtube"
+                  :placeholder="$t('bookmark.name_placeholder')"
                 />
               </n-form-item>
-              <n-form-item class="mt-3" label="Link" path="bookMarkLink">
+              <n-form-item
+                class="mt-3"
+                :label="$t('bookmark.link')"
+                path="bookMarkLink"
+              >
                 <n-input
                   v-model:value="formValue.bookMarkLink"
-                  placeholder="e.g www.youtube.com"
+                  :placeholder="$t('bookmark.url_placeholder')"
                 />
               </n-form-item>
               <p v-if="error" class="mt-3 text-danger">{{ error }}</p>
@@ -52,7 +54,7 @@
                   @click="handleCreate"
                   class="bg-success text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
                 >
-                  Create
+                  {{ $t('actions.create') }}
                 </n-button>
               </n-form-item>
               <n-form-item v-if="!newBookMark" class="float-right">
@@ -60,7 +62,7 @@
                   @click="handleUpdate"
                   class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
                 >
-                  Update
+                  {{ $t('actions.update') }}
                 </n-button>
               </n-form-item>
               <n-form-item v-if="!newBookMark" class="float-right">
@@ -68,7 +70,7 @@
                   @click="handleDelete"
                   class="bg-danger text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
                 >
-                  Delete
+                  {{ $t('actions.delete') }}
                 </n-button>
               </n-form-item>
             </n-form>
@@ -146,14 +148,12 @@ export default {
       this.validations();
       if (!this.error) {
         this.toggleModel();
-        console.log('handleDelete: comming soon');
       }
     },
     handleUpdate() {
       this.validations();
       if (!this.error) {
         this.toggleModel();
-        console.log('handleUpdate: comming soon');
       }
     },
     validations() {
