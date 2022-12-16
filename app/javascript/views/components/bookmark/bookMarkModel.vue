@@ -83,6 +83,7 @@
 <script>
 import { NForm, NFormItem, NButton, NInput } from 'naive-ui';
 import { useBookmarkStore } from '../../../stores/useBookmarkStore';
+import { CONSTANTS } from '../../../assets/constants';
 export default {
   name: 'CreateChannel',
   components: {
@@ -113,12 +114,12 @@ export default {
       rules: {
         bookMarkTitle: {
           required: true,
-          message: "Don't forget to add bookmark title.",
+          message: CONSTANTS.DONNT_FORGET_TO_ADD_BOOKMARK_TITLE,
           trigger: ['input'],
         },
         bookMarkLink: {
           required: true,
-          message: "Don't forget to to add bookmark link.",
+          message: CONSTANTS.DONNT_FORGET_TO_ADD_BOOKMARK_LINK,
           trigger: ['input'],
         },
       },
@@ -156,9 +157,10 @@ export default {
     },
     validations() {
       if (this.formValue.bookMarkTitle == '') {
-        this.error = 'You forget to add bookmark title.';
+        this.error =   CONSTANTS.YOU_FORGET_TO_ADD_BOOKMARK_TITLE;
+
       } else if (this.formValue.bookMarkLink == '') {
-        this.error = 'You forget to add bookmark link.';
+        this.error =   CONSTANTS.YOU_FORGET_TO_ADD_BOOKMARK_LINK;
       } else {
         this.error = '';
       }

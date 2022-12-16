@@ -65,7 +65,6 @@ export default {
   },
   mounted() {
     this.bookmarkStore.getbookmarks(this.conversation_id);
-    console.log(this.bookmarkStore.bookmarks);
   },
 
   watch: {

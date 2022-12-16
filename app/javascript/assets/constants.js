@@ -78,5 +78,9 @@ export const CONSTANTS = {
   VIEW_CHANNEL_DETAILS: 'View channel details',
   DRAFTS: 'Drafts',
   SCHEDULED: 'Scheduled',
-  SENT: 'Sent'
+  SENT: 'Sent',
+  YOU_FORGET_TO_ADD_BOOKMARK_TITLE: 'You forget to add bookmark title.',
+  YOU_FORGET_TO_ADD_BOOKMARK_LINK: 'You forget to add bookmark link.',
+  DONNT_FORGET_TO_ADD_BOOKMARK_TITLE: "Don't forget to add bookmark title.",
+  DONNT_FORGET_TO_ADD_BOOKMARK_LINK: "Don't forget to to add bookmark link."
 };
