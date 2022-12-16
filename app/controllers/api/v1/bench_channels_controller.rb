@@ -52,13 +52,13 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def join_public_channel
     channel_participant = ChannelParticipant.create(user_id: current_user.id, bench_channel_id: @bench_channel.id)
 
-    render json: { message: "Joined channel successfully ##{@bench_channel.name}!" }, status: :ok
+    render json: { message: "Joined channel successfully ##{@bench_channel.name}!" }, status: :o  k
   rescue ActiveRecord::RecordNotSaved
     render json: { message: 'Could not join channel!', errors: channel_participant.errors }, status: :unprocessable_entity
   end
 
   def user_already_member
-    return if ChannelParticipant.find_by(user_id: current_user.id, bench_channel_id: @bench_channel.id).nil?
+    return if ChannelParticipant.find_or_create_by(user_id: current_user.id, bench_channel_id: @bench_channel.id).nil?
 
     render json: { message: 'You already joined this channel' }, status: :unprocessable_entity
   end
