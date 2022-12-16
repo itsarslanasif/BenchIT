@@ -99,3 +99,8 @@ export default defineComponent({
   },
 });
 </script>
+<style scoped>
+.fa-user-plus {
+  color: black;
+}
+</style>

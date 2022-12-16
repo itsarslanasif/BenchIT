@@ -6,11 +6,13 @@ export const useMessageStore = () => {
     state: () => {
       return {
         messages: [],
+        currMessage: null
       };
     },
 
     getters: {
       getMessages: state => state.messages,
+      repliesCount: state => state.messages?.find(m => m.id == state.currMessage?.id).replies?.length
     },
 
     actions: {

@@ -74,7 +74,7 @@ module.exports = {
         700: '#40546B',
         800: '#314155',
         900: '#1F2D3D',
-        1000: '#252d34'
+        1000: '#252d34',
       },
       black: {
         50: '#F8F9FE',
@@ -111,11 +111,8 @@ module.exports = {
         dark: { raw: '(prefers-color-scheme: dark)' },
       },
       width: {
-        '100': '25rem',
-       },
-       height: {
-        '50': '20rem',
-       }
+        100: '25rem',
+      },
     },
   },
   variants: {},

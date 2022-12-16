@@ -18,15 +18,15 @@
     <div
       class="flex p-1 relative hover:bg-transparent"
       :class="{
-        messageContentpinned: pinnedConversationStore.isPinned(currMessage),
+        messageContentPinned: pinnedConversationStore.isPinned(currMessage),
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <div class="min-w-fit ml-1">
+      <div class="min-w-fit self-start ml-1">
         <n-avatar
           v-show="!isSameUser || !isSameDayMessage"
-          class="mr-1 self-baseline"
+          class="mr-1"
           size="large"
           src="../../../assets/images/user.png"
         />
@@ -56,9 +56,9 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          <div v-if="message.attachments" class="flex gap-2">
-            <div v-for="attachment in message.attachments" class="w-64">
-              <img :src="attachment.attachment_link" class="rounded" />
+          <div v-if="currMessage?.attachments" class="flex gap-2">
+            <div v-for="attachment in currMessage?.attachments" :key="attachment.id" class="w-64">
+              <img :src="attachment?.attachment_link" class="rounded" :class="{ 'ml-12': isSameUser && isSameDayMessage }" />
             </div>
           </div>
         </div>
@@ -66,7 +66,15 @@
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
         </template>
         <div
-          class="bg-white text-black-500 p-1 rounded absolute top-0 right-0 -mt-3 mr-3 shadow-2xl"
+          v-if="currMessage?.is_threaded"
+          @click="toggleThread"
+          :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+          class="text-info text-xs cursor-pointer hover:underline"
+        >
+          {{ repliesCount }}
+        </div>
+        <div
+          class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="emojiModalStatus || openEmojiModal || showOptions"
         >
           <template v-for="emoji in topReactions" :key="emoji">
@@ -82,8 +90,10 @@
             :action="setEmojiModal"
           />
           <EmojiModalButton
+            v-if="!currMessage.parent_message_id"
             icon="fa-solid fa-comment-dots"
             :actionText="$t('emojiModalButton.reply_in_thread')"
+            :action="toggleThread"
           />
           <EmojiModalButton
             icon="fa-solid fa-share"
@@ -115,6 +125,7 @@ import moment from 'moment';
 import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
+import { useThreadStore } from '../../../stores/useThreadStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
@@ -123,10 +134,11 @@ import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
 
 export default {
   name: 'MessageWrapper',
-  setup() {
+    setup() {
+    const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
-    return { pinnedConversationStore, savedItemsStore };
+    return { threadStore, pinnedConversationStore, savedItemsStore };
   },
   components: {
     NAvatar,
@@ -159,8 +171,6 @@ export default {
           n: CONSTANTS.TAKING_A_LOOK,
         },
       ],
-      message: this.currMessage,
-      oldMessage: this.prevMessage,
       emojiModalStatus: false,
       openEmojiModal: false,
       allReactions: [],
@@ -188,16 +198,23 @@ export default {
         new Date(this.prevMessage?.created_at).toDateString()
       );
     },
+    repliesCount(){
+      return `${this.currMessage.replies?.length} replies..`
+    }
   },
   methods: {
     addReaction(emoji) {
-      this.allReactions.push(this.currMessage.reactions[0].emoji);
+      this.allReactions.push(emoji);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
     },
     setOptionsModal() {
       this.showOptions = !this.showOptions;
+    },
+    toggleThread() {
+      this.threadStore.setMessage(this.currMessage);
+      this.threadStore.toggleShow(true);
     },
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
@@ -217,7 +234,8 @@ export default {
 };
 </script>
 <style scoped>
-.messageContentpinned {
+.messageContentPinned {
   @apply bg-yellow-100;
 }
 </style>
+
