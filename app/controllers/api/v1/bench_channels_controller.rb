@@ -1,9 +1,9 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, except: %i[index create]
+  before_action :member_status, except: %i[index create join_public_channel]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
-  before_action :user_already_member, only: %i[join_public_channel]
-  before_action :member_status, except: %i[index create join_public_channel]
+  before_action :channel_is_public, only: %i[join_public_channel]
   before_action :user_already_member, only: %i[join_public_channel]
 
   def index
