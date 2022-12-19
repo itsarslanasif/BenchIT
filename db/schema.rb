@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_19_153426) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_19_162605) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -102,13 +102,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_153426) do
 
   create_table "draft_messages", force: :cascade do |t|
     t.text "content", null: false
-    t.bigint "user_id", null: false
     t.bigint "bench_conversation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "profile_id", null: false
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
-    t.index ["user_id", "bench_conversation_id"], name: "index_draft_messages_on_user_id_and_bench_conversation_id", unique: true
-    t.index ["user_id"], name: "index_draft_messages_on_user_id"
+    t.index ["profile_id"], name: "index_draft_messages_on_profile_id"
   end
 
   create_table "favourites", force: :cascade do |t|
@@ -218,7 +217,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_153426) do
   add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
-  add_foreign_key "draft_messages", "users"
+  add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
