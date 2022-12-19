@@ -1,8 +1,8 @@
 workspace = Workspace.create!(company_name: 'BenchIT',
-  workspace_type: :work,
-  bench_it_url: 'https://www.benchit.com',
-  capacity: 2000,
-  organization_type: :financial_services)
+                              workspace_type: :work,
+                              bench_it_url: 'https://www.benchit.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
 
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
