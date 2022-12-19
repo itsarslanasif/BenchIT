@@ -57,13 +57,21 @@
             v-html="currMessage.content"
           />
           <div v-if="currMessage?.attachments" class="flex gap-2">
-            <div v-for="attachment in currMessage?.attachments" :key="attachment.id" class="w-64">
-              <img :src="attachment?.attachment_link" class="rounded" :class="{ 'ml-12': isSameUser && isSameDayMessage }" />
+            <div
+              v-for="attachment in currMessage?.attachments"
+              :key="attachment.id"
+              class="w-64"
+            >
+              <img
+                :src="attachment?.attachment_link"
+                class="rounded"
+                :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+              />
             </div>
           </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
-          <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
+          <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.emoji }}</span>
         </template>
         <div
           v-if="currMessage?.is_threaded"
@@ -131,10 +139,11 @@ import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
+import { addReaction } from '../../../api/reactions/addReaction.js';
 
 export default {
   name: 'MessageWrapper',
-    setup() {
+  setup() {
     const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
@@ -173,7 +182,7 @@ export default {
       ],
       emojiModalStatus: false,
       openEmojiModal: false,
-      allReactions: [],
+      allReactions: this.currMessage.reactions,
       showOptions: false,
     };
   },
@@ -198,13 +207,14 @@ export default {
         new Date(this.prevMessage?.created_at).toDateString()
       );
     },
-    repliesCount(){
-      return `${this.currMessage.replies?.length} replies..`
-    }
+    repliesCount() {
+      return `${this.currMessage.replies?.length} replies..`;
+    },
   },
   methods: {
-    addReaction(emoji) {
-      this.allReactions.push(emoji);
+    async addReaction(emoji) {
+      this.allReactions.push({ emoji: emoji.i });
+      await addReaction(this.currMessage.id, emoji.i);
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
@@ -219,14 +229,14 @@ export default {
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       if (this.currMessage.isSaved) {
-        save(this.message.id, {
-          data: this.message,
+        save(this.currMessage.id, {
+          data: this.currMessage,
         }).then(() => {
-          this.savedItemsStore.addSavedItem(this.message);
+          this.savedItemsStore.addSavedItem(this.currMessage);
         });
       } else {
-        unsave(this.message.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.message);
+        unsave(this.currMessage.id).then(() => {
+          this.savedItemsStore.removeSavedItem(this.currMessage);
         });
       }
     },
@@ -238,4 +248,3 @@ export default {
   @apply bg-yellow-100;
 }
 </style>
-
