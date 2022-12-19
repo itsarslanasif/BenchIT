@@ -206,12 +206,12 @@ export default {
     },
     updateStatus() {
       if (!this.userStatus.active) {
-        this.userStatus.active = true;
+        this.userStatus.active = !this.userStatus.active;
         this.status = 'Active';
         this.prevStatus = 'away';
         this.statusIcon = '🟢';
       } else {
-        this.userStatus.active = false;
+        this.userStatus.active = !this.userStatus.active;
         this.status = 'Away';
         this.prevStatus = 'active';
         this.statusIcon = '⚫';
@@ -226,16 +226,20 @@ export default {
   right: 20px;
   top: 8px;
 }
+
 .dropdown {
   right: -97vw;
 }
+
 .icon {
   right: 14px;
   top: 33px;
 }
+
 .active {
   font-size: 9px;
 }
+
 .away {
   font-size: 6px;
   outline: 3px solid rgb(28, 29, 28);
