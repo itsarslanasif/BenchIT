@@ -103,7 +103,8 @@ module.exports = {
       gray: {
         600: '#4B5563',
         800: '#1F2937',
-        100: '#f8f8f8'
+        100: '#f8f8f8',
+        50: '#F3F3F5',
       }
     },
     extend: {
@@ -112,7 +113,11 @@ module.exports = {
       },
       width: {
         100: '25rem',
+        80: '18.75rem'
       },
+      height: {
+        9: '2.1875rem'
+      }
     },
   },
   variants: {},

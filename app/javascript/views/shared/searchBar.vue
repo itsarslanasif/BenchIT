@@ -51,6 +51,7 @@
       </div>
     </div>
   </div>
+  <ProfileDropdown />
 </template>
 
 <script>
@@ -58,8 +59,10 @@ import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { storeToRefs } from 'pinia';
+import ProfileDropdown from '../widgets/profileDropdown.vue'
 export default {
   name: 'SearchBar',
+  components: { ProfileDropdown },
   data() {
     return {
       searchModalToggle: false,
