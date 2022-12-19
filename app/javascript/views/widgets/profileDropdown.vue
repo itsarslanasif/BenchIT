@@ -4,7 +4,7 @@
     size="medium"
     :options="options"
     @select="handleSelect"
-    class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown"
+    class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
   >
     <n-button>
       <div class="flex avatar absolute">
@@ -31,7 +31,7 @@
 <script>
 import { NDropdown, NAvatar, NText } from 'naive-ui';
 import { h } from 'vue';
-import userStatusStore from '../../stores/userStatus';
+import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
 export default {
   components: { NDropdown, NAvatar },
@@ -188,10 +188,10 @@ export default {
         'div',
         {
           class:
-            'hover:bg-black-100 m-1 cursor-pointer border rounded border-gray-100 mt-2',
+            'hover:bg-gray-50 m-1 cursor-pointer border rounded border-gray-100 mt-2',
         },
         [
-          h('div', { class: 'w-full option-height items-center flex' }, [
+          h('div', { class: 'w-full h-9 items-center flex' }, [
             h(
               NText,
               { class: 'ml-2 text-black-800' },
@@ -228,7 +228,6 @@ export default {
 }
 .dropdown {
   right: -97vw;
-  width: 300px;
 }
 .icon {
   right: 14px;
@@ -240,8 +239,5 @@ export default {
 .away {
   font-size: 6px;
   outline: 3px solid rgb(28, 29, 28);
-}
-.option-height {
-  height: 35px;
 }
 </style>

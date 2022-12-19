@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-const userStatusStore = defineStore('userStatusStore', {
+const useUserStatusStore = defineStore('useUserStatusStore', {
   state: () => {
     return {
       active: false,
@@ -12,4 +12,4 @@ const userStatusStore = defineStore('userStatusStore', {
   }
 )
 
-export default userStatusStore
+export default useUserStatusStore
