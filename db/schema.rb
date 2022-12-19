@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_19_071550) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_19_153426) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -112,13 +112,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_071550) do
   end
 
   create_table "favourites", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "favourable_type"
     t.bigint "favourable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "profile_id", null: false
     t.index ["favourable_type", "favourable_id"], name: "index_favourites_on_favourable"
-    t.index ["user_id"], name: "index_favourites_on_user_id"
+    t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
 
   create_table "groups", force: :cascade do |t|
@@ -219,7 +219,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_071550) do
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
   add_foreign_key "draft_messages", "users"
-  add_foreign_key "favourites", "users"
+  add_foreign_key "favourites", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "users"
