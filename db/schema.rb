@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_19_162605) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_19_163615) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -107,6 +107,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_19_162605) do
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
+    t.index ["profile_id", "bench_conversation_id"], name: "index_draft_messages_on_profile_id_and_bench_conversation_id", unique: true
     t.index ["profile_id"], name: "index_draft_messages_on_profile_id"
   end
 

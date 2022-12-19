@@ -1,10 +1,13 @@
 class Api::V1::DraftMessagesController < Api::ApiController
   before_action :set_draft_message, only: %i[update destroy]
   def index
-    @draft_messages = current_user.draft_messages
+    @draft_messages = Current.profile.draft_messages
   end
 
   def create
+    p "arshad"
+    puts
+    puts draft_messages_params
     @draft_message = DraftMessage.new(draft_messages_params)
 
     if @draft_message.save
@@ -34,7 +37,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def draft_messages_params
     params.require(:draft_message).permit(:content, :bench_conversation_id).tap do |param|
-      param[:user] = current_user
+      param[:profile] = Current.profile
     end
   end
 end

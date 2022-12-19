@@ -7,8 +7,8 @@ if draft_message.bench_conversation.conversationable_type.eql?('BenchChannel')
 end
 json.group_id draft_message.bench_conversation.conversationable_id if draft_message.bench_conversation.conversationable_type.eql?('Group')
 
-if draft_message.bench_conversation.conversationable_type.eql?('User')
-  if draft_message.bench_conversation.conversationable_id == draft_message.user_id
+if draft_message.bench_conversation.conversationable_type.eql?('Profile')
+  if draft_message.bench_conversation.conversationable_id == draft_message.profile_id
     json.receiver_id draft_message.bench_conversation.sender_id
     json.receiver_name draft_message.bench_conversation.sender.name
   else
