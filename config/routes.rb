@@ -49,7 +49,7 @@ Rails.application.routes.draw do
             post :invite
           end
 
-          resources :profiles, only: %i[index create]
+          resources :profiles, only: %i[index create show]
         end
 
         resources :reactions, only: %i[create destroy]
