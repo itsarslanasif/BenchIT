@@ -13,7 +13,7 @@ class BenchConversation < ApplicationRecord
   def self.last_dm_message
     BenchConversation.where(
       'conversationable_type = :conversationable_type AND (sender_id = :sender_id OR conversationable_id = :conversationable_id)',
-      { conversationable_type: 'User', sender_id: Current.user, conversationable_id: Current.user }
+      { conversationable_type: 'Profile', sender_id: Current.profile, conversationable_id: Current.profile }
     ).pluck(:id)
   end
 end

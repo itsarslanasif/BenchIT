@@ -6,6 +6,6 @@ export const getDirectMessagesList = async () => {
       headers: { Authorization: sessionStorage.getItem('token') },
     })
     .then(response => {
-      return response.data;
+      return response.data.profiles;
     });
 };

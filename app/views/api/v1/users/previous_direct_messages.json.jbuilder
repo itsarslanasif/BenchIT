@@ -1,1 +1,1 @@
-json.array! @users, :id, :email, :name
+json.partial! 'api/v1/shared/partials/profiles', profiles: @users

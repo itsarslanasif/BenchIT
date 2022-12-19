@@ -19,7 +19,7 @@ class Api::V1::UsersController < Api::ApiController
 
   def previous_direct_messages
     dm_users_ids = BenchConversation.where(id: @bench_converations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
-    @users = User.where(id: dm_users_ids)
+    @users = Profile.where(id: dm_users_ids)
   end
 
   private
@@ -30,9 +30,9 @@ class Api::V1::UsersController < Api::ApiController
 
   def set_previous_direct_messages
     conversation_ids = BenchConversation.last_dm_message
-    return render json: [current_user] if conversation_ids.empty?
+    return render json: [Current.profile] if conversation_ids.empty?
 
     @bench_converations_ids = ConversationMessage.last_dm_message(conversation_ids)
-    return render json: [current_user] if @bench_converations_ids.empty?
+    return render json: [Current.profile] if @bench_converations_ids.empty?
   end
 end
