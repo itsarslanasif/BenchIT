@@ -16,6 +16,10 @@ class Api::V1::ProfilesController < Api::ApiController
     @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
   end
 
+  def show
+    @profile = @workspace.profiles.find(params[:id])
+  end
+
   def create
     @profile = current_user.profiles.new(profile_params)
 
@@ -24,10 +28,6 @@ class Api::V1::ProfilesController < Api::ApiController
     else
       render json: { errors: @profile.errors, message: 'There was an error creating the profile' }, status: :unprocessable_entity
     end
-  end
-
-  def show
-    @profile = @workspace.profiles.find(params[:id])
   end
 
   private
@@ -39,7 +39,7 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description,:id).tap do |param|
+    params.require(:profile).permit(:username, :description, :id).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end
