@@ -34,7 +34,7 @@ BenchConversation.create(conversationable_type: 'Group', conversationable_id: 1)
 ConversationMessage.create(content: 'Hi Group from Alva', is_threaded: false, bench_conversation_id: 2, sender_id: 1)
 ConversationMessage.create(content: 'Hi Group from Arnold', is_threaded: false, bench_conversation_id: 2, sender_id: 2)
 ConversationMessage.create(content: 'Hi Group from Arthur', is_threaded: false, bench_conversation_id: 2, sender_id: 3)
-BenchConversation.create(conversationable_type: 'User', conversationable_id: 1, sender_id: 4)
+BenchConversation.create(conversationable_type: 'Profile', conversationable_id: 1, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
 

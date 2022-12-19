@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_19_071550) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,8 +48,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.boolean "is_private", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "creator_id"
     t.bigint "workspace_id", null: false
+    t.bigint "creator_id"
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
     t.index ["name"], name: "index_bench_channels_on_name", unique: true
     t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
@@ -81,10 +81,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.datetime "left_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
     t.bigint "bench_channel_id", null: false
+    t.bigint "profile_id", null: false
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
-    t.index ["user_id"], name: "index_channel_participants_on_user_id"
+    t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
   end
 
   create_table "conversation_messages", force: :cascade do |t|
@@ -93,8 +93,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.bigint "parent_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "sender_id"
     t.bigint "bench_conversation_id"
+    t.bigint "sender_id"
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
@@ -124,6 +124,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
   create_table "groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "members", default: [], array: true
   end
 
   create_table "invitables", force: :cascade do |t|
@@ -162,15 +163,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.integer "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "user_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.bigint "group_id", null: false
-    t.index ["group_id"], name: "index_user_groups_on_group_id"
-    t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -217,20 +209,18 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "bench_channels", "users", column: "creator_id"
+  add_foreign_key "bench_channels", "profiles", column: "creator_id"
   add_foreign_key "bench_channels", "workspaces"
-  add_foreign_key "bench_conversations", "users", column: "sender_id"
+  add_foreign_key "bench_conversations", "profiles", column: "sender_id"
   add_foreign_key "bookmarks", "bench_channels"
   add_foreign_key "bookmarks", "users"
   add_foreign_key "channel_participants", "bench_channels"
-  add_foreign_key "channel_participants", "users"
+  add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
-  add_foreign_key "conversation_messages", "users", column: "sender_id"
+  add_foreign_key "conversation_messages", "profiles", column: "sender_id"
   add_foreign_key "draft_messages", "users"
   add_foreign_key "favourites", "users"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "users"
-  add_foreign_key "user_groups", "groups"
-  add_foreign_key "user_groups", "users"
 end

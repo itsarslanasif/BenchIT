@@ -21,7 +21,7 @@ class ConversationMessage < ApplicationRecord
       is_threaded: is_threaded,
       parent_message_id: parent_message_id,
       sender_id: sender_id,
-      sender_name: user.name,
+      sender_name: profile.username,
       bench_conversation_id: bench_conversation_id,
       created_at: created_at,
       updated_at: updated_at
