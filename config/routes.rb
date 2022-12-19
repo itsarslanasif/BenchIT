@@ -27,11 +27,11 @@ Rails.application.routes.draw do
           collection do
             get :send_message
             get :index_saved_messages
+            get :recent_files
           end
           member do
             post :save_message
             delete :unsave_message
-            get :recent_files
           end
         end
         resources :favourites, only: %i[create destroy]
