@@ -5,9 +5,6 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def create
-    p "arshad"
-    puts
-    puts draft_messages_params
     @draft_message = DraftMessage.new(draft_messages_params)
 
     if @draft_message.save
