@@ -10,7 +10,18 @@ export const getChannels = async () => {
     });
 };
 
-export const memberLeaveChannel = async (channel_id) => {
+export const getChannelMembers = async (query, bench_channel_id) => {
+  return await axios
+    .get(`/v1/channel_participants`, {
+      headers: { Authorization: sessionStorage.getItem('token') },
+      params: { query: query, bench_channel_id: bench_channel_id },
+    })
+    .then(response => {
+      return response.data.profiles;
+    });
+};
+
+export const memberLeaveChannel = async channel_id => {
   return await axios
     .delete(`v1/bench_channels/${channel_id}/leave`, {
       headers: { Authorization: sessionStorage.getItem('token') },
@@ -18,4 +29,4 @@ export const memberLeaveChannel = async (channel_id) => {
     .then(response => {
       return response.data;
     });
-}
+};

@@ -4,11 +4,11 @@
       <div v-if="chat">
         <ChatHeader />
       </div>
-      <div v-if="messages" class="h-1/2 break-words">
+      <div v-if="messages" class="break-words">
         <ChatBody />
       </div>
       <div class="h-3/4">
-        <div class="m-4 pt-6">
+        <div class="mx-4">
           <div
             v-if="showMentions || showChannels"
             class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -82,7 +82,7 @@
             <div class="w-1/12">
               <button
                 @click="sendMessage"
-                class="px-6 py-2 bg-success my-3 rounded-md text-white hover:bg-successHover"
+                class="px-4 py-1 bg-success my-4 rounded-md text-white hover:bg-successHover"
               >
                 {{ $t('actions.send') }}
               </button>
@@ -93,6 +93,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import { useProfileStore } from '../../stores/useProfileStore';
@@ -116,7 +117,6 @@ export default {
     ChatBody,
     NInput,
     NSpace,
-    LandingPage,
     editor: Editor,
     Attachments,
   },
