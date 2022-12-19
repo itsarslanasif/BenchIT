@@ -149,6 +149,9 @@ en:
         cancel: 'Cancel'
         message: 'Message'
         huddle: 'Huddle'
+        upload_photo: 'Upload photo'
+        remove_photo: 'Remove photo'
+        save_changes: 'Save changes'
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
@@ -203,6 +206,21 @@ en:
         recent_files: 'Recent files'
         from_computer: 'Attach from your computer'
         divider: '●'
+      edit_profile:
+        heading: 'Edit your profile'
+        full_name: 'Full name'
+        display_name: 'Display name'
+        display_name_desc: "This could be your first name, or a nickname — however you’d like
+              people to refer to you in Slack."
+        title: 'Title'
+        title_desc: 'Let people know what you do at Devsinc.'
+        name_pronounce: 'Name pronounciation'
+        name_pronounce_placeholder: "Zoe (pronounced 'zo-ee')"
+        name_pronounce_desc: 'This could be a phonetic pronunciation, or an example of something
+              your name sounds like.'
+        time_zone: 'Time zone'
+        time_zone_desc: 'Your current time zone. Used to send summary and notification
+              emails, for times in your activity feeds, and for reminders.'
 
     admin:
       title: 'Admin'
