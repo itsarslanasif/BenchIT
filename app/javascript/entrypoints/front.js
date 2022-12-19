@@ -30,7 +30,8 @@ import {
   faLayerGroup,
   faLaptop,
   faCircleXmark,
-  faArrowLeft
+  faArrowLeft,
+  faCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -66,7 +67,8 @@ library.add(
   faLayerGroup,
   faLaptop,
   faCircleXmark,
-  faArrowLeft
+  faArrowLeft,
+  faCircle,
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
