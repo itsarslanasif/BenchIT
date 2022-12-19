@@ -23,27 +23,27 @@
     "file": "assets/fa-brands-400.b1d1c1b0.ttf",
     "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
   },
-  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
-    "file": "assets/fa-v4compatibility.2ddb3b41.ttf",
-    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
-  },
   "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
     "file": "assets/fa-solid-900.e4f6a7e9.ttf",
     "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
+    "file": "assets/fa-v4compatibility.2ddb3b41.ttf",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
   },
   "assets/images/codeblock.png": {
     "file": "assets/codeblock.47f62098.png",
     "src": "assets/images/codeblock.png"
   },
   "entrypoints/front.js": {
-    "file": "assets/front.ee47f778.js",
+    "file": "assets/front.f340cd9b.js",
     "src": "entrypoints/front.js",
     "isEntry": true,
     "imports": [
       "assets/constants.js"
     ],
     "css": [
-      "assets/front.722c9ebf.css",
+      "assets/front.78e7eb39.css",
       "assets/application.0f67292c.css"
     ],
     "assets": [
@@ -69,7 +69,7 @@
     "isEntry": true
   },
   "entrypoints/front.css": {
-    "file": "assets/front.722c9ebf.css",
+    "file": "assets/front.78e7eb39.css",
     "src": "entrypoints/front.css"
   },
   "assets/images/loading.gif": {

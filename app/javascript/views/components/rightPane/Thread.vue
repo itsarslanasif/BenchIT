@@ -23,7 +23,7 @@
   <div class="relative mx-1">
       <editor
         v-model="newMessage"
-        api-key="no-api-key"
+        api-key="v69g5pnxcpt0m2kmjntucft1sek0y2g7qw17n2scwu0pi76w"
         :init="{
           menubar: false,
           statusbar: false,
