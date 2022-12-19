@@ -2,7 +2,7 @@ class ConversationMessage < ApplicationRecord
   after_commit :broadcast_message
 
   belongs_to :bench_conversation
-  belongs_to :user, foreign_key: :sender_id, inverse_of: :conversation_messages
+  belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
   belongs_to :parent_message, class_name: 'ConversationMessage', optional: true
 
   has_many_attached :message_attachments, dependent: :purge_later

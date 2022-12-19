@@ -15,10 +15,14 @@ class Profile < ApplicationRecord
   belongs_to :workspace
   has_one_attached :profile_image, dependent: :destroy
 
+  has_many :saved_items
+  has_many :channel_participants, dependent: :destroy
+  has_many :bench_channels, through: :channel_participants
+  has_many :conversation_messages, dependent: :destroy, foreign_key: :sender_id, inverse_of: :profile
+  has_many :bench_conversations, as: :conversationable, dependent: :destroy, foreign_key: :sender_id, inverse_of: :profile
+
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
-
-  has_many :saved_items
 
   enum role: {
     primary_owner: 0,

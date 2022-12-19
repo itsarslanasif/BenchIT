@@ -1,5 +1,5 @@
 class BenchChannel < ApplicationRecord
-  belongs_to :user, foreign_key: :creator_id, inverse_of: :bench_channels
+  belongs_to :creator, class_name: 'Profile'
   belongs_to :workspace
   has_many :channel_participants, dependent: :destroy
   has_many :users, through: :channel_participants
