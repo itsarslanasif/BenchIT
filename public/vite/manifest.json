@@ -1,0 +1,83 @@
+{
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2": {
+    "file": "assets/fa-regular-400.5da313b0.woff2",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.woff2"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2": {
+    "file": "assets/fa-brands-400.c61287c2.woff2",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.woff2"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2": {
+    "file": "assets/fa-solid-900.8f06540f.woff2",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.woff2"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2": {
+    "file": "assets/fa-v4compatibility.f46715c9.woff2",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.woff2"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf": {
+    "file": "assets/fa-regular-400.d7b19fe2.ttf",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-regular-400.ttf"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf": {
+    "file": "assets/fa-brands-400.b1d1c1b0.ttf",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-brands-400.ttf"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf": {
+    "file": "assets/fa-v4compatibility.2ddb3b41.ttf",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-v4compatibility.ttf"
+  },
+  "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf": {
+    "file": "assets/fa-solid-900.e4f6a7e9.ttf",
+    "src": "../../node_modules/@fortawesome/fontawesome-free/webfonts/fa-solid-900.ttf"
+  },
+  "assets/images/codeblock.png": {
+    "file": "assets/codeblock.47f62098.png",
+    "src": "assets/images/codeblock.png"
+  },
+  "entrypoints/front.js": {
+    "file": "assets/front.ee47f778.js",
+    "src": "entrypoints/front.js",
+    "isEntry": true,
+    "imports": [
+      "assets/constants.js"
+    ],
+    "css": [
+      "assets/front.722c9ebf.css",
+      "assets/application.0f67292c.css"
+    ],
+    "assets": [
+      "assets/codeblock.47f62098.png",
+      "assets/fa-brands-400.c61287c2.woff2",
+      "assets/fa-brands-400.b1d1c1b0.ttf",
+      "assets/fa-regular-400.5da313b0.woff2",
+      "assets/fa-regular-400.d7b19fe2.ttf",
+      "assets/fa-solid-900.8f06540f.woff2",
+      "assets/fa-solid-900.e4f6a7e9.ttf",
+      "assets/fa-v4compatibility.f46715c9.woff2",
+      "assets/fa-v4compatibility.2ddb3b41.ttf"
+    ]
+  },
+  "assets/constants.js": {
+    "file": "assets/constants.98f6d976.js",
+    "src": "assets/constants.js",
+    "isEntry": true
+  },
+  "entrypoints/application.scss": {
+    "file": "assets/application.0f67292c.css",
+    "src": "entrypoints/application.scss",
+    "isEntry": true
+  },
+  "entrypoints/front.css": {
+    "file": "assets/front.722c9ebf.css",
+    "src": "entrypoints/front.css"
+  },
+  "assets/images/loading.gif": {
+    "file": "assets/loading.82076465.gif",
+    "src": "assets/images/loading.gif"
+  },
+  "assets/images/user.png": {
+    "file": "assets/user.8cb40652.png",
+    "src": "assets/images/user.png"
+  }
+}

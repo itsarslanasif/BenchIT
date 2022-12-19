@@ -23,7 +23,7 @@
   <div class="relative mx-1">
       <editor
         v-model="newMessage"
-        api-key="{{ import.meta.env.VITE_EDITOR_API }}"
+        api-key="no-api-key"
         :init="{
           menubar: false,
           statusbar: false,
