@@ -4,18 +4,13 @@ class Api::V1::ReactionsController < Api::ApiController
   def create
     @reaction = current_user.reactions.new(reaction_params)
 
-    if @reaction.save
-      render json: 'Reaction added.'
-    else
-      render json: @reaction.errors
-    end
+    render json: @reaction.save ?  @reaction : @reaction.errors
   end
 
   def destroy
-    if @reaction.destroy
-      render json: 'Reaction removed.'
-    else
-      render json: { json: @reaction.errors }
+
+    if @reaction.user == current_user
+      render json: @reaction.destroy ? { json: 'Reaction removed' } : @reaction.errors
     end
   end
 
