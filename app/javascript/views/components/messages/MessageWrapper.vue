@@ -230,11 +230,12 @@ export default {
       });
     },
 
-    emojiClickListener(emoji) {
+    async emojiClickListener(emoji) {
       if (emoji.user_id == this.currentUserStore.currentUser.id) {
-        remove_reaction(emoji.id);
-        this.allReactions = this.allReactions.filter(function (reaction) {
-          return reaction.id != emoji.id;
+        await remove_reaction(emoji.id).then(() => {
+          this.allReactions = this.allReactions.filter(function (reaction) {
+            return reaction.id != emoji.id;
+          });
         });
       }
     },
