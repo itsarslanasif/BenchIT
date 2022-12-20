@@ -219,6 +219,7 @@ en:
         name_pronounce_desc: 'This could be a phonetic pronunciation, or an example of something
               your name sounds like.'
         time_zone: 'Time zone'
+        time_zone_default_option: 'Please choose the option'
         time_zone_desc: 'Your current time zone. Used to send summary and notification
               emails, for times in your activity feeds, and for reminders.'
 

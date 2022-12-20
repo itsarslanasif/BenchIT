@@ -23,6 +23,9 @@
         <Thread />
       </pane>
     </splitpanes>
+    <div class="bg-white">
+      <EditProfile />
+    </div>
   </div>
 </template>
 
@@ -40,12 +43,14 @@ import { useThreadStore } from '../../stores/useThreadStore';
 import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
+import EditProfile from '../components/profile/EditProfile.vue'
 export default {
   components: {
     Splitpanes,
     Pane,
     Chat,
     WorkspaceDropdown,
+    EditProfile,
     LeftPane,
     UserInviteFormVue,
     Thread,

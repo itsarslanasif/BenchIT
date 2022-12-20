@@ -12,7 +12,7 @@
               type="text"
               :placeholder="$t('edit_profile.full_name')"
               class="input focus:border-primary"
-              :value="currentUser.name"
+              v-model="fullName"
             />
           </div>
           <div class="sections">
@@ -21,11 +21,7 @@
               type="text"
               :placeholder="$t('edit_profile.display_name')"
               class="input"
-              :value="
-                currentUser.display_name
-                  ? currentUser.display_name
-                  : currentUser.name
-              "
+              v-model="displayName"
             />
             <p class="text-xs">
               {{ $t('edit_profile.display_name_desc') }}
@@ -37,8 +33,12 @@
               type="text"
               :placeholder="$t('edit_profile.title')"
               class="input"
+              v-model="title"
             />
             <p class="text-xs">{{ $t('edit_profile.title_desc') }}</p>
+          </div>
+          <div class="sections">
+            
           </div>
           <div class="sections">
             <label>{{ $t('edit_profile.name_pronounce') }}</label>
@@ -46,6 +46,7 @@
               type="text"
               :placeholder="$t('edit_profile.name_pronounce_placeholder')"
               class="input"
+              v-model="namePronounciation"
             />
             <p class="text-xs">
               {{ $t('edit_profile.name_pronounce_desc') }}
@@ -53,7 +54,11 @@
           </div>
           <div class="sections">
             <label>{{ $t('edit_profile.time_zone') }}</label>
-            <input type="text" placeholder="hello" class="input" />
+            <select class="input" v-model="timezone">
+              <option v-for="tz in timezones" :key="tz.text" class="option">
+                {{ tz.text }}
+              </option>
+            </select>
             <p class="text-xs">
               {{ $t('edit_profile.time_zone_desc') }}
             </p>
@@ -63,13 +68,16 @@
           <div class="flex w-48 h-48 mt-8">
             <img
               :src="
-                readerFile.length
+                currentUser.imageURL
+                  ? currentUser.imageURL
+                  : readerFile.length
                   ? readerFile[readerFile.length - 1]
                   : '../../../assets/images/user.png'
               "
               class="rounded-md object-cover"
             />
           </div>
+          <button @click="recording">Record</button>
           <label for="uploadFile" class="button cursor-pointer">{{
             $t('actions.upload_photo')
           }}</label>
@@ -77,6 +85,7 @@
             type="file"
             id="uploadFile"
             @change="uploadFile"
+            accept="image/*"
             ref="file"
             class="hidden"
           />
@@ -91,7 +100,10 @@
       <div class="float-right mb-2 mr-3">
         <div class="flex gap-2">
           <button class="button">{{ $t('actions.cancel') }}</button>
-          <button class="button bg-success text-white border-none">
+          <button
+            class="button bg-success text-white border-none"
+            @click="saveChanges"
+          >
             {{ $t('actions.save_changes') }}
           </button>
         </div>
@@ -102,11 +114,24 @@
 <script>
 import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
+import { timezones } from '../../../assets/timezone';
 export default {
   data() {
     return {
+      timezones: timezones,
+      recordingFlag: false,
       file: null,
       readerFile: [],
+      title: this.currentUser.title ? this.currentUser.title : '',
+      timezone: this.currentUser.timezone ? this.currentUser.timezone : '',
+      namePronounciation: this.currentUser.namePronounciation
+        ? this.currentUser.namePronounciation
+        : '',
+      displayName: this.currentUser.displayName
+        ? this.currentUser.displayName
+        : this.currentUser.name,
+      fullName: this.currentUser.name,
+      recorder: null,
     };
   },
   setup() {
@@ -119,25 +144,24 @@ export default {
   methods: {
     uploadFile() {
       this.file = this.$refs.file.files[0];
-      const reader = new FileReader();
-      reader.readAsDataURL(this.file);
-      reader.onload = () => this.readerFile.push(reader.result);
+      if (this.file.type.slice(0, 6) === 'image/') {
+        const reader = new FileReader();
+        reader.readAsDataURL(this.file);
+        reader.onload = () => this.readerFile.push(reader.result);
+      }
     },
     removeFile() {
-      this.readerFile = []
+      this.readerFile = [];
     },
     saveChanges() {
-      // let formData = new FormData();
-      // formData.append('full_name', this.currentUser.id);
-      // formData.append('display_name', this.message.replace(/<[^>]+>/g, ''));
-      // formData.append('title', false);
-      // formData.append('name_pronounciation', null);
-      // formData.append('time_zone', this.conversation_type);
-      // formData.append('conversation_id', this.id);
-      // this.files.forEach(file => {
-      //   formData.append('message_attachments[]', file);
-      // });
-    }
+      let formData = new FormData();
+      formData.append('full_name', this.fullName);
+      formData.append('display_name', this.displayName);
+      formData.append('title', this.title);
+      formData.append('name_pronounciation', this.namePronounciation);
+      formData.append('time_zone', this.timezone);
+      formData.append('profile_photo', this.file);
+    },
   },
 };
 </script>
