@@ -194,13 +194,6 @@ export default {
 
   updated() {
     this.Cable.on('chat', data => {
-      if (this.conversation_type === 'channels') {
-        data.message.channel_name = this.messages[0].channel_name;
-      } else if (this.conversation_type === 'groups') {
-        data.message.group_id = this.messages[0].group_id;
-      } else {
-        data.message.receiver_name = this.messages[0].receiver_name;
-      }
       const findMessage = this.messages.find(m => m.id === data.message.id);
 
       if (findMessage == undefined) {
