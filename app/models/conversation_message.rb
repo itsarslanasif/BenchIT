@@ -28,7 +28,7 @@ class ConversationMessage < ApplicationRecord
     }
     message[:attachments] = attach_message_attachments if message_attachments.present?
     channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
-    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('User')
+    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('Profile')
 
     ActionCable.server.broadcast(channel_key, { message: message })
   end
