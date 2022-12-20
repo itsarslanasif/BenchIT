@@ -1,7 +1,7 @@
 class Api::V1::ProfilesController < Api::ApiController
   before_action :set_workspace, only: %i[index create show]
   before_action :check_profile_already_exists, only: %i[create]
-  before_action :if_member_of_workspace, only: %i[show]
+  before_action :check_user_member_of_workspace, only: %i[show]
 
   def index
     @profiles = if params[:query].presence
@@ -45,7 +45,7 @@ class Api::V1::ProfilesController < Api::ApiController
     end
   end
 
-  def if_member_of_workspace
+  def check_user_member_of_workspace
     return if Current.workspace.id == params[:workspace_id].to_i
 
     render json: { message: 'You are not member of specified  workspace.' }, status: :unprocessable_entity
