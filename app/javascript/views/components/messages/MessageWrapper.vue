@@ -16,25 +16,21 @@
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
     <div
-      class="flex p-1 relative hover:bg-transparent"
+      class="flex p-1 px-4 relative hover:bg-transparent"
       :class="{
         messageContentPinned: pinnedConversationStore.isPinned(currMessage),
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <div class="min-w-fit self-start ml-1">
-        <n-avatar
-          v-show="!isSameUser || !isSameDayMessage"
-          class="mr-1"
-          size="large"
-          src="../../../assets/images/user.png"
-        />
-      </div>
+      <template v-if="!isSameUser || !isSameDayMessage">
+        <user-profile-modal />
+      </template>
       <span class="message">
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
+              @click="showUserProfile"
               v-show="!isSameUser || !isSameDayMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
@@ -63,7 +59,7 @@
           </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
-          <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
+          <span class="bg-black-300 p-1 mr-1 rounded" >{{ emoji.i }}</span>
         </template>
         <div
           v-if="currMessage?.is_threaded"
@@ -122,7 +118,7 @@
 
 <script>
 import moment from 'moment';
-import { NAvatar } from 'naive-ui';
+import { NAvatar, NCard, NDivider} from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -131,6 +127,8 @@ import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import UserProfileModal from '../../widgets/UserProfileModal.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -138,12 +136,14 @@ export default {
     const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
-    return { threadStore, pinnedConversationStore, savedItemsStore };
+    const rightPaneStore = useRightPaneStore();
+    return { threadStore, pinnedConversationStore, savedItemsStore, rightPaneStore };
   },
   components: {
-    NAvatar,
+    NAvatar, NCard, NDivider,
     EmojiPicker,
     EmojiModalButton,
+    UserProfileModal
   },
   props: {
     currMessage: {
@@ -214,7 +214,10 @@ export default {
     },
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
-      this.threadStore.toggleShow(true);
+      this.rightPaneStore.toggleThreadShow(true);
+    },
+    showUserProfile(){
+      this.rightPaneStore.toggleUserProfileShow(true);
     },
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;

@@ -62,7 +62,7 @@
                 },
               }"
             />
-            <div v-if="readerFile.length" class="flex mt-2">
+            <div v-if="readerFile.length" class="flex">
               <div
                 v-for="file in readerFile"
                 :key="file"
@@ -82,7 +82,7 @@
             <div class="w-1/12">
               <button
                 @click="sendMessage"
-                class="px-4 py-1 bg-success my-4 rounded-md text-white hover:bg-successHover"
+                class="px-4 py-1 bg-success my-2 float-right rounded-md text-white hover:bg-successHover"
               >
                 {{ $t('actions.send') }}
               </button>

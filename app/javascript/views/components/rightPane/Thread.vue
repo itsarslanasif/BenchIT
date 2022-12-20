@@ -1,9 +1,9 @@
 <template>
-  <thread-header
-    :threadName="threadStore.message.receiver_name || threadStore.message.channel_name"
+  <right-pane-header
+    :paneTitle="threadStore.message.receiver_name || threadStore.message.channel_name"
     :messageId="threadStore.message.id"
   />
-  <div class="overflow-auto chatBody">
+  <div class="overflow-auto threadBody">
     <div class="pt-8">
       <MessageWrapper :curr-message="threadStore.message" />
     </div>
@@ -70,7 +70,7 @@ import { NDivider } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
-import ThreadHeader from './ThreadHeader.vue';
+import RightPaneHeader from './RightPaneHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
 import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
@@ -81,7 +81,7 @@ export default {
     MessageWrapper,
     NDivider,
     Editor,
-    ThreadHeader,
+    RightPaneHeader,
   },
   setup() {
     const threadStore = useThreadStore();
@@ -124,7 +124,7 @@ export default {
 };
 </script>
 <style scoped>
-.chatBody {
-  max-height: 64.5vh;
+.threadBody {
+  max-height: 67vh;
 }
 </style>

@@ -3,7 +3,7 @@
     <div class="custom-border px-1 h-12 items-center flex justify-between">
       <div
         @click="OpenChannelDetailModal(true)"
-        class="flex px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
+        class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
         <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
         <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>

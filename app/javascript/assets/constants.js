@@ -78,5 +78,9 @@ export const CONSTANTS = {
   VIEW_CHANNEL_DETAILS: 'View channel details',
   DRAFTS: 'Drafts',
   SCHEDULED: 'Scheduled',
-  SENT: 'Sent'
+  SENT: 'Sent',
+  HEADER: 'Header',
+  BODY: 'Body',
+  FOOTER: 'Footer',
+
 };

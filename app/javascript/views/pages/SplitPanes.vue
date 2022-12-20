@@ -4,23 +4,24 @@
       <SearchBar />
     </div>
     <splitpanes>
-      <pane max-size="25" min-size="11">
+      <pane max-size="35" min-size="15">
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-      <pane max-size="70" min-size="75" class="bg-white">
+      <pane max-size="150" min-size="100" class="bg-white">
         <router-view :key="$route.fullPath" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
       </div>
       <pane
-        v-if="threadStore.showThread"
-        max-size="60"
-        min-size="40"
+        v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+        max-size="80"
+        min-size="60"
         class="bg-white"
       >
-        <Thread />
+        <Thread v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile" />
+        <UserProfile v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile" />
       </pane>
     </splitpanes>
   </div>
@@ -36,10 +37,14 @@ import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
-import { useThreadStore } from '../../stores/useThreadStore';
 import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
+import { useRightPaneStore } from '../../stores/useRightPaneStore';
+import UserProfile from '../components/rightPane/UserProfile.vue';
+
+
+
 export default {
   components: {
     Splitpanes,
@@ -51,11 +56,12 @@ export default {
     Thread,
     searchDmscreen,
     SearchBar,
+    UserProfile
   },
   setup() {
     const screenStore = useSelectedScreenStore();
-    const threadStore = useThreadStore();
-    return { screenStore, threadStore };
+    const rightPaneStore = useRightPaneStore();
+    return { screenStore, rightPaneStore };
   },
   methods: {
     closeForm() {
