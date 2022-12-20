@@ -1,6 +1,7 @@
 class Api::V1::ProfilesController < Api::ApiController
-  before_action :set_workspace, only: %i[index create]
+  before_action :set_workspace, only: %i[index create show]
   before_action :check_profile_already_exists, only: %i[create]
+  before_action :check_user_member_of_workspace, only: %i[show]
 
   def index
     @profiles = if params[:query].presence
@@ -14,6 +15,10 @@ class Api::V1::ProfilesController < Api::ApiController
                 end
     @profiles = @profiles.reorder(username: :asc) if params[:sort] == 'asc'
     @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
+  end
+
+  def show
+    @profile = @workspace.profiles.find(params[:id])
   end
 
   def create
@@ -38,6 +43,12 @@ class Api::V1::ProfilesController < Api::ApiController
     params.require(:profile).permit(:username, :description).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
+  end
+
+  def check_user_member_of_workspace
+    return if Current.workspace.id == params[:workspace_id].to_i
+
+    render json: { message: 'You are not member of specified  workspace.' }, status: :unprocessable_entity
   end
 
   def check_profile_already_exists
