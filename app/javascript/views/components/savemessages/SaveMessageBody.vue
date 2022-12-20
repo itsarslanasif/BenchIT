@@ -43,7 +43,6 @@ export default {
   async mounted() {
     this.messages = await getSaveMessages();
     this.savedItemsStore.savedItems = this.messages;
-    console.log(this.messages);
   },
 };
 </script>

@@ -13,4 +13,3 @@ json.array! @saved_items do |saved_item|
     end
   end
 end
-
