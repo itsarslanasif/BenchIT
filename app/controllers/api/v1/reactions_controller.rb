@@ -4,11 +4,19 @@ class Api::V1::ReactionsController < Api::ApiController
   def create
     @reaction = current_user.reactions.new(reaction_params)
 
-    render json: @reaction.save ? @reaction : @reaction.errors
+    if @reaction.save
+      render json: @reaction, status: :ok
+    else
+      render json: @reaction.errors, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    render json: @reaction.destroy ? { json: 'Reaction removed' } : @reaction.errors
+    if @reaction.destroy
+      render json: 'reaction removed', status: :ok
+    else
+      render json: @reaction.errors, status: :unprocessable_entity
+    end
   end
 
   private
