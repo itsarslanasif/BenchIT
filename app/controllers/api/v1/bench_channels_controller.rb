@@ -13,7 +13,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
-    @bench_channel.creator_id = Current.profile.id
 
     if @bench_channel.save
       create_first_bench_channel_participant
@@ -48,11 +47,15 @@ class Api::V1::BenchChannelsController < Api::ApiController
   private
 
   def bench_channel_params
-    params.require(:bench_channel).permit(:name, :description, :is_private)
+    params.require(:bench_channel).permit(:name, :description, :is_private).tap do |param|
+      param[:creator_id] = Current.profile.id
+      param[:workspace_id] = Current.workspace.id
+    end
   end
 
   def create_first_bench_channel_participant
     @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
+    BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: @bench_channel.id)
   rescue StandardError
     @bench_channel.destroy
 
