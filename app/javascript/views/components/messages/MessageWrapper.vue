@@ -71,7 +71,11 @@
           </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
-          <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.emoji }}</span>
+          <span
+            @click="emojiClickListener(emoji)"
+            class="bg-black-300 p-1 mr-1 rounded"
+            >{{ emoji.emoji }}</span
+          >
         </template>
         <div
           v-if="currMessage?.is_threaded"
@@ -139,7 +143,9 @@ import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
-import { addReaction } from '../../../api/reactions/addReaction.js';
+import { add_reaction } from '../../../api/reactions/reaction.js';
+import { remove_reaction } from '../../../api/reactions/reaction.js';
+import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
 
 export default {
   name: 'MessageWrapper',
@@ -147,7 +153,13 @@ export default {
     const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
-    return { threadStore, pinnedConversationStore, savedItemsStore };
+    const currentUserStore = useCurrentUserStore();
+    return {
+      threadStore,
+      pinnedConversationStore,
+      savedItemsStore,
+      currentUserStore,
+    };
   },
   components: {
     NAvatar,
@@ -213,8 +225,18 @@ export default {
   },
   methods: {
     async addReaction(emoji) {
-      this.allReactions.push({ emoji: emoji.i });
-      await addReaction(this.currMessage.id, emoji.i);
+      await add_reaction(this.currMessage.id, emoji.i).then(response => {
+        return this.allReactions.push(response.data);
+      });
+    },
+
+    emojiClickListener(emoji) {
+      if (emoji.user_id == this.currentUserStore.currentUser.id) {
+        remove_reaction(emoji.id);
+        this.allReactions = this.allReactions.filter(function (reaction) {
+          return reaction.id != emoji.id;
+        });
+      }
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
