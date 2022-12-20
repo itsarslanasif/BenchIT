@@ -8,9 +8,7 @@ class Api::V1::ReactionsController < Api::ApiController
   end
 
   def destroy
-    if @reaction.user == current_user
-      render json: @reaction.destroy ? { json: 'Reaction removed' } : @reaction.errors
-    end
+    render json: @reaction.destroy ? { json: 'Reaction removed' } : @reaction.errors
   end
 
   private
