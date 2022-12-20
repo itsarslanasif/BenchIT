@@ -6,16 +6,16 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     @profiles = if params[:query].presence
                   Profile.search(
                     params[:query],
-                    where: { user_id: @channel.channel_participants.pluck(:user_id) },
+                    where: { id: @channel.channel_participants.pluck(:profile_id) },
                     match: :word_start, misspellings: false
                   )
                 else
-                  Profile.where(user_id: @channel.channel_participants.select(:user_id)).with_attached_profile_image
+                  Profile.where(id: @channel.channel_participants.select(:profile_id)).with_attached_profile_image
                 end
   end
 
   def create
-    params[:user_ids].map { |user_id| ChannelParticipant.create(bench_channel_id: @channel.id, user_id: user_id, permission: true) }
+    params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
     render status: :created, json: { members: @users_joined }
   end
 
@@ -26,9 +26,9 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_channel_participants
-    @channel_members = ChannelParticipant.where(user_id: params[:user_ids], bench_channel_id: @channel.id).ids
+    @channel_members = ChannelParticipant.where(profile_id: params[:profile_ids], bench_channel_id: @channel.id).ids
     return render json: { error: 'One or Many Users already participant of this channel', status: :unprocessable_entity } if @channel_members.present?
 
-    @users_joined = User.where(id: params[:user_ids]).pluck(:name)
+    @users_joined = Profile.where(id: params[:profile_ids]).pluck(:username)
   end
 end
