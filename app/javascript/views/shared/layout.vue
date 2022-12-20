@@ -1,7 +1,7 @@
 <template>
   <div class="max-h-full">
     <router-view class="relative"/>
-    <!-- <EditProfileVue /> -->
+    <EditProfileVue />
   </div>
 </template>
 

@@ -1,8 +1,6 @@
 <template>
   <div class="w-full h-full p-3">
-    <div
-      class="w-2/5 gap-5 p-3 justify-center mx-auto text-base rounded-lg"
-    >
+    <div class="w-2/5 gap-5 p-3 justify-center mx-auto text-base rounded-lg">
       <div class="p-2 font-bold text-xl">
         <label>{{ $t('edit_profile.heading') }}</label>
       </div>
@@ -23,7 +21,11 @@
               type="text"
               :placeholder="$t('edit_profile.display_name')"
               class="input"
-              :value="currentUser.display_name ? currentUser.display_name : currentUser.name"
+              :value="
+                currentUser.display_name
+                  ? currentUser.display_name
+                  : currentUser.name
+              "
             />
             <p class="text-xs">
               {{ $t('edit_profile.display_name_desc') }}
@@ -59,10 +61,29 @@
         </div>
         <div class="flex flex-col gap-2">
           <div class="flex w-48 h-48 mt-8">
-            <img src="../../../assets/images/user.png" class="rounded-md" />
+            <img
+              :src="
+                readerFile.length
+                  ? readerFile[readerFile.length - 1]
+                  : '../../../assets/images/user.png'
+              "
+              class="rounded-md object-cover"
+            />
           </div>
-          <button class="button">{{ $t('actions.upload_photo') }}</button>
-          <button class="button border-none text-info hover:underline">
+          <label for="uploadFile" class="button cursor-pointer">{{
+            $t('actions.upload_photo')
+          }}</label>
+          <input
+            type="file"
+            id="uploadFile"
+            @change="uploadFile"
+            ref="file"
+            class="hidden"
+          />
+          <button
+            class="button border-none text-info hover:underline"
+            @click="removeFile"
+          >
             {{ $t('actions.remove_photo') }}
           </button>
         </div>
@@ -82,13 +103,42 @@
 import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
 export default {
-  setup() {
-    const CurrentUserStore = useCurrentUserStore()
-    const { currentUser } = storeToRefs(CurrentUserStore)
+  data() {
     return {
-      currentUser
+      file: null,
+      readerFile: [],
+    };
+  },
+  setup() {
+    const CurrentUserStore = useCurrentUserStore();
+    const { currentUser } = storeToRefs(CurrentUserStore);
+    return {
+      currentUser,
+    };
+  },
+  methods: {
+    uploadFile() {
+      this.file = this.$refs.file.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(this.file);
+      reader.onload = () => this.readerFile.push(reader.result);
+    },
+    removeFile() {
+      this.readerFile = []
+    },
+    saveChanges() {
+      // let formData = new FormData();
+      // formData.append('full_name', this.currentUser.id);
+      // formData.append('display_name', this.message.replace(/<[^>]+>/g, ''));
+      // formData.append('title', false);
+      // formData.append('name_pronounciation', null);
+      // formData.append('time_zone', this.conversation_type);
+      // formData.append('conversation_id', this.id);
+      // this.files.forEach(file => {
+      //   formData.append('message_attachments[]', file);
+      // });
     }
-  }
+  },
 };
 </script>
 <style>
@@ -101,6 +151,6 @@ export default {
 }
 
 .button {
-  @apply py-1 px-3 rounded border;
+  @apply py-1 px-3 rounded border text-center;
 }
 </style>
