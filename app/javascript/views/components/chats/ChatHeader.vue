@@ -8,13 +8,13 @@
   <div v-else-if="chat && conversation_type === 'users'">
     <UserChatInfo :chat="chat" />
   </div>
-  <div class="flex items-center h-8 justify-between px-1 mt-1 shadow-md custom-border">
-    <div class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer">
+  <div
+    class="flex items-center h-8 justify-between px-1 mt-1 shadow-md custom-border"
+  >
+    <div
+      class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer"
+    >
       <PinnedConversation />
-      <BookmarkPopUp @clicked="onClickChild" />
-      <p class="bookmarkText" v-for="bookmark in bookmarks" :key="bookmark.id">
-        <BookmarkShow :data="bookmark" @clicked="onClickChild" />
-      </p>
     </div>
   </div>
 </template>
@@ -59,7 +59,9 @@ export default {
   },
   mounted() {
     axios
-      .get(`v1/bench_channels/${1}/bookmarks`, {headers: { Authorization: sessionStorage.getItem('token') },})
+      .get(`v1/bench_channels/${1}/bookmarks`, {
+        headers: { Authorization: sessionStorage.getItem('token') },
+      })
       .then(response => {
         this.bookmarks = response.data.bookmarks;
         this.loading = false;
@@ -100,15 +102,17 @@ export default {
       this.loading = true;
       this.bookmarks.push({ name: value.name, url: value.url });
       axios
-        .post(`v1/bench_channels/${1}/bookmarks`,
-        {
-          headers: { Authorization: sessionStorage.getItem('token') },
-        },
-        {
-          name: value.name,
-          bookmark_URL: value.url,
-          user_id: this.user_id,
-        })
+        .post(
+          `v1/bench_channels/${1}/bookmarks`,
+          {
+            headers: { Authorization: sessionStorage.getItem('token') },
+          },
+          {
+            name: value.name,
+            bookmark_URL: value.url,
+            user_id: this.user_id,
+          }
+        )
         .then(response => {
           this.members = response.data.profiles;
           this.loading = false;

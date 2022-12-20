@@ -222,14 +222,14 @@ export default {
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       if (this.currMessage.isSaved) {
-        save(this.message.id, {
-          data: this.message,
+        save(this.currMessage.id, {
+          data: this.currMessage,
         }).then(() => {
-          this.savedItemsStore.addSavedItem(this.message);
+          this.savedItemsStore.addSavedItem(this.currMessage);
         });
       } else {
-        unsave(this.message.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.message);
+        unsave(this.currMessage.id).then(() => {
+          this.savedItemsStore.removeSavedItem(this.currMessage);
         });
       }
     },

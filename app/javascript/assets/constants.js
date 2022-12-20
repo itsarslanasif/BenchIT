@@ -83,4 +83,16 @@ export const CONSTANTS = {
   BODY: 'Body',
   FOOTER: 'Footer',
 
+  PAUSE_NOTIFICATIONS: 'Pause Notifications',
+  GROUP_PAUSE_NOTIFICATIONS: 'Pause notifications...',
+  FOR_30_MINUTES: 'For 30 minutes',
+  FOR_1_HOUR: 'For 1 hour',
+  FOR_2_HOURS: 'For 2 hours',
+  UNTIL_TOMORROW: 'Until tomorrow',
+  SET_A_NOTIFICATION_SCHEDULE: 'Set a notification schedule',
+  PROFILE: 'Profile',
+  PREFERENCES: 'Preferences',
+  DOWNLOADS: 'Downloads',
+  SIGN_OUT_OF_DEVSINC: 'Sign out of Devsinc',
+  SET_STATUS: 'Set status'
 };

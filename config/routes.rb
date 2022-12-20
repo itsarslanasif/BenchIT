@@ -27,11 +27,11 @@ Rails.application.routes.draw do
           collection do
             get :send_message
             get :index_saved_messages
+            get :recent_files
           end
           member do
             post :save_message
             delete :unsave_message
-            get :recent_files
           end
         end
         resources :favourites, only: %i[create destroy]
@@ -49,11 +49,11 @@ Rails.application.routes.draw do
             post :invite
           end
 
-          resources :profiles, only: %i[index create]
+          resources :profiles, only: %i[index create show]
         end
 
         resources :reactions, only: %i[create destroy]
-        resources :channel_participants, only: %i[create]
+        resources :channel_participants, only: %i[create index]
         resources :draft_messages, only: %i[index create update destroy]
       end
     end
