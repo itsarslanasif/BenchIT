@@ -1,5 +1,6 @@
 class Group < ApplicationRecord
   has_one :bench_conversation, as: :conversationable, dependent: :destroy
+  has_one :favourite, as: :favourable, dependent: :destroy
 
   validates :members, presence: true, length: { minimum: 2 }
   validates :members, inclusion: { in: Profile.ids }

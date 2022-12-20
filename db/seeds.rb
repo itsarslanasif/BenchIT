@@ -50,7 +50,7 @@ ConversationMessage.create(content: 'Hi from general', is_threaded: false, bench
 Favourite.create(profile_id: 1, favourable_type: 'Profile', favourable_id: 4)
 Favourite.create(profile_id: 1, favourable_type: 'Group', favourable_id: 1)
 Favourite.create(profile_id: 1, favourable_type: 'BenchChannel', favourable_id: 1)
-ConversationMessage.create(content: '1st reply', is_threaded: false, bench_conversation_id: 1, sender_id: 1)
+ConversationMessage.create(content: '1st reply', is_threaded: false, bench_conversation_id: 1, sender_id: 1, parent_message_id: 1)
 workspace = Workspace.create!(company_name: 'Devsinc',
   workspace_type: :work,
   bench_it_url: 'https://www.devsinc.com',
