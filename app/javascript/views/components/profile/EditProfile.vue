@@ -37,9 +37,7 @@
             />
             <p class="text-xs">{{ $t('edit_profile.title_desc') }}</p>
           </div>
-          <div class="sections">
-            
-          </div>
+          <div class="sections"></div>
           <div class="sections">
             <label>{{ $t('edit_profile.name_pronounce') }}</label>
             <input
@@ -78,6 +76,7 @@
             />
           </div>
           <button @click="recording">Record</button>
+          <audio :src="recordedVoice"></audio>
           <label for="uploadFile" class="button cursor-pointer">{{
             $t('actions.upload_photo')
           }}</label>
@@ -120,8 +119,12 @@ export default {
     return {
       timezones: timezones,
       recordingFlag: false,
+      audioChunks: [],
+      audioRecorder: null,
+      audioBlob: null,
       file: null,
       readerFile: [],
+      recordedVoice: {},
       title: this.currentUser.title ? this.currentUser.title : '',
       timezone: this.currentUser.timezone ? this.currentUser.timezone : '',
       namePronounciation: this.currentUser.namePronounciation
@@ -131,14 +134,18 @@ export default {
         ? this.currentUser.displayName
         : this.currentUser.name,
       fullName: this.currentUser.name,
-      recorder: null,
     };
   },
+
   setup() {
     const CurrentUserStore = useCurrentUserStore();
     const { currentUser } = storeToRefs(CurrentUserStore);
+    const constraints = { audio: true };
+    let chunks = [];
     return {
       currentUser,
+      constraints,
+      chunks,
     };
   },
   methods: {
@@ -161,6 +168,36 @@ export default {
       formData.append('name_pronounciation', this.namePronounciation);
       formData.append('time_zone', this.timezone);
       formData.append('profile_photo', this.file);
+    },
+    recording() {
+      this.recordingFlag = !this.recordingFlag;
+      if (this.recordingFlag) {
+        this.startRecording();
+      } else {
+        this.stopRecording();
+        this.playRecording()
+      }
+    },
+    startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
+        this.audioRecorder = new MediaRecorder(stream);
+        this.audioRecorder.start();
+        const audioChunks = [];
+        this.audioRecorder.addEventListener('dataavailable', event => {
+          this.audioChunks.push(event.data);
+        });
+        this.audioRecorder.addEventListener('stop', () => {
+          audioBlob = new Blob(audioChunks);
+        });
+      });
+    },
+    stopRecording() {
+      this.audioRecorder.stop();
+    },
+    playRecording() {
+      const audioUrl = window.URL.createObjectURL(this.audioBlob);
+      const audio = new Audio(audioUrl);
+      audio.play();
     },
   },
 };
