@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-transparent">
+  <div class="bg-white">
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
@@ -10,22 +10,21 @@
       </span>
     </div>
     <div
-      class="items-center flex p-1 relative hover:bg-transparent"
+      class="flex p-1 relative hover:bg-transparent items-start"
       :class="{
         messageContentpinned: pinnedConversationStore.isPinned(currMessage),
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <div class="min-w-fit ml-1">
+      <div class="m-1">
         <n-avatar
           v-show="!isSameUser || !isSameDayMessage"
-          class="mr-1 self-baseline"
           size="large"
           src="../../../assets/images/user.png"
         />
       </div>
-      <span class="message">
+      <div class="message">
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
@@ -45,6 +44,20 @@
             v-html="currMessage.message.content"
           />
         </div>
+        <div v-if="currMessage?.attachments" class="flex gap-2">
+          <div
+            v-for="attachment in currMessage?.attachments"
+            :key="attachment.id"
+            class="w-64"
+          >
+            <p>{{ attachment.attachment.filename }}</p>
+            <img
+              :src="attachment?.attachment_link"
+              class="rounded border border-black-300 rounded"
+              :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+            />
+          </div>
+        </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
           <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
         </template>
@@ -59,16 +72,33 @@
               :action="addReaction"
             />
           </template>
-          <EmojiModalButton icon="fa-solid fa-icons" :actionText="$t('emojiModalButton.find_another_reaction')"
-            :action="setEmojiModal" />
-          <EmojiModalButton icon="fa-solid fa-comment-dots" :actionText="$t('emojiModalButton.reply_in_thread')" />
-          <EmojiModalButton icon="fa-solid fa-share" :actionText="$t('emojiModalButton.share_message')" />
-          <EmojiModalButton icon="fa-solid fa-bookmark" :actionText="$t('actions.remove_from_saved_items')"
-            :action="unSave" />
-          <EmojiModalButton icon="fa-solid fa-ellipsis-vertical" :actionText="$t('emojiModalButton.more_actions')"
-            :action="setOptionsModal" :message="currMessage" :pinnedConversationStore="usePinnedConversation" />
+          <EmojiModalButton
+            icon="fa-solid fa-icons"
+            :actionText="$t('emojiModalButton.find_another_reaction')"
+            :action="setEmojiModal"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-comment-dots"
+            :actionText="$t('emojiModalButton.reply_in_thread')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-share"
+            :actionText="$t('emojiModalButton.share_message')"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-bookmark"
+            :actionText="$t('actions.remove_from_saved_items')"
+            :action="unSave"
+          />
+          <EmojiModalButton
+            icon="fa-solid fa-ellipsis-vertical"
+            :actionText="$t('emojiModalButton.more_actions')"
+            :action="setOptionsModal"
+            :message="currMessage"
+            :pinnedConversationStore="usePinnedConversation"
+          />
         </div>
-      </span>
+      </div>
     </div>
     <div v-if="openEmojiModal" class="absolute right-0 z-50">
       <EmojiPicker :addReaction="addReaction" />
@@ -82,7 +112,7 @@ import { NAvatar } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import { unsave } from '../../../api/save_messages/unsavemessage.js'
+import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
 import { CONSTANTS } from '../../../assets/constants';
 
@@ -151,10 +181,9 @@ export default {
     },
     unSave() {
       if (this.currMessage.isSaved) {
-        unsave(this.currMessage.message.id).
-          then(() => {
-            this.savedItemsStore.removeSavedItem(this.message);
-          })
+        unsave(this.currMessage.message.id).then(() => {
+          this.savedItemsStore.removeSavedItem(this.message);
+        });
       }
     },
   },
