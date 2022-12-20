@@ -7,7 +7,7 @@ class BenchChannel < ApplicationRecord
   has_one :favourite, as: :favourable, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
 
-  # before_validation :set_user_and_workspace
+  before_validation :set_user_and_workspace
 
   validates :name, uniqueness: true, presence: true, length: { minimum: 1, maximum: 80 }
   validates :description, length: { maximum: 500 }
@@ -25,7 +25,7 @@ class BenchChannel < ApplicationRecord
   private
 
   def set_user_and_workspace
-    self.creator_id = Current.user.id
-    self.workspace_id = Current.workspace.id
+    self.creator_id = Current.user.id if creator_id.nil?
+    self.workspace_id = Current.workspace.id if workspace_id.nil?
   end
 end
