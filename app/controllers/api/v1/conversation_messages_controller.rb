@@ -4,7 +4,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_saved_item, only: %i[unsave_message]
 
   def send_message
-    @messages = current_profile.conversation_messages.includes(:profile).order(created_at: :desc)
+    @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
   end
 
   def create
@@ -39,7 +39,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = current_profile.conversation_messages.with_attached_message_attachments
+    @messages = Current.profile.conversation_messages.with_attached_message_attachments
   end
 
   private

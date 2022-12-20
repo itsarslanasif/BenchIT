@@ -4,7 +4,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    render json: current_profile.bench_channels
+    render json: Current.profile.bench_channels
   end
 
   def show
@@ -13,7 +13,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
-    @bench_channel.creator_id = current_profile.id
+    @bench_channel.creator_id = Current.profile.id
 
     if @bench_channel.save
       create_first_bench_channel_participant
@@ -52,7 +52,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def create_first_bench_channel_participant
-    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: current_profile.id)
+    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
   rescue StandardError
     @bench_channel.destroy
 
@@ -62,7 +62,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def set_bench_channel
     @bench_channel = BenchChannel.find_by(id: params[:id])
     render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
-    render json: { json: 'user is not part of this channel', status: :not_found } unless current_profile.bench_channel_ids.include?(@bench_channel.id)
+    render json: { json: 'user is not part of this channel', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_channel_participant

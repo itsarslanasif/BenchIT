@@ -3,12 +3,12 @@ class Api::V1::UsersController < Api::ApiController
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
 
   def index
-    @users = Profile.where(workspace_id: current_profile.workspace_id)
+    @users = Profile.where(workspace_id: Current.profile.workspace_id)
     render json: @users
   end
 
   def show
-    @conversation = BenchConversation.user_to_user_conversation(current_profile.id, @receiver.id)
+    @conversation = BenchConversation.user_to_user_conversation(Current.profile.id, @receiver.id)
 
     if @conversation.blank?
       @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: current_profile.id)
