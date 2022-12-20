@@ -22,6 +22,8 @@ Rails.application.routes.draw do
           collection do
             get :previous_direct_messages
           end
+
+          resources :bookmarks, only: %i[create index]
         end
         resources :conversation_messages, only: %i[create destroy] do
           collection do

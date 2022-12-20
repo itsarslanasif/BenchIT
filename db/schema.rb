@@ -66,13 +66,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
   end
 
   create_table "bookmarks", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "bench_channel_id", null: false
+    t.bigint "profile_id", null: false
+    t.bigint "user_id"
+    t.bigint "bench_channel_id"
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bench_channel_id"], name: "index_bookmarks_on_bench_channel_id"
+    t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
     t.index ["user_id"], name: "index_bookmarks_on_user_id"
   end
 
@@ -221,6 +223,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
   add_foreign_key "bench_channels", "workspaces"
   add_foreign_key "bench_conversations", "users", column: "sender_id"
   add_foreign_key "bookmarks", "bench_channels"
+  add_foreign_key "bookmarks", "profiles"
   add_foreign_key "bookmarks", "users"
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "users"

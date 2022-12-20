@@ -14,12 +14,13 @@ class Api::V1::BookmarksController < Api::ApiController
   private
 
   def set_channel
-    @channel = BenchChannel.find_by(id: params[:bench_channel_id])
-
+    @channel = BenchChannel.find_by(id: params[:bench_channel_id]) || User.find_by(id: params[:user_id])
     return render json: { message: 'Bench Channel Not Found.' }, status: :not_found if @channel.nil?
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name, :bookmark_URL)
+    params.require(:bookmark).permit(:name, :bookmark_URL).tap do |param|
+      param[:profile_id] = Current.profile.id
+    end
   end
 end
