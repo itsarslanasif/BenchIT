@@ -21,6 +21,7 @@ class Profile < ApplicationRecord
   has_many :conversation_messages, dependent: :destroy, foreign_key: :sender_id, inverse_of: :profile
   has_many :bench_conversations, as: :conversationable, dependent: :destroy
   has_many :draft_messages, dependent: :destroy
+  has_many :reactions, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
