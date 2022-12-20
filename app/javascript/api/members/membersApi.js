@@ -19,7 +19,7 @@ export const addMemberstoChannel = async (channel_id, members) => {
     `/v1/channel_participants`,
     {
       bench_channel_id: channel_id,
-      user_ids: members,
+      profile_ids: members,
     },
     { headers: { Authorization: sessionStorage.getItem('token') } }
   );
