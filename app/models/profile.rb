@@ -9,10 +9,12 @@ class Profile < ApplicationRecord
       workspace_id: workspace_id
     }
   end
+
   after_commit :add_default_image, on: %i[create]
 
   belongs_to :user
   belongs_to :workspace
+
   has_one_attached :profile_image, dependent: :destroy
 
   has_many :saved_items
@@ -33,6 +35,8 @@ class Profile < ApplicationRecord
     workspace_admin: 2,
     member: 3
   }
+
+  scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }
 
   def add_default_image
     return if profile_image.attached?

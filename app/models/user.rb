@@ -11,5 +11,5 @@ class User < ApplicationRecord
 
   validates_presence_of :email
 
-  scope :workspace_users, ->(workspace_id) { joins(:profiles).where(workspace_id: workspace_id).distinct }
+  scope :workspace_users, -> { joins(:profiles).where(workspace_id: Current.workspace).distinct }
 end

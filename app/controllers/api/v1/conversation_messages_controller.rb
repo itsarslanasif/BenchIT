@@ -67,7 +67,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           when 'groups'
                             Group.find_by(id: conversation_id)&.bench_conversation
                           when 'users'
-                            BenchConversation.user_to_user_conversation(params[:sender_id], conversation_id)
+                            BenchConversation.profile_to_profile_conversation(params[:sender_id], conversation_id)
                           end
 
     render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?

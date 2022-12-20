@@ -18,9 +18,10 @@ user.save!
 user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1)
 admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password', jti: SecureRandom.uuid)
 admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1)
-Current.user = admin
+Current.user = user1
+Current.profile = user1.profiles.first
 Current.workspace = workspace
-BenchChannel.create(name: 'dev', description: 'dev', creator_id: 1, workspace_id: 1)
+BenchChannel.create(name: 'dev', description: 'dev')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 1)
@@ -38,12 +39,12 @@ BenchConversation.create(conversationable_type: 'Profile', conversationable_id: 
 ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, bench_conversation_id: 3, sender_id: 4)
 ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
 
-BenchChannel.create(name: 'watercooler', description: 'memes', creator_id: 1, workspace_id: 1)
+BenchChannel.create(name: 'watercooler', description: 'memes')
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 2)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 2)
 ConversationMessage.create(content: 'Hi from watercooler', is_threaded: false, bench_conversation_id: 4, sender_id: 1)
 
-BenchChannel.create(name: 'general', description: 'general', creator_id: 2, workspace_id: 1)
+BenchChannel.create(name: 'general', description: 'general')
 ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 3)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
 ConversationMessage.create(content: 'Hi from general', is_threaded: false, bench_conversation_id: 5, sender_id: 2)

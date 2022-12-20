@@ -47,10 +47,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   private
 
   def bench_channel_params
-    params.require(:bench_channel).permit(:name, :description, :is_private).tap do |param|
-      param[:creator_id] = Current.profile.id
-      param[:workspace_id] = Current.workspace.id
-    end
+    params.require(:bench_channel).permit(:name, :description, :is_private)
   end
 
   def create_first_bench_channel_participant

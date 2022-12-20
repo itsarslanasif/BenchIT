@@ -9,7 +9,7 @@ class BenchConversation < ApplicationRecord
     disable: 1
   }
 
-  scope :user_to_user_conversation, lambda { |sender_id, receiver_id|
+  scope :profile_to_profile_conversation, lambda { |sender_id, receiver_id|
     find_by(conversationable_type: 'Profile', sender_id: sender_id, conversationable_id: receiver_id) ||
       find_by(conversationable_type: 'Profile', sender_id: receiver_id, conversationable_id: sender_id) ||
       none
