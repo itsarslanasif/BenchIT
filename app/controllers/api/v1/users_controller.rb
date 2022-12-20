@@ -3,18 +3,18 @@ class Api::V1::UsersController < Api::ApiController
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
 
   def index
-    @users = User.all
+    @users = Profile.where(workspace_id: current_profile.workspace_id)
     render json: @users
   end
 
   def show
-    @conversation = BenchConversation.user_to_user_conversation(current_user.id, @receiver.id)
+    @conversation = BenchConversation.user_to_user_conversation(current_profile.id, @receiver.id)
 
     if @conversation.blank?
-      @conversation = BenchConversation.create(conversationable_type: 'User', conversationable_id: @receiver.id, sender_id: current_user.id)
+      @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: current_profile.id)
     end
 
-    @messages = @conversation.conversation_messages.includes(:user, :reactions).with_attached_message_attachments
+    @messages = @conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def previous_direct_messages
@@ -25,7 +25,7 @@ class Api::V1::UsersController < Api::ApiController
   private
 
   def set_user
-    @receiver = User.find(params[:id])
+    @receiver = Profile.find(params[:id])
   end
 
   def set_previous_direct_messages
