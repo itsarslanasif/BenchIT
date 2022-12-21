@@ -37,7 +37,9 @@
             />
             <p class="text-xs">{{ $t('edit_profile.title_desc') }}</p>
           </div>
-          <div class="sections"></div>
+          <div>
+            <audioRecordingVue :submit="submit" />
+          </div>
           <div class="sections">
             <label>{{ $t('edit_profile.name_pronounce') }}</label>
             <input
@@ -75,8 +77,6 @@
               class="rounded-md object-cover"
             />
           </div>
-          <button @click="recording">Record</button>
-          <audio :src="recordedVoice"></audio>
           <label for="uploadFile" class="button cursor-pointer">{{
             $t('actions.upload_photo')
           }}</label>
@@ -114,17 +114,19 @@
 import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
 import { storeToRefs } from 'pinia';
 import { timezones } from '../../../assets/timezone';
+import audioRecordingVue from '../../widgets/audioRecording.vue';
 export default {
+  components: { audioRecordingVue },
   data() {
     return {
       timezones: timezones,
       recordingFlag: false,
       audioChunks: [],
+      recordedFlag: false,
       audioRecorder: null,
       audioBlob: null,
       file: null,
       readerFile: [],
-      recordedVoice: {},
       title: this.currentUser.title ? this.currentUser.title : '',
       timezone: this.currentUser.timezone ? this.currentUser.timezone : '',
       namePronounciation: this.currentUser.namePronounciation
@@ -168,36 +170,12 @@ export default {
       formData.append('name_pronounciation', this.namePronounciation);
       formData.append('time_zone', this.timezone);
       formData.append('profile_photo', this.file);
+      formData.append('audio_clip', this.audioBlob);
     },
-    recording() {
-      this.recordingFlag = !this.recordingFlag;
-      if (this.recordingFlag) {
-        this.startRecording();
-      } else {
-        this.stopRecording();
-        this.playRecording()
-      }
-    },
-    startRecording() {
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        this.audioRecorder = new MediaRecorder(stream);
-        this.audioRecorder.start();
-        const audioChunks = [];
-        this.audioRecorder.addEventListener('dataavailable', event => {
-          this.audioChunks.push(event.data);
-        });
-        this.audioRecorder.addEventListener('stop', () => {
-          audioBlob = new Blob(audioChunks);
-        });
-      });
-    },
-    stopRecording() {
-      this.audioRecorder.stop();
-    },
-    playRecording() {
-      const audioUrl = window.URL.createObjectURL(this.audioBlob);
-      const audio = new Audio(audioUrl);
-      audio.play();
+    submit(audioChunks, audioBlob, audioRecorder) {
+      this.audioChunks = audioChunks;
+      this.audioBlob = audioBlob;
+      this.audioRecorder = audioRecorder;
     },
   },
 };

@@ -213,11 +213,14 @@ en:
         display_name_desc: "This could be your first name, or a nickname — however you’d like
               people to refer to you in Slack."
         title: 'Title'
+        record_audio_clip: 'Record Audio Clip'
         title_desc: 'Let people know what you do at Devsinc.'
         name_pronounce: 'Name pronounciation'
         name_pronounce_placeholder: "Zoe (pronounced 'zo-ee')"
         name_pronounce_desc: 'This could be a phonetic pronunciation, or an example of something
               your name sounds like.'
+        play: 'Play'
+        stop_recording: 'Stop Recording'
         time_zone: 'Time zone'
         time_zone_default_option: 'Please choose the option'
         time_zone_desc: 'Your current time zone. Used to send summary and notification

@@ -32,6 +32,8 @@ import {
   faCircleXmark,
   faArrowLeft,
   faCircle,
+  faTrash,
+  faCheck
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -69,6 +71,8 @@ library.add(
   faCircleXmark,
   faArrowLeft,
   faCircle,
+  faTrash,
+  faCheck
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
