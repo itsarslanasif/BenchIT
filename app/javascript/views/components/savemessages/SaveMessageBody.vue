@@ -10,7 +10,7 @@
     <div class="overflow-auto chatBody bg-gray-100">
       <PinnedConversationModel />
       <div v-for="message in messages" :key="message.id" :id="message.id">
-        <div class="border border-black-300 m-5">
+        <div class="border border-black-200 m-5">
           <SaveMessageWrapper :currMessage="message" />
         </div>
       </div>

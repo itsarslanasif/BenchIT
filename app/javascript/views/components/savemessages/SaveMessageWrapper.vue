@@ -10,52 +10,67 @@
       </span>
     </div>
     <div
-      class="flex p-1 relative hover:bg-transparent items-start"
+      class="flex p-1 relative hover:bg-transparent items-start flex-col"
       :class="{
         messageContentpinned: pinnedConversationStore.isPinned(currMessage),
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <div class="m-1">
-        <n-avatar
-          v-show="!isSameUser || !isSameDayMessage"
-          size="large"
-          src="../../../assets/images/user.png"
-        />
+      <div
+        class="flex m-1 text-xs text-black-600 font-semibold hover:underline cursor-pointer"
+      >
+        <div v-if="message.conversation_type == 'User'">Direct Message</div>
+        <div v-else-if="message.conversation_type == 'BenchChannel'">
+          {{ message.channel_name }}
+        </div>
+        <div v-else-if="message.conversation_type == 'Group'">
+          Group Message
+        </div>
       </div>
-      <div class="message">
-        <div class="ml-1">
-          <span class="items-center flex text-black-800 text-lg m-0">
-            <p
-              v-show="!isSameUser || !isSameDayMessage"
-              class="mr-1 text-sm hover:underline cursor-pointer"
-            >
-              <b>{{ currMessage.profile.name }}</b>
-            </p>
-            <p
-              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
-            >
-              {{ currMessage.message.created_at ? timeWithoutAMPM : time }}
-            </p>
-          </span>
-          <span
-            class="text-black-800 text-sm flex-wrap"
-            v-html="currMessage.message.content"
+      <div class="flex">
+        <div class="m-1">
+          <n-avatar
+            v-show="!isSameUser || !isSameDayMessage"
+            size="large"
+            src="../../../assets/images/user.png"
           />
         </div>
-        <div v-if="currMessage?.attachments" class="flex gap-2">
-          <div
-            v-for="attachment in currMessage?.attachments"
-            :key="attachment.id"
-            class="w-64"
-          >
-            <p>{{ attachment.attachment.filename }}</p>
-            <img
-              :src="attachment?.attachment_link"
-              class="rounded border border-black-300 rounded"
-              :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+        <div>
+          <div class="ml-1">
+            <span class="items-center flex text-black-800 text-lg m-0">
+              <p
+                v-show="!isSameUser || !isSameDayMessage"
+                class="mr-1 text-sm hover:underline cursor-pointer"
+              >
+                <b>{{ currMessage.profile.name }}</b>
+              </p>
+              <p
+                class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
+              >
+                {{ currMessage.message.created_at ? timeWithoutAMPM : time }}
+              </p>
+            </span>
+            <span
+              class="text-black-800 text-sm flex-wrap"
+              v-html="currMessage.message.content"
             />
+          </div>
+          <div v-if="currMessage?.attachments" class="flex gap-2 mb-3">
+            <div
+              v-for="attachment in currMessage?.attachments"
+              :key="attachment.id"
+              class="w-64"
+            >
+              <p class="text-xs text-black-600">
+                {{ attachment.attachment.filename }}
+              </p>
+              <img
+                :src="attachment?.attachment_link"
+                class="border border-black-300 rounded"
+                :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+              />
+            </div>
           </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
