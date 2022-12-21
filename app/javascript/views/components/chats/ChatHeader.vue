@@ -5,7 +5,10 @@
   <div v-if="chat && conversation_type === 'channels'">
     <ChannelInfo :channel="chat" />
   </div>
-  <div v-else-if="chat && conversation_type === 'users'">
+  <div v-if="chat && conversation_type === 'groups'">
+    <ChannelInfo :channel="chat" />
+  </div>
+  <div v-else-if="chat && conversation_type === 'profiles'">
     <UserChatInfo :chat="chat" />
   </div>
   <div
