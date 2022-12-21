@@ -57,13 +57,25 @@
             v-html="currMessage.content"
           />
           <div v-if="currMessage?.attachments" class="flex gap-2">
-            <div v-for="attachment in currMessage?.attachments" :key="attachment.id" class="w-64">
-              <img :src="attachment?.attachment_link" class="rounded" :class="{ 'ml-12': isSameUser && isSameDayMessage }" />
+            <div
+              v-for="attachment in currMessage?.attachments"
+              :key="attachment.id"
+              class="w-64"
+            >
+              <img
+                :src="attachment?.attachment_link"
+                class="rounded"
+                :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+              />
             </div>
           </div>
         </div>
         <template v-for="emoji in allReactions" :key="emoji.id">
-          <span class="bg-black-300 p-1 mr-1 rounded">{{ emoji.i }}</span>
+          <span
+            @click="emojiClickListener(emoji)"
+            class="bg-black-300 p-1 mr-1 rounded"
+            >{{ emoji.emoji }}</span
+          >
         </template>
         <div
           v-if="currMessage?.is_threaded"
@@ -131,14 +143,23 @@ import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
+import { add_reaction } from '../../../api/reactions/reaction.js';
+import { remove_reaction } from '../../../api/reactions/reaction.js';
+import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
 
 export default {
   name: 'MessageWrapper',
-    setup() {
+  setup() {
     const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
-    return { threadStore, pinnedConversationStore, savedItemsStore };
+    const currentUserStore = useCurrentUserStore();
+    return {
+      threadStore,
+      pinnedConversationStore,
+      savedItemsStore,
+      currentUserStore,
+    };
   },
   components: {
     NAvatar,
@@ -173,7 +194,7 @@ export default {
       ],
       emojiModalStatus: false,
       openEmojiModal: false,
-      allReactions: [],
+      allReactions: this.currMessage.reactions,
       showOptions: false,
     };
   },
@@ -198,13 +219,25 @@ export default {
         new Date(this.prevMessage?.created_at).toDateString()
       );
     },
-    repliesCount(){
-      return `${this.currMessage.replies?.length} replies..`
-    }
+    repliesCount() {
+      return `${this.currMessage.replies?.length} replies..`;
+    },
   },
   methods: {
-    addReaction(emoji) {
-      this.allReactions.push(emoji);
+    async addReaction(emoji) {
+      await add_reaction(this.currMessage.id, emoji.i).then(response => {
+        return this.allReactions.push(response.data);
+      });
+    },
+
+    async emojiClickListener(emoji) {
+      if (emoji.user_id == this.currentUserStore.currentUser.id) {
+        await remove_reaction(emoji.id).then(() => {
+          this.allReactions = this.allReactions.filter(function (reaction) {
+            return reaction.id != emoji.id;
+          });
+        });
+      }
     },
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
@@ -219,14 +252,14 @@ export default {
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       if (this.currMessage.isSaved) {
-        save(this.message.id, {
-          data: this.message,
+        save(this.currMessage.id, {
+          data: this.currMessage,
         }).then(() => {
-          this.savedItemsStore.addSavedItem(this.message);
+          this.savedItemsStore.addSavedItem(this.currMessage);
         });
       } else {
-        unsave(this.message.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.message);
+        unsave(this.currMessage.id).then(() => {
+          this.savedItemsStore.removeSavedItem(this.currMessage);
         });
       }
     },
@@ -238,4 +271,3 @@ export default {
   @apply bg-yellow-100;
 }
 </style>
-
