@@ -84,7 +84,7 @@
 import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
 import BenchitAlert from '../widgets/benchitAlert.vue';
-import { useCurrentUserStore } from '../../stores/CurrentUserStore';
+import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 export default {
   name: 'UserSignIn',
   components: {

@@ -10,7 +10,7 @@
           </a>
         </template>
         <h5 v-for="user in dmList" :key="user.id" class="hover:bg-primaryHover">
-          <div @click="goToChat(`/users/${user.id}`)"
+          <div @click="goToChat(`/profiles/${user.id}`)"
             class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover">
             <img class="w-6 h-6 rounded-md"
               src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg" />
@@ -30,6 +30,8 @@ import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { getDirectMessagesList } from '../../../api/directMessages/directMessages';
 import { useSelectedScreenStore } from '../../../stores/useSelectedScreen';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {
@@ -60,7 +62,8 @@ export default {
       this.modalOpen = !this.modalOpen;
     },
     async getDmList() {
-      this.dmList = await getDirectMessagesList();
+      const currentProfileStore = useCurrentProfileStore();
+      this.dmList = await getDirectMessagesList(currentProfileStore.currentProfile.workspace_id);
     },
     goToChat(chatURL) {
       this.$router.push(chatURL);

@@ -72,7 +72,7 @@ import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import ThreadHeader from './ThreadHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
-import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
+import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { storeToRefs } from 'pinia';
 
 export default {
