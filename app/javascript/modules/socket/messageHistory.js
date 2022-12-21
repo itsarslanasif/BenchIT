@@ -5,7 +5,7 @@ export const getMessageHistory = async (conversation_type, id) => {
     conversation_type = 'bench_channels';
   }
   return await axios
-    .get(`/v1/${conversation_type}/${id}`, {
+    .get(`/v1/conversation_messages/${id}/${conversation_type.slice(0, -1)}_messages`, {
       headers: { Authorization: sessionStorage.getItem('token') },
     })
     .then(response => {
