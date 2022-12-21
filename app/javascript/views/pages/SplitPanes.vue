@@ -23,9 +23,6 @@
         <Thread />
       </pane>
     </splitpanes>
-    <div class="bg-white">
-      <EditProfile />
-    </div>
   </div>
 </template>
 
