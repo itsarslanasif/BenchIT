@@ -28,6 +28,7 @@ Rails.application.routes.draw do
           member do
             post :save_message
             delete :unsave_message
+            get :bench_channel_messages, :group_messages, :dm_messages
           end
         end
         resources :favourites, only: %i[create destroy]

@@ -2,6 +2,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, only: %i[destroy]
   before_action :set_saved_item, only: %i[unsave_message]
+  before_action :set_bench_channel, only: %i[bench_channel_messages]
+  before_action :set_group, only: %i[group_messages]
+  before_action :set_receiver, only: %i[dm_messages]
 
   def send_message
     @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
@@ -42,6 +45,24 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @messages = Current.profile.conversation_messages.with_attached_message_attachments
   end
 
+  def bench_channel_messages
+    @messages = @bench_channel.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
+  def group_messages
+    @messages = @group.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
+  def dm_messages
+    @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
+
+    if @conversation.blank?
+      @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
+    end
+
+    @messages = @conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
   private
 
   def set_saved_item
@@ -71,5 +92,20 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           end
 
     render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?
+  end
+
+  def set_bench_channel
+    @bench_channel = BenchChannel.find(params[:id])
+    render json: { json: 'user is not part of this channel', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
+  end
+
+  def set_group
+    @group = Group.find(params[:id])
+    render json: { json: 'user is not part of this group', status: :not_found } unless @group.members.include?(Current.profile.id)
+  end
+
+  def set_receiver
+    @receiver = Profile.find(params[:id])
+    render json: { message: 'You cannot access this profile.' }, status: :unprocessable_entity unless @receiver.workspace_id == Current.workspace.id
   end
 end
