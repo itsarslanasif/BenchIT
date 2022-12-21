@@ -145,7 +145,7 @@ import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
 import { add_reaction } from '../../../api/reactions/reaction.js';
 import { remove_reaction } from '../../../api/reactions/reaction.js';
-import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
+import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 
 export default {
   name: 'MessageWrapper',
