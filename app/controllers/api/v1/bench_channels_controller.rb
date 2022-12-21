@@ -7,7 +7,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: Current.profile.bench_channels
   end
 
-  def show;end
+  def show; end
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)

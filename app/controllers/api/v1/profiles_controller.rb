@@ -18,8 +18,7 @@ class Api::V1::ProfilesController < Api::ApiController
     @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
   end
 
-  def show
-  end
+  def show; end
 
   def create
     @profile = current_user.profiles.new(profile_params)
