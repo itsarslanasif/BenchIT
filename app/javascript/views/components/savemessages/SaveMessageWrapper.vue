@@ -48,7 +48,8 @@
               <p
                 class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
               >
-                {{ currMessage.message.created_at ? timeWithoutAMPM : time }}
+                {{ new Date(currMessage.message.created_at).toDateString() }} at
+                {{ time }}
               </p>
             </span>
             <span

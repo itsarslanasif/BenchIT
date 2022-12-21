@@ -28,7 +28,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def index_saved_messages
     @saved_items = Current.profile.saved_items.order(created_at: :desc)
-    render 'api/v1/saved_items/index'
   end
 
   def save_message
