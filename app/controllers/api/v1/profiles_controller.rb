@@ -19,13 +19,6 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def show
-    @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
-
-    if @conversation.blank?
-      @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
-    end
-
-    @messages = @conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def create

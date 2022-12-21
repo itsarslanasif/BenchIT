@@ -7,9 +7,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: Current.profile.bench_channels
   end
 
-  def show
-    @messages = @bench_channel.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
-  end
+  def show;end
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
@@ -60,8 +58,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
-    @bench_channel = BenchChannel.find_by(id: params[:id])
-    render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
+    @bench_channel = BenchChannel.find(params[:id])
     render json: { json: 'user is not part of this channel', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
   end
 
