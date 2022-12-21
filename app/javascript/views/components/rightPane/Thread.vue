@@ -114,7 +114,7 @@ export default {
       };
       conversation(payload).then( async () => {
         this.newMessage = '';
-        const messages = await getMessageHistory(this.conversation_type, this.id);
+        const messages = await getMessageHistory(this.conversation_type.slice(0, -1), this.id);
         this.threadStore.message = messages.find(
           msg => msg.id === this.threadStore.message.id
         );
