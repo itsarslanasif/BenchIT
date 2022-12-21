@@ -210,7 +210,6 @@ export default {
   methods: {
     sendMessage() {
       let formData = new FormData();
-      //formData.append('sender_id', this.currentUser.id);
       formData.append('content', this.message.replace(/<[^>]+>/g, ''));
       formData.append('is_threaded', false);
       formData.append('parent_message_id', null);
