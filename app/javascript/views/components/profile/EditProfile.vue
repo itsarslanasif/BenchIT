@@ -10,8 +10,11 @@
             <label>{{ $t('edit_profile.full_name') }}</label>
             <input
               type="text"
+              :class="
+                fullName.length < 50 && fullName.length ? 'success' : 'error'
+              "
               :placeholder="$t('edit_profile.full_name')"
-              class="input focus:border-primary"
+              class="input"
               v-model="fullName"
             />
           </div>
@@ -19,6 +22,11 @@
             <label>{{ $t('edit_profile.display_name') }}</label>
             <input
               type="text"
+              :class="
+                displayName.length < 50 && displayName.length
+                  ? 'success'
+                  : 'error'
+              "
               :placeholder="$t('edit_profile.display_name')"
               class="input"
               v-model="displayName"
@@ -31,6 +39,7 @@
             <label>{{ $t('edit_profile.title') }}</label>
             <input
               type="text"
+              :class="title.length < 50 && title.length ? 'success' : 'error'"
               :placeholder="$t('edit_profile.title')"
               class="input"
               v-model="title"
@@ -44,6 +53,11 @@
             <label>{{ $t('edit_profile.name_pronounce') }}</label>
             <input
               type="text"
+              :class="
+                namePronounciation.length < 20 && namePronounciation.length
+                  ? 'success'
+                  : 'error'
+              "
               :placeholder="$t('edit_profile.name_pronounce_placeholder')"
               class="input"
               v-model="namePronounciation"
@@ -164,10 +178,21 @@ export default {
     },
     saveChanges() {
       let formData = new FormData();
-      formData.append('full_name', this.fullName);
-      formData.append('display_name', this.displayName);
-      formData.append('title', this.title);
-      formData.append('name_pronounciation', this.namePronounciation);
+      if (this.fullName.length && this.fullName.length < 50) {
+        formData.append('full_name', this.fullName);
+      }
+      if (this.displayName.length && this.displayName.length < 50) {
+        formData.append('display_name', this.displayName);
+      }
+      if (this.title.length && this.title.length < 50) {
+        formData.append('title', this.title);
+      }
+      if (
+        this.namePronounciation.length &&
+        this.namePronounciation.length < 20
+      ) {
+        formData.append('name_pronounciation', this.namePronounciation);
+      }
       formData.append('time_zone', this.timezone);
       formData.append('profile_photo', this.file);
       formData.append('audio_clip', this.audioBlob);
@@ -191,5 +216,13 @@ export default {
 
 .button {
   @apply py-1 px-3 rounded border text-center;
+}
+
+.error {
+  @apply border-danger border;
+}
+
+.success {
+  @apply border-success border;
 }
 </style>
