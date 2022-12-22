@@ -63,6 +63,7 @@ class Profile < ApplicationRecord
   end
 
   def add_default_image
+    return
     return if profile_image.attached?
 
     profile_image.attach(io: Rails.root.join(*%w[app assets images default_image.png]).open,

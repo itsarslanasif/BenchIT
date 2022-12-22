@@ -16,6 +16,7 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/vue-fontawesome": "^3.0.2",
+    "@intlify/unplugin-vue-i18n": "^0.8.1",
     "@rails/actioncable": "^7.0.2-4",
     "@tailwindcss/typography": "0.2.0",
     "@tinymce/tinymce-vue": "^4",
