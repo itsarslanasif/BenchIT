@@ -11,8 +11,8 @@ export const useCurrentWorkspaceStore = () => {
     },
 
     actions: {
-      setWorkspace(Workspace) {
-        this.currentWorkspace = Workspace;
+      setWorkspace(workspace) {
+        this.currentWorkspace = workspace;
       },
     },
   });
