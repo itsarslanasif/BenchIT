@@ -25,7 +25,7 @@
           />
         </div>
         <div class="ml-3 leading-3">
-          <div v-if="!message.is_threaded && message.conversationable_type == 'User'">
+          <div v-if="!message.is_threaded && message.conversationable_type == 'Profile'">
             {{ message.receiver_name }}
           </div>
           <div v-else-if="!message.is_threaded && message.conversationable_type == 'BenchChannel'">
@@ -34,7 +34,7 @@
           <div v-else-if="message.is_threaded && message.conversationable_type == 'BenchChannel'">
             Thread in {{ message.channel_name }}
           </div>
-           <div v-else-if="message.is_threaded && message.conversationable_type == 'User'">
+           <div v-else-if="message.is_threaded && message.conversationable_type == 'Profile'">
             Thread in {{ message.receiver_name }}
           </div>
           <div v-else-if="message.is_threaded && message.conversationable_type == 'Group'">
@@ -81,9 +81,9 @@ export default {
         `/channels/${message.bench_conversation}/${message.id}`
       );
       }
-      else if (message.conversationable_type == 'User') {
+      else if (message.conversationable_type == 'Profile') {
          this.$router.push(
-        `/users/${message.receiver_id}/${message.id}`
+        `/profiles/${message.receiver_id}/${message.id}`
       );
       }
        else if (message.conversationable_type == 'Group') {
