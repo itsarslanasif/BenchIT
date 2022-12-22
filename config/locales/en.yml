@@ -203,6 +203,14 @@ en:
         recent_files: 'Recent files'
         from_computer: 'Attach from your computer'
         divider: '●'
+      messages_section:
+        today: 'Today'
+        yesterday: 'Yesterday'
+        jump_to: 'Jump to...'
+        last_week: 'Last week'
+        last_month: 'Last month'
+        the_very_beginning: 'The very beginning'
+        jump_to_specific_date: 'Jump to a specific date'
 
     admin:
       title: 'Admin'
