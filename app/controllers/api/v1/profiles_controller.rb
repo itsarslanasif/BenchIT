@@ -1,6 +1,8 @@
 class Api::V1::ProfilesController < Api::ApiController
   before_action :set_workspace, only: %i[index create show]
   before_action :check_profile_already_exists, only: %i[create]
+  before_action :set_receiver, only: %i[show]
+  before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show]
 
   def index
@@ -31,6 +33,10 @@ class Api::V1::ProfilesController < Api::ApiController
     end
   end
 
+  def previous_direct_messages
+    @profiles = Profile.where(id: @dm_users_ids)
+  end
+
   private
 
   def set_workspace
@@ -55,5 +61,21 @@ class Api::V1::ProfilesController < Api::ApiController
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
     render json: { message: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
+  end
+
+  def set_receiver
+    @receiver = Profile.find(params[:id])
+
+    render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
+  end
+
+  def set_previous_direct_messages
+    conversation_ids = BenchConversation.recent_last_conversation
+    return render json: [Current.profile] if conversation_ids.empty?
+
+    @bench_conversations_ids = ConversationMessage.recent_last_conversation(conversation_ids)
+    return render json: [Current.profile] if @bench_conversations_ids.empty?
+
+    @dm_users_ids = BenchConversation.where(id: @bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
 end

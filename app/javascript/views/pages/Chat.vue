@@ -25,7 +25,7 @@
                 class="p-1 rounded-md hover:bg-secondaryHover"
                 @click="addMentionToText"
               >
-                {{ item.name }}
+                {{ item.creator_id? item.name : item.username }}
               </div>
             </div>
           </div>
@@ -105,7 +105,7 @@ import Editor from '@tinymce/tinymce-vue';
 import { createCable } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
-import { useCurrentUserStore } from '../../stores/CurrentUserStore';
+import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { storeToRefs } from 'pinia';
 import LandingPage from '../components/landingPage/landingPage.vue';
 import Attachments from '../components/attachments/Attachments.vue';
@@ -181,26 +181,23 @@ export default {
       const lastWord = words[words.length - 1];
       if (lastWord[0] === '@') {
         this.enableMention();
+        this.filteredList = this.filteredList.filter(item =>
+          item.username.toLowerCase().includes(lastWord.slice(1).toLowerCase())
+        );
+        return;
       } else if (lastWord[0] === '#') {
         this.enableChannels();
+        this.filteredList = this.filteredList.filter(item =>
+          item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase())
+        );
       } else {
         this.disableAll();
       }
-      this.filteredList = this.filteredList.filter(item =>
-        item.name.toLowerCase().includes(lastWord.slice(1).toLowerCase())
-      );
     },
   },
 
   updated() {
     this.Cable.on('chat', data => {
-      if (this.conversation_type === 'channels') {
-        data.message.channel_name = this.messages[0].channel_name;
-      } else if (this.conversation_type === 'groups') {
-        data.message.group_id = this.messages[0].group_id;
-      } else {
-        data.message.receiver_name = this.messages[0].receiver_name;
-      }
       const findMessage = this.messages.find(m => m.id === data.message.id);
 
       if (findMessage == undefined) {
@@ -213,7 +210,6 @@ export default {
   methods: {
     sendMessage() {
       let formData = new FormData();
-      formData.append('sender_id', this.currentUser.id);
       formData.append('content', this.message.replace(/<[^>]+>/g, ''));
       formData.append('is_threaded', false);
       formData.append('parent_message_id', null);

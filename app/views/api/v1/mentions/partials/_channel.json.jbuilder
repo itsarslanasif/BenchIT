@@ -1,1 +1,1 @@
-json.array! channels, :id, :channel_name, :is_private
+json.array! channels, :id, :name, :is_private

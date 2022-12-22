@@ -72,7 +72,7 @@ import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
-import { useCurrentUserStore } from '../../../stores/CurrentUserStore';
+import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { storeToRefs } from 'pinia';
 
 export default {
@@ -114,7 +114,7 @@ export default {
       };
       conversation(payload).then( async () => {
         this.newMessage = '';
-        const messages = await getMessageHistory(this.conversation_type, this.id);
+        const messages = await getMessageHistory(this.conversation_type.slice(0, -1), this.id);
         this.threadStore.message = messages.find(
           msg => msg.id === this.threadStore.message.id
         );

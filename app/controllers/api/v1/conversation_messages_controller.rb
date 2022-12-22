@@ -2,9 +2,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, only: %i[destroy]
   before_action :set_saved_item, only: %i[unsave_message]
+  before_action :set_bench_channel, only: %i[bench_channel_messages]
+  before_action :set_group, only: %i[group_messages]
+  before_action :set_receiver, only: %i[profile_messages]
 
   def send_message
-    @messages = current_user.conversation_messages.includes(:user).order(created_at: :desc)
+    @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
   end
 
   def create
@@ -39,7 +42,25 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = current_user.conversation_messages.with_attached_message_attachments
+    @messages = Current.profile.conversation_messages.with_attached_message_attachments
+  end
+
+  def bench_channel_messages
+    @messages = @bench_channel.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
+  def group_messages
+    @messages = @group.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
+  def profile_messages
+    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
+
+    if conversation.blank?
+      conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
+    end
+
+    @messages = conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   private
@@ -55,7 +76,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, :sender_id, message_attachments: [])
+    params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
+      param[:sender_id] = Current.profile.id
+    end
   end
 
   def fetch_conversation
@@ -66,10 +89,25 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                             BenchChannel.find_by(id: conversation_id)&.bench_conversation
                           when 'groups'
                             Group.find_by(id: conversation_id)&.bench_conversation
-                          when 'users'
-                            BenchConversation.user_to_user_conversation(params[:sender_id], conversation_id)
+                          when 'profiles'
+                            BenchConversation.profile_to_profile_conversation(Current.profile.id, conversation_id)
                           end
 
     render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?
+  end
+
+  def set_bench_channel
+    @bench_channel = BenchChannel.find(params[:id])
+    render json: { json: 'user is not part of this channel', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
+  end
+
+  def set_group
+    @group = Group.find(params[:id])
+    render json: { json: 'user is not part of this group', status: :not_found } unless @group.profile_ids.include?(Current.profile.id)
+  end
+
+  def set_receiver
+    @receiver = Profile.find(params[:id])
+    render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
   end
 end

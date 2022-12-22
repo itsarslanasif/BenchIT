@@ -30,11 +30,11 @@
             </div>
             <div v-for="item in filteredList" :key="item.id" class="hover:bg-slate-600 p-2 rounded">
               <div class="flex">
-                <div v-if="isUser(item)" class="mx-3">
+                <div v-if="!item.creator_id" class="mx-3">
                   <font-awesome-icon icon="fa-user" />
                 </div>
-                <div v-if="isChannel(item)" class="mx-3">
-                  <div v-if="isPrivateChannel(item)">
+                <div v-if="item.creator_id" class="mx-3">
+                  <div v-if="item.is_private">
                     <font-awesome-icon icon="fa-lock" />
                   </div>
                   <div v-else>
@@ -42,7 +42,7 @@
                   </div>
                 </div>
                 <div>
-                  {{ item.name }}
+                  {{ item.creator_id? item.name : item.username }}
                 </div>
               </div>
             </div>
@@ -68,7 +68,7 @@ export default {
       searchModalToggle: false,
       search: '',
       filteredList: [],
-      allUsers: [],
+      allProfiles: [],
       allChannels: [],
       usersFlag: false,
       channelsFlag: false,
@@ -78,7 +78,7 @@ export default {
     searchPeopleOnly() {
       this.usersFlag = true;
       this.channelsFlag = false;
-      this.filteredList = this.allUsers;
+      this.filteredList = this.allProfiles;
     },
     searchChannelsOnly() {
       this.usersFlag = false;
@@ -87,27 +87,6 @@ export default {
     },
     filterData() {
       this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()));
-    },
-    isUser(item) {
-      if (item.email) {
-        return true
-      } else {
-        return false
-      }
-    },
-    isChannel(item) {
-      if (item.description) {
-        return true
-      } else {
-        return false
-      }
-    },
-    isPrivateChannel(item) {
-      if (item.isPrivateChannel) {
-        return true
-      } else {
-        return false
-      }
     }
   },
   watch: {
@@ -115,19 +94,19 @@ export default {
       if (this.search === '') {
         this.usersFlag = false
         this.channelsFlag = false
-        this.filteredList = [...this.allUsers, ...this.allChannels]
+        this.filteredList = [...this.allProfiles, ...this.allChannels]
       }
       if (this.usersFlag) {
-        this.filteredList = this.allUsers;
+        this.filteredList = this.allProfiles;
       } else if (this.channelsFlag) {
         this.filteredList = this.allChannels;
       } else {
-        this.filteredList = [...this.allUsers, ...this.allChannels];
+        this.filteredList = [...this.allProfiles, ...this.allChannels];
       }
       this.filterData();
     },
-    allUsers() {
-      this.allUsers = this.allUsers.filter(user => user.name !== null);
+    allProfiles() {
+      this.allProfiles = this.allProfiles.filter(profile => profile.username !== null);
     }
   },
   setup() {
@@ -138,7 +117,7 @@ export default {
     profileStore.index();
     channelStore.index();
     return {
-      allUsers: profiles,
+      allProfiles: profiles,
       allChannels: channels,
     };
   },
