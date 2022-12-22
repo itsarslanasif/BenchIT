@@ -1,7 +1,7 @@
 class Api::V1::ProfilesController < Api::ApiController
   before_action :set_workspace, only: %i[index create show]
   before_action :check_profile_already_exists, only: %i[create]
-  before_action :find_profile, only: %i[show]
+  before_action :set_receiver, only: %i[show]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show]
 
@@ -64,7 +64,7 @@ class Api::V1::ProfilesController < Api::ApiController
     render json: { message: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
   end
 
-  def find_profile
+  def set_receiver
     @receiver = Profile.find(params[:id])
 
     render json: { message: 'You cannot access this profile.' }, status: :unprocessable_entity unless @receiver.workspace_id == Current.workspace.id
