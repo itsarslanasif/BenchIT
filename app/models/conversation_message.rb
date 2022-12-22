@@ -33,7 +33,7 @@ class ConversationMessage < ApplicationRecord
     ActionCable.server.broadcast(channel_key, { message: message })
   end
 
-  def self.last_dm_message(conversation_ids)
+  def self.recent_last_conversation(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
                                                                              two_weaks_ago_time).distinct.pluck(:bench_conversation_id)

@@ -44,4 +44,8 @@ class Profile < ApplicationRecord
     profile_image.attach(io: Rails.root.join(*%w[app assets images default_image.png]).open,
                          filename: 'default_image.png', content_type: 'image/png')
   end
+
+  def groups
+    Group.where('profile_ids @> ARRAY[?]::integer[]', [id])
+  end
 end

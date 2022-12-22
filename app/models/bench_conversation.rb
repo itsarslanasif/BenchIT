@@ -10,7 +10,7 @@ class BenchConversation < ApplicationRecord
       none
   }
 
-  def self.last_dm_message
+  def self.recent_last_conversation
     BenchConversation.where(
       'conversationable_type = :conversationable_type AND (sender_id = :sender_id OR conversationable_id = :conversationable_id)',
       { conversationable_type: 'Profile', sender_id: Current.profile, conversationable_id: Current.profile }

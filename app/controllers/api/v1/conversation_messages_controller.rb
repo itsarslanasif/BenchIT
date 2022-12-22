@@ -103,7 +103,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { json: 'user is not part of this group', status: :not_found } unless @group.members.include?(Current.profile.id)
+    render json: { json: 'user is not part of this group', status: :not_found } unless @group.profile_ids.include?(Current.profile.id)
   end
 
   def set_receiver

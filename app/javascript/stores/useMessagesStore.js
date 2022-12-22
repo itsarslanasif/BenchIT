@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getMessageHistory } from '../modules/socket/messageHistory';
+import { CONSTANTS } from '../assets/constants';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -12,9 +13,14 @@ export const useMessageStore = () => {
 
     getters: {
       getMessages: state => state.messages,
-      repliesCount: state =>
-        state.messages?.find(m => m.id == state.currMessage?.id).replies
-          ?.length,
+      repliesCount: state => {
+        if (
+          !CONSTANTS.NULL_VALUES.includes(state.messages) &&
+          state.currMessage !== null
+        ) {
+          state.messages.find(m => m.id == state.currMessage.id).replies.length;
+        }
+      },
     },
 
     actions: {

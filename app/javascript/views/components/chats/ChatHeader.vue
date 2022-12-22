@@ -81,7 +81,7 @@ export default {
         name: msg[0]?.channel_name
           ? msg[0]?.channel_name
           : msg[0]?.group_name
-          ? 'Group Chat ' + msg[0]?.group_name
+          ? msg[0]?.group_name
           : msg[0]?.receiver_name,
         isActive: true,
         status: '',

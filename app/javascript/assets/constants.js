@@ -90,5 +90,6 @@ export const CONSTANTS = {
   PREFERENCES: 'Preferences',
   DOWNLOADS: 'Downloads',
   SIGN_OUT_OF_DEVSINC: 'Sign out of Devsinc',
-  SET_STATUS: 'Set status'
+  SET_STATUS: 'Set status',
+  NULL_VALUES: [null, undefined, []],
 };
