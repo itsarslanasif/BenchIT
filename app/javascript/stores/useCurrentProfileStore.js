@@ -17,8 +17,8 @@ export const useCurrentProfileStore = () => {
     },
 
     actions: {
-      setProfile(Profile) {
-        this.currentProfile = Profile;
+      setProfile(profile) {
+        this.currentProfile = profile;
       },
     },
   });
