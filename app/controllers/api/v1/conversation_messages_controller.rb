@@ -108,6 +108,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_receiver
     @receiver = Profile.find(params[:id])
-    render json: { message: "You can't access this profile." }, status: :unprocessable_entity unless @receiver.workspace_id.eql?(Current.workspace.id)
+    render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
   end
 end
