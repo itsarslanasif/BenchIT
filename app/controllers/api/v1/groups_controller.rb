@@ -2,7 +2,7 @@ class Api::V1::GroupsController < Api::ApiController
   before_action :set_group, only: %i[show]
 
   def index
-    render json: Group.all.map { |group| group if group.members.include?(Current.profile.id) }
+    render json: Group.joined_groups(Current.profile.id)
   end
 
   def show; end

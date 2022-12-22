@@ -25,6 +25,7 @@ class Profile < ApplicationRecord
   has_many :draft_messages, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
+  #has_many :groups, dependent: :destroy, foreign_key: :members, inverse_of: :profile
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
