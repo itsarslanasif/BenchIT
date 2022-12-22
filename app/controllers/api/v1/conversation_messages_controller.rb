@@ -54,13 +54,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def profile_messages
-    @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
+    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
 
-    if @conversation.blank?
-      @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
+    if conversation.blank?
+      conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
     end
 
-    @messages = @conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+    @messages = conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   private
