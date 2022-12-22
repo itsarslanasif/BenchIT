@@ -1,11 +1,16 @@
 <template>
-  <n-dropdown trigger="hover" :options="options" @select="handleSelect">
+  <n-dropdown
+    trigger="hover"
+    placement="bottom-start"
+    class="rounded-lg border border-black-400"
+    :options="options"
+    @select="handleSelect"
+  >
     <div
       @click="showUserProfile"
       class="min-w-fit self-start ml-1 cursor-pointer"
     >
       <n-avatar
-        v-show="!isSameUser || !isSameDayMessage"
         class="mr-1"
         size="large"
         src="../../../assets/images/user.png"
@@ -69,11 +74,27 @@ export default {
             src: '../../../assets/images/user.png',
           }),
           h('div', { class: 'text-md' }, [
-            h('div', { class: 'font-bold' }, [
-              h(NText, { depth: 2 }, { default: () => 'Asad Tariq' }),
-              h(NText, { depth: 2 }, { default: () => ' (you)' }),
-              h(NText, { depth: 2 }, { default: () => ' ⚫' }),
-            ]),
+            h(
+              'div',
+              {
+                class: 'font-bold',
+              },
+              [
+                h(
+                  NText,
+                  {
+                    depth: 2,
+                    onClick: () => {
+                      this.showUserProfile();
+                    },
+                    class: 'cursor-pointer hover:underline',
+                  },
+                  { default: () => 'Asad Tariq' }
+                ),
+                h(NText, { depth: 2 }, { default: () => ' (you)' }),
+                h(NText, { depth: 2 }, { default: () => ' ⚫' }),
+              ]
+            ),
             h('div', null, [
               h(
                 NText,

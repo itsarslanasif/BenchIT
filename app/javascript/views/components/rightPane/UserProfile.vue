@@ -6,31 +6,31 @@
     </div>
     <div class="flex flex-col mt-2">
       <span class="grid grid-cols-12 mx-4">
-        <p class="col-span-11 font-bold text-2xl break-words">{{userProfileStore.user_profile?.display_name}}</p>
+        <p class="col-span-11 font-bold text-xl break-words">{{userProfileStore.user_profile?.display_name}}</p>
         <p v-if="ownProfile" class="col-span-1 self-center text-info cursor-pointer hover:underline">{{$t('actions.edit')}}</p>
       </span>
-      <p v-if="userProfileStore.user_profile?.title" class="float-left text-lg mx-4 break-words text-black-800 hover:underline cursor-pointer">{{userProfileStore.user_profile?.title}}</p>
-      <span v-if="userProfileStore.user_profile?.status" class="flex float-left text-lg mx-4 mt-2 break-words text-black-800">
+      <p v-if="userProfileStore.user_profile?.title" class="float-left text-md mx-4 break-words text-black-800 hover:underline cursor-pointer">{{userProfileStore.user_profile?.title}}</p>
+      <span v-if="userProfileStore.user_profile?.status" class="flex float-left text-md mx-4 mt-2 break-words text-black-800">
         <font-awesome-icon v-if="userProfileStore.user_profile?.isActive" icon="fa-circle" class="self-center text-success text-sm mr-2 px-1" />
         <font-awesome-icon v-else icon="fa-circle" class="self-center text-sm mr-2 px-1" />
         <p>{{userProfileStore.user_profile?.isActive ? 'Active' : 'Away'}}</p>
       </span>
-      <span v-if="userProfileStore.user_profile?.status" class="flex float-left text-lg mx-4 break-words text-black-800">
-        <p class="mr-3">{{userProfileStore.user_profile?.status.emoji}}</p>
+      <span v-if="userProfileStore.user_profile?.status" class="flex float-left text-md mx-4 break-words text-black-800">
+        <p class="mr-3 text-lg">{{userProfileStore.user_profile?.status.emoji}}</p>
         <p>{{userProfileStore.user_profile?.status.text}}</p>
       </span>
-      <span class="flex float-left mx-4 text-lg break-words text-black-800">
+      <span class="flex float-left mx-4 text-md break-words text-black-800">
         <font-awesome-icon icon="fa-clock" class="self-center text-lg mr-3" />
-        <p class="float-left text-lg break-words text-black-800">{{userProfileStore.user_profile?.localtime}} {{$t('rightpane.local_time')}}</p>
+        <p class="float-left text-md break-words text-black-800">{{userProfileStore.user_profile?.localtime}} {{$t('rightpane.local_time')}}</p>
       </span>
       <span class="flex float-left mt-2">
         <button class="flex border border-black-800 rounded h-10 px-10 ml-4 hover:bg-transparent focus:outline-none">
           <font-awesome-icon v-if="!ownProfile" icon="fa-comment-dots" class="self-center text-lg pr-1" />
-          <p class="self-center text-lg">{{ownProfile ? $t('actions.set_a_status') : $t('actions.message')}}</p>
+          <p class="self-center text-md">{{ownProfile ? $t('actions.set_a_status') : $t('actions.message')}}</p>
         </button>
         <button class="flex border border-black-800 rounded h-10 ml-2 hover:bg-transparent focus:outline-none">
           <font-awesome-icon v-if="!ownProfile" icon="fa-headphones" class="self-center text-lg pr-1 pl-8" />
-          <p class="pr-6 self-center text-lg" :class="{'pl-8' : ownProfile}">{{ownProfile ? $t('actions.view_as') : $t('actions.huddle')}}</p>
+          <p class="pr-6 self-center text-md" :class="{'pl-8' : ownProfile}">{{ ownProfile ? $t('actions.view_as') : $t('actions.huddle') }}</p>
           <font-awesome-icon icon="fa-chevron-down" class="self-center text-xs pr-2" />
         </button>
         <button class="flex border border-black-800 rounded h-10 px-4 ml-2 hover:bg-transparent focus:outline-none">
@@ -46,7 +46,7 @@
       </span>
       <span class="hover-trigger grid grid-cols-8 float-left mt-2 text-black-800">
         <font-awesome-icon icon="fa-envelope" class="col-span-1 self-center text-lg p-3 bg-transparent rounded-md" />
-        <span class="col-span-2 float-left text-xl text-black-800">
+        <span class="col-span-2 float-left text-lg text-black-800">
           <p class="text-sm">{{$t('rightpane.email_address')}}</p>
           <p id="email_address" class="text-sm text-info cursor-pointer hover:underline">{{userProfileStore.user_profile?.contact_info?.email_address}}</p>
         </span>
@@ -58,9 +58,9 @@
           <span> Copied! </span>
         </n-tooltip>
       </span>
-      <span class="hover-trigger grid grid-cols-8 float-left text-xl mt-2 text-black-800">
+      <span class="hover-trigger grid grid-cols-8 float-left text-lg mt-2 text-black-800">
         <font-awesome-icon icon="fa-phone" class="col-span-1 self-center text-lg p-3 bg-transparent rounded-md" />
-        <span class="col-span-2 float-left text-xl text-black-800">
+        <span class="col-span-2 float-left text-lg text-black-800">
           <p class="text-sm">{{$t('rightpane.phone')}}</p>
           <p id="phone_number" class="text-sm text-info cursor-pointer hover:underline">{{userProfileStore.user_profile?.contact_info?.phone_number}}</p>
         </span>
@@ -81,9 +81,9 @@
         <p v-if="ownProfile" class="col-span-1 self-center text-info cursor-pointer hover:underline">{{$t('actions.edit')}}</p>
       </span>
       <span class="grid grid-cols-8 float-left mt-2 text-black-800">
-        <span class="col-span-2 float-left text-xl text-black-800">
+        <span class="col-span-2 float-left text-md text-black-800">
           <p class="text-sm">{{$t('rightpane.skype')}}</p>
-          <p v-if="!ownProfile" class="text-sm text-info cursor-pointer hover:underline">{{userProfileStore.userProfile?.about_me.skype}}</p>
+          <p v-if="!ownProfile" class="text-sm text-info cursor-pointer hover:underline">{{userProfileStore.userProfile?.about_me?.skype}}</p>
           <p v-if="ownProfile" class="text-sm text-info cursor-pointer hover:underline">{{$t('rightpane.add_skype')}}</p>
         </span>
       </span>
@@ -104,6 +104,16 @@ export default {
     const userProfileStore = useUserProfileStore()
     const currentUserStore = useCurrentUserStore()
     return { userProfileStore, currentUserStore }
+  },
+  async mounted(){
+    let result = axios.get(
+        `/v1/workspaces/1/profiles/2`,
+        {
+          headers: { Authorization: sessionStorage.getItem('token') }
+        },
+      );
+      let profile = await result
+      this.userProfileStore.user_profile = profile.data
   },
   computed:{
     ownProfile(){

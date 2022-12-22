@@ -16,6 +16,9 @@ export const useUserProfileStore = defineStore('userProfileStore', {
         email_address: 'alva@gmail.com',
         phone_number: '03088567481',
       },
+      about_me: {
+        skype: 'alva@gmail.com',
+      },
     },
   }),
 
