@@ -43,7 +43,7 @@
                 v-show="!isSameUser || !isSameDayMessage"
                 class="mr-1 text-sm hover:underline cursor-pointer"
               >
-                <b>{{ currMessage.profile.name }}</b>
+                <b>{{ currMessage.profile.username }}</b>
               </p>
               <p
                 class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
