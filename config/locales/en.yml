@@ -149,6 +149,7 @@ en:
         cancel: 'Cancel'
         message: 'Message'
         huddle: 'Huddle'
+        go: 'Go!'
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
