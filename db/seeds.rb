@@ -6,7 +6,8 @@ workspace = Workspace.create!(company_name: 'BenchIT',
 
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
-user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1)
+user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '123', skype: '123', text_status: '123',
+                       time_zone: 'Karachi', emoji_status: 'haha')
 user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user2.save!
 user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1)
