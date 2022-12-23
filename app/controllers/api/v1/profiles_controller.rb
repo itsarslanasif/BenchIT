@@ -1,7 +1,6 @@
 class Api::V1::ProfilesController < Api::ApiController
   before_action :set_workspace, only: %i[index create show]
   before_action :check_profile_already_exists, only: %i[create]
-  before_action :set_receiver, only: %i[show]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show]
 
@@ -40,9 +39,7 @@ class Api::V1::ProfilesController < Api::ApiController
   private
 
   def set_workspace
-    @workspace = Workspace.find_by(id: params[:workspace_id])
-
-    return render json: { message: 'Workspace Not Found.' }, status: :not_found if @workspace.nil?
+    @workspace = Workspace.find(params[:workspace_id])
   end
 
   def profile_params
@@ -52,21 +49,15 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def check_user_member_of_workspace
-    return if Current.workspace.id == params[:workspace_id].to_i
+    return if Current.workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { message: 'You are not member of specified  workspace.' }, status: :unprocessable_entity
+    render json: { message: 'You are not member of specified  workspace.', status: :unprocessable_entity }
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { message: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
-  end
-
-  def set_receiver
-    @receiver = Profile.find(params[:id])
-
-    render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
+    render json: { message: 'You already have a profile in this workspace.', status: :unprocessable_entity }
   end
 
   def set_previous_direct_messages
