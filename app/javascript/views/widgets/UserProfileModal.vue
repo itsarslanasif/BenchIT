@@ -22,6 +22,8 @@
 <script>
 import { NDropdown, NAvatar, NText, NButton } from 'naive-ui';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
+import { useUserProfileStore } from '../../stores/useUserProfileStore';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { h } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
 
@@ -30,8 +32,10 @@ export default {
   components: { NDropdown, NAvatar, NText, NButton },
   props: ['showModal', 'userProfile'],
   setup() {
+    const userProfileStore = useUserProfileStore()
+    const currentProfileStore = useCurrentProfileStore()
     const rightPaneStore = useRightPaneStore();
-    return { rightPaneStore };
+    return { userProfileStore, currentProfileStore, rightPaneStore }
   },
   data() {
     return {
@@ -57,6 +61,11 @@ export default {
         },
       ],
     };
+  },
+  computed:{
+    ownProfile(){
+      return this.currentProfileStore.currentProfile.id == this.userProfileStore.user_profile.id
+    }
   },
   methods: {
     renderCustomHeader() {
@@ -89,17 +98,17 @@ export default {
                     },
                     class: 'cursor-pointer hover:underline',
                   },
-                  { default: () => 'Asad Tariq' }
+                  { default: () => `${this.userProfileStore.user_profile.display_name}` }
                 ),
-                h(NText, { depth: 2 }, { default: () => ' (you)' }),
-                h(NText, { depth: 2 }, { default: () => ' ⚫' }),
+                h(NText, { depth: 2 }, { default: () => this.ownProfile ? ' (you)' : '' }),
+                h(NText, { depth: 2 }, { default: () => this.userProfileStore.user_profile.isActive ? ' 🟢' :  ' ⚫'}),
               ]
             ),
             h('div', null, [
               h(
                 NText,
                 { depth: 3 },
-                { default: () => 'Associate Software Engineer' }
+                { default: () => `${this.userProfileStore.user_profile.title}` }
               ),
             ]),
           ]),
@@ -142,7 +151,7 @@ export default {
               {
                 class: 'text-black-800',
               },
-              { default: () => '5:47 PM local time' }
+              { default: () => `${this.userProfileStore.user_profile.localtime} local time` }
             ),
           ]),
         ]

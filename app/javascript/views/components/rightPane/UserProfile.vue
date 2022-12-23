@@ -95,7 +95,7 @@
 import { NDivider, NTooltip } from 'naive-ui';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
-import { UserStore } from '../../../stores/user_store';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import axios from 'axios';
 
 export default {
@@ -103,8 +103,8 @@ export default {
   components: { RightPaneHeader, NDivider, NTooltip },
   setup(){
     const userProfileStore = useUserProfileStore()
-    const currentUserStore = UserStore()
-    return { userProfileStore, currentUserStore }
+    const currentProfileStore = useCurrentProfileStore()
+    return { userProfileStore, currentProfileStore }
   },
   async mounted(){
     let result = axios.get(
@@ -118,8 +118,7 @@ export default {
   },
   computed:{
     ownProfile(){
-      // return this.currentUserStore.currentUser.id == this.userProfileStore.userProfile.id
-      return false
+      return this.currentProfileStore.currentProfile.id == this.userProfileStore.user_profile.id
     }
   },
   methods:{
