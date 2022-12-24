@@ -70,13 +70,31 @@
             </div>
           </div>
         </div>
-        <template v-for="emoji in allReactions" :key="emoji.id">
-          <span
-            @click="emojiClickListener(emoji)"
-            class="bg-black-300 p-1 mr-1 rounded"
-            >{{ emoji.emoji }}</span
-          >
-        </template>
+        <div>
+          {{ displayReaction }}
+          <template v-for="emoji in displayedReactions" :key="emoji">
+            <span
+              @click="emojiClickListener(emoji)"
+              class="mt-1 inline-flex bg-black-200 mr-1 w-9 h-7 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
+            >
+              <n-tooltip
+                placement="top"
+                :style="{ width: '150px' }"
+                trigger="hover"
+              >
+                <template #trigger>
+                  <n-button text color="#1a1a1a" size="medium"
+                    >{{ emoji }}
+                    <span class="text-xs ml-2">{{
+                      countReaction(emoji)
+                    }}</span></n-button
+                  >
+                </template>
+                <span> {{ getUsers(emoji) }} reacted with {{ emoji }} </span>
+              </n-tooltip>
+            </span>
+          </template>
+        </div>
         <div
           v-if="currMessage?.is_threaded"
           @click="toggleThread"
@@ -134,7 +152,7 @@
 
 <script>
 import moment from 'moment';
-import { NAvatar } from 'naive-ui';
+import { NAvatar, NTooltip, NButton } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -165,6 +183,8 @@ export default {
     NAvatar,
     EmojiPicker,
     EmojiModalButton,
+    NTooltip,
+    NButton,
   },
   props: {
     currMessage: {
@@ -196,6 +216,8 @@ export default {
       openEmojiModal: false,
       allReactions: this.currMessage.reactions,
       showOptions: false,
+      displayedReactions: [],
+      users: this.currMessage.reaction_users,
     };
   },
   computed: {
@@ -222,20 +244,60 @@ export default {
     repliesCount() {
       return `${this.currMessage.replies?.length} replies..`;
     },
+    displayReaction() {
+      const unique = this.allReactions.filter(element => {
+        const isDuplicate = this.displayedReactions.includes(element.emoji);
+        if (!isDuplicate) {
+          this.displayedReactions.push(element.emoji);
+          return true;
+        }
+        return false;
+      });
+    },
   },
   methods: {
     async addReaction(emoji) {
-      await add_reaction(this.currMessage.id, emoji.i).then(response => {
-        return this.allReactions.push(response.data);
-      });
+      let emoji_id = null;
+      if (
+        this.allReactions.some(reaction => {
+          return (
+            (emoji_id = reaction.id),
+            reaction.emoji === emoji.i &&
+              reaction.user_id === this.currentUserStore.currentUser.id
+          );
+        })
+      ) {
+        await remove_reaction(emoji_id).then(() => {
+          this.allReactions = this.allReactions.filter(function (reaction) {
+            return reaction.id != emoji_id;
+          });
+        });
+      } else {
+        await add_reaction(this.currMessage.id, emoji.i).then(response => {
+          return this.allReactions.push(response.data);
+        });
+      }
     },
 
     async emojiClickListener(emoji) {
-      if (emoji.user_id == this.currentUserStore.currentUser.id) {
-        await remove_reaction(emoji.id).then(() => {
+      let emoji_id = null;
+      if (
+        this.allReactions.some(reaction => {
+          return (
+            (emoji_id = reaction.id),
+            reaction.emoji === emoji &&
+              reaction.user_id === this.currentUserStore.currentUser.id
+          );
+        })
+      ) {
+        await remove_reaction(emoji_id).then(() => {
           this.allReactions = this.allReactions.filter(function (reaction) {
-            return reaction.id != emoji.id;
+            return reaction.id != emoji_id;
           });
+        });
+      } else {
+        await add_reaction(this.currMessage.id, emoji).then(response => {
+          return this.allReactions.push(response.data);
         });
       }
     },
@@ -263,11 +325,42 @@ export default {
         });
       }
     },
+    countReaction(emoji) {
+      const filteredReactions = this.allReactions.filter(function (value) {
+        return value.emoji === emoji;
+      });
+      if (filteredReactions.length === 0) {
+        this.displayedReactions = this.displayedReactions.filter(function (
+          reaction
+        ) {
+          return reaction != emoji;
+        });
+      }
+      return filteredReactions.length;
+    },
+    getUsers(emoji) {
+      const filteredUsers = this.users.filter(function (value) {
+        if (value.reaction === emoji) {
+          return value.username;
+        }
+      });
+      var users = filteredUsers.map(function (item) {
+        return item.username;
+      });
+      const formatter = new Intl.ListFormat('en', {
+        style: 'long',
+        type: 'conjunction',
+      });
+      return formatter.format(users);
+    },
   },
 };
 </script>
 <style scoped>
 .messageContentPinned {
   @apply bg-yellow-100;
+}
+.n-button{
+  border: none;
 }
 </style>
