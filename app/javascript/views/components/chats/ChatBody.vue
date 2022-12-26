@@ -131,8 +131,7 @@ export default {
     },
     getDate(created_at) {
       const dateInUTC = moment(new Date(created_at));
-      const date = new Date(dateInUTC);
-      return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
+      return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
   },
   updated() {
