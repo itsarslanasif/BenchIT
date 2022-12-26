@@ -12,7 +12,7 @@ json.receiver_name @receiver.username if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
 json.group_name @group.name if @group.present?
 json.reaction_users message.reactions do |reaction|
-  json.username reaction.user.name
+  json.username reaction.profile.username
   json.reaction reaction.emoji
 end
 json.replies message.replies do |reply|

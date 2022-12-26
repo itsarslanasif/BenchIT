@@ -70,31 +70,29 @@
             </div>
           </div>
         </div>
-        <div>
-          {{ displayReaction }}
-          <template v-for="emoji in displayedReactions" :key="emoji">
-            <span
-              @click="emojiClickListener(emoji)"
-              class="mt-1 inline-flex bg-black-200 mr-1 w-9 h-7 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
+        {{ displayReaction }}
+        <template v-for="emoji in displayedReactions" :key="emoji">
+          <span
+            @click="emojiClickListener(emoji)"
+            class="mt-1 inline-flex bg-black-200 mr-1 w-9 h-7 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
+          >
+            <n-tooltip
+              placement="top"
+              :style="{ width: '150px' }"
+              trigger="hover"
             >
-              <n-tooltip
-                placement="top"
-                :style="{ width: '150px' }"
-                trigger="hover"
-              >
-                <template #trigger>
-                  <n-button text color="#1a1a1a" size="medium"
-                    >{{ emoji }}
-                    <span class="text-xs ml-2">{{
-                      countReaction(emoji)
-                    }}</span></n-button
-                  >
-                </template>
-                <span> {{ getUsers(emoji) }} reacted with {{ emoji }} </span>
-              </n-tooltip>
-            </span>
-          </template>
-        </div>
+              <template #trigger>
+                <n-button text color="#1a1a1a" size="medium"
+                  >{{ emoji }}
+                  <span class="text-xs ml-2">{{
+                    countReaction(emoji)
+                  }}</span></n-button
+                >
+              </template>
+              <span> {{ getUsers(emoji) }} reacted with {{ emoji }} </span>
+            </n-tooltip>
+          </span>
+        </template>
         <div
           v-if="currMessage?.is_threaded"
           @click="toggleThread"
@@ -245,6 +243,7 @@ export default {
       return `${this.currMessage.replies?.length} replies..`;
     },
     displayReaction() {
+      if (this.allReactions !== undefined ) {
       const unique = this.allReactions.filter(element => {
         const isDuplicate = this.displayedReactions.includes(element.emoji);
         if (!isDuplicate) {
@@ -252,18 +251,18 @@ export default {
           return true;
         }
         return false;
-      });
+      });}
     },
   },
   methods: {
-    async addReaction(emoji) {
+   async addReaction(emoji) {
       let emoji_id = null;
       if (
         this.allReactions.some(reaction => {
           return (
             (emoji_id = reaction.id),
             reaction.emoji === emoji.i &&
-              reaction.user_id === this.currentUserStore.currentUser.id
+              reaction.profile_id === this.currentUserStore.currentUser.id
           );
         })
       ) {
@@ -286,7 +285,7 @@ export default {
           return (
             (emoji_id = reaction.id),
             reaction.emoji === emoji &&
-              reaction.user_id === this.currentUserStore.currentUser.id
+              reaction.profile_id === this.currentUserStore.currentUser.id
           );
         })
       ) {
@@ -301,6 +300,7 @@ export default {
         });
       }
     },
+
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
     },
@@ -360,7 +360,7 @@ export default {
 .messageContentPinned {
   @apply bg-yellow-100;
 }
-.n-button{
+.n-button {
   border: none;
 }
 </style>
