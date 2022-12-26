@@ -33,11 +33,7 @@ class Profile < ApplicationRecord
   validates :text_status, length: { maximum: 100 }
   validates :pronounce_name, length: { maximum: 20 }
 
-
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
-  validates :profile_image, attached: true, content_type: ['image/png', 'image/jpeg'],
-                            dimension: { width: { min: 512, max: 1024 },
-                                         height: { min: 512, max: 1024 } }
   enum role: {
     primary_owner: 0,
     workspace_owner: 1,

@@ -1,4 +1,3 @@
-
 json.id @profile.id
 json.workspace_id @profile.workspace_id
 json.user_id @profile.user_id
