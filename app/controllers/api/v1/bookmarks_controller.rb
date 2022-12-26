@@ -1,5 +1,5 @@
 class Api::V1::BookmarksController < Api::ApiController
-  before_action :set_channel, only: %i[index]
+  before_action :set_bookmark_id_and_type, only: %i[index]
 
   def index
     @bookmarks = Bookmark.with_bookmarkid_and_bookmarktype(@bookmark_id, @bookmark_type)
@@ -13,10 +13,9 @@ class Api::V1::BookmarksController < Api::ApiController
 
   private
 
-  def set_channel
+  def set_bookmark_id_and_type
     @bookmark_id = params[:bookmarkable_id]
     @bookmark_type = params[:bookmarkable_type]
-    return render json: { message: 'Invalid', status: :not_found } if @bookmark_id.blank? || @bookmark_type.blank?
   end
 
   def bookmark_params
