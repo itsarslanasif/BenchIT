@@ -5,6 +5,6 @@ class Bookmark < ApplicationRecord
   validates :name, length: { maximum: 50 }
 
   scope :with_bookmarkid_and_bookmarktype, lambda { |bookmark_id, bookmark_type|
-    where(bookmarkable_id: bookmark_id,bookmarkable_type: bookmark_type)
+    where(bookmarkable_id: bookmark_id, bookmarkable_type: bookmark_type)
   }
 end
