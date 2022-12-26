@@ -32,6 +32,11 @@ class Api::V1::ProfilesController < Api::ApiController
     end
   end
 
+  def update
+    @profile = Current.profile.update(profile_params)
+    render json: { message: 'Profile Updated Sucessfully.' }, status: :ok
+  end
+
   def previous_direct_messages
     @profiles = Profile.where(id: @dm_users_ids)
   end
