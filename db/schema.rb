@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_26_160637) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_26_201934) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -138,11 +138,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_26_160637) do
     t.index ["token"], name: "index_invitables_on_token"
   end
 
-  create_table "profile_statuses", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "workspace_id", null: false
@@ -178,18 +173,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_26_160637) do
     t.integer "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "statuses", force: :cascade do |t|
-    t.string "text"
-    t.string "emoji"
-    t.datetime "clear_after"
-    t.bigint "profile_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "type"
-    t.integer "workspace_id"
-    t.index ["profile_id"], name: "index_statuses_on_profile_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -250,5 +233,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_26_160637) do
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "profiles"
-  add_foreign_key "statuses", "profiles"
 end
