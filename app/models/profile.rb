@@ -16,6 +16,7 @@ class Profile < ApplicationRecord
   belongs_to :workspace
 
   has_one_attached :profile_image, dependent: :destroy
+  has_one_attached :recording
 
   has_many :saved_items
   has_many :channel_participants, dependent: :destroy
