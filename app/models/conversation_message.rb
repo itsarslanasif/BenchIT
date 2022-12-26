@@ -1,5 +1,5 @@
 class ConversationMessage < ApplicationRecord
-  after_commit :broadcast_message
+  after_commit :broadcast_message, :set_message
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
@@ -14,8 +14,8 @@ class ConversationMessage < ApplicationRecord
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
-  def broadcast_message
-    message = {
+  def set_message
+    @message = {
       id: id,
       content: content,
       is_threaded: is_threaded,
@@ -27,11 +27,14 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at,
       is_edited: is_edited
     }
-    message[:attachments] = attach_message_attachments if message_attachments.present?
+    @message[:attachments] = attach_message_attachments if message_attachments.present?
+  end
+
+  def broadcast_message
     channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
     channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('Profile')
 
-    ActionCable.server.broadcast(channel_key, { message: message })
+    ActionCable.server.broadcast(channel_key, { message: @message })
   end
 
   def self.recent_last_conversation(conversation_ids)
