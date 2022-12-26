@@ -3,8 +3,9 @@ class Api::V1::StatusesController < Api::ApiController
 
   def create
     @profile_status = Current.profile.build_profile_status(status_params)
-    @recent_status = Current.profile.recent_statuses.create(status_params)
+    @recent_status = Current.profile.recent_statuses.new(status_params)
     if @profile_status.save
+      @recent_status.save
       ClearStatusJob.set(wait_until:params[:clear_after].to_time).perform_later(@profile_status.id)
       render json: @profile_status, status: :ok
     else
@@ -24,7 +25,7 @@ class Api::V1::StatusesController < Api::ApiController
   private
 
   def set_status
-    @status = Current.profile.status
+    @status = Status.find(params[:id])
 
     return render json: { message: 'Status Not Found.' }, status: :not_found if @status.nil?
   end

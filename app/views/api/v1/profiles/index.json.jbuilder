@@ -4,5 +4,6 @@ json.array! @profiles do |profile|
   json.description profile.description
   json.workspace_id profile.workspace_id
   json.user_id profile.user_id
+  json.status profile.profile_status if profile.profile_status.present?
   json.image_url url_for(profile.profile_image) if profile.profile_image.attached?
 end
