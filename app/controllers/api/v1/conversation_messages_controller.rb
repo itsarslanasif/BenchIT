@@ -1,6 +1,6 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
-  before_action :set_message, only: %i[destroy]
+  before_action :set_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
@@ -20,6 +20,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       response = { message: @message.errors, status: :unprocessable_entity }
     end
     render json: response
+  end
+
+  def update
+    if @message.update(conversation_messages_params)
+      render json: { success: 'Messages updated', message: @message, status: :updated }
+    else
+      render json: { errors: @message.errors, status: :unprocessable_entity }
+    end
   end
 
   def destroy
@@ -75,7 +83,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
+    params.permit(:content, :is_threaded, :is_edited, :parent_message_id, message_attachments: []).tap do |param|
       param[:sender_id] = Current.profile.id
     end
   end
