@@ -31,6 +31,9 @@ class Profile < ApplicationRecord
   validates :description, length: { maximum: 150 }
   validates :display_name, length: { maximum: 80 }
   validates :text_status, length: { maximum: 100 }
+  validates :pronounce_name, length: { maximum: 20 }
+
+
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
   validates :profile_image, attached: true, content_type: ['image/png', 'image/jpeg'],
                             dimension: { width: { min: 512, max: 1024 },
