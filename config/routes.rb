@@ -19,7 +19,7 @@ Rails.application.routes.draw do
 
         resources :groups, only: %i[index show]
         resources :users, only: %i[index]
-        resources :conversation_messages, only: %i[create destroy] do
+        resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message
             get :index_saved_messages
