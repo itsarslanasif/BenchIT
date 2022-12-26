@@ -57,9 +57,6 @@ export default {
     };
   },
   methods: {
-    selectedDate(date) {
-      console.log(date);
-    },
     setOption(type) {
       const date = new Date();
       switch (type) {

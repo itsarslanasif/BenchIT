@@ -119,6 +119,7 @@ export default {
       }
       message = document.getElementById(id);
       this.scrollToMessage(message);
+      this.jumpToDateTodayToggle = this.jumpToDateToggle = false;
     },
     scrollToMessage(message) {
       if (message) {
@@ -151,7 +152,7 @@ export default {
 }
 
 .highlight {
-  animation: background-fade 7s;
+  animation: background-fade 5s;
 }
 
 @keyframes background-fade {
