@@ -48,7 +48,21 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description).tap do |param|
+    params.require(:profile).permit(
+      :username,
+      :description,
+      :recording,
+      :profile_image,
+      :role,
+      :display_name,
+      :title,
+      :text_status,
+      :emoji_status,
+      :time_zone,
+      :pronounce_name,
+      :phone,
+      :skype
+    ).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end
