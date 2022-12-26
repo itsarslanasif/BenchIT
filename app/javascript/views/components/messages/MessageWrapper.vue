@@ -243,7 +243,6 @@ export default {
       return `${this.currMessage.replies?.length} replies..`;
     },
     displayReaction() {
-      if (this.allReactions !== undefined ) {
       const unique = this.allReactions.filter(element => {
         const isDuplicate = this.displayedReactions.includes(element.emoji);
         if (!isDuplicate) {
@@ -251,11 +250,11 @@ export default {
           return true;
         }
         return false;
-      });}
+      });
     },
   },
   methods: {
-   async addReaction(emoji) {
+    async addReaction(emoji) {
       let emoji_id = null;
       if (
         this.allReactions.some(reaction => {

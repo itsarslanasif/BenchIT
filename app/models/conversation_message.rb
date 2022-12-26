@@ -24,7 +24,8 @@ class ConversationMessage < ApplicationRecord
       sender_name: profile.username,
       bench_conversation_id: bench_conversation_id,
       created_at: created_at,
-      updated_at: updated_at
+      updated_at: updated_at,
+      reactions: reactions
     }
     message[:attachments] = attach_message_attachments if message_attachments.present?
     channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
