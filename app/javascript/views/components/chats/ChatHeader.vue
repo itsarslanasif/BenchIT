@@ -11,6 +11,7 @@
   <div v-else-if="chat && conversation_type === 'profiles'">
     <UserChatInfo :chat="chat" />
   </div>
+  <div><EditContactInfo/></div>
   <div
     class="flex items-center h-8 justify-between px-1 mt-1 shadow-md custom-border"
   >
@@ -35,6 +36,7 @@ import PinnedConversationModelVue from '../pinnedConversation/pinnedConversation
 import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
+import EditContactInfo from '../profile/EditContactInfo.vue';
 
 export default {
   name: 'ChatHeader',
@@ -50,7 +52,8 @@ export default {
     PinnedConversationModelVue,
     ChannelInfo,
     UserChatInfo,
-  },
+    EditContactInfo
+},
   data() {
     return {
       bookmarks: [],
