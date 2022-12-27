@@ -3,6 +3,7 @@ json.workspace_id @profile.workspace_id
 json.user_id @profile.user_id
 json.username @profile.username
 json.description @profile.description
+json.image_url url_for(@profile.profile_image) if @profile.profile_image.attached?
 json.display_name @profile.display_name
 json.pronounce_name @profile.pronounce_name
 json.role @profile.role
@@ -17,6 +18,14 @@ json.contact_info do
 end
 json.about_me do
   json.skype @profile.skype
+end
+if @profile.recording.present?
+  json.attachments @profile.recording do |attachment|
+    json.attachment do
+      json.extract! attachment.blob, :id, :content_type
+    end
+    json.attachment_link rails_storage_proxy_url(attachment)
+  end
 end
 json.local_time Time.current.in_time_zone(@profile.time_zone).strftime('%I:%M %p')
 json.image_url url_for(@profile.profile_image) if @profile.profile_image.attached?
