@@ -6,8 +6,8 @@ class Bookmark < ApplicationRecord
   validates :bookmark_URL, presence: true
   validates :name, length: { maximum: 50 }
 
-  scope :with_bookmarkid_and_bookmarktype, lambda { |bookmark_id, bookmark_type|
-    where(bookmarkable_id: bookmark_id, bookmarkable_type: bookmark_type)
+  scope :with_bookmarkable_id_and_type, lambda { |bookmarkable_id, bookmarkable_type|
+    where(bookmarkable_id: bookmarkable_id, bookmarkable_type: bookmarkable_type)
   }
 
   private

@@ -1,6 +1,6 @@
 class Api::V1::BookmarksController < Api::ApiController
   def index
-    @bookmarks = Bookmark.with_bookmarkid_and_bookmarktype(params[:bookmarkable_id], params[:bookmarkable_type])
+    @bookmarks = Bookmark.with_bookmarkable_id_and_type(params[:bookmarkable_id], params[:bookmarkable_type])
   end
 
   def create
