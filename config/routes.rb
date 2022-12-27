@@ -46,7 +46,7 @@ Rails.application.routes.draw do
             post :invite
           end
 
-          resources :profiles, only: %i[index create show], shallow: true do
+          resources :profiles, only: %i[index create show] do
             collection do
               get :previous_direct_messages
             end

@@ -28,6 +28,9 @@ class Profile < ApplicationRecord
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
+  validates :display_name, length: { maximum: 80 }
+  validates :text_status, length: { maximum: 100 }
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
 
   enum role: {
     primary_owner: 0,

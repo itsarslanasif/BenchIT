@@ -6,18 +6,23 @@ workspace = Workspace.create!(company_name: 'BenchIT',
 
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
-user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1)
+user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '123', skype: '123', text_status: '123',
+                       time_zone: 'Karachi', emoji_status: 'haha')
 user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user2.save!
-user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1)
+user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1, display_name: 'arnold', phone: '123', skype: '123',
+                       text_status: '123', time_zone: 'UTC', emoji_status: 'haha')
 user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user3.save!
-user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: 1)
+user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: 1, display_name: 'arthur', phone: '123', skype: '123', text_status: '123',
+                       time_zone: 'Samoa', emoji_status: 'haha')
 user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user.save!
-user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1)
+user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1, display_name: 'austin', phone: '123', skype: '123', text_status: '123',
+                      time_zone: 'Auckland', emoji_status: 'haha')
 admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password', jti: SecureRandom.uuid)
-admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1)
+admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1, display_name: 'admin', phone: '123', skype: '123',
+                       text_status: '123', time_zone: 'UTC', emoji_status: 'haha')
 Current.user = user1
 Current.profile = user1.profiles.first
 Current.workspace = workspace
