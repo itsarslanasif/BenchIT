@@ -25,7 +25,7 @@ class ConversationMessage < ApplicationRecord
       bench_conversation_id: bench_conversation_id,
       created_at: created_at,
       updated_at: updated_at,
-      is_edited: is_edited
+      is_edited: created_at != updated_at
     }
     @message[:attachments] = attach_message_attachments if message_attachments.present?
   end
