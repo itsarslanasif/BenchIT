@@ -4,6 +4,7 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show update]
   before_action :set_profile, only: %i[show update]
+
   def index
     @profiles = if params[:query].presence
                   Profile.search(
@@ -34,7 +35,7 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def update
     if (@profile = Current.profile.update(profile_params))
-      render json: { message: 'Profile Updated Sucessfully.' }, status: :ok
+      render json: { message: 'Profile Updated successfully.' }, status: :ok
     else
       render json: { errors: @profile.errors, message: 'There was an error updating the profile' }, status: :unprocessable_entity
     end
