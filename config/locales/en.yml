@@ -162,7 +162,6 @@ en:
         edit: 'Edit'
         set_a_status: 'Set a status'
         view_as: 'View as'
-        go: 'Go!'
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
@@ -217,9 +216,7 @@ en:
         recent_files: 'Recent files'
         from_computer: 'Attach from your computer'
         divider: '●'
-<<<<<<< HEAD
       user_profile:
-=======
       messages_section:
         today: 'Today'
         yesterday: 'Yesterday'
@@ -228,7 +225,6 @@ en:
         last_month: 'Last month'
         the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
->>>>>>> c8f4564e0b5f6148b91c00ee736b0bb5b451f600
 
     admin:
       title: 'Admin'
