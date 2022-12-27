@@ -35,7 +35,7 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def update
     if (@profile = Current.profile.update(profile_params))
-      render json: { message: 'Profile Updated successfully.' }, status: :ok
+      render json: { message: 'Profile Updated Successfully.' }, status: :ok
     else
       render json: { errors: @profile.errors, message: 'There was an error updating the profile' }, status: :unprocessable_entity
     end
