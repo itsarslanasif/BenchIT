@@ -96,25 +96,13 @@ import { NDivider, NTooltip } from 'naive-ui';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-import axios from 'axios';
 
 export default {
-  name: 'UserProfile',
   components: { RightPaneHeader, NDivider, NTooltip },
   setup(){
     const userProfileStore = useUserProfileStore()
     const currentProfileStore = useCurrentProfileStore()
     return { userProfileStore, currentProfileStore }
-  },
-  async mounted(){
-    let result = axios.get(
-        `/v1/workspaces/1/profiles/1`,
-        {
-          headers: { Authorization: sessionStorage.getItem('token') }
-        },
-      );
-      let profile = await result
-      // this.userProfileStore.setUserProfile(profile.data)
   },
   computed:{
     ownProfile(){
