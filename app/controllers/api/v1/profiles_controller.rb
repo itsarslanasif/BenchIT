@@ -4,8 +4,6 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show update]
   before_action :set_profile, only: %i[show update]
-  before_action :check_profile_user, only: %i[update]
-
   def index
     @profiles = if params[:query].presence
                   Profile.search(
@@ -35,8 +33,11 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def update
-    @profile = Current.profile.update(profile_params)
-    render json: { message: 'Profile Updated Sucessfully.' }, status: :ok
+    if (@profile = Current.profile.update(profile_params))
+      render json: { message: 'Profile Updated Sucessfully.' }, status: :ok
+    else
+      render json: { errors: @profile.errors, message: 'There was an error updating the profile' }, status: :unprocessable_entity
+    end
   end
 
   def previous_direct_messages
@@ -47,12 +48,6 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def set_profile
     @profile = Profile.find(params[:id])
-  end
-
-  def check_profile_user
-    return if current_user.profile_ids.include?(@profile.id)
-
-    render json: { message: "This profile doesn't blongs to you." }
   end
 
   def set_workspace
