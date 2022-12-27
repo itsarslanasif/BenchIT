@@ -1,4 +1,5 @@
 <template>
+  <div>
   <n-dropdown
     trigger="click"
     size="medium"
@@ -26,15 +27,19 @@
       </div>
     </n-button>
   </n-dropdown>
+  <SetProfileStatusVue v-if="profileStatusStore.showProfileStatusPopUp"/>
+</div>
 </template>
 
 <script>
 import { NDropdown, NAvatar, NText } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
+import SetProfileStatusVue from '../components/profileStatus/setProfileStatus.vue';
 import { CONSTANTS } from '../../assets/constants';
+import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js'
 export default {
-  components: { NDropdown, NAvatar },
+  components: { NDropdown, NAvatar ,SetProfileStatusVue },
   data() {
     return {
       status: 'Away',
@@ -134,8 +139,17 @@ export default {
       ],
     };
   },
+  setup() {
+    const profileStatusStore = useProfileStatusStore();
+    return { profileStatusStore };
+  },
   methods: {
     handleSelect(key) {},
+    handleStatusSelect(){
+      console.log("set profile status: selected")
+      this.profileStatusStore.toggleProfileStatusPopUp()
+      console.log("Toggle Profile Status popup:" ,this.profileStatusStore.showProfileStatusPopUp)
+    },
     renderCustomHeader() {
       return h(
         'div',
@@ -170,7 +184,9 @@ export default {
         {
           class:
             'hover:border-black-600 border rounded border-black-300 flex items-center px-3 pt-1 pb-1 cursor-pointer my-px mx-3',
+             onClick:this.handleStatusSelect
         },
+
         [
           h('div', [h(NText, { class: 'text-xl' }, { default: () => '🙂' })]),
           h('div', { class: 'w-full' }, [
