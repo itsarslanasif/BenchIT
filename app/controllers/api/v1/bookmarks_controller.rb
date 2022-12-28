@@ -27,6 +27,10 @@ class Api::V1::BookmarksController < Api::ApiController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name, :bookmark_URL, :bookmarkable_type, :bookmarkable_id)
+    params.require(:bookmark).permit(:name,:id, :bookmark_URL, :bookmarkable_type, :bookmarkable_id)
   end
 end
+
+
+
+

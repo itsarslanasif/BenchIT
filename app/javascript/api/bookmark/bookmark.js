@@ -29,3 +29,23 @@ export const getBookmarks = async (bookmarkable_type, bookmarkable_id) => {
       return response.data.bookmarks;
     })
 }
+
+export const updateBookmark = async (bookmark_id, name, url) => {
+  return await axios
+    .patch(`v1/bookmarks/${bookmark_id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }
+    ,bookmark: { name: name, bookmark_URL: url },
+    })
+}
+
+export const deleteBookmark = async (bookmark_id) => {
+ 
+  return await axios
+    .delete(`v1/bookmarks/${bookmark_id}`, {
+      headers: {
+        Authorization: sessionStorage.getItem('token')
+      }
+    })
+}

@@ -155,12 +155,17 @@ export default {
     handleDelete() {
       this.validations();
       if (!this.error) {
+        this.bookmarkStore.delete_bookmark(this.bookMarkObject.id)
         this.toggleModel();
       }
     },
     handleUpdate() {
       this.validations();
       if (!this.error) {
+        this.bookmarkStore.update_bookmark(
+          this.bookMarkObject.id,
+          this.formValue.bookMarkTitle,
+          this.formValue.bookMarkLink )
         this.toggleModel();
       }
     },

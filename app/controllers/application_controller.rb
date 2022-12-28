@@ -11,6 +11,7 @@ class ApplicationController < ActionController::Base
   private
 
   def render_error(exception)
+    puts exception
     if exception.instance_of?(ActiveRecord::RecordNotFound)
       render json: { success: false, error: 'Record Not found' }.to_json, status: :not_found
     else
