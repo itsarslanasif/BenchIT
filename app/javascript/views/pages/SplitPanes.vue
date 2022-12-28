@@ -1,14 +1,14 @@
 <template>
-  <div class="bg-primary text-sm">
-    <div class="border-b border-slate-400 bg-secondary">
+  <div class="bg-primary text-sm h-screen flex flex-col ">
+    <div class="border-b border-slate-400 bg-secondary ">
       <SearchBar />
     </div>
-    <splitpanes>
-      <pane max-size="25" min-size="11">
+    <splitpanes class="bg-danger">
+      <pane max-size="20" min-size="10">
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-      <pane max-size="70" min-size="75" class="bg-white">
+      <pane class="bg-white" max-size="90" min-size="80">
         <router-view :key="$route.fullPath" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
@@ -123,17 +123,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.chatpane {
-  overflow: hidden;
-  position: relative;
-}
-
-.modal-styling {
-  background-color: transparent;
-  margin-left: 40%;
-  margin-top: 7%;
-  position: absolute;
-}
-</style>
