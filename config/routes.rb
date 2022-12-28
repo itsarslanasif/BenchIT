@@ -17,7 +17,11 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :groups, only: %i[index show]
+        resources :groups, only: %i[index show] do
+          member do
+            post :add_member
+          end
+        end
         resources :users, only: %i[index]
         resources :conversation_messages, only: %i[create destroy] do
           collection do
