@@ -167,6 +167,8 @@ en:
         email: 'Email Address'
         phone: 'Phone'
         title: 'Profile'
+        edit_contact_information: 'Edit Contact information'
+        edit_phone_placeholder: 'Enter Your Phone Number (Dont use Alphabets or dashes)'
       filters:
         all_types: 'All types'
         owners: "Owners"
