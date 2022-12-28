@@ -48,9 +48,21 @@ class ConversationMessage < ApplicationRecord
       profile_ids = BenchChannel.find(bench_conversation.conversationable_id).profiles.pluck(:id)
     end
     profile_ids.each do |id|
+      add_unread_message_in_redis(id)
       notification_key = "NotificationChannel#{Current.workspace.id}-#{id}"
       ActionCable.server.broadcast(notification_key, { message: @message })
     end
+  end
+
+  def add_unread_message_in_redis(profile_id)
+    str = REDIS.get("unreadMessages#{Current.workspace.id}#{profile_id}")
+    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
+    previous_unread_messages_details.push({
+                                            conversationable_type: bench_conversation.conversationable_type,
+                                            conversationable_id: bench_conversation.conversationable_id,
+                                            message_id: id
+                                          })
+    REDIS.set("unreadMessages#{Current.workspace.id}#{profile_id}", previous_unread_messages_details.to_json) unless profile_id == Current.profile.id
   end
 
   def set_message
