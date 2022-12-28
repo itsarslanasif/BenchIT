@@ -1,6 +1,7 @@
 json.id message.id
 json.content message.content
 json.is_threaded message.is_threaded
+json.is_edited message.created_at != message.updated_at
 json.parent_message_id message.parent_message_id
 json.sender_id message.sender_id
 json.sender_name message.profile.username
