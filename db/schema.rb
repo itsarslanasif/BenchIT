@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_23_152051) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -48,8 +48,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.boolean "is_private", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "creator_id"
     t.bigint "workspace_id", null: false
+    t.bigint "creator_id"
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
     t.index ["name"], name: "index_bench_channels_on_name", unique: true
     t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
@@ -66,14 +66,15 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
   end
 
   create_table "bookmarks", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "bench_channel_id", null: false
+    t.bigint "profile_id", null: false
+    t.string "bookmarkable_type"
+    t.bigint "bookmarkable_id"
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bench_channel_id"], name: "index_bookmarks_on_bench_channel_id"
-    t.index ["user_id"], name: "index_bookmarks_on_user_id"
+    t.index ["bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_bookmarkable"
+    t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
   end
 
   create_table "channel_participants", force: :cascade do |t|
@@ -81,10 +82,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.datetime "left_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
     t.bigint "bench_channel_id", null: false
+    t.bigint "profile_id", null: false
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
-    t.index ["user_id"], name: "index_channel_participants_on_user_id"
+    t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
   end
 
   create_table "conversation_messages", force: :cascade do |t|
@@ -93,8 +94,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.bigint "parent_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "sender_id"
     t.bigint "bench_conversation_id"
+    t.bigint "sender_id"
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
@@ -102,28 +103,29 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
 
   create_table "draft_messages", force: :cascade do |t|
     t.text "content", null: false
-    t.bigint "user_id", null: false
     t.bigint "bench_conversation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "profile_id", null: false
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
-    t.index ["user_id", "bench_conversation_id"], name: "index_draft_messages_on_user_id_and_bench_conversation_id", unique: true
-    t.index ["user_id"], name: "index_draft_messages_on_user_id"
+    t.index ["profile_id", "bench_conversation_id"], name: "index_draft_messages_on_profile_id_and_bench_conversation_id", unique: true
+    t.index ["profile_id"], name: "index_draft_messages_on_profile_id"
   end
 
   create_table "favourites", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.string "favourable_type"
     t.bigint "favourable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "profile_id", null: false
     t.index ["favourable_type", "favourable_id"], name: "index_favourites_on_favourable"
-    t.index ["user_id"], name: "index_favourites_on_user_id"
+    t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
 
   create_table "groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "profile_ids", default: [], array: true
   end
 
   create_table "invitables", force: :cascade do |t|
@@ -144,17 +146,26 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "role", default: 3
+    t.string "display_name", limit: 80, default: "", null: false
+    t.string "title", default: "", null: false
+    t.string "pronounce_name", default: "", null: false
+    t.string "text_status", limit: 100, default: "", null: false
+    t.string "emoji_status", default: "", null: false
+    t.string "phone", default: "", null: false
+    t.string "skype", default: ""
+    t.string "time_zone", default: "UTC", null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
   end
 
   create_table "reactions", force: :cascade do |t|
-    t.integer "user_id"
     t.integer "conversation_message_id"
     t.string "emoji"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "profile_id", null: false
+    t.index ["profile_id"], name: "index_reactions_on_profile_id"
   end
 
   create_table "saved_items", force: :cascade do |t|
@@ -162,15 +173,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
     t.integer "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "user_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "user_id", null: false
-    t.bigint "group_id", null: false
-    t.index ["group_id"], name: "index_user_groups_on_group_id"
-    t.index ["user_id"], name: "index_user_groups_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -217,20 +219,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_14_094516) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "bench_channels", "users", column: "creator_id"
+  add_foreign_key "bench_channels", "profiles", column: "creator_id"
   add_foreign_key "bench_channels", "workspaces"
-  add_foreign_key "bench_conversations", "users", column: "sender_id"
-  add_foreign_key "bookmarks", "bench_channels"
-  add_foreign_key "bookmarks", "users"
+  add_foreign_key "bench_conversations", "profiles", column: "sender_id"
+  add_foreign_key "bookmarks", "profiles"
   add_foreign_key "channel_participants", "bench_channels"
-  add_foreign_key "channel_participants", "users"
+  add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
-  add_foreign_key "conversation_messages", "users", column: "sender_id"
-  add_foreign_key "draft_messages", "users"
-  add_foreign_key "favourites", "users"
+  add_foreign_key "conversation_messages", "profiles", column: "sender_id"
+  add_foreign_key "draft_messages", "profiles"
+  add_foreign_key "favourites", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
-  add_foreign_key "reactions", "users"
-  add_foreign_key "user_groups", "groups"
-  add_foreign_key "user_groups", "users"
+  add_foreign_key "reactions", "profiles"
 end

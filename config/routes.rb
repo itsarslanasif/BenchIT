@@ -13,25 +13,22 @@ Rails.application.routes.draw do
         resources :mentions, only: [] do
           collection do
             get :channels_list
-            get :users_list
+            get :profiles_list
           end
         end
 
         resources :groups, only: %i[index show]
-        resources :users, only: %i[index show] do
-          collection do
-            get :previous_direct_messages
-          end
-        end
+        resources :users, only: %i[index]
         resources :conversation_messages, only: %i[create destroy] do
           collection do
             get :send_message
             get :index_saved_messages
+            get :recent_files
           end
           member do
             post :save_message
             delete :unsave_message
-            get :recent_files
+            get :bench_channel_messages, :group_messages, :profile_messages
           end
         end
         resources :favourites, only: %i[create destroy]
@@ -40,8 +37,6 @@ Rails.application.routes.draw do
           member do
             delete :leave
           end
-
-          resources :bookmarks, only: %i[create index]
         end
 
         resources :workspaces, only: %i[create] do
@@ -49,9 +44,14 @@ Rails.application.routes.draw do
             post :invite
           end
 
-          resources :profiles, only: %i[index create]
+          resources :profiles, only: %i[index create show update] do
+            collection do
+              get :previous_direct_messages
+            end
+          end
         end
 
+        resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create index]
         resources :draft_messages, only: %i[index create update destroy]
