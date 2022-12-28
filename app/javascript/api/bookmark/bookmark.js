@@ -1,27 +1,31 @@
 import axios from '../../modules/axios';
 
-export const createBookmark = async (channel_id,name, bookmark_URL, user_id) => {
+
+export const createBookmark = async (name, bookmark_URL, bookmarkable_type, bookmarkable_id) => {
   return await axios
-    .post(`v1/bench_channels/${channel_id}/bookmarks`, {
+    .post('v1/bookmarks', {
       name: name,
       bookmark_URL: bookmark_URL,
-      user_id: user_id,
+      bookmarkable_type: bookmarkable_type,
+      bookmarkable_id: bookmarkable_id
     }, {
       headers: {
         Authorization: sessionStorage.getItem('token')
       }
-    })
-    ;
+    });
 };
 
-export const getBookmarks = async (bench_channels_id) => {
+export const getBookmarks = async (bookmarkable_type, bookmarkable_id) => {
+  console.log(bookmarkable_type, bookmarkable_id)
   return await axios
-    .get(`v1/bench_channels/${bench_channels_id}/bookmarks`, {
+    .get('v1/bookmarks', {
       headers: {
         Authorization: sessionStorage.getItem('token')
-      },
+      }
+      ,params: { bookmarkable_type: bookmarkable_type, bookmarkable_id: bookmarkable_id },
     })
     .then(response => {
+      console.log(response)
       return response.data.bookmarks;
     })
 }

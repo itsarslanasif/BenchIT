@@ -13,6 +13,8 @@
         :newBookMark="newBookMark"
         :toggleModel="toggleBookmarkModel"
         :channelId="channelId"
+        :bookmarkable_type="bookmarkable_type"
+        :bookmarkable_id="bookmarkable_id"
       />
     </div>
   </div>
@@ -29,6 +31,8 @@
         :newBookMark="newBookMark"
         :toggleModel="toggleBookmarkModel"
         :bookMarkObject="bookMarkObject"
+        :bookmarkable_type="bookmarkable_type"
+        :bookmarkable_id="bookmarkable_id"
       />
     </div>
   </div>
@@ -43,6 +47,8 @@ export default {
   },
   data() {
     return {
+      bookmarkable_type: window.location.pathname.split('/')[1],
+      bookmarkable_id: window.location.pathname.split('/')[2],
       modalOpen: false,
     };
   },

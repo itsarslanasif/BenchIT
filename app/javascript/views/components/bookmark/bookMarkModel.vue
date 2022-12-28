@@ -102,7 +102,15 @@ export default {
       error: '',
     };
   },
-  props: ['title', 'bookMarkObject', 'newBookMark', 'toggleModel', 'channelId'],
+  props: [
+    'title',
+    'bookMarkObject',
+    'newBookMark',
+    'toggleModel',
+    'channelId',
+    'bookmarkable_type',
+    'bookmarkable_id',
+  ],
   mounted() {
     if (!this.newBookMark) {
       this.setBookmarkObject(this.bookMarkObject);
@@ -131,15 +139,16 @@ export default {
       this.formValue.bookMarkTitle = bookmark.name;
       this.formValue.bookMarkLink = bookmark.bookmark_URL;
     },
+
     handleCreate() {
       this.validations();
       if (!this.error) {
         this.toggleModel();
         this.bookmarkStore.create_bookmark(
-          this.channelId,
           this.formValue.bookMarkTitle,
           this.formValue.bookMarkLink,
-          1
+          this.bookmarkable_type,
+          this.bookmarkable_id
         );
       }
     },
@@ -155,12 +164,12 @@ export default {
         this.toggleModel();
       }
     },
+
     validations() {
       if (this.formValue.bookMarkTitle == '') {
-        this.error =   CONSTANTS.YOU_FORGET_TO_ADD_BOOKMARK_TITLE;
-
+        this.error = CONSTANTS.YOU_FORGET_TO_ADD_BOOKMARK_TITLE;
       } else if (this.formValue.bookMarkLink == '') {
-        this.error =   CONSTANTS.YOU_FORGET_TO_ADD_BOOKMARK_LINK;
+        this.error = CONSTANTS.YOU_FORGET_TO_ADD_BOOKMARK_LINK;
       } else {
         this.error = '';
       }

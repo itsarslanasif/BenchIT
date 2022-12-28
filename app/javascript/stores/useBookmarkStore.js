@@ -17,11 +17,29 @@ export const useBookmarkStore = defineStore('BookmarkStore', {
   },
 
   actions: {
-    async getbookmarks(id) {
-      this.bookmarks = await getBookmarks(id);
+
+    setbookmarkable_type(type) {
+      let selectedType = '';
+      switch (type) {
+        case 'profiles':
+          selectedType = 'Profile';
+          break;
+        case 'channels':
+          selectedType = 'BenchChannel';
+          break;
+        case 'groups':
+          selectedType = 'Group';
+          break;
+      }
+      return selectedType
     },
-    async create_bookmark(channel_id,name,bookmark_URL,user_id) {
-      let newBookmark=await createBookmark(channel_id,name,bookmark_URL,user_id);
+
+    async getbookmarks(bookmarkable_type, bookmarkable_id) {
+
+      this.bookmarks = await getBookmarks(this.setbookmarkable_type(bookmarkable_type), bookmarkable_id);
+    },
+    async create_bookmark(name, bookmark_URL, bookmarkable_type, bookmarkable_id) {
+      let newBookmark=await createBookmark(name, bookmark_URL, this.setbookmarkable_type(bookmarkable_type), bookmarkable_id);
       this.bookmarks.push(newBookmark.data);
     },
   },

@@ -39,7 +39,6 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 import BookMarkTagVue from '../bookmark/bookMarkTag.vue';
-import { getBookmarks } from '../../../api/bookmark/bookmark.js';
 import { useBookmarkStore } from '../../../stores/useBookmarkStore.js';
 
 export default {
@@ -67,7 +66,7 @@ export default {
     };
   },
   mounted() {
-    this.bookmarkStore.getbookmarks(this.conversation_id);
+    this.bookmarkStore.getbookmarks(this.conversation_type,this.conversation_id);
   },
 
   watch: {
