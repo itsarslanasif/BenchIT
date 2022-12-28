@@ -114,7 +114,9 @@ export default {
           .content,
         commit: 'Log in',
       }).then(res => {
-        sessionStorage.setItem('token', res.headers.authorization);
+        if (res.headers.authorization) {
+          sessionStorage.setItem('token', res.headers.authorization);
+        }
         this.response = res.data;
         if (res.data?.user) {
           const currentUser = useCurrentUserStore();

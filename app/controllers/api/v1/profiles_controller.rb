@@ -1,8 +1,9 @@
 class Api::V1::ProfilesController < Api::ApiController
-  before_action :set_workspace, only: %i[index create show]
+  before_action :set_workspace, only: %i[index create show update]
   before_action :check_profile_already_exists, only: %i[create]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
-  before_action :check_user_member_of_workspace, only: %i[show]
+  before_action :check_user_member_of_workspace, only: %i[show update]
+  before_action :set_profile, only: %i[show update]
 
   def index
     @profiles = if params[:query].presence
@@ -32,18 +33,44 @@ class Api::V1::ProfilesController < Api::ApiController
     end
   end
 
+  def update
+    if (@profile = Current.profile.update(profile_params))
+      render json: { message: 'Profile Updated Successfully.' }, status: :ok
+    else
+      render json: { errors: @profile.errors, message: 'There was an error updating the profile' }, status: :unprocessable_entity
+    end
+  end
+
   def previous_direct_messages
     @profiles = Profile.where(id: @dm_users_ids)
   end
 
   private
 
+  def set_profile
+    @profile = Profile.find(params[:id])
+  end
+
   def set_workspace
     @workspace = Workspace.find(params[:workspace_id])
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description).tap do |param|
+    params.require(:profile).permit(
+      :username,
+      :description,
+      :recording,
+      :profile_image,
+      :role,
+      :display_name,
+      :title,
+      :text_status,
+      :emoji_status,
+      :time_zone,
+      :pronounce_name,
+      :phone,
+      :skype
+    ).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end

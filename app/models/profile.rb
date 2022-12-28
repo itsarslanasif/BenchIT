@@ -16,6 +16,7 @@ class Profile < ApplicationRecord
   belongs_to :workspace
 
   has_one_attached :profile_image, dependent: :destroy
+  has_one_attached :recording
 
   has_many :saved_items
   has_many :channel_participants, dependent: :destroy
@@ -25,13 +26,15 @@ class Profile < ApplicationRecord
   has_many :draft_messages, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
+  has_many :bookmarks, as: :bookmarkable, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
   validates :display_name, length: { maximum: 80 }
   validates :text_status, length: { maximum: 100 }
-  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validates :pronounce_name, length: { maximum: 20 }
 
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
   enum role: {
     primary_owner: 0,
     workspace_owner: 1,
@@ -40,6 +43,24 @@ class Profile < ApplicationRecord
   }
 
   scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }
+
+  def attach_recording
+    recording.map do |attachment|
+      {
+        attachment: attachment.blob,
+        attachment_link: Rails.application.routes.url_helpers.rails_storage_proxy_url(attachment)
+      }
+    end
+  end
+
+  def attach_profile_image
+    profile_image.map do |attachment|
+      {
+        attachment: attachment.blob,
+        attachment_link: Rails.application.routes.url_helpers.rails_storage_proxy_url(attachment)
+      }
+    end
+  end
 
   def add_default_image
     return if profile_image.attached?

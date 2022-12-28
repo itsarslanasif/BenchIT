@@ -1,5 +1,1 @@
-json.id bookmark.id
-json.name bookmark.name
-json.bookmark_URL bookmark.bookmark_URL
-json.user_id bookmark.user_id
-json.bench_channel_id bookmark.bench_channel_id
+json.extract! bookmark, :id, :name, :bookmark_URL, :bookmarkable_type, :bookmarkable_id, :profile_id

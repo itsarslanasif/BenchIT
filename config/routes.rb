@@ -37,8 +37,6 @@ Rails.application.routes.draw do
           member do
             delete :leave
           end
-
-          resources :bookmarks, only: %i[create index]
         end
 
         resources :workspaces, only: %i[create] do
@@ -46,13 +44,14 @@ Rails.application.routes.draw do
             post :invite
           end
 
-          resources :profiles, only: %i[index create show] do
+          resources :profiles, only: %i[index create show update] do
             collection do
               get :previous_direct_messages
             end
           end
         end
 
+        resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create index]
         resources :draft_messages, only: %i[index create update destroy]
