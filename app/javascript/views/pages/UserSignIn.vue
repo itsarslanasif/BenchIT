@@ -69,6 +69,7 @@ import { userSignIn } from '../../api/user_auth/user_sign_in_api';
 import { switchWorkspace } from '../../api/switchWorkspace/switchWorkspace.js';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 export default {
   name: 'UserSignIn',
   components: {
@@ -87,6 +88,7 @@ export default {
         password: '',
       },
       response: null,
+      currentProfile: {},
     };
   },
 
@@ -105,14 +107,20 @@ export default {
         if (res.data?.user) {
           const currentUser = useCurrentUserStore();
           currentUser.setUser(res.data.user);
-          switchWorkspace(1);
-          this.goToHomepage();
+          this.getProfile();
         }
       });
     },
-
     goToHomepage() {
       this.$router.push('/');
+    },
+    async getProfile() {
+      const currentProfileStore = useCurrentProfileStore();
+      await switchWorkspace(1).then(response => {
+        this.currentProfile = response;
+      });
+      currentProfileStore.setProfile(this.currentProfile);
+      this.goToHomepage();
     },
   },
 };
