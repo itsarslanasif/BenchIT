@@ -7,13 +7,13 @@ export const useRightPaneStore = defineStore('useRightPaneStore', {
 
   actions: {
     toggleUserProfileShow(val) {
-      if (val == true) {
+      if (val) {
         this.showThread = false;
       }
       this.showUserProfile = val;
     },
     toggleThreadShow(val) {
-      if (val == true) {
+      if (val) {
         this.showUserProfile = false;
       }
       this.showThread = val;

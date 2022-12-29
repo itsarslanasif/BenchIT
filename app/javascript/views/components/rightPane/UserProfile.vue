@@ -106,7 +106,7 @@ export default {
   },
   computed:{
     ownProfile(){
-      return this.currentProfileStore.currentProfile.id == this.userProfileStore.user_profile.id
+      return this.currentProfileStore.currentProfile.id === this.userProfileStore.user_profile.id
     }
   },
   methods:{

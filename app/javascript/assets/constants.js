@@ -82,7 +82,6 @@ export const CONSTANTS = {
   HEADER: 'Header',
   BODY: 'Body',
   FOOTER: 'Footer',
-
   PAUSE_NOTIFICATIONS: 'Pause Notifications',
   GROUP_PAUSE_NOTIFICATIONS: 'Pause notifications...',
   FOR_30_MINUTES: 'For 30 minutes',

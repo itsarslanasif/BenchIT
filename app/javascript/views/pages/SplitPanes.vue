@@ -43,8 +43,6 @@ import searchDmscreen from '../components/directMessages/findDirectMessages.vue'
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 
-
-
 export default {
   components: {
     Splitpanes,
