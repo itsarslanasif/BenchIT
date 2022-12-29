@@ -132,7 +132,7 @@ export default {
         this.formValue.Description == ''
       ) {
         this.error = CONSTANTS.FIELDS_REQUIRED_ERROR;
-      } else if (regex.test(this.formValue.Description)) {
+      } else if (!regex.test(this.formValue.channelName)) {
         this.error = CONSTANTS.CHANNEL_NAME_INVALID_ERROR;
       } else {
         this.error = '';
