@@ -11,7 +11,11 @@
             +
           </a>
         </template>
-        <h5 v-for="user in dmList" :key="user.id" class="hover:bg-primaryHover">
+        <h5
+          v-for="user in directMessageStore.directMessagesList"
+          :key="user.id"
+          class="hover:bg-primaryHover"
+        >
           <div
             @click="goToChat(`/profiles/${user.id}`)"
             class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
@@ -37,10 +41,9 @@
 <script>
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
-import { getDirectMessagesList } from '../../../api/directMessages/directMessages';
-import { useSelectedScreenStore } from '../../../stores/useSelectedScreen';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useDirectMessagesStore } from '../../../stores/userDirectMessagesStore';
+
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {
@@ -62,12 +65,15 @@ export default {
   beforeUnmount() {
     this.dmList = this.options = null;
   },
-  setup() {
-    const selectScreen = useSelectedScreenStore();
-    return { selectScreen };
-  },
   mounted() {
-    this.getDmList();
+    this.directMessageStore.getDmList(
+      this.currentProfileStore.currentProfile.workspace_id
+    );
+  },
+  setup() {
+    const directMessageStore = useDirectMessagesStore();
+    const currentProfileStore = useCurrentProfileStore();
+    return { directMessageStore, currentProfileStore };
   },
   methods: {
     closeModal() {
