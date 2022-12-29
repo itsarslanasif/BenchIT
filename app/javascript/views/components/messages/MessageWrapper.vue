@@ -24,7 +24,7 @@
       @mouseleave="emojiModalStatus = false"
     >
       <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal />
+        <user-profile-modal :profile_id='currMessage.sender_id' />
       </template>
       <span class="message">
         <div class="ml-1">
