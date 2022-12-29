@@ -46,6 +46,7 @@ Rails.application.routes.draw do
         resources :workspaces, only: %i[create] do
           member do
             post :invite
+            get :switch_workspace
           end
 
           resources :profiles, only: %i[index create show update] do
