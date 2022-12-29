@@ -7,9 +7,10 @@
       <i class="fa-solid fa-add"></i>
       {{ $t('bookmark.add_bookmark') }}
     </a>
+
     <div v-if="modalOpen">
       <bookMarkModel
-        title="Create Bookmark"
+        :title="$t('bookmark.create_bookmark')"
         :newBookMark="newBookMark"
         :toggleModel="toggleBookmarkModel"
         :channelId="channelId"
@@ -27,7 +28,7 @@
     >
     <div v-if="modalOpen">
       <bookMarkModel
-        title="Update or delete Bookmark"
+        :title="$t('bookmark.update_or_delete_bookmark')"
         :newBookMark="newBookMark"
         :toggleModel="toggleBookmarkModel"
         :bookMarkObject="bookMarkObject"

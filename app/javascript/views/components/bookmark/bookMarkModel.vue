@@ -155,7 +155,7 @@ export default {
     handleDelete() {
       this.validations();
       if (!this.error) {
-        this.bookmarkStore.delete_bookmark(this.bookMarkObject.id)
+        this.bookmarkStore.delete_bookmark(this.bookMarkObject.id);
         this.toggleModel();
       }
     },
@@ -165,7 +165,8 @@ export default {
         this.bookmarkStore.update_bookmark(
           this.bookMarkObject.id,
           this.formValue.bookMarkTitle,
-          this.formValue.bookMarkLink )
+          this.formValue.bookMarkLink
+        );
         this.toggleModel();
       }
     },

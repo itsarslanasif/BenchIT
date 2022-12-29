@@ -127,6 +127,8 @@ en:
         title: 'Title'
         link: 'Link'
         add_bookmark: 'Add bookmark'
+        update_or_delete_bookmark: 'Update or delete Bookmark'
+        create_bookmark: 'Create Bookmark'
         url_placeholder: 'e.g www.youtube.com'
         name_placeholder: 'e.g youtube'
         add_bookmark_note: ' Bookmark important links for your team add bookmarks for links you want to find quickly. All channel members can see the bookmarks you add.'
