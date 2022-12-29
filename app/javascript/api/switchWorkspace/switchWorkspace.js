@@ -6,7 +6,6 @@ export const switchWorkspace = async id => {
       headers: { Authorization: sessionStorage.getItem('token') },
     })
     .then(response => {
-      console.log(response.data)
       return response.data;
     });
 };
