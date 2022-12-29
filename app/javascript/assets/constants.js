@@ -95,4 +95,5 @@ export const CONSTANTS = {
   SIGN_OUT_OF_DEVSINC: 'Sign out of Devsinc',
   SET_STATUS: 'Set status',
   NULL_VALUES: [null, undefined, []],
+  PROFILE_ADDED: 'Profile added'
 };
