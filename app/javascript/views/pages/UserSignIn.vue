@@ -1,10 +1,7 @@
 <template>
   <div v-show="response" class="relative">
-    <benchit-alert
-      :errorMessage="$t('pages.sign_in.error_message')"
-      :successMessage="response?.message"
-      :success="response?.user"
-    />
+    <benchit-alert :errorMessage="$t('pages.sign_in.error_message')" :successMessage="response?.message"
+      :success="response?.user" />
   </div>
   <div class="mt-8 flex flex-col items-center justify-items-center text-center">
     <header class="w-full p-4 items-center grid grid-cols-3">
@@ -19,7 +16,7 @@
           {{ $t('pages.sign_in.new_to_bench_it') }}
         </p>
         <a class="text-md text-woot-800" href="#">{{
-          $t('pages.sign_in.create_your_account')
+            $t('pages.sign_in.create_your_account')
         }}</a>
       </div>
     </header>
@@ -34,10 +31,7 @@
     </p>
     <button class="google-btn">
       <span class="flex items-center justify-items-center justify-center">
-        <font-awesome-icon
-          icon="fa-brands fa-google"
-          class="h-5 w-5 mr-3 text-woot-600"
-        />
+        <font-awesome-icon icon="fa-brands fa-google" class="h-5 w-5 mr-3 text-woot-600" />
         <p class="text-woot-600 text-lg font-semibold">
           {{ $t('pages.sign_in.continue_with_google') }}
         </p>
@@ -55,18 +49,8 @@
       <p class="text-m font-normal w-10">{{ $t('pages.sign_in.or') }}</p>
     </n-divider>
     <form class="flex flex-col" @submit.prevent="handleSubmit">
-      <input
-        v-model="user.email"
-        type="email"
-        :placeholder="$t('pages.sign_in.email_placeholder')"
-        required
-      />
-      <input
-        v-model="user.password"
-        type="password"
-        :placeholder="$t('pages.sign_in.password_placeholder')"
-        required
-      />
+      <input v-model="user.email" type="email" :placeholder="$t('pages.sign_in.email_placeholder')" required />
+      <input v-model="user.password" type="password" :placeholder="$t('pages.sign_in.password_placeholder')" required />
       <button class="sign-in-btn">
         {{ $t('pages.sign_in.sign_in_with_email') }}
       </button>
@@ -74,8 +58,7 @@
     <p class="magic-code-text">
       {{ $t('pages.sign_in.code_for_password_free_sign_in') }}
       <a href="#" class="text-woot-900">
-        {{ $t('pages.sign_in.sign_in_manually_instead') }}</a
-      >
+        {{ $t('pages.sign_in.sign_in_manually_instead') }}</a>
     </p>
   </div>
 </template>
@@ -83,6 +66,7 @@
 <script>
 import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
+import { switchWorkspace } from '../../api/switchWorkspace/switchWorkspace.js';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 export default {
@@ -121,6 +105,7 @@ export default {
         if (res.data?.user) {
           const currentUser = useCurrentUserStore();
           currentUser.setUser(res.data.user);
+          switchWorkspace(1);
           this.goToHomepage();
         }
       });
