@@ -127,3 +127,17 @@ export default {
   },
 };
 </script>
+
+<style>
+.chatpane {
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-styling {
+  background-color: transparent;
+  margin-left: 40%;
+  margin-top: 7%;
+  position: absolute;
+}
+</style>
