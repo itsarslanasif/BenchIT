@@ -85,7 +85,6 @@ import { NForm, NFormItem, NButton, NInput } from 'naive-ui';
 import { useBookmarkStore } from '../../../stores/useBookmarkStore';
 import { CONSTANTS } from '../../../assets/constants';
 export default {
-  name: 'CreateChannel',
   components: {
     NForm,
     NFormItem,
