@@ -15,7 +15,7 @@
       <ChannelsAccordion />
       <DirectMessageAccordian />
     </div>
-    <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover">
+    <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover cursor-pointer">
       {{ $t('channels.selected_channels') }}
     </div>
   </div>
