@@ -9,10 +9,13 @@
     </div>
 
     <transition name="fade" appear>
-      <div class="bg-white rounded-md text-black-800 opacity-100 p-2 pl-4 pr-10 fixed text-sm z-10 ml-10 -mt-1" v-if="isOpen">
-        <div v-for="item in items" :key="item" class="p-1 hover:bg-primaryHover hover:text-white rounded-md"
-          @click="item.func">
-          {{ item.title }}
+      <div class="bg-white rounded text-black-800 opacity-100 fixed text-sm z-10 ml-10" v-if="isOpen">
+        <div class="py-2">
+          <div v-for="item in items" :key="item" class="hover:bg-primaryHover hover:text-white" @click="item.func">
+            <div class="px-4 py-1 ">
+              {{ item.title }}
+            </div>
+          </div>
         </div>
       </div>
     </transition>
