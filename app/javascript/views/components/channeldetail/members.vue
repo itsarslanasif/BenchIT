@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import MermberCard from '../directMessages/memberCard.vue';
+import MermberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
 export default {
   name: 'About',
