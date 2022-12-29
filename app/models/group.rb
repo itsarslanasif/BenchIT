@@ -7,7 +7,7 @@ class Group < ApplicationRecord
 
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
 
-  def name
-    'group_name'
+  def fetch_group_chat_name
+    Profile.where(id: profile_ids).pluck(:username).join(',')
   end
 end
