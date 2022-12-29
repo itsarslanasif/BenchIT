@@ -7,7 +7,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_receiver, only: %i[profile_messages]
 
   def send_message
-    @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
   end
 
   def create
@@ -49,7 +49,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = Current.profile.conversation_messages.with_attached_message_attachments
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def bench_channel_messages
