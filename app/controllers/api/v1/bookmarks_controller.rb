@@ -12,14 +12,14 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def update
     if @bookmark.update(bookmark_params)
-      render json:  { message: "Bookmark updated", bookmark: @bookmark }
+      render json: { message: 'Bookmark updated', bookmark: @bookmark }
     else
-      render json:  { error: @bookmark.errors, status: :unprocessable_entity }
+      render json: { error: @bookmark.errors, status: :unprocessable_entity }
     end
   end
 
   def destroy
-    render json: @bookmark.destroy ?  { message: "Bookmark deleted" } : { error: @bookmark.errors, status: :unprocessable_entity }
+    render json: @bookmark.destroy ? { message: 'Bookmark deleted' } : { error: @bookmark.errors, status: :unprocessable_entity }
   end
 
   def find_bookmark
@@ -27,10 +27,6 @@ class Api::V1::BookmarksController < Api::ApiController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name,:id, :bookmark_URL, :bookmarkable_type, :bookmarkable_id)
+    params.require(:bookmark).permit(:name, :bookmark_URL, :bookmarkable_type, :bookmarkable_id)
   end
 end
-
-
-
-
