@@ -1,13 +1,22 @@
 <template>
   <n-modal
     v-model:show="showModal"
-    class="custom-card rounded-lg"
+    class="custom-card rounded-lg w-180"
     preset="card"
-    :style="bodyStyle"
     :bordered="false"
     size="huge"
   >
-    <template #header>Request invitations to BenchIT</template>
+    <div class="mb-3" v-if="errorMessage">
+      <n-alert type="error" closable>
+        <span>{{ $t('request.error_message') }}</span>
+      </n-alert>
+    </div>
+    <div class="mb-3" v-if="successMessage">
+      <n-alert type="success" closable>
+        <span>{{ $t('request.success_message') }}</span>
+      </n-alert>
+    </div>
+    <template #header>{{ $t('request.requesting_invitation') }}</template>
     <form @submit.prevent="handleSubmit">
       <label class="flex font-semibold">{{ $t('request.to') }}</label>
       <input
@@ -17,16 +26,6 @@
         required
         class="border border-black-400 rounded w-150 h-12 text-black-900 mt-2 p-3"
       />
-      <div class="mt-3" v-if="errorMessage">
-        <n-alert type="error" closable>
-          <span>User does not exist!</span>
-        </n-alert>
-      </div>
-      <div class="mt-3" v-if="successMessage">
-        <n-alert type="success" closable>
-          <span>Invitation sent successfully!</span>
-        </n-alert>
-      </div>
       <label class="flex mt-6 font-semibold">{{
         $t('request.reason_for_request')
       }}</label>
@@ -64,9 +63,6 @@ export default {
   setup() {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     return {
-      bodyStyle: {
-        width: '600px',
-      },
       currentWorkspaceStore,
     };
   },

@@ -41,7 +41,6 @@ import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
-import { useThreadStore } from '../../stores/useThreadStore';
 import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
@@ -81,8 +80,6 @@ export default {
   },
   data() {
     return {
-      modalOpen: false,
-      UserInviteFormFlag: false,
       response: null,
       showModal: false,
       options: [

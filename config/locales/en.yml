@@ -148,8 +148,10 @@ en:
         send_request: 'Send Request'
         reason_for_request: 'Reason for request (optional)'
         to: 'To:'
-        requesting_invitation: 'Requestion invitation to BenchIT'
+        requesting_invitation: 'Request invitations to BenchIT'
         request_reason_placeholder: 'Add a note for your admin'
+        error_message: 'User does not exist!'
+        success_message: 'Invitation sent successfully!'
       actions:
         save: 'Save'
         send: 'Send'
