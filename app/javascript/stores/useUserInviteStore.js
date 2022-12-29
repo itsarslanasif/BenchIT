@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const UserStore = defineStore('user', {
+export const useUserInviteStore = defineStore('user', {
   state: () => {
     return {
       user_email: {

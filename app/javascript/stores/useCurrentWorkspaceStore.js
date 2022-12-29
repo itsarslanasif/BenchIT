@@ -3,7 +3,9 @@ import { defineStore } from 'pinia';
 export const useCurrentWorkspaceStore = () => {
   const currentWorkspaceStore = defineStore('currentWorkspaceStore', {
     state: () => ({
-      currentWorkspace: {},
+      currentWorkspace: {
+        id: 1,
+      },
     }),
 
     getters: {

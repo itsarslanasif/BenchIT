@@ -32,7 +32,7 @@ import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
-import { UserStore } from '../../../stores/user_store';
+import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
 
 export default {
@@ -46,7 +46,7 @@ export default {
   },
   setup() {
     const threadStore = useThreadStore();
-    const currentUserStore = UserStore();
+    const currentUserStore = useUserInviteStore()
     const { currentUser } = storeToRefs(currentUserStore);
     return { threadStore, currentUser };
   },
@@ -88,7 +88,7 @@ export default {
       } catch (e) {
         console.log(e)
       }
-      
+
     },
   },
 };
