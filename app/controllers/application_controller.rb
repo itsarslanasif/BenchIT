@@ -17,4 +17,4 @@ class ApplicationController < ActionController::Base
       render json: { success: false, error: 'Internal server error' }.to_json, status: :internal_server_error
     end
   end
-end 
+end

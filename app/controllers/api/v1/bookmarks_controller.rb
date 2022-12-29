@@ -1,5 +1,5 @@
 class Api::V1::BookmarksController < Api::ApiController
-  before_action :find_bookmark , only: %i[update destroy]
+  before_action :find_bookmark, only: %i[update destroy]
   def index
     @bookmarks = Bookmark.with_bookmarkable_id_and_type(params[:bookmarkable_id], params[:bookmarkable_type])
   end
