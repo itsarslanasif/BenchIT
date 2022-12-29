@@ -4,7 +4,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    render json: Current.profile.bench_channels
+    @bench_channels = Current.profile.bench_channels.includes(:channel_participants, :profiles)
   end
 
   def show; end
