@@ -90,10 +90,19 @@ en:
       rightpane:
         send: 'Send'
         replies: 'replies'
+        about_me: 'About me'
+        skype: 'Skype'
+        add_skype: '+ Add skype'
+        local_time: 'local time'
+        contact_information: 'Contact information'
+        email_address: 'Email Address'
+        phone: 'Phone'
       chat:
         today: 'Today'
         replies: 'replies'
+      right_pane:
         thread: 'Thread'
+        profile: 'Profile'
       channels:
           channels: 'Channels'
           add_new_channel: 'Add New Channel'
@@ -149,7 +158,10 @@ en:
         cancel: 'Cancel'
         message: 'Message'
         huddle: 'Huddle'
-        go: 'Go!'
+        copied: 'Copied!'
+        edit: 'Edit'
+        set_a_status: 'Set a status'
+        view_as: 'View as'
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
@@ -204,6 +216,7 @@ en:
         recent_files: 'Recent files'
         from_computer: 'Attach from your computer'
         divider: '●'
+      user_profile:
       messages_section:
         today: 'Today'
         yesterday: 'Yesterday'

@@ -4,14 +4,14 @@
       <font-awesome-icon
         icon="fa-circle-xmark"
         @click="closeModal"
-        class="text-xl p-2 m-3 hover:bg-slate-100 rounded-md"
+        class="text-xl p-2 m-3 float-left hover:bg-slate-100 rounded-md"
       />
     </div>
     <div v-else>
       <font-awesome-icon
         icon="fa-plus-circle"
         @click="openAttach = true"
-        class="text-xl p-2 m-3 hover:bg-slate-100 rounded-md"
+        class="text-xl p-2 m-2 float-left hover:bg-slate-100 rounded-md"
       />
     </div>
     <div
