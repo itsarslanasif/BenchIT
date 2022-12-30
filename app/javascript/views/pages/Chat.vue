@@ -32,6 +32,7 @@
           <div class="relative">
             <editor
               v-model="message"
+              @keydown.enter="sendMessage"
               api-key="{{ import.meta.env.VITE_EDITOR_API }}"
               :init="{
                 menubar: false,
@@ -193,6 +194,7 @@ export default {
       } else {
         this.disableAll();
       }
+      
     },
   },
 

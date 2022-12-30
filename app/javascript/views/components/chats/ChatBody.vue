@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-auto chatBody">
+  <div class="chatBody">
     <PinnedConversationModel />
     <div
       v-for="message in messages"
@@ -72,6 +72,9 @@ export default {
       selectedMessage: {},
     };
   },
+  mounted() {
+    this.scrollToEnd();
+  },
   computed: {
     isToday() {
       return (
@@ -133,6 +136,11 @@ export default {
       const dateInUTC = moment(new Date(created_at));
       return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
+    scrollToEnd() {
+      var container = document.querySelector(".chatBody");
+      var height = container.scrollHeight;
+      container.scrollTop = height;
+    },
   },
   updated() {
     const message_id = this.$route.params.message_id;
@@ -141,6 +149,7 @@ export default {
       message.scrollIntoView();
       message.classList.add('highlight');
     }
+    this.scrollToEnd();
   },
 };
 </script>
@@ -148,6 +157,7 @@ export default {
 .chatBody {
   height: 60vh;
   max-height: 60vh;
+  overflow: scroll;
 }
 
 .highlight {
