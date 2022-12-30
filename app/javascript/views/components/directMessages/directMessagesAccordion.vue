@@ -17,7 +17,7 @@
           class="hover:bg-primaryHover"
         >
           <div
-            @click="goToChat(`/profiles/${user.id}`)"
+            @click="goToChat(`/profiles/${user.id}`,user)"
             class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
           >
             <img
@@ -68,15 +68,18 @@ export default {
     );
   },
   setup() {
+
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
     return { directMessageStore, currentProfileStore };
   },
   methods: {
     closeModal() {
+
       this.modalOpen = !this.modalOpen;
     },
-    goToChat(chatURL) {
+    goToChat(chatURL,user) {
+      this.directMessageStore.setSelectedDm(user)
       this.$router.push(chatURL);
     },
     handleClick() {

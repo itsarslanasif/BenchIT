@@ -36,6 +36,7 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 
+
 export default {
   name: 'ChatHeader',
   components: {

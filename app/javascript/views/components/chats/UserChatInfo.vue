@@ -10,11 +10,8 @@
           class="bg-success rounded-full border-primary border-2 h-3 w-3 relative -ml-3 mt-4"
         />
         <span v-show="chat">
-          <p class="text-xl self-center font-semibold pl-1" v-if="chat.name">
-            {{ chat.name }}
-          </p>
-          <p class="text-xl self-center font-semibold pl-1" v-else-if="chat">
-            {{ selectedDm.getSelectedDm.username }}
+          <p class="text-xl self-center font-semibold pl-1" >
+            {{ directMessagesStore.getSelectedDm.username }}
           </p>
         </span>
         <i
@@ -39,8 +36,8 @@ export default {
   name: 'UserChatInfo',
   components: { NAvatar, NIcon },
   setup() {
-    const selectedDm = useDirectMessagesStore();
-    return { selectedDm };
+    const directMessagesStore = useDirectMessagesStore();
+    return { directMessagesStore };
   },
   props: ['chat'],
 };
