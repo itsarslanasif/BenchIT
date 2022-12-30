@@ -76,6 +76,7 @@ export default {
   updated() {
     this.errorMessage = false;
     this.successMessage = false;
+    this.userStore.workspace_invite.email = null;
   },
   methods: {
     async handleSubmit() {
