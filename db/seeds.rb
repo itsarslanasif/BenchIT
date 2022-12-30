@@ -75,4 +75,7 @@ ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, be
 
 Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')
 Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bookmarkable_id: 1, bookmark_URL: 'www.facebook.com')
-Bookmark.create!(name: 'Twitter', profile_id: 1, bookmarkable_type: 'Profile', bookmarkable_id: 4, bookmark_URL: 'www.twitter.com')
+
+Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 1)
+Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 2)
+Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 3)
