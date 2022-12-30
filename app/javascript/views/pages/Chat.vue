@@ -93,7 +93,7 @@ export default {
       conversation(formData);
     },
   },
-};https://github.com/arslan-asif-se/BenchIT
+}
 </script>
 
 <style>
