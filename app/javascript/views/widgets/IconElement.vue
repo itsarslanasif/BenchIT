@@ -1,8 +1,7 @@
 <template>
-  <div
-    class="text-base flex text-center text-slate-50 hover:bg-primaryHover -mr-2 p-0 cursor-pointer"
-  >
-    <div class="w-8" @click="elementClicked">{{ icon }}</div>
+  <div class="text-base flex text-center text-slate-50 hover:bg-primaryHover -mr-2 p-0 cursor-pointer"
+    @click="elementClicked">
+    <div class="w-8">{{ icon }}</div>
     <div>{{ name }}</div>
   </div>
 </template>
