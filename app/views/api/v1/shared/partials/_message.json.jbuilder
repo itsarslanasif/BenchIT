@@ -11,7 +11,6 @@ json.updated_at message.updated_at
 json.isSaved saved?(message)
 json.receiver_name @receiver.username if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
-json.group_name @group.name if @group.present?
 json.replies message.replies do |reply|
   json.id reply.id
   json.content reply.content
@@ -24,7 +23,6 @@ json.replies message.replies do |reply|
   json.updated_at reply.updated_at
   json.receiver_name @receiver.username if @receiver.present?
   json.channel_name @bench_channel.name if @bench_channel.present?
-  json.group_name @group.name if @group.present?
 end
 json.bench_conversation_id message.bench_conversation_id
 if message.message_attachments.present?
@@ -41,10 +39,10 @@ json.conversationable_type message.bench_conversation.conversationable_type
 json.conversationable_id message.bench_conversation.conversationable_id
 json.channel_name message.bench_conversation.conversationable.name if
   message.bench_conversation.conversationable_type.eql?('BenchChannel')
-if message.bench_conversation.conversationable_type.eql?('Group')
-  json.group_id message.bench_conversation.conversationable_id
-  json.group_name message.bench_conversation.conversationable.name
-end
+
+json.group_id message.bench_conversation.conversationable_id if
+  message.bench_conversation.conversationable_type.eql?('Group')
+
 if message.bench_conversation.conversationable_type.eql?('Profile')
   if message.bench_conversation.conversationable_id == message.sender_id
     json.receiver_id message.bench_conversation.conversationable_id
