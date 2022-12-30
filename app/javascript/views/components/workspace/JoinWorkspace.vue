@@ -30,7 +30,9 @@
             :placeholder="$t('workspace.description_placehodler')"
             required
           />
-          <button class="bg-success  hover:bg-successHover w-full py-2 rounded text-white">
+          <button
+            class="bg-success hover:bg-successHover w-full py-2 rounded text-white"
+          >
             {{ $t('actions.join') }}
           </button>
         </div>
@@ -63,22 +65,28 @@ export default {
   mounted() {
     this.workspace_id = window.location.pathname.split('/')[2];
   },
+  beforeUnmount() {
+    this.username = this.description = this.response = this.workspace_id = null;
+  },
   computed: {
-    isResponseSuccess(){
-      return this.response?.data?.message.includes(CONSTANTS.PROFILE_ADDED)
-    }
+    isResponseSuccess() {
+      return this.response?.data?.message.includes(CONSTANTS.PROFILE_ADDED);
+    },
   },
   methods: {
     async handleSubmit() {
-      await joinWorkspace(
-        this.workspace_id,
-        this.username,
-        this.description
-      ).then(response => {
-        this.response = response;
-      });
+      try {
+        await joinWorkspace(
+          this.workspace_id,
+          this.username,
+          this.description
+        ).then(response => {
+          this.response = response;
+        });
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };
 </script>
-

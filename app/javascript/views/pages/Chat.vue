@@ -69,14 +69,22 @@ export default {
       current_user_id: this.currentUser.id,
     });
   },
+  beforeUnmount() {
+    this.chat = null;
+    this.Cable = null;
+  },
 
   updated() {
-    this.Cable.on('chat', data => {
-      const findMessage = this.messages.find(m => m.id === data.message.id);
-      if (findMessage == undefined) {
-        this.messages.push(data.message);
-      }
-    });
+    try {
+      this.Cable.on('chat', data => {
+        const findMessage = this.messages.find(m => m.id === data.message.id);
+        if (findMessage == undefined) {
+          this.messages.push(data.message);
+        }
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   methods: {
@@ -90,7 +98,11 @@ export default {
       files.forEach(file => {
         formData.append('message_attachments[]', file);
       });
-      conversation(formData);
+      try {
+        conversation(formData);
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 }

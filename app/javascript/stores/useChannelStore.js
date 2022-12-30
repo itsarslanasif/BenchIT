@@ -14,13 +14,20 @@ export const useChannelStore = () => {
 
     actions: {
       async index() {
-        this.channels = await getChannels();
+        try {
+          this.channels = await getChannels()
+        } catch (e) {
+          console.error(e)
+        }
       },
       async createChannel(name, description, is_private) {
-        console.log(name, description, is_private);
-        await createChannel(name, description, is_private).then(response => {
-          this.channels.push(response.data);
-        });
+        try {
+          await createChannel(name, description, is_private).then(response => {
+            this.channels.push(response.data);
+          });
+        } catch (e) {
+          console.error(e)
+        }
       },
       leaveChannel(id) {
         this.channels = this.channels.filter(channel => channel.id != id);

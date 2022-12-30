@@ -37,13 +37,15 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 export default {
   components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
-
   data() {
     return {
       channels: [],
       modalOpen: false,
       showChannelOptions: false,
     };
+  },
+  unmounted() {
+    this.channels = null;
   },
   setup() {
     const channelStore = useChannelStore();

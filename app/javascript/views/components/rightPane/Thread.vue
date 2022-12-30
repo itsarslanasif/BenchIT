@@ -1,6 +1,8 @@
 <template>
   <right-pane-header
-    :paneTitle="threadStore.message.receiver_name || threadStore.message.channel_name"
+    :paneTitle="
+      threadStore.message.receiver_name || threadStore.message.channel_name
+    "
     :messageId="threadStore.message.id"
   />
   <div class="overflow-auto threadBody">
@@ -44,7 +46,7 @@ export default {
   },
   setup() {
     const threadStore = useThreadStore();
-    const currentUserStore = UserStore()
+    const currentUserStore = UserStore();
     const { currentUser } = storeToRefs(currentUserStore);
     return { threadStore, currentUser };
   },
@@ -55,6 +57,9 @@ export default {
       id: window.location.pathname.split('/')[2],
       conversation_type: window.location.pathname.split('/')[1],
     };
+  },
+  beforeUnmount() {
+    this.newMessage = null;
   },
   computed: {
     repliesCount() {
@@ -73,12 +78,17 @@ export default {
       files.forEach(file => {
         formData.append('message_attachments[]', file);
       });
-      conversation(formData).then(async () => {
+      try {
+        conversation(formData).then(async () => {
         const messages = await getMessageHistory(this.conversation_type.slice(0, -1), this.id);
         this.threadStore.message = messages.find(
           msg => msg.id === this.threadStore.message.id
         );
       });
+      } catch (e) {
+        console.log(e)
+      }
+      
     },
   },
 };

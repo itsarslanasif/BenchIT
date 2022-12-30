@@ -31,7 +31,7 @@
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
               @click="showUserProfile"
-              v-show="!isSameUser || !isSameDayMessage"
+              v-if="!isSameUser || !isSameDayMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
@@ -42,13 +42,13 @@
               {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
             </p>
             <span
-              v-show="isSameUser && isSameDayMessage"
+              v-if="isSameUser && isSameDayMessage"
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
           </span>
           <span
-            v-show="!isSameUser || !isSameDayMessage"
+            v-if="!isSameUser || !isSameDayMessage"
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
@@ -130,7 +130,7 @@
 
 <script>
 import moment from 'moment';
-import { NAvatar, NCard, NDivider} from 'naive-ui';
+import { NAvatar, NCard, NDivider } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -158,14 +158,16 @@ export default {
       pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
-      rightPaneStore
+      rightPaneStore,
     };
   },
   components: {
-    NAvatar, NCard, NDivider,
+    NAvatar,
+    NCard,
+    NDivider,
     EmojiPicker,
     EmojiModalButton,
-    UserProfileModal
+    UserProfileModal,
   },
   props: {
     currMessage: {
@@ -199,6 +201,9 @@ export default {
       showOptions: false,
     };
   },
+  beforeUnmount() {
+    this.topReactions = null;
+  },
   computed: {
     time() {
       return moment(new Date(this.currMessage.created_at).getTime()).format(
@@ -226,18 +231,25 @@ export default {
   },
   methods: {
     async addReaction(emoji) {
-      await add_reaction(this.currMessage.id, emoji.i).then(response => {
-        return this.allReactions.push(response.data);
-      });
-    },
-
-    async emojiClickListener(emoji) {
-      if (emoji.user_id == this.currentUserStore.currentUser.id) {
-        await remove_reaction(emoji.id).then(() => {
-          this.allReactions = this.allReactions.filter(function (reaction) {
-            return reaction.id != emoji.id;
-          });
+      try {
+        await add_reaction(this.currMessage.id, emoji.i).then(response => {
+          return this.allReactions.push(response.data);
         });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async emojiClickListener(emoji) {
+      try {
+        if (emoji.user_id == this.currentUserStore.currentUser.id) {
+          await remove_reaction(emoji.id).then(() => {
+            this.allReactions = this.allReactions.filter(function (reaction) {
+              return reaction.id != emoji.id;
+            });
+          });
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
     setEmojiModal() {
@@ -250,21 +262,25 @@ export default {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
     },
-    showUserProfile(){
+    showUserProfile() {
       this.rightPaneStore.toggleUserProfileShow(true);
     },
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
-      if (this.currMessage.isSaved) {
-        save(this.currMessage.id, {
-          data: this.currMessage,
-        }).then(() => {
-          this.savedItemsStore.addSavedItem(this.currMessage);
-        });
-      } else {
-        unsave(this.currMessage.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.currMessage);
-        });
+      try {
+        if (this.currMessage.isSaved) {
+          save(this.currMessage.id, {
+            data: this.currMessage,
+          }).then(() => {
+            this.savedItemsStore.addSavedItem(this.currMessage);
+          });
+        } else {
+          unsave(this.currMessage.id).then(() => {
+            this.savedItemsStore.removeSavedItem(this.currMessage);
+          });
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
   },

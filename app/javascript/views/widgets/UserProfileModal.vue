@@ -32,10 +32,13 @@ export default {
   components: { NDropdown, NAvatar, NText, NButton },
   props: ['showModal', 'userProfile'],
   setup() {
-    const userProfileStore = useUserProfileStore()
-    const currentProfileStore = useCurrentProfileStore()
+    const userProfileStore = useUserProfileStore();
+    const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
-    return { userProfileStore, currentProfileStore, rightPaneStore }
+    return { userProfileStore, currentProfileStore, rightPaneStore };
+  },
+  beforeUnmount() {
+    this.options = null;
   },
   data() {
     return {
@@ -62,10 +65,13 @@ export default {
       ],
     };
   },
-  computed:{
-    ownProfile(){
-      return this.currentProfileStore.currentProfile.id === this.userProfileStore.user_profile.id
-    }
+  computed: {
+    ownProfile() {
+      return (
+        this.currentProfileStore.currentProfile.id ===
+        this.userProfileStore.user_profile.id
+      );
+    },
   },
   methods: {
     renderCustomHeader() {
@@ -98,10 +104,26 @@ export default {
                     },
                     class: 'cursor-pointer hover:underline',
                   },
-                  { default: () => `${this.userProfileStore.user_profile.display_name}` }
+                  {
+                    default: () =>
+                      `${this.userProfileStore.user_profile.display_name}`,
+                  }
                 ),
-                h(NText, { depth: 2 }, { default: () => this.ownProfile ? ' (you)' : '' }),
-                h(NText, { depth: 2 }, { default: () => this.userProfileStore.user_profile.isActive ? ' 🟢' :  ' ⚫'}),
+                h(
+                  NText,
+                  { depth: 2 },
+                  { default: () => (this.ownProfile ? ' (you)' : '') }
+                ),
+                h(
+                  NText,
+                  { depth: 2 },
+                  {
+                    default: () =>
+                      this.userProfileStore.user_profile.isActive
+                        ? ' 🟢'
+                        : ' ⚫',
+                  }
+                ),
               ]
             ),
             h('div', null, [
@@ -151,7 +173,10 @@ export default {
               {
                 class: 'text-black-800',
               },
-              { default: () => `${this.userProfileStore.user_profile.localtime} local time` }
+              {
+                default: () =>
+                  `${this.userProfileStore.user_profile.localtime} local time`,
+              }
             ),
           ]),
         ]

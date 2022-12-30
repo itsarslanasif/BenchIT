@@ -21,8 +21,12 @@
         min-size="60"
         class="bg-white"
       >
-        <Thread v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile" />
-        <UserProfile v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile" />
+        <Thread
+          v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+        />
+        <UserProfile
+          v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+        />
       </pane>
     </splitpanes>
   </div>
@@ -55,7 +59,7 @@ export default {
     Thread,
     searchDmscreen,
     SearchBar,
-    UserProfile
+    UserProfile,
   },
   setup() {
     const screenStore = useSelectedScreenStore();
@@ -80,6 +84,9 @@ export default {
         this.$router.push('/sign_in');
       });
     },
+  },
+  beforeUnmount() {
+    this.options = null;
   },
   data() {
     return {
