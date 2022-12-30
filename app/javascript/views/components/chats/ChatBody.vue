@@ -72,6 +72,9 @@ export default {
       selectedMessage: {},
     };
   },
+  beforeUnmount() {
+    this.messages = this.prevMessage = this.selectedMessage = null;
+  },
   computed: {
     isToday() {
       return (

@@ -16,8 +16,8 @@
           />
         </h5>
         <div
-          class="mt-2 -ml-3 hover:bg-primaryHover cursor-pointer"
-          @click="modalOpen = !modalOpen"
+          class="mt-2 -ml-3 cursor-pointer hover:bg-primaryHover"
+          @click="closeModal"
         >
           <h5 class="pl-3">{{ $t('channels.add_new_channel') }}</h5>
         </div>
@@ -37,7 +37,6 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 export default {
   components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
-
   data() {
     return {
       channels: [],
@@ -45,12 +44,15 @@ export default {
       showChannelOptions: false,
     };
   },
+  unmounted() {
+    this.channels = null;
+  },
   setup() {
-    const channelStore = useChannelStore()
-    const { channels } = storeToRefs(channelStore)
+    const channelStore = useChannelStore();
+    const { channels } = storeToRefs(channelStore);
     return {
-      channels
-    }
+      channels,
+    };
   },
   methods: {
     closeModal() {

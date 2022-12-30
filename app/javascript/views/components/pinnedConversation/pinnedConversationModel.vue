@@ -1,6 +1,6 @@
 <template>
   <div
-    v-show="pinnedConversationStore.pinToggle"
+    v-if="pinnedConversationStore.pinToggle"
     class="flex overflow-auto z-10 px-2 py-2 ml-1 fixed flex-col border-slate-700 bg-slate-900 w-6/12 maxHeight border-2 rounded-lg"
   >
     <div class="w-100 flex justify-end">

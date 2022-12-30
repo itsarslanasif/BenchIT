@@ -17,7 +17,10 @@
             <p class="ml-2 text-sm text-white">{{ user.username }}</p>
           </div>
         </h5>
-        <div class="-ml-3 flex items-start py-1 hover:bg-primaryHover cursor-pointer" @click="modalOpen = !modalOpen">
+        <div
+          class="-ml-3 flex items-start py-1 hover:bg-primaryHover cursor-pointer"
+          @click="modalOpen = !modalOpen"
+        >
           <addTeammatesDropdown :items="options" />
         </div>
       </AccordionItem>
@@ -50,12 +53,19 @@ export default {
       ],
     };
   },
-  setup() {
-    const selectScreen = useSelectedScreenStore();
-    return { selectScreen };
+  beforeUnmount() {
+    this.dmList = this.options = null;
   },
   mounted() {
-    this.getDmList();
+    this.directMessageStore.getDmList(
+      this.currentProfileStore.currentProfile.workspace_id
+    );
+  },
+  setup() {
+    const directMessageStore = useDirectMessagesStore();
+    const selectScreen = useSelectedScreenStore();
+    const currentProfileStore = useCurrentProfileStore();
+    return { directMessageStore, currentProfileStore, selectScreen };
   },
   methods: {
     closeModal() {
@@ -63,7 +73,13 @@ export default {
     },
     async getDmList() {
       const currentProfileStore = useCurrentProfileStore();
-      this.dmList = await getDirectMessagesList(currentProfileStore.currentProfile.workspace_id);
+      try {
+        this.dmList = await getDirectMessagesList(
+          currentProfileStore.currentProfile.workspace_id
+        );
+      } catch (e) {
+        console.error(e);
+      }
     },
     goToChat(chatURL) {
       this.$router.push(chatURL);
