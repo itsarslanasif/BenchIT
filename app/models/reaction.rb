@@ -7,14 +7,15 @@ class Reaction < ApplicationRecord
   belongs_to :conversation_message
 
   def reaction_broadcast
-    set_reaction
-    cable_channel_broadcast(conversation_message.bench_conversation, @result)
+    result = append_conversation_type_and_id(conversation_message.bench_conversation, set_reaction)
+    BroadcastMessageService.new(result, conversation_message.bench_conversation).call
   end
 
   def reaction_delete_broadcast
-    set_reaction
-    @result[:action] = 'Delete'
-    cable_channel_broadcast(conversation_message.bench_conversation, @result)
+    result = set_reaction
+    result[:action] = 'Delete'
+    result = append_conversation_type_and_id(conversation_message.bench_conversation, result)
+    BroadcastMessageService.new(result, conversation_message.bench_conversation).call
   end
 
   private
@@ -26,10 +27,11 @@ class Reaction < ApplicationRecord
       conversation_message_id: conversation_message_id,
       bench_conversation_id: conversation_message.bench_conversation_id
     }
-    @result = {
+    result = {
       content: reaction,
       type: 'Reaction'
     }
-    @result[:action] = created_at == updated_at ? 'Create' : 'Update'
+    result[:action] = created_at == updated_at ? 'Create' : 'Update'
+    result
   end
 end

@@ -35,9 +35,8 @@ class ConversationMessage < ApplicationRecord
   private
 
   def broadcast_message
-    set_message
-    append_conversation_type_and_id(bench_conversation, result)
-    BroadcastMessageService.new(set_message, bench_conversation).call
+    result = append_conversation_type_and_id(bench_conversation, set_message)
+    BroadcastMessageService.new(result, bench_conversation).call
   end
 
   def broadcast_delete_message
