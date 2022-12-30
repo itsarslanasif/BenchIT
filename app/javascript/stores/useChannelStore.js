@@ -13,7 +13,11 @@ export const useChannelStore = () => {
 
     actions: {
       async index() {
+        try {
         this.channels = await getChannels()
+        } catch(e) {
+          console.error(e)
+        }
       },
       leaveChannel(id) {
         this.channels = this.channels.filter((channel) => channel.id != id)
