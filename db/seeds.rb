@@ -72,3 +72,7 @@ BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
 ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 4)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
 ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 6, sender_id: 6)
+
+Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')
+Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bookmarkable_id: 1, bookmark_URL: 'www.facebook.com')
+Bookmark.create!(name: 'Twitter', profile_id: 1, bookmarkable_type: 'Profile', bookmarkable_id: 4, bookmark_URL: 'www.twitter.com')
