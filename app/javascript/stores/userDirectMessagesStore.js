@@ -17,7 +17,17 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       this.selectedDm = selectedDm;
     },
     appendToDirectMessagesList(member) {
-      this.directMessagesList.push(member);
+      if (!this.checkDuplication(this.directMessagesList, member)) {
+        this.directMessagesList.push(member);
+      }
+    },
+    checkDuplication(array, member) {
+      for (const i in array) {
+        if (array[i].id == member.id) {
+          return true;
+        }
+      }
+      return false;
     },
     async getDmList(workspace_id) {
       this.directMessagesList = await getDirectMessagesList(workspace_id);
