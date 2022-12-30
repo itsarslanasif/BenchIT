@@ -1,5 +1,7 @@
 class ConversationMessage < ApplicationRecord
-  after_commit :broadcast_message, :set_message
+  include Cablable
+  after_destroy :broadcast_delete_message
+  after_save :broadcast_message
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
@@ -32,23 +34,16 @@ class ConversationMessage < ApplicationRecord
   private
 
   def broadcast_message
-    BroadcastMessageService.new(@message, bench_conversation).call
+    set_message
+    append_conversation_type_and_id(bench_conversation, result)
+    BroadcastMessageService.new(set_message, bench_conversation).call
   end
 
-  def set_message
-    @message = {
-      id: id,
-      content: content,
-      is_threaded: is_threaded,
-      parent_message_id: parent_message_id,
-      sender_id: sender_id,
-      sender_name: profile.username,
-      bench_conversation_id: bench_conversation_id,
-      created_at: created_at,
-      updated_at: updated_at,
-      is_edited: created_at != updated_at
-    }
-    @message[:attachments] = attach_message_attachments if message_attachments.present?
+  def broadcast_delete_message
+    result = set_message
+    result[:action] = 'Delete'
+    result = append_conversation_type_and_id(bench_conversation, result)
+    BroadcastMessageService.new(result, bench_conversation).call
   end
 
   def attach_message_attachments
@@ -60,5 +55,27 @@ class ConversationMessage < ApplicationRecord
                                                                                       disposition: 'attachment')
       }
     end
+  end
+
+  def set_message
+    message = {
+      id: id,
+      content: content,
+      is_threaded: is_threaded,
+      parent_message_id: parent_message_id,
+      sender_id: sender_id,
+      sender_name: profile.username,
+      bench_conversation_id: bench_conversation_id,
+      created_at: created_at,
+      updated_at: updated_at,
+      is_edited: created_at != updated_at
+    }
+    message[:attachments] = attach_message_attachments if message_attachments.present?
+    result = {
+      content: message,
+      type: 'Message'
+    }
+    result[:action] = created_at == updated_at ? 'Create' : 'Update'
+    result
   end
 end
