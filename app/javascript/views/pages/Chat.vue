@@ -198,12 +198,15 @@ export default {
 
   updated() {
     this.Cable.on('chat', data => {
-      const findMessage = this.messages.find(m => m.id === data.message.id);
+      let content = data.message.content
+      if (data.message.type === 'Message'){
+      const findMessage = this.messages.find(m => m.id === content.id);
 
       if (findMessage == undefined) {
-        this.messages.push(data.message);
+        this.messages.push(content);
         this.message = '';
       }
+    }
     });
   },
 
