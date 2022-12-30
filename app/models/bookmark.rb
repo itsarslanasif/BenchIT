@@ -1,12 +1,12 @@
 class Bookmark < ApplicationRecord
   include Cablable
+  before_validation :set_profile
   after_destroy :broadcast_delete_bookmark
   after_save :broadcast_bookmark
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :profile
 
-  before_validation :set_profile
   validates :bookmark_URL, presence: true
   validates :name, length: { maximum: 50 }
 
