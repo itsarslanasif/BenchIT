@@ -1,1 +1,1 @@
-json.partial! 'api/v1/conversation_messages/messages', messages: @messages
+json.partial! 'api/v1/shared/partials/message', messages: @messages

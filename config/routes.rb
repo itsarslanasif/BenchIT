@@ -17,9 +17,13 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :groups, only: %i[index show]
+        resources :groups, only: %i[index show] do
+          member do
+            post :add_member
+          end
+        end
         resources :users, only: %i[index]
-        resources :conversation_messages, only: %i[create destroy] do
+        resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message
             get :index_saved_messages
@@ -42,6 +46,7 @@ Rails.application.routes.draw do
         resources :workspaces, only: %i[create] do
           member do
             post :invite
+            get :switch_workspace
           end
 
           resources :profiles, only: %i[index create show update] do

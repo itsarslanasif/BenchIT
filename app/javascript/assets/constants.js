@@ -79,6 +79,9 @@ export const CONSTANTS = {
   DRAFTS: 'Drafts',
   SCHEDULED: 'Scheduled',
   SENT: 'Sent',
+  HEADER: 'Header',
+  BODY: 'Body',
+  FOOTER: 'Footer',
   PAUSE_NOTIFICATIONS: 'Pause Notifications',
   GROUP_PAUSE_NOTIFICATIONS: 'Pause notifications...',
   FOR_30_MINUTES: 'For 30 minutes',
@@ -92,4 +95,5 @@ export const CONSTANTS = {
   SIGN_OUT_OF_DEVSINC: 'Sign out of Devsinc',
   SET_STATUS: 'Set status',
   NULL_VALUES: [null, undefined, []],
+  PROFILE_ADDED: 'Profile added'
 };
