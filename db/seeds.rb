@@ -78,4 +78,3 @@ Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bo
 
 Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 1)
 Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 2)
-Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 3)
