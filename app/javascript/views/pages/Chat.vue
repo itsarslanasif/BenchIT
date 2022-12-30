@@ -25,7 +25,7 @@
                 class="p-1 rounded-md hover:bg-secondaryHover"
                 @click="addMentionToText"
               >
-                {{ item.creator_id? item.name : item.username }}
+                {{ item.creator_id ? item.name : item.username }}
               </div>
             </div>
           </div>
@@ -93,7 +93,6 @@
     </div>
   </div>
 </template>
-
 
 <script>
 import { useProfileStore } from '../../stores/useProfileStore';
@@ -173,6 +172,11 @@ export default {
       type: this.conversation_type,
       current_user_id: this.currentUser.id,
     });
+  },
+  beforeUnmount() {
+    this.chat = null;
+    this.messages = null;
+    this.Cable = null;
   },
   watch: {
     message() {

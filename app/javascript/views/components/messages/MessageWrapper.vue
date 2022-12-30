@@ -31,7 +31,7 @@
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
               @click="showUserProfile"
-              v-show="!isSameUser || !isSameDayMessage"
+              v-if="!isSameUser || !isSameDayMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
@@ -42,13 +42,13 @@
               {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
             </p>
             <span
-              v-show="isSameUser && isSameDayMessage"
+              v-if="isSameUser && isSameDayMessage"
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
           </span>
           <span
-            v-show="!isSameUser || !isSameDayMessage"
+            v-if="!isSameUser || !isSameDayMessage"
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
@@ -130,7 +130,7 @@
 
 <script>
 import moment from 'moment';
-import { NAvatar, NCard, NDivider} from 'naive-ui';
+import { NAvatar, NCard, NDivider } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -158,14 +158,16 @@ export default {
       pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
-      rightPaneStore
+      rightPaneStore,
     };
   },
   components: {
-    NAvatar, NCard, NDivider,
+    NAvatar,
+    NCard,
+    NDivider,
     EmojiPicker,
     EmojiModalButton,
-    UserProfileModal
+    UserProfileModal,
   },
   props: {
     currMessage: {
@@ -198,6 +200,9 @@ export default {
       allReactions: this.currMessage.reactions,
       showOptions: false,
     };
+  },
+  beforeUnmount() {
+    this.topReactions = null;
   },
   computed: {
     time() {
@@ -250,7 +255,7 @@ export default {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
     },
-    showUserProfile(){
+    showUserProfile() {
       this.rightPaneStore.toggleUserProfileShow(true);
     },
     saveMessage() {

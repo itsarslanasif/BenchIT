@@ -45,12 +45,15 @@ export default {
       showChannelOptions: false,
     };
   },
+  unmounted() {
+    this.channels = null;
+  },
   setup() {
-    const channelStore = useChannelStore()
-    const { channels } = storeToRefs(channelStore)
+    const channelStore = useChannelStore();
+    const { channels } = storeToRefs(channelStore);
     return {
-      channels
-    }
+      channels,
+    };
   },
   methods: {
     closeModal() {

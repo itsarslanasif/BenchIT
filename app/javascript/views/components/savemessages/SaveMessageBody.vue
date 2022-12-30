@@ -40,6 +40,9 @@ export default {
       message: null,
     };
   },
+  beforeUnmount() {
+    this.messages = null;
+  },
   async mounted() {
     this.messages = await getSaveMessages();
     this.savedItemsStore.savedItems = this.messages;

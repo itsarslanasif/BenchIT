@@ -56,6 +56,9 @@ export default {
       timestamp: null,
     };
   },
+  beforeUnmount() {
+    this.timestamp = null;
+  },
   methods: {
     setOption(type) {
       const date = new Date();

@@ -33,7 +33,7 @@ import { NDropdown, NAvatar, NText } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
-import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore'
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 
 export default {
@@ -42,6 +42,9 @@ export default {
     const profileStore = useCurrentProfileStore();
     const { currentProfile } = storeToRefs(profileStore);
     return { profile: currentProfile };
+  },
+  beforeUnmount() {
+    this.profile = null;
   },
   data() {
     return {

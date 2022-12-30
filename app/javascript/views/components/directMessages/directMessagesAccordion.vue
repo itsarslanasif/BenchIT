@@ -50,6 +50,9 @@ export default {
       ],
     };
   },
+  beforeUnmount() {
+    this.dmList = this.options = null;
+  },
   setup() {
     const selectScreen = useSelectedScreenStore();
     return { selectScreen };

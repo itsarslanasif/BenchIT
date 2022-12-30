@@ -1,7 +1,13 @@
 <template>
   <div>
-    <select v-model="option" class="dropDown" @change="emitDropDownSelection(option)">
-      <option value="copy_display_name">{{ $t('actions.copy_display_name') }}</option>
+    <select
+      v-model="option"
+      class="dropDown"
+      @change="emitDropDownSelection(option)"
+    >
+      <option value="copy_display_name">
+        {{ $t('actions.copy_display_name') }}
+      </option>
       <option value="View_files">{{ $t('actions.view_files') }}</option>
       <option value="copy_member_id">{{ $t('actions.copy_member_id') }}</option>
     </select>
@@ -10,12 +16,14 @@
 
 <script>
 export default {
-
   components: {},
   data() {
     return {
       option: '',
     };
+  },
+  beforeUnmount() {
+    this.option = null;
   },
   methods: {
     emitDropDownSelection() {

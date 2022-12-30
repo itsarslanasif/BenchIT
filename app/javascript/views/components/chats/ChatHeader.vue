@@ -1,5 +1,5 @@
 <template>
-  <div class="loading" v-show="loading">
+  <div class="loading" v-if="loading">
     <Spinner />
   </div>
   <div v-if="chat && conversation_type === 'channels'">
@@ -59,6 +59,9 @@ export default {
       chat: {},
       conversation_type: window.location.pathname.split('/')[1],
     };
+  },
+  beforeUnmount() {
+    this.bookmarks = this.chat = null;
   },
   mounted() {
     axios

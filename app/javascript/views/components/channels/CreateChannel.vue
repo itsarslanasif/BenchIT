@@ -1,15 +1,19 @@
 <template>
   <transition name="modal-fade">
     <div
-      class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent">
+      class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
+    >
       <div class="modal rounded-md shadow-md bg-slate-50" role="dialog">
         <div class="p-8">
           <header id="modalTitle" class="flex w-full">
             <div class="w-5/6 text-lg">
               <h1>{{ $t('channels.create_channel') }}</h1>
             </div>
-            <button type="button" class="w-1/6 bg-none py-1 px-3 text-base float-right rounded"
-              @click="closeModal">
+            <button
+              type="button"
+              class="w-1/6 bg-none py-1 px-3 text-base float-right rounded"
+              @click="closeModal"
+            >
               {{ $t('actions.close') }}
             </button>
           </header>
@@ -25,22 +29,33 @@
                 <label> {{ $t('channels.new_channel_name') }} </label>
               </div>
               <div class="mb-3">
-                <Field v-model="channelName" class="form-control w-full p-2 rounded bg-none" type="text"
-                  :placeholder="$t('channels.new_channel_name_placeholder')" :rules="validateName" />
+                <Field
+                  v-model="channelName"
+                  class="form-control w-full p-2 rounded bg-none"
+                  type="text"
+                  :placeholder="$t('channels.new_channel_name_placeholder')"
+                  :rules="validateName"
+                />
                 <ErrorMessage name="Name" class="text-danger text-sm" />
               </div>
               <div>
                 <label> {{ $t('channels.new_channel_description') }} </label>
               </div>
               <div class="mb-3">
-                <Field class="form-control w-full p-2 rounded bg-none" type="text"
-                  :placeholder="$t('channels.new_channel_desc_placeholder')" />
+                <Field
+                  class="form-control w-full p-2 rounded bg-none"
+                  type="text"
+                  :placeholder="$t('channels.new_channel_desc_placeholder')"
+                />
               </div>
             </section>
 
             <footer class="mb-4">
-              <button type="submit" :disabled="!channelName"
-                class="bg-success text-white py-2 px-5 text-base float-right my-3 rounded">
+              <button
+                type="submit"
+                :disabled="!channelName"
+                class="bg-success text-white py-2 px-5 text-base float-right my-3 rounded"
+              >
                 {{ $t('actions.create') }}
               </button>
             </footer>
@@ -68,6 +83,11 @@ export default {
         Description: '',
       },
     };
+  },
+
+  beforeUnmount() {
+    this.form.channelName = null;
+    this.form.Description = null;
   },
 
   methods: {

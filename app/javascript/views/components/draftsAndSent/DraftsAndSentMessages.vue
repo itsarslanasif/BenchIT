@@ -48,6 +48,9 @@ export default {
       ],
     };
   },
+  beforeUnmount() {
+    this.links = null;
+  },
 };
 </script>
 

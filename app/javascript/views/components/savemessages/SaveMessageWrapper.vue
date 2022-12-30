@@ -31,7 +31,7 @@
       <div class="flex">
         <div class="m-1">
           <n-avatar
-            v-show="!isSameUser || !isSameDayMessage"
+            v-if="!isSameUser || !isSameDayMessage"
             size="large"
             src="../../../assets/images/user.png"
           />
@@ -40,7 +40,7 @@
           <div class="ml-1">
             <span class="items-center flex text-black-800 text-lg m-0">
               <p
-                v-show="!isSameUser || !isSameDayMessage"
+                v-if="!isSameUser || !isSameDayMessage"
                 class="mr-1 text-sm hover:underline cursor-pointer"
               >
                 <b>{{ currMessage.profile.username }}</b>
@@ -172,6 +172,9 @@ export default {
       allReactions: [],
       showOptions: false,
     };
+  },
+  beforeUnmount() {
+    this.topReactions = this.allReactions = this.message = null;
   },
   computed: {
     time() {

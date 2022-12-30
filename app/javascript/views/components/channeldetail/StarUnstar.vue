@@ -25,6 +25,9 @@ export default {
       favChannelId: 0,
     };
   },
+  beforeUnmount() {
+    this.favChannelId = 0;
+  },
   methods: {
     MarkStar() {
       this.favChannel = !this.favChannel;
