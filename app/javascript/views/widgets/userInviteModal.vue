@@ -6,14 +6,16 @@
     :bordered="false"
     size="huge"
   >
-    <div class="mb-3" v-if="errorMessage">
-      <n-alert type="error">
-        <span>{{ $t('request.error_message') }}</span>
-      </n-alert>
-    </div>
-    <div class="mb-3" v-if="successMessage">
-      <n-alert type="success">
-        <span>{{ $t('request.success_message') }}</span>
+    <div class="mb-3" v-if="error !== null">
+      <n-alert
+        :show-icon="false"
+        :class="
+          errorAlert
+            ? 'border border-red-100 bg-red-100'
+            : 'border border-green-100 bg-green-100'
+        "
+      >
+        <span>{{ getResponse }}</span>
       </n-alert>
     </div>
     <template #header
@@ -51,15 +53,16 @@ import { NModal, NAlert } from 'naive-ui';
 import { useUserInviteStore } from '../../stores/useUserInviteStore.js';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { invite_user } from '../../api/workspaces/workspacesApi.js';
+import { CONSTANTS } from '../../assets/constants.js';
 import { storeToRefs } from 'pinia';
 
 export default {
   data() {
     return {
       userStore: useUserInviteStore(),
-      errorMessage: false,
-      successMessage: false,
+      error: null,
       workspace: null,
+      errorAlert: null,
     };
   },
   components: {
@@ -73,9 +76,20 @@ export default {
       workspace: currentWorkspace,
     };
   },
+  computed: {
+    getResponse() {
+      if (this.error) {
+        this.alertMessage = CONSTANTS.ERROR_MESSAGE;
+        this.errorAlert = true;
+      } else if (!this.error) {
+        this.alertMessage = CONSTANTS.SUCCESS_MESSAGE;
+        this.errorAlert = false;
+      }
+      return this.alertMessage;
+    },
+  },
   updated() {
-    this.errorMessage = false;
-    this.successMessage = false;
+    this.error = null;
     this.userStore.workspace_invite.email = null;
   },
   methods: {
@@ -85,12 +99,10 @@ export default {
         this.userStore.workspace_invite
       ).then(
         response => {
-          this.successMessage = true;
-          this.errorMessage = false;
+          this.error = false;
         },
         error => {
-          this.errorMessage = true;
-          this.successMessage = false;
+          this.error = true;
         }
       );
       this.userStore.workspace_invite.email = null;
