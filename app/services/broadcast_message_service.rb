@@ -27,8 +27,10 @@ class BroadcastMessageService
     when 'BenchChannel'
       profile_ids = BenchChannel.find(@bench_conversation.conversationable_id).profiles.pluck(:id)
     end
+    return if profile_ids.empty?
+
     profile_ids.each do |id|
-      UnreadMessagesService.new(@bench_conversation, id, @message_json[:id]).call
+      UnreadMessagesService.new(@bench_conversation, id, @message_json[:content][:id]).call if @message_json[:type].eql?('Message')
       notification_key = "NotificationChannel#{Current.workspace.id}-#{id}"
       ActionCable.server.broadcast(notification_key, { message: @message_json })
     end

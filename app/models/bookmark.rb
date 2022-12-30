@@ -16,13 +16,15 @@ class Bookmark < ApplicationRecord
 
   def broadcast_bookmark
     set_bookmark
-    cable_channel_broadcast(@conversation, @result)
+    result = append_conversation_type_and_id(@conversation, @result)
+    BroadcastMessageService.new(result, @conversation).call
   end
 
   def broadcast_delete_bookmark
     set_bookmark
     @result[:action] = 'Delete'
-    cable_channel_broadcast(@conversation, @result)
+    result = append_conversation_type_and_id(@conversation, @result)
+    BroadcastMessageService.new(result, @conversation).call
   end
 
   private

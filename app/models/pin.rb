@@ -10,13 +10,15 @@ class Pin < ApplicationRecord
   def broadcast_pin
     set_pin
     @result[:action] = 'Pin'
-    cable_channel_broadcast(bench_conversation, @result)
+    @result = append_conversation_type_and_id(bench_conversation, @result)
+    BroadcastMessageService.new(@result, bench_conversation).call
   end
 
   def broadcast_unpin
     set_pin
     @result[:action] = 'Unpin'
-    cable_channel_broadcast(bench_conversation, @result)
+    @result = append_conversation_type_and_id(bench_conversation, @result)
+    BroadcastMessageService.new(@result, bench_conversation).call
   end
 
   private

@@ -14,7 +14,8 @@ class UnreadMessagesService
   def add_in_redis
     return if @profile_id == Current.profile.id
 
-    previous_unread_messages_details = REDIS.fetch("unreadMessages#{Current.workspace.id}#{@profile_id}") { [] }
+    previous_unread_messages_details = REDIS.get("unreadMessages#{Current.workspace.id}#{@profile_id}")
+    previous_unread_messages_details = previous_unread_messages_details.nil? ? [] : JSON.parse(previous_unread_messages_details)
     previous_unread_messages_details << {
       conversationable_type: @bench_conversation.conversationable_type,
       conversationable_id: @bench_conversation.conversationable_id,
