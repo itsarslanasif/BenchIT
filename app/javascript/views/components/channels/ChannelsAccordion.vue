@@ -16,7 +16,7 @@
           />
         </h5>
         <div
-          class="mt-2 -ml-3 hover:bg-primaryHover"
+          class="mt-2 -ml-3 hover:bg-primaryHover cursor-pointer"
           @click="modalOpen = !modalOpen"
         >
           <h5 class="pl-3">{{ $t('channels.add_new_channel') }}</h5>

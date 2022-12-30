@@ -100,6 +100,7 @@ export default
         const currentMessage = ignoreHTML(curr)
         const oldMessage = ignoreHTML(old)
         const message = ignoreHTML(newMessage.value)
+        
         if (message && getLastIndex(currentMessage) == '@' && getLastIndex(oldMessage) == ';') {
           enableMention()
         }

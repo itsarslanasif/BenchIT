@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div class="flex px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer">
+      <div class="flex px-1 mx-3 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer">
         <n-avatar class="mr-1" size="small" :src="chat.avatar" />
         <span v-if="chat.isActive" class="bg-success rounded-full border-primary border-2 h-3 w-3 relative -ml-3 mt-4 " />
         <p class="text-xl self-center font-semibold pl-1">{{ chat.name }}</p>
