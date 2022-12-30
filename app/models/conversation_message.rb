@@ -1,7 +1,7 @@
 class ConversationMessage < ApplicationRecord
   include Cablable
   after_destroy :broadcast_delete_message
-  after_save :broadcast_message
+  after_commit :broadcast_message, on: [:create, :update]
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
