@@ -31,7 +31,7 @@
 
 <script>
 import { NAvatar, NIcon } from 'naive-ui';
-import { useDirectMessagesStore } from '../../../stores/userDirectMessagesStore.js';
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore.js';
 export default {
   name: 'UserChatInfo',
   components: { NAvatar, NIcon },

@@ -42,7 +42,7 @@
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-import { useDirectMessagesStore } from '../../../stores/userDirectMessagesStore';
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },

@@ -36,7 +36,7 @@
 <script>
 import memberCardDm from './memberCardDm.vue';
 import { getMembers } from '../../../api/members/membersApi';
-import { useDirectMessagesStore } from '../../../stores/userDirectMessagesStore';
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 export default {
   mounted() {
     this.searchQuery();
