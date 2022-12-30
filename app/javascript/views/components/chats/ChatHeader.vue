@@ -14,20 +14,23 @@
   <div
     class="flex items-center h-8 justify-between px-1 mt-1 shadow-md custom-border"
   >
-    <div
-      class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer"
-    >
-      <PinnedConversation />
+    <div class="flex overflow-y-hidden text-ellipsis p-1 cursor-pointer">
+      <pinnedConversation />
+      <BookMarkTagVue :newBookMark="true" :channelId="conversation_id" />
+      <p
+        class="bookmarkText"
+        v-for="bookmark in bookmarkStore.bookmarks"
+        :key="bookmark.id"
+      >
+        <BookMarkTagVue :bookMarkObject="bookmark" :newBookMark="false" />
+      </p>
     </div>
   </div>
 </template>
 
 <script>
 import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
-import BookmarkPopUp from '../bookmark/popup.vue';
-import BookmarkShow from '../bookmark/bookmarkShow.vue';
 import Spinner from '../../shared/spinner.vue';
-import axios from '../../../modules/axios/index';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
@@ -35,14 +38,14 @@ import PinnedConversationModelVue from '../pinnedConversation/pinnedConversation
 import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
+import BookMarkTagVue from '../bookmark/bookMarkTag.vue';
+import { useBookmarkStore } from '../../../stores/useBookmarkStore.js';
 
 export default {
   name: 'ChatHeader',
   components: {
     NAvatar,
     NIcon,
-    BookmarkPopUp,
-    BookmarkShow,
     NSpace,
     NSpin,
     Spinner,
@@ -50,30 +53,22 @@ export default {
     PinnedConversationModelVue,
     ChannelInfo,
     UserChatInfo,
+    BookMarkTagVue,
   },
   data() {
     return {
-      bookmarks: [],
-      loading: true,
+      loading: false,
       user_id: 1,
       chat: {},
+      bookmarks: [],
       conversation_type: window.location.pathname.split('/')[1],
+      conversation_id: window.location.pathname.split('/')[2],
     };
   },
   mounted() {
-    axios
-      .get(`v1/bench_channels/${1}/bookmarks`, {
-        headers: { Authorization: sessionStorage.getItem('token') },
-      })
-      .then(response => {
-        this.bookmarks = response.data.bookmarks;
-        this.loading = false;
-      })
-      .catch(error => {
-        this.loading = false;
-        return error;
-      });
+    this.bookmarkStore.getbookmarks(this.conversation_type,this.conversation_id);
   },
+
   watch: {
     messages(msg) {
       this.chat = {
@@ -94,37 +89,12 @@ export default {
     const messageStore = useMessageStore();
     const { messages } = storeToRefs(messageStore);
     const pinnedConversationStore = usePinnedConversation();
-
+    const bookmarkStore = useBookmarkStore();
     return {
       messages,
       pinnedConversationStore,
+      bookmarkStore,
     };
-  },
-  methods: {
-    onClickChild(value) {
-      this.loading = true;
-      this.bookmarks.push({ name: value.name, url: value.url });
-      axios
-        .post(
-          `v1/bench_channels/${1}/bookmarks`,
-          {
-            headers: { Authorization: sessionStorage.getItem('token') },
-          },
-          {
-            name: value.name,
-            bookmark_URL: value.url,
-            user_id: this.user_id,
-          }
-        )
-        .then(response => {
-          this.members = response.data.profiles;
-          this.loading = false;
-        })
-        .catch(error => {
-          this.loading = false;
-          return error;
-        });
-    },
   },
 };
 </script>
