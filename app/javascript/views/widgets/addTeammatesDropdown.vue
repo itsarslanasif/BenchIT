@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-2 w-full" @click="isOpen = !isOpen">
+  <div class="flex py-2 w-full" @click="openModal">
     <div class="text-white text-xl hover:bg-primaryHover flex">
       <p
         class="w-6 h-6 ml-3 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid">
@@ -40,6 +40,9 @@ export default {
           break;
       }
     },
+    openModal() {
+      this.isOpen = !this.isOpen;
+    }
   },
 };
 </script>
