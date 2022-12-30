@@ -55,11 +55,15 @@ export default {
   },
   methods: {
     async searchQuery() {
-      this.members = await getMembers(
-        this.CurrentWorkspaceId,
-        this.query,
-        this.sort
-      );
+      try {
+        this.members = await getMembers(
+          this.CurrentWorkspaceId,
+          this.query,
+          this.sort
+        );
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

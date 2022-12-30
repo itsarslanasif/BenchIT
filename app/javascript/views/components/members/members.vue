@@ -88,12 +88,16 @@ export default {
   },
   methods: {
     async searchQuery() {
-      this.members = await getMembers(
-        this.CurrentWorkspaceId,
-        this.query,
-        this.sort
-      );
-      this.showSpinner = false;
+      try {
+        this.members = await getMembers(
+          this.CurrentWorkspaceId,
+          this.query,
+          this.sort
+        );
+        this.showSpinner = false;
+      } catch (e) {
+        console.error(e);
+      }
     },
     getSortFilter(value) {
       this.sort = value;

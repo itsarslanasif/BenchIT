@@ -64,18 +64,22 @@ export default {
     this.bookmarks = this.chat = null;
   },
   mounted() {
-    axios
-      .get(`v1/bench_channels/${1}/bookmarks`, {
-        headers: { Authorization: sessionStorage.getItem('token') },
-      })
-      .then(response => {
-        this.bookmarks = response.data.bookmarks;
-        this.loading = false;
-      })
-      .catch(error => {
-        this.loading = false;
-        return error;
-      });
+    try {
+      axios
+        .get(`v1/bench_channels/${1}/bookmarks`, {
+          headers: { Authorization: sessionStorage.getItem('token') },
+        })
+        .then(response => {
+          this.bookmarks = response.data.bookmarks;
+          this.loading = false;
+        })
+        .catch(error => {
+          this.loading = false;
+          return error;
+        });
+    } catch (e) {
+      console.error(e);
+    }
   },
   watch: {
     messages(msg) {
@@ -107,26 +111,30 @@ export default {
     onClickChild(value) {
       this.loading = true;
       this.bookmarks.push({ name: value.name, url: value.url });
-      axios
-        .post(
-          `v1/bench_channels/${1}/bookmarks`,
-          {
-            headers: { Authorization: sessionStorage.getItem('token') },
-          },
-          {
-            name: value.name,
-            bookmark_URL: value.url,
-            user_id: this.user_id,
-          }
-        )
-        .then(response => {
-          this.members = response.data.profiles;
-          this.loading = false;
-        })
-        .catch(error => {
-          this.loading = false;
-          return error;
-        });
+      try {
+        axios
+          .post(
+            `v1/bench_channels/${1}/bookmarks`,
+            {
+              headers: { Authorization: sessionStorage.getItem('token') },
+            },
+            {
+              name: value.name,
+              bookmark_URL: value.url,
+              user_id: this.user_id,
+            }
+          )
+          .then(response => {
+            this.members = response.data.profiles;
+            this.loading = false;
+          })
+          .catch(error => {
+            this.loading = false;
+            return error;
+          });
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

@@ -75,13 +75,17 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      await joinWorkspace(
-        this.workspace_id,
-        this.username,
-        this.description
-      ).then(response => {
-        this.response = response;
-      });
+      try {
+        await joinWorkspace(
+          this.workspace_id,
+          this.username,
+          this.description
+        ).then(response => {
+          this.response = response;
+        });
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

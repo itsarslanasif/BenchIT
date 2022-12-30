@@ -59,9 +59,13 @@ export default {
 
   methods: {
     async leaveChannel() {
-      const response = await memberLeaveChannel(this.id);
-      this.channelStore.leaveChannel(this.id);
-      this.$router.push('/');
+      try {
+        const response = await memberLeaveChannel(this.id);
+        this.channelStore.leaveChannel(this.id);
+        this.$router.push('/');
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

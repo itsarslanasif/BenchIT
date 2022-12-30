@@ -45,7 +45,11 @@ export default {
   methods: {
     async searchQuery() {
       let channel_id = window.location.pathname.split('/')[2];
-      await this.channelDetailStore.getChannelMembers(this.query, channel_id);
+      try {
+        await this.channelDetailStore.getChannelMembers(this.query, channel_id);
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

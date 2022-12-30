@@ -175,7 +175,6 @@ export default {
   },
   beforeUnmount() {
     this.chat = null;
-    this.messages = null;
     this.Cable = null;
   },
   watch: {
@@ -201,14 +200,17 @@ export default {
   },
 
   updated() {
-    this.Cable.on('chat', data => {
-      const findMessage = this.messages.find(m => m.id === data.message.id);
-
-      if (findMessage == undefined) {
-        this.messages.push(data.message);
-        this.message = '';
-      }
-    });
+    try {
+      this.Cable.on('chat', data => {
+        const findMessage = this.messages.find(m => m.id === data.message.id);
+        if (findMessage == undefined) {
+          this.messages.push(data.message);
+          this.message = '';
+        }
+      });
+    } catch (e) {
+      console.error(e);
+    }
   },
 
   methods: {
@@ -222,7 +224,11 @@ export default {
       this.files.forEach(file => {
         formData.append('message_attachments[]', file);
       });
-      conversation(formData);
+      try {
+        conversation(formData);
+      } catch (e) {
+        console.error(e);
+      }
       this.message = '';
       (this.files = []), (this.readerFile = []);
     },

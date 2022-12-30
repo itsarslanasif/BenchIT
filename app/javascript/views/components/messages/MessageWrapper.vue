@@ -231,18 +231,25 @@ export default {
   },
   methods: {
     async addReaction(emoji) {
-      await add_reaction(this.currMessage.id, emoji.i).then(response => {
-        return this.allReactions.push(response.data);
-      });
-    },
-
-    async emojiClickListener(emoji) {
-      if (emoji.user_id == this.currentUserStore.currentUser.id) {
-        await remove_reaction(emoji.id).then(() => {
-          this.allReactions = this.allReactions.filter(function (reaction) {
-            return reaction.id != emoji.id;
-          });
+      try {
+        await add_reaction(this.currMessage.id, emoji.i).then(response => {
+          return this.allReactions.push(response.data);
         });
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    async emojiClickListener(emoji) {
+      try {
+        if (emoji.user_id == this.currentUserStore.currentUser.id) {
+          await remove_reaction(emoji.id).then(() => {
+            this.allReactions = this.allReactions.filter(function (reaction) {
+              return reaction.id != emoji.id;
+            });
+          });
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
     setEmojiModal() {
@@ -260,16 +267,20 @@ export default {
     },
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
-      if (this.currMessage.isSaved) {
-        save(this.currMessage.id, {
-          data: this.currMessage,
-        }).then(() => {
-          this.savedItemsStore.addSavedItem(this.currMessage);
-        });
-      } else {
-        unsave(this.currMessage.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.currMessage);
-        });
+      try {
+        if (this.currMessage.isSaved) {
+          save(this.currMessage.id, {
+            data: this.currMessage,
+          }).then(() => {
+            this.savedItemsStore.addSavedItem(this.currMessage);
+          });
+        } else {
+          unsave(this.currMessage.id).then(() => {
+            this.savedItemsStore.removeSavedItem(this.currMessage);
+          });
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
   },

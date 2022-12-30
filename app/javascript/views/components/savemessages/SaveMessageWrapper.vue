@@ -199,10 +199,14 @@ export default {
       this.showOptions = !this.showOptions;
     },
     unSave() {
-      if (this.currMessage.isSaved) {
-        unsave(this.currMessage.message.id).then(() => {
-          this.savedItemsStore.removeSavedItem(this.message);
-        });
+      try {
+        if (this.currMessage.isSaved) {
+          unsave(this.currMessage.message.id).then(() => {
+            this.savedItemsStore.removeSavedItem(this.message);
+          });
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
   },

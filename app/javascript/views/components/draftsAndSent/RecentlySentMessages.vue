@@ -117,7 +117,11 @@ export default {
     },
   },
   async mounted() {
-    this.messages = await getMessages();
+    try {
+      this.messages = await getMessages();
+    } catch (e) {
+      console.error(e);
+    }
   },
   computed: {
     isToday() {
