@@ -1,5 +1,5 @@
 class ConversationMessage < ApplicationRecord
-  after_commit :broadcast_message, :send_notification_ws, :set_message
+  after_commit :broadcast_message, :set_message
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
@@ -32,37 +32,7 @@ class ConversationMessage < ApplicationRecord
   private
 
   def broadcast_message
-    channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
-    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('Profile')
-
-    ActionCable.server.broadcast(channel_key, { message: @message })
-  end
-
-  def send_notification_ws
-    case bench_conversation.conversationable_type
-    when 'Profile'
-      profile_ids = [bench_conversation.conversationable_id, sender_id]
-    when 'Group'
-      profile_ids = Group.find(bench_conversation.conversationable_id).profile_ids
-    when 'BenchChannel'
-      profile_ids = BenchChannel.find(bench_conversation.conversationable_id).profiles.pluck(:id)
-    end
-    profile_ids.each do |id|
-      add_unread_message_in_redis(id)
-      notification_key = "NotificationChannel#{Current.workspace.id}-#{id}"
-      ActionCable.server.broadcast(notification_key, { message: @message })
-    end
-  end
-
-  def add_unread_message_in_redis(profile_id)
-    str = REDIS.get("unreadMessages#{Current.workspace.id}#{profile_id}")
-    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
-    previous_unread_messages_details.push({
-                                            conversationable_type: bench_conversation.conversationable_type,
-                                            conversationable_id: bench_conversation.conversationable_id,
-                                            message_id: id
-                                          })
-    REDIS.set("unreadMessages#{Current.workspace.id}#{profile_id}", previous_unread_messages_details.to_json) unless profile_id == Current.profile.id
+    BroadcastMessageService.new(@message, bench_conversation).call
   end
 
   def set_message
