@@ -338,19 +338,20 @@ export default {
       return filteredReactions.length;
     },
     getUsers(emoji) {
-      const filteredUsers = this.users.filter(function (value) {
-        if (value.reaction === emoji) {
-          return value.username;
-        }
-      });
-      var users = filteredUsers.map(function (item) {
-        return item.username;
-      });
-      const formatter = new Intl.ListFormat('en', {
-        style: 'long',
-        type: 'conjunction',
-      });
-      return formatter.format(users);
+      if (this.users !== undefined) {
+        let users = this.users
+          .filter(function (profile) {
+            return profile.reaction === emoji;
+          })
+          .map(function (profile) {
+            return profile.username;
+          });
+        const formatter = new Intl.ListFormat('en', {
+          style: 'long',
+          type: 'conjunction',
+        });
+        return formatter.format(users);
+      }
     },
   },
 };
@@ -358,8 +359,5 @@ export default {
 <style scoped>
 .messageContentPinned {
   @apply bg-yellow-100;
-}
-.n-button {
-  border: none;
 }
 </style>
