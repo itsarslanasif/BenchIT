@@ -1,7 +1,7 @@
 <template>
-  <div class="container overflow-auto bg-primary">
+  <div class=" bg-primary flex flex-col h-full overflow-auto">
     <hr class="text-slate-400" />
-    <div class="relative mt-4 mb-4 text-white">
+    <div class="mt-4 mb-4 text-white">
       <IconElement icon="&#8860;" :name="$t('sidebar.threads')" />
       <IconElement icon="&#8704;" :name="$t('sidebar.direct_messages')" />
       <IconElement icon="&#64;" :name="$t('sidebar.mentions_and_reactions')" />
@@ -14,9 +14,6 @@
     <div>
       <ChannelsAccordion />
       <DirectMessageAccordian />
-    </div>
-    <div class="absolute bottom-0 text-sm text-white ml-3 p-2 rounded-md hover:bg-primaryHover cursor-pointer">
-      {{ $t('channels.selected_channels') }}
     </div>
   </div>
 </template>

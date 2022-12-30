@@ -103,7 +103,6 @@ en:
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
-
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
