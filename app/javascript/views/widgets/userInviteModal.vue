@@ -7,16 +7,19 @@
     size="huge"
   >
     <div class="mb-3" v-if="errorMessage">
-      <n-alert type="error" closable>
+      <n-alert type="error">
         <span>{{ $t('request.error_message') }}</span>
       </n-alert>
     </div>
     <div class="mb-3" v-if="successMessage">
-      <n-alert type="success" closable>
+      <n-alert type="success">
         <span>{{ $t('request.success_message') }}</span>
       </n-alert>
     </div>
-    <template #header>{{ $t('request.requesting_invitation') }}</template>
+    <template #header
+      >{{ $t('request.requesting_invitation') }}
+      {{ workspace.company_name }}</template
+    >
     <form @submit.prevent="handleSubmit">
       <label class="flex font-semibold">{{ $t('request.to') }}</label>
       <input
@@ -48,12 +51,15 @@ import { NModal, NAlert } from 'naive-ui';
 import { useUserInviteStore } from '../../stores/useUserInviteStore.js';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { invite_user } from '../../api/workspaces/workspacesApi.js';
+import { storeToRefs } from 'pinia';
+
 export default {
   data() {
     return {
       userStore: useUserInviteStore(),
       errorMessage: false,
       successMessage: false,
+      workspace: null,
     };
   },
   components: {
@@ -61,9 +67,10 @@ export default {
     NAlert,
   },
   setup() {
-    const currentWorkspaceStore = useCurrentWorkspaceStore();
+    const workspaceStore = useCurrentWorkspaceStore();
+    const { currentWorkspace } = storeToRefs(workspaceStore);
     return {
-      currentWorkspaceStore,
+      workspace: currentWorkspace,
     };
   },
   updated() {
@@ -73,7 +80,7 @@ export default {
   methods: {
     async handleSubmit() {
       await invite_user(
-        this.currentWorkspaceStore.currentWorkspace.id,
+        this.workspace.id,
         this.userStore.workspace_invite
       ).then(
         response => {

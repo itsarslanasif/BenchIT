@@ -87,6 +87,8 @@ import { switchWorkspace } from '../../api/switchWorkspace/switchWorkspace.js';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
+
 export default {
   name: 'UserSignIn',
   components: {
@@ -136,10 +138,12 @@ export default {
     },
     async getProfile() {
       const currentProfileStore = useCurrentProfileStore();
+      const currentWorkspaceStore = useCurrentWorkspaceStore();
       await switchWorkspace(1).then(response => {
         this.currentProfile = response;
       });
       currentProfileStore.setProfile(this.currentProfile);
+      currentWorkspaceStore.setWorkspace(this.currentProfile);
       this.goToHomepage();
     },
   },

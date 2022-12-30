@@ -3,9 +3,7 @@ import { defineStore } from 'pinia';
 export const useCurrentWorkspaceStore = () => {
   const currentWorkspaceStore = defineStore('currentWorkspaceStore', {
     state: () => ({
-      currentWorkspace: {
-        id: 1,
-      },
+      currentWorkspace: {},
     }),
 
     getters: {
@@ -13,8 +11,8 @@ export const useCurrentWorkspaceStore = () => {
     },
 
     actions: {
-      setWorkspace(workspace) {
-        this.currentWorkspace = workspace;
+      setWorkspace(currentProfile) {
+        this.currentWorkspace = currentProfile.workspace;
       },
     },
   });
