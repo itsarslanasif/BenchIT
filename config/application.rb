@@ -17,7 +17,7 @@ module BenchIt
     # in config/environments, which are processed later.
     #
     # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    config.eager_load_paths << Rails.root.join('app/services')
     config.active_job.queue_adapter = :sidekiq
     config.autoload_paths += Dir[Rails.root.join('lib/')]
     # config.autoload_paths << '../lib/tasks/token'
