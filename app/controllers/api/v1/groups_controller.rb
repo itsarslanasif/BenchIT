@@ -7,7 +7,9 @@ class Api::V1::GroupsController < Api::ApiController
     render json: Current.profile.groups
   end
 
-  def show; end
+  def show
+    @profiles = Profile.where(id: @group.profile_ids)
+  end
 
   def add_member
     @group.profile_ids += params[:profile_ids]
