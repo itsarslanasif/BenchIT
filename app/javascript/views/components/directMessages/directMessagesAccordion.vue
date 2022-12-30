@@ -17,7 +17,7 @@
             <p class="ml-2 text-sm text-white">{{ user.username }}</p>
           </div>
         </h5>
-        <div class="-ml-3 flex items-start py-1 hover:bg-primaryHover" @click="modalOpen = !modalOpen">
+        <div class="-ml-3 flex items-start py-1 hover:bg-primaryHover cursor-pointer" @click="modalOpen = !modalOpen">
           <addTeammatesDropdown :items="options" />
         </div>
       </AccordionItem>

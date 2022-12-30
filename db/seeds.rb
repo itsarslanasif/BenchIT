@@ -65,3 +65,10 @@ Workspace.create!(company_name: 'Devsinc',
                   bench_it_url: 'https://www.devsinc.com',
                   capacity: 2000,
                   organization_type: :financial_services)
+user1.profiles.create!(username: 'Alvi', description: 'SE', workspace_id: 2)
+Current.profile = user1.profiles.second
+Current.workspace = Workspace.second
+BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
+ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 4)
+BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
+ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 6, sender_id: 6)

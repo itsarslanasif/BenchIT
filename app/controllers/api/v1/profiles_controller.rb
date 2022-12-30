@@ -3,7 +3,7 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show update]
-  before_action :set_profile, only: %i[show update]
+  before_action :find_profile, only: %i[show update]
 
   def index
     @profiles = if params[:query].presence
@@ -19,9 +19,7 @@ class Api::V1::ProfilesController < Api::ApiController
     @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
   end
 
-  def show
-    @profile = @workspace.profiles.find(params[:id])
-  end
+  def show; end
 
   def create
     @profile = current_user.profiles.new(profile_params)
@@ -47,7 +45,7 @@ class Api::V1::ProfilesController < Api::ApiController
 
   private
 
-  def set_profile
+  def find_profile
     @profile = Profile.find(params[:id])
   end
 

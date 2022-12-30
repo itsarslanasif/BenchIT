@@ -28,6 +28,7 @@ Rails.application.routes.draw do
             get :send_message
             get :index_saved_messages
             get :recent_files
+            get :unread_messages
           end
           member do
             post :save_message
@@ -46,6 +47,7 @@ Rails.application.routes.draw do
         resources :workspaces, only: %i[create] do
           member do
             post :invite
+            get :switch_workspace
           end
 
           resources :profiles, only: %i[index create show update] do

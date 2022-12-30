@@ -1,8 +1,8 @@
 import axios from '../../modules/axios/index';
 
-export const getDirectMessagesList = async id => {
-  return axios
-    .get(`v1/workspaces/${id}/profiles/previous_direct_messages`, {
+export const switchWorkspace = async id => {
+  return await axios
+    .get(`v1/workspaces/${id}/switch_workspace`, {
       headers: { Authorization: sessionStorage.getItem('token') },
     })
     .then(response => {

@@ -99,4 +99,5 @@ export const CONSTANTS = {
   CHANNEL_NAME_ERROR: 'Please enter channel name.',
   CHANNEL_DISCRIPTION_ERROR: 'Please enter channel description.',
   NULL_VALUES: [null, undefined, []],
+  PROFILE_ADDED: 'Profile added'
 };

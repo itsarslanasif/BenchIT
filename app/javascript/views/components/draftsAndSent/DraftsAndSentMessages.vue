@@ -8,7 +8,7 @@
       </div>
     </div>
     <nav
-      class="container px-4 py-2 mx-auto border flex justify-between items-center border-black-300 border-r-0 border-l-0"
+      class="px-4 py-2 mx-auto border flex justify-between items-center border-black-300 border-r-0 border-l-0"
     >
       <div class="flex items-center justify-between">
         <router-link

@@ -33,14 +33,23 @@ import { NDropdown, NAvatar, NText } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore'
+import { storeToRefs } from 'pinia';
+
 export default {
   components: { NDropdown, NAvatar },
+  setup() {
+    const profileStore = useCurrentProfileStore();
+    const { currentProfile } = storeToRefs(profileStore);
+    return { profile: currentProfile };
+  },
   data() {
     return {
       status: 'Away',
       prevStatus: 'active',
       statusIcon: '⚫',
       userStatus: userStatusStore(),
+      profile: null,
       options: [
         {
           key: 'header',
@@ -150,7 +159,7 @@ export default {
           }),
           h('div', null, [
             h('div', { class: 'text-base font-bold' }, [
-              h(NText, { depth: 2 }, { default: () => 'Alva' }),
+              h(NText, { depth: 2 }, { default: () => this.profile.username }),
             ]),
             h(
               'div',
