@@ -1,5 +1,5 @@
 <template>
-  <div class="container bg-primary">
+  <div class="container overflow-auto bg-primary">
     <hr class="text-slate-400" />
     <div class="relative mt-4 mb-4 text-white">
       <IconElement icon="&#8860;" :name="$t('sidebar.threads')" />
@@ -36,3 +36,8 @@ export default {
   },
 };
 </script>
+<style>
+.container{
+  height: 88vh
+}
+</style>
