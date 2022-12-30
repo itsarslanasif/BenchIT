@@ -1,13 +1,13 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
-  before_action :set_message, only: %i[destroy]
+  before_action :set_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
 
   def send_message
-    @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
   end
 
   def create
@@ -20,6 +20,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       response = { message: @message.errors, status: :unprocessable_entity }
     end
     render json: response
+  end
+
+  def update
+    if @message.update(conversation_messages_params)
+      render json: { success: 'Messages updated', message: @message, status: :updated }
+    else
+      render json: { errors: @message.errors, status: :unprocessable_entity }
+    end
   end
 
   def destroy
@@ -41,7 +49,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = Current.profile.conversation_messages.with_attached_message_attachments
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def bench_channel_messages

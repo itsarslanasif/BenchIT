@@ -83,6 +83,10 @@ export const CONSTANTS = {
   YOU_FORGET_TO_ADD_BOOKMARK_LINK: 'You forget to add bookmark link.',
   DONNT_FORGET_TO_ADD_BOOKMARK_TITLE: "Don't forget to add bookmark title.",
   DONNT_FORGET_TO_ADD_BOOKMARK_LINK: "Don't forget to to add bookmark link.",
+
+  HEADER: 'Header',
+  BODY: 'Body',
+  FOOTER: 'Footer',
   PAUSE_NOTIFICATIONS: 'Pause Notifications',
   GROUP_PAUSE_NOTIFICATIONS: 'Pause notifications...',
   FOR_30_MINUTES: 'For 30 minutes',
@@ -96,4 +100,5 @@ export const CONSTANTS = {
   SIGN_OUT_OF_DEVSINC: 'Sign out of Devsinc',
   SET_STATUS: 'Set status',
   NULL_VALUES: [null, undefined, []],
+  PROFILE_ADDED: 'Profile added'
 };

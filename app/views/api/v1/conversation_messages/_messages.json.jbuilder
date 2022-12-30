@@ -1,3 +1,3 @@
 json.array! messages do |message|
-  json.partial! 'api/v1/conversation_messages/message', message: message
+  json.partial! 'api/v1/shared/partials/message', message: message
 end
