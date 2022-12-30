@@ -29,7 +29,7 @@
         </h5>
         <div
           class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
-          @click="modalOpen = !modalOpen"
+          @click="closeModal"
         >
           <addTeammatesDropdown :items="options" />
         </div>

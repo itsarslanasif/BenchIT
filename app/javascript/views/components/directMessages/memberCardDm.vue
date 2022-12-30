@@ -10,7 +10,7 @@
     </div>
     <div class="ml-5 text-white">
       <p>{{ name }}</p>
-      <p>{{ name }}@gmail.com</p>
+      <p>{{ name }}{{  $t('email.gmail') }}</p>
     </div>
     <hr />
   </div>
