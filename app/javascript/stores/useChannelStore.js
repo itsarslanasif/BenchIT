@@ -19,7 +19,6 @@ export const useChannelStore = () => {
         } catch (e) {
           console.error(e)
         }
-        this.channels = await getChannels();
       },
       async createChannel(name, description, is_private) {
         try {
