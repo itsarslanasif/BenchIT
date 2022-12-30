@@ -33,7 +33,7 @@
             <editor
               v-model="message"
               @keydown.enter="sendMessage"
-              api-key="{{ import.meta.env.VITE_EDITOR_API }}"
+              api-key="no-api-key"
               :init="{
                 menubar: false,
                 statusbar: false,
@@ -194,7 +194,7 @@ export default {
       } else {
         this.disableAll();
       }
-      
+
     },
   },
 
