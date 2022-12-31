@@ -91,12 +91,15 @@ export default {
     this.error = null;
     this.email = null;
   },
+  beforeUnmount() {
+    this.workspace = null;
+    this.error = null;
+    this.errorAlert = null;
+    this.email = null;
+  },
   methods: {
     async handleSubmit() {
-      await invite_user(
-        this.workspace.id,
-        this.email
-      ).then(
+      await invite_user(this.workspace.id, this.email).then(
         response => {
           this.error = false;
         },
