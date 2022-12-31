@@ -1,3 +1,4 @@
+
 <template>
   <div class="bg-white flex flex-col p-5 gap-3">
     <div class="py-5">
@@ -29,7 +30,7 @@
 </template>
 
 <script>
-import MermberCard from '../directMessages/memberCard.vue';
+import MermberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
 export default {
   name: 'About',
@@ -45,11 +46,7 @@ export default {
   methods: {
     async searchQuery() {
       let channel_id = window.location.pathname.split('/')[2];
-      try {
-        await this.channelDetailStore.getChannelMembers(this.query, channel_id);
-      } catch (e) {
-        console.error(e);
-      }
+      await this.channelDetailStore.getChannelMembers(this.query, channel_id);
     },
   },
 };

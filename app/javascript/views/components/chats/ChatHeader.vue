@@ -1,5 +1,5 @@
 <template>
-  <div class="loading" v-if="loading">
+  <div class="loading" v-show="loading">
     <Spinner />
   </div>
   <div v-if="chat && conversation_type === 'channels'">
@@ -36,6 +36,7 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 
+
 export default {
   name: 'ChatHeader',
   components: {
@@ -60,26 +61,19 @@ export default {
       conversation_type: window.location.pathname.split('/')[1],
     };
   },
-  beforeUnmount() {
-    this.bookmarks = this.chat = null;
-  },
   mounted() {
-    try {
-      axios
-        .get(`v1/bench_channels/${1}/bookmarks`, {
-          headers: { Authorization: sessionStorage.getItem('token') },
-        })
-        .then(response => {
-          this.bookmarks = response.data.bookmarks;
-          this.loading = false;
-        })
-        .catch(error => {
-          this.loading = false;
-          return error;
-        });
-    } catch (e) {
-      console.error(e);
-    }
+    axios
+      .get(`v1/bench_channels/${1}/bookmarks`, {
+        headers: { Authorization: sessionStorage.getItem('token') },
+      })
+      .then(response => {
+        this.bookmarks = response.data.bookmarks;
+        this.loading = false;
+      })
+      .catch(error => {
+        this.loading = false;
+        return error;
+      });
   },
   watch: {
     messages(msg) {
@@ -111,30 +105,26 @@ export default {
     onClickChild(value) {
       this.loading = true;
       this.bookmarks.push({ name: value.name, url: value.url });
-      try {
-        axios
-          .post(
-            `v1/bench_channels/${1}/bookmarks`,
-            {
-              headers: { Authorization: sessionStorage.getItem('token') },
-            },
-            {
-              name: value.name,
-              bookmark_URL: value.url,
-              user_id: this.user_id,
-            }
-          )
-          .then(response => {
-            this.members = response.data.profiles;
-            this.loading = false;
-          })
-          .catch(error => {
-            this.loading = false;
-            return error;
-          });
-      } catch (e) {
-        console.error(e);
-      }
+      axios
+        .post(
+          `v1/bench_channels/${1}/bookmarks`,
+          {
+            headers: { Authorization: sessionStorage.getItem('token') },
+          },
+          {
+            name: value.name,
+            bookmark_URL: value.url,
+            user_id: this.user_id,
+          }
+        )
+        .then(response => {
+          this.members = response.data.profiles;
+          this.loading = false;
+        })
+        .catch(error => {
+          this.loading = false;
+          return error;
+        });
     },
   },
 };
@@ -157,3 +147,4 @@ export default {
   position: fixed;
 }
 </style>
+
