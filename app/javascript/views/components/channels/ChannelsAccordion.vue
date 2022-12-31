@@ -56,6 +56,7 @@ export default {
   },
   methods: {
     closeModal() {
+      console.log("close Model Function")
       this.modalOpen = !this.modalOpen;
     },
     goToChannelChat(chatURL) {
