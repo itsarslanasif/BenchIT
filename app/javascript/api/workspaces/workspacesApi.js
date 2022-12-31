@@ -8,10 +8,10 @@ export const createWorkspace = async workspace => {
   );
 };
 
-export const invite_user = async (currentWorkspace, workspace_invite) => {
+export const invite_user = async (currentWorkspace, email) => {
   return await axios.post(
     `/v1/workspaces/${currentWorkspace}/invite`,
-    workspace_invite,
+    { email: email },
     { headers: { Authorization: sessionStorage.getItem('token') } }
   );
 };

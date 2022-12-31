@@ -11,8 +11,8 @@
         :show-icon="false"
         :class="
           errorAlert
-            ? 'border border-red-100 bg-red-100'
-            : 'border border-green-100 bg-green-100'
+            ? 'border border-red-100 bg-red-50'
+            : 'border border-green-200 bg-green-100'
         "
       >
         <span>{{ getResponse }}</span>
@@ -25,7 +25,7 @@
     <form @submit.prevent="handleSubmit">
       <label class="flex font-semibold">{{ $t('request.to') }}</label>
       <input
-        v-model="userStore.workspace_invite.email"
+        v-model="email"
         type="email"
         :placeholder="$t('placeholder.email')"
         required
@@ -50,7 +50,6 @@
 
 <script>
 import { NModal, NAlert } from 'naive-ui';
-import { useUserInviteStore } from '../../stores/useUserInviteStore.js';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { invite_user } from '../../api/workspaces/workspacesApi.js';
 import { CONSTANTS } from '../../assets/constants.js';
@@ -59,10 +58,10 @@ import { storeToRefs } from 'pinia';
 export default {
   data() {
     return {
-      userStore: useUserInviteStore(),
       error: null,
       workspace: null,
       errorAlert: null,
+      email: null,
     };
   },
   components: {
@@ -90,13 +89,13 @@ export default {
   },
   updated() {
     this.error = null;
-    this.userStore.workspace_invite.email = null;
+    this.email = null;
   },
   methods: {
     async handleSubmit() {
       await invite_user(
         this.workspace.id,
-        this.userStore.workspace_invite
+        this.email
       ).then(
         response => {
           this.error = false;
@@ -105,7 +104,7 @@ export default {
           this.error = true;
         }
       );
-      this.userStore.workspace_invite.email = null;
+      this.email = null;
     },
   },
 };

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 
-export const useUserInviteStore = defineStore('user', {
+export const useUserInviteStore = defineStore('useUserInviteStore', {
   state: () => {
     return {
       user_email: {
@@ -10,9 +10,6 @@ export const useUserInviteStore = defineStore('user', {
         password: null,
         password_confirmation: null,
         invitation_token: null,
-      },
-      workspace_invite: {
-        email: null,
       },
       confirmPasswordError: null,
     }
