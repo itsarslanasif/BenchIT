@@ -36,7 +36,6 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 
-
 export default {
   name: 'ChatHeader',
   components: {
@@ -137,7 +136,6 @@ export default {
 .custom-border {
   border-bottom: 0.5px solid gray;
 }
-
 .loading {
   width: 80%;
   height: 50%;
@@ -147,4 +145,3 @@ export default {
   position: fixed;
 }
 </style>
-

@@ -67,14 +67,13 @@ export default {
       this.currentProfileStore.currentProfile.workspace_id
     );
   },
+  beforeUnmount() {
+    this.dmList = this.options = null;
+  },
   setup() {
-
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
     return { directMessageStore, currentProfileStore };
-  },
-  beforeUnmount() {
-    this.dmList = this.options = null;
   },
   methods: {
     closeModal() {

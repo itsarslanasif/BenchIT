@@ -41,6 +41,9 @@ export default {
   mounted() {
     this.searchQuery();
   },
+  beforeUnmount() {
+    this.query = this.members = this.users = null;
+  },
   components: {
     memberCardDm,
   },
