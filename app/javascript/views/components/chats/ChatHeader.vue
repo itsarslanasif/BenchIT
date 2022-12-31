@@ -1,5 +1,5 @@
 <template>
-  <div class="loading" v-show="loading">
+  <div class="loading" v-if="loading">
     <Spinner />
   </div>
   <div v-if="chat && conversation_type === 'channels'">

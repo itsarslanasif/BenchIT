@@ -30,7 +30,11 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       return false;
     },
     async getDmList(workspace_id) {
-      this.directMessagesList = await getDirectMessagesList(workspace_id);
+      try {
+        this.directMessagesList = await getDirectMessagesList(workspace_id);
+      } catch (e) {
+        console.error(e)
+      }
     },
   },
 });
