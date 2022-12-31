@@ -73,6 +73,9 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     return { directMessageStore, currentProfileStore };
   },
+  beforeUnmount() {
+    this.dmList = this.options = null;
+  },
   methods: {
     closeModal() {
 

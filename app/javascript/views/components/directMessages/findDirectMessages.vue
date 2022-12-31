@@ -66,11 +66,15 @@ export default {
       this.goToChat(`/profiles/${member.id}`);
     },
     async searchQuery() {
-      this.members = await getMembers(
+      try {
+        this.members = await getMembers(
         this.CurrentWorkspaceId,
         this.query,
         this.sort
       );
+      } catch (e) {
+        console.error(e)
+      }
     },
   },
 };
