@@ -45,10 +45,10 @@ json.group_id message.bench_conversation.conversationable_id if
 
 if message.bench_conversation.conversationable_type.eql?('Profile')
   if message.bench_conversation.conversationable_id == message.sender_id
-    json.receiver_id message.bench_conversation.conversationable_id
-    json.receiver_name message.bench_conversation.conversationable.username
-  else
     json.receiver_id message.bench_conversation.sender_id
     json.receiver_name message.bench_conversation.sender.username
+  else
+    json.receiver_id message.bench_conversation.conversationable_id
+    json.receiver_name message.bench_conversation.conversationable.username
   end
 end
