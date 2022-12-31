@@ -11,9 +11,13 @@
             +
           </a>
         </template>
-        <h5 v-for="user in dmList" :key="user.id" class="hover:bg-primaryHover">
+        <h5
+          v-for="user in directMessageStore.directMessagesList"
+          :key="user.id"
+          class="hover:bg-primaryHover"
+        >
           <div
-            @click="goToChat(`/profiles/${user.id}`)"
+            @click="goToChat(`/profiles/${user.id}`,user)"
             class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
           >
             <img
@@ -24,8 +28,8 @@
           </div>
         </h5>
         <div
-          class="-ml-3 flex items-start py-1 hover:bg-primaryHover cursor-pointer"
-          @click="modalOpen = !modalOpen"
+          class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
+          @click="closeModal"
         >
           <addTeammatesDropdown :items="options" />
         </div>
@@ -37,10 +41,9 @@
 <script>
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
-import { getDirectMessagesList } from '../../../api/directMessages/directMessages';
-import { useSelectedScreenStore } from '../../../stores/useSelectedScreen';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
+
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {
@@ -59,31 +62,26 @@ export default {
       ],
     };
   },
+  mounted() {
+    this.directMessageStore.getDmList(
+      this.currentProfileStore.currentProfile.workspace_id
+    );
+  },
   beforeUnmount() {
     this.dmList = this.options = null;
   },
-  mounted() {
-    this.getDmList();
-  },
   setup() {
-    const selectScreen = useSelectedScreenStore();
-    return { selectScreen };
+    const directMessageStore = useDirectMessagesStore();
+    const currentProfileStore = useCurrentProfileStore();
+    return { directMessageStore, currentProfileStore };
   },
   methods: {
     closeModal() {
+
       this.modalOpen = !this.modalOpen;
     },
-    async getDmList() {
-      const currentProfileStore = useCurrentProfileStore();
-      try {
-        this.dmList = await getDirectMessagesList(
-          currentProfileStore.currentProfile.workspace_id
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    goToChat(chatURL) {
+    goToChat(chatURL,user) {
+      this.directMessageStore.setSelectedDm(user)
       this.$router.push(chatURL);
     },
     handleClick() {

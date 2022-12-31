@@ -113,10 +113,6 @@ export default {
       channelStore,
     };
   },
-  beforeUnmount() {
-    this.form.channelName = null;
-    this.form.Description = null;
-  },
   methods: {
     onSubmit() {
       this.validations();

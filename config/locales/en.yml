@@ -1,3 +1,4 @@
+
 en:
   time:
     formats:
@@ -51,6 +52,8 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      email:
+        gmail: '@gmail.com'
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
@@ -103,6 +106,9 @@ en:
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
+      channels:
+          channels: 'Channels'
+          add_new_channel: 'Add New Channel'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -118,7 +124,6 @@ en:
         more: 'More'
         save_message: 'Save items'
       channels:
-        channels: 'Channels'
         selected_channels: 'Selected Channels'
         title: 'Channels'
         add_new_channel: 'Add New Channel'
@@ -130,7 +135,6 @@ en:
         new_channel_name_placeholder: 'e.g plan-budget'
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
-        set_channel_private: 'set channel to private.'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -259,3 +263,4 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+
