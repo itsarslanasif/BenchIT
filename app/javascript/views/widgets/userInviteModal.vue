@@ -80,7 +80,7 @@ export default {
       if (this.error) {
         this.alertMessage = CONSTANTS.ERROR_MESSAGE;
         this.errorAlert = true;
-      } else if (!this.error) {
+      } else {
         this.alertMessage = CONSTANTS.SUCCESS_MESSAGE;
         this.errorAlert = false;
       }

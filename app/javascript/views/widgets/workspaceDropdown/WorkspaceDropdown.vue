@@ -8,7 +8,7 @@
   >
     <n-text text color="white">
       <div class="mx-3 my-2 flex text-white">
-        <strong class="text-xl">BenchIT</strong>
+        <strong class="text-xl">{{ $t('project.title')}}</strong>
         <i class="fa-solid fa-chevron-down self-center fa-xs ml-1 mb-2" /></div
     ></n-text>
   </n-dropdown>
