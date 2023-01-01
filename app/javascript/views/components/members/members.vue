@@ -24,18 +24,9 @@
             :name="member.username"
             :description="member.description"
             :img-url="member.image_url"
-            @click="profileClickListener(member)"
+            @click="toggleUserProfileShow(true)"
           />
         </div>
-      </div>
-      <div class="ml-10" v-if="showProfile">
-        <profile
-          @exitProfileView="exitProfile"
-          :username="this.selectedMember.username"
-          :description="this.selectedMember.description"
-          :img-url="this.selectedMember.image_url"
-          :userId="this.selectedMember.user_id"
-        ></profile>
       </div>
     </div>
     <div class="flex justify-center" v-if="members.length == 0">
@@ -52,6 +43,8 @@ import member from './member.vue';
 import Spinner from '../../shared/spinner.vue';
 import filters from '../../widgets/filters.vue';
 import profile from '../../widgets/profile.vue';
+import {useRightPaneStore} from '../../../stores/useRightPaneStore'
+import { mapActions } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
 import { getMembers } from '../../../api/members/membersApi';
 export default {
@@ -102,13 +95,7 @@ export default {
     getSortFilter(value) {
       this.sort = value;
     },
-    profileClickListener(member) {
-      this.showProfile = true;
-      this.selectedMember = member;
-    },
-    exitProfile(value) {
-      this.showProfile = value;
-    },
+    ...mapActions(useRightPaneStore,['toggleUserProfileShow'])
   },
   watch: {
     sort() {
