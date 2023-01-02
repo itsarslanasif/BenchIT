@@ -25,19 +25,25 @@ export default {
       favChannelId: 0,
     };
   },
+  beforeUnmount() {
+    this.favChannelId = 0;
+  },
   methods: {
     MarkStar() {
       this.favChannel = !this.favChannel;
-
-      if (this.favChannel) {
-        star({
-          favourable_type: 'BenchChannel',
-          favourable_id: this.channelId,
-        }).then(response => {
-          this.favChannelId = response.data.favourite.id;
-        });
-      } else {
-        unstar(this.favChannelId);
+      try {
+        if (this.favChannel) {
+          star({
+            favourable_type: 'BenchChannel',
+            favourable_id: this.channelId,
+          }).then(response => {
+            this.favChannelId = response.data.favourite.id;
+          });
+        } else {
+          unstar(this.favChannelId);
+        }
+      } catch (e) {
+        console.error(e);
       }
     },
   },

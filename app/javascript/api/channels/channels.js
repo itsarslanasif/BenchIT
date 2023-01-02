@@ -21,6 +21,22 @@ export const getChannelMembers = async (query, bench_channel_id) => {
     });
 };
 
+export const createChannel = async (name, description, is_private) => {
+  return await axios.post(
+    `/v1/bench_channels`,
+    {
+      bench_channel: {
+        name: name,
+        description: description,
+        is_private: is_private,
+      },
+    },
+    {
+      headers: { Authorization: sessionStorage.getItem('token') },
+    }
+  );
+};
+
 export const memberLeaveChannel = async channel_id => {
   return await axios
     .delete(`v1/bench_channels/${channel_id}/leave`, {

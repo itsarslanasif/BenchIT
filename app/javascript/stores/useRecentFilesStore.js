@@ -13,7 +13,11 @@ export const useRecentFilesStore = () => {
 
     actions: {
       async index() {
-        this.recentFiles = await getAllRecentAttachments()
+        try {
+          this.recentFiles = await getAllRecentAttachments()
+        } catch (e) {
+          console.error(e)
+        }
       },
     },
   });

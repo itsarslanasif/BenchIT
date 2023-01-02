@@ -14,11 +14,20 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
   },
   actions: {
     async getChannelMembers(query, bench_channel_id) {
-      this.channelMembers = await getChannelMembers(query, bench_channel_id);
+      try {
+        this.channelMembers = await getChannelMembers(query, bench_channel_id);
+      } catch(e){
+        console.error(e)
+      }
+
     },
     async getChannelMembersCount(bench_channel_id) {
+      try {
       let members = await getChannelMembers('', bench_channel_id);
       this.channelMemberCount = members.length;
+      } catch(e){
+        console.error(e)
+      }
       return this.channelMemberCount;
     },
     setSlectedOption(option) {

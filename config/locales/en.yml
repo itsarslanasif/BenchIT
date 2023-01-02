@@ -1,3 +1,4 @@
+
 en:
   time:
     formats:
@@ -51,6 +52,8 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      email:
+        gmail: '@gmail.com'
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
@@ -260,3 +263,4 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+

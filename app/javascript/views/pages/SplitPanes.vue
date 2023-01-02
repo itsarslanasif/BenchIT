@@ -1,14 +1,15 @@
 <template>
-  <div class="bg-primary text-sm">
-    <div class="border-b border-slate-400 bg-secondary">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <div class="bg-primary text-sm h-screen flex flex-col ">
+    <div class=" ">
       <SearchBar />
     </div>
     <splitpanes>
-      <pane max-size="35" min-size="15">
+      <pane max-size="20" min-size="10">
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-      <pane max-size="150" min-size="100" class="bg-white">
+      <pane class="bg-white " max-size="90" min-size="80">
         <router-view :key="$route.fullPath" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
@@ -20,8 +21,12 @@
         min-size="60"
         class="bg-white"
       >
-        <Thread v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile" />
-        <UserProfile v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile" />
+        <Thread
+          v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+        />
+        <UserProfile
+          v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+        />
       </pane>
     </splitpanes>
   </div>
@@ -54,7 +59,7 @@ export default {
     Thread,
     searchDmscreen,
     SearchBar,
-    UserProfile
+    UserProfile,
   },
   setup() {
     const screenStore = useSelectedScreenStore();
@@ -79,6 +84,9 @@ export default {
         this.$router.push('/sign_in');
       });
     },
+  },
+  beforeUnmount() {
+    this.options = null;
   },
   data() {
     return {
@@ -127,17 +135,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.chatpane {
-  overflow: hidden;
-  position: relative;
-}
-
-.modal-styling {
-  background-color: transparent;
-  margin-left: 40%;
-  margin-top: 7%;
-  position: absolute;
-}
-</style>

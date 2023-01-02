@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 export const useRightPaneStore = defineStore('useRightPaneStore', {
   state: () => ({
     showUserProfile: false,

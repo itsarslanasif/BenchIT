@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+
 export const useThreadStore = defineStore('threadStore', {
   state: () => ({
     message: {},

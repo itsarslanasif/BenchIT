@@ -32,7 +32,13 @@
           {{ $t('send_attachments.from_computer') }}
         </div>
       </label>
-      <input type="file" id="getFile" @change="uploadFile" ref="file" class="hidden" />
+      <input
+        type="file"
+        id="getFile"
+        @change="uploadFile"
+        ref="file"
+        class="hidden"
+      />
       <img :src="imgSrc" v-if="imgSrc" />
     </div>
     <div
@@ -91,6 +97,10 @@ export default {
     return {
       recentFilesData: recentFilesStore.getRecentFiles,
     };
+  },
+  beforeUnmount() {
+    this.file = null;
+    this.imgSrc = null;
   },
   methods: {
     uploadFile() {

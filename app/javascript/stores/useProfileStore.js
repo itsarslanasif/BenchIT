@@ -16,9 +16,13 @@ export const useProfileStore = () => {
     actions: {
       async index() {
         const currentProfileStore = useCurrentProfileStore();
-        this.profiles = await getAllProfiles(
-          currentProfileStore.currentProfile.workspace_id
-        );
+        try {
+          this.profiles = await getAllProfiles(
+            currentProfileStore.currentProfile.workspace_id
+          );
+        } catch (e) {
+          console.error(e)
+        }
       },
     },
   });

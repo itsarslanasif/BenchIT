@@ -40,9 +40,16 @@ export default {
       message: null,
     };
   },
+  beforeUnmount() {
+    this.messages = null;
+  },
   async mounted() {
-    this.messages = await getSaveMessages();
-    this.savedItemsStore.savedItems = this.messages;
+    try {
+      this.messages = await getSaveMessages();
+      this.savedItemsStore.savedItems = this.messages;
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
 </script>
