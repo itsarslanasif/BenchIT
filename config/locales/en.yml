@@ -182,6 +182,8 @@ en:
         email: 'Email Address'
         phone: 'Phone'
         title: 'Profile'
+        active: 'Active'
+        away: 'Away'
       filters:
         all_types: 'All types'
         owners: "Owners"

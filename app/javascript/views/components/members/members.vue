@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="flex justify-center" v-if="members.length == 0">
-      <p>{{ CONSTANTS.NO_RESULT_FOUND }}</p>
+      <p>{{ $t('filters.no_results_found') }}</p>
     </div>
     <div v-if="members.length == 0 && query == ''">
       {{ searchQuery() }}
@@ -43,7 +43,7 @@ import member from './member.vue';
 import Spinner from '../../shared/spinner.vue';
 import filters from '../../widgets/filters.vue';
 import profile from '../../widgets/profile.vue';
-import {useRightPaneStore} from '../../../stores/useRightPaneStore'
+import { useRightPaneStore } from '../../../stores/useRightPaneStore'
 import { mapActions } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
 import { getMembers } from '../../../api/members/membersApi';

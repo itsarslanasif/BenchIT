@@ -67,6 +67,7 @@ const router = createRouter({
           path: '/members',
           component: Members,
           name: 'members',
+          meta: { auth: true },
         },
         {
           path: '/profiles/:id/:message_id?',

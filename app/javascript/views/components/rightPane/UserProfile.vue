@@ -40,7 +40,7 @@
           icon="fa-circle"
           class="self-center text-sm mr-2 px-1"
         />
-        <p>{{ userProfileStore.user_profile?.isActive ? 'Active' : 'Away' }}</p>
+        <p>{{ userProfileStore.user_profile?.isActive ? $t('profile.active') : $t('profile.away') }}</p>
       </span>
       <span
         v-if="userProfileStore.user_profile?.status"
@@ -140,7 +140,7 @@
               class="hover-target col-span-1 self-center text-lg p-2 mr-2 float-right cursor-pointer bg-transparent rounded-md focus:outline-none"
             />
           </template>
-          <span> Copied! </span>
+          <span> {{ $t('actions.copied') }}</span>
         </n-tooltip>
       </span>
       <span
