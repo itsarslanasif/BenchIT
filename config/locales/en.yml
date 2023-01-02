@@ -99,7 +99,13 @@ en:
         local_time: 'local time'
         contact_information: 'Contact information'
         email_address: 'Email Address'
+        add_email: '+ Add Email'
         phone: 'Phone'
+        add_phone: '+ Add Phone'
+        add_name_pronounciation: '+ Add name pronounciation'
+        add_description: '+ Add description'
+        active: 'Active'
+        away: 'Away'
       chat:
         today: 'Today'
         replies: 'replies'
