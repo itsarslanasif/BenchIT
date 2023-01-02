@@ -141,9 +141,7 @@ export default {
       const currentWorkspaceStore = useCurrentWorkspaceStore();
       try {
         this.currentProfile = await switchWorkspace(1);
-      } catch (e) {
-        let error = e;
-      }
+      } catch (e) {}
       currentProfileStore.setProfile(this.currentProfile);
       currentWorkspaceStore.setWorkspace(this.currentProfile);
       this.goToHomepage();
