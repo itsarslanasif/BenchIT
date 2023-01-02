@@ -6,7 +6,7 @@
       <div class="w-full" @click="searchModalToggle = true">
         <input
           type="text"
-          placeholder="Search"
+          :placeholder="$t('action.search')"
           class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
           v-model="search"
         />
@@ -16,7 +16,7 @@
         v-if="searchModalToggle"
         @click="closeSearchModal()"
       >
-        <span class="inline-block align-middle">Close</span>
+        <span class="inline-block align-middle">{{ $t('actions.close') }}</span>
       </div>
       <div
         v-if="searchModalToggle"
