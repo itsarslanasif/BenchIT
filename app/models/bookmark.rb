@@ -1,8 +1,10 @@
 class Bookmark < ApplicationRecord
   include Cablable
   before_validation :set_profile
-  after_destroy :broadcast_delete_bookmark
-  after_save :broadcast_bookmark
+  after_create :set_action_create
+  after_update :set_action_update
+  after_destroy :set_action_delete
+  after_commit :broadcast_bookmark
 
   belongs_to :bookmarkable, polymorphic: true
   belongs_to :profile
@@ -15,15 +17,12 @@ class Bookmark < ApplicationRecord
   }
 
   def broadcast_bookmark
-    set_bookmark
-    result = append_conversation_type_and_id(@conversation, @result)
-    BroadcastMessageService.new(result, @conversation).call
-  end
-
-  def broadcast_delete_bookmark
-    set_bookmark
-    @result[:action] = 'Delete'
-    result = append_conversation_type_and_id(@conversation, @result)
+    result = {
+      content: set_bookmark,
+      action: @action,
+      type: 'Bookmark'
+    }
+    result = append_conversation_type_and_id(@conversation, result)
     BroadcastMessageService.new(result, @conversation).call
   end
 
@@ -33,18 +32,26 @@ class Bookmark < ApplicationRecord
     self.profile_id = Current.profile.id
   end
 
+  def set_action_delete
+    @action = 'Delete'
+  end
+
+  def set_action_create
+    @action = 'Create'
+  end
+
+  def set_action_update
+    @action = 'Update'
+  end
+
   def set_bookmark
     bookmark = {
       id: id,
       name: name,
       url: bookmark_URL
     }
-    @result = {
-      content: bookmark,
-      type: 'Bookmark'
-    }
-    @result[:action] = created_at == updated_at ? 'Create' : 'Update'
     bookmark_conversation
+    bookmark
   end
 
   def bookmark_conversation
