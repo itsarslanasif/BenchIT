@@ -45,6 +45,7 @@ ConversationMessage.create(content: 'Hi User from Austin', is_threaded: false, b
 ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, bench_conversation_id: 3, sender_id: 1)
 
 BenchChannel.create(name: 'watercooler', description: 'memes')
+BenchChannel.create(name: 'Benchit-devs', description: 'developers', is_private: true)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 2)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 2)
 ConversationMessage.create(content: 'Hi from watercooler', is_threaded: false, bench_conversation_id: 4, sender_id: 1)
