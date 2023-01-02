@@ -13,12 +13,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
-    if @message.save
-      @message.parent_message.update(is_threaded: true) if @message.parent_message_id.present?
-      response = { message: 'Message sent.' }
-    else
-      response = { message: @message.errors, status: :unprocessable_entity }
-    end
+    response = if @message.save
+                 { message: 'Message sent.' }
+               else
+                 { message: @message.errors, status: :unprocessable_entity }
+               end
     render json: response
   end
 
@@ -53,7 +52,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def bench_channel_messages
-    @messages = @bench_channel.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+    @messages = @bench_channel.bench_conversation.conversation_messages.where(parent_message_id: nil).includes(:profile, :replies,
+                                                                                                               :reactions).with_attached_message_attachments
   end
 
   def group_messages

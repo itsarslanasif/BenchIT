@@ -31,7 +31,7 @@ BenchConversation.create(conversationable_type: 'BenchChannel', conversationable
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 4, bench_channel_id: 1)
-ConversationMessage.create(content: 'Hi Dev Channel from Alva', is_threaded: true, bench_conversation_id: 1, sender_id: 1)
+ConversationMessage.create(content: 'Hi Dev Channel from Alva', is_threaded: false, bench_conversation_id: 1, sender_id: 1)
 ConversationMessage.create(content: 'Hi Dev Channel from Arnold', is_threaded: false, bench_conversation_id: 1, sender_id: 2)
 Group.create(id: 1, profile_ids: [1, 2])
 Group.create(id: 2, profile_ids: [3, 2])

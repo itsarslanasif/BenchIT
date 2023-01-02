@@ -1,7 +1,9 @@
 class ConversationMessage < ApplicationRecord
   include Cablable
-  after_destroy :broadcast_delete_message
-  after_commit :broadcast_message, on: [:create, :update]
+  after_create :set_action_create
+  after_update :set_action_update
+  after_destroy :set_action_delete
+  after_commit :broadcast_message
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
@@ -34,14 +36,24 @@ class ConversationMessage < ApplicationRecord
 
   private
 
-  def broadcast_message
-    result = append_conversation_type_and_id(bench_conversation, set_message)
-    BroadcastMessageService.new(result, bench_conversation).call
+  def set_action_delete
+    @action = 'Delete'
   end
 
-  def broadcast_delete_message
-    result = set_message
-    result[:action] = 'Delete'
+  def set_action_create
+    @action = 'Create'
+  end
+
+  def set_action_update
+    @action = 'Update'
+  end
+
+  def broadcast_message
+    result = {
+      content: set_message,
+      action: @action,
+      type: 'Message'
+    }
     result = append_conversation_type_and_id(bench_conversation, result)
     BroadcastMessageService.new(result, bench_conversation).call
   end
@@ -57,25 +69,29 @@ class ConversationMessage < ApplicationRecord
     end
   end
 
+  def saved?(message)
+    Current.profile.saved_items.exists?(conversation_message_id: message.id)
+  end
+
   def set_message
     message = {
       id: id,
       content: content,
       is_threaded: is_threaded,
+      is_edited: created_at != updated_at,
       parent_message_id: parent_message_id,
       sender_id: sender_id,
       sender_name: profile.username,
-      bench_conversation_id: bench_conversation_id,
+      reactions: reactions,
       created_at: created_at,
       updated_at: updated_at,
-      is_edited: created_at != updated_at
+      isSaved: saved?(self),
+      replies: replies,
+      bench_conversation_id: bench_conversation_id,
+      conversationable_type: bench_conversation.conversationable_type,
+      conversationable_id: bench_conversation.conversationable_id
     }
     message[:attachments] = attach_message_attachments if message_attachments.present?
-    result = {
-      content: message,
-      type: 'Message'
-    }
-    result[:action] = created_at == updated_at ? 'Create' : 'Update'
-    result
+    message
   end
 end

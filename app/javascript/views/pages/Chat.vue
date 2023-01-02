@@ -69,23 +69,20 @@ export default {
       type: this.conversation_type,
       current_user_id: this.currentUser.id,
     });
+    this.Cable.on('chat', data => {
+      cableActions(data.message);
+    });
   },
   beforeUnmount() {
     this.chat = null;
     unsubscribe();
     this.Cable = null;
   },
-  updated() {
-    this.Cable.on('chat', data => {
-      cableActions(data.message);
-    });
-  },
   methods: {
     sendMessage(message, files) {
       let formData = new FormData();
       formData.append('content', message);
       formData.append('is_threaded', false);
-      formData.append('parent_message_id', null);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
       files.forEach(file => {

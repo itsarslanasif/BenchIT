@@ -74,7 +74,7 @@
           >
         </template>
         <div
-          v-if="currMessage?.is_threaded"
+          v-if="currMessage?.replies?.length > 0"
           @click="toggleThread"
           :class="{ 'ml-12': isSameUser && isSameDayMessage }"
           class="text-info text-xs cursor-pointer hover:underline"
