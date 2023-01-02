@@ -156,7 +156,7 @@ export default {
               { default: () => this.modal_profile?.status?.text }
             ),
           ]),
-          h('div', { class: '' }, [
+          h('div', [
             h(
               NText,
               {
@@ -212,7 +212,7 @@ export default {
                 { default: () => 'Message' }
               ),
             ]),
-            h('div', { class: '' }, [
+            h('div', [
               h(
                 NText,
                 {
