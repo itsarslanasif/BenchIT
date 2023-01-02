@@ -4,7 +4,6 @@
       class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
     >
       <div
-        v-click-outside="closeModal"
         class="modal rounded-md w-2/5 h-2/5 shadow-md bg-slate-50"
         role="dialog"
       >
@@ -76,7 +75,7 @@
 import { NForm, NFormItem, NButton, NInput, NSwitch, NSpace } from 'naive-ui';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { CONSTANTS } from '../../../assets/constants';
-import vClickOutside from 'click-outside-vue3'
+
 export default {
   components: {
     NForm,
@@ -86,9 +85,6 @@ export default {
     NSwitch,
     NSpace,
   },
-  directives: {
-      clickOutside: vClickOutside.directive
-    },
   props: ['closeModal'],
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center flex-col p-2 border-b border-slate-400 bg-secondary h-12">
-    <div  v-click-outside="closeSearchModal"  class="flex w-1/2">
+    <div  class="flex w-1/2">
       <div class="w-full" @click="searchModalToggle = true">
         <input type="text" placeholder="Search"
           class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
@@ -60,13 +60,10 @@ import { useChannelStore } from '../../stores/useChannelStore';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { storeToRefs } from 'pinia';
 import ProfileDropdown from '../widgets/profileDropdown.vue'
-import vClickOutside from 'click-outside-vue3'
+
 export default {
   name: 'SearchBar',
   components: { ProfileDropdown },
-  directives: {
-      clickOutside: vClickOutside.directive
-    },
   data() {
     return {
       searchModalToggle: false,
