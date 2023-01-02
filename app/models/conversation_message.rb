@@ -28,6 +28,10 @@ class ConversationMessage < ApplicationRecord
       )
   }
 
+  scope :chat_messages, lambda { |id|
+    where(parent_message_id: nil, bench_conversation_id: id).includes(:profile, :replies, :reactions).with_attached_message_attachments
+  }
+
   def self.recent_last_conversation(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',

@@ -52,12 +52,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def bench_channel_messages
-    @messages = @bench_channel.bench_conversation.conversation_messages.where(parent_message_id: nil).includes(:profile, :replies,
-                                                                                                               :reactions).with_attached_message_attachments
+    @messages = ConversationMessage.chat_messages(@bench_channel.bench_conversation.id)
   end
 
   def group_messages
-    @messages = @group.bench_conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+    @messages = ConversationMessage.chat_messages(@group.bench_conversation.id)
   end
 
   def profile_messages
@@ -67,7 +66,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
     end
 
-    @messages = conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+    @messages = ConversationMessage.chat_messages(conversation.id)
   end
 
   def unread_messages
