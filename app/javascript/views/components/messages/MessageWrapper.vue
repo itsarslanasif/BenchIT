@@ -232,9 +232,7 @@ export default {
   methods: {
     async addReaction(emoji) {
       try {
-        await add_reaction(this.currMessage.id, emoji.i).then(response => {
-          return this.allReactions.push(response.data);
-        });
+        await add_reaction(this.currMessage.id, emoji.i);
       } catch (e) {
         console.error(e);
       }
