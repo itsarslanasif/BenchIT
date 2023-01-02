@@ -2,11 +2,12 @@
   <div>
     <!-- Modal -->
     <div
+      @click.self="closeModal()"
       class="fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center z-10"
       v-if="showModal"
     >
       <div
-        class="relative bg-white rounded-lg overflow-hidden shadow-2xl w-2/3 sm:w-1/2 lg:w-1/3 xl:w-1/4 max-h-screen"
+        class="relative bg-whiteounded-lg overflow-hidden shadow-2xl w-2/3 sm:w-1/2 lg:w-1/3 xl:w-1/4 max-h-screen"
       >
         <!-- Header -->
         <div class="flex items-center justify-between py-4 px-6 bg-gray-100">
