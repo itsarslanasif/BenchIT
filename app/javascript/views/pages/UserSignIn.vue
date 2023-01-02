@@ -139,9 +139,11 @@ export default {
     async getProfile() {
       const currentProfileStore = useCurrentProfileStore();
       const currentWorkspaceStore = useCurrentWorkspaceStore();
-      await switchWorkspace(1).then(response => {
-        this.currentProfile = response;
-      });
+      try {
+        this.currentProfile = await switchWorkspace(1);
+      } catch (e) {
+        console.error(e);
+      }
       currentProfileStore.setProfile(this.currentProfile);
       currentWorkspaceStore.setWorkspace(this.currentProfile);
       this.goToHomepage();
