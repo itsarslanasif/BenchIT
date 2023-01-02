@@ -1,12 +1,12 @@
 <template>
   <div class="flex items-center justify-center flex-col p-2 border-b border-slate-400 bg-secondary h-12">
-    <div class="flex w-1/2">
+    <div  v-click-outside="closeSearchModal"  class="flex w-1/2">
       <div class="w-full" @click="searchModalToggle = true">
         <input type="text" placeholder="Search"
           class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
           v-model="search" />
       </div>
-      <div class="w-1/6 text-center text-white" v-if="searchModalToggle" @click="searchModalToggle = false">
+      <div class="w-1/6 text-center text-white" v-if="searchModalToggle" @click="closeSearchModal()">
         <span class="inline-block align-middle">Close</span>
       </div>
       <div v-if="searchModalToggle"
@@ -60,9 +60,13 @@ import { useChannelStore } from '../../stores/useChannelStore';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { storeToRefs } from 'pinia';
 import ProfileDropdown from '../widgets/profileDropdown.vue'
+import vClickOutside from 'click-outside-vue3'
 export default {
   name: 'SearchBar',
   components: { ProfileDropdown },
+  directives: {
+      clickOutside: vClickOutside.directive
+    },
   data() {
     return {
       searchModalToggle: false,
@@ -84,6 +88,9 @@ export default {
       this.usersFlag = false;
       this.channelsFlag = true;
       this.filteredList = this.allChannels;
+    },
+    closeSearchModal(){
+      this.searchModalToggle = false
     },
     filterData() {
       this.filteredList = this.filteredList.filter(item => item.name.toLowerCase().includes(this.search.toLowerCase()));

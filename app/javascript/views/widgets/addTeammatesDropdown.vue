@@ -1,5 +1,5 @@
 <template>
-  <div class="flex py-2 w-full" @click="isOpen = !isOpen">
+  <div class="flex py-2 w-full" @click="toggleModel()">
     <div class="text-white text-xl hover:bg-primaryHover flex">
       <p
         class="w-6 h-6 ml-3 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid">
@@ -8,7 +8,7 @@
       <p class="ml-3 text-xs text-white">{{ $t('direct_messages.add_teammates') }}</p>
     </div>
 
-    <transition name="fade" appear>
+    <transition v-click-outside="toggleModel" name="fade" appear>
       <div class="bg-white rounded text-black-800 opacity-100 fixed text-sm z-10 ml-10" v-if="isOpen">
         <div class="py-2">
           <div v-for="item in items" :key="item" class="hover:bg-primaryHover hover:text-white" @click="item.func">
@@ -23,9 +23,13 @@
 </template>
 
 <script>
+import vClickOutside from 'click-outside-vue3'
 export default {
   name: 'dropdown',
   props: ['title', 'items'],
+  directives: {
+      clickOutside: vClickOutside.directive
+    },
   data() {
     return {
       isOpen: false,
@@ -33,6 +37,9 @@ export default {
     };
   },
   methods: {
+    toggleModel(){
+      this.isOpen = !this.isOpen
+    },
     displayItem(e) {
       switch (e.target.outerText) {
         case 'Invite People':

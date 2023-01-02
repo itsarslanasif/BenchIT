@@ -1,5 +1,5 @@
 <template>
-  <transition name="modal-fade">
+  <transition  name="fade" appear>
     <div
       class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
     >

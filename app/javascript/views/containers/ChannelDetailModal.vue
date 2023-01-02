@@ -1,6 +1,7 @@
 <template>
   <div
-    class="modal cursor-pointer w-1/3 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-2xl m-10"
+  v-click-outside="closeModel"
+  class="modal cursor-pointer w-1/3 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-2xl m-10"
   >
     <p
       @click="detailsopen(false)"
@@ -63,9 +64,13 @@ import About from '../components/channeldetail/About.vue';
 import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
+import vClickOutside from 'click-outside-vue3'
 export default {
   name: 'ChannelDetailModal',
   components: { About, StarUnstar, Members },
+  directives: {
+      clickOutside: vClickOutside.directive
+    },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     return { ChannelDetailStore };
@@ -75,5 +80,10 @@ export default {
     channelId: Number,
     detailsopen: Function,
   },
+  methods:{
+    closeModel(){
+      this.detailsopen(false)
+    }
+  }
 };
 </script>
