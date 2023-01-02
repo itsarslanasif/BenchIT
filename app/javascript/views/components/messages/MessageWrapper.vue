@@ -18,7 +18,7 @@
     <div
       class="flex p-1 px-4 relative hover:bg-transparent"
       :class="{
-        messageContentPinned: pinnedConversationStore.isPinned(currMessage),
+        'bg-yellow-100': pinnedConversationStore.isPinned(currMessage),
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
@@ -144,6 +144,8 @@ import UserProfileModal from '../../widgets/UserProfileModal.vue';
 import { add_reaction } from '../../../api/reactions/reaction.js';
 import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
+import { getUserProfile } from '../../../api/profiles/userProfile';
+import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 
 export default {
   name: 'MessageWrapper',
@@ -153,12 +155,14 @@ export default {
     const savedItemsStore = useSavedItemsStore();
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
+    const userProfileStore = useUserProfileStore();
     return {
       threadStore,
       pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
-      rightPaneStore
+      rightPaneStore,
+      userProfileStore
     };
   },
   components: {
@@ -240,19 +244,31 @@ export default {
         });
       }
     },
+
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
     },
+
     setOptionsModal() {
       this.showOptions = !this.showOptions;
     },
+
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
     },
-    showUserProfile(){
+
+    showUserProfile() {
+      this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
     },
+
+    async setUserProfileForPane() {
+      this.userProfileStore.setUserProfile(
+        await getUserProfile(1, this.currMessage.sender_id)
+      );
+    },
+
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       if (this.currMessage.isSaved) {
@@ -270,8 +286,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.messageContentPinned {
-  @apply bg-yellow-100;
-}
-</style>
