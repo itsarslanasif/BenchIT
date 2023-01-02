@@ -5,7 +5,7 @@
       <SearchBar />
     </div>
     <splitpanes>
-      <pane max-size="35" min-size="15">
+      <pane max-size="20" min-size="10">
         <WorkspaceDropdown />
         <LeftPane />
       </pane>
