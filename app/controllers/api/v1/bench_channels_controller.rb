@@ -4,7 +4,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    @bench_channels = Current.profile.bench_channels.includes(:channel_participants, :profiles)
+    @bench_channels = if params[:query].presence
+      BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id }, match: :word_start)
+    else
+      Current.profile.bench_channels.includes(:channel_participants, :profiles)
+    end
   end
 
   def show; end
