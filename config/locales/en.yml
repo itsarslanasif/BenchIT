@@ -99,7 +99,13 @@ en:
         local_time: 'local time'
         contact_information: 'Contact information'
         email_address: 'Email Address'
+        add_email: '+ Add Email'
         phone: 'Phone'
+        add_phone: '+ Add Phone'
+        add_name_pronounciation: '+ Add name pronounciation'
+        add_description: '+ Add description'
+        active: 'Active'
+        away: 'Away'
       chat:
         today: 'Today'
         replies: 'replies'
@@ -147,9 +153,11 @@ en:
       request:
         send_request: 'Send Request'
         reason_for_request: 'Reason for request (optional)'
-        to: 'To'
-        requesting_invitation: 'Requestion invitation to BenchIT'
+        to: 'To:'
+        requesting_invitation: 'Request invitations to '
         request_reason_placeholder: 'Add a note for your admin'
+        error_message: 'User does not exist!'
+        success_message: 'Invitation sent successfully!'
       actions:
         save: 'Save'
         send: 'Send'

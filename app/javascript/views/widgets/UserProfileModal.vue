@@ -4,7 +4,6 @@
     placement="bottom-start"
     class="rounded-lg border border-black-400"
     :options="options"
-    @select="handleSelect"
   >
     <div
       @click="showUserProfile"
@@ -14,6 +13,7 @@
         class="mr-1"
         size="large"
         src="../../../assets/images/user.png"
+        @mouseover="setUserProfileForModal"
       />
     </div>
   </n-dropdown>
@@ -26,11 +26,12 @@ import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { h } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
+import { getUserProfile } from '../../api/profiles/userProfile';
 
 export default {
   name: 'UserProfileModal',
   components: { NDropdown, NAvatar, NText, NButton },
-  props: ['showModal', 'userProfile'],
+  props: ['profile_id'],
   setup() {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();
@@ -42,6 +43,7 @@ export default {
   },
   data() {
     return {
+      modal_profile: null,
       options: [
         {
           key: `${CONSTANTS.HEADER}`,
@@ -68,8 +70,7 @@ export default {
   computed: {
     ownProfile() {
       return (
-        this.currentProfileStore.currentProfile.id ===
-        this.userProfileStore.user_profile.id
+        this.currentProfileStore.currentProfile.id === this.modal_profile.id
       );
     },
   },
@@ -86,7 +87,7 @@ export default {
               this.showUserProfile();
             },
             class: 'mr-2 w-20 h-20 cursor-pointer',
-            src: '../../../assets/images/user.png',
+            src: this.modal_profile.image_url,
           }),
           h('div', { class: 'text-md' }, [
             h(
@@ -104,10 +105,7 @@ export default {
                     },
                     class: 'cursor-pointer hover:underline',
                   },
-                  {
-                    default: () =>
-                      `${this.userProfileStore.user_profile.display_name}`,
-                  }
+                  { default: () => `${this.modal_profile.username}` }
                 ),
                 h(
                   NText,
@@ -119,9 +117,7 @@ export default {
                   { depth: 2 },
                   {
                     default: () =>
-                      this.userProfileStore.user_profile.isActive
-                        ? ' 🟢'
-                        : ' ⚫',
+                      this.modal_profile?.isActive ? ' 🟢' : ' ⚫',
                   }
                 ),
               ]
@@ -130,7 +126,7 @@ export default {
               h(
                 NText,
                 { depth: 3 },
-                { default: () => `${this.userProfileStore.user_profile.title}` }
+                { default: () => `${this.modal_profile?.description}` }
               ),
             ]),
           ]),
@@ -150,17 +146,17 @@ export default {
               {
                 class: 'text-black-800 mr-2 text-md',
               },
-              { default: () => '💬' }
+              { default: () => this.modal_profile?.status?.emoji }
             ),
             h(
               NText,
               {
                 class: 'text-black-800 text-md self-center',
               },
-              { default: () => 'AFK' }
+              { default: () => this.modal_profile?.status?.text }
             ),
           ]),
-          h('div', { class: '' }, [
+          h('div', [
             h(
               NText,
               {
@@ -173,47 +169,74 @@ export default {
               {
                 class: 'text-black-800',
               },
-              {
-                default: () =>
-                  `${this.userProfileStore.user_profile.localtime} local time`,
-              }
+              { default: () => `${this.modal_profile?.local_time} local time` }
             ),
           ]),
         ]
       );
     },
     renderCustomFooter() {
-      return h(
-        'div',
-        {
-          class: 'flex items-center justify-center self-center p-4',
-        },
-        [
-          h('div', { class: 'mr-6' }, [
-            h(
-              NText,
-              {
-                class:
-                  'text-black-800 border rounded cursor-pointer px-10 py-2 hover:bg-transparent',
-              },
-              { default: () => 'Message' }
-            ),
-          ]),
-          h('div', { class: '' }, [
-            h(
-              NText,
-              {
-                class:
-                  'text-black-800 border rounded cursor-pointer px-10 py-2 hover:bg-transparent',
-              },
-              { default: () => 'Huddle' }
-            ),
-          ]),
-        ]
-      );
+      if (this.ownProfile) {
+        return h(
+          'div',
+          {
+            class: 'flex items-center justify-center w-95 p-4',
+          },
+          [
+            h('div', [
+              h(
+                NText,
+                {
+                  class:
+                    'text-black-800 border rounded cursor-pointer px-20 py-1 hover:bg-transparent',
+                },
+                { default: () => 'Set a status' }
+              ),
+            ]),
+          ]
+        );
+      } else {
+        return h(
+          'div',
+          {
+            class: 'flex items-center justify-center self-center p-4',
+          },
+          [
+            h('div', { class: 'mr-6' }, [
+              h(
+                NText,
+                {
+                  class:
+                    'text-black-800 border rounded cursor-pointer px-10 py-1 hover:bg-transparent',
+                },
+                { default: () => 'Message' }
+              ),
+            ]),
+            h('div', [
+              h(
+                NText,
+                {
+                  class:
+                    'text-black-800 border rounded cursor-pointer px-10 py-1 hover:bg-transparent',
+                },
+                { default: () => 'Huddle' }
+              ),
+            ]),
+          ]
+        );
+      }
     },
     showUserProfile() {
+      this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
+    },
+    async setUserProfileForPane() {
+      this.userProfileStore.setUserProfile(
+        await getUserProfile(1, this.profile_id)
+      );
+    },
+    async setUserProfileForModal() {
+      this.modal_profile = await getUserProfile(1, this.profile_id);
     },
     generateKey(label) {
       return label.toLowerCase().replace(/ /g, '-');

@@ -99,5 +99,14 @@ export const CONSTANTS = {
   CHANNEL_NAME_ERROR: 'Please enter channel name.',
   CHANNEL_DISCRIPTION_ERROR: 'Please enter channel description.',
   NULL_VALUES: [null, undefined, []],
-  PROFILE_ADDED: 'Profile added'
+  PROFILE_ADDED: 'Profile added',
+  ERROR_MESSAGE: 'User does not exist!',
+  SUCCESS_MESSAGE: 'Invitation sent successfully!',
+  INVITE_PEOPLE: 'Invite People',
+  CREATE_CHANNEL: 'Create a channel',
+  ADMINISTRATION: 'Administration',
+  TOOLS: 'Tools',
+  SIGN_IN_MOBILE: 'Sign in to BenchIT on mobile',
+  SIGN_OUT: 'Sign Out of BenchIT',
+  ADD_WORKSPACE: 'Add workspaces',
 };
