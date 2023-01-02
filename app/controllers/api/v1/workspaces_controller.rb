@@ -6,7 +6,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   skip_before_action :set_profile, only: %i[switch_workspace]
 
   def index
-    render json:{ workspaces: Current.user.workspaces, status: :ok }
+    render json: { workspaces: Current.user.workspaces, status: :ok }
   end
 
   def create
