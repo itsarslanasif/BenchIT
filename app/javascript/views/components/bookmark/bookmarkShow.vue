@@ -2,7 +2,7 @@
   <div>
     <div>
       <a class="BoookmarkButton" :href="'#' + data['name']">{{
-          data['name']
+        data['name']
       }}</a>
     </div>
     <div :id="data['name']" class="overlay">
@@ -19,13 +19,28 @@
             <input v-model="data.name" required />
           </div>
           <div class="buttons">
-            <a v-show="data.bookmark_URL !== '' && data.name !== ''" class="btn" href="#" @click="handleUpdate()">
+            <a
+              v-if="data.bookmark_URL !== '' && data.name !== ''"
+              class="btn"
+              href="#"
+              @click="handleUpdate()"
+            >
               {{ $t('actions.update') }}
             </a>
-            <a v-show="data.bookmark_URL !== '' && data.name !== ''" class="btn" href="#" @click="handleDelete()">
+            <a
+              v-if="data.bookmark_URL !== '' && data.name !== ''"
+              class="btn"
+              href="#"
+              @click="handleDelete()"
+            >
               {{ $t('actions.delete') }}
             </a>
-            <a v-show="data.bookmark_URL !== '' && data.name !== ''" class="btn" href="#" @click="handleCancel()">
+            <a
+              v-if="data.bookmark_URL !== '' && data.name !== ''"
+              class="btn"
+              href="#"
+              @click="handleCancel()"
+            >
               {{ $t('actions.cancel') }}
             </a>
           </div>
@@ -38,6 +53,10 @@
 <script>
 export default {
   props: ['data'],
+  beforeUnmount() {
+    this.bookmark.url = null;
+    this.bookmark.name = null;
+  },
   data() {
     return {
       bookmark: {

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  default_url_options host: 'localhost', port: 5100 if Rails.env.development?
   mount ActionCable.server => '/cable'
 
   localized do
@@ -12,17 +13,29 @@ Rails.application.routes.draw do
         resources :mentions, only: [] do
           collection do
             get :channels_list
-            get :users_list
+            get :profiles_list
           end
         end
 
-        resources :groups, only: %i[index show]
-        resources :users, only: %i[index show] do
-          collection do
-            get :previous_direct_messages
+        resources :groups, only: %i[index show] do
+          member do
+            post :add_member
           end
         end
-        resources :conversation_messages, only: %i[create destroy]
+        resources :users, only: %i[index]
+        resources :conversation_messages, only: %i[create update destroy] do
+          collection do
+            get :send_message
+            get :index_saved_messages
+            get :recent_files
+            get :unread_messages
+          end
+          member do
+            post :save_message
+            delete :unsave_message
+            get :bench_channel_messages, :group_messages, :profile_messages
+          end
+        end
         resources :favourites, only: %i[create destroy]
 
         resources :bench_channels, except: %i[new edit] do
@@ -30,22 +43,30 @@ Rails.application.routes.draw do
             post :join_public_channel
             delete :leave
           end
-
-          resources :bookmarks, only: %i[create index]
         end
 
         resources :workspaces, only: %i[create] do
           member do
             post :invite
+            get :switch_workspace
           end
 
-          resources :profiles, only: %i[index create]
+          resources :profiles, only: %i[index create show update] do
+            collection do
+              get :previous_direct_messages
+            end
+          end
         end
 
+        resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
+        resources :channel_participants, only: %i[create index]
+        resources :draft_messages, only: %i[index create update destroy]
       end
     end
 
-    get '*path', to: 'application#index', format: false
+    get '*path', to: 'application#index', format: false, constraints: lambda { |req|
+      req.path.exclude? 'rails/active_storage'
+    }
   end
 end

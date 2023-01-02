@@ -1,7 +1,7 @@
 <template>
   <n-popover style="backgroundcolor: #1e293b" trigger="hover">
     <template #trigger>
-      <template v-if="actionText == 'More actions'">
+      <template v-if="actionText == $t('emojiModalButton.more_actions')">
         <n-dropdown
           class="rounded-md border border-slate-100"
           placement="bottom-start"
@@ -12,13 +12,13 @@
           @mouseleave="action"
           @select="handleSelect($event, message, pinnedConversationStore)"
         >
-          <span @click="action" class="p-1 hover:bg-slate-100 rounded">
+          <span @click="action" class="p-2 text-sm hover:bg-transparent px-3 rounded">
             <font-awesome-icon :icon="icon" />
           </span>
         </n-dropdown>
       </template>
       <template v-else>
-        <span @click="action(emoji)" class="p-1 hover:bg-slate-100 rounded">
+        <span @click="action(emoji)" class="p-2 text-sm hover:bg-transparent cursor-pointer rounded">
           <font-awesome-icon v-if="icon" :icon="icon" />
           <template v-if="emoji">
             {{ emoji.i }}
@@ -57,7 +57,7 @@ export default {
         switch (key) {
           case 'copy-link':
             let tempText = document.createElement('input');
-            tempText.value = `${ import.meta.env.VITE_APP_SERVER_URL }channels/${`${window.location.pathname.split('/')[2]}`}/${ message.id }`;
+            tempText.value = `${ import.meta.env.VITE_APP_SERVER_URL }channels/${ message.bench_conversation_id }/${ message.id }`;
             document.body.appendChild(tempText);
             tempText.select();
             document.execCommand('copy');

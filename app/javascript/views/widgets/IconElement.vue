@@ -1,8 +1,7 @@
 <template>
-  <div
-    class="text-base flex text-center text-slate-50 hover:bg-primaryHover -mr-2 p-0"
-  >
-    <div class="w-8 cursor-pointer" @click="elementClicked">{{ icon }}</div>
+  <div class="text-base flex text-center text-slate-50 hover:bg-primaryHover -mr-2 p-0 cursor-pointer"
+    @click="elementClicked">
+    <div class="w-8">{{ icon }}</div>
     <div>{{ name }}</div>
   </div>
 </template>
@@ -18,9 +17,10 @@ export default {
     elementClicked() {
       switch (this.name) {
         case 'People & User Group':
-          window.location.replace(
-            `${import.meta.env.VITE_APP_SERVER_URL}members`
-          );
+          this.$router.replace({ path: '/members' })
+          break;
+        case 'Drafts & Sent':
+          this.$router.replace({ path: '/drafts_sent_messages' })
           break;
       }
     },

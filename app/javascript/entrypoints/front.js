@@ -26,6 +26,12 @@ import {
   faXmark,
   faPlus,
   faMessage,
+  faPlusCircle,
+  faLayerGroup,
+  faLaptop,
+  faCircleXmark,
+  faArrowLeft,
+  faCircle,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -56,7 +62,13 @@ library.add(
   faThumbtack,
   faXmark,
   faPlus,
-  faMessage
+  faMessage,
+  faPlusCircle,
+  faLayerGroup,
+  faLaptop,
+  faCircleXmark,
+  faArrowLeft,
+  faCircle,
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

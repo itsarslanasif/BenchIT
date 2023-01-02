@@ -1,13 +1,33 @@
 <template>
-  <div class="fixed top-0 bottom-0 right-0 left-0 bg-backgroundTransparent flex justify-center items-center z-10">
-    <form class="bg-slate-50 rounded-md my-8 mx-auto opacity-100 p-10 fixed text-left w-2/4 z-10" @submit.prevent="handleSubmit">
-      <button type="button" class="border-0 cursor-pointer text-base w-12 m-0 p-0 right-0 bg-backgroundTransparent" @click="closeModal">x</button>
+  <div
+    class="fixed top-0 bottom-0 right-0 left-0 bg-backgroundTransparent flex justify-center items-center z-10"
+  >
+    <form
+      class="bg-slate-50 rounded-md my-8 mx-auto opacity-100 p-10 fixed text-left w-2/4 z-10"
+      @submit.prevent="handleSubmit"
+    >
+      <button
+        type="button"
+        class="border-0 cursor-pointer text-base w-12 m-0 p-0 right-0 bg-backgroundTransparent"
+        @click="closeModal"
+      >
+        x
+      </button>
       <h3>{{ $t('request.requesting_invitation') }}</h3>
       <label>{{ $t('request.to') }}</label>
-      <input v-model="userStore.workspace_invite.email" type="email" :placeholder="$t('placeholder.email')" required      
-        class="bg-slate-50 border border-primary w-auto text-black-900" />
+      <input
+        v-model="userStore.workspace_invite.email"
+        type="email"
+        :placeholder="$t('placeholder.email')"
+        required
+        class="bg-slate-50 border border-primary w-auto text-black-900"
+      />
       <label>{{ $t('request.reason_for_request') }}</label>
-      <input type="text" :placeholder="$t('request.request_reason_placeholder')" class="bg-slate-50 border border-primary w-auto text-black-900" />
+      <input
+        type="text"
+        :placeholder="$t('request.request_reason_placeholder')"
+        class="bg-slate-50 border border-primary w-auto text-black-900"
+      />
       <div>
         <button>{{ $t('request.send_request') }}</button>
       </div>
@@ -25,6 +45,9 @@ export default {
     return {
       userStore: UserStore(),
     };
+  },
+  beforeUnmount() {
+    this.userStore = null;
   },
   methods: {
     handleSubmit() {

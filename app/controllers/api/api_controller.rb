@@ -1,16 +1,24 @@
 class Api::ApiController < ApplicationController
   skip_before_action :verify_authenticity_token
-  before_action :set_workspace_in_session
   before_action :presence_of_api_token
   before_action :authenticate_api_with_token
+  before_action :set_workspace_in_session
+  before_action :set_profile
 
   attr_reader :current_user
 
   private
 
   def set_workspace_in_session
-    session[:current_workspace_id] = Workspace.first.id
-    Current.workspace = Workspace.first
+    if session[:current_workspace_id].nil?
+      render json: { message: 'No Workspace Selected.', status: :unprocessable_entity }
+    else
+      Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
+    end
+  end
+
+  def set_profile
+    Current.profile = Current.user.profiles.find_by(workspace_id: Current.workspace)
   end
 
   def presence_of_api_token

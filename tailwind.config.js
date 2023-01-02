@@ -74,7 +74,7 @@ module.exports = {
         700: '#40546B',
         800: '#314155',
         900: '#1F2D3D',
-        1000: '#252d34'
+        1000: '#252d34',
       },
       black: {
         50: '#F8F9FE',
@@ -102,7 +102,9 @@ module.exports = {
       },
       gray: {
         600: '#4B5563',
-        800: '#1F2937'
+        800: '#1F2937',
+        100: '#f8f8f8',
+        50: '#F3F3F5',
       }
     },
     extend: {
@@ -110,8 +112,13 @@ module.exports = {
         dark: { raw: '(prefers-color-scheme: dark)' },
       },
       width: {
-        '100': '25rem',
-       }
+        100: '25rem',
+        90: '18rem',
+        80: '18.75rem'
+      },
+      height: {
+        9: '2.1875rem'
+      }
     },
   },
   variants: {},

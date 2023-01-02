@@ -1,18 +1,24 @@
-import axios from 'axios';
+import axios from '../../modules/axios/index';
 
 export const getMembers = async (workspace, query, sort) => {
-  let result = axios.get(
-    `${
-      import.meta.env.VITE_APP_SERVER_URL
-    }/api/v1/workspaces/${workspace}/profiles`,
+  let result = axios.get(`/v1/workspaces/${workspace}/profiles`, {
+    headers: { Authorization: sessionStorage.getItem('token') },
+    params: {
+      workspace: workspace,
+      query: query,
+      sort: sort,
+    },
+  });
+  return (await result).data;
+};
+
+export const addMemberstoChannel = async (channel_id, members) => {
+  return await axios.post(
+    `/v1/channel_participants`,
     {
-      headers: { Authorization: sessionStorage.getItem('token') },
-      params: {
-        workspace: workspace,
-        query: query,
-        sort: sort,
-      },
-    }
+      bench_channel_id: channel_id,
+      profile_ids: members,
+    },
+    { headers: { Authorization: sessionStorage.getItem('token') } }
   );
-  return (await result).data.profiles;
 };

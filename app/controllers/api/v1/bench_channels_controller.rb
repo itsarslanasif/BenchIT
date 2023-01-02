@@ -12,9 +12,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
                      end
   end
 
-  def show
-    @messages = @bench_channel.bench_conversation.conversation_messages
-  end
+  def show; end
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
@@ -70,7 +68,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def create_first_bench_channel_participant
-    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, user_id: current_user.id)
+    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
+    BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: @bench_channel.id)
   rescue StandardError
     @bench_channel.destroy
 
@@ -78,13 +77,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def set_bench_channel
-    @bench_channel = BenchChannel.find_by(id: params[:id])
-    render json: { message: 'Bench channel not found' }, status: :not_found if @bench_channel.nil?
-    render json: { json: 'user is not part of this channel', status: :not_found } unless current_user.bench_channel_ids.include?(@bench_channel.id)
+    @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
+    render json: { json: 'User is not part of channel.', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_channel_participant
-    @channel_participant = Current.user.channel_participants.find_by(bench_channel_id: @bench_channel.id)
+    @channel_participant = Current.profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
 
     render json: { message: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
   end

@@ -1,3 +1,4 @@
+
 en:
   time:
     formats:
@@ -51,6 +52,8 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      email:
+        gmail: '@gmail.com'
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
@@ -58,6 +61,9 @@ en:
       direct_messages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'
+      channel_details:
+        find_members: 'Find members'
+        no_matches_found: 'No matches found for '
       company:
         title: 'What is your Company called?'
         description: 'We will use this to name your workspace which you can always change later'
@@ -84,6 +90,22 @@ en:
         people: 'People'
         channels: 'Channels'
         tagline: "I'm looking for"
+      rightpane:
+        send: 'Send'
+        replies: 'replies'
+        about_me: 'About me'
+        skype: 'Skype'
+        add_skype: '+ Add skype'
+        local_time: 'local time'
+        contact_information: 'Contact information'
+        email_address: 'Email Address'
+        phone: 'Phone'
+      chat:
+        today: 'Today'
+        replies: 'replies'
+      right_pane:
+        thread: 'Thread'
+        profile: 'Profile'
       channels:
           channels: 'Channels'
           add_new_channel: 'Add New Channel'
@@ -97,9 +119,10 @@ en:
         threads: 'Threads'
         direct_messages: 'Direct Messages'
         mentions_and_reactions: 'Mentions & Reactions'
-        draft_and_sent: 'Draft & Sent'
+        draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
         more: 'More'
+        save_message: 'Save items'
       channels:
         selected_channels: 'Selected Channels'
         title: 'Channels'
@@ -138,11 +161,19 @@ en:
         cancel: 'Cancel'
         message: 'Message'
         huddle: 'Huddle'
+        copied: 'Copied!'
+        edit: 'Edit'
+        set_a_status: 'Set a status'
+        view_as: 'View as'
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
+        save_items: 'Added to your saved items'
+        remove_from_saved_items: 'Remove from saved items'
+        saved_items: 'Saved Items'
       members:
         search_by_name: 'Search By Name'
+        add_members_modal_title : 'Add members to #channel'
       placeholder:
         email: 'Email'
         workspace: 'acme@benchit.com'
@@ -183,6 +214,20 @@ en:
       welcome:
         no_chat_selected: 'No Chat Selected'
         tagline: 'Select any chat from sidebar to see messages'
+      send_attachments:
+        title: 'Attach'
+        recent_files: 'Recent files'
+        from_computer: 'Attach from your computer'
+        divider: '●'
+      user_profile:
+      messages_section:
+        today: 'Today'
+        yesterday: 'Yesterday'
+        jump_to: 'Jump to...'
+        last_week: 'Last week'
+        last_month: 'Last month'
+        the_very_beginning: 'The very beginning'
+        jump_to_specific_date: 'Jump to a specific date'
 
     admin:
       title: 'Admin'
@@ -218,3 +263,4 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+

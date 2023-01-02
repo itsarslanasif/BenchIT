@@ -1,16 +1,33 @@
 <template>
-  <div class="bg-primary text-sm">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <div class="bg-primary text-sm h-screen flex flex-col ">
+    <div class=" ">
+      <SearchBar />
+    </div>
     <splitpanes>
-      <pane max-size="25" min-size="11">
+      <pane max-size="20" min-size="10">
         <WorkspaceDropdown title="BenchIT" :items="options" />
         <LeftPane />
       </pane>
-      <pane max-size="81" min-size="75" class="bg-white">
-        <router-view :key="$route.fullPath"/>
+      <pane class="bg-white " max-size="90" min-size="80">
+        <router-view :key="$route.fullPath" />
       </pane>
       <div v-if="UserInviteFormFlag" class="modal-styling">
         <UserInviteFormVue :close-modal="closeForm" />
       </div>
+      <pane
+        v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+        max-size="80"
+        min-size="60"
+        class="bg-white"
+      >
+        <Thread
+          v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+        />
+        <UserProfile
+          v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+        />
+      </pane>
     </splitpanes>
   </div>
 </template>
@@ -19,13 +36,18 @@
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
+import SearchBar from '../shared/searchBar.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
+import Thread from '../components/rightPane/Thread.vue';
 import UserInviteFormVue from '../widgets/UserInviteForm.vue';
 import { userSignOut } from '../../api/user_auth/user_sign_out_api';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
+import { useRightPaneStore } from '../../stores/useRightPaneStore';
+import UserProfile from '../components/rightPane/UserProfile.vue';
+
 export default {
   components: {
     Splitpanes,
@@ -34,11 +56,15 @@ export default {
     WorkspaceDropdown,
     LeftPane,
     UserInviteFormVue,
+    Thread,
     searchDmscreen,
+    SearchBar,
+    UserProfile,
   },
   setup() {
     const screenStore = useSelectedScreenStore();
-    return { screenStore };
+    const rightPaneStore = useRightPaneStore();
+    return { screenStore, rightPaneStore };
   },
   methods: {
     closeForm() {
@@ -58,6 +84,9 @@ export default {
         this.$router.push('/sign_in');
       });
     },
+  },
+  beforeUnmount() {
+    this.options = null;
   },
   data() {
     return {
@@ -106,21 +135,3 @@ export default {
   },
 };
 </script>
-
-<style>
-/* .splitpanes {
-  height: 89vh;
-} */
-
-.chatpane {
-  overflow: hidden;
-  position: relative;
-}
-
-.modal-styling {
-  background-color: transparent;
-  margin-left: 40%;
-  margin-top: 7%;
-  position: absolute;
-}
-</style>
