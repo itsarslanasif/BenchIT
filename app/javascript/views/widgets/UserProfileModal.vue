@@ -38,6 +38,9 @@ export default {
     const rightPaneStore = useRightPaneStore();
     return { userProfileStore, currentProfileStore, rightPaneStore };
   },
+  beforeUnmount() {
+    this.options = null;
+  },
   data() {
     return {
       modal_profile: null,

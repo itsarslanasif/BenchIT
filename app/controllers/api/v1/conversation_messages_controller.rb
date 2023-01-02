@@ -7,7 +7,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_receiver, only: %i[profile_messages]
 
   def send_message
-    @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
   end
 
   def create
@@ -49,7 +49,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = Current.profile.conversation_messages.with_attached_message_attachments
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def bench_channel_messages
@@ -68,6 +68,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     end
 
     @messages = conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
+  def unread_messages
+    str = REDIS.get("unreadMessages#{Current.workspace.id}#{Current.profile.id}")
+    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
+    unread_messages_ids = previous_unread_messages_details.pluck('message_id')
+    @messages = ConversationMessage.messages_by_ids_array(unread_messages_ids)
+                                   .includes(:reactions, :replies, :parent_message, :saved_items)
+                                   .with_attached_message_attachments
   end
 
   private

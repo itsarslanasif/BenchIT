@@ -3,27 +3,42 @@
     <div class="py-5 px-8">
       <input
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="text" v-model="query" :placeholder="$t('members.search_by_name')" @keyup.enter="searchQuery()" />
+        type="text"
+        v-model="query"
+        :placeholder="$t('members.search_by_name')"
+        @keyup.enter="searchQuery()"
+      />
     </div>
     <filters v-if="!showProfile" @sort_filter="getSortFilter"></filters>
 
-    <div class="justify-center flex h-full w-full" v-show="showSpinner">
+    <div class="justify-center flex h-full w-full" v-if="showSpinner">
       <Spinner />
     </div>
-    <div class="justify-items-start flex align-top" v-show="members.length > 0">
-      <div class="render-member-row items-start flex-wrap flex" style="min-width: 725px">
+    <div class="justify-items-start flex align-top" v-if="members.length > 0">
+      <div
+        class="render-member-row items-start flex-wrap flex"
+        style="min-width: 725px"
+      >
         <div v-for="member in members" :key="member.id">
-          <member :name="member.username" :description="member.description" :img-url="member.image_url"
-            @click="profileClickListener(member)" />
+          <member
+            :name="member.username"
+            :description="member.description"
+            :img-url="member.image_url"
+            @click="profileClickListener(member)"
+          />
         </div>
       </div>
       <div class="ml-10" v-if="showProfile">
-        <profile @exitProfileView="exitProfile" :username="this.selectedMember.username"
-          :description="this.selectedMember.description" :img-url="this.selectedMember.image_url"
-          :userId="this.selectedMember.user_id"></profile>
+        <profile
+          @exitProfileView="exitProfile"
+          :username="this.selectedMember.username"
+          :description="this.selectedMember.description"
+          :img-url="this.selectedMember.image_url"
+          :userId="this.selectedMember.user_id"
+        ></profile>
       </div>
     </div>
-    <div class="flex justify-center" v-show="members.length == 0">
+    <div class="flex justify-center" v-if="members.length == 0">
       <p>{{ CONSTANTS.NO_RESULT_FOUND }}</p>
     </div>
     <div v-if="members.length == 0 && query == ''">
@@ -63,14 +78,26 @@ export default {
       CONSTANTS: CONSTANTS,
     };
   },
+  beforeUnmount() {
+    this.members =
+      this.query =
+      this.sort =
+      this.users =
+      this.selectedMember =
+        null;
+  },
   methods: {
     async searchQuery() {
-      this.members = await getMembers(
-        this.CurrentWorkspaceId,
-        this.query,
-        this.sort
-      );
-      this.showSpinner = false;
+      try {
+        this.members = await getMembers(
+          this.CurrentWorkspaceId,
+          this.query,
+          this.sort
+        );
+        this.showSpinner = false;
+      } catch (e) {
+        console.error(e);
+      }
     },
     getSortFilter(value) {
       this.sort = value;

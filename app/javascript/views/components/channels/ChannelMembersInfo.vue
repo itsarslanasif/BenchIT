@@ -49,9 +49,13 @@ export default {
   methods: {
     async getChannelMembersCount() {
       let channelId = window.location.pathname.split('/')[2];
-      this.count = await this.channelDetailStore.getChannelMembersCount(
-        channelId
-      );
+      try {
+        this.count = await this.channelDetailStore.getChannelMembersCount(
+          channelId
+        );
+      } catch (e) {
+        console.error(e);
+      }
     },
   },
 };

@@ -2,10 +2,7 @@
   <div>
     <h3>{{ $t('workspaces.title') }}</h3>
     <label>{{ $t('workspaces.usage') }}</label>
-    <select
-      v-model="workspaceStore.workspace.workspace_type"
-      class="border"
-    >
+    <select v-model="workspaceStore.workspace.workspace_type" class="border">
       <option
         v-for="option in workspaceStore.workspace_type_options"
         :key="option.value"
@@ -15,10 +12,7 @@
       </option>
     </select>
     <label>{{ $t('workspaces.company_type_info') }}</label>
-    <select
-      v-model="workspaceStore.workspace.organization_type"
-      class="border"
-    >
+    <select v-model="workspaceStore.workspace.organization_type" class="border">
       <option
         v-for="option in workspaceStore.organization_type_options"
         :key="option.value"
@@ -34,14 +28,14 @@
       type="number"
       required
     />
-    <div v-if="workspaceStore.capacityError" class="text-danger text-sm font-bold mt-2">
+    <div
+      v-if="workspaceStore.capacityError"
+      class="text-danger text-sm font-bold mt-2"
+    >
       {{ workspaceStore.capacityError }}
     </div>
     <label>{{ $t('workspaces.admin_role_type') }}</label>
-    <select
-      v-model="workspaceStore.workspace.admin_role"
-      class="border"
-    >
+    <select v-model="workspaceStore.workspace.admin_role" class="border">
       <option
         v-for="option in workspaceStore.admin_role_options"
         :key="option.value"
@@ -57,12 +51,7 @@
       }"
       @click="selectImage"
     />
-    <input
-      ref="fileInput"
-      type="file"
-      class="border"
-      @input="pickFile"
-    />
+    <input ref="fileInput" type="file" class="border" @input="pickFile" />
   </div>
 </template>
 
@@ -74,6 +63,9 @@ export default {
     return {
       workspaceStore: WorkspaceStore(),
     };
+  },
+  beforeUnmount() {
+    this.workspaceStore = null;
   },
   methods: {
     selectImage() {
