@@ -6,7 +6,7 @@
       <div class="w-full" @click="searchModalToggle = true">
         <input
           type="text"
-          :placeholder="$t('action.search')"
+          :placeholder="$t('actions.search')"
           class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
           v-model="search"
         />

@@ -5,7 +5,7 @@
     >
       <div
         v-click-outside="closeModal"
-        class="modal rounded-md w-2/5 h-2/5 shadow-md bg-slate-50"
+        class="modal rounded-md w-2/5 h-2/5 shadow-md bg-white"
         role="dialog"
       >
         <div class="p-8">
