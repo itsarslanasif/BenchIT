@@ -99,14 +99,13 @@ export default {
   },
   methods: {
     async handleSubmit() {
-      await invite_user(this.workspace.id, this.email).then(
-        response => {
+      try {
+        await invite_user(this.workspace.id, this.email).then(response => {
           this.error = false;
-        },
-        error => {
-          this.error = true;
-        }
-      );
+        });
+      } catch (e) {
+        this.error = true;
+      }
       this.email = null;
     },
   },

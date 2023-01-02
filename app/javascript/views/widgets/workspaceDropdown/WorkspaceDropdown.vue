@@ -8,7 +8,7 @@
   >
     <n-text text color="white">
       <div class="mx-3 my-2 flex text-white">
-        <strong class="text-xl">{{ $t('project.title')}}</strong>
+        <strong class="text-xl">{{ $t('project.title') }}</strong>
         <i class="fa-solid fa-chevron-down self-center fa-xs ml-1 mb-2" /></div
     ></n-text>
   </n-dropdown>
@@ -31,7 +31,6 @@ export default {
   },
   methods: {
     handleSelect(key) {
-      console.log(key);
       switch (key) {
         case 'sign-out-of-benchit':
           let token = sessionStorage.getItem('token');
