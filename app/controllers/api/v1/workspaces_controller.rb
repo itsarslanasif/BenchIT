@@ -2,8 +2,8 @@ class Api::V1::WorkspacesController < Api::ApiController
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :find_user, only: %i[invite]
-  skip_before_action :set_workspace_in_session, only: %i[switch_workspace]
-  skip_before_action :set_profile, only: %i[switch_workspace]
+  skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
+  skip_before_action :set_profile, only: %i[index switch_workspace]
 
   def index
     render json: { workspaces: Current.user.workspaces, status: :ok }
