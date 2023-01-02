@@ -72,3 +72,5 @@ BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
 ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 4)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
 ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 6, sender_id: 6)
+user1 = User.new(name: 'Michael', email: 'michael@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
+user1.save!
