@@ -32,13 +32,13 @@
 
 <script>
 import axios from '../../../modules/axios';
-import { UserStore } from '../../../stores/user_store.js';
+import { useUserInviteStore } from '../../../stores/useUserInviteStore.js';
 import '../../components/workspace/style.css'
 
 export default {
   data() {
     return {
-      userStore: UserStore(),
+      userStore: useUserInviteStore(),
     };
   },
   methods: {
