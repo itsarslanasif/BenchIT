@@ -1,7 +1,7 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <div class="bg-primary text-sm h-screen flex flex-col">
-    <div class=" ">
+    <div>
       <SearchBar />
     </div>
     <splitpanes>
@@ -59,16 +59,6 @@ export default {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
     return { screenStore, rightPaneStore };
-  },
-  methods: {
-    beforeUnmount() {
-      this.options = null;
-    },
-  },
-  data() {
-    return {
-      response: null,
-    };
   },
 };
 </script>

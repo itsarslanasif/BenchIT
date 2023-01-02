@@ -142,7 +142,7 @@ export default {
       try {
         this.currentProfile = await switchWorkspace(1);
       } catch (e) {
-        console.error(e);
+        let error = e;
       }
       currentProfileStore.setProfile(this.currentProfile);
       currentWorkspaceStore.setWorkspace(this.currentProfile);
