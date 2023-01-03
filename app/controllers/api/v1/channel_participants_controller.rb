@@ -23,7 +23,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def join_public_channel
     is_channel_participant = @channel.channel_participant_ids.include?(Current.profile.id)
 
-    return render json: { error: 'Already part of this channel', status: :unprocessable_entity } if is_channel_participant
+    return render json: { error: 'Already part of this channel.', status: :unprocessable_entity } if is_channel_participant
 
     return render json: { error: 'You cannot join Private Channel yourself.', status: :unprocessable_entity } if @channel.is_private?
 
