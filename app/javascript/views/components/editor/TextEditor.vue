@@ -13,7 +13,7 @@
       </div>
     </div>
     <div>
-      <editor v-model="newMessage" api-key="{{ import.meta.env.VITE_EDITOR_API }}" :init="{
+      <editor v-model="newMessage" @keydown.enter="sendMessagePayload" api-key="no-api-key" :init="{
   menubar: false,
   statusbar: false,
   plugins: 'lists link code codesample',
@@ -100,7 +100,7 @@ export default
         const currentMessage = ignoreHTML(curr)
         const oldMessage = ignoreHTML(old)
         const message = ignoreHTML(newMessage.value)
-        
+
         if (message && getLastIndex(currentMessage) == '@' && getLastIndex(oldMessage) == ';') {
           enableMention()
         }
@@ -127,7 +127,8 @@ export default
       }
 
       const sendMessagePayload = () => {
-        props.sendMessage(newMessage.value, files.value)
+        const newMessageData = newMessage?.value?.split('\n')[0];
+        props.sendMessage(newMessageData, files.value)
         newMessage.value = ''
         readerFile.value = []
         files.value = []

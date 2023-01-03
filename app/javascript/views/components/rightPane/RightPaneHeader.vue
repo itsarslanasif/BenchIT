@@ -9,7 +9,7 @@
         <p v-if="messageId" class="text-md text-black-600 self-center mr-1">{{ paneTitle }}</p>
       </div>
       <div
-        @click="messageId ? rightPaneStore?.toggleThreadShow(false) : rightPaneStore?.toggleUserProfileShow(false)"
+        @click="messageId ? rightPaneStore?.toggleThreadShow(false) : closeProfilePane()"
         class="flex items-center justify-center mr-2 w-8 h-8 rounded hover:bg-transparent cursor-pointer"
       >
         <i class="fas fa-xmark self-center fa-lg"></i>
@@ -29,6 +29,10 @@ export default {
   methods: {
     goToMessage() {
       this.$router.push(this.messageId);
+    },
+    closeProfilePane() {
+      this.rightPaneStore?.toggleUserProfileShow(false)
+      this.userProfileStore.setUserProfile({})
     },
   },
   setup() {

@@ -1,5 +1,5 @@
 <template>
-  <div class="chatBody">
+  <div class="overflow-auto chatBody" ref="body">
     <PinnedConversationModel />
     <div v-for="message in messages" :key="message.id" :id="getDate(message.created_at)">
       {{ setMessage(message) }}
@@ -123,9 +123,8 @@ export default {
       return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
     scrollToEnd() {
-      var container = document.querySelector(".chatBody");
-      var height = container.scrollHeight;
-      container.scrollTop = height;
+      var body = this.$refs.body;
+      body.scrollTop = body.scrollHeight;
     },
   },
   updated() {
@@ -141,9 +140,8 @@ export default {
 </script>
 <style scoped>
 .chatBody {
-  height: 60vh;
-  max-height: 60vh;
-  overflow: scroll;
+  height: 62.5vh;
+  max-height: 100vh;
 }
 
 .highlight {
