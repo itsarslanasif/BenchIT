@@ -1,95 +1,46 @@
 import { useMessageStore } from '../../stores/useMessagesStore';
-import { useThreadStore } from '../../stores/useThreadStore';
 
-const MessageHandler = (data, action, messageStore) => {
-  switch (action) {
-    case 'Create':
-      const messages = messageStore.getMessages;
-      if (data.parent_message_id) {
-        const message = messages.find(m => m.id === data.parent_message_id);
-        message.replies.push(data);
-      } else {
-        const findMessage = messageStore.getMessages.find(
-          m => m.id === data.id
-        );
-        if (findMessage == undefined) {
-          messageStore.addMessage(data);
-        }
+const createMessage = (data, messageStore) => {
+  try {
+    const messages = messageStore.getMessages;
+    if (data.parent_message_id) {
+      const message = messages.find(m => m.id === data.parent_message_id);
+      message.replies.push(data);
+    } else {
+      const findMessage = messageStore.getMessages.find(m => m.id === data.id);
+      if (findMessage == undefined) {
+        messageStore.addMessage(data);
       }
-      break;
-    case 'Update':
-      break;
-    case 'Delete':
-      break;
-    default:
-      break;
+    }
+  } catch (err) {
+    console.error(err);
   }
 };
 
-const BookmarkHandler = (data, action) => {
-  switch (action) {
-    case 'Create':
-      break;
-    case 'Update':
-      break;
-    case 'Delete':
-      break;
-    default:
-      break;
+const createReaction = (data, messageStore) => {
+  try {
+    let messages = messageStore.getMessages;
+    messages = messages.flatMap(message => [message, message.replies]).flat();
+    const message = messages.find(m => m.id === data.conversation_message_id);
+    if (message) {
+      message.reactions.push(data);
+    }
+  } catch (err) {
+    console.error(err);
   }
 };
 
-const PinHandler = (data, action) => {
-  switch (action) {
-    case 'Create':
-      break;
-    case 'Update':
-      break;
-    case 'Delete':
-      break;
-    default:
-      break;
-  }
-};
-
-const ReactionHandler = (data, action, messageStore) => {
-  switch (action) {
-    case 'Create':
-      let messages = messageStore.getMessages;
-      messages = messages
-        .map(message => [message, message.replies])
-        .flat()
-        .flat();
-      const message = messages.find(m => m.id === data.conversation_message_id);
-      if (message) {
-        message.reactions.push(data);
-      }
-      break;
-    case 'Update':
-      break;
-    case 'Delete':
-      break;
-    default:
-      break;
-  }
+const actions = {
+  MessageCreate: createMessage,
+  ReactionCreate: createReaction,
 };
 
 export const cableActions = data => {
   const messageStore = useMessageStore();
-  switch (data.type) {
-    case 'Message':
-      MessageHandler(data.content, data.action, messageStore);
-      break;
-    case 'Bookmark':
-      BookmarkHandler(data.content, data.action);
-      break;
-    case 'Pin':
-      Pin(data.content, data.action);
-      break;
-    case 'Reaction':
-      ReactionHandler(data.content, data.action, messageStore);
-      break;
-    default:
-      break;
+  try {
+    const key = data.type + data.action;
+    actions[key](data.content, messageStore);
+  } catch (err) {
+    console.error(err);
   }
 };
