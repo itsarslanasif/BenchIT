@@ -138,6 +138,7 @@ en:
           'Channels are where your team communicates. They’re best when
           organized around a topic — #marketing, for example.'
         new_channel_name: 'Name'
+        set_channel_private: 'Set Channel Private'
         new_channel_name_placeholder: 'e.g plan-budget'
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
@@ -171,6 +172,7 @@ en:
         huddle: 'Huddle'
         copied: 'Copied!'
         edit: 'Edit'
+        go: 'Go'
         set_a_status: 'Set a status'
         view_as: 'View as'
         copy_display_name: 'Copy display name'
