@@ -12,8 +12,13 @@ class Pin < ApplicationRecord
       content: pin_content,
       type: 'Pin'
     }
-    result[:action] = created_at.eql?(updated_at) ? 'Create' : 'Update'
-    result[:action] = 'Delete' if destroyed?
+    result[:action] = if destroyed?
+                        'Delete'
+                      elsif created_at.eql?(updated_at)
+                        'Create'
+                      else
+                        'Update'
+                      end
     BroadcastMessageService.new(result, bench_conversation).call
   end
 

@@ -19,8 +19,13 @@ class Bookmark < ApplicationRecord
       content: bookmark_content,
       type: 'Bookmark'
     }
-    result[:action] = created_at.eql?(updated_at) ? 'Create' : 'Update'
-    result[:action] = 'Delete' if destroyed?
+    result[:action] = if destroyed?
+                        'Delete'
+                      elsif created_at.eql?(updated_at)
+                        'Create'
+                      else
+                        'Update'
+                      end
     @conversation = case bookmarkable_type
                     when 'Profile'
                       BenchConversation.profile_to_profile_conversation(bookmarkable_id, profile_id)
