@@ -25,7 +25,6 @@ const deleteMessage = (data, messageStore) => {
       const findThreadMessageIndex = message.replies.findIndex(
         m => m.id === data.id
       );
-      debugger;
       if (findThreadMessageIndex != -1) {
         message.replies.splice(findThreadMessageIndex, 1);
       }
