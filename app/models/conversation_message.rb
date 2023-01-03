@@ -1,5 +1,5 @@
 class ConversationMessage < ApplicationRecord
-  after_commit :broadcast_message, :set_message
+  after_commit :broadcast_message
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
@@ -8,9 +8,10 @@ class ConversationMessage < ApplicationRecord
   has_many_attached :message_attachments, dependent: :purge_later
 
   has_many :replies, class_name: 'ConversationMessage',
-                     foreign_key: :parent_message_id, dependent: :destroy
-  has_many :saved_items
-  has_many :reactions, dependent: :destroy
+                     foreign_key: :parent_message_id, dependent: :delete_all
+  has_many :saved_items, dependent: :delete_all
+  has_many :reactions, dependent: :delete_all
+  has_one :pin, dependent: :delete
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
@@ -23,6 +24,10 @@ class ConversationMessage < ApplicationRecord
       )
   }
 
+  scope :chat_messages, lambda { |id|
+    includes(:profile, :replies, :reactions).where(parent_message_id: nil, bench_conversation_id: id).with_attached_message_attachments
+  }
+
   def self.recent_last_conversation(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
@@ -32,23 +37,18 @@ class ConversationMessage < ApplicationRecord
   private
 
   def broadcast_message
-    BroadcastMessageService.new(@message, bench_conversation).call
-  end
-
-  def set_message
-    @message = {
-      id: id,
-      content: content,
-      is_threaded: is_threaded,
-      parent_message_id: parent_message_id,
-      sender_id: sender_id,
-      sender_name: profile.username,
-      bench_conversation_id: bench_conversation_id,
-      created_at: created_at,
-      updated_at: updated_at,
-      is_edited: created_at != updated_at
+    result = {
+      content: message_content,
+      type: 'Message'
     }
-    @message[:attachments] = attach_message_attachments if message_attachments.present?
+    result[:action] = if destroyed?
+                        'Delete'
+                      elsif created_at.eql?(updated_at)
+                        'Create'
+                      else
+                        'Update'
+                      end
+    BroadcastMessageService.new(result, bench_conversation).call
   end
 
   def attach_message_attachments
@@ -60,5 +60,31 @@ class ConversationMessage < ApplicationRecord
                                                                                       disposition: 'attachment')
       }
     end
+  end
+
+  def saved?(id)
+    Current.profile.saved_items.exists?(conversation_message_id: id)
+  end
+
+  def message_content
+    message = {
+      id: id,
+      content: content,
+      is_threaded: is_threaded,
+      is_edited: created_at != updated_at,
+      parent_message_id: parent_message_id,
+      sender_id: sender_id,
+      sender_name: profile.username,
+      reactions: reactions,
+      created_at: created_at,
+      updated_at: updated_at,
+      isSaved: saved?(id),
+      replies: replies,
+      bench_conversation_id: bench_conversation_id,
+      conversationable_type: bench_conversation.conversationable_type,
+      conversationable_id: bench_conversation.conversationable_id
+    }
+    message[:attachments] = attach_message_attachments if message_attachments.present?
+    message
   end
 end
