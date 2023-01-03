@@ -21,14 +21,14 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def join_public_channel
-    if Current.profile.channel_participants.find_by(bench_channel_id: @channel.id)
-      return render json: { error: 'Already part of this channel',
-                            status: :unprocessable_entity }
-    end
+    @channel_participant = Current.profile.channel_participants.includes(:bench_channel).find_by(bench_channels: { id: @channel.id })
+
+    return render json: { error: 'Already part of this channel', status: :unprocessable_entity } if @channel_participant
 
     return render json: { error: 'You cannot join Private Channel yourself.', status: :unprocessable_entity } if @channel.is_private?
 
     @channel_participant = ChannelParticipant.new(bench_channel_id: @channel.id, profile_id: Current.profile.id, permission: true)
+
     if @channel_participant.save
       render json: { success: 'Channel joined successfully', status: :created }
     else
