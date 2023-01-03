@@ -48,3 +48,15 @@ export const memberLeaveChannel = async channel_id => {
       return response.data;
     });
 };
+
+export const memberJoinChannel = async channel_id => {
+  return await axios.post(
+    `/v1/channel_participants/join_public_channel`,
+    {
+      "bench_channel_id" : channel_id
+    },
+    {
+      headers: { Authorization: sessionStorage.getItem('token') },
+    }
+  );
+}

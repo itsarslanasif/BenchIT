@@ -166,6 +166,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        leave: 'Leave'
         update: 'Update'
         search: 'Search'
         delete: 'Delete'
