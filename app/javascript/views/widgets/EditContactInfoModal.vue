@@ -26,6 +26,7 @@
         :placeholder="$t('placeholder.phone')"
         class="border border-black-400 rounded w-150 text-black-900 mt-2 h-12 p-3 focus:outline-none focus:bg-transparent"
       />
+
       <button
         @click="saveChanges"
         class="bg-green-700 text-white mt-8 float-right border px-4 h-9 rounded hover:bg-green-800 focus:outline-none"
@@ -43,13 +44,19 @@
 </template>
 
 <script>
-import { NModal, NAlert } from 'naive-ui';
+import { NModal } from 'naive-ui';
 export default {
-  components: {
-    NModal,
-    NAlert,
+  components: { NModal },
+  props: {
+    userContactInfo: {
+      type: Object,
+      default: undefined,
+    },
+    toggleModal: {
+      type: Function,
+      default: undefined,
+    },
   },
-  props: ['userContactInfo', 'toggleModal'],
   data() {
     return {
       email: '',

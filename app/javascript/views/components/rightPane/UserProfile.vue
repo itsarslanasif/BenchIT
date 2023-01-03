@@ -103,18 +103,14 @@ import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue'
-
+import { ref } from 'vue';
 export default {
   components: { RightPaneHeader, NDivider, NTooltip, EditContactInfoModal },
-  data(){
-    return{
-      showContactInfoModal: false
-    }
-  },
   setup(){
     const userProfileStore = useUserProfileStore()
     const currentProfileStore = useCurrentProfileStore()
-    return { userProfileStore, currentProfileStore }
+    const showContactInfoModal = ref(false)
+    return { userProfileStore, currentProfileStore, showContactInfoModal }
   },
   computed:{
     ownProfile(){
