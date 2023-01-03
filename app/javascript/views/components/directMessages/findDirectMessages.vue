@@ -1,10 +1,10 @@
 <template>
-  <div class=" bg-secondary text-white border border-slate-600 h-screen -mb-12">
+  <div class="bg-secondary text-white border border-slate-600 h-screen -mb-12">
     <div class="grid text-slate-600 grid-cols-1 divide-y">
       <div class="p-2 text-white text-xl">
         {{ $t('direct_messages.direct_messages') }}
       </div>
-      <div >
+      <div>
         <div class="flex p-3">
           <p>{{ $t('request.to') }}:</p>
           <input
@@ -19,11 +19,12 @@
         <hr />
         <div class="w-full p-5">
           <div v-for="member in members" :key="member.id">
-            <memberCard
+            <memberCardDm
               class="cursor-pointer"
               :name="member.username"
               :description="member.description"
               :img-url="member.image_url"
+              @click="handleSelect(member)"
             />
           </div>
         </div>
@@ -33,14 +34,18 @@
 </template>
 
 <script>
-import memberCard from './memberCard.vue';
+import memberCardDm from './memberCardDm.vue';
 import { getMembers } from '../../../api/members/membersApi';
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 export default {
   mounted() {
     this.searchQuery();
   },
+  beforeUnmount() {
+    this.query = this.members = this.users = null;
+  },
   components: {
-    memberCard,
+    memberCardDm,
   },
   data() {
     return {
@@ -50,13 +55,29 @@ export default {
       users: [],
     };
   },
+  setup() {
+    const selectedDm = useDirectMessagesStore();
+    return { selectedDm };
+  },
   methods: {
+    goToChat(chatURL) {
+      this.$router.push(chatURL);
+    },
+    handleSelect(member) {
+      this.selectedDm.appendToDirectMessagesList(member);
+      this.selectedDm.setSelectedDm(member);
+      this.goToChat(`/profiles/${member.id}`);
+    },
     async searchQuery() {
-      this.members = await getMembers(
+      try {
+        this.members = await getMembers(
         this.CurrentWorkspaceId,
         this.query,
         this.sort
       );
+      } catch (e) {
+        console.error(e)
+      }
     },
   },
 };
@@ -68,3 +89,4 @@ input:focus {
   outline: none;
 }
 </style>
+

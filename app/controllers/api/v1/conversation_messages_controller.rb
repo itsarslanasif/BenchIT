@@ -1,13 +1,13 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :fetch_conversation, only: %i[create]
-  before_action :set_message, only: %i[destroy]
+  before_action :set_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
 
   def send_message
-    @messages = Current.profile.conversation_messages.includes(:profile).order(created_at: :desc)
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
   end
 
   def create
@@ -22,13 +22,20 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     render json: response
   end
 
+  def update
+    if @message.update(conversation_messages_params)
+      render json: { success: 'Messages updated', message: @message, status: :updated }
+    else
+      render json: { errors: @message.errors, status: :unprocessable_entity }
+    end
+  end
+
   def destroy
     render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
   end
 
   def index_saved_messages
-    @saved_items = Current.profile.saved_items
-    render 'api/v1/saved_items/index'
+    @saved_items = Current.profile.saved_items.order(created_at: :desc)
   end
 
   def save_message
@@ -42,7 +49,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = Current.profile.conversation_messages.with_attached_message_attachments
+    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def bench_channel_messages
@@ -61,6 +68,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     end
 
     @messages = conversation.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+  end
+
+  def unread_messages
+    str = REDIS.get("unreadMessages#{Current.workspace.id}#{Current.profile.id}")
+    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
+    unread_messages_ids = previous_unread_messages_details.pluck('message_id')
+    @messages = ConversationMessage.messages_by_ids_array(unread_messages_ids)
+                                   .includes(:reactions, :replies, :parent_message, :saved_items)
+                                   .with_attached_message_attachments
   end
 
   private

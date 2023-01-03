@@ -1,5 +1,5 @@
 <template>
-  <div class="loading" v-show="loading">
+  <div class="loading" v-if="loading">
     <Spinner />
   </div>
   <div v-if="chat && conversation_type === 'channels'">
@@ -136,7 +136,6 @@ export default {
 .custom-border {
   border-bottom: 0.5px solid gray;
 }
-
 .loading {
   width: 80%;
   height: 50%;

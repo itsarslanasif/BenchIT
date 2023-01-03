@@ -4,20 +4,33 @@
       <AccordionItem default-opened="true">
         <template #summary>
           {{ $t('direct_messages.direct_messages') }}
-          <a @click="handleClick"
-            class="px-2 hover-target py-1 h-5 ml-10 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid">
+          <a
+            @click="handleClick"
+            class="px-2 hover-target py-1 h-5 ml-10 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid"
+          >
             +
           </a>
         </template>
-        <h5 v-for="user in dmList" :key="user.id" class="hover:bg-primaryHover">
-          <div @click="goToChat(`/profiles/${user.id}`)"
-            class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover">
-            <img class="w-6 h-6 rounded-md"
-              src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg" />
+        <h5
+          v-for="user in directMessageStore.directMessagesList"
+          :key="user.id"
+          class="hover:bg-primaryHover"
+        >
+          <div
+            @click="goToChat(`/profiles/${user.id}`,user)"
+            class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
+          >
+            <img
+              class="w-6 h-6 rounded-md"
+              src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
+            />
             <p class="ml-2 text-sm text-white">{{ user.username }}</p>
           </div>
         </h5>
-        <div class="-ml-3 flex items-start py-1 hover:bg-primaryHover" @click="modalOpen = !modalOpen">
+        <div
+          class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
+          @click="closeModal"
+        >
           <addTeammatesDropdown :items="options" />
         </div>
       </AccordionItem>
@@ -28,10 +41,9 @@
 <script>
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
-import { getDirectMessagesList } from '../../../api/directMessages/directMessages';
-import { useSelectedScreenStore } from '../../../stores/useSelectedScreen';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
+
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {
@@ -50,26 +62,30 @@ export default {
       ],
     };
   },
-  setup() {
-    const selectScreen = useSelectedScreenStore();
-    return { selectScreen };
-  },
   mounted() {
-    this.getDmList();
+    this.directMessageStore.getDmList(
+      this.currentProfileStore.currentProfile.workspace_id
+    );
+  },
+  beforeUnmount() {
+    this.dmList = this.options = null;
+  },
+  setup() {
+    const directMessageStore = useDirectMessagesStore();
+    const currentProfileStore = useCurrentProfileStore();
+    return { directMessageStore, currentProfileStore };
   },
   methods: {
     closeModal() {
+
       this.modalOpen = !this.modalOpen;
     },
-    async getDmList() {
-      const currentProfileStore = useCurrentProfileStore();
-      this.dmList = await getDirectMessagesList(currentProfileStore.currentProfile.workspace_id);
-    },
-    goToChat(chatURL) {
+    goToChat(chatURL,user) {
+      this.directMessageStore.setSelectedDm(user)
       this.$router.push(chatURL);
     },
     handleClick() {
-      this.$router.push('/new_direct_message')
+      this.$router.push('/new_direct_message');
     },
   },
 };

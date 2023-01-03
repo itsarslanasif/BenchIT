@@ -17,13 +17,18 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :groups, only: %i[index show]
+        resources :groups, only: %i[index show] do
+          member do
+            post :add_member
+          end
+        end
         resources :users, only: %i[index]
-        resources :conversation_messages, only: %i[create destroy] do
+        resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message
             get :index_saved_messages
             get :recent_files
+            get :unread_messages
           end
           member do
             post :save_message
@@ -37,16 +42,15 @@ Rails.application.routes.draw do
           member do
             delete :leave
           end
-
-          resources :bookmarks, only: %i[create index]
         end
 
-        resources :workspaces, only: %i[create] do
+        resources :workspaces, only: %i[index create] do
           member do
             post :invite
+            get :switch_workspace
           end
 
-          resources :profiles, only: %i[index create show], shallow: true do
+          resources :profiles, only: %i[index create show update] do
             collection do
               get :previous_direct_messages
             end
@@ -54,6 +58,7 @@ Rails.application.routes.draw do
         end
 
         resources :statuses, only: %i[create destroy]
+        resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create index]
         resources :draft_messages, only: %i[index create update destroy]

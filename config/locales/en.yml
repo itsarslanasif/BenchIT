@@ -1,3 +1,4 @@
+
 en:
   time:
     formats:
@@ -51,6 +52,8 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      email:
+        gmail: '@gmail.com'
       pinconversation:
         pinned_by: 'Pinned by'
         you: 'you'
@@ -90,10 +93,25 @@ en:
       rightpane:
         send: 'Send'
         replies: 'replies'
+        about_me: 'About me'
+        skype: 'Skype'
+        add_skype: '+ Add skype'
+        local_time: 'local time'
+        contact_information: 'Contact information'
+        email_address: 'Email Address'
+        add_email: '+ Add Email'
+        phone: 'Phone'
+        add_phone: '+ Add Phone'
+        add_name_pronounciation: '+ Add name pronounciation'
+        add_description: '+ Add description'
+        active: 'Active'
+        away: 'Away'
       chat:
         today: 'Today'
         replies: 'replies'
+      right_pane:
         thread: 'Thread'
+        profile: 'Profile'
       channels:
           channels: 'Channels'
           add_new_channel: 'Add New Channel'
@@ -135,9 +153,11 @@ en:
       request:
         send_request: 'Send Request'
         reason_for_request: 'Reason for request (optional)'
-        to: 'To'
-        requesting_invitation: 'Requestion invitation to BenchIT'
+        to: 'To:'
+        requesting_invitation: 'Request invitations to '
         request_reason_placeholder: 'Add a note for your admin'
+        error_message: 'User does not exist!'
+        success_message: 'Invitation sent successfully!'
       actions:
         save: 'Save'
         send: 'Send'
@@ -145,10 +165,15 @@ en:
         create: 'Create'
         join: 'Join'
         update: 'Update'
+        search: 'Search'
         delete: 'Delete'
         cancel: 'Cancel'
         message: 'Message'
         huddle: 'Huddle'
+        copied: 'Copied!'
+        edit: 'Edit'
+        set_a_status: 'Set a status'
+        view_as: 'View as'
         copy_display_name: 'Copy display name'
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
@@ -203,6 +228,15 @@ en:
         recent_files: 'Recent files'
         from_computer: 'Attach from your computer'
         divider: '●'
+      user_profile:
+      messages_section:
+        today: 'Today'
+        yesterday: 'Yesterday'
+        jump_to: 'Jump to...'
+        last_week: 'Last week'
+        last_month: 'Last month'
+        the_very_beginning: 'The very beginning'
+        jump_to_specific_date: 'Jump to a specific date'
 
     admin:
       title: 'Admin'
@@ -238,3 +272,4 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+

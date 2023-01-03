@@ -1,5 +1,5 @@
 class ConversationMessage < ApplicationRecord
-  after_commit :broadcast_message
+  after_commit :broadcast_message, :set_message
 
   belongs_to :bench_conversation
   belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
@@ -14,24 +14,14 @@ class ConversationMessage < ApplicationRecord
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
-  def broadcast_message
-    message = {
-      id: id,
-      content: content,
-      is_threaded: is_threaded,
-      parent_message_id: parent_message_id,
-      sender_id: sender_id,
-      sender_name: profile.username,
-      bench_conversation_id: bench_conversation_id,
-      created_at: created_at,
-      updated_at: updated_at
-    }
-    message[:attachments] = attach_message_attachments if message_attachments.present?
-    channel_key = "ChatChannel#{bench_conversation.conversationable_type}#{bench_conversation.conversationable_id}"
-    channel_key += "-#{bench_conversation.sender_id}" if bench_conversation.conversationable_type.eql?('Profile')
-
-    ActionCable.server.broadcast(channel_key, { message: message })
-  end
+  scope :messages_by_ids_array, lambda { |ids|
+    joins(:bench_conversation)
+      .where(id: ids)
+      .group(:conversationable_type, :conversationable_id, :id)
+      .order(
+        conversationable_type: :asc, conversationable_id: :asc, created_at: :desc
+      )
+  }
 
   def self.recent_last_conversation(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
@@ -40,6 +30,26 @@ class ConversationMessage < ApplicationRecord
   end
 
   private
+
+  def broadcast_message
+    BroadcastMessageService.new(@message, bench_conversation).call
+  end
+
+  def set_message
+    @message = {
+      id: id,
+      content: content,
+      is_threaded: is_threaded,
+      parent_message_id: parent_message_id,
+      sender_id: sender_id,
+      sender_name: profile.username,
+      bench_conversation_id: bench_conversation_id,
+      created_at: created_at,
+      updated_at: updated_at,
+      is_edited: created_at != updated_at
+    }
+    @message[:attachments] = attach_message_attachments if message_attachments.present?
+  end
 
   def attach_message_attachments
     message_attachments.map do |attachment|

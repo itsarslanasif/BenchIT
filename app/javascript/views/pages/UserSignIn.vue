@@ -1,5 +1,5 @@
 <template>
-  <div v-show="response" class="relative">
+  <div v-if="response" class="relative">
     <benchit-alert
       :errorMessage="$t('pages.sign_in.error_message')"
       :successMessage="response?.message"
@@ -83,8 +83,12 @@
 <script>
 import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
+import { switchWorkspace } from '../../api/switchWorkspace/switchWorkspace.js';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
+
 export default {
   name: 'UserSignIn',
   components: {
@@ -103,7 +107,11 @@ export default {
         password: '',
       },
       response: null,
+      currentProfile: {},
     };
+  },
+  beforeUnmount() {
+    this.user = this.currentProfile = null;
   },
 
   methods: {
@@ -114,18 +122,29 @@ export default {
           .content,
         commit: 'Log in',
       }).then(res => {
-        sessionStorage.setItem('token', res.headers.authorization);
+        if (res.headers.authorization) {
+          sessionStorage.setItem('token', res.headers.authorization);
+        }
         this.response = res.data;
         if (res.data?.user) {
           const currentUser = useCurrentUserStore();
           currentUser.setUser(res.data.user);
-          this.goToHomepage();
+          this.getProfile();
         }
       });
     },
-
     goToHomepage() {
       this.$router.push('/');
+    },
+    async getProfile() {
+      const currentProfileStore = useCurrentProfileStore();
+      const currentWorkspaceStore = useCurrentWorkspaceStore();
+      try {
+        this.currentProfile = await switchWorkspace(1);
+      } catch (e) {}
+      currentProfileStore.setProfile(this.currentProfile);
+      currentWorkspaceStore.setWorkspace(this.currentProfile);
+      this.goToHomepage();
     },
   },
 };

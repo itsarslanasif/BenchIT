@@ -1,9 +1,9 @@
 class Api::V1::ProfilesController < Api::ApiController
-  before_action :set_workspace, only: %i[index create show]
+  before_action :set_workspace, only: %i[index create show update]
   before_action :check_profile_already_exists, only: %i[create]
-  before_action :set_receiver, only: %i[show]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
-  before_action :check_user_member_of_workspace, only: %i[show]
+  before_action :check_user_member_of_workspace, only: %i[show update]
+  before_action :find_profile, only: %i[show update]
 
   def index
     @profiles = if params[:query].presence
@@ -19,9 +19,7 @@ class Api::V1::ProfilesController < Api::ApiController
     @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
   end
 
-  def show
-    @profile = @workspace.profiles.find(params[:id])
-  end
+  def show; end
 
   def create
     @profile = current_user.profiles.new(profile_params)
@@ -33,40 +31,58 @@ class Api::V1::ProfilesController < Api::ApiController
     end
   end
 
+  def update
+    if (@profile = Current.profile.update(profile_params))
+      render json: { message: 'Profile Updated Successfully.' }, status: :ok
+    else
+      render json: { errors: @profile.errors, message: 'There was an error updating the profile' }, status: :unprocessable_entity
+    end
+  end
+
   def previous_direct_messages
     @profiles = Profile.where(id: @dm_users_ids)
   end
 
   private
 
-  def set_workspace
-    @workspace = Workspace.find_by(id: params[:workspace_id])
+  def find_profile
+    @profile = Profile.find(params[:id])
+  end
 
-    return render json: { message: 'Workspace Not Found.' }, status: :not_found if @workspace.nil?
+  def set_workspace
+    @workspace = Workspace.find(params[:workspace_id])
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description).tap do |param|
+    params.require(:profile).permit(
+      :username,
+      :description,
+      :recording,
+      :profile_image,
+      :role,
+      :display_name,
+      :title,
+      :text_status,
+      :emoji_status,
+      :time_zone,
+      :pronounce_name,
+      :phone,
+      :skype
+    ).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end
 
   def check_user_member_of_workspace
-    return if Current.workspace.id == params[:workspace_id].to_i
+    return if Current.workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { message: 'You are not member of specified  workspace.' }, status: :unprocessable_entity
+    render json: { message: 'You are not member of specified  workspace.', status: :unprocessable_entity }
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { message: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
-  end
-
-  def set_receiver
-    @receiver = Profile.find(params[:id])
-
-    render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
+    render json: { message: 'You already have a profile in this workspace.', status: :unprocessable_entity }
   end
 
   def set_previous_direct_messages
