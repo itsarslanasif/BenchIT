@@ -6,23 +6,23 @@ workspace = Workspace.create!(company_name: 'BenchIT',
 
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
-user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '123', skype: '123', text_status: '123',
-                       time_zone: 'Karachi', emoji_status: 'haha')
+user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',
+                       text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂')
 user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user2.save!
-user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1, display_name: 'arnold', phone: '123', skype: '123',
-                       text_status: '123', time_zone: 'UTC', emoji_status: 'haha')
+user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1, display_name: 'arnold', phone: '1234567890', skype: '1234567890',
+                       text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
 user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user3.save!
-user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: 1, display_name: 'arthur', phone: '123', skype: '123', text_status: '123',
-                       time_zone: 'Samoa', emoji_status: 'haha')
+user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: 1, display_name: 'arthur', phone: '1234567890', skype: '1234567890',
+                       text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
 user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user.save!
-user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1, display_name: 'austin', phone: '123', skype: '123', text_status: '123',
-                      time_zone: 'Auckland', emoji_status: 'haha')
+user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1, display_name: 'austin', phone: '1234567890', skype: '1234567890',
+                      text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
 admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password', jti: SecureRandom.uuid)
-admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1, display_name: 'admin', phone: '123', skype: '123',
-                       text_status: '123', time_zone: 'UTC', emoji_status: 'haha')
+admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1, display_name: 'admin', phone: '1234567890',
+                       skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍')
 Current.user = user1
 Current.profile = user1.profiles.first
 Current.workspace = workspace
@@ -73,3 +73,4 @@ BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
 ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 4)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
 ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 6, sender_id: 6)
+User.create(name: 'Michael', email: 'michael@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)

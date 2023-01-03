@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center flex-col p-2 border-b border-slate-400 bg-secondary h-15">
+  <div class="flex items-center justify-center flex-col p-2 border-b border-slate-400 bg-secondary h-12">
     <div class="flex w-1/2">
       <div class="w-full" @click="searchModalToggle = true">
         <input type="text" placeholder="Search"
