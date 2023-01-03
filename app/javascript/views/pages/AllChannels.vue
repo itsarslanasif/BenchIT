@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { NInput, NSpace, NButton } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
@@ -113,6 +113,13 @@ export default {
     onMounted(() => {
       searchedChannels.value = channels.value;
     });
+
+    onBeforeMount(()=>{
+      term.value = null
+      showButton.value =null
+      searchedChannels.value = null
+      channels.value = null
+    })
 
     return {
       term,
