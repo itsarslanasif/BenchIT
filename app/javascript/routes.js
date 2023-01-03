@@ -8,7 +8,6 @@ import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import SplitPanes from './views/pages/SplitPanes.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
-import UserInviteFormVue from './views/widgets/UserInviteForm.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
@@ -52,12 +51,6 @@ const router = createRouter({
       name: 'screen',
       meta: { auth: true },
       children: [
-        {
-          path: '/screen/invite_to_workspace/:id',
-          component: UserInviteFormVue,
-          name: 'user_invite_form',
-          meta: { auth: true },
-        },
         {
           path: '',
           component: LandingPage,

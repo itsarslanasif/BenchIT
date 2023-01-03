@@ -24,7 +24,7 @@
             :name="member.username"
             :description="member.description"
             :img-url="member.image_url"
-            @click="toggleUserProfileShow(true)"
+            @click="showUserProfile(member.id)"
           />
         </div>
       </div>
@@ -43,10 +43,13 @@ import member from './member.vue';
 import Spinner from '../../shared/spinner.vue';
 import filters from '../../widgets/filters.vue';
 import profile from '../../widgets/profile.vue';
-import { useRightPaneStore } from '../../../stores/useRightPaneStore'
+import { useUserProfileStore } from '../../../stores/useUserProfileStore';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { mapActions } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
 import { getMembers } from '../../../api/members/membersApi';
+import { getUserProfile } from '../../../api/profiles/userProfile';
+
 export default {
   props: ['filterComponentData'],
   components: {
@@ -92,10 +95,20 @@ export default {
         console.error(e);
       }
     },
+
+    async showUserProfile(member_id) {
+      this.setUserProfile(
+        await getUserProfile(this.CurrentWorkspaceId, member_id)
+      );
+      this.toggleUserProfileShow(true);
+    },
+
     getSortFilter(value) {
       this.sort = value;
     },
-    ...mapActions(useRightPaneStore,['toggleUserProfileShow'])
+    ...mapActions(useRightPaneStore, ['toggleUserProfileShow']),
+
+    ...mapActions(useUserProfileStore, ['setUserProfile']),
   },
   watch: {
     sort() {

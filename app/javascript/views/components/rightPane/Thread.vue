@@ -32,7 +32,7 @@ import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { getMessageHistory } from '../../../modules/socket/messageHistory';
-import { UserStore } from '../../../stores/user_store';
+import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
 
 export default {
@@ -46,7 +46,7 @@ export default {
   },
   setup() {
     const threadStore = useThreadStore();
-    const currentUserStore = UserStore();
+    const currentUserStore = useUserInviteStore()
     const { currentUser } = storeToRefs(currentUserStore);
     return { threadStore, currentUser };
   },
@@ -79,16 +79,11 @@ export default {
         formData.append('message_attachments[]', file);
       });
       try {
-        conversation(formData).then(async () => {
-        const messages = await getMessageHistory(this.conversation_type.slice(0, -1), this.id);
-        this.threadStore.message = messages.find(
-          msg => msg.id === this.threadStore.message.id
-        );
-      });
+        conversation(formData);
       } catch (e) {
-        console.log(e)
+        let error = e;
       }
-      
+
     },
   },
 };

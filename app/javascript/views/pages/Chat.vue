@@ -19,10 +19,11 @@ import ChatHeader from '../components/chats/ChatHeader.vue';
 import { NInput, NSpace } from 'naive-ui';
 import ChatBody from '../components/chats/ChatBody.vue';
 import TextEditorVue from '../components/editor/TextEditor.vue';
-import { createCable } from '@/plugins/cable';
+import { createCable, unsubscribe } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
+import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
 export default {
   name: 'Chat',
@@ -68,44 +69,35 @@ export default {
       type: this.conversation_type,
       current_user_id: this.currentUser.id,
     });
+    this.Cable.on('chat', data => {
+      cableActions(data.message);
+    });
   },
   beforeUnmount() {
     this.chat = null;
+    unsubscribe();
     this.Cable = null;
   },
-
-  updated() {
-    try {
-      this.Cable.on('chat', data => {
-        const findMessage = this.messages.find(m => m.id === data.message.id);
-        if (findMessage == undefined) {
-          this.messages.push(data.message);
-        }
-      });
-    } catch (e) {
-      console.error(e);
-    }
-  },
-
   methods: {
     sendMessage(message, files) {
       let formData = new FormData();
       formData.append('content', message);
       formData.append('is_threaded', false);
-      formData.append('parent_message_id', null);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
       files.forEach(file => {
         formData.append('message_attachments[]', file);
       });
       try {
-        conversation(formData);
+        conversation(formData).then(() => {
+          this.message = '';
+        });
       } catch (e) {
         console.error(e);
       }
     },
   },
-}
+};
 </script>
 
 <style>

@@ -1,20 +1,17 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <div class="bg-primary text-sm h-screen flex flex-col ">
-    <div class=" ">
+  <div class="bg-primary text-sm h-screen flex flex-col">
+    <div>
       <SearchBar />
     </div>
     <splitpanes>
       <pane max-size="20" min-size="10">
-        <WorkspaceDropdown title="BenchIT" :items="options" />
+        <WorkspaceDropdown />
         <LeftPane />
       </pane>
-      <pane class="bg-white " max-size="90" min-size="80">
+      <pane class="bg-white" max-size="90" min-size="80">
         <router-view :key="$route.fullPath" />
       </pane>
-      <div v-if="UserInviteFormFlag" class="modal-styling">
-        <UserInviteFormVue :close-modal="closeForm" />
-      </div>
       <pane
         v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
         max-size="80"
@@ -35,18 +32,16 @@
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
-import WorkspaceDropdown from '../widgets/WorkspaceDropdown.vue';
+import WorkspaceDropdown from '../widgets/workspaceDropdown/WorkspaceDropdown.vue';
 import SearchBar from '../shared/searchBar.vue';
 import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
-import UserInviteFormVue from '../widgets/UserInviteForm.vue';
-import { userSignOut } from '../../api/user_auth/user_sign_out_api';
-import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
-import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
+import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
+import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
 
 export default {
   components: {
@@ -55,7 +50,6 @@ export default {
     Chat,
     WorkspaceDropdown,
     LeftPane,
-    UserInviteFormVue,
     Thread,
     searchDmscreen,
     SearchBar,
@@ -65,73 +59,6 @@ export default {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
     return { screenStore, rightPaneStore };
-  },
-  methods: {
-    closeForm() {
-      this.UserInviteFormFlag = !this.UserInviteFormFlag;
-    },
-    enableInviteModal() {
-      this.UserInviteFormFlag = !this.UserInviteFormFlag;
-      this.$router.push({
-        name: 'user_invite_form',
-        params: { id: 1 },
-      });
-    },
-    sign_out() {
-      let token = sessionStorage.getItem('token');
-      userSignOut(token).then(res => {
-        this.response = res;
-        this.$router.push('/sign_in');
-      });
-    },
-  },
-  beforeUnmount() {
-    this.options = null;
-  },
-  data() {
-    return {
-      modalOpen: false,
-      UserInviteFormFlag: false,
-      response: null,
-      options: [
-        {
-          title: 'BenchIT',
-          link: '#',
-        },
-        {
-          title: 'Terms & Conditions',
-          link: '#',
-        },
-        {
-          title: 'Invite People',
-          func: this.enableInviteModal,
-        },
-        {
-          title: 'Create Channel',
-          link: '#',
-        },
-        {
-          title: 'Preferences',
-          link: '#',
-        },
-        {
-          title: 'Administration',
-          link: '#',
-        },
-        {
-          title: 'Tools',
-          link: '#',
-        },
-        {
-          title: 'Sign in to BenchIT on mobile',
-          link: '#',
-        },
-        {
-          title: 'Sign Out of BenchIT',
-          func: this.sign_out,
-        },
-      ],
-    };
   },
 };
 </script>

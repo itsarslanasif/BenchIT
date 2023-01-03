@@ -11,10 +11,11 @@
       <font-awesome-icon
         icon="fa-plus-circle"
         @click="openAttach = true"
-        class="text-xl p-2 m-2 float-left hover:bg-slate-100 rounded-md"
+        class="text-xl p-2 m-3 float-left hover:bg-slate-100 rounded-md"
       />
     </div>
     <div
+      v-click-outside="closeModal"
       v-if="openAttach && !recentFiles"
       class="bottom-0 ml-12 py-2 absolute w-auto bg-primary text-white rounded-md h-auto"
     >
@@ -81,6 +82,7 @@
 <script>
 import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
 import { getFileFromURL } from '../../../api/attachments/attachments';
+import vClickOutside from 'click-outside-vue3';
 export default {
   props: ['getImages'],
   data() {
@@ -90,6 +92,9 @@ export default {
       imgSrc: '',
       recentFiles: false,
     };
+  },
+  directives: {
+    clickOutside: vClickOutside.directive,
   },
   setup() {
     const recentFilesStore = useRecentFilesStore();

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getMessageHistory } from '../modules/socket/messageHistory';
+import { deleteMessage } from '../api/messages';
 import { CONSTANTS } from '../assets/constants';
 
 export const useMessageStore = () => {
@@ -31,7 +32,11 @@ export const useMessageStore = () => {
         );
       },
       async addMessage(msg) {
+        messageStore;
         this.messages.push(msg);
+      },
+      async deleteMessage(id) {
+        await deleteMessage(id);
       },
     },
   });

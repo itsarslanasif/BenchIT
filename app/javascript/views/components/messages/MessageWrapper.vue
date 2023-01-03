@@ -18,13 +18,13 @@
     <div
       class="flex p-1 px-4 relative hover:bg-transparent"
       :class="{
-        messageContentPinned: pinnedConversationStore.isPinned(currMessage),
+        'bg-yellow-100': pinnedConversationStore.isPinned(currMessage),
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
       <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal />
+        <user-profile-modal :profile_id='currMessage.sender_id' />
       </template>
       <span class="message">
         <div class="ml-1">
@@ -74,7 +74,7 @@
           >
         </template>
         <div
-          v-if="currMessage?.is_threaded"
+          v-if="currMessage?.replies?.length > 0"
           @click="toggleThread"
           :class="{ 'ml-12': isSameUser && isSameDayMessage }"
           class="text-info text-xs cursor-pointer hover:underline"
@@ -144,6 +144,8 @@ import UserProfileModal from '../../widgets/UserProfileModal.vue';
 import { add_reaction } from '../../../api/reactions/reaction.js';
 import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
+import { getUserProfile } from '../../../api/profiles/userProfile';
+import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 
 export default {
   name: 'MessageWrapper',
@@ -153,12 +155,14 @@ export default {
     const savedItemsStore = useSavedItemsStore();
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
+    const userProfileStore = useUserProfileStore();
     return {
       threadStore,
       pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
       rightPaneStore,
+      userProfileStore
     };
   },
   components: {
@@ -232,9 +236,7 @@ export default {
   methods: {
     async addReaction(emoji) {
       try {
-        await add_reaction(this.currMessage.id, emoji.i).then(response => {
-          return this.allReactions.push(response.data);
-        });
+        await add_reaction(this.currMessage.id, emoji.i);
       } catch (e) {
         console.error(e);
       }
@@ -252,19 +254,31 @@ export default {
         console.error(e);
       }
     },
+
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
     },
+
     setOptionsModal() {
       this.showOptions = !this.showOptions;
     },
+
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
     },
+
     showUserProfile() {
+      this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
     },
+
+    async setUserProfileForPane() {
+      this.userProfileStore.setUserProfile(
+        await getUserProfile(1, this.currMessage.sender_id)
+      );
+    },
+
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       try {
@@ -286,8 +300,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.messageContentPinned {
-  @apply bg-yellow-100;
-}
-</style>
