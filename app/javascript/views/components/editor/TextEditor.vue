@@ -126,12 +126,14 @@ export default
         return value[value.length - 1]
       }
 
-      const sendMessagePayload = () => {
-        const newMessageData = newMessage?.value?.split('\n')[0];
-        props.sendMessage(newMessageData, files.value)
-        newMessage.value = ''
-        readerFile.value = []
-        files.value = []
+      const sendMessagePayload = (event) => {
+        if (event.keyCode === 13 && !event.shiftKey ) {
+          const newMessageData = newMessage?.value?.split('\n')[0];
+          props.sendMessage(newMessageData, files.value)
+          newMessage.value = ''
+          readerFile.value = []
+          files.value = []
+        }
       };
 
       const enableMention = () => {
