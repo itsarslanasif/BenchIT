@@ -105,7 +105,7 @@ module.exports = {
         800: '#1F2937',
         100: '#f8f8f8',
         50: '#F3F3F5',
-      }
+      },
     },
     extend: {
       screens: {
@@ -118,13 +118,12 @@ module.exports = {
         95: '20rem',
         90: '18rem',
         80: '18.75rem',
-        20: '8rem'
       },
       height: {
         9: '2.1875rem',
         12: '3rem',
-        15: '5rem'
-      }
+        15: '5rem',
+      },
     },
   },
   variants: {},

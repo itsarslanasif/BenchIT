@@ -40,7 +40,7 @@
         class="border border-black-400 rounded w-150 text-black-900 mt-2 h-12 p-3"
       />
       <button
-        class="bg-green-800 text-white mt-8 float-right border w-20 h-9 rounded-md"
+        class="bg-green-800 text-white mt-8 float-right border px-4 h-9 rounded-md"
       >
         {{ $t('request.send_request') }}
       </button>

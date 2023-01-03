@@ -167,6 +167,7 @@ en:
         create: 'Create'
         join: 'Join'
         update: 'Update'
+        search: 'Search'
         delete: 'Delete'
         cancel: 'Cancel'
         message: 'Message'
