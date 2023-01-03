@@ -112,12 +112,18 @@ module.exports = {
         dark: { raw: '(prefers-color-scheme: dark)' },
       },
       width: {
+        180: '37.5rem',
+        150: '32.5rem',
         100: '25rem',
+        95: '20rem',
         90: '18rem',
-        80: '18.75rem'
+        80: '18.75rem',
+        20: '8rem'
       },
       height: {
-        9: '2.1875rem'
+        9: '2.1875rem',
+        12: '3rem',
+        15: '5rem'
       }
     },
   },
