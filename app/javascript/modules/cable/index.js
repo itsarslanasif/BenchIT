@@ -17,6 +17,23 @@ const createMessage = (data, messageStore) => {
   }
 };
 
+const updateMessage = (data, messageStore) => {
+  try {
+    const messages = messageStore.getMessages;
+    if (data.parent_message_id) {
+      const message = messages.find(m => m.id === data.parent_message_id);
+      message.replies.push(data);
+    } else {
+      const findMessage = messages.find(m => m.id === data.id);
+      if (findMessage == undefined) {
+        messageStore.addMessage(data);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const deleteMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
@@ -57,6 +74,7 @@ const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
   MessageDelete: deleteMessage,
+  MessageUpdate: updateMessage,
 };
 
 export const cableActions = data => {
