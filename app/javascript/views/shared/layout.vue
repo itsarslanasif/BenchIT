@@ -7,15 +7,10 @@
 </template>
 
 <script>
-import NavBar from './_nav.vue';
-import searchBarVue from './searchBar.vue';
 import { NConfigProvider } from 'naive-ui';
-
 export default {
   components: {
     NConfigProvider,
-    'nav-bar': NavBar,
-    'search-bar': searchBarVue,
   },
   data() {
     return {
