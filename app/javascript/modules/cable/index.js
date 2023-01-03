@@ -17,6 +17,30 @@ const createMessage = (data, messageStore) => {
   }
 };
 
+const deleteMessage = (data, messageStore) => {
+  try {
+    const messages = messageStore.getMessages;
+    if (data.parent_message_id) {
+      const message = messageStore.getMessages.find(
+        m => m.id === data.parent_message_id
+      );
+      const findThreadMessageIndex = message.replies.findIndex(m => m.id === data.id);
+      if (findThreadMessageIndex) {
+        message.replies.splice(findThreadMessageIndex, 1);
+      }
+    } else {
+      const findMessageIndex = messageStore.getMessages.findIndex(
+        m => m.id === data.id
+      );
+      if (findMessageIndex) {
+        messages.splice(findMessageIndex, 1);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const createReaction = (data, messageStore) => {
   try {
     let messages = messageStore.getMessages;
@@ -33,6 +57,7 @@ const createReaction = (data, messageStore) => {
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
+  MessageDelete: deleteMessage,
 };
 
 export const cableActions = data => {

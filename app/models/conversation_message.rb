@@ -12,10 +12,10 @@ class ConversationMessage < ApplicationRecord
   has_many_attached :message_attachments, dependent: :purge_later
 
   has_many :replies, class_name: 'ConversationMessage',
-                     foreign_key: :parent_message_id, dependent: :destroy
-  has_many :saved_items
-  has_many :reactions, dependent: :destroy
-  has_one :pin, dependent: :destroy
+                     foreign_key: :parent_message_id, dependent: :delete_all
+  has_many :saved_items, dependent: :delete_all
+  has_many :reactions, dependent: :delete_all
+  has_one :pin, dependent: :delete
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
