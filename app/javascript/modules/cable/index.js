@@ -7,7 +7,7 @@ const createMessage = (data, messageStore) => {
       const message = messages.find(m => m.id === data.parent_message_id);
       message.replies.push(data);
     } else {
-      const findMessage = messageStore.getMessages.find(m => m.id === data.id);
+      const findMessage = messages.find(m => m.id === data.id);
       if (findMessage == undefined) {
         messageStore.addMessage(data);
       }
@@ -21,18 +21,17 @@ const deleteMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
     if (data.parent_message_id) {
-      const message = messageStore.getMessages.find(
-        m => m.id === data.parent_message_id
+      const message = messages.find(m => m.id === data.parent_message_id);
+      const findThreadMessageIndex = message.replies.findIndex(
+        m => m.id === data.id
       );
-      const findThreadMessageIndex = message.replies.findIndex(m => m.id === data.id);
-      if (findThreadMessageIndex) {
+      debugger;
+      if (findThreadMessageIndex != -1) {
         message.replies.splice(findThreadMessageIndex, 1);
       }
     } else {
-      const findMessageIndex = messageStore.getMessages.findIndex(
-        m => m.id === data.id
-      );
-      if (findMessageIndex) {
+      const findMessageIndex = messages.findIndex(m => m.id === data.id);
+      if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
       }
     }
@@ -43,8 +42,9 @@ const deleteMessage = (data, messageStore) => {
 
 const createReaction = (data, messageStore) => {
   try {
-    let messages = messageStore.getMessages;
-    messages = messages.flatMap(message => [message, message.replies]).flat();
+    let messages = messageStore.getMessages
+      .flatMap(message => [message, message.replies])
+      .flat();
     const message = messages.find(m => m.id === data.conversation_message_id);
     if (message) {
       message.reactions.push(data);

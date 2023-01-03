@@ -1,40 +1,23 @@
 class Pin < ApplicationRecord
-  include Cablable
-  after_create :set_action_create
-  after_update :set_action_update
-  after_destroy :set_action_delete
   after_commit :broadcast_pin
 
   belongs_to :conversation_message
   belongs_to :profile
   belongs_to :bench_conversation
 
+  private
+
   def broadcast_pin
-    pin = set_pin
     result = {
-      content: pin,
-      action: @action,
+      content: pin_content,
       type: 'Pin'
     }
-    result = append_conversation_type_and_id(bench_conversation, result)
+    result[:action] = created_at.eql?(updated_at) ? 'Create' : 'Update'
+    result[:action] = 'Delete' if destroyed?
     BroadcastMessageService.new(result, bench_conversation).call
   end
 
-  private
-
-  def set_action_delete
-    @action = 'Unpin'
-  end
-
-  def set_action_create
-    @action = 'Pin'
-  end
-
-  def set_action_update
-    @action = 'Update'
-  end
-
-  def set_pin
+  def pin_content
     {
       id: id,
       conversation_message_id: conversation_message_id,

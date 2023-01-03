@@ -1,8 +1,4 @@
 class ConversationMessage < ApplicationRecord
-  include Cablable
-  after_create :set_action_create
-  after_update :set_action_update
-  after_destroy :set_action_delete
   after_commit :broadcast_message
 
   belongs_to :bench_conversation
@@ -29,7 +25,7 @@ class ConversationMessage < ApplicationRecord
   }
 
   scope :chat_messages, lambda { |id|
-    where(parent_message_id: nil, bench_conversation_id: id).includes(:profile, :replies, :reactions).with_attached_message_attachments
+    includes(:profile, :replies, :reactions).where(parent_message_id: nil, bench_conversation_id: id).with_attached_message_attachments
   }
 
   def self.recent_last_conversation(conversation_ids)
@@ -40,25 +36,13 @@ class ConversationMessage < ApplicationRecord
 
   private
 
-  def set_action_delete
-    @action = 'Delete'
-  end
-
-  def set_action_create
-    @action = 'Create'
-  end
-
-  def set_action_update
-    @action = 'Update'
-  end
-
   def broadcast_message
     result = {
-      content: set_message,
-      action: @action,
+      content: message_content,
       type: 'Message'
     }
-    result = append_conversation_type_and_id(bench_conversation, result)
+    result[:action] = created_at.eql?(updated_at) ? 'Create' : 'Update'
+    result[:action] = 'Delete' if destroyed?
     BroadcastMessageService.new(result, bench_conversation).call
   end
 
@@ -73,11 +57,11 @@ class ConversationMessage < ApplicationRecord
     end
   end
 
-  def saved?(message)
-    Current.profile.saved_items.exists?(conversation_message_id: message.id)
+  def saved?(id)
+    Current.profile.saved_items.exists?(conversation_message_id: id)
   end
 
-  def set_message
+  def message_content
     message = {
       id: id,
       content: content,
@@ -89,7 +73,7 @@ class ConversationMessage < ApplicationRecord
       reactions: reactions,
       created_at: created_at,
       updated_at: updated_at,
-      isSaved: saved?(self),
+      isSaved: saved?(id),
       replies: replies,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,

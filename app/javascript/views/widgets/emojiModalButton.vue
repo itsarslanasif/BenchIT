@@ -40,7 +40,6 @@
 import options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
-import { cableActions } from '../../modules/cable';
 import { deleteMessage } from '../../api/messages';
 export default {
   name: 'EmojiModalButton',
@@ -74,7 +73,6 @@ export default {
             break;
           case 'delete-message':
             deleteMessage(message.id);
-            // cableActions(message)
             break;
           case 'pin-to-this-conversation':
             if (!pinnedConversationStore.isPinned(message)) {

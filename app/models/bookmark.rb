@@ -1,9 +1,5 @@
 class Bookmark < ApplicationRecord
-  include Cablable
   before_validation :set_profile
-  after_create :set_action_create
-  after_update :set_action_update
-  after_destroy :set_action_delete
   after_commit :broadcast_bookmark
 
   belongs_to :bookmarkable, polymorphic: true
@@ -16,50 +12,33 @@ class Bookmark < ApplicationRecord
     where(bookmarkable_id: bookmarkable_id, bookmarkable_type: bookmarkable_type)
   }
 
-  def broadcast_bookmark
-    result = {
-      content: set_bookmark,
-      action: @action,
-      type: 'Bookmark'
-    }
-    result = append_conversation_type_and_id(@conversation, result)
-    BroadcastMessageService.new(result, @conversation).call
-  end
-
   private
 
-  def set_profile
-    self.profile_id = Current.profile.id
-  end
-
-  def set_action_delete
-    @action = 'Delete'
-  end
-
-  def set_action_create
-    @action = 'Create'
-  end
-
-  def set_action_update
-    @action = 'Update'
-  end
-
-  def set_bookmark
-    bookmark = {
-      id: id,
-      name: name,
-      url: bookmark_URL
+  def broadcast_bookmark
+    result = {
+      content: bookmark_content,
+      type: 'Bookmark'
     }
-    bookmark_conversation
-    bookmark
-  end
-
-  def bookmark_conversation
+    result[:action] = created_at.eql?(updated_at) ? 'Create' : 'Update'
+    result[:action] = 'Delete' if destroyed?
     @conversation = case bookmarkable_type
                     when 'Profile'
                       BenchConversation.profile_to_profile_conversation(bookmarkable_id, profile_id)
                     else
                       bookmarkable.bench_conversation
                     end
+    BroadcastMessageService.new(result, @conversation).call
+  end
+
+  def set_profile
+    self.profile_id = Current.profile.id
+  end
+
+  def bookmark_content
+    {
+      id: id,
+      name: name,
+      url: bookmark_URL
+    }
   end
 end
