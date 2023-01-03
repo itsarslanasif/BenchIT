@@ -22,7 +22,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def join_public_channel
     if Current.profile.channel_participants.find_by(bench_channel_id: @channel.id)
-      return render json: { error: 'Already part of this channel.',
+      return render json: { error: 'Already part of this channel',
                             status: :unprocessable_entity }
     end
 
