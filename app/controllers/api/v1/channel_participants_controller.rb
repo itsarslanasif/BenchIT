@@ -45,7 +45,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_already_joined
-    is_channel_participant = @channel.channel_participants.pluck(:profile_id).include?(Current.profile.id)
+    is_channel_participant = @channel.profile_ids.include?(Current.profile.id)
 
     render json: { error: 'Already part of this channel.', status: :unprocessable_entity } if is_channel_participant
   end
