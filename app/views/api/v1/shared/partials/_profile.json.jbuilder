@@ -8,10 +8,7 @@ json.display_name profile.display_name
 json.pronounce_name profile.pronounce_name
 json.role profile.role
 json.title profile.title
-json.status do
-  json.text profile.text_status
-  json.emoji profile.emoji_status
-end
+json.status profile.profile_status
 json.contact_info do
   json.email profile.user.email
   json.phone profile.phone

@@ -3,7 +3,7 @@ class Workspace < ApplicationRecord
 
   has_many :profiles, dependent: :destroy
   has_many :users, through: :profiles, dependent: :destroy
-  has_many :workspace_statuses, foreign_key: :workspace_id
+  has_many :workspace_statuses
 
   enum workspace_type: {
     work: 0,

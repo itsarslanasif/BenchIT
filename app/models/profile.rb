@@ -26,8 +26,8 @@ class Profile < ApplicationRecord
   has_many :draft_messages, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
-  has_one :profile_status, dependent: :destroy, foreign_key: :profile_id
-  has_many :recent_statuses, dependent: :destroy, foreign_key: :profile_id
+  has_one :profile_status, dependent: :destroy
+  has_many :recent_statuses, dependent: :destroy
 
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
 

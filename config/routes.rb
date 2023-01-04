@@ -57,7 +57,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :statuses, only: %i[create destroy]
+        resources :statuses, only: %i[index create destroy]
         resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create index]
