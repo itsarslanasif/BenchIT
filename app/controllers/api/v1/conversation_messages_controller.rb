@@ -6,6 +6,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
   before_action :profile_check, only: %i[destroy update]
+  before_action :member_check, only: %i[destroy update]
 
   def send_message
     @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
@@ -128,8 +129,19 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def profile_check
-    return if @message.profile_id.eql?(Current.profile.id)
+    return if @message.sender_id.eql?(Current.profile.id)
 
     render json: { message: 'Sorry, this message is not your', status: :unprocessable_entity }
+  end
+
+  def member_check
+    profile_ids = if @message.bench_conversation.conversationable_type.eql?('Profile')
+                    [@message.bench_conversation.conversationable_id, @message.bench_conversation.sender_id]
+                  else
+                    @message.bench_conversation.conversationable.profile_ids
+                  end
+    return if profile_ids.include?(Current.profile.id)
+
+    render json: { message: 'Sorry, Right now you are not part of this', status: :unprocessable_entity }
   end
 end
