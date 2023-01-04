@@ -42,7 +42,7 @@
         <div 
           class="py-3 px-1" 
           v-if="showButton && isChannelParticipant(channel.profiles)" 
-          @click="handleLeave"
+          @click="handleLeave(channel.id)"
           >
           <n-button type="error">{{ $t('actions.leave') }}</n-button>
         </div>
@@ -95,8 +95,8 @@ export default {
       goToChannel(channel_id);
     };
 
-    const handleLeave = async () => {
-      await channelStore.leaveChannel(currentProfile.value.id);
+    const handleLeave = async (channel_id) => {
+      await channelStore.leaveChannel(channel_id);
       router.push('/');
     }
 

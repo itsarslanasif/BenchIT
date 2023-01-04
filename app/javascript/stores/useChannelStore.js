@@ -40,7 +40,8 @@ export const useChannelStore = () => {
 
       async joinChannel(channel_id) {
         try {
-          return await memberJoinChannel(channel_id);
+          const res = await memberJoinChannel(channel_id);
+          this.channels.push(res.data.channel);
         } catch (e) {
           console.error(e);
         }
