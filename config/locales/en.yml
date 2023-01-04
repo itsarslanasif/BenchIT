@@ -97,6 +97,7 @@ en:
         skype: 'Skype'
         add_skype: '+ Add skype'
         local_time: 'local time'
+        edit_contact_information: 'Edit Contact information'
         contact_information: 'Contact information'
         email_address: 'Email Address'
         add_email: '+ Add Email'
@@ -182,11 +183,13 @@ en:
         save_items: 'Added to your saved items'
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
+        save_changes: 'Save Changes'
       members:
         search_by_name: 'Search By Name'
         add_members_modal_title : 'Add members to #channel'
       placeholder:
         email: 'Email'
+        phone: 'Phone'
         workspace: 'acme@benchit.com'
       profile:
         contact_information: 'Contact Information'
