@@ -148,6 +148,12 @@
         </span>
       </span>
     </span>
+    <EditContactInfoModal
+      v-if="showContactInfoModal"
+      v-model:show="showContactInfoModal"
+      :toggleModal="toggleEditContactInfoModal"
+      :userContactInfo="userProfileStore.user_profile.contact_info"
+    />
   </div>
 </template>
 
@@ -156,7 +162,8 @@ import { NDivider, NTooltip } from 'naive-ui';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-
+import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
+import { ref } from 'vue';
 export default {
   components: { RightPaneHeader, NDivider, NTooltip },
   setup() {

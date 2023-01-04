@@ -83,11 +83,8 @@
 <script>
 import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
-import { switchWorkspace } from '../../api/switchWorkspace/switchWorkspace.js';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
-import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 
 export default {
   name: 'UserSignIn',
@@ -123,28 +120,19 @@ export default {
         commit: 'Log in',
       }).then(res => {
         if (res.headers.authorization) {
-          sessionStorage.setItem('token', res.headers.authorization);
+          localStorage.setItem('token', res.headers.authorization);
+          localStorage.setItem('currentUser', JSON.stringify(res.data.user));
         }
         this.response = res.data;
         if (res.data?.user) {
           const currentUser = useCurrentUserStore();
           currentUser.setUser(res.data.user);
-          this.getProfile();
+          this.goToWorkspaces();
         }
       });
     },
-    goToHomepage() {
-      this.$router.push('/');
-    },
-    async getProfile() {
-      const currentProfileStore = useCurrentProfileStore();
-      const currentWorkspaceStore = useCurrentWorkspaceStore();
-      try {
-        this.currentProfile = await switchWorkspace(1);
-      } catch (e) {}
-      currentProfileStore.setProfile(this.currentProfile);
-      currentWorkspaceStore.setWorkspace(this.currentProfile);
-      this.goToHomepage();
+    goToWorkspaces() {
+      this.$router.push('/workspace_dashboard');
     },
   },
 };

@@ -10,7 +10,7 @@ export const joinWorkspace = async (workspace_id, username, description) => {
         workspace_id: workspace_id,
       },
       {
-        headers: { Authorization: sessionStorage.getItem('token') },
+        headers: { Authorization: localStorage.getItem('token') },
       }
     )
     .then(response => {

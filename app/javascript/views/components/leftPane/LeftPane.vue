@@ -15,6 +15,11 @@
         :name="$t('sidebar.save_message')"
         @click="getdata(`/savemessages`)"
       />
+      <IconElement
+        icon="&#xf292;"
+        :name="$t('sidebar.all_channels')"
+        @click="getdata(`/browse-channels`)"
+      />
       <IconElement icon="&#8285;" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />
@@ -32,7 +37,7 @@ import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vu
 
 export default {
   components: { ChannelsAccordion, IconElement, DirectMessageAccordian },
-
+  
   methods: {
     getdata(chatURL) {
       this.$router.push(chatURL);
@@ -45,3 +50,4 @@ export default {
   height: 88vh;
 }
 </style>
+
