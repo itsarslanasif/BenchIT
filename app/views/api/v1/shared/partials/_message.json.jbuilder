@@ -7,6 +7,8 @@ json.updated_at message.updated_at
 json.is_edited message.created_at != message.updated_at
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.isSaved saved?(message)
+json.pinned message.pin.present?
+json.pinned_by message.pin.profile.username if message.pin.present?
 json.receiver_name @receiver.username if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
 json.replies message.replies do |reply|

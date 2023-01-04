@@ -31,6 +31,15 @@ class ConversationMessage < ApplicationRecord
                                                                              two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
   end
 
+  def message_content
+    message = model_basic_content
+    message[:pinned_by] = pin.profile.username if pin.present?
+    message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
+    message[:attachments] = attach_message_attachments if message_attachments.present?
+
+    message
+  end
+
   private
 
   def broadcastable_content
@@ -90,22 +99,9 @@ class ConversationMessage < ApplicationRecord
     end
   end
 
-  def saved?(id)
-    Current.profile.saved_items.exists?(conversation_message_id: id)
-  end
-
-  def message_content
-    message = message_basic_content
-    message[:attachments] = attach_message_attachments if message_attachments.present?
-    message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
-
-    message
-  end
-
-  def message_basic_content
+  def model_basic_content
     {
-      id: id,
-      content: content,
+      id: id, content: content,
       is_threaded: is_threaded,
       is_edited: created_at != updated_at,
       parent_message_id: parent_message_id,
@@ -115,10 +111,15 @@ class ConversationMessage < ApplicationRecord
       created_at: created_at,
       updated_at: updated_at,
       isSaved: saved?(id),
+      pinned: pin.present?,
       replies: replies,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,
       conversationable_id: bench_conversation.conversationable_id
     }
+  end
+
+  def saved?(id)
+    Current.profile.saved_items.exists?(conversation_message_id: id)
   end
 end
