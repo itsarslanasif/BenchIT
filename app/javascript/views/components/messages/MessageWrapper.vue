@@ -24,7 +24,7 @@
       @mouseleave="emojiModalStatus = false"
     >
       <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal :profile_id='currMessage.sender_id' />
+        <user-profile-modal :profile_id="currMessage.sender_id" />
       </template>
       <span class="message">
         <div class="ml-1">
@@ -66,12 +66,32 @@
             </div>
           </div>
         </div>
-        <template v-for="emoji in allReactions" :key="emoji.id">
-          <span
-            @click="emojiClickListener(emoji)"
-            class="bg-black-300 p-1 mr-1 rounded"
-            >{{ emoji.emoji }}</span
+        {{ displayReaction }}
+        <template v-for="emoji in displayedReactions" :key="emoji">
+          <div
+            @click="addReaction(emoji)"
+            :class="{ 'ml-12 reaction-margin': isSameUser && isSameDayMessage }"
+            class="mt-1 inline-flex bg-black-200 mr-1 w-10 h-7 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
+            <n-tooltip
+              placement="top"
+              :style="{ width: '150px' }"
+              trigger="hover"
+            >
+              <template #trigger>
+                <n-text class="ml-1"
+                  >{{ emoji }}
+                  <span class="text-xs ml-1">{{
+                    countReaction(emoji)
+                  }}</span></n-text
+                >
+              </template>
+              <div>
+                {{ getUsers(emoji, currentUserStore.currentUser.name) }} reacted
+                with {{ emoji }}
+              </div>
+            </n-tooltip>
+          </div>
         </template>
         <div
           v-if="currMessage?.replies?.length > 0"
@@ -130,7 +150,7 @@
 
 <script>
 import moment from 'moment';
-import { NAvatar, NCard, NDivider } from 'naive-ui';
+import { NAvatar, NCard, NDivider, NTooltip, NButton, NText } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -146,6 +166,7 @@ import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
+import emojiModalButtonVue from '../../widgets/emojiModalButton.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -162,7 +183,7 @@ export default {
       savedItemsStore,
       currentUserStore,
       rightPaneStore,
-      userProfileStore
+      userProfileStore,
     };
   },
   components: {
@@ -172,6 +193,9 @@ export default {
     EmojiPicker,
     EmojiModalButton,
     UserProfileModal,
+    NTooltip,
+    NButton,
+    NText,
   },
   props: {
     currMessage: {
@@ -203,6 +227,8 @@ export default {
       openEmojiModal: false,
       allReactions: this.currMessage.reactions,
       showOptions: false,
+      displayedReactions: [],
+      users: this.currMessage.reaction_users,
     };
   },
   beforeUnmount() {
@@ -232,26 +258,51 @@ export default {
     repliesCount() {
       return `${this.currMessage.replies?.length} replies..`;
     },
+    displayReaction() {
+      if (this.allReactions !== undefined) {
+        const unique = this.allReactions.filter(element => {
+          const isDuplicate = this.displayedReactions.includes(element.emoji);
+          if (!isDuplicate) {
+            this.displayedReactions.push(element.emoji);
+            return true;
+          }
+          return false;
+        });
+      }
+    },
   },
   methods: {
     async addReaction(emoji) {
-      try {
-        await add_reaction(this.currMessage.id, emoji.i);
-      } catch (e) {
-        console.error(e);
+      let temp = null;
+      if (typeof emoji === 'object') {
+        temp = emoji.i;
+      } else {
+        temp = emoji;
       }
-    },
-    async emojiClickListener(emoji) {
-      try {
-        if (emoji.user_id == this.currentUserStore.currentUser.id) {
-          await remove_reaction(emoji.id).then(() => {
-            this.allReactions = this.allReactions.filter(function (reaction) {
-              return reaction.id != emoji.id;
-            });
+      let emoji_id = null;
+      if (
+        this.allReactions.some(reaction => {
+          return (
+            (emoji_id = reaction.id),
+            reaction.emoji === temp &&
+              reaction.profile_id === this.currentUserStore.currentUser.id
+          );
+        })
+      ) {
+        await remove_reaction(emoji_id).then(() => {
+          this.allReactions = this.allReactions.filter(function (reaction) {
+            return reaction.id != emoji_id;
           });
-        }
-      } catch (e) {
-        console.error(e);
+        });
+        this.removeUser(temp, this.currentUserStore.currentUser.name);
+      } else {
+        await add_reaction(this.currMessage.id, temp).then(response => {
+          this.allReactions.push(response.data);
+          this.users.push({
+            username: this.currentUserStore.currentUser.name,
+            reaction: temp,
+          });
+        });
       }
     },
 
@@ -297,6 +348,50 @@ export default {
         console.error(e);
       }
     },
+    countReaction(emoji) {
+      const filteredReactions = this.allReactions.filter(function (value) {
+        return value.emoji === emoji;
+      });
+      if (filteredReactions.length === 0) {
+        this.displayedReactions = this.displayedReactions.filter(function (
+          reaction
+        ) {
+          return reaction != emoji;
+        });
+      }
+      return filteredReactions.length;
+    },
+    getUsers(emoji, name) {
+      if (this.users !== undefined) {
+        let users = this.users
+          .filter(function (profile) {
+            return profile.reaction === emoji;
+          })
+          .map(function (profile) {
+            if (profile.username === name) {
+              return 'you';
+            } else {
+              return profile.username;
+            }
+          });
+        const formatter = new Intl.ListFormat('en', {
+          style: 'long',
+          type: 'conjunction',
+        });
+        return formatter.format(users);
+      }
+    },
+    removeUser(emoji, name) {
+      this.users = this.users.filter(function (reaction) {
+        return (reaction.reaction !== emoji || reaction.username !== name);
+      });
+    },
   },
 };
 </script>
+<style scoped>
+.reaction-margin {
+  margin-right: -44px;
+}
+</style>
+
