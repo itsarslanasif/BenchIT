@@ -70,10 +70,28 @@ const createReaction = (data, messageStore) => {
   }
 };
 
+const deleteReaction = (data, messageStore) => {
+  try {
+    let messages = messageStore.getMessages
+      .flatMap(message => [message, message.replies])
+      .flat();
+    const message = messages.find(m => m.id === data.conversation_message_id);
+    const findMessageReactionIndex = message.reactions.findIndex(
+      r => r.id === data.id
+    );
+    if (message != -1) {
+      message.reactions.splice(findMessageReactionIndex, 1);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
   MessageDelete: deleteMessage,
+  ReactionDelete: deleteReaction,
   MessageUpdate: updateMessage,
 };
 
