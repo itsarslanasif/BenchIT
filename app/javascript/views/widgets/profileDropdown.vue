@@ -35,9 +35,10 @@
 import { NDropdown, NAvatar, NText } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
-import SetProfileStatusVue from '../components/profileStatus/setProfileStatus.vue';
+import SetProfileStatusVue from '../components/profileStatus/setProfileStatusT.vue';
 import { CONSTANTS } from '../../assets/constants';
 import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js'
+
 export default {
   components: { NDropdown, NAvatar ,SetProfileStatusVue },
   data() {
@@ -146,9 +147,7 @@ export default {
   methods: {
     handleSelect(key) {},
     handleStatusSelect(){
-      console.log("set profile status: selected")
-      this.profileStatusStore.toggleProfileStatusPopUp()
-      console.log("Toggle Profile Status popup:" ,this.profileStatusStore.showProfileStatusPopUp)
+     this.profileStatusStore.toggleProfileStatusPopUp()
     },
     renderCustomHeader() {
       return h(
