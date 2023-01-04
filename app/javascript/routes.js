@@ -36,6 +36,12 @@ const router = createRouter({
       meta: { auth: true },
     },
     {
+      path: '/members',
+      component: Members,
+      name: 'members',
+      meta: { auth: true },
+    },
+    {
       path: '/invite_user',
       component: EmailForm,
       name: 'invite_user',
@@ -57,12 +63,6 @@ const router = createRouter({
           path: '',
           component: LandingPage,
           name: 'landing_page',
-        },
-        {
-          path: '/members',
-          component: Members,
-          name: 'members',
-          meta: { auth: true },
         },
         {
           path: '/profiles/:id/:message_id?',
