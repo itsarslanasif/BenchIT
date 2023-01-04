@@ -56,7 +56,7 @@
             </div>
             <div
               class="items-end self-center py-2 px-4 rounded border-primary border hover:text-white hover:bg-primary duration-200 cursor-pointer"
-              @click="goToWorspaceHomepage(workspace)"
+              @click="goToWorkspaceDashboard(workspace)"
             >
               {{ $t('actions.open') }}
             </div>
@@ -98,12 +98,12 @@ export default {
     createWorkspace() {
       this.$router.push('/new_workspace');
     },
-    async goToWorspaceHomepage(workspace) {
-      let current = await switchWorkspace(workspace.id);
-      sessionStorage.setItem('currentProfile', JSON.stringify(current.profile));
+    async goToWorkspaceDashboard(workspace) {
+      let currentProfile = await switchWorkspace(workspace.id);
+      sessionStorage.setItem('currentProfile', JSON.stringify(currentProfile.profile));
       sessionStorage.setItem('currentWorkspace', JSON.stringify(workspace));
       this.currentWorkspace.setWorkspace(workspace);
-      this.currentProfile.setProfile(current);
+      this.currentProfile.setProfile(currentProfile);
       this.$router.push('/');
     },
   },
