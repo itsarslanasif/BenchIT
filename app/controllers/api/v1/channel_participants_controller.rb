@@ -26,7 +26,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     @channel_participant = ChannelParticipant.new(bench_channel_id: @channel.id, profile_id: Current.profile.id, permission: true)
 
     if @channel_participant.save
-      render json: { success: 'Channel joined successfully', status: :created }
+      render json: { success: 'Channel joined successfully', channel: @channel, status: :created }
     else
       render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
     end
