@@ -1,9 +1,12 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create]
+  before_action :set_bench_channel, only: %i[index create join_public_channel]
   before_action :check_channel_participants, only: %i[create]
+  before_action :check_workspace, only: %i[join_public_channel]
+  before_action :check_already_joined_channel, only: %i[join_public_channel]
+  before_action :check_private_channel, only: %i[join_public_channel]
 
   def index
-    @profiles = if params[:query].presence
+    @profiles = if params[:query].present?
                   Profile.search(
                     params[:query],
                     where: { id: @channel.channel_participants.pluck(:profile_id) },
@@ -19,10 +22,36 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     render status: :created, json: { members: @users_joined }
   end
 
+  def join_public_channel
+    @channel_participant = ChannelParticipant.new(bench_channel_id: @channel.id, profile_id: Current.profile.id, permission: true)
+
+    if @channel_participant.save
+      render json: { success: 'Channel joined successfully', channel: @channel, status: :created }
+    else
+      render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
+    end
+  end
+
   private
 
   def set_bench_channel
     @channel = BenchChannel.find(params[:bench_channel_id])
+  end
+
+  def check_workspace
+    return if Current.profile.workspace.eql?(@channel.workspace)
+
+    render json: { error: 'This Channel is not part of your workspace.', status: :unprocessable_entity }
+  end
+
+  def check_already_joined_channel
+    is_channel_participant = @channel.profile_ids.include?(Current.profile.id)
+
+    render json: { error: 'Already part of this channel.', status: :unprocessable_entity } if is_channel_participant
+  end
+
+  def check_private_channel
+    return render json: { error: 'You cannot join Private Channel yourself.', status: :unprocessable_entity } if @channel.is_private?
   end
 
   def check_channel_participants

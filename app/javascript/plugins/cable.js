@@ -35,5 +35,9 @@ export const createCable = options => {
       },
     }
   );
-  return new Cable();
+  return new Cable(channel);
 };
+
+export const unsubscribe = () => {
+  channel.unsubscribe();
+}

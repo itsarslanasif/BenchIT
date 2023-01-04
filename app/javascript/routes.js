@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from 'vue-router';
 import Error404 from '@/views/pages/error_404.vue';
+import AllChannels from './views/pages/AllChannels.vue'
 import NewWorkspace from '@/views/components/workspace/NewWorkspace.vue';
 import JoinWorkspace from '@/views/components/workspace/JoinWorkspace.vue';
 import Members from '@/views/components/members/members.vue';
@@ -72,6 +73,12 @@ const router = createRouter({
           path: '/channels/:id/:message_id?',
           component: Chat,
           name: 'user-chat',
+        },
+        {
+          path: '/browse-channels',
+          component: AllChannels,
+          name: 'browse-channels',
+          meta: { auth: true },
         },
         {
           path: '/groups/:id/:message_id?',

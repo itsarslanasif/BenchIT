@@ -97,6 +97,7 @@ en:
         skype: 'Skype'
         add_skype: '+ Add skype'
         local_time: 'local time'
+        edit_contact_information: 'Edit Contact information'
         contact_information: 'Contact information'
         email_address: 'Email Address'
         add_email: '+ Add Email'
@@ -112,9 +113,6 @@ en:
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
-      channels:
-          channels: 'Channels'
-          add_new_channel: 'Add New Channel'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -130,12 +128,16 @@ en:
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
+        all_channels : 'All Channels'
         more: 'More'
         save_message: 'Save items'
       channels:
+        channels: 'Channels'
+        add_new_channel: 'Add New Channel'
+        search_by_name_or_desc : 'Search by channel name or description'
+        all_channels: 'All channels'
         selected_channels: 'Selected Channels'
         title: 'Channels'
-        add_new_channel: 'Add New Channel'
         create_channel: 'Create a channel'
         add_channel_dialog:
           'Channels are where your team communicates. They’re best when
@@ -145,6 +147,7 @@ en:
         new_channel_name_placeholder: 'e.g plan-budget'
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
+        result: 'result(s)'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -168,6 +171,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        leave: 'Leave'
         update: 'Update'
         search: 'Search'
         continue: 'Continue'
@@ -178,6 +182,7 @@ en:
         huddle: 'Huddle'
         copied: 'Copied!'
         edit: 'Edit'
+        view: 'View'
         go: 'Go'
         set_a_status: 'Set a status'
         view_as: 'View as'
@@ -187,11 +192,13 @@ en:
         save_items: 'Added to your saved items'
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
+        save_changes: 'Save Changes'
       members:
         search_by_name: 'Search By Name'
         add_members_modal_title : 'Add members to #channel'
       placeholder:
         email: 'Email'
+        phone: 'Phone'
         workspace: 'acme@benchit.com'
         enter_workspace_url: 'your-workspace.slack.com'
       profile:
