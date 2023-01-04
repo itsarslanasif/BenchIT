@@ -11,8 +11,8 @@ export const useCurrentWorkspaceStore = () => {
     },
 
     actions: {
-      setWorkspace(currentProfile) {
-        this.currentWorkspace = currentProfile.workspace;
+      setWorkspace(workspace) {
+        this.currentWorkspace = workspace;
       },
     },
   });

@@ -63,7 +63,7 @@ export default {
   mounted() {
     axios
       .get(`v1/bench_channels/${1}/bookmarks`, {
-        headers: { Authorization: sessionStorage.getItem('token') },
+        headers: { Authorization: localStorage.getItem('token') },
       })
       .then(response => {
         this.bookmarks = response.data.bookmarks;
@@ -108,7 +108,7 @@ export default {
         .post(
           `v1/bench_channels/${1}/bookmarks`,
           {
-            headers: { Authorization: sessionStorage.getItem('token') },
+            headers: { Authorization: localStorage.getItem('token') },
           },
           {
             name: value.name,
