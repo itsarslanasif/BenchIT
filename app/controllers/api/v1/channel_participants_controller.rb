@@ -2,8 +2,8 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :set_bench_channel, only: %i[index create join_public_channel]
   before_action :check_channel_participants, only: %i[create]
   before_action :check_workspace, only: %i[join_public_channel]
-  before_action :check_already_joined, only: %i[join_public_channel]
-  before_action :check_is_private, only: %i[join_public_channel]
+  before_action :check_already_joined_channel, only: %i[join_public_channel]
+  before_action :check_private_channel, only: %i[join_public_channel]
 
   def index
     @profiles = if params[:query].present?
@@ -44,13 +44,13 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     render json: { error: 'This Channel is not part of your workspace.', status: :unprocessable_entity }
   end
 
-  def check_already_joined
+  def check_already_joined_channel
     is_channel_participant = @channel.profile_ids.include?(Current.profile.id)
 
     render json: { error: 'Already part of this channel.', status: :unprocessable_entity } if is_channel_participant
   end
 
-  def check_is_private
+  def check_private_channel
     return render json: { error: 'You cannot join Private Channel yourself.', status: :unprocessable_entity } if @channel.is_private?
   end
 
