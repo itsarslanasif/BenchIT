@@ -27,70 +27,29 @@
         <p class="float-left text-md break-words text-black-800">{{userProfileStore.userProfile?.local_time}} {{$t('rightpane.local_time')}}</p>
       </span>
       <span class="flex float-left mt-2">
-        <button
-          class="flex border border-black-800 rounded h-10 px-10 ml-4 hover:bg-transparent focus:outline-none"
-        >
-          <font-awesome-icon
-            v-if="!ownProfile"
-            icon="fa-comment-dots"
-            class="self-center text-lg pr-1"
-          />
-          <p class="self-center text-md">
-            {{
-              ownProfile ? $t('actions.set_a_status') : $t('actions.message')
-            }}
-          </p>
+        <button class="flex border border-black-800 rounded h-10 px-10 ml-4 hover:bg-transparent focus:outline-none">
+          <font-awesome-icon v-if="!ownProfile" icon="fa-comment-dots" class="self-center text-lg pr-1" />
+          <p class="self-center text-md">{{ownProfile ? $t('actions.set_a_status') : $t('actions.message')}}</p>
         </button>
-        <button
-          class="flex border border-black-800 rounded h-10 ml-2 hover:bg-transparent focus:outline-none"
-        >
-          <font-awesome-icon
-            v-if="!ownProfile"
-            icon="fa-headphones"
-            class="self-center text-lg pr-1 pl-8"
-          />
-          <p class="pr-6 self-center text-md" :class="{ 'pl-8': ownProfile }">
-            {{ ownProfile ? $t('actions.view_as') : $t('actions.huddle') }}
-          </p>
-          <font-awesome-icon
-            icon="fa-chevron-down"
-            class="self-center text-xs pr-2"
-          />
+        <button class="flex border border-black-800 rounded h-10 ml-2 hover:bg-transparent focus:outline-none">
+          <font-awesome-icon v-if="!ownProfile" icon="fa-headphones" class="self-center text-lg pr-1 pl-8" />
+          <p class="pr-6 self-center text-md" :class="{'pl-8' : ownProfile}">{{ ownProfile ? $t('actions.view_as') : $t('actions.huddle') }}</p>
+          <font-awesome-icon icon="fa-chevron-down" class="self-center text-xs pr-2" />
         </button>
-        <button
-          class="flex border border-black-800 rounded h-10 px-4 ml-2 hover:bg-transparent focus:outline-none"
-        >
-          <font-awesome-icon
-            icon="fa-ellipsis-vertical"
-            class="self-center text-lg"
-          />
+        <button class="flex border border-black-800 rounded h-10 px-4 ml-2 hover:bg-transparent focus:outline-none">
+          <font-awesome-icon icon="fa-ellipsis-vertical" class="self-center text-lg" />
         </button>
       </span>
     </div>
     <n-divider v-if="userProfileStore.userProfile?.contact_info" />
-    <span
-      v-if="userProfileStore.userProfile?.contact_info"
-      class="flex flex-col float-left mx-4 mb-2 text-black-800"
-    >
+    <span v-if="userProfileStore.userProfile?.contact_info" class="flex flex-col float-left mx-4 mb-2 text-black-800">
       <span class="grid grid-cols-12">
-        <p class="col-span-11 font-bold text-md break-words">
-          {{ $t('rightpane.contact_information') }}
-        </p>
-        <p
-          v-if="ownProfile"
-          class="col-span-1 self-center text-info cursor-pointer hover:underline"
-        >
-          {{ $t('actions.edit') }}
-        </p>
+        <p class="col-span-11 font-bold text-md break-words">{{$t('rightpane.contact_information')}}</p>
+        <p v-if="ownProfile" @click="toggleEditContactInfoModal" class="col-span-1 self-center text-info cursor-pointer hover:underline">{{$t('actions.edit')}}</p>
       </span>
-      <span
-        class="hover-trigger grid grid-cols-8 float-left mt-2 text-black-800"
-      >
-        <font-awesome-icon
-          icon="fa-envelope"
-          class="col-span-1 self-center text-lg p-3 bg-transparent rounded-md"
-        />
-        <span class="col-span-2 float-left text-lg text-black-800">
+      <span class="hover-trigger grid grid-cols-8 float-left mt-2 text-black-800">
+        <font-awesome-icon icon="fa-envelope" class="col-span-1 self-center text-lg p-3 bg-transparent rounded-md" />
+        <span class="col-span-2 -ml-4 float-left text-lg text-black-800">
           <p class="text-sm">{{$t('rightpane.email_address')}}</p>
           <p v-if='userProfileStore.userProfile?.contact_info?.email' id="email_address" class="text-sm text-info cursor-pointer hover:underline">{{userProfileStore.userProfile?.contact_info?.email}}</p>
           <p v-if="ownProfile && !userProfileStore.userProfile?.contact_info?.email" class="text-sm text-info cursor-pointer hover:underline">{{$t('rightpane.add_email')}}</p>
@@ -100,17 +59,12 @@
           <template #trigger>
             <font-awesome-icon v-if='userProfileStore.userProfile?.contact_info?.email' @click="copyEmailAddress" icon="fa-copy" class="hover-target col-span-1 self-center text-lg p-2 mr-2 float-right cursor-pointer bg-transparent rounded-md focus:outline-none" />
           </template>
-          <span> {{ $t('actions.copied') }}</span>
+          <span> {{$t('actions.copied')}} </span>
         </n-tooltip>
       </span>
-      <span
-        class="hover-trigger grid grid-cols-8 float-left text-lg mt-2 text-black-800"
-      >
-        <font-awesome-icon
-          icon="fa-phone"
-          class="col-span-1 self-center text-lg p-3 bg-transparent rounded-md"
-        />
-        <span class="col-span-2 float-left text-lg text-black-800">
+      <span class="hover-trigger grid grid-cols-8 float-left text-lg mt-2 text-black-800">
+        <font-awesome-icon icon="fa-phone" class="col-span-1 self-center text-lg p-3 bg-transparent rounded-md" />
+        <span class="col-span-2 -ml-4 float-left text-lg text-black-800">
           <p class="text-sm">{{$t('rightpane.phone')}}</p>
           <p v-if='userProfileStore.userProfile?.contact_info?.phone' id="phone_number" class="text-sm text-info cursor-pointer hover:underline">{{userProfileStore.userProfile?.contact_info?.phone}}</p>
           <p v-if="ownProfile && !userProfileStore.userProfile?.contact_info?.phone" class="text-sm text-info cursor-pointer hover:underline">{{$t('rightpane.add_phone')}}</p>
@@ -120,25 +74,16 @@
           <template #trigger>
             <font-awesome-icon v-if='userProfileStore.userProfile?.contact_info?.phone' @click="copyPhoneNumber" icon="fa-copy" class="hover-target col-span-1 self-center text-lg p-2 mr-2 float-right cursor-pointer bg-transparent rounded-md focus:outline-none" />
           </template>
-          <span> {{ $t('actions.copied') }} </span>
+          <span> {{$t('actions.copied')}} </span>
         </n-tooltip>
       </span>
+
     </span>
-    <n-divider v-if="userProfileStore.userProfile?.about_me" />
-    <span
-      v-if="userProfileStore.userProfile?.about_me"
-      class="flex flex-col float-left mx-4 mb-2 text-black-800"
-    >
+    <n-divider v-if="userProfileStore.userProfile?.about_me"/>
+    <span v-if="userProfileStore.userProfile?.about_me" class="flex flex-col float-left mx-4 mb-2 text-black-800">
       <span class="grid grid-cols-12">
-        <p class="col-span-11 font-bold text-md break-words">
-          {{ $t('rightpane.about_me') }}
-        </p>
-        <p
-          v-if="ownProfile"
-          class="col-span-1 self-center text-info cursor-pointer hover:underline"
-        >
-          {{ $t('actions.edit') }}
-        </p>
+        <p class="col-span-11 font-bold text-md break-words">{{$t('rightpane.about_me')}}</p>
+        <p v-if="ownProfile" class="col-span-1 self-center text-info cursor-pointer hover:underline">{{$t('actions.edit')}}</p>
       </span>
       <span class="grid grid-cols-8 float-left mt-2 text-black-800">
         <span class="col-span-2 float-left text-md text-black-800">
@@ -148,12 +93,7 @@
         </span>
       </span>
     </span>
-    <EditContactInfoModal
-      v-if="showContactInfoModal"
-      v-model:show="showContactInfoModal"
-      :toggleModal="toggleEditContactInfoModal"
-      :userContactInfo="userProfileStore.user_profile.contact_info"
-    />
+      <EditContactInfoModal v-if="showContactInfoModal" v-model:show="showContactInfoModal" :toggleModal="toggleEditContactInfoModal" :userContactInfo='userProfileStore.userProfile.contact_info' />
   </div>
 </template>
 
@@ -162,24 +102,26 @@ import { NDivider, NTooltip } from 'naive-ui';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
-import { ref } from 'vue';
+import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue'
+
 export default {
-  components: { RightPaneHeader, NDivider, NTooltip },
-  setup() {
-    const userProfileStore = useUserProfileStore();
-    const currentProfileStore = useCurrentProfileStore();
-    return { userProfileStore, currentProfileStore };
+  components: { RightPaneHeader, NDivider, NTooltip, EditContactInfoModal },
+  data(){
+    return{
+      showContactInfoModal: false
+    }
   },
-  computed: {
-    ownProfile() {
-      return (
-        this.currentProfileStore.currentProfile.id ===
-        this.userProfileStore.userProfile.id
-      );
-    },
+  setup(){
+    const userProfileStore = useUserProfileStore()
+    const currentProfileStore = useCurrentProfileStore()
+    return { userProfileStore, currentProfileStore }
   },
-  methods: {
+  computed:{
+    ownProfile(){
+      return this.currentProfileStore.currentProfile.id === this.userProfileStore.userProfile.id
+    }
+  },
+  methods:{
     copyEmailAddress() {
       let element = document.getElementById('email_address');
       this.copyTextClipBoard(element.textContent);
@@ -189,9 +131,12 @@ export default {
       this.copyTextClipBoard(element.textContent);
     },
     copyTextClipBoard(text) {
-      navigator.clipboard.writeText(text);
+      navigator.clipboard.writeText(text)
     },
-  },
+    toggleEditContactInfoModal(){
+      this.showContactInfoModal = !this.showContactInfoModal
+    }
+  }
 };
 </script>
 
