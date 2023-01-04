@@ -70,6 +70,9 @@
     <n-divider v-if="userProfileStore.userProfile?.contact_info" />
     <span
       v-if="userProfileStore.userProfile?.contact_info"
+    <n-divider v-if="userProfileStore.user_profile?.contact_info" />
+    <span
+      v-if="userProfileStore.user_profile?.contact_info"
       class="flex flex-col float-left mx-4 mb-2 text-black-800"
     >
       <span class="grid grid-cols-12">
@@ -78,6 +81,7 @@
         </p>
         <p
           v-if="ownProfile"
+          @click="toggleEditContactInfoModal"
           class="col-span-1 self-center text-info cursor-pointer hover:underline"
         >
           {{ $t('actions.edit') }}
@@ -148,6 +152,12 @@
         </span>
       </span>
     </span>
+    <EditContactInfoModal
+      v-if="showContactInfoModal"
+      v-model:show="showContactInfoModal"
+      :toggleModal="toggleEditContactInfoModal"
+      :userContactInfo="userProfileStore.user_profile.contact_info"
+    />
   </div>
 </template>
 
@@ -156,19 +166,22 @@ import { NDivider, NTooltip } from 'naive-ui';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
-
+import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
+import { ref } from 'vue';
 export default {
-  components: { RightPaneHeader, NDivider, NTooltip },
+  components: { RightPaneHeader, NDivider, NTooltip, EditContactInfoModal },
   setup() {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();
-    return { userProfileStore, currentProfileStore };
+    const showContactInfoModal = ref(false);
+    return { userProfileStore, currentProfileStore, showContactInfoModal };
   },
   computed: {
     ownProfile() {
       return (
         this.currentProfileStore.currentProfile.id ===
         this.userProfileStore.userProfile.id
+
       );
     },
   },
@@ -183,6 +196,9 @@ export default {
     },
     copyTextClipBoard(text) {
       navigator.clipboard.writeText(text);
+    },
+    toggleEditContactInfoModal() {
+      this.showContactInfoModal = !this.showContactInfoModal;
     },
   },
 };

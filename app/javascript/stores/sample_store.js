@@ -12,7 +12,7 @@ export const SampleStore = defineStore('users', {
     async index() {
       return this.axios
         .get('/users', {
-          headers: { Authorization: sessionStorage.getItem('token') },
+          headers: { Authorization: localStorage.getItem('token') },
         })
         .then(response => {
           this.users = response.data.users;
@@ -21,7 +21,7 @@ export const SampleStore = defineStore('users', {
     async show(id) {
       return this.axios
         .get(`/user/${id}`, {
-          headers: { Authorization: sessionStorage.getItem('token') },
+          headers: { Authorization: localStorage.getItem('token') },
         })
         .then(response => {
           this.user = response.data.user;
