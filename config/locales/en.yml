@@ -113,9 +113,6 @@ en:
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
-      channels:
-          channels: 'Channels'
-          add_new_channel: 'Add New Channel'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -128,12 +125,16 @@ en:
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
+        all_channels : 'All Channels'
         more: 'More'
         save_message: 'Save items'
       channels:
+        channels: 'Channels'
+        add_new_channel: 'Add New Channel'
+        search_by_name_or_desc : 'Search by channel name or description'
+        all_channels: 'All channels'
         selected_channels: 'Selected Channels'
         title: 'Channels'
-        add_new_channel: 'Add New Channel'
         create_channel: 'Create a channel'
         add_channel_dialog:
           'Channels are where your team communicates. They’re best when
@@ -143,6 +144,7 @@ en:
         new_channel_name_placeholder: 'e.g plan-budget'
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
+        result: 'result(s)'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -166,6 +168,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        leave: 'Leave'
         update: 'Update'
         search: 'Search'
         delete: 'Delete'
@@ -174,6 +177,7 @@ en:
         huddle: 'Huddle'
         copied: 'Copied!'
         edit: 'Edit'
+        view: 'View'
         go: 'Go'
         set_a_status: 'Set a status'
         view_as: 'View as'
