@@ -1,5 +1,5 @@
 <template>
-  <div class="overflow-auto chatBody" ref="body">
+  <div class="overflow-auto chatBody" ref="chatBody">
     <PinnedConversationModel />
     <div v-for="message in messages" :key="message.id" :id="getDate(message.created_at)">
       {{ setMessage(message) }}
@@ -123,7 +123,7 @@ export default {
       return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
     scrollToEnd() {
-      var body = this.$refs.body;
+      let body = this.$refs.chatBody;
       body.scrollTop = body.scrollHeight;
     },
   },
