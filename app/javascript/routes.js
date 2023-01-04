@@ -1,5 +1,4 @@
 import { createWebHistory, createRouter } from 'vue-router';
-import PageIndex from '@/views/pages/index.vue';
 import Error404 from '@/views/pages/error_404.vue';
 import NewWorkspace from '@/views/components/workspace/NewWorkspace.vue';
 import JoinWorkspace from '@/views/components/workspace/JoinWorkspace.vue';
@@ -15,7 +14,9 @@ import NewDirectMessages from '@/views/components/directMessages/findDirectMessa
 import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue';
 import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue';
 import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue';
-
+import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js'
+import { useCurrentUserStore } from './stores/useCurrentUserStore.js'
+import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js'
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
   routes: [
@@ -106,8 +107,8 @@ const router = createRouter({
     {
       path: '/workspace_dashboard',
       component: WorkspaceDashboard,
-      name: 'workspace_dashboard',
-      meta: { auth: true },
+      name: 'workspace-dashboard',
+      meta: { auth: false },
     },
     {
       path: '/sign_in/',
@@ -118,9 +119,23 @@ const router = createRouter({
   ],
 });
 router.beforeEach((to, from, next) => {
-  if (!sessionStorage.getItem('token') && to.meta.auth) {
+  const currentUserStore = useCurrentUserStore()
+  const currentProfileStore = useCurrentProfileStore()
+  const currentWorkspaceStore = useCurrentWorkspaceStore()
+
+  const currentWorkspace = JSON.parse(sessionStorage.getItem('currentWorkspace'))
+  const currentProfile = JSON.parse(sessionStorage.getItem('currentProfile'))
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
+
+  currentProfileStore.setProfile({ profile: currentProfile })
+  currentUserStore.setUser(currentUser)
+  currentWorkspaceStore.setWorkspace(currentWorkspace)
+
+  if (!localStorage.getItem('token') && currentWorkspace === null && to.meta.auth) {
     next('/sign_in');
-  } else if (sessionStorage.getItem('token') && !to.meta.auth) {
+  } else if (localStorage.getItem('token') && currentWorkspace === null && to.meta.auth) {
+    next('/workspace_dashboard')
+  } else if (localStorage.getItem('token') && currentWorkspace !== null && !to.meta.auth) {
     next('/');
   } else {
     next();
