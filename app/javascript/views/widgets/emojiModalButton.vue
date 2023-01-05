@@ -8,7 +8,7 @@
           size="medium"
           trigger="click"
           :message="message"
-          :options="options"
+          :options="Options.getOptions()"
           @mouseleave="action"
           @select="handleSelect($event, message, pinnedConversationStore)"
         >
@@ -37,7 +37,7 @@
 </template>
 
 <script>
-import options from './options.js';
+import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { deleteMessage } from '../../api/messages';
@@ -56,6 +56,11 @@ export default {
   setup() {
     const pinnedConversationStore = usePinnedConversation();
     return { pinnedConversationStore };
+  },
+  beforeMount() {
+    if (this.message) {
+      this.Options = new Options(this.message.pinned);
+    }
   },
   data() {
     return {

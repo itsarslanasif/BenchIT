@@ -187,6 +187,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_113452) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "statuses", force: :cascade do |t|
+    t.string "text"
+    t.string "emoji"
+    t.string "clear_after"
+    t.integer "profile_id"
+    t.integer "type"
+    t.integer "workspace_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
