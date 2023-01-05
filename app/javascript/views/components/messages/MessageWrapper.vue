@@ -296,13 +296,7 @@ export default {
           );
         })
       ) {
-        await remove_reaction(emoji_id).then(() => {
-          this.currMessage.reactions = this.currMessage.reactions.filter(
-            function (reaction) {
-              return reaction.id != emoji_id;
-            }
-          );
-        });
+        await remove_reaction(emoji_id)
       } else {
         await add_reaction(this.currMessage.id, temp);
       }
