@@ -11,7 +11,7 @@
             type="text"
             :placeholder="$t('find_direct_messages.somebody')"
             ouline="none"
-            class="bg-secondary w-full ml-1"
+            class="bg-secondary w-full ml-1 focus:outline-none"
             v-model="query"
             @keyup.enter="searchQuery()"
           />
@@ -82,11 +82,4 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-textarea:focus,
-input:focus {
-  outline: none;
-}
-</style>
 

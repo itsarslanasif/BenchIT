@@ -2,35 +2,39 @@
   <div class="hover-trigger">
     <AccordionList class="my-5 ml-3 text-base text-slate-50">
       <AccordionItem default-opened="true">
-        <template #summary>
-          {{ $t('direct_messages.direct_messages') }}
-          <a
+        <template class="flex justify-between items-center" #summary>
+          <span class="ml-2 cursor-pointer">
+            {{ $t('direct_messages.direct_messages') }}
+          </span>
+          <font-awesome-icon
             @click="handleClick"
-            class="px-2 hover-target py-1 h-5 ml-10 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid"
-          >
-            +
-          </a>
+            icon="fa-plus"
+            class="hover-target px-2 p-2 float-right -ml-12 mr-4 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+          />
         </template>
         <h5
-          v-for="user in directMessageStore.directMessagesList"
-          :key="user.id"
+          v-for="user in sortedDMList"
+          :key="user?.id"
           class="hover:bg-primaryHover"
         >
           <div
-            @click="goToChat(`/profiles/${user.id}`, user)"
+            @click="goToChat(`/profiles/${user?.id}`, user)"
             class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
           >
-            <img class="w-6 h-6 rounded-md" :src="user.image_url" />
-            <p class="ml-2 text-sm text-white">{{ user.username }}</p>
+            <img class="w-6 h-6 rounded-md" :src="user?.image_url" />
+            <p class="ml-2 text-sm text-white">{{ user?.username }}</p>
+            <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
+              {{ $t('pinconversation.you') }}
+            </p>
           </div>
         </h5>
-        <div
-          class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
-          @click="closeModal"
-        >
-          <addTeammatesDropdown :items="options" />
-        </div>
       </AccordionItem>
+      <div
+        class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
+        @click="closeModal"
+      >
+        <addTeammatesDropdown :items="options" />
+      </div>
     </AccordionList>
   </div>
 </template>
@@ -61,7 +65,7 @@ export default {
   },
   mounted() {
     this.directMessageStore.getDmList(
-      this.currentProfileStore.currentProfile.workspace_id
+      this.currentProfileStore.currentProfile?.workspace_id
     );
   },
   beforeUnmount() {
@@ -71,6 +75,13 @@ export default {
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
     return { directMessageStore, currentProfileStore };
+  },
+  computed: {
+    sortedDMList() {
+      return this.directMessageStore.getSortedDMList(
+        this.currentProfileStore.currentProfile.id
+      );
+    },
   },
   methods: {
     closeModal() {
@@ -82,6 +93,9 @@ export default {
     },
     handleClick() {
       this.$router.push('/new_direct_message');
+    },
+    isOwnChat(user) {
+      return this.currentProfileStore.currentProfile?.id === user?.id;
     },
   },
 };

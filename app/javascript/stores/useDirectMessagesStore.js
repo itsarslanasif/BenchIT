@@ -6,7 +6,6 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     selectedDm: '',
     directMessagesList: [],
   }),
-
   getters: {
     getSelectedDm() {
       return this.selectedDm;
@@ -19,7 +18,6 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     appendToDirectMessagesList(member) {
       if (!this.checkDuplication(this.directMessagesList, member)) {
         this.directMessagesList.push(member);
-        this.sortDMList();
       }
     },
     checkDuplication(array, member) {
@@ -33,27 +31,51 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     async getDmList(workspace_id) {
       try {
         this.directMessagesList = await getDirectMessagesList(workspace_id);
-        this.sortDMList();
       } catch (e) {
         console.error(e);
       }
     },
-    sortDMList() {
+    getSortedDMList(currentProfileID) {
+      const ownChat = this.getOwnChat(currentProfileID);
+      const index = this.getIndexOfOwnChat(ownChat);
+      this.removeOwnChatFromList(index);
+      if (this.hasElementsToSort()) {
+        this.sort();
+      }
+      this.addOwnChatAtTop(ownChat);
+      return this.directMessagesList;
+    },
+    getOwnChat(currentProfileID) {
+      return this.directMessagesList.find(chat => chat.id === currentProfileID);
+    },
+    getIndexOfOwnChat(ownChat) {
+      return this.directMessagesList.indexOf(ownChat);
+    },
+    removeOwnChatFromList(index) {
+      this.directMessagesList.splice(index, 1);
+    },
+    hasElementsToSort() {
+      return this.directMessagesList.length > 1;
+    },
+    sort() {
       this.directMessagesList = this.directMessagesList.sort(
-        (currUser, nextUser) => {
+        (thisUser, nextUser) => {
           if (
-            currUser.username.toLowerCase() < nextUser.username.toLowerCase()
+            thisUser.username.toLowerCase() < nextUser.username.toLowerCase()
           ) {
             return -1;
           }
           if (
-            currUser.username.toLowerCase() > nextUser.username.toLowerCase()
+            thisUser.username.toLowerCase() > nextUser.username.toLowerCase()
           ) {
             return 1;
           }
           return 0;
         }
       );
+    },
+    addOwnChatAtTop(ownChat) {
+      this.directMessagesList.unshift(ownChat);
     },
   },
 });
