@@ -63,7 +63,7 @@
 <script>
 import { NSelect } from 'naive-ui';
 import { storeToRefs } from 'pinia';
-import { defineComponent, ref } from 'vue';
+import { defineComponent } from 'vue';
 import {
   getMembers,
   addMemberstoChannel,
@@ -88,7 +88,6 @@ export default defineComponent({
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     return {
       currentWorkspace,
-      selectedValues: ref(null),
     };
   },
   data() {
@@ -97,6 +96,7 @@ export default defineComponent({
       response: null,
       loading: false,
       options: [],
+      selectedValues: null,
     };
   },
   beforeUnmount() {
@@ -135,7 +135,7 @@ export default defineComponent({
         return;
       }
       this.loading = true;
-      window.setTimeout(async () => {
+      setTimeout(async () => {
         let options = await getMembers(this.currentWorkspace?.id, query);
         this.options = options.map(item => {
           return {
