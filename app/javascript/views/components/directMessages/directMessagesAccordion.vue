@@ -17,13 +17,10 @@
           class="hover:bg-primaryHover"
         >
           <div
-            @click="goToChat(`/profiles/${user.id}`,user)"
+            @click="goToChat(`/profiles/${user.id}`, user)"
             class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
           >
-            <img
-              class="w-6 h-6 rounded-md"
-              src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
-            />
+            <img class="w-6 h-6 rounded-md" :src="user.image_url" />
             <p class="ml-2 text-sm text-white">{{ user.username }}</p>
           </div>
         </h5>
@@ -43,20 +40,20 @@ import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
+import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
   data() {
     return {
-      dmList: [],
       modalOpen: false,
       options: [
         {
-          title: 'Invite people',
+          title: CONSTANTS.INVITE_PEOPLE,
           link: '#',
         },
         {
-          title: 'New Conversation',
+          title: CONSTANTS.NEW_CONVERSATION,
           link: '#',
         },
       ],
@@ -68,7 +65,7 @@ export default {
     );
   },
   beforeUnmount() {
-    this.dmList = this.options = null;
+    this.options = null;
   },
   setup() {
     const directMessageStore = useDirectMessagesStore();
@@ -77,11 +74,10 @@ export default {
   },
   methods: {
     closeModal() {
-
       this.modalOpen = !this.modalOpen;
     },
-    goToChat(chatURL,user) {
-      this.directMessageStore.setSelectedDm(user)
+    goToChat(chatURL, user) {
+      this.directMessageStore.setSelectedDm(user);
       this.$router.push(chatURL);
     },
     handleClick() {
