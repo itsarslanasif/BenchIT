@@ -127,12 +127,26 @@ export default
       }
 
       const sendMessagePayload = (event) => {
-        if (event.keyCode === 13 && !event.shiftKey ) {
-          const newMessageData = newMessage?.value?.split('\n')[0];
-          props.sendMessage(newMessageData, files.value)
-          newMessage.value = ''
-          readerFile.value = []
-          files.value = []
+        if (event.keyCode === 13 && !event.shiftKey) {
+          let messageData;
+          let filterData;
+          let actuallData;
+          const startWithBr = newMessage.value.startsWith('<p><br />', 0);
+          const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
+          if (startWithBr) {
+            messageData = newMessage.value.split('<br />');
+            filterData = messageData.filter(function (el) { return el !== '' });
+            actuallData = filterData.join().split('\n')[0].replace(/,/g, " ");
+          }
+          else {
+            actuallData = newMessage?.value?.split('\n')[0];
+          }
+          if (actuallData !== '' && !startWithNonBreakSpace) {
+            props.sendMessage(actuallData, files.value)
+            newMessage.value = ''
+            readerFile.value = []
+            files.value = []
+          }
         }
       };
 
