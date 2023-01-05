@@ -102,7 +102,7 @@ const createPin = (data, messageStore) => {
         m => m.id === data.message.parent_message_id
       );
       const findThreadMessageIndex = message.replies.findIndex(
-        m => m.id === data.id
+        m => m.id === data.message.id
       );
       if (findThreadMessageIndex != -1) {
         message.replies[findThreadMessageIndex] = data.message;
