@@ -123,7 +123,7 @@
       </span>
     </div>
     <div v-if="openEmojiModal" class="absolute right-0 z-50">
-      <EmojiPicker :addReaction="addReaction" />
+      <EmojiPicker :toggleModal="setEmojiModal" :addReaction="addReaction" />
     </div>
   </div>
 </template>

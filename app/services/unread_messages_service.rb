@@ -6,7 +6,7 @@ class UnreadMessagesService
   end
 
   def call
-    add_in_redis
+     add_in_redis
   end
 
   private

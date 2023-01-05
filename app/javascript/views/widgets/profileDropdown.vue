@@ -1,4 +1,5 @@
 <template>
+  <div>
   <n-dropdown
     trigger="click"
     size="medium"
@@ -26,6 +27,8 @@
       </div>
     </n-button>
   </n-dropdown>
+  <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp"/>
+</div>
 </template>
 
 <script>
@@ -34,14 +37,17 @@ import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import SetProfileStatusModal from '../components/profileStatus/setProfileStatusModal.vue';
+import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js'
 import { storeToRefs } from 'pinia';
 
 export default {
-  components: { NDropdown, NAvatar },
+  components: { NDropdown, NAvatar,SetProfileStatusModal },
   setup() {
+    const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
     const { currentProfile } = storeToRefs(profileStore);
-    return { profile: currentProfile };
+    return { profile: currentProfile,profileStatusStore:profileStatusStore };
   },
   beforeUnmount() {
     this.profile = null;
@@ -148,6 +154,9 @@ export default {
   },
   methods: {
     handleSelect(key) {},
+    handleStatusSelect(){
+     this.profileStatusStore.toggleProfileStatusPopUp()
+    },
     renderCustomHeader() {
       return h(
         'div',
@@ -182,6 +191,7 @@ export default {
         {
           class:
             'hover:border-black-600 border rounded border-black-300 flex items-center px-3 pt-1 pb-1 cursor-pointer my-px mx-3',
+            onClick:this.handleStatusSelect
         },
         [
           h('div', [h(NText, { class: 'text-xl' }, { default: () => '🙂' })]),
