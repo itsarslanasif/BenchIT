@@ -1,6 +1,6 @@
 class Api::V1::ReactionsController < Api::ApiController
   before_action :set_reaction, only: :destroy
-  before_action :profile_check, only: :destroy
+  before_action :check_profile, only: :destroy
 
   def create
     @reaction = Current.profile.reactions.new(reaction_params)
@@ -30,7 +30,7 @@ class Api::V1::ReactionsController < Api::ApiController
     params.require(:reaction).permit(:conversation_message_id, :emoji)
   end
 
-  def profile_check
+  def check_profile
     return if @reaction.profile_id.eql?(Current.profile.id)
 
     render json: { message: 'Sorry, this reaction is not your', status: :unprocessable_entity }
