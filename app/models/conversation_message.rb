@@ -1,147 +1,90 @@
-class Api::V1::ConversationMessagesController < Api::ApiController
-  before_action :fetch_conversation, only: %i[create]
-  before_action :set_message, only: %i[destroy update]
-  before_action :set_saved_item, only: %i[unsave_message]
-  before_action :set_bench_channel, only: %i[bench_channel_messages]
-  before_action :set_group, only: %i[group_messages]
-  before_action :set_receiver, only: %i[profile_messages]
-  before_action :profile_check, only: %i[destroy update]
-  before_action :member_check, only: %i[destroy update]
+class ConversationMessage < ApplicationRecord
+  after_commit :broadcast_message
 
-  def send_message
-    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
-  end
+  belongs_to :bench_conversation
+  belongs_to :profile, foreign_key: :sender_id, inverse_of: :conversation_messages
+  belongs_to :parent_message, class_name: 'ConversationMessage', optional: true
 
-  def create
-    @message = ConversationMessage.new(conversation_messages_params)
-    @message.bench_conversation_id = @bench_conversation.id
-    response = if @message.save
-                 { message: 'Message sent.' }
-               else
-                 { message: @message.errors, status: :unprocessable_entity }
-               end
-    render json: response
-  end
+  has_many_attached :message_attachments, dependent: :purge_later
 
-  def update
-    if @message.update(conversation_messages_params)
-      render json: { success: 'Messages updated', message: @message, status: :updated }
-    else
-      render json: { errors: @message.errors, status: :unprocessable_entity }
-    end
-  end
+  has_many :replies, class_name: 'ConversationMessage',
+                     foreign_key: :parent_message_id, dependent: :delete_all
+  has_many :saved_items, dependent: :delete_all
+  has_many :reactions, dependent: :delete_all
+  has_one :pin, dependent: :delete
 
-  def destroy
-    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
-  end
+  validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
-  def index_saved_messages
-    @saved_items = Current.profile.saved_items.order(created_at: :desc)
-  end
+  scope :messages_by_ids_array, lambda { |ids|
+    joins(:bench_conversation)
+      .where(id: ids)
+      .group(:conversationable_type, :conversationable_id, :id)
+      .order(
+        conversationable_type: :asc, conversationable_id: :asc, created_at: :desc
+      )
+  }
 
-  def save_message
-    @saved_item = Current.profile.saved_items.new(conversation_message_id: params[:id])
+  scope :chat_messages, lambda { |id|
+    includes(:profile, :replies, :reactions).where(parent_message_id: nil, bench_conversation_id: id).with_attached_message_attachments
+  }
 
-    render json: @saved_item.save ? { json: 'added to saved items' } : @saved_item.errors
-  end
-
-  def unsave_message
-    render json: @saved_item.destroy ? { json: 'Removed from saved items' } : @saved_item.errors
-  end
-
-  def recent_files
-    @messages = Current.profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
-  end
-
-  def bench_channel_messages
-    @messages = ConversationMessage.chat_messages(@bench_channel.bench_conversation.id)
-  end
-
-  def group_messages
-    @messages = ConversationMessage.chat_messages(@group.bench_conversation.id)
-  end
-
-  def profile_messages
-    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
-
-    if conversation.blank?
-      conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
-    end
-
-    @messages = ConversationMessage.chat_messages(conversation.id)
-  end
-
-  def unread_messages
-    str = REDIS.get("unreadMessages#{Current.workspace.id}#{Current.profile.id}")
-    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
-    unread_messages_ids = previous_unread_messages_details.pluck('message_id')
-    @messages = ConversationMessage.messages_by_ids_array(unread_messages_ids)
-                                   .includes(:reactions, :replies, :parent_message, :saved_items)
-                                   .with_attached_message_attachments
+  def self.recent_last_conversation(conversation_ids)
+    two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
+    ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
+                                                                             two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
   end
 
   private
 
-  def set_saved_item
-    @saved_item = Current.profile.saved_items.find_by(conversation_message_id: params[:id])
-
-    return render json: { message: 'Message Not Found.' }, status: :not_found if @saved_item.nil?
+  def broadcast_message
+    result = {
+      content: message_content,
+      type: 'Message'
+    }
+    result[:action] = if destroyed?
+                        'Delete'
+                      elsif created_at.eql?(updated_at)
+                        'Create'
+                      else
+                        'Update'
+                      end
+    BroadcastMessageService.new(result, bench_conversation).call
   end
 
-  def set_message
-    @message = ConversationMessage.find(params[:id])
-  end
-
-  def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
-      param[:sender_id] = Current.profile.id
+  def attach_message_attachments
+    message_attachments.map do |attachment|
+      {
+        attachment: attachment.blob,
+        attachment_link: Rails.application.routes.url_helpers.rails_storage_proxy_url(attachment),
+        attachment_download_link: Rails.application.routes.url_helpers.rails_blob_url(attachment,
+                                                                                      disposition: 'attachment')
+      }
     end
   end
 
-  def fetch_conversation
-    conversation_id = params[:conversation_id]
-
-    @bench_conversation = case params[:conversation_type]
-                          when 'channels'
-                            BenchChannel.find_by(id: conversation_id)&.bench_conversation
-                          when 'groups'
-                            Group.find_by(id: conversation_id)&.bench_conversation
-                          when 'profiles'
-                            BenchConversation.profile_to_profile_conversation(Current.profile.id, conversation_id)
-                          end
-
-    render json: { message: 'wrong type', status: :unprocessable_entity } if @bench_conversation.blank?
+  def saved?(id)
+    Current.profile.saved_items.exists?(conversation_message_id: id)
   end
 
-  def set_bench_channel
-    @bench_channel = BenchChannel.find(params[:id])
-    render json: { json: 'user is not part of this channel', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
-  end
-
-  def set_group
-    @group = Group.find(params[:id])
-    render json: { json: 'user is not part of this group', status: :not_found } unless @group.profile_ids.include?(Current.profile.id)
-  end
-
-  def set_receiver
-    @receiver = Profile.find(params[:id])
-    render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
-  end
-
-  def profile_check
-    return if @message.sender_id.eql?(Current.profile.id)
-
-    render json: { message: 'Sorry, this message is not your', status: :unprocessable_entity }
-  end
-
-  def member_check
-    profile_ids = if @message.bench_conversation.conversationable_type.eql?('Profile')
-                    [@message.bench_conversation.conversationable_id, @message.bench_conversation.sender_id]
-                  else
-                    @message.bench_conversation.conversationable.profile_ids
-                  end
-    return if profile_ids.include?(Current.profile.id)
-
-    render json: { message: 'Sorry, Right now you are not part of this', status: :unprocessable_entity }
+  def message_content
+    message = {
+      id: id,
+      content: content,
+      is_threaded: is_threaded,
+      is_edited: created_at != updated_at,
+      parent_message_id: parent_message_id,
+      sender_id: sender_id,
+      sender_name: profile.username,
+      reactions: reactions,
+      created_at: created_at,
+      updated_at: updated_at,
+      isSaved: saved?(id),
+      replies: replies,
+      bench_conversation_id: bench_conversation_id,
+      conversationable_type: bench_conversation.conversationable_type,
+      conversationable_id: bench_conversation.conversationable_id
+    }
+    message[:attachments] = attach_message_attachments if message_attachments.present?
+    message
   end
 end
