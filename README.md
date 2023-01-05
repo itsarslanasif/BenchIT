@@ -76,7 +76,6 @@ follow this link https://ourcodeworld.com/articles/read/1508/how-to-install-elas
 After installation and running instance of elasticsearch run following command to reindex profiles and Bench Channels
 ```
 rake searchkick:reindex CLASS=Profile
-```
 rake searchkick:reindex CLASS=BenchChannel
 ```
 You can check if instance of elasticsearch is running by using following command
