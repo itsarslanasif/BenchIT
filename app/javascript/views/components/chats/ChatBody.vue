@@ -1,6 +1,6 @@
 <template>
   <div class="overflow-auto chatBody" ref="chatBody">
-    <PinnedConversationModel />
+    <PinnedConversationModal />
     <ChatDetail />
     <div
       v-for="message in messages"
@@ -62,7 +62,7 @@ import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
-import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
+import PinnedConversationModal from '../pinnedConversation/pinnedConversationModal.vue';
 import JumpToDateVue from '../../widgets/JumpToDate.vue';
 import moment from 'moment';
 import ChatDetail from '../../widgets/ChatDetail.vue';
@@ -73,7 +73,7 @@ export default {
     NDivider,
     NButton,
     NSpace,
-    PinnedConversationModel,
+    PinnedConversationModal,
     JumpToDateVue,
     ChatDetail,
   },

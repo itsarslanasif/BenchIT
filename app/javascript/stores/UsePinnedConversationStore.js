@@ -21,6 +21,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
   actions: {
     async index(conversation_type, id) {
       this.pinnedConversation = await pinnedMessages(conversation_type, id);
+      this.pinToggle=false;
     },
     pinMessage(message) {
       this.pinnedConversation.push(message);
@@ -36,5 +37,8 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     togglePin() {
       this.pinToggle = !this.pinToggle;
     },
+    closeModal(){
+      this.pinToggle=false;
+    }
   },
 });
