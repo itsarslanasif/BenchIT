@@ -1,5 +1,6 @@
 <template>
   <div
+    @click="jumpToConversation"
     class="bg-white border border-black-200 rounded-md drop-shadow-md "
   >
     <div v-if="currMessage.pinned">
@@ -264,6 +265,18 @@ export default {
     showUserProfile() {
       this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
+    },
+
+    jumpToConversation() {
+      if (this.currMessage.conversationable_type == 'BenchChannel') {
+        this.$router.push(
+          `/channels/${this.currMessage.bench_conversation}/${this.currMessage.id}`
+        );
+      } else if (this.currMessage.conversationable_type == 'Profile') {
+        this.$router.push(`/profiles/${this.currMessage.receiver_id}/${this.currMessage.id}`);
+      } else if (message.conversationable_type == 'Group') {
+        this.$router.push(`/groups/${this.currMessage.group_id}/${this.currMessage.id}`);
+      }
     },
 
     async setUserProfileForPane() {

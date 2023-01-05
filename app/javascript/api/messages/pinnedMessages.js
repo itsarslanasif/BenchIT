@@ -13,7 +13,7 @@ export const pinnedMessages = (conversation_type, conversation_id) => {
     });
 };
 
-export const createPin = (conversation_type, conversation_id, message_id) => {
+export const pinMessage = (conversation_type, conversation_id, message_id) => {
   return axios
     .post(
       `v1/pins`,
@@ -22,6 +22,19 @@ export const createPin = (conversation_type, conversation_id, message_id) => {
         conversation_id: conversation_id,
         conversation_message_id: message_id,
       },
+      {
+        headers: { Authorization: localStorage.getItem('token') },
+      }
+    )
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const unPinMessage = (pin_id) => {
+  return axios
+    .delete(
+      `v1/pins${pin_id}`,
       {
         headers: { Authorization: localStorage.getItem('token') },
       }

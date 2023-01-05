@@ -93,7 +93,7 @@ const deleteReaction = (data, messageStore) => {
   }
 };
 
-const createPin = (data, messageStore) => {
+const pinMessage = (data, messageStore) => {
   const pinsStore = usePinnedConversation();
   try {
     const messages = messageStore.getMessages;
@@ -132,7 +132,7 @@ const actions = {
   MessageDelete: deleteMessage,
   ReactionDelete: deleteReaction,
   MessageUpdate: updateMessage,
-  PinCreate: createPin,
+  PinCreate: pinMessage,
 };
 
 export const cableActions = data => {

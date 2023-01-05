@@ -41,7 +41,7 @@ import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { deleteMessage } from '../../api/messages';
-import { createPin } from '../../api/messages/pinnedMessages';
+import { pinMessage } from '../../api/messages/pinnedMessages';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -95,7 +95,7 @@ export default {
           const conversation_type = getIndexByParams(1);
           const conversation_id = getIndexByParams(2);
           try {
-            createPin(
+            pinMessage(
               getConversationType(conversation_type),
               conversation_id,
               message.id

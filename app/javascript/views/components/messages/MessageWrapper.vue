@@ -4,7 +4,7 @@
   >
     <div v-if="currMessage.pinned">
       <span
-        class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
+        class="p-1 items-center text-black-800 text-xs flex bg-yellow-50 relative"
       >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
@@ -18,7 +18,7 @@
     <div
       class="flex p-1 px-4 relative"
       :class="{
-        'bg-yellow-100': currMessage.pinned,
+        'bg-yellow-50': currMessage.pinned,
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"

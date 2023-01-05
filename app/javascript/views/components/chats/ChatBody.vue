@@ -164,8 +164,8 @@ export default {
     const message_id = this.$route.params.message_id;
     if (message_id) {
       const message = document.getElementById(message_id);
-      message.scrollIntoView();
       message.classList.add('highlight');
+      message.scrollIntoView();
     }
     this.scrollToEnd();
     this.newMessageFlag = false;
@@ -179,12 +179,12 @@ export default {
 }
 
 .highlight {
-  animation: background-fade 5s;
+  animation: background-fade 10s;
 }
 
 @keyframes background-fade {
   0% {
-    background: rgba(253, 245, 221, 255);
+    background: rgba(213, 215, 211, 215);
   }
 }
 
