@@ -1,4 +1,5 @@
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 
 const createMessage = (data, messageStore) => {
   try {
@@ -92,12 +93,46 @@ const deleteReaction = (data, messageStore) => {
   }
 };
 
+const createPin = (data, messageStore) => {
+  const pinsStore = usePinnedConversation();
+  try {
+    const messages = messageStore.getMessages;
+    if (data.message.parent_message_id) {
+      const message = messages.find(
+        m => m.id === data.message.parent_message_id
+      );
+      const findThreadMessageIndex = message.replies.findIndex(
+        m => m.id === data.id
+      );
+      if (findThreadMessageIndex != -1) {
+        message.replies[findThreadMessageIndex] = data.message;
+      }
+    } else {
+      const findMessageIndex = messages.findIndex(
+        m => m.id === data.message.id
+      );
+      if (findMessageIndex != -1) {
+        messages[findMessageIndex] = data.message;
+      }
+    }
+
+    const pinnedMessages = pinsStore.getPinnedConversation;
+    const pin = pinnedMessages.find(m => m.id === data.id);
+    if (pin == undefined) {
+      pinsStore.pinMessage(data);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
   MessageDelete: deleteMessage,
   ReactionDelete: deleteReaction,
   MessageUpdate: updateMessage,
+  PinCreate: createPin,
 };
 
 export const cableActions = data => {

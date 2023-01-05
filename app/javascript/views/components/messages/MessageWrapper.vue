@@ -2,13 +2,13 @@
   <div
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
-    <div v-if="pinnedConversationStore.isPinned(currMessage)">
+    <div v-if="currMessage.pinned">
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
       >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
-        {{ $t('pinconversation.you') }}
+        {{ currMessage.pinned_by }}
       </span>
     </div>
     <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">
@@ -16,9 +16,9 @@
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
     <div
-      class="flex p-1 px-4 relative hover:bg-transparent"
+      class="flex p-1 px-4 relative"
       :class="{
-        'bg-yellow-100': pinnedConversationStore.isPinned(currMessage),
+        'bg-yellow-100': currMessage.pinned,
       }"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"

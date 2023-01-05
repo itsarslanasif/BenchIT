@@ -12,11 +12,11 @@
       </span>
     </div>
     <template
-      v-for="message in pinnedConversationStore.getPinnedConversation"
-      :key="message.id"
+      v-for="pin in pinnedConversationStore.getPinnedConversation"
+      :key="pin.id"
     >
       <div class="mt-5">
-        <MessageWrapper :curr-message="message" :prev-message="prevMessage" />
+        <MessageWrapper :curr-message="pin.message" :prev-message="prevMessage" />
       </div>
     </template>
   </div>
