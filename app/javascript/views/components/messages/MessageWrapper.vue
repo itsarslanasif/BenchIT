@@ -70,12 +70,15 @@
         <template v-for="emoji in displayedReactions" :key="emoji">
           <div
             @click="addReaction(emoji)"
-            :class="{ 'ml-12 reaction-margin': isSameUser && isSameDayMessage }"
-            class="mt-1 inline-flex bg-black-200 mr-1 w-10 h-7 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
+            :class="[
+              { own_reactions: computedClass(emoji) },
+              { 'ml-12 reaction-margin': isSameUser && isSameDayMessage },
+            ]"
+            class="mt-1 inline-flex mr-1 w-10 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
             <n-tooltip
               placement="top"
-              :style="{ width: '150px' }"
+              :style="{ width: '170px' }"
               trigger="hover"
             >
               <template #trigger>
@@ -86,9 +89,14 @@
                   }}</span></n-text
                 >
               </template>
-              <div>
-                {{ getUsers(emoji, currentUserStore.currentUser.name) }} reacted
-                with {{ emoji }}
+              <div class="flex flex-col items-center">
+                <span class="text-3xl bg-white rounded text-center w-10">{{
+                  emoji
+                }}</span>
+                <span class="text-md"
+                  >{{ getUsers(emoji, currentUserStore.currentUser.name) }}
+                  {{ $t('chat.reacted') }}</span
+                >
               </div>
             </n-tooltip>
           </div>
@@ -229,6 +237,7 @@ export default {
       showOptions: false,
       displayedReactions: [],
       users: this.currMessage.reaction_users,
+      self_reacted: false,
     };
   },
   beforeUnmount() {
@@ -259,16 +268,14 @@ export default {
       return `${this.currMessage.replies?.length} replies..`;
     },
     displayReaction() {
-      if (this.allReactions !== undefined) {
-        const unique = this.allReactions.filter(element => {
-          const isDuplicate = this.displayedReactions.includes(element.emoji);
-          if (!isDuplicate) {
-            this.displayedReactions.push(element.emoji);
-            return true;
-          }
-          return false;
-        });
-      }
+      const unique = this.currMessage.reactions.filter(element => {
+        const isDuplicate = this.displayedReactions.includes(element.emoji);
+        if (!isDuplicate) {
+          this.displayedReactions.push(element.emoji);
+          return true;
+        }
+        return false;
+      });
     },
   },
   methods: {
@@ -281,7 +288,7 @@ export default {
       }
       let emoji_id = null;
       if (
-        this.allReactions.some(reaction => {
+        this.currMessage.reactions.some(reaction => {
           return (
             (emoji_id = reaction.id),
             reaction.emoji === temp &&
@@ -290,19 +297,14 @@ export default {
         })
       ) {
         await remove_reaction(emoji_id).then(() => {
-          this.allReactions = this.allReactions.filter(function (reaction) {
-            return reaction.id != emoji_id;
-          });
+          this.currMessage.reactions = this.currMessage.reactions.filter(
+            function (reaction) {
+              return reaction.id != emoji_id;
+            }
+          );
         });
-        this.removeUser(temp, this.currentUserStore.currentUser.name);
       } else {
-        await add_reaction(this.currMessage.id, temp).then(response => {
-          this.allReactions.push(response.data);
-          this.users.push({
-            username: this.currentUserStore.currentUser.name,
-            reaction: temp,
-          });
-        });
+        await add_reaction(this.currMessage.id, temp);
       }
     },
 
@@ -349,7 +351,9 @@ export default {
       }
     },
     countReaction(emoji) {
-      const filteredReactions = this.allReactions.filter(function (value) {
+      const filteredReactions = this.currMessage.reactions.filter(function (
+        value
+      ) {
         return value.emoji === emoji;
       });
       if (filteredReactions.length === 0) {
@@ -362,28 +366,32 @@ export default {
       return filteredReactions.length;
     },
     getUsers(emoji, name) {
-      if (this.users !== undefined) {
-        let users = this.users
-          .filter(function (profile) {
-            return profile.reaction === emoji;
-          })
-          .map(function (profile) {
-            if (profile.username === name) {
-              return 'you';
-            } else {
-              return profile.username;
-            }
-          });
-        const formatter = new Intl.ListFormat('en', {
-          style: 'long',
-          type: 'conjunction',
+      let users = this.currMessage.reactions
+        .filter(function (reaction) {
+          return reaction.emoji === emoji;
+        })
+        .map(function (reaction) {
+          if (reaction.reacted_by === name) {
+            return CONSTANTS.YOU;
+          } else {
+            return reaction.reacted_by;
+          }
         });
-        return formatter.format(users);
-      }
+      const formatter = new Intl.ListFormat('en', {
+        style: 'long',
+        type: 'conjunction',
+      });
+      users = users.filter(function (user) {
+        return user !== undefined;
+      });
+      return formatter.format(users);
     },
-    removeUser(emoji, name) {
-      this.users = this.users.filter(function (reaction) {
-        return (reaction.reaction !== emoji || reaction.username !== name);
+    computedClass(emoji) {
+      return this.currMessage.reactions.some(reaction => {
+        return (
+          reaction.emoji === emoji &&
+          reaction.profile_id === this.currentUserStore.currentUser.id
+        );
       });
     },
   },
@@ -393,5 +401,8 @@ export default {
 .reaction-margin {
   margin-right: -44px;
 }
+.own_reactions {
+  background-color: rgb(216, 233, 239);
+  border-color: rgb(13, 162, 255);
+}
 </style>
-

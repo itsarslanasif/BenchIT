@@ -110,6 +110,7 @@ en:
       chat:
         today: 'Today'
         replies: 'replies'
+        reacted: 'reacted'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
