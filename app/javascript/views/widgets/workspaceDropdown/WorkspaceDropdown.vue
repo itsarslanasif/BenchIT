@@ -33,7 +33,7 @@ export default {
     handleSelect(key) {
       switch (key) {
         case 'sign-out-of-benchit':
-          let token = sessionStorage.getItem('token');
+          let token = localStorage.getItem('token');
           userSignOut(token).then(res => {
             this.response = res;
             this.$router.push('/sign_in');

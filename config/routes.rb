@@ -60,7 +60,11 @@ Rails.application.routes.draw do
         resources :statuses, only: %i[index create destroy]
         resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
-        resources :channel_participants, only: %i[create index]
+        resources :channel_participants, only: %i[create index] do
+          collection do
+            post :join_public_channel
+          end
+        end
         resources :draft_messages, only: %i[index create update destroy]
       end
     end

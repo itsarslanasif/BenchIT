@@ -26,8 +26,8 @@
 </template>
 
 <script>
-import { memberLeaveChannel } from '../../../api/channels/channels';
 import { useChannelStore } from '../../../stores/useChannelStore';
+
 export default {
   name: 'About',
   data() {
@@ -59,13 +59,8 @@ export default {
 
   methods: {
     async leaveChannel() {
-      try {
-        const response = await memberLeaveChannel(this.id);
-        this.channelStore.leaveChannel(this.id);
+        await this.channelStore.leaveChannel(this.id);
         this.$router.push('/');
-      } catch (e) {
-        console.error(e);
-      }
     },
   },
 };

@@ -1,15 +1,16 @@
-class Reaction < ApplicationRecord
-  after_commit :reaction_broadcast
+class Pin < ApplicationRecord
+  after_commit :broadcast_pin
 
-  belongs_to :profile
   belongs_to :conversation_message
+  belongs_to :profile
+  belongs_to :bench_conversation
 
   private
 
-  def reaction_broadcast
+  def broadcast_pin
     result = {
-      content: reaction_content,
-      type: 'Reaction'
+      content: pin_content,
+      type: 'Pin'
     }
     result[:action] = if destroyed?
                         'Delete'
@@ -18,15 +19,15 @@ class Reaction < ApplicationRecord
                       else
                         'Update'
                       end
-    BroadcastMessageService.new(result, conversation_message.bench_conversation).call
+    BroadcastMessageService.new(result, bench_conversation).call
   end
 
-  def reaction_content
+  def pin_content
     {
       id: id,
-      emoji: emoji,
       conversation_message_id: conversation_message_id,
-      bench_conversation_id: conversation_message.bench_conversation_id
+      pin_by: profile.username,
+      count: bench_conversation.pins.size
     }
   end
 end

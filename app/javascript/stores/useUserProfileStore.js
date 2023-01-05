@@ -2,12 +2,12 @@ import { defineStore } from 'pinia';
 
 export const useUserProfileStore = defineStore('userProfileStore', {
   state: () => ({
-    user_profile: {},
+    userProfile: {},
   }),
 
   actions: {
-    setUserProfile(user_profile) {
-      this.user_profile = user_profile;
+    setUserProfile(userProfile) {
+      this.userProfile = userProfile;
     },
   },
 });

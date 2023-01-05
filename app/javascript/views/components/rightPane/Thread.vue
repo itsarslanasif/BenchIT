@@ -79,12 +79,7 @@ export default {
         formData.append('message_attachments[]', file);
       });
       try {
-        conversation(formData).then(async () => {
-        const messages = await getMessageHistory(this.conversation_type.slice(0, -1), this.id);
-        this.threadStore.message = messages.find(
-          msg => msg.id === this.threadStore.message.id
-        );
-      });
+        conversation(formData);
       } catch (e) {
         let error = e;
       }

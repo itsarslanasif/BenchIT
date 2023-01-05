@@ -19,16 +19,19 @@ class BroadcastMessageService
   end
 
   def send_notification_ws
-    case @bench_conversation.conversationable_type
-    when 'Profile'
-      profile_ids = [@bench_conversation.conversationable_id, @message_json[:sender_id]]
-    when 'Group'
-      profile_ids = Group.find(@bench_conversation.conversationable_id).profile_ids
-    when 'BenchChannel'
-      profile_ids = BenchChannel.find(@bench_conversation.conversationable_id).profiles.pluck(:id)
-    end
+    profile_ids = case @bench_conversation.conversationable_type
+                  when 'Profile'
+                    [@bench_conversation.conversationable_id, @message_json[:sender_id]]
+                  else
+                    @bench_conversation.conversationable.profile_ids
+                  end
+    return if profile_ids.empty?
+
     profile_ids.each do |id|
-      UnreadMessagesService.new(@bench_conversation, id, @message_json[:id]).call
+      if @message_json[:type].eql?('Message') && @message_json[:action].eql?('Create')
+        UnreadMessagesService.new(@bench_conversation, id,
+                                  @message_json[:content][:id]).call
+      end
       notification_key = "NotificationChannel#{Current.workspace.id}-#{id}"
       ActionCable.server.broadcast(notification_key, { message: @message_json })
     end

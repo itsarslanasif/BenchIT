@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_04_091325) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -138,6 +138,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_091325) do
     t.index ["token"], name: "index_invitables_on_token"
   end
 
+  create_table "pins", force: :cascade do |t|
+    t.bigint "conversation_message_id", null: false
+    t.bigint "profile_id", null: false
+    t.bigint "bench_conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bench_conversation_id"], name: "index_pins_on_bench_conversation_id"
+    t.index ["conversation_message_id"], name: "index_pins_on_conversation_message_id"
+    t.index ["profile_id"], name: "index_pins_on_profile_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "workspace_id", null: false
@@ -240,6 +251,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_04_091325) do
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
+  add_foreign_key "pins", "bench_conversations"
+  add_foreign_key "pins", "conversation_messages"
+  add_foreign_key "pins", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "profiles"

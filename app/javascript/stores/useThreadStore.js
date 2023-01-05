@@ -5,6 +5,10 @@ export const useThreadStore = defineStore('threadStore', {
     message: {},
   }),
 
+  getters: {
+    getMessages: state => state.message,
+  },
+
   actions: {
     setMessage(message) {
       this.message = message;
