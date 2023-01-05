@@ -8,7 +8,7 @@ json.display_name profile.display_name
 json.pronounce_name profile.pronounce_name
 json.role profile.role
 json.title profile.title
-json.status profile.profile_status
+json.status profile.profile_status if profile.profile_status.present?
 json.contact_info do
   json.email profile.user.email
   json.phone profile.phone

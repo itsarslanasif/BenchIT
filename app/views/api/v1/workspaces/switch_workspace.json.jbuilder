@@ -1,3 +1,4 @@
 json.workspace @workspace
-json.profile @profile
-json.status @profile.profile_status if @profile.profile_status.present?
+json.profile do
+  json.partial! 'api/v1/shared/partials/profile', profile: @profile
+end
