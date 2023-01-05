@@ -233,11 +233,8 @@ export default {
       ],
       emojiModalStatus: false,
       openEmojiModal: false,
-      allReactions: this.currMessage.reactions,
       showOptions: false,
       displayedReactions: [],
-      users: this.currMessage.reaction_users,
-      self_reacted: false,
     };
   },
   beforeUnmount() {
@@ -268,7 +265,7 @@ export default {
       return `${this.currMessage.replies?.length} replies..`;
     },
     displayReaction() {
-      const unique = this.currMessage.reactions.filter(element => {
+      this.currMessage.reactions.filter(element => {
         const isDuplicate = this.displayedReactions.includes(element.emoji);
         if (!isDuplicate) {
           this.displayedReactions.push(element.emoji);
@@ -296,9 +293,17 @@ export default {
           );
         })
       ) {
-        await remove_reaction(emoji_id)
+        try {
+          await remove_reaction(emoji_id);
+        } catch (e) {
+          console.error(e);
+        }
       } else {
-        await add_reaction(this.currMessage.id, temp);
+        try {
+          await add_reaction(this.currMessage.id, temp);
+        } catch (e) {
+          console.error(e);
+        }
       }
     },
 
@@ -388,6 +393,9 @@ export default {
         );
       });
     },
+  },
+  beforeUnmount() {
+    this.displayedReactions = null;
   },
 };
 </script>
