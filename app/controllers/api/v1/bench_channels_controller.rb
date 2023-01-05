@@ -5,7 +5,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def index
     @bench_channels = if params[:query].present?
-                        BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id }, match: :word_start).reject(&:is_private)
+                        BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id }, match: :word_start).reject do |channel|
+                          channel.is_private && !channel.channel_participants.exists?(profile: Current.profile)
+                        end
                       else
                         channel_ids = Current.profile.bench_channel_ids
                         BenchChannel.where(workspace_id: Current.workspace.id,
