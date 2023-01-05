@@ -1,4 +1,11 @@
 <template>
+  <div v-if="response?.data">
+    <benchit-alert
+      :errorMessage="$t('members.error_message')"
+      :successMessage="successMessage"
+      :success="isSuccessfullResponse"
+    />
+  </div>
   <div>
     <div
       @click.self="closeModal()"
@@ -6,11 +13,11 @@
       v-if="showModal"
     >
       <div
-        class="relative bg-white rounded-lg overflow-hidden shadow-2xl w-2/3 sm:w-1/2 lg:w-1/3 xl:w-1/4 max-h-screen"
+        class="relative bg-white rounded overflow-hidden border border-black-400 shadow-md w-100"
       >
-        <div class="flex items-center justify-between py-4 px-6 bg-gray-100">
+        <div class="flex items-center justify-between py-4 px-6">
           <div class="text-xl font-medium text-gray-800">
-            {{ $t(`members.add_members_modal_title`) }}
+            {{ $t(`members.add_members_modal_title`) }} {{ channelName }}
           </div>
           <button
             class="text-gray-400 hover:text-gray-500 focus:outline-none"
@@ -19,13 +26,13 @@
             <i class="fas fa-times"></i>
           </button>
         </div>
-        <div class="m-3 !bg-danger">
+        <div class="m-3">
           <n-select
             vertical
             v-model:value="selectedValues"
             multiple
             filterable
-            placeholder="ex. Nathalie, or james@acme.com"
+            :placeholder="$t('placeholder.add_people_to_channel')"
             :options="options"
             :loading="loading"
             clearable
@@ -37,8 +44,13 @@
             @change="resetSelectedTag()"
           />
         </div>
-        <div class="flex items-center justify-end py-4 px-6 bg-gray-100">
-          <button class="btn btn-blue-400 btn-lg" @click="submit()">Add</button>
+        <div class="flex items-center justify-end py-4 px-6">
+          <button
+            class="border px-4 py-1 rounded hover:bg-transparent"
+            @click="submit()"
+          >
+            {{ $t('actions.add') }}
+          </button>
         </div>
       </div>
     </div>
@@ -50,36 +62,89 @@
 
 <script>
 import { NSelect } from 'naive-ui';
+import { storeToRefs } from 'pinia';
 import { defineComponent, ref } from 'vue';
 import {
   getMembers,
   addMemberstoChannel,
 } from '../../../api/members/membersApi';
-
-let options = [];
+import { CONSTANTS } from '../../../assets/constants';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import benchitAlert from '../../widgets/benchitAlert.vue';
 
 export default defineComponent({
   components: {
     NSelect,
+    benchitAlert,
+  },
+  props: {
+    channelName: {
+      type: String,
+      default: undefined,
+    },
+  },
+  setup() {
+    const currentWorkspaceStore = useCurrentWorkspaceStore();
+    const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+    return {
+      currentWorkspace,
+      selectedValues: ref(null),
+    };
   },
   data() {
     return {
       showModal: false,
+      response: null,
+      loading: false,
+      options: [],
     };
+  },
+  beforeUnmount() {
+    this.response = this.options = null;
+  },
+  computed: {
+    isSuccessfullResponse() {
+      return this.response.statusText === CONSTANTS.CREATED;
+    },
+    successMessage() {
+      let members = this.response?.data?.members;
+      if (members && members.length > 1)
+        return `${members?.length} ${CONSTANTS.SUCCESS_MESSAGE_PLURAL}`;
+      else {
+        return `${members?.length} ${CONSTANTS.SUCCESS_MESSAGE_SINGULAR}`;
+      }
+    },
   },
   methods: {
     async submit() {
       let channel_id = window.location.pathname.split('/')[2];
       try {
-        let Success_msg = await addMemberstoChannel(
+        let response = await addMemberstoChannel(
           channel_id,
           this.selectedValues
         );
-        alert(`${Success_msg.data.members[0]} added`);
+        this.response = response;
+        this.closeModal();
       } catch (e) {
         console.error(e);
       }
-      this.closeModal();
+    },
+    handleSearch(query) {
+      if (!query.length) {
+        this.options.username = [];
+        return;
+      }
+      this.loading = true;
+      window.setTimeout(async () => {
+        let options = await getMembers(this.currentWorkspace?.id, query);
+        this.options = options.map(item => {
+          return {
+            label: item.username,
+            value: item.id,
+          };
+        });
+        this.loading = false;
+      }, 1e3);
     },
     closeModal() {
       this.selectedValues = [];
@@ -89,36 +154,5 @@ export default defineComponent({
       this.value = '';
     },
   },
-  setup() {
-    const loadingRef = ref(false);
-    const optionsRef = ref([]);
-    return {
-      selectedValues: ref(null),
-      loading: loadingRef,
-      options: optionsRef,
-      handleSearch: query => {
-        if (!query.length) {
-          optionsRef.username = [];
-          return;
-        }
-        loadingRef.value = true;
-        window.setTimeout(async () => {
-          options = await getMembers(1, query);
-          optionsRef.value = options.map(item => {
-            return {
-              label: item.username,
-              value: item.id,
-            };
-          });
-          loadingRef.value = false;
-        }, 1e3);
-      },
-    };
-  },
 });
 </script>
-<style scoped>
-.fa-user-plus {
-  color: black;
-}
-</style>

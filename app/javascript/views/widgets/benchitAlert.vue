@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute top-10 right-0 mr-4 mt-24">
+  <div class="absolute z-10 top-10 right-0 mr-4 mt-24">
     <n-alert
       class="pr-20"
       v-if="success"
@@ -25,6 +25,3 @@ export default {
   props: ['errorMessage', 'successMessage', 'success'],
 };
 </script>
-
-<style scoped>
-</style>

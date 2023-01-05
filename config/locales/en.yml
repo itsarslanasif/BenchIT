@@ -1,4 +1,3 @@
-
 en:
   time:
     formats:
@@ -128,13 +127,13 @@ en:
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
-        all_channels : 'All Channels'
+        all_channels: 'All Channels'
         more: 'More'
         save_message: 'Save items'
       channels:
         channels: 'Channels'
         add_new_channel: 'Add New Channel'
-        search_by_name_or_desc : 'Search by channel name or description'
+        search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
         selected_channels: 'Selected Channels'
         title: 'Channels'
@@ -166,6 +165,7 @@ en:
         error_message: 'User does not exist!'
         success_message: 'Invitation sent successfully!'
       actions:
+        add: 'Add'
         save: 'Save'
         send: 'Send'
         close: 'Close'
@@ -195,12 +195,14 @@ en:
         save_changes: 'Save Changes'
       members:
         search_by_name: 'Search By Name'
-        add_members_modal_title : 'Add members to #channel'
+        add_members_modal_title: 'Add members to'
+        error_message: 'Member is already present in channel.'
       placeholder:
         email: 'Email'
         phone: 'Phone'
         workspace: 'acme@benchit.com'
         enter_workspace_url: 'your-workspace.slack.com'
+        add_people_to_channel: 'ex. Nathalie, or james@acme.com'
       profile:
         contact_information: 'Contact Information'
         email: 'Email Address'
@@ -210,21 +212,21 @@ en:
         away: 'Away'
       filters:
         all_types: 'All types'
-        owners: "Owners"
-        admins: "Admins"
-        full_members: "Full Members"
-        guests: "Guests"
-        deactivated_accounts: "Deactivated accounts"
-        not_on_slack: "Not on slack"
-        most_recommended: "Most recommended"
-        a_to_z: "A to Z"
-        z_to_a: "Z to A"
-        copy_display_name: "Copy display name"
-        view_files: "View Files"
-        copy_member_id: "Copy member ID"
-        no_results_found: "No Results Found !"
-        sort: "Sort"
-        account_type: "Account Type"
+        owners: 'Owners'
+        admins: 'Admins'
+        full_members: 'Full Members'
+        guests: 'Guests'
+        deactivated_accounts: 'Deactivated accounts'
+        not_on_slack: 'Not on slack'
+        most_recommended: 'Most recommended'
+        a_to_z: 'A to Z'
+        z_to_a: 'Z to A'
+        copy_display_name: 'Copy display name'
+        view_files: 'View Files'
+        copy_member_id: 'Copy member ID'
+        no_results_found: 'No Results Found !'
+        sort: 'Sort'
+        account_type: 'Account Type'
       channeldetail:
         about: 'About'
         members: 'Members'
@@ -254,7 +256,6 @@ en:
         last_month: 'Last month'
         the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
-
     admin:
       title: 'Admin'
       save: 'Save'
@@ -289,4 +290,3 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
-
