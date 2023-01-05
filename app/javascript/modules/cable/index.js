@@ -63,7 +63,12 @@ const createReaction = (data, messageStore) => {
       .flat();
     const message = messages.find(m => m.id === data.conversation_message_id);
     if (message) {
-      message.reactions.push(data);
+      const findMessageReactionIndex = message.reactions.findIndex(
+        r => r.id === data.id
+      );
+      if (findMessageReactionIndex == -1) {
+        message.reactions.push(data);
+      }
     }
   } catch (err) {
     console.error(err);
