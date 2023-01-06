@@ -42,6 +42,7 @@ import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { deleteMessage } from '../../api/messages';
 import { pinMessage } from '../../api/messages/pinnedMessages';
+import { unPinMessage } from '../../api/messages/pinnedMessages';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -100,6 +101,14 @@ export default {
               conversation_id,
               message.id
             );
+          } catch (e) {
+            console.error(e);
+          }
+          break;
+        case 'un-pin-from-this-conversation':
+          console.log('pin ID:', message.pin.id);
+          try {
+            unPinMessage(message.pin.id);
           } catch (e) {
             console.error(e);
           }

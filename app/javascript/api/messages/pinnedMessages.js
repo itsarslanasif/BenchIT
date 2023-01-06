@@ -34,7 +34,7 @@ export const pinMessage = (conversation_type, conversation_id, message_id) => {
 export const unPinMessage = (pin_id) => {
   return axios
     .delete(
-      `v1/pins${pin_id}`,
+      `v1/pins/${pin_id}`,
       {
         headers: { Authorization: localStorage.getItem('token') },
       }

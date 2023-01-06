@@ -1,5 +1,9 @@
-import { useMessageStore } from '../../stores/useMessagesStore';
-import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
+import {
+  useMessageStore
+} from '../../stores/useMessagesStore';
+import {
+  usePinnedConversation
+} from '../../stores/UsePinnedConversationStore';
 
 const createMessage = (data, messageStore) => {
   try {
@@ -122,6 +126,33 @@ const pinMessage = (data, messageStore) => {
   }
 };
 
+
+const unPinMessage = (data, messageStore) => {
+  const pinsStore = usePinnedConversation();
+  try {
+    const messages = messageStore.getMessages;
+    if (data.parent_message_id) {
+      const message = messages.find(m => m.id === data.parent_message_id);
+      const findThreadMessageIndex = message.replies.findIndex(
+        m => m.id === data.id
+      );
+      if (findThreadMessageIndex != -1) {
+        message.replies[findThreadMessageIndex] = data;
+      }
+    } else {
+      const findMessageIndex = messages.findIndex(m => m.id === data.id);
+      if (findMessageIndex != -1) {
+        messages[findMessageIndex] = data;
+      }
+    }
+    pinsStore.unPinMessage(data);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
@@ -129,6 +160,7 @@ const actions = {
   ReactionDelete: deleteReaction,
   MessageUpdate: updateMessage,
   PinCreate: pinMessage,
+  PinDelete: unPinMessage,
 };
 
 export const cableActions = data => {
