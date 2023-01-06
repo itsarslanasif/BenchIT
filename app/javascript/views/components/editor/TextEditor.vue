@@ -128,28 +128,35 @@ export default
 
       const sendMessagePayload = (event) => {
         if (event.keyCode === 13 && !event.shiftKey) {
-          let messageData;
-          let filterData;
-          let actuallData;
-          const startWithBr = newMessage.value.startsWith('<p><br />', 0);
           const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
-          const endWithBr = newMessage.value.endsWith("<br /></p>\n<p>&nbsp;</p>");
-          if (startWithBr || endWithBr) {
-            messageData = newMessage.value.split('<br />');
-            filterData = messageData.filter(function (el) { return el !== '' });
-            actuallData = filterData.join().split('\n')[0].replace(/,/g, " ");
-          }
-          else {
-            actuallData = newMessage?.value?.split('\n')[0];
-          }
-          if (actuallData !== '' && actuallData !== '<p> </p>' && !startWithNonBreakSpace) {
-            props.sendMessage(actuallData, files.value)
+          const messagetext = message(newMessage);
+          if (messagetext !== '' && messagetext !== '<p> </p>' && !startWithNonBreakSpace) {
+            debugger;
+            props.sendMessage(messagetext, files.value)
             newMessage.value = ''
             readerFile.value = []
             files.value = []
           }
         }
       };
+
+      const message = newMessage => {
+        let messageData;
+        let filterData;
+        let actuallData;
+        const startWithBr = newMessage.value.startsWith('<p><br />', 0);
+        const endWithBr = newMessage.value.endsWith("<br /></p>\n<p>&nbsp;</p>");
+        if (startWithBr || endWithBr) {
+          messageData = newMessage.value.split('<br />');
+          filterData = messageData.filter(function (el) { return el !== '' });
+          actuallData = filterData.join().split('\n')[0].replace(/,/g, " ");
+          return actuallData;
+        }
+        else {
+          actuallData = newMessage?.value?.split('\n')[0];
+          return actuallData;
+        }
+      }
 
       const enableMention = () => {
         filteredList.value = profiles.value;
