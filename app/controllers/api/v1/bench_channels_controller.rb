@@ -1,14 +1,19 @@
 class Api::V1::BenchChannelsController < Api::ApiController
-  before_action :set_bench_channel, except: %i[index create]
+  before_action :set_bench_channel, except: %i[index create joined_channels]
   before_action :set_channel_participant, :set_left_on, only: %i[leave]
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    @bench_channels = if params[:query].present?
-                        BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id }, match: :word_start)
-                      else
-                        Current.profile.bench_channels.includes(:channel_participants, :profiles)
-                      end
+    @bench_channels = Current.workspace.bench_channels
+
+    if params[:query].present?
+      @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
+                                                            match: :word_start)
+    end
+
+    @bench_channels = @bench_channels.reject do |channel|
+      channel.is_private && !channel.participant?(Current.profile)
+    end
   end
 
   def show; end
@@ -44,6 +49,10 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
+  end
+
+  def joined_channels
+    @bench_channels = Current.profile.bench_channels
   end
 
   private

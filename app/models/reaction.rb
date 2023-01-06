@@ -26,7 +26,9 @@ class Reaction < ApplicationRecord
       id: id,
       emoji: emoji,
       conversation_message_id: conversation_message_id,
-      bench_conversation_id: conversation_message.bench_conversation_id
+      bench_conversation_id: conversation_message.bench_conversation_id,
+      profile_id: profile.id,
+      reacted_by: profile.username
     }
   end
 end

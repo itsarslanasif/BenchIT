@@ -30,6 +30,10 @@ class BenchChannel < ApplicationRecord
     }
   end
 
+  def participant?(profile)
+    channel_participants.exists?(profile: profile)
+  end
+
   private
 
   def set_profile_and_workspace
