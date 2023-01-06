@@ -111,6 +111,6 @@ export const CONSTANTS = {
   SIGN_OUT: 'Sign Out of BenchIT',
   ADD_WORKSPACE: 'Add workspaces',
   CREATED: 'Created',
-  SUCCESS_MESSAGE_PLURAL: 'members added successfully.',
-  SUCCESS_MESSAGE_SINGULAR: 'member added successfully.',
+  MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
+  MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
 };
