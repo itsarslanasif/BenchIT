@@ -4,7 +4,7 @@
       <AccordionItem default-opened="true">
         <template #summary>{{ $t('channels.title') }}</template>
         <h5
-          v-for="channel in channels"
+          v-for="channel in joinedChannels"
           :key="channel.id"
           class="hover:bg-primaryHover"
         >
@@ -49,9 +49,9 @@ export default {
   },
   setup() {
     const channelStore = useChannelStore();
-    const { channels } = storeToRefs(channelStore);
+    const { joinedChannels } = storeToRefs(channelStore);
     return {
-      channels,
+      joinedChannels,
     };
   },
   methods: {
