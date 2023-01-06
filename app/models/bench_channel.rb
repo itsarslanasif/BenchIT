@@ -30,7 +30,7 @@ class BenchChannel < ApplicationRecord
     }
   end
 
-  def participating?(profile)
+  def participant?(profile)
     channel_participants.exists?(profile: profile)
   end
 
