@@ -62,6 +62,8 @@ Favourite.create(profile_id: 2, favourable_type: 'BenchChannel', favourable_id: 
 Favourite.create(profile_id: 2, favourable_type: 'BenchChannel', favourable_id: 2)
 Favourite.create(profile_id: 2, favourable_type: 'Group', favourable_id: 2)
 ConversationMessage.create(content: '1st reply', is_threaded: false, bench_conversation_id: 1, sender_id: 1, parent_message_id: 1)
+BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
+ConversationMessage.create(content: 'Hi from developer', is_threaded: false, bench_conversation_id: 6, sender_id: 1)
 Workspace.create!(company_name: 'Devsinc',
                   workspace_type: :work,
                   bench_it_url: 'https://www.devsinc.com',
@@ -73,7 +75,7 @@ Current.workspace = Workspace.second
 BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
 ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 5)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 5)
-ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 6, sender_id: 6)
+ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 7, sender_id: 6)
 
 Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')
 Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bookmarkable_id: 1, bookmark_URL: 'www.facebook.com')
