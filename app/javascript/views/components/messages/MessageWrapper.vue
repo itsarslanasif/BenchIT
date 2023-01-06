@@ -239,6 +239,7 @@ export default {
   },
   beforeUnmount() {
     this.topReactions = null;
+    this.displayedReactions = null;
   },
   computed: {
     time() {
@@ -349,6 +350,7 @@ export default {
         console.error(e);
       }
     },
+
     countReaction(emoji) {
       const filteredReactions = this.currMessage.reactions.filter(function (
         value
@@ -364,6 +366,7 @@ export default {
       }
       return filteredReactions.length;
     },
+
     getUsers(emoji, name) {
       let users = this.currMessage.reactions
         .filter(function (reaction) {
@@ -385,6 +388,7 @@ export default {
       });
       return formatter.format(users);
     },
+
     computedClass(emoji) {
       return this.currMessage.reactions.some(reaction => {
         return (
@@ -394,11 +398,9 @@ export default {
       });
     },
   },
-  beforeUnmount() {
-    this.displayedReactions = null;
-  },
 };
 </script>
+
 <style scoped>
 .reaction-margin {
   margin-right: -44px;
