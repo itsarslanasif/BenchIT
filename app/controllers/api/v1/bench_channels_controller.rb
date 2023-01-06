@@ -10,7 +10,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                             match: :word_start)
     end
     @bench_channels = @bench_channels.reject do |channel|
-      channel.is_private && !channel.channel_participants.exists?(profile: Current.profile)
+      channel.is_private && !channel.participating?(Current.profile)
     end
   end
 
