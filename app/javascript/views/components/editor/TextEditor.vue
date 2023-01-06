@@ -131,7 +131,6 @@ export default
           const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
           const messagetext = message(newMessage);
           if (messagetext !== '' && messagetext !== '<p> </p>' && !startWithNonBreakSpace) {
-            debugger;
             props.sendMessage(messagetext, files.value)
             newMessage.value = ''
             readerFile.value = []
