@@ -1,6 +1,5 @@
 class Api::V1::ReactionsController < Api::ApiController
-  before_action :set_reaction, only: :destroy
-  before_action :check_profile, only: :destroy
+  before_action :set_reaction, :check_profile, only: :destroy
 
   def create
     @reaction = Current.profile.reactions.new(reaction_params)
