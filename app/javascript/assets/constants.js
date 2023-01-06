@@ -110,6 +110,7 @@ export const CONSTANTS = {
   SIGN_IN_MOBILE: 'Sign in to BenchIT on mobile',
   SIGN_OUT: 'Sign Out of BenchIT',
   ADD_WORKSPACE: 'Add workspaces',
+  YOU: 'you',
   CREATED: 'Created',
   MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
