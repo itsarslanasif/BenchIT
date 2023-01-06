@@ -11,6 +11,7 @@ import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.
 import UserSignIn from './views/pages/UserSignIn.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
+import Homepage from './views/pages/Homepage.vue'
 import NewDirectMessages from '@/views/components/directMessages/findDirectMessages.vue';
 import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue';
 import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue';
@@ -49,7 +50,7 @@ const router = createRouter({
     },
     {
       path: '/',
-      component: SplitPanes,
+      component: Homepage,
       name: 'screen',
       meta: { auth: true },
       children: [
@@ -137,7 +138,7 @@ router.beforeEach((to, from, next) => {
   currentProfileStore.setProfile({ profile: currentProfile })
   currentUserStore.setUser(currentUser)
   currentWorkspaceStore.setWorkspace(currentWorkspace)
-
+  
   if (!localStorage.getItem('token') && currentWorkspace === null && to.meta.auth) {
     next('/sign_in');
   } else if (localStorage.getItem('token') && currentWorkspace === null && to.meta.auth) {
