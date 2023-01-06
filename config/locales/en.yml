@@ -98,6 +98,7 @@ en:
         local_time: 'local time'
         edit_contact_information: 'Edit Contact information'
         contact_information: 'Contact information'
+        edit_about_me: 'Edit About me'
         email_address: 'Email Address'
         add_email: '+ Add Email'
         phone: 'Phone'
@@ -106,6 +107,7 @@ en:
         add_description: '+ Add description'
         active: 'Active'
         away: 'Away'
+        displayed_on_your_profile: 'This will be displayed on your profile.'
       chat:
         today: 'Today'
         replies: 'replies'
