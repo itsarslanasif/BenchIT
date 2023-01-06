@@ -71,8 +71,8 @@
           <div
             @click="addReaction(emoji)"
             :class="[
-              { own_reactions: isCurrentUserReaction(emoji) },
-              { 'ml-12 reaction-margin': isSameUser && isSameDayMessage },
+              { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
+              { 'ml-12 -mr-10': isSameUser && isSameDayMessage },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
@@ -400,13 +400,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.reaction-margin {
-  margin-right: -44px;
-}
-.own_reactions {
-  background-color: rgb(216, 233, 239);
-  border-color: rgb(13, 162, 255);
-}
-</style>

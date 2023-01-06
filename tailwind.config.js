@@ -106,6 +106,10 @@ module.exports = {
         100: '#f8f8f8',
         50: '#F3F3F5',
       },
+      blue: {
+        100: '#D8E9EF',
+        200: '#0DA2FF',
+      }
     },
     extend: {
       screens: {
