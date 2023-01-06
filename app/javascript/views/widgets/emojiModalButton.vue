@@ -65,21 +65,7 @@ export default {
     handleSelect(key, message, pinnedConversationStore) {
       switch (key) {
         case 'copy-link':
-          let tempText = document.createElement('input');
-          if (message.conversationable_type == 'BenchChannel') {
-            tempText.value = `${import.meta.env.VITE_APP_SERVER_URL}/channels/${
-              message.conversationable_id
-            }/${message.id}`;
-          } else if (message.conversationable_type == 'Profile') {
-            tempText.value = `${import.meta.env.VITE_APP_SERVER_URL}/profiles/${
-              this.$route.params.id
-            }/${message.id}`;
-          } else if (message.conversationable_type == 'Group') {
-            tempText.value = `${import.meta.env.VITE_APP_SERVER_URL}/groups/${
-              this.$route.params.id
-            }/${message.id}`;
-          }
-          navigator.clipboard.writeText(tempText.value);
+          this.copyLinkToMessage(message);
           break;
         case 'delete-message':
           deleteMessage(message.id);
@@ -98,6 +84,24 @@ export default {
           }
           break;
       }
+    },
+
+    copyLinkToMessage(message) {
+      let tempText = null;
+      if (message.conversationable_type == 'BenchChannel') {
+        tempText = `${import.meta.env.VITE_APP_SERVER_URL}/channels/${
+          message.conversationable_id
+        }/${message.id}`;
+      } else if (message.conversationable_type == 'Profile') {
+        tempText = `${import.meta.env.VITE_APP_SERVER_URL}/profiles/${
+          this.$route.params.id
+        }/${message.id}`;
+      } else if (message.conversationable_type == 'Group') {
+        tempText = `${import.meta.env.VITE_APP_SERVER_URL}/groups/${
+          this.$route.params.id
+        }/${message.id}`;
+      }
+      navigator.clipboard.writeText(tempText);
     },
   },
 };
