@@ -271,7 +271,9 @@ export default {
 
     jumpToConversation() {
       if (this.currMessage.conversationable_type == 'BenchChannel') {
-        this.$router.push(`/channels/${this.getConversationId()}`);
+        this.$router.push(
+          `/channels/${this.getConversationId()}/${this.currMessage.id}`
+        );
       } else if (this.currMessage.conversationable_type == 'Profile') {
         this.$router.push(
           `/profiles/${this.getConversationId()}/${this.currMessage.id}`
