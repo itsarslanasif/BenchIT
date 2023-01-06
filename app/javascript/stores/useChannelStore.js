@@ -18,6 +18,7 @@ export const useChannelStore = () => {
         try {
           this.channels = await getChannels();
           this.joinedChannels = await getJoinedChannels();
+          this.sortChannelsList();
         } catch (e) {
           console.error(e);
         }
@@ -28,6 +29,7 @@ export const useChannelStore = () => {
           await createChannel(name, description, is_private).then(response => {
             this.channels.push(response.data);
             this.joinedChannels.push(response.data);
+            this.sortChannelsList();
           });
         } catch (e) {
           console.error(e);
@@ -45,7 +47,9 @@ export const useChannelStore = () => {
       async joinChannel(channel_id) {
         try {
           const res = await memberJoinChannel(channel_id);
+          this.channels.push(res.data.channel);
           this.joinedChannels.push(res.data.channel);
+          this.sortChannelsList();
         } catch (e) {
           console.error(e);
         }
@@ -54,11 +58,24 @@ export const useChannelStore = () => {
       async leaveChannel(id) {
         try {
           const response = await memberLeaveChannel(id);
+          this.channels = this.channels.filter(channel => channel.id != id);
           this.joinedChannels = this.joinedChannels.filter(channel => channel.id != id);
           return response
         } catch (e) {
-          console.error(e)
+          console.error(e);
         }
+      },
+
+      sortChannelsList() {
+        this.joinedChannels = this.joinedChannels.sort((thisChannel, nextChannel) => {
+          if (thisChannel.name.toLowerCase() < nextChannel.name.toLowerCase()) {
+            return -1;
+          }
+          if (thisChannel.name.toLowerCase() > nextChannel.name.toLowerCase()) {
+            return 1;
+          }
+          return 0;
+        });
       },
     },
   });

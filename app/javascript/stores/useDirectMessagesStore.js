@@ -6,7 +6,6 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     selectedDm: '',
     directMessagesList: [],
   }),
-
   getters: {
     getSelectedDm() {
       return this.selectedDm;
@@ -33,9 +32,50 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       try {
         this.directMessagesList = await getDirectMessagesList(workspace_id);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
+    },
+    getSortedDMList(currentProfileID) {
+      const ownChat = this.getOwnChat(currentProfileID);
+      const index = this.getIndexOfOwnChat(ownChat);
+      this.removeOwnChatFromList(index);
+      if (this.hasElementsToSort()) {
+        this.sort();
+      }
+      this.addOwnChatAtTop(ownChat);
+      return this.directMessagesList;
+    },
+    getOwnChat(currentProfileID) {
+      return this.directMessagesList.find(chat => chat.id === currentProfileID);
+    },
+    getIndexOfOwnChat(ownChat) {
+      return this.directMessagesList.indexOf(ownChat);
+    },
+    removeOwnChatFromList(index) {
+      this.directMessagesList.splice(index, 1);
+    },
+    hasElementsToSort() {
+      return this.directMessagesList.length > 1;
+    },
+    sort() {
+      this.directMessagesList = this.directMessagesList.sort(
+        (thisUser, nextUser) => {
+          if (
+            thisUser.username.toLowerCase() < nextUser.username.toLowerCase()
+          ) {
+            return -1;
+          }
+          if (
+            thisUser.username.toLowerCase() > nextUser.username.toLowerCase()
+          ) {
+            return 1;
+          }
+          return 0;
+        }
+      );
+    },
+    addOwnChatAtTop(ownChat) {
+      this.directMessagesList.unshift(ownChat);
     },
   },
 });
-
