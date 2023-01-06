@@ -94,7 +94,8 @@ export const CONSTANTS = {
   DOWNLOADS: 'Downloads',
   SIGN_OUT_OF_DEVSINC: 'Sign out of Devsinc',
   SET_STATUS: 'Set status',
-  CHANNEL_NAME_INVALID_ERROR:"Channel names can't contain spaces, periods, or most punctuation. Try again?",
+  CHANNEL_NAME_INVALID_ERROR:
+    "Channel names can't contain spaces, periods, or most punctuation. Try again?",
   FIELDS_REQUIRED_ERROR: "Fields are required and can't be blank !",
   CHANNEL_NAME_ERROR: 'Please enter channel name.',
   CHANNEL_DISCRIPTION_ERROR: 'Please enter channel description.',
@@ -109,5 +110,9 @@ export const CONSTANTS = {
   SIGN_IN_MOBILE: 'Sign in to BenchIT on mobile',
   SIGN_OUT: 'Sign Out of BenchIT',
   ADD_WORKSPACE: 'Add workspaces',
-  NEW_CONVERSATION: 'New conversation'
+  NEW_CONVERSATION: 'New conversation',
+  YOU: 'you',
+  CREATED: 'Created',
+  MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
+  MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
 };
