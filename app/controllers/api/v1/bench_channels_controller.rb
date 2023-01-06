@@ -4,7 +4,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
-    @bench_channels = BenchChannel.where(workspace_id: Current.workspace.id)
+    @bench_channels = Current.workspace.bench_channels
     if params[:query].present?
       @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
                                                             match: :word_start)
