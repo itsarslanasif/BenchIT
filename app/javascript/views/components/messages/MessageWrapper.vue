@@ -71,10 +71,10 @@
           <div
             @click="addReaction(emoji)"
             :class="[
-              { own_reactions: computedClass(emoji) },
+              { own_reactions: isCurrentUserReaction(emoji) },
               { 'ml-12 reaction-margin': isSameUser && isSameDayMessage },
             ]"
-            class="mt-1 inline-flex mr-1 w-10 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
+            class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
             <n-tooltip
               placement="top"
@@ -90,7 +90,7 @@
                 >
               </template>
               <div class="flex flex-col items-center">
-                <span class="text-3xl bg-white rounded text-center w-10">{{
+                <span class="text-3xl bg-white rounded text-center w-12">{{
                   emoji
                 }}</span>
                 <span class="text-md"
@@ -266,10 +266,10 @@ export default {
       return `${this.currMessage.replies?.length} replies..`;
     },
     displayReaction() {
-      this.currMessage.reactions.filter(element => {
-        const isDuplicate = this.displayedReactions.includes(element.emoji);
+      this.currMessage.reactions.filter(reaction => {
+        const isDuplicate = this.displayedReactions.includes(reaction.emoji);
         if (!isDuplicate) {
-          this.displayedReactions.push(element.emoji);
+          this.displayedReactions.push(reaction.emoji);
           return true;
         }
         return false;
@@ -353,9 +353,9 @@ export default {
 
     countReaction(emoji) {
       const filteredReactions = this.currMessage.reactions.filter(function (
-        value
+        reaction
       ) {
-        return value.emoji === emoji;
+        return reaction.emoji === emoji;
       });
       if (filteredReactions.length === 0) {
         this.displayedReactions = this.displayedReactions.filter(function (
@@ -389,7 +389,7 @@ export default {
       return formatter.format(users);
     },
 
-    computedClass(emoji) {
+    isCurrentUserReaction(emoji) {
       return this.currMessage.reactions.some(reaction => {
         return (
           reaction.emoji === emoji &&
