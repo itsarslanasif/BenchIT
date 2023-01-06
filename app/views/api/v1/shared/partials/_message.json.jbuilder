@@ -5,6 +5,7 @@ json.is_edited message.created_at != message.updated_at
 json.parent_message_id message.parent_message_id
 json.sender_id message.sender_id
 json.sender_name message.profile.username
+json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
 json.reactions message.reactions
 json.created_at message.created_at
@@ -19,6 +20,7 @@ json.replies message.replies do |reply|
   json.parent_message_id reply.parent_message_id
   json.sender_id reply.sender_id
   json.sender_name reply.profile.username
+  json.partial! 'api/v1/reactions/partials/reactions', reactions: reply.reactions
   json.sender_avatar url_for(reply.profile.profile_image) if reply.profile.profile_image.attached?
   json.reactions reply.reactions
   json.created_at reply.created_at

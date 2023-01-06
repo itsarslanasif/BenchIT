@@ -253,6 +253,14 @@ export default {
     firstMessageId() {
       return this.messagesStore.messages[0]?.id;
     },
+    isFirstMessage() {
+      if (this.messagesStore.messages) {
+        return this.firstMessageId === this.currMessage?.id;
+      }
+    },
+    firstMessageId() {
+      return this.messagesStore.messages[0]?.id;
+    },
   },
   methods: {
     async addReaction(emoji) {
