@@ -53,4 +53,3 @@ if message.bench_conversation.conversationable_type.eql?('Profile')
     json.receiver_name message.bench_conversation.conversationable.username
   end
 end
-
