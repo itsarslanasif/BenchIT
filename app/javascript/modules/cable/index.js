@@ -1,9 +1,5 @@
-import {
-  useMessageStore
-} from '../../stores/useMessagesStore';
-import {
-  usePinnedConversation
-} from '../../stores/UsePinnedConversationStore';
+import { useMessageStore } from '../../stores/useMessagesStore';
+import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 
 const createMessage = (data, messageStore) => {
   try {
@@ -126,7 +122,6 @@ const pinMessage = (data, messageStore) => {
   }
 };
 
-
 const unPinMessage = (data, messageStore) => {
   const pinsStore = usePinnedConversation();
   try {
@@ -150,8 +145,6 @@ const unPinMessage = (data, messageStore) => {
     console.error(err);
   }
 };
-
-
 
 const actions = {
   MessageCreate: createMessage,

@@ -179,12 +179,12 @@ export default {
 }
 
 .highlight {
-  animation: background-fade 10s;
+  animation: background-fade 5s;
 }
 
 @keyframes background-fade {
   0% {
-    background: rgba(213, 215, 211, 215);
+    background: rgba(253, 245, 221, 255);
   }
 }
 

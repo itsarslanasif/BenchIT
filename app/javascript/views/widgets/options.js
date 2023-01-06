@@ -1,18 +1,11 @@
-import {
-  NIcon
-} from 'naive-ui';
-import {
-  h
-} from 'vue';
+import { NIcon } from 'naive-ui';
+import { h } from 'vue';
 import {
   RocketOutline as PollyIcon,
   CardOutline as CardOutlineIcon,
-  PersonAddOutline as PersonAddIcon
+  PersonAddOutline as PersonAddIcon,
 } from '@vicons/ionicons5';
-import {
-  CONSTANTS
-} from '../../assets/constants';
-
+import { CONSTANTS } from '../../assets/constants';
 
 export default class Options {
   constructor(isPinned) {
@@ -32,7 +25,8 @@ export default class Options {
   };
 
   getOptions() {
-    return [{
+    return [
+      {
         label: CONSTANTS.OFF_NOTIFICATIONS,
         key: this.generateKey(CONSTANTS.OFF_NOTIFICATIONS),
       },
@@ -47,7 +41,8 @@ export default class Options {
       {
         label: CONSTANTS.REMIND_LATER,
         key: this.generateKey(CONSTANTS.REMIND_LATER),
-        children: [{
+        children: [
+          {
             label: CONSTANTS.TWENTY_MINUTES,
             key: this.generateKey(CONSTANTS.TWENTY_MINUTES),
           },
@@ -88,12 +83,12 @@ export default class Options {
       {
         label: CONSTANTS.PIN_TO_CONVERSATION,
         key: this.generateKey(CONSTANTS.PIN_TO_CONVERSATION),
-        show: !this.isPinned
+        show: !this.isPinned,
       },
       {
         label: CONSTANTS.UNPIN_FROM_CONVERSATION,
         key: this.generateKey(CONSTANTS.UNPIN_FROM_CONVERSATION),
-        show: this.isPinned
+        show: this.isPinned,
       },
       {
         type: 'divider',
