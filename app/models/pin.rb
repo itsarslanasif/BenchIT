@@ -9,11 +9,7 @@ class Pin < ApplicationRecord
 
   def broadcast_pin
     result = {
-      content: {
-        id: id,
-        pinned_by: profile.username,
-        message: conversation_message.message_content
-      },
+      content: conversation_message.message_content,
       type: 'Pin'
     }
     result[:action] = if destroyed?

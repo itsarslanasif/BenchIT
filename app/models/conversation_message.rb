@@ -33,7 +33,7 @@ class ConversationMessage < ApplicationRecord
 
   def message_content
     message = model_basic_content
-    message[:pinned_by] = pin.profile.username if pin.present?
+    message[:pin] = { id: pin.id, pinned_by: pin.profile.username } if pin.present?
     message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
     message[:attachments] = attach_message_attachments if message_attachments.present?
 

@@ -1,15 +1,18 @@
-<template >
+<template>
   <div
-   v-click-outside="pinnedConversationStore.closeModal"
+    v-click-outside="pinnedConversationStore.closeModal"
     v-if="pinnedConversationStore.pinToggle && pinnedConversationStore.getCount"
-    class="flex overflow-auto z-10 -mt-1 px-2 py-2 ml-1 fixed flex-col drop-shadow-2xl border-black-300  bg-gray-50 w-2/6 maxHeight border rounded-lg"
+    class="flex overflow-auto z-10 -mt-1 px-2 py-2 ml-1 fixed flex-col drop-shadow-2xl border-black-300 bg-gray-50 w-2/6 maxHeight border rounded-lg"
   >
     <template
-      v-for="pin in pinnedConversationStore.getPinnedConversation"
-      :key="pin.id"
+      v-for="message in pinnedConversationStore.getPinnedConversation"
+      :key="message.pin.id"
     >
       <div class="mt-5">
-        <PinnedMessageWrapperVue :curr-message="pin.message" :prev-message="prevMessage" />
+        <PinnedMessageWrapperVue
+          :curr-message="message"
+          :prev-message="prevMessage"
+        />
       </div>
     </template>
   </div>
@@ -20,7 +23,6 @@ import MessageWrapper from '../messages/MessageWrapper.vue';
 import PinnedMessageWrapperVue from './pinnedMessageWrapper.vue';
 import vClickOutside from 'click-outside-vue3';
 
-
 export default {
   setup() {
     const pinnedConversationStore = usePinnedConversation();
@@ -30,7 +32,8 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   components: {
-    MessageWrapper,PinnedMessageWrapperVue
+    MessageWrapper,
+    PinnedMessageWrapperVue,
   },
 };
 </script>
@@ -40,4 +43,3 @@ export default {
   max-height: 800px;
 }
 </style>
-

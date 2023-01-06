@@ -21,13 +21,13 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
   actions: {
     async index(conversation_type, id) {
       this.pinnedConversation = await pinnedMessages(conversation_type, id);
-      this.pinToggle=false;
+      this.pinToggle = false;
     },
     pinMessage(message) {
       this.pinnedConversation.push(message);
     },
     isPinned(message) {
-      return this.pinnedConversation.includes(p => p.message == message);
+      return this.pinnedConversation.includes(message);
     },
     unPinMessage(message) {
       this.pinnedConversation = this.pinnedConversation.filter(
@@ -37,8 +37,8 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     togglePin() {
       this.pinToggle = !this.pinToggle;
     },
-    closeModal(){
-      this.pinToggle=false;
-    }
+    closeModal() {
+      this.pinToggle = false;
+    },
   },
 });

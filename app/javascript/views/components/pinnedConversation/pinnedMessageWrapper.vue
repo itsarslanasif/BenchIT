@@ -1,15 +1,13 @@
 <template>
   <div
     @click="jumpToConversation"
-    class="bg-white border border-black-200 rounded-md drop-shadow-md "
+    class="bg-white border border-black-200 rounded-md drop-shadow-md"
   >
     <div v-if="currMessage.pinned">
-      <span
-        class="p-1 items-center text-black-800 text-xs flex relative"
-      >
+      <span class="p-1 items-center text-black-800 text-xs flex relative">
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
-        {{ currMessage.pinned_by }}
+        {{ currMessage.pin.pinned_by }}
       </span>
     </div>
     <div
@@ -273,9 +271,13 @@ export default {
           `/channels/${this.currMessage.bench_conversation}/${this.currMessage.id}`
         );
       } else if (this.currMessage.conversationable_type == 'Profile') {
-        this.$router.push(`/profiles/${this.currMessage.receiver_id}/${this.currMessage.id}`);
+        this.$router.push(
+          `/profiles/${this.currMessage.receiver_id}/${this.currMessage.id}`
+        );
       } else if (message.conversationable_type == 'Group') {
-        this.$router.push(`/groups/${this.currMessage.group_id}/${this.currMessage.id}`);
+        this.$router.push(
+          `/groups/${this.currMessage.group_id}/${this.currMessage.id}`
+        );
       }
     },
 

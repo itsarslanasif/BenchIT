@@ -8,7 +8,7 @@
       >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
-        {{ currMessage.pinned_by }}
+        {{ currMessage.pin.pinned_by }}
       </span>
     </div>
     <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">

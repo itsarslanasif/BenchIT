@@ -5,7 +5,12 @@ json.sender_avatar url_for(message.profile.profile_image) if message.profile.pro
 json.is_edited message.created_at != message.updated_at
 json.isSaved saved?(message)
 json.pinned message.pin.present?
-json.pinned_by message.pin.profile.username if message.pin.present?
+if message.pin.present?
+  json.pin do
+    json.id message.pin.id
+    json.pinned_by message.pin.profile.username
+  end
+end
 json.receiver_name @receiver.username if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
 if message.parent_message_id.blank?

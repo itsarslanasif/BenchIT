@@ -97,27 +97,23 @@ const pinMessage = (data, messageStore) => {
   const pinsStore = usePinnedConversation();
   try {
     const messages = messageStore.getMessages;
-    if (data.message.parent_message_id) {
-      const message = messages.find(
-        m => m.id === data.message.parent_message_id
-      );
+    if (data.parent_message_id) {
+      const message = messages.find(m => m.id === data.parent_message_id);
       const findThreadMessageIndex = message.replies.findIndex(
-        m => m.id === data.message.id
+        m => m.id === data.id
       );
       if (findThreadMessageIndex != -1) {
-        message.replies[findThreadMessageIndex] = data.message;
+        message.replies[findThreadMessageIndex] = data;
       }
     } else {
-      const findMessageIndex = messages.findIndex(
-        m => m.id === data.message.id
-      );
+      const findMessageIndex = messages.findIndex(m => m.id === data.id);
       if (findMessageIndex != -1) {
-        messages[findMessageIndex] = data.message;
+        messages[findMessageIndex] = data;
       }
     }
 
     const pinnedMessages = pinsStore.getPinnedConversation;
-    const pin = pinnedMessages.find(m => m.id === data.id);
+    const pin = pinnedMessages.find(m => m.pin.id === data.pin.id);
     if (pin == undefined) {
       pinsStore.pinMessage(data);
     }
