@@ -8,7 +8,7 @@ class Pin < ApplicationRecord
   private
 
   def broadcast_pin
-    conversation_message.pin = nil
+    conversation_message.pin = nil if destroyed?
     result = {
       content: conversation_message.message_content,
       type: 'Pin'
