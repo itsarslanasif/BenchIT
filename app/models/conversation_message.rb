@@ -75,6 +75,7 @@ class ConversationMessage < ApplicationRecord
       parent_message_id: parent_message_id,
       sender_id: sender_id,
       sender_name: profile.username,
+      sender_avatar: Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image),
       reactions: reactions,
       created_at: created_at,
       updated_at: updated_at,
