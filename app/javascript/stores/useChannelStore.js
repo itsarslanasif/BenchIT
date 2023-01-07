@@ -16,7 +16,9 @@ export const useChannelStore = () => {
     actions: {
       async index() {
         try {
-          this.channels = await getChannels();
+          let test = await getChannels();
+          this.channels = [...test]
+          console.log("My channels", this.channels);
           this.joinedChannels = await getJoinedChannels();
           this.sortChannelsList();
         } catch (e) {
@@ -38,7 +40,8 @@ export const useChannelStore = () => {
 
       async searchChannels(query) {
         try {
-          return await getChannels(query);
+          this.channels = await getChannels(query);
+          
         } catch (e) {
           console.error(e);
         }
@@ -47,7 +50,7 @@ export const useChannelStore = () => {
       async joinChannel(channel_id) {
         try {
           const res = await memberJoinChannel(channel_id);
-          this.channels.push(res.data.channel);
+          // this.channels.push(res.data.channel);
           this.joinedChannels.push(res.data.channel);
           this.sortChannelsList();
         } catch (e) {
@@ -58,7 +61,6 @@ export const useChannelStore = () => {
       async leaveChannel(id) {
         try {
           const response = await memberLeaveChannel(id);
-          this.channels = this.channels.filter(channel => channel.id != id);
           this.joinedChannels = this.joinedChannels.filter(channel => channel.id != id);
           return response
         } catch (e) {

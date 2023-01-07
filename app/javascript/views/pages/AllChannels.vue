@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { NInput, NSpace, NButton } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
@@ -61,13 +61,13 @@ export default {
   setup() {
     const term = ref('');
     const showButton = ref(false);
-    const searchedChannels = ref([]);
     const router = useRouter();
 
     const channelStore = useChannelStore();
     const currentProfileStore = useCurrentProfileStore();
     const { channels } = storeToRefs(channelStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
+    const searchedChannels = computed(()=> channels.value)
 
     const handleSubmit = async () => {
       searchedChannels.value = await channelStore.searchChannels(term.value);
@@ -89,12 +89,12 @@ export default {
 
     const isChannelParticipant = channel_participants => {
       return channel_participants.some(
-        participant => participant.id == currentProfile.value.id
+        participant => participant?.id == currentProfile.value.id
       );
     };
 
     onMounted(() => {
-      searchedChannels.value = channels.value;
+      channelStore.index(term.value);
     });
 
     onBeforeUnmount(() => {
