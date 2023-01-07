@@ -44,7 +44,9 @@ export default {
     return { profile: currentProfile, currentWorkspace };
   },
   beforeUnmount() {
-    this.profile = null;
+    this.status = this.userStatus = null;
+    this.prevStatus = this.profile = null;
+    this.statusIcon = this.options = null;
   },
   data() {
     return {
@@ -156,6 +158,7 @@ export default {
       switch (key) {
         case 'sign-out-of-workspace':
           sessionStorage.removeItem('currentWorkspace');
+          sessionStorage.removeItem('currentProfile');
           this.$router.push('/workspace_dashboard');
           break;
       }
