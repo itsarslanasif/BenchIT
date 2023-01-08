@@ -8,6 +8,7 @@ json.display_name profile.display_name
 json.pronounce_name profile.pronounce_name
 json.role profile.role
 json.title profile.title
+json.type 'Profile'
 json.status do
   json.text profile.text_status
   json.emoji profile.emoji_status

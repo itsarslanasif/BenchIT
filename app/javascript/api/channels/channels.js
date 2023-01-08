@@ -60,3 +60,13 @@ export const memberJoinChannel = async channel_id => {
     }
   );
 }
+
+export const getChannelInfo = async (channel_id) => {
+  return await axios
+    .get(`/v1/bench_channels/${channel_id}`, {
+      headers: { Authorization: localStorage.getItem('token') }, 
+    })
+    .then(response => {
+            return response.data;
+    });
+};

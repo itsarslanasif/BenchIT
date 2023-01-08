@@ -23,6 +23,7 @@ import { createCable, unsubscribe } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
+import { useConversationInfoStore } from '../../stores/useConversationInfoStore';
 import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
 export default {
@@ -51,10 +52,13 @@ export default {
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
     const conversation_type = getIndexByParams(1);
+    const conversationInfoStore = useConversationInfoStore();
     const id = getIndexByParams(2);
     const { messages } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
     messageStore.index(conversation_type, id);
+    conversationInfoStore.index(conversation_type, id)
+
     return {
       messages,
       conversation_type,

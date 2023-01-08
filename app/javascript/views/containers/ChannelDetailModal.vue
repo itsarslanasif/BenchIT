@@ -10,9 +10,9 @@
       <i class="fa-solid fa-xmark"></i>
     </p>
     <p class="font-bold text-2xl pl-8">
-      <i class="fas fa-hashtag mr-1"></i>{{ this.channelName }}
+      <i class="fas fa-hashtag mr-1"></i>{{ conversationInfo.name }}
     </p>
-    <StarUnstar :channelId="this.channelId" />
+    <!-- <StarUnstar :channelId="conversationInfo.id" />
     <div class="flex ml-4">
       <p
         @click="ChannelDetailStore.setSlectedOption('about')"
@@ -55,16 +55,19 @@
       v-if="ChannelDetailStore.isAbout()"
       :channelName="this.channelName"
     />
-    <members v-if="ChannelDetailStore.isMembers()" />
-  </div>
+    <members v-if="ChannelDetailStore.isMembers()" />-->
+  </div> 
 </template>
 
 <script>
+import {onMounted} from 'vue'
 import About from '../components/channeldetail/About.vue';
 import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
-import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
+import { useConversationInfoStore } from '../../stores/useConversationInfoStore';
+import { storeToRefs } from 'pinia';
 import vClickOutside from 'click-outside-vue3';
+
 export default {
   name: 'ChannelDetailModal',
   components: { About, StarUnstar, Members },
@@ -72,8 +75,12 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   setup() {
-    const ChannelDetailStore = useChannelDetailStore();
-    return { ChannelDetailStore };
+    const conversationInfoStore = useConversationInfoStore()
+    const {conversationInfo} = storeToRefs(conversationInfoStore)
+
+    return { 
+      conversationInfo,
+    };
   },
   props: {
     channelName: String,
