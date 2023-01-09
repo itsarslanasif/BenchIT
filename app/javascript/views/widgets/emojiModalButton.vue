@@ -65,7 +65,7 @@ export default {
   },
   data() {
     return {
-      options,
+      Options: '',
     };
   },
   methods: {
@@ -106,7 +106,6 @@ export default {
           }
           break;
         case 'un-pin-from-this-conversation':
-          console.log('pin ID:', message.pin.id);
           try {
             unPinMessage(message.pin.id);
           } catch (e) {
