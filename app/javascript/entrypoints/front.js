@@ -32,6 +32,11 @@ import {
   faCircleXmark,
   faArrowLeft,
   faCircle,
+  faComment,
+  faComments,
+  faAt,
+  faPaperPlane,
+  faAddressBook,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -69,6 +74,11 @@ library.add(
   faCircleXmark,
   faArrowLeft,
   faCircle,
+  faComments,
+  faComment,
+  faAt,
+  faPaperPlane,
+  faAddressBook,
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
