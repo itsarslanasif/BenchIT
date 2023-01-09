@@ -3,9 +3,9 @@
     <div v-if="showMentions || showChannels"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
       <div v-if="
-  (showMentions && hasMentionCommand) ||
-  (showChannels && hasChannelCommand)
-">
+        (showMentions && hasMentionCommand) ||
+        (showChannels && hasChannelCommand)
+      ">
         <div v-for="item in filteredList" :key="item.name" class="p-1 rounded-md hover:bg-secondaryHover"
           @click="addMentionToText">
           {{ item.creator_id ? item.name : item.username }}
@@ -14,35 +14,35 @@
     </div>
     <div>
       <editor v-model="newMessage" @keydown.enter="sendMessagePayload" api-key="no-api-key" :init="{
-  menubar: false,
-  statusbar: false,
-  plugins: 'lists link code codesample',
-  toolbar:
-    'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
-  codesample_languages: [none],
-  formats: {
-    code: {
-      selector: 'p',
-      styles: {
-        background:
-          'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-        'border-left': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-        'border-right': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-        'border-top': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-        'border-bottom': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-        'border-radius': '3px',
-        'font-size': '10px',
-        'font-variant-ligatures': 'none',
-        'line-height': '1.5',
-        'margin-bottom': '14px',
-        'padding-left': '8px',
-        'padding-right': '8px',
-        position: 'relative',
-        'font-family': 'monospace',
-      },
-    },
-  },
-}" />
+        menubar: false,
+        statusbar: false,
+        plugins: 'lists link code codesample',
+        toolbar:
+          'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
+        codesample_languages: [none],
+        formats: {
+          code: {
+            selector: 'p',
+            styles: {
+              background:
+                'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
+              'border-left': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+              'border-right': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+              'border-top': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+              'border-bottom': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+              'border-radius': '3px',
+              'font-size': '10px',
+              'font-variant-ligatures': 'none',
+              'line-height': '1.5',
+              'margin-bottom': '14px',
+              'padding-left': '8px',
+              'padding-right': '8px',
+              position: 'relative',
+              'font-family': 'monospace',
+            },
+          },
+        },
+      }" />
     </div>
     <div>
       <div v-if="readerFile.length" class="flex mt-2">
@@ -55,7 +55,7 @@
     <div class="flex w-full relative">
       <Attachments :getImages="getImages" />
       <div class="w-1/12">
-        <button @click="sendMessagePayload"
+        <button @click="dispatchKeydownEnterEvent"
           class="px-4 py-1 bg-success my-4 rounded-md text-white hover:bg-successHover">
           {{ $t('actions.send') }}
         </button>
@@ -80,6 +80,12 @@ export default
       editor: Editor,
       Attachments,
       NMention
+    },
+    methods: {
+      dispatchKeydownEnterEvent() {
+        const event = new KeyboardEvent('keydown', { keyCode: 13 });
+        this.sendMessagePayload(event);
+      },
     },
     props: ["sendMessage"],
     setup(props) {
@@ -127,7 +133,8 @@ export default
       }
 
       const sendMessagePayload = (event) => {
-        if (event.keyCode === 13 && !event.shiftKey) {
+        if (!event.shiftKey) {
+          debugger;
           const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
           const messagetext = message(newMessage);
           if (messagetext !== '' && messagetext !== '<p> </p>' && !startWithNonBreakSpace) {
@@ -144,8 +151,9 @@ export default
         let filterData;
         let actuallData;
         const startWithBr = newMessage.value.startsWith('<p><br />', 0);
-        const endWithBr = newMessage.value.endsWith("<br /></p>\n<p>&nbsp;</p>");
-        if (startWithBr || endWithBr) {
+        const endWithBr = newMessage.value.endsWith("<br /></p>");
+        const endWithBrAndP = newMessage.value.endsWith("<br /></p>\n<p>&nbsp;</p>");
+        if (startWithBr || endWithBr || endWithBrAndP) {
           messageData = newMessage.value.split('<br />');
           filterData = messageData.filter(function (el) { return el !== '' });
           actuallData = filterData.join().split('\n')[0].replace(/,/g, " ");
