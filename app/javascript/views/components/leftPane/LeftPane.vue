@@ -1,26 +1,26 @@
 <template>
-  <div class=" bg-primary flex flex-col h-full overflow-auto">
+  <div class="bg-primary flex flex-col h-full overflow-auto">
     <hr class="text-slate-400" />
     <div class="mt-4 mb-4 text-white">
-      <IconElement icon="&#8860;" :name="$t('sidebar.threads')" />
-      <IconElement icon="&#8704;" :name="$t('sidebar.direct_messages')" />
-      <IconElement icon="&#64;" :name="$t('sidebar.mentions_and_reactions')" />
-      <IconElement icon="&#8634;" :name="$t('sidebar.draft_and_sent')" />
+      <IconElement icon="fa-regular fa-comment" :name="$t('sidebar.threads')" />
+      <IconElement icon="fa-regular fa-comments" :name="$t('sidebar.direct_messages')" />
+      <IconElement icon="fa-at" :name="$t('sidebar.mentions_and_reactions')" />
+      <IconElement icon="fa-paper-plane" :name="$t('sidebar.draft_and_sent')" />
       <IconElement
-        icon="&#128101;"
+        icon="fa-regular fa-address-book"
         :name="$t('sidebar.people_and_user_group')"
       />
       <IconElement
-        icon="&#xf097;"
+        icon="fa-regular fa-bookmark"
         :name="$t('sidebar.save_message')"
         @click="getdata(`/savemessages`)"
       />
       <IconElement
-        icon="&#xf292;"
+        icon="fa-hashtag"
         :name="$t('sidebar.all_channels')"
         @click="getdata(`/browse-channels`)"
       />
-      <IconElement icon="&#8285;" :name="$t('sidebar.more')" />
+      <IconElement icon="fa-ellipsis-vertical" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />
     <div>
@@ -37,7 +37,7 @@ import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vu
 
 export default {
   components: { ChannelsAccordion, IconElement, DirectMessageAccordian },
-  
+
   methods: {
     getdata(chatURL) {
       this.$router.push(chatURL);
@@ -50,4 +50,3 @@ export default {
   height: 88vh;
 }
 </style>
-

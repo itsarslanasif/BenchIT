@@ -19,9 +19,9 @@
         >
           <div
             @click="goToChat(`/profiles/${user?.id}`, user)"
-            class="flex items-center -ml-3 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
+            class="flex items-center -ml-4 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
           >
-            <img class="w-6 h-6 rounded-md" :src="user?.image_url" />
+            <img class="w-5 h-5 rounded-md" :src="user?.image_url" />
             <p class="ml-2 text-sm text-white">{{ user?.username }}</p>
             <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
               {{ $t('pinconversation.you') }}
