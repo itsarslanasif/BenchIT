@@ -172,9 +172,8 @@ import UserProfileModal from '../../widgets/UserProfileModal.vue';
 import { add_reaction } from '../../../api/reactions/reaction.js';
 import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
-import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
-import emojiModalButtonVue from '../../widgets/emojiModalButton.vue';
+import { useProfileStore } from '../../../stores/useProfileStore';
 
 export default {
   name: 'MessageWrapper',
@@ -185,6 +184,7 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
+    const profilesStore = useProfileStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -192,6 +192,7 @@ export default {
       currentUserStore,
       rightPaneStore,
       userProfileStore,
+      profilesStore,
     };
   },
   components: {
@@ -326,10 +327,11 @@ export default {
       this.rightPaneStore.toggleUserProfileShow(true);
     },
 
-    async setUserProfileForPane() {
-      this.userProfileStore.setUserProfile(
-        await getUserProfile(1, this.currMessage.sender_id)
+    setUserProfileForPane() {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile.id === this.currMessage.sender_id
       );
+      this.userProfileStore.setUserProfile(profile);
     },
 
     saveMessage() {

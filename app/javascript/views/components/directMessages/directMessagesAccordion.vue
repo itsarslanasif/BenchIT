@@ -45,6 +45,7 @@ import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   components: { AccordionList, AccordionItem, addTeammatesDropdown },
@@ -74,7 +75,8 @@ export default {
   setup() {
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
-    return { directMessageStore, currentProfileStore };
+    const messagesStore = useMessageStore();
+    return { directMessageStore, currentProfileStore, messagesStore };
   },
   computed: {
     sortedDMList() {
@@ -88,7 +90,7 @@ export default {
       this.modalOpen = !this.modalOpen;
     },
     goToChat(chatURL, user) {
-      this.directMessageStore.setSelectedDm(user);
+      this.messagesStore.setSelectedChat(user);
       this.$router.push(chatURL);
     },
     handleClick() {

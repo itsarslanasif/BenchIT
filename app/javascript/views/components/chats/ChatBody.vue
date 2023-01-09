@@ -1,6 +1,7 @@
 <template>
   <div class="overflow-auto chatBody" ref="chatBody">
     <PinnedConversationModel />
+    <ChatDetail />
     <div
       v-for="message in messages"
       :key="message.id"
@@ -59,6 +60,7 @@ import { storeToRefs } from 'pinia';
 import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
 import JumpToDateVue from '../../widgets/JumpToDate.vue';
 import moment from 'moment';
+import ChatDetail from '../../widgets/ChatDetail.vue';
 export default {
   name: 'ChatBody',
   components: {
@@ -68,6 +70,7 @@ export default {
     NSpace,
     PinnedConversationModel,
     JumpToDateVue,
+    ChatDetail,
   },
   data() {
     return {

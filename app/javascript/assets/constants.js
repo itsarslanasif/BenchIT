@@ -114,6 +114,6 @@ export const CONSTANTS = {
   NEW_CONVERSATION: 'New conversation',
   YOU: 'you',
   CREATED: 'Created',
-  MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
-  MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
+  MEMBER_SUCCESS_MESSAGE: 'member added successfully.',
+  MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
 };

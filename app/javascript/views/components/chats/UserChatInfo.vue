@@ -10,8 +10,8 @@
           class="bg-success rounded-full border-primary border-2 h-3 w-3 relative -ml-3 mt-4"
         />
         <span v-show="chat">
-          <p class="text-xl self-center font-semibold pl-1" >
-            {{ directMessagesStore.getSelectedDm.username }}
+          <p class="text-xl self-center font-semibold pl-1">
+            {{ selectedChat.username }}
           </p>
         </span>
         <i
@@ -32,12 +32,16 @@
 <script>
 import { NAvatar, NIcon } from 'naive-ui';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore.js';
+import { useMessageStore } from '../../../stores/useMessagesStore.js';
+import { storeToRefs } from 'pinia';
 export default {
   name: 'UserChatInfo',
   components: { NAvatar, NIcon },
   setup() {
     const directMessagesStore = useDirectMessagesStore();
-    return { directMessagesStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { directMessagesStore, selectedChat };
   },
   props: ['chat'],
 };
