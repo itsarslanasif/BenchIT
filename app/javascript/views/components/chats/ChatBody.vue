@@ -16,7 +16,7 @@
           </div>
           <div
             v-if="jumpToDateTodayToggle"
-            class="absolute top-0 mt-8 w-1/5 z-10"
+            class="absolute top-0 mt-8 w-48 z-10"
           >
             <JumpToDateVue
               :scrollToMessageByDate="scrollToMessageByDate"
@@ -30,7 +30,7 @@
           </p>
           <div
             v-if="jumpToDateToggle && message.id === selectedMessage.id"
-            class="absolute top-0 mt-8 w-1/5 z-10"
+            class="absolute top-0 mt-8 w-48 z-10"
           >
             <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" />
           </div>
