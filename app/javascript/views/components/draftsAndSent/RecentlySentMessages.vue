@@ -107,7 +107,7 @@ export default {
     handleClick(message) {
       if (message.conversationable_type == 'BenchChannel') {
         this.$router.push(
-          `/channels/${message.bench_conversation}/${message.id}`
+          `/channels/${message.conversationable_id}/${message.id}`
         );
       } else if (message.conversationable_type == 'Profile') {
         this.$router.push(`/profiles/${message.receiver_id}/${message.id}`);

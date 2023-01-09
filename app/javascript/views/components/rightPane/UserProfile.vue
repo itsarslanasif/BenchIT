@@ -162,6 +162,7 @@
             v-if="
               ownProfile && !userProfileStore.userProfile?.contact_info?.email
             "
+            @click="toggleEditContactInfoModal"
             class="text-sm text-info cursor-pointer hover:underline"
           >
             {{ $t('rightpane.add_email') }}
@@ -200,6 +201,7 @@
             v-if="
               ownProfile && !userProfileStore.userProfile?.contact_info?.phone
             "
+            @click="toggleEditContactInfoModal"
             class="text-sm text-info cursor-pointer hover:underline"
           >
             {{ $t('rightpane.add_phone') }}
@@ -230,6 +232,7 @@
         </p>
         <p
           v-if="ownProfile"
+          @click="toggleEditAboutMeModal"
           class="col-span-1 self-center text-info cursor-pointer hover:underline"
         >
           {{ $t('actions.edit') }}
@@ -246,6 +249,7 @@
           </p>
           <p
             v-if="ownProfile && !userProfileStore.userProfile?.about_me?.skype"
+            @click="toggleEditAboutMeModal"
             class="text-sm text-info cursor-pointer hover:underline"
           >
             {{ $t('rightpane.add_skype') }}
@@ -259,6 +263,12 @@
       :toggleModal="toggleEditContactInfoModal"
       :userContactInfo="userProfileStore.userProfile.contact_info"
     />
+    <EditAboutMeModal
+      v-if="showAboutMeModal"
+      v-model:show="showAboutMeModal"
+      :toggleModal="toggleEditAboutMeModal"
+      :userAboutMe="userProfileStore.userProfile.about_me"
+    />
   </div>
 </template>
 
@@ -268,12 +278,20 @@ import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
+import EditAboutMeModal from '../../widgets/EditAboutMeModal.vue';
 
 export default {
-  components: { RightPaneHeader, NDivider, NTooltip, EditContactInfoModal },
+  components: {
+    RightPaneHeader,
+    NDivider,
+    NTooltip,
+    EditContactInfoModal,
+    EditAboutMeModal,
+  },
   data() {
     return {
       showContactInfoModal: false,
+      showAboutMeModal: false,
     };
   },
   setup() {
@@ -303,6 +321,9 @@ export default {
     },
     toggleEditContactInfoModal() {
       this.showContactInfoModal = !this.showContactInfoModal;
+    },
+    toggleEditAboutMeModal() {
+      this.showAboutMeModal = !this.showAboutMeModal;
     },
   },
 };
