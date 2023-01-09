@@ -72,4 +72,9 @@ class Profile < ApplicationRecord
   def groups
     Group.where('profile_ids @> ARRAY[?]::integer[]', [id])
   end
+
+  def favourite?(favourable_id,favourable_type)
+    return true if Current.profile.favourites.where(favourable_type: favourable_type, favourable_id: favourable_id).present?
+    return false
+  end
 end
