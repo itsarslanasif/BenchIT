@@ -71,11 +71,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def unread_messages
     str = REDIS.get("unreadMessages#{Current.workspace.id}#{Current.profile.id}")
-    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
-    unread_messages_ids = previous_unread_messages_details.pluck('message_id')
-    @messages = ConversationMessage.messages_by_ids_array(unread_messages_ids)
-                                   .includes(:reactions, :replies, :parent_message, :saved_items)
-                                   .with_attached_message_attachments
+    @previous_unread_messages_details = str.nil? ? {} : JSON.parse(str)
   end
 
   private

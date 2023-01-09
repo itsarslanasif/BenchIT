@@ -1,4 +1,4 @@
-class UnreadMessagesService
+class UnreadMessagesCreatorService
   def initialize(bench_conversation, profile_ids, message_id)
     @bench_conversation = bench_conversation
     @profile_ids = profile_ids
@@ -18,12 +18,11 @@ class UnreadMessagesService
       next if id == Current.profile.id
 
       previous_unread_messages_details = REDIS.get("unreadMessages#{Current.workspace.id}#{id}")
-      previous_unread_messages_details = previous_unread_messages_details.nil? ? [] : JSON.parse(previous_unread_messages_details)
-      previous_unread_messages_details << {
-        conversationable_type: @bench_conversation.conversationable_type,
-        conversationable_id: @bench_conversation.conversationable_id,
-        message_id: @message_id
-      }.freeze
+      previous_unread_messages_details = previous_unread_messages_details.nil? ? {} : JSON.parse(previous_unread_messages_details)
+      key = @bench_conversation.conversationable_type + @bench_conversation.conversationable_id.to_s
+      previous_unread_messages_details[key] ||= []
+      previous_unread_messages_details[key] << @message_id
+
       REDIS.set("unreadMessages#{Current.workspace.id}#{id}", previous_unread_messages_details.to_json)
     end
   end

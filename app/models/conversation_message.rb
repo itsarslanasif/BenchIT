@@ -16,11 +16,11 @@ class ConversationMessage < ApplicationRecord
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
   scope :messages_by_ids_array, lambda { |ids|
-    joins(:bench_conversation)
+    includes(:reactions, :replies, :parent_message, :saved_items)
+      .with_attached_message_attachments
       .where(id: ids)
-      .group(:conversationable_type, :conversationable_id, :id)
       .order(
-        conversationable_type: :asc, conversationable_id: :asc, created_at: :desc
+        created_at: :desc
       )
   }
 
@@ -78,8 +78,8 @@ class ConversationMessage < ApplicationRecord
   def add_unread_messages
     return unless action_performed.eql?('Create')
 
-    UnreadMessagesService.new(bench_conversation, eligible_for_notification_profile_ids,
-                              id).call
+    UnreadMessagesCreatorService.new(bench_conversation, eligible_for_notification_profile_ids,
+                                     id).call
   end
 
   def attach_message_attachments
