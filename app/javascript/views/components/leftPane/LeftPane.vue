@@ -24,6 +24,7 @@
     </div>
     <hr class="text-slate-400" />
     <div>
+      <!-- <StarredChannels /> -->
       <ChannelsAccordion />
       <DirectMessageAccordian />
     </div>
@@ -34,10 +35,11 @@
 import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
 import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vue';
+import StarredChannels from '../channels/StarredChannels.vue';
 
 export default {
-  components: { ChannelsAccordion, IconElement, DirectMessageAccordian },
-  
+  components: { ChannelsAccordion, IconElement, DirectMessageAccordian, StarredChannels },
+
   methods: {
     getdata(chatURL) {
       this.$router.push(chatURL);

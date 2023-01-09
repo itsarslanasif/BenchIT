@@ -150,6 +150,7 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        starred: 'Starred'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'

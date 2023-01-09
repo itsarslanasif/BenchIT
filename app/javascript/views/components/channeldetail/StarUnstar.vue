@@ -12,17 +12,26 @@
 <script>
 import { star } from '../../../api/starunstar/star.js';
 import { unstar } from '../../../api/starunstar/unstar.js';
+import { useStarredChannelsStore } from '../../../stores/useStarredChannelsStore';
 export default {
   name: 'StarUnstar',
+  setup() {
+    const starredChannelsStore = useStarredChannelsStore();
+    return {
+      starredChannelsStore,
+    };
+  },
 
   props: {
     channelId: Number,
+    channelName: String,
   },
 
   data() {
     return {
       favChannel: false,
       favChannelId: 0,
+      channel: { channelId: null, channelName: null },
     };
   },
   beforeUnmount() {
@@ -33,6 +42,7 @@ export default {
       this.favChannel = !this.favChannel;
       try {
         if (this.favChannel) {
+          this.setChannel();
           star({
             favourable_type: 'BenchChannel',
             favourable_id: this.channelId,
@@ -41,10 +51,21 @@ export default {
           });
         } else {
           unstar(this.favChannelId);
+          this.unsetChannel();
         }
       } catch (e) {
         console.error(e);
       }
+    },
+    setChannel() {
+      this.channel.channelId = this.channelId;
+      this.channel.channelName = this.channelName;
+      this.starredChannelsStore.addStarredChannel(this.channel);
+    },
+    unsetChannel() {
+      this.channel.channelId = null;
+      this.channel.channelName = null;
+      this.starredChannelsStore.removeStarredChannel(this.channel);
     },
   },
 };

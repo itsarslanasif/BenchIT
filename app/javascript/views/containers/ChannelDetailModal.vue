@@ -12,7 +12,7 @@
     <p class="font-bold text-2xl pl-8">
       <i class="fas fa-hashtag mr-1"></i>{{ this.channelName }}
     </p>
-    <StarUnstar :channelId="this.channelId" />
+    <StarUnstar :channelId="this.channelId" :channelName="this.channelName"/>
     <div class="flex ml-4">
       <p
         @click="ChannelDetailStore.setSlectedOption('about')"
