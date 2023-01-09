@@ -12,14 +12,16 @@
       oncontextmenu="return false;"
       @click="goTo(`/channels/${channel.id}`)"
       @click.right="toggleShow"
-      class="flex items-center -ml-3 pl-3 hover:bg-primaryHover cursor-pointer"
+      class="flex items-center -ml-4 pl-3 hover:bg-primaryHover cursor-pointer"
     >
-    <div v-if="channel.is_private">
-      <font-awesome-icon icon="fa-lock" />
-    </div>
-    <div v-else>
-      <font-awesome-icon icon="fa-hashtag" />
-    </div>
+      <div class="w-5">
+        <div v-if="channel.is_private">
+          <font-awesome-icon icon="fa-lock" />
+        </div>
+        <div v-else>
+          <font-awesome-icon icon="fa-hashtag" />
+        </div>
+      </div>
       <div class="px-1">{{ channel.name }}</div>
     </div>
   </n-dropdown>
