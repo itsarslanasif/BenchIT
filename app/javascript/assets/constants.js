@@ -116,4 +116,12 @@ export const CONSTANTS = {
   CREATED: 'Created',
   MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
+  OPEN: 'Open',
+  OPEN_IN_BROWAER: 'Open in browser',
+  OPEN_IN_NEW_WINDOW: 'Open in new window',
+  VIEW_FILE_DETAILS: 'View file details',
+  COPY_LINK_TO_FILE: 'Copy link to file',
+  ADD_TO_SAVED_ITEMS: 'Add to saved items',
+  EDIT_FILE_DETAILS: 'Edit file details',
+  DELETE_FILE: 'Delete file'
 };

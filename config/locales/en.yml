@@ -51,6 +51,9 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      downloadsModal:
+        download: 'Download'
+        share_file: 'Share file...'
       email:
         gmail: '@gmail.com'
       pinconversation:

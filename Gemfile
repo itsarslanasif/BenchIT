@@ -2,7 +2,6 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 gem 'rails', '~> 7.0.2'
-gem "aws-sdk-s3", require: false
 gem 'bootsnap', require: false
 gem 'brakeman'
 gem 'bundler-audit'
