@@ -53,7 +53,6 @@
     </div>
     <About
       v-if="conversationInfoStore.isAbout()"
-      :channelName="this.channelName"
     />
     <members v-if="conversationInfoStore.isMembers()" />
   </div> 
@@ -83,8 +82,6 @@ export default {
     };
   },
   props: {
-    channelName: String,
-    channelId: Number,
     detailsopen: Function,
   },
   methods: {

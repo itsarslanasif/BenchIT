@@ -11,8 +11,6 @@
       </div>
       <ChannelMembersInfoVue
         :showMemberClickListener="this.OpenChannelDetailMemberModal"
-        :channelId="channel.id"
-        :channelName="channel.name"
       />
     </div>
   </div>
@@ -31,7 +29,6 @@ import { storeToRefs } from 'pinia';
 export default {
   name: 'ChannelInfo',
   components: { ChannelDetailModal, ChannelMembersInfoVue },
-  props: ['channel'],
   setup() {
     const conversationInfoStore = useConversationInfoStore();
     const {conversationInfo} = storeToRefs(conversationInfoStore)

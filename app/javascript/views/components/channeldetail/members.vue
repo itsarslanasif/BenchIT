@@ -32,7 +32,6 @@
 import MermberCard from '../../widgets/memberCard.vue';
 import { useConversationInfoStore } from '../../../stores/useConversationInfoStore';
 import { ref } from 'vue';
-import { storeToRefs } from 'pinia';
 export default {
   name: 'About',
   components: { MermberCard },
@@ -51,7 +50,6 @@ export default {
       } catch (e) {
         console.error(e)
       }
-
     },
   },
 };
