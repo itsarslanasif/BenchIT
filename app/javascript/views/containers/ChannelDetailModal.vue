@@ -12,39 +12,39 @@
     <p class="font-bold text-2xl pl-8">
       <i class="fas fa-hashtag mr-1"></i>{{ conversationInfo.name }}
     </p>
-    <!-- <StarUnstar :channelId="conversationInfo.id" />
+    <StarUnstar :channelId="conversationInfo?.id" />
     <div class="flex ml-4">
       <p
-        @click="ChannelDetailStore.setSlectedOption('about')"
+        @click="conversationInfoStore.setSlectedOption('about')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isAbout(),
+          'text-slate-800 bg-transparent': conversationInfoStore.isAbout(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('channeldetail.about') }}
       </p>
       <p
-        @click="ChannelDetailStore.setSlectedOption('members')"
+        @click="conversationInfoStore.setSlectedOption('members')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isMembers(),
+          'text-slate-800 bg-transparent': conversationInfoStore.isMembers(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('channeldetail.members') }}
       </p>
       <p
-        @click="ChannelDetailStore.setSlectedOption('integrations')"
+        @click="conversationInfoStore.setSlectedOption('integrations')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isIntegrations(),
+          'text-slate-800 bg-transparent': conversationInfoStore.isIntegrations(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('channeldetail.integrations') }}
       </p>
       <p
-        @click="ChannelDetailStore.setSlectedOption('settings')"
+        @click="conversationInfoStore.setSlectedOption('settings')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isSettings(),
+          'text-slate-800 bg-transparent': conversationInfoStore.isSettings(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
@@ -52,15 +52,14 @@
       </p>
     </div>
     <About
-      v-if="ChannelDetailStore.isAbout()"
+      v-if="conversationInfoStore.isAbout()"
       :channelName="this.channelName"
     />
-    <members v-if="ChannelDetailStore.isMembers()" />-->
+    <members v-if="conversationInfoStore.isMembers()" />
   </div> 
 </template>
 
 <script>
-import {onMounted} from 'vue'
 import About from '../components/channeldetail/About.vue';
 import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
@@ -80,6 +79,7 @@ export default {
 
     return { 
       conversationInfo,
+      conversationInfoStore
     };
   },
   props: {

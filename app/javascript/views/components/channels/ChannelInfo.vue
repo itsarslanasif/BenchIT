@@ -17,8 +17,6 @@
   </div>
   <ChannelDetailModal
     v-if="modalOpen"
-    :channelName="channel.name"
-    :channelId="channel.id"
     :detailsopen="this.OpenChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />
@@ -36,7 +34,7 @@ export default {
   setup() {
     const conversationInfoStore = useConversationInfoStore();
     const {conversationInfo} = storeToRefs(conversationInfoStore)
-    return { conversationInfo };
+    return { conversationInfo, conversationInfoStore };
   },
   data() {
     return {
@@ -47,10 +45,10 @@ export default {
   methods: {
     OpenChannelDetailModal(open) {
       this.modalOpen = open;
-      this.ChannelDetailStore.setSlectedOption('about');
+      this.conversationInfoStore.setSlectedOption('about');
     },
     OpenChannelDetailMemberModal(open) {
-      this.ChannelDetailStore.setSlectedOption('members');
+      this.conversationInfoStore.setSlectedOption('members');
       this.modalOpen = open;
     },
   },

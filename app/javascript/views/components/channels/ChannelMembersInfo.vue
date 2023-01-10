@@ -26,37 +26,24 @@
 
 <script>
 import AddPeopleToChannel from './AddPeopleToChannel.vue';
-import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
+import { useConversationInfoStore } from '../../../stores/useConversationInfoStore';
 import { NDivider } from 'naive-ui';
+import { storeToRefs } from 'pinia';
+import { computed } from '@vue/reactivity';
 export default {
   props: ['showMemberClickListener', 'channelId'],
   components: {
     AddPeopleToChannel,
     NDivider,
   },
-  mounted() {
-    this.getChannelMembersCount();
-  },
   setup() {
-    const channelDetailStore = useChannelDetailStore();
-    return { channelDetailStore };
-  },
-  data() {
-    return {
-      count: '',
-    };
-  },
-  methods: {
-    async getChannelMembersCount() {
-      let channelId = window.location.pathname.split('/')[2];
-      try {
-        this.count = await this.channelDetailStore.getChannelMembersCount(
-          channelId
-        );
-      } catch (e) {
-        console.error(e);
-      }
-    },
+    const conversationInfoStore = useConversationInfoStore();
+    const {conversationInfo} = storeToRefs(conversationInfoStore)
+    const count = computed(()=>{
+     return conversationInfo.value.profiles?.length
+    })
+
+    return { conversationInfoStore, conversationInfo, count };
   },
 };
 </script>

@@ -26,6 +26,7 @@ import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { useConversationInfoStore } from '../../stores/useConversationInfoStore';
 import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
+
 export default {
   name: 'Chat',
   components: {

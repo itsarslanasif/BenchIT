@@ -2,13 +2,13 @@
   <div class="loading" v-if="loading">
     <Spinner />
   </div>
-  <div v-if="chat && conversation_type === 'channels'">
+  <div v-if="chat && conversationType === 'channels'">
     <ChannelInfo :channel="chat" />
   </div>
-  <div v-if="chat && conversation_type === 'groups'">
+  <div v-if="chat && conversationType === 'groups'">
     <ChannelInfo :channel="chat" />
   </div>
-  <div v-else-if="chat && conversation_type === 'profiles'">
+  <div v-else-if="chat && conversationType === 'profiles'">
     <UserChatInfo :chat="chat" />
   </div>
   <div
@@ -57,7 +57,6 @@ export default {
       loading: true,
       user_id: 1,
       chat: {},
-      conversation_type: window.location.pathname.split('/')[1],
     };
   },
   mounted() {
@@ -91,13 +90,18 @@ export default {
     },
   },
   setup() {
+    function getIndexByParams(param) {
+      return window.location.pathname.split('/')[param];
+    }
     const messageStore = useMessageStore();
     const { messages } = storeToRefs(messageStore);
     const pinnedConversationStore = usePinnedConversation();
-
+    const conversationType = getIndexByParams(1);
+   
     return {
       messages,
       pinnedConversationStore,
+      conversationType,
     };
   },
   methods: {

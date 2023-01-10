@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg-white flex flex-col p-5 gap-3">
     <div class="py-5">
@@ -11,10 +10,10 @@
       />
     </div>
     <div
-      v-if="channelDetailStore.channelMembers.length > 0"
+      v-if="conversationInfoStore.conversationMembers.length > 0"
       class="maxHeight overflow-auto"
     >
-      <div v-for="member in channelDetailStore.channelMembers" :key="member.id">
+      <div v-for="member in conversationInfoStore.conversationMembers" :key="member.id">
         <MermberCard
           class="cursor-pointer"
           :name="member.username"
@@ -23,7 +22,7 @@
         />
       </div>
     </div>
-    <p v-if="channelDetailStore.channelMembers.length == 0">
+    <p v-if="conversationInfoStore.conversationMembers.length == 0">
       {{ $t('channel_details.no_matches_found') }} " {{ query }} "
     </p>
   </div>
@@ -31,23 +30,24 @@
 
 <script>
 import MermberCard from '../../widgets/memberCard.vue';
-import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
+import { useConversationInfoStore } from '../../../stores/useConversationInfoStore';
+import { ref } from 'vue';
+import { storeToRefs } from 'pinia';
 export default {
   name: 'About',
   components: { MermberCard },
-  query: '',
   mounted() {
     this.searchQuery();
   },
   setup() {
-    const channelDetailStore = useChannelDetailStore();
-    return { channelDetailStore };
+    const conversationInfoStore = useConversationInfoStore();
+    const query = ref('')
+    return { conversationInfoStore, query };
   },
   methods: {
     async searchQuery() {
-      let channel_id = window.location.pathname.split('/')[2];
       try {
-        await this.channelDetailStore.getChannelMembers(this.query, channel_id);
+        await this.conversationInfoStore.getConversationMembers(this.query);
       } catch (e) {
         console.error(e)
       }
