@@ -4,11 +4,15 @@ import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 const createMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
+
     if (data.parent_message_id) {
-      const message = messages.find(element => element.id === data.parent_message_id);
+      const message = messages.find(
+        element => element.id === data.parent_message_id
+      );
       message.replies.push(data);
     } else {
       const findMessage = messages.find(element => element.id === data.id);
+
       if (findMessage == undefined) {
         messageStore.addMessage(data);
       }
@@ -21,11 +25,15 @@ const createMessage = (data, messageStore) => {
 const updateMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
+
     if (data.parent_message_id) {
-      const message = messages.find(element => element.id === data.parent_message_id);
+      const message = messages.find(
+        element => element.id === data.parent_message_id
+      );
       message.replies.push(data);
     } else {
       const findMessage = messages.find(element => element.id === data.id);
+
       if (findMessage == undefined) {
         messageStore.addMessage(data);
       }
@@ -38,16 +46,23 @@ const updateMessage = (data, messageStore) => {
 const deleteMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
+
     if (data.parent_message_id) {
-      const message = messages.find(element => element.id === data.parent_message_id);
+      const message = messages.find(
+        element => element.id === data.parent_message_id
+      );
       const findThreadMessageIndex = message.replies.findIndex(
         element => element.id === data.id
       );
+
       if (findThreadMessageIndex != -1) {
         message.replies.splice(findThreadMessageIndex, 1);
       }
     } else {
-      const findMessageIndex = messages.findIndex(element => element.id === data.id);
+      const findMessageIndex = messages.findIndex(
+        element => element.id === data.id
+      );
+
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
       }
@@ -62,11 +77,15 @@ const createReaction = (data, messageStore) => {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
       .flat();
-    const message = messages.find(element => element.id === data.conversation_message_id);
+    const message = messages.find(
+      element => element.id === data.conversation_message_id
+    );
+
     if (message) {
       const findMessageReactionIndex = message.reactions.findIndex(
         reaction => reaction.id === data.id
       );
+
       if (findMessageReactionIndex == -1) {
         message.reactions.push(data);
       }
@@ -81,7 +100,9 @@ const deleteReaction = (data, messageStore) => {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
       .flat();
-    const message = messages.find(element => element.id === data.conversation_message_id);
+    const message = messages.find(
+      element => element.id === data.conversation_message_id
+    );
     const findMessageReactionIndex = message.reactions.findIndex(
       reaction => reaction.id === data.id
     );
@@ -97,16 +118,19 @@ const pinMessage = (data, messageStore) => {
   const pinsStore = usePinnedConversation();
   try {
     const messages = messageStore.getMessages;
+
     if (data.parent_message_id) {
       const message = messages.find(m => m.id === data.parent_message_id);
       const findThreadMessageIndex = message.replies.findIndex(
         m => m.id === data.id
       );
+
       if (findThreadMessageIndex != -1) {
         message.replies[findThreadMessageIndex] = data;
       }
     } else {
       const findMessageIndex = messages.findIndex(m => m.id === data.id);
+
       if (findMessageIndex != -1) {
         messages[findMessageIndex] = data;
       }
@@ -114,6 +138,7 @@ const pinMessage = (data, messageStore) => {
 
     const pinnedMessages = pinsStore.getPinnedConversation;
     const pin = pinnedMessages.find(m => m.pin.id === data.pin.id);
+
     if (pin == undefined) {
       pinsStore.pinMessage(data);
     }
@@ -126,16 +151,19 @@ const unPinMessage = (data, messageStore) => {
   const pinsStore = usePinnedConversation();
   try {
     const messages = messageStore.getMessages;
+
     if (data.parent_message_id) {
       const message = messages.find(m => m.id === data.parent_message_id);
       const findThreadMessageIndex = message.replies.findIndex(
         m => m.id === data.id
       );
+
       if (findThreadMessageIndex != -1) {
         message.replies[findThreadMessageIndex] = data;
       }
     } else {
       const findMessageIndex = messages.findIndex(m => m.id === data.id);
+
       if (findMessageIndex != -1) {
         messages[findMessageIndex] = data;
       }

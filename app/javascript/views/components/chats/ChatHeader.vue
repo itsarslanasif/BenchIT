@@ -98,8 +98,8 @@ export default {
       pinnedConversationStore,
     };
   },
-  beforeUnmount(){
-   this.pinnedConversationStore.closeModal()
+  beforeUnmount() {
+    this.pinnedConversationStore.closeModal();
   },
   methods: {
     onClickChild(value) {

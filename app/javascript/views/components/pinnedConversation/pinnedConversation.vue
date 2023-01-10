@@ -16,9 +16,11 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 
 export default {
   setup() {
+    
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
     }
+
     function getConversationType(type) {
       switch (type) {
         case 'channels':
