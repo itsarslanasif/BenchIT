@@ -14,7 +14,7 @@
       class="maxHeight overflow-auto"
     >
       <div v-for="member in conversationInfoStore.conversationMembers" :key="member.id">
-        <MermberCard
+        <MemberCard
           class="cursor-pointer"
           :name="member.username"
           :description="member.description"
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import MermberCard from '../../widgets/memberCard.vue';
+import MemberCard from '../../widgets/memberCard.vue';
 import { useConversationInfoStore } from '../../../stores/useConversationInfoStore';
 import { ref } from 'vue';
 export default {
   name: 'About',
-  components: { MermberCard },
+  components: { MemberCard },
   mounted() {
     this.searchQuery();
   },

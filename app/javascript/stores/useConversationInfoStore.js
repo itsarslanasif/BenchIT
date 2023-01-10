@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { getChannelInfo } from '../api/channels/channels';
 import { getChannelMembers } from '../api/channels/channels';
+import { CONSTANTS } from '../assets/constants';
 
 
 export const useConversationInfoStore = defineStore('conversationInfoStore ', {
@@ -44,19 +45,19 @@ export const useConversationInfoStore = defineStore('conversationInfoStore ', {
     },
 
     isAbout() {
-      return this.selectedOption === 'about';
+      return this.selectedOption ===  CONSTANTS.ABOUT;
     },
 
     isIntegrations() {
-      return this.selectedOption === 'integrations';
+      return this.selectedOption === CONSTANTS.INTEGRATIONS;
     },
 
     isMembers() {
-      return this.selectedOption ==='members';
+      return this.selectedOption === CONSTANTS.MEMBERS;
     },
 
     isSettings() {
-      return this.selectedOption ==='settings';
+      return this.selectedOption === CONSTANTS.SETTINGS;
     },
 
     setSlectedOption(selectedOption) {

@@ -16,7 +16,7 @@
   </div>
   <ChannelDetailModal
     v-if="modalOpen"
-    :detailsopen="this.OpenChannelDetailModal"
+    :detailsOpen="this.OpenChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />
 </template>
@@ -26,12 +26,13 @@ import ChannelDetailModal from '../../containers/ChannelDetailModal.vue';
 import ChannelMembersInfoVue from './ChannelMembersInfo.vue';
 import { useConversationInfoStore } from '../../../stores/useConversationInfoStore';
 import { storeToRefs } from 'pinia';
+import { CONSTANTS } from '../../../assets/constants';
 export default {
   name: 'ChannelInfo',
   components: { ChannelDetailModal, ChannelMembersInfoVue },
   setup() {
     const conversationInfoStore = useConversationInfoStore();
-    const {conversationInfo} = storeToRefs(conversationInfoStore)
+    const { conversationInfo } = storeToRefs(conversationInfoStore);
     return { conversationInfo, conversationInfoStore };
   },
   data() {
@@ -43,10 +44,10 @@ export default {
   methods: {
     OpenChannelDetailModal(open) {
       this.modalOpen = open;
-      this.conversationInfoStore.setSlectedOption('about');
+      this.conversationInfoStore.setSlectedOption(CONSTANTS.ABOUT);
     },
     OpenChannelDetailMemberModal(open) {
-      this.conversationInfoStore.setSlectedOption('members');
+      this.conversationInfoStore.setSlectedOption(CONSTANTS.MEMBERS);
       this.modalOpen = open;
     },
   },

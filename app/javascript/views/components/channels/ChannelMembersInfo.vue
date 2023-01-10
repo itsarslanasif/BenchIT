@@ -38,9 +38,9 @@ export default {
   },
   setup() {
     const conversationInfoStore = useConversationInfoStore();
-    const {conversationInfo} = storeToRefs(conversationInfoStore)
-    const count = computed(()=>{
-     return conversationInfo.value.profiles?.length
+    const { conversationInfo } = storeToRefs(conversationInfoStore)
+    const count = computed(() => {
+      return conversationInfo.value.profiles?.length
     })
 
     return { conversationInfoStore, conversationInfo, count };

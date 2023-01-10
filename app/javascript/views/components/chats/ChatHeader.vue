@@ -2,10 +2,10 @@
   <div class="loading" v-if="loading">
     <Spinner />
   </div>
-  <div v-if="conversationType === 'channels'">
+  <div v-if="conversationType === $t('channels.channels_option')">
     <ChannelInfo />
   </div>
-  <div v-else-if="conversationType === 'profiles'">
+  <div v-else-if="conversationType === $t('profiles.profiles_option')">
     <UserChatInfo />
   </div>
   <div

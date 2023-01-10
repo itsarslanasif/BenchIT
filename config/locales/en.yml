@@ -135,6 +135,7 @@ en:
         save_message: 'Save items'
       channels:
         channels: 'Channels'
+        channels_option: 'channels'
         add_new_channel: 'Add New Channel'
         search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
@@ -213,6 +214,7 @@ en:
         title: 'Profile'
         active: 'Active'
         away: 'Away'
+        profiles_option: 'profiles'
       filters:
         all_types: 'All types'
         owners: 'Owners'
@@ -230,11 +232,15 @@ en:
         no_results_found: 'No Results Found !'
         sort: 'Sort'
         account_type: 'Account Type'
-      channeldetail:
+      channel_detail:
         about: 'About'
         members: 'Members'
         integrations: 'Integrations'
         settings: 'Settings'
+        about_option: 'about'
+        members_option: 'members'
+        integrations_option: 'integrations'
+        settings_option: 'settings'
         channelname: 'Channel name'
         topic: 'Topic'
         description: 'Description'

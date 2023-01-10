@@ -116,4 +116,10 @@ export const CONSTANTS = {
   CREATED: 'Created',
   MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
+  ABOUT: 'about',
+  MEMBERS : 'members',
+  SETTINGS : 'settings',
+  INTEGRATIONS : 'integrations'
+
+  
 };

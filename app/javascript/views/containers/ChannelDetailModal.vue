@@ -4,7 +4,7 @@
     class="modal cursor-pointer w-1/3 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-2xl m-10"
   >
     <p
-      @click="detailsopen(false)"
+      @click="detailsOpen(false)"
       class="float-right mr-2 p-2 hover:bg-transparent rounded self-center"
     >
       <i class="fa-solid fa-xmark"></i>
@@ -15,40 +15,40 @@
     <StarUnstar :channelId="conversationInfo?.id" />
     <div class="flex ml-4">
       <p
-        @click="conversationInfoStore.setSlectedOption('about')"
+        @click="conversationInfoStore.setSlectedOption($t('channel_detail.about_option'))"
         :class="{
           'text-slate-800 bg-transparent': conversationInfoStore.isAbout(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
-        {{ $t('channeldetail.about') }}
+        {{ $t('channel_detail.about') }}
       </p>
       <p
-        @click="conversationInfoStore.setSlectedOption('members')"
+        @click="conversationInfoStore.setSlectedOption($t('channel_detail.members_option'))"
         :class="{
           'text-slate-800 bg-transparent': conversationInfoStore.isMembers(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
-        {{ $t('channeldetail.members') }}
+        {{ $t('channel_detail.members') }}
       </p>
       <p
-        @click="conversationInfoStore.setSlectedOption('integrations')"
+        @click="conversationInfoStore.setSlectedOption($t('channel_detail.integrations_option'))"
         :class="{
           'text-slate-800 bg-transparent': conversationInfoStore.isIntegrations(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
-        {{ $t('channeldetail.integrations') }}
+        {{ $t('channel_detail.integrations') }}
       </p>
       <p
-        @click="conversationInfoStore.setSlectedOption('settings')"
+        @click="conversationInfoStore.setSlectedOption($t('channel_detail.settings_option'))"
         :class="{
           'text-slate-800 bg-transparent': conversationInfoStore.isSettings(),
         }"
         class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
       >
-        {{ $t('channeldetail.settings') }}
+        {{ $t('channel_detail.settings') }}
       </p>
     </div>
     <About
@@ -74,7 +74,7 @@ export default {
   },
   setup() {
     const conversationInfoStore = useConversationInfoStore()
-    const {conversationInfo} = storeToRefs(conversationInfoStore)
+    const { conversationInfo } = storeToRefs(conversationInfoStore)
 
     return { 
       conversationInfo,
@@ -82,11 +82,11 @@ export default {
     };
   },
   props: {
-    detailsopen: Function,
+    detailsOpen: Function,
   },
   methods: {
     closeModel() {
-      this.detailsopen(false);
+      this.detailsOpen(false);
     },
   },
 };
