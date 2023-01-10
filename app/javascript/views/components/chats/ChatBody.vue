@@ -42,6 +42,11 @@
             </div>
           </n-divider>
         </div>
+        <n-divider
+          v-if="oldestUnreadMessageId && oldestUnreadMessageId === message.id"
+        >
+          <div class="text-danger">New Messages</div>
+        </n-divider>
         <MessageWrapper
           v-if="!message.parent_message_id"
           :currMessage="currMessage"
@@ -71,6 +76,7 @@ export default {
     JumpToDateVue,
     ChatDetail,
   },
+  props: ['oldestUnreadMessageId'],
   data() {
     return {
       messages: [],

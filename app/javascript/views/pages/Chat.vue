@@ -5,7 +5,7 @@
         <ChatHeader />
       </div>
       <div v-if="messages" class="break-words h-1/2">
-        <ChatBody />
+        <ChatBody :oldestUnreadMessageId="oldestUnreadMessageId" />
       </div>
       <div class="px-3">
         <TextEditorVue :sendMessage="sendMessage" />
@@ -56,12 +56,17 @@ export default {
     const id = getIndexByParams(2);
     const { messages } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
+    const oldestUnreadMessageId = unreadStore.getOldestMessageId(
+      conversation_type,
+      id
+    );
     unreadStore.markedChatAsRead(conversation_type, id);
     messageStore.index(conversation_type, id);
     return {
       messages,
       conversation_type,
       currentUser,
+      oldestUnreadMessageId,
       id,
     };
   },

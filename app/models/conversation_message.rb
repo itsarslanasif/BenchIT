@@ -20,7 +20,7 @@ class ConversationMessage < ApplicationRecord
       .with_attached_message_attachments
       .where(id: ids)
       .order(
-        created_at: :desc
+        created_at: :asc
       )
   }
 

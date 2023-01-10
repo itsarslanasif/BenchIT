@@ -103,6 +103,21 @@ export const useUnreadStore = () => {
           unreadDetails.messages = [];
         }
       },
+      getOldestMessageId(conversationable_type, conversationable_id) {
+        const unreadDetails = this.unreadMessages.find(
+          m =>
+            m.bench_conversation ===
+            `${getConversationType(
+              conversationable_type
+            )}${conversationable_id}`
+        );
+        if (unreadDetails) {
+          if (unreadDetails.messages.length !== 0) {
+            return unreadDetails.messages[0].id;
+          }
+        }
+        return null;
+      },
     },
   });
 
