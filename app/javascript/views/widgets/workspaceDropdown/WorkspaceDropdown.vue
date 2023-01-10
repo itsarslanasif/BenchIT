@@ -28,7 +28,7 @@ export default {
   components: { NButton, NDropdown, UserInviteModal },
   data() {
     return {
-      options,
+      options: [],
       showModal: false,
       currentWorkspace: null,
     };
@@ -36,8 +36,11 @@ export default {
   setup() {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
-    return { currentWorkspace };
+    return { currentWorkspace, options };
   },
+  // beforeUnmount() {
+  //   options = [];
+  // },
   methods: {
     handleSelect(key) {
       switch (key) {

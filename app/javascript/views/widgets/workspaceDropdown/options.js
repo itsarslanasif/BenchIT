@@ -8,6 +8,13 @@ const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
 };
 
+function getWorkspaceName() {
+  if (sessionStorage.getItem('currentWorkspace')) {
+    const currentWorkspace = JSON.parse(sessionStorage.getItem('currentWorkspace'))
+    return currentWorkspace.company_name
+  }
+}
+
 function renderCustomHeader() {
   const currentWorkspaceStore = useCurrentWorkspaceStore();
   const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
@@ -35,6 +42,28 @@ function renderCustomHeader() {
             NText,
             { depth: 3 },
             { default: () => currentWorkspace.value.bench_it_url }
+          ),
+        ]),
+      ]),
+    ]
+  );
+}
+
+function renderMobile() {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+  return h(
+    'div',
+    {
+      class: 'flex items-center p-4',
+    },
+    [
+      h('div', null, [
+        h('div', { class: 'text-md' }, [
+          h(
+            NText,
+            { depth: 2 },
+            { default: () => `${CONSTANTS.SIGN_IN_TO} ${currentWorkspace.value.company_name} ${CONSTANTS.MOBILE}` }
           ),
         ]),
       ]),
@@ -85,8 +114,9 @@ export default [
     key: 'd4',
   },
   {
-    label: CONSTANTS.SIGN_IN_MOBILE,
-    key: generateKey(CONSTANTS.SIGN_IN_MOBILE),
+    key: 'header',
+    type: 'render',
+    render: renderMobile,
   },
   {
     label: CONSTANTS.SIGN_OUT,
