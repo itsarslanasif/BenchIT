@@ -18,8 +18,8 @@
       </div>
     </div>
     <n-divider vertical class="self-center text-black" />
-    <div class="ml-3 cursor-pointer">
-      <AddPeopleToChannel />
+    <div class="ml-3">
+      <AddPeopleToChannel :channelName="channelName" />
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ import { NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { computed } from '@vue/reactivity';
 export default {
-  props: ['showMemberClickListener', 'channelId'],
+  props: ['showMemberClickListener', 'channelId', 'channelName'],
   components: {
     AddPeopleToChannel,
     NDivider,

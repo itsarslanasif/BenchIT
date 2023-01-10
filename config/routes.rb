@@ -42,6 +42,10 @@ Rails.application.routes.draw do
           member do
             delete :leave
           end
+
+          collection do
+            get :joined_channels
+          end
         end
 
         resources :workspaces, only: %i[index create] do

@@ -12,6 +12,16 @@ export const getChannels = async (query) => {
     });
 };
 
+export const getJoinedChannels = async () => {
+  return await axios
+    .get(`/v1/bench_channels/joined_channels`, {
+      headers: { Authorization: localStorage.getItem('token') }
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
 export const getChannelMembers = async (query, bench_channel_id) => {
   return await axios
     .get(`/v1/channel_participants`, {
@@ -56,7 +66,7 @@ export const memberJoinChannel = async channel_id => {
       "bench_channel_id" : channel_id
     },
     {
-      headers: { Authorization: sessionStorage.getItem('token') },
+      headers: { Authorization: localStorage.getItem('token') },
     }
   );
 }

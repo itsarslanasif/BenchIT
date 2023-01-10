@@ -12,6 +12,7 @@
       <ChannelMembersInfoVue
         :showMemberClickListener="this.OpenChannelDetailMemberModal"
         :channelId="channel.id"
+        :channelName="channel.name"
       />
     </div>
   </div>
