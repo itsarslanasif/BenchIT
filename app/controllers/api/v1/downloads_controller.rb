@@ -1,6 +1,11 @@
 class Api::V1::DownloadsController < Api::ApiController
   def create
-    @download = Download.create(download_params)
+    @download = Download.new(download_params)
+    if @download.save
+      render json: @download, status: :ok
+    else
+      render json: @download.errors, status: :unprocessable_entity
+    end
   end
 
   def index
@@ -10,7 +15,7 @@ class Api::V1::DownloadsController < Api::ApiController
   private
 
   def download_params
-    params.permit(:file).tap do |param|
+    params.require(:download).permit(:file_name, :file_link, :file_download_link, :file_type).tap do |param|
       param[:profile] = Current.profile
     end
   end

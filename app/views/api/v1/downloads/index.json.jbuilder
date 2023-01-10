@@ -1,9 +1,6 @@
-@downloads.each do |download|
-  if download.file.present?
-      json.file do
-        json.extract! download.file.blob, :id, :created_at, :content_type, :filename
-      end
-      json.file_link rails_storage_proxy_url(download.file)
-      json.file_download_link rails_blob_url(download.file, disposition: 'attachment')
-  end
+json.array! @downloads do |download|
+  json.file_name download.file_name
+  json.file_link download.file_link
+  json.file_download_link download.file_download_link
+  json.file_type download.file_type
 end
