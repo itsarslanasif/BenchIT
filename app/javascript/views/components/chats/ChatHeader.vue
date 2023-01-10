@@ -5,7 +5,7 @@
   <div v-if="conversationType === $t('channels.channels_option')">
     <ChannelInfo />
   </div>
-  <div v-else-if="conversationType === $t('profiles.profiles_option')">
+  <div v-else-if="conversationType === $t('profile.profiles_option')">
     <UserChatInfo />
   </div>
   <div

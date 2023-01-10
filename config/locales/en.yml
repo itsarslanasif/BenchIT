@@ -214,6 +214,8 @@ en:
         title: 'Profile'
         active: 'Active'
         away: 'Away'
+        status:
+          work_from_home: 'wfh'
         profiles_option: 'profiles'
       filters:
         all_types: 'All types'

@@ -4,18 +4,17 @@
       <div
         class="flex px-1 mx-3 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
-        <n-avatar class="mr-1" size="small" :src="chat.avatar" />
+        <n-avatar class="mr-1" size="small" :src="conversationInfo?.image_url" />
         <span
-          v-if="chat.isActive"
           class="bg-success rounded-full border-primary border-2 h-3 w-3 relative -ml-3 mt-4"
         />
-        <span v-show="chat">
+        <span>
           <p class="text-xl self-center font-semibold pl-1" >
-            {{ directMessagesStore.getSelectedDm.username }}
+            {{ conversationInfo?.display_name }}  {{ conversationInfo?.status?.emoji }}
           </p>
         </span>
         <i
-          v-if="chat.status == 'wfh'"
+          v-if="conversationInfo?.status?.text == $t('profile.status.work_from_home')"
           class="fa-solid fa-house-laptop self-center fa-lg mr-1"
         />
         <i class="fa-solid fa-chevron-down self-center fa-xs ml-1" />
@@ -31,15 +30,17 @@
 
 <script>
 import { NAvatar, NIcon } from 'naive-ui';
-import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore.js';
+import { storeToRefs } from 'pinia';
+import { useConversationInfoStore } from '../../../stores/useConversationInfoStore'
 export default {
   name: 'UserChatInfo',
   components: { NAvatar, NIcon },
   setup() {
-    const directMessagesStore = useDirectMessagesStore();
-    return { directMessagesStore };
+    const conversationInfoStore = useConversationInfoStore();
+    const { conversationInfo } = storeToRefs(conversationInfoStore)
+
+    return { conversationInfo };
   },
-  props: ['chat'],
 };
 </script>
 

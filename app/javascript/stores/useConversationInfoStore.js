@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
-import { getChannelInfo } from '../api/channels/channels';
-import { getChannelMembers } from '../api/channels/channels';
+import {useCurrentWorkspaceStore} from './useCurrentWorkspaceStore'
+import { getChannelInfo, getDMInfo, getChannelMembers, getGroupInfo  } from '../api/channels/channels';
 import { CONSTANTS } from '../assets/constants';
 
 
@@ -8,7 +8,7 @@ export const useConversationInfoStore = defineStore('conversationInfoStore ', {
   state: () => ({
     conversationInfo: [],
     conversationMembers: [],
-    selectedOption: 'about',
+    selectedOption: CONSTANTS.ABOUT,
   }),
 
   getters: {
@@ -25,16 +25,16 @@ export const useConversationInfoStore = defineStore('conversationInfoStore ', {
             console.error(e);
           }
           break;
-        case 'group':
+        case 'groups':
           try {
             this.conversationInfo = await getGroupInfo(conversation_id);
           } catch (e) {
             console.error(e);
           }
           break;
-        case 'direct-messages':
+        case 'profiles':
           try {
-            this.conversationInfo = await getDMInfo(conversation_id);
+            this.conversationInfo = await getDMInfo(conversation_id, useCurrentWorkspaceStore().currentWorkspace.id);
           } catch (e) {
             console.error(e);
           }

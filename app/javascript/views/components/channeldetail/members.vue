@@ -17,8 +17,8 @@
         <MemberCard
           class="cursor-pointer"
           :name="member.username"
-          :description="member.description"
-          :img-url="member.image_url"
+          :email="member.contact_info.email"
+          :imgUrl="member.image_url"
         />
       </div>
     </div>

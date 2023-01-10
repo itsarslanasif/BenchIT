@@ -80,3 +80,23 @@ export const getChannelInfo = async (channel_id) => {
             return response.data;
     });
 };
+
+export const getDMInfo = async (profile_id, workspace_id) => {
+  return await axios
+    .get(`/v1/workspaces/${workspace_id}/profiles/${profile_id}`, {
+      headers: { Authorization: localStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
+}
+
+export const getGroupInfo = async (group_id) => {
+  return await axios
+    .get(`/v1/bench_channels/${group_id}`, {
+      headers: { Authorization: localStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
+};

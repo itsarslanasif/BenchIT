@@ -5,12 +5,12 @@
     <div>
       <img
         class="w-10 h-10 rounded-md"
-        src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
+        src= {{imgUrl}}
       />
     </div>
     <div class="ml-5 text-black-600 ">
       <p>{{ name }}</p>
-      <p>{{ name }}@gmail.com</p>
+      <p>{{ email }}</p>
     </div>
     <hr />
   </div>
@@ -18,6 +18,6 @@
 
 <script>
 export default {
-  props: ['name', 'email', 'img-url'],
+  props: ['name', 'email', 'imgUrl'],
 };
 </script>
