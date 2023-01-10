@@ -22,14 +22,25 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-1">{{ channel.name }}</div>
+      <div class="px-1" :class="unreadMessagesCount ? 'font-bold' : ''">
+        {{ channel.name }}
+      </div>
+      <div
+        v-if="unreadMessagesCount"
+        class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
+      >
+        {{ unreadMessagesCount }}
+      </div>
     </div>
   </n-dropdown>
 </template>
 
 <script>
-import { NDropdown } from 'naive-ui';
 import channel_options from './channel_options.js';
+import { NDropdown } from 'naive-ui';
+import { useUnreadStore } from '../../../stores/useUnreadStore';
+import { storeToRefs } from 'pinia';
+import { unreadMessagesCount } from '../../../modules/unreadMessages';
 
 export default {
   name: 'ChannelItem',
@@ -38,7 +49,23 @@ export default {
   data() {
     return {
       channel_options: channel_options,
+      unread: [],
+      unreadMessagesCount: null,
     };
+  },
+  setup() {
+    const unreadStore = useUnreadStore();
+    const { unreadMessages } = storeToRefs(unreadStore);
+    return {
+      unreadMessages,
+    };
+  },
+  mounted() {
+    this.unreadMessagesCount = unreadMessagesCount(
+      this.unreadMessages,
+      this.channel,
+      'BenchChannel'
+    );
   },
 };
 </script>

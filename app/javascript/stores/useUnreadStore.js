@@ -12,7 +12,6 @@ export const useUnreadStore = () => {
     actions: {
       async index() {
         this.unreadMessages = await getUnreadMessages()
-        console.log(this.unreadMessages)
       },
     },
   });

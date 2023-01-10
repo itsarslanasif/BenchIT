@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <div>
     <SplitPanesVue />
   </div>
@@ -8,6 +8,7 @@ import SplitPanesVue from './SplitPanes.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
+import { useUnreadStore } from '../../stores/useUnreadStore';
 import {
   createNotificationCable,
   unsubscribeNotification,
@@ -37,8 +38,10 @@ export default {
   setup() {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const currentProfileStore = useCurrentProfileStore();
+    const unreadMessageStore = useUnreadStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
+    unreadMessageStore.index()
     return {
       currentWorkspace,
       currentProfile,

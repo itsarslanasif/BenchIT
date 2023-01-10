@@ -40,7 +40,6 @@ export const createCable = options => {
 };
 
 export const createNotificationCable = options => {
-  console.log(options)
   notificationChannel = consumer.subscriptions.create(
     {
       channel: options.channel,
