@@ -172,9 +172,7 @@ export default {
 
       const sendMessagePayload = event => {
         if (!event.shiftKey) {
-          debugger;
-          const startWithNonBreakSpace =
-            newMessage.value.startsWith('<p>&nbsp;</p>');
+          const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
           const messagetext = message(newMessage);
           if (
             messagetext !== '' &&
