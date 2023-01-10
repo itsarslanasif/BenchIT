@@ -5,7 +5,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
-  include Pagy::Backend
+  include Pagination
 
   def send_message
     @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
@@ -53,26 +53,33 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def bench_channel_messages
-    @messages = ConversationMessage.chat_messages(@bench_channel.bench_conversation.id)
+    @pagy, @messages = pagination_for_chat_messages(@bench_channel.bench_conversation.id, params[:page])
+
+    return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
+
+    @messages = @messages.reverse
   end
 
   def group_messages
-    @messages = ConversationMessage.chat_messages(@group.bench_conversation.id)
+    @pagy, @messages = pagination_for_chat_messages(@group.bench_conversation.id, params[:page])
+
+    return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
+
+    @messages = @messages.reverse
   end
 
   def profile_messages
-    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
+    @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
 
-    if conversation.blank?
-      conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
-    end
+    if @conversation.blank?
+      @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
+    else
+      @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
-    begin
-      @pagy, @messages = pagy(ConversationMessage.chat_messages(conversation.id), page: params[:page] || 1, items: 3)
-    rescue StandardError => e
-      return render json: { errors: e, status: :unprocessable_entity }
+      return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
+
+      @messages = @messages.reverse
     end
-    @messages = @messages.reverse
   end
 
   def unread_messages

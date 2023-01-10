@@ -9,6 +9,6 @@ export const getMessageHistory = async (conversation_type, id) => {
       headers: { Authorization: localStorage.getItem('token') },
     })
     .then(response => {
-      return response.data;
+      return response.data.messages;
     });
 };
