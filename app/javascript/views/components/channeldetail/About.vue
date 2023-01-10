@@ -27,7 +27,7 @@
 
 <script>
 import { storeToRefs } from 'pinia';
-import { ref, onUnmounted } from 'vue';
+import { ref } from 'vue';
 import { computed } from '@vue/reactivity';
 import { useRouter } from 'vue-router'
 import { useChannelStore } from '../../../stores/useChannelStore';
@@ -61,12 +61,6 @@ export default {
         await channelStore.leaveChannel(conversationInfo.value.creator_id);
         router.push('/');
     }
-
-    onUnmounted(()=>{
-      topic = null
-      months = null
-      date = null
-    })
     
     return {
       conversationInfo,
