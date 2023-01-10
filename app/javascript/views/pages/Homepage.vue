@@ -9,6 +9,7 @@ import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore'
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
+import { notifyActions } from '../../modules/cable/notification'
 import {
   createNotificationCable,
   unsubscribeNotification,
@@ -31,8 +32,7 @@ export default {
       profile_id: this.currentProfile.id,
     });
     this.Cable.on('notification', data => {
-      console.log(data);
-      // cableActions(data.message);
+      notifyActions(data.message);
     });
   },
   setup() {
@@ -43,6 +43,7 @@ export default {
     const { currentProfile } = storeToRefs(currentProfileStore);
     unreadMessageStore.index()
     return {
+      unreadMessageStore,
       currentWorkspace,
       currentProfile,
     };

@@ -1,11 +1,5 @@
-export const unreadMessagesCount = (unreadMessages, channel, conversation_type) => {
-  let unreadMessagesLength = 0
-  if (unreadMessages.length && channel?.id) {
-    unreadMessages.forEach(element => {
-      if (element.bench_conversation == `${conversation_type}${channel.id}`) {
-        unreadMessagesLength = element.messages.length;
-      }
-    });
+export const unreadMessagesCount = (unreadMessages, conversation_type) => {
+  if (unreadMessages.length) {
+    return unreadMessages.find(m => m.bench_conversation === conversation_type)
   }
-  return unreadMessagesLength
 }

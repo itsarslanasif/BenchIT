@@ -26,10 +26,10 @@
         {{ channel.name }}
       </div>
       <div
-        v-if="unreadMessagesCount"
+        v-if="unreadDetails?.messages.length"
         class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
       >
-        {{ unreadMessagesCount }}
+        {{ unreadDetails.messages.length }}
       </div>
     </div>
   </n-dropdown>
@@ -50,7 +50,7 @@ export default {
     return {
       channel_options: channel_options,
       unread: [],
-      unreadMessagesCount: null,
+      unreadDetails: null,
     };
   },
   setup() {
@@ -61,10 +61,9 @@ export default {
     };
   },
   mounted() {
-    this.unreadMessagesCount = unreadMessagesCount(
+    this.unreadDetails = unreadMessagesCount(
       this.unreadMessages,
-      this.channel,
-      'BenchChannel'
+      `BenchChannel${this.channel?.id}`
     );
   },
 };

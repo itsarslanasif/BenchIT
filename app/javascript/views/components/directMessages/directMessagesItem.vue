@@ -16,10 +16,10 @@
           {{ $t('pinconversation.you') }}
         </p>
         <div
-          v-if="unreadMessagesCount"
+          v-if="unreadDetails?.messages.length"
           class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
         >
-          {{ unreadMessagesCount }}
+          {{ unreadDetails.messages.length }}
         </div>
       </div>
     </h5>
@@ -30,10 +30,11 @@ import { useUnreadStore } from '../../../stores/useUnreadStore';
 import { storeToRefs } from 'pinia';
 import { unreadMessagesCount } from '../../../modules/unreadMessages';
 export default {
-  props: ['sortedDMList', 'isOwnChat'],
+  props: ['sortedDMList', 'isOwnChat', 'goToChat'],
   data() {
     return {
       unreadMessagesCount: 0,
+      unreadDetails: null,
     };
   },
   setup() {
@@ -45,12 +46,12 @@ export default {
   },
   methods: {
     isUnreadDM(user) {
-      this.unreadMessagesCount = unreadMessagesCount(
+      console.log(this.unreadMessages)
+      this.unreadDetails = unreadMessagesCount(
         this.unreadMessages,
-        user,
-        'Profile'
+        `Profile${user?.id}`
       );
-      return this.unreadMessagesCount;
+      return this.unreadDetails?.messages.length;
     },
   },
   setup() {

@@ -63,7 +63,7 @@ class ConversationMessage < ApplicationRecord
   def eligible_for_notification_profile_ids
     case bench_conversation.conversationable_type
     when 'Profile'
-      [bench_conversation.conversationable_id, sender_id]
+      [bench_conversation.conversationable_id, bench_conversation.sender_id]
     else
       bench_conversation.conversationable.profile_ids
     end

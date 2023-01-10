@@ -1,22 +1,17 @@
+import { useUnreadStore } from "../../stores/useUnreadStore";
 
-const createMessage = (data, messageStore) => {
+const createMessage = (data) => {
+  const unreadMessagesStore = useUnreadStore()
   try {
-    const messages = messageStore.getMessages;
-    if (data.parent_message_id) {
-      const message = messages.find(m => m.id === data.parent_message_id);
-      message.replies.push(data);
-    } else {
-      const findMessage = messages.find(m => m.id === data.id);
-      if (findMessage == undefined) {
-        messageStore.addMessage(data);
-      }
+    if (!data.parent_message_id) {
+      unreadMessagesStore.addNewMessage(data)
     }
   } catch (err) {
     console.error(err);
   }
 };
 
-const deleteMessage = (data, messageStore) => {
+const deleteMessage = (data) => {
   try {
     const messages = messageStore.getMessages;
     if (data.parent_message_id) {
@@ -45,10 +40,10 @@ const notificationActions = {
 };
 
 export const notifyActions = data => {
-  // const messageStore = useMessageStore();
   try {
+    console.log(data)
     const key = data.type + data.action;
-    notificationActions[key](data.content, messageStore);
+    notificationActions[key](data.content);
   } catch (err) {
     console.error(err);
   }

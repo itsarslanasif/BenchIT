@@ -16,6 +16,7 @@
         <directMessagesItemVue
           :sortedDMList="sortedDMList"
           :isOwnChat="isOwnChat"
+          :goToChat="goToChat"
         />
       </AccordionItem>
       <div
