@@ -5,6 +5,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
+  include Pagy::Backend
 
   def send_message
     @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
@@ -66,7 +67,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
     end
 
-    @messages = ConversationMessage.chat_messages(conversation.id)
+    begin
+      @pagy, @messages = pagy(ConversationMessage.chat_messages(conversation.id), page: params[:page] || 1, items: 3)
+    rescue StandardError => e
+      return render json: { errors: e, status: :unprocessable_entity }
+    end
+    @messages = @messages.reverse
   end
 
   def unread_messages
