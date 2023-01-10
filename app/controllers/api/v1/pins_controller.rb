@@ -21,11 +21,12 @@ class Api::V1::PinsController < Api::ApiController
   private
 
   def find_conversation
-    if params[:conversation_type] == 'Profile'
-      @conversation = BenchConversation.profile_to_profile_conversation(params[:conversation_id], Current.profile.id)
-      return
-    end
-    @conversation = BenchConversation.find_by!(conversationable_type: params[:conversation_type], conversationable_id: params[:conversation_id])
+    @conversation = if params[:conversation_type].eql?('Profile')
+                      BenchConversation.profile_to_profile_conversation(params[:conversation_id], Current.profile.id)
+                    else
+                      BenchConversation.find_by!(conversationable_type: params[:conversation_type],
+                                                 conversationable_id: params[:conversation_id])
+                    end
   end
 
   def set_pin
