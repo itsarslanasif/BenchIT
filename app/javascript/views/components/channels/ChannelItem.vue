@@ -22,7 +22,7 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-1" :class="unreadMessagesCount ? 'font-bold' : ''">
+      <div class="px-1" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
         {{ channel.name }}
       </div>
       <div
@@ -60,11 +60,14 @@ export default {
       unreadMessages,
     };
   },
-  mounted() {
-    this.unreadDetails = unreadMessagesCount(
-      this.unreadMessages,
-      `BenchChannel${this.channel?.id}`
-    );
+  methods: {
+    isUnreadChannel(channel) {
+      this.unreadDetails = unreadMessagesCount(
+        this.unreadMessages,
+        `BenchChannel${channel?.id}`
+      );
+      return this.unreadDetails?.messages.length;
+    },
   },
 };
 </script>
