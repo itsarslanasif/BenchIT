@@ -60,7 +60,7 @@ Rails.application.routes.draw do
             end
           end
         end
-
+        resources :downloads, only: %i[create index]
         resources :bookmarks, only: %i[create index]
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create index] do

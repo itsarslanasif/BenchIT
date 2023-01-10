@@ -27,6 +27,7 @@ class Profile < ApplicationRecord
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
+  has_many :downloads, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
