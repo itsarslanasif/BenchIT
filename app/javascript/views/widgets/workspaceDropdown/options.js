@@ -55,7 +55,7 @@ function renderMobile() {
   return h(
     'div',
     {
-      class: 'flex items-center p-4',
+      class: 'flex items-center px-4 py-3 cursor-pointer hover:bg-transparent duration-300',
     },
     [
       h('div', null, [
