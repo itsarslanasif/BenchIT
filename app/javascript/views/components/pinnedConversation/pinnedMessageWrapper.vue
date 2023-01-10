@@ -139,6 +139,7 @@ import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   name: 'MessageWrapper',
@@ -149,13 +150,14 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
+    const mesageStore=useMessageStore();
     return {
       threadStore,
       pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
       rightPaneStore,
-      userProfileStore,
+      userProfileStore,mesageStore
     };
   },
   components: {
@@ -213,7 +215,7 @@ export default {
       );
     },
     isSameUser() {
-      
+
       if (this.prevMessage === undefined) return false;
       return this.currMessage?.sender_id === this.prevMessage?.sender_id;
     },
@@ -268,10 +270,12 @@ export default {
     },
     jumpToConversation() {
       if (this.currMessage.conversationable_type == 'BenchChannel') {
+        this.checkForThreadedMessage(this.currMessage)
         this.$router.push(
           `/channels/${this.getConversationId()}/${this.currMessage.id}`
         );
       } else if (this.currMessage.conversationable_type == 'Profile') {
+        this.checkForThreadedMessage(this.currMessage)
         this.$router.push(
           `/profiles/${this.getConversationId()}/${this.currMessage.id}`
         );
@@ -279,6 +283,16 @@ export default {
         this.$router.push(
           `/groups/${this.getConversationId()}/${this.currMessage.id}`
         );
+      }
+    },
+    checkForThreadedMessage(message){
+      if(message.parent_message_id){
+        if( this.rightPaneStore.showThread)
+        {
+          this.rightPaneStore.toggleThreadShow(false);
+        }
+        this.threadStore.setMessage(this.mesageStore.getMessage(message.parent_message_id));
+        this.rightPaneStore.toggleThreadShow(true);
       }
     },
     async setUserProfileForPane() {

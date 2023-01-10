@@ -164,8 +164,11 @@ export default {
     const message_id = this.$route.params.message_id;
     if (message_id) {
       const message = document.getElementById(message_id);
-      message.classList.add('highlight');
-      message.scrollIntoView();
+      if (message) {
+        message.classList.add('highlight');
+        message.scrollIntoView();
+        return;
+      }
     }
     this.scrollToEnd();
     this.newMessageFlag = false;

@@ -1,10 +1,11 @@
 <template>
   <div
+    class="py-1"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
     <div v-if="currMessage.pinned">
       <span
-        class="p-1 items-center text-black-800 text-xs flex bg-yellow-50 relative"
+        class="pl-4 items-center text-black-800 text-xs flex bg-yellow-50 relative"
       >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
@@ -40,7 +41,7 @@
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <p
-              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
+              class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
             >
               {{
                 isSameUser && isSameDayMessage && !isFirstMessage

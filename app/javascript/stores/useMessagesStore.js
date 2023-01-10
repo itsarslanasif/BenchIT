@@ -51,6 +51,9 @@ export const useMessageStore = () => {
       async deleteMessage(id) {
         await deleteMessage(id);
       },
+      getMessage(id){
+       return this.messages.find(message => message.id === id);
+      }
     },
   });
 
