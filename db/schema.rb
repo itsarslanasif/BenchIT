@@ -103,6 +103,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_10_085415) do
 
   create_table "downloads", force: :cascade do |t|
     t.integer "profile_id"
+    t.string "file_name"
+    t.string "file_link"
+    t.string "file_download_link"
+    t.string "file_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
