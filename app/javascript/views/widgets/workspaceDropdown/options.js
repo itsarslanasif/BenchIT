@@ -8,14 +8,7 @@ const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
 };
 
-function getWorkspaceName() {
-  if (sessionStorage.getItem('currentWorkspace')) {
-    const currentWorkspace = JSON.parse(sessionStorage.getItem('currentWorkspace'))
-    return currentWorkspace.company_name
-  }
-}
-
-function renderCustomHeader() {
+const renderCustomHeader = () => {
   const currentWorkspaceStore = useCurrentWorkspaceStore();
   const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
   return h(
@@ -47,15 +40,16 @@ function renderCustomHeader() {
       ]),
     ]
   );
-}
+};
 
-function renderMobile() {
+const renderMobile = () => {
   const currentWorkspaceStore = useCurrentWorkspaceStore();
   const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
   return h(
     'div',
     {
-      class: 'flex items-center px-4 py-3 cursor-pointer hover:bg-transparent duration-300',
+      class:
+        'flex items-center px-4 py-3 cursor-pointer hover:bg-transparent duration-300',
     },
     [
       h('div', null, [
@@ -63,13 +57,16 @@ function renderMobile() {
           h(
             NText,
             { depth: 2 },
-            { default: () => `${CONSTANTS.SIGN_IN_TO} ${currentWorkspace.value.company_name} ${CONSTANTS.MOBILE}` }
+            {
+              default: () =>
+                `${CONSTANTS.SIGN_IN_TO} ${currentWorkspace.value.company_name} ${CONSTANTS.MOBILE}`,
+            }
           ),
         ]),
       ]),
     ]
   );
-}
+};
 
 export default [
   {
