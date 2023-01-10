@@ -38,9 +38,6 @@ export default {
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     return { currentWorkspace, options };
   },
-  // beforeUnmount() {
-  //   options = [];
-  // },
   methods: {
     handleSelect(key) {
       switch (key) {
