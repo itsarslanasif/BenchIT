@@ -15,25 +15,54 @@ export const useUnreadStore = () => {
 
     actions: {
       async index() {
-        this.unreadMessages = await getUnreadMessages()
+        this.unreadMessages = await getUnreadMessages();
       },
       addNewMessage(message) {
         const unreadDetails = this.unreadMessages.find(m => {
-          if(message.conversationable_type === 'Profile')
-          {
-            if(m.bench_conversation === `${message.conversationable_type}${message.sender_id}`){
+          if (message.conversationable_type === 'Profile') {
+            if (
+              m.bench_conversation ===
+              `${message.conversationable_type}${message.sender_id}`
+            ) {
+              return m;
+            }
+          } else {
+            if (
+              m.bench_conversation ===
+              `${message.conversationable_type}${message.conversationable_id}`
+            ) {
               return m;
             }
           }
-          else {
-            if( m.bench_conversation === `${message.conversationable_type}${message.conversationable_id}`) {
-              return m;
-            }
-          }
-      });
+        });
         unreadDetails.messages.push(message);
-        console.log(unreadDetails)
-      }
+      },
+      removeMessage(message) {
+        const unreadDetails = this.unreadMessages.find(m => {
+          if (message.conversationable_type === 'Profile') {
+            if (
+              m.bench_conversation ===
+              `${message.conversationable_type}${message.sender_id}`
+            ) {
+              return m;
+            }
+          } else {
+            if (
+              m.bench_conversation ===
+              `${message.conversationable_type}${message.conversationable_id}`
+            ) {
+              return m;
+            }
+          }
+        });
+        const messages = unreadDetails.messages;
+        const findMessageIndex = messages.findIndex(
+          element => element.id === message.id
+        );
+        if (findMessageIndex != -1) {
+          messages.splice(findMessageIndex, 1);
+        }
+      },
     },
   });
 

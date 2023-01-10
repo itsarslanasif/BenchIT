@@ -46,7 +46,6 @@ export default {
   },
   methods: {
     isUnreadDM(user) {
-      console.log(this.unreadMessages)
       this.unreadDetails = unreadMessagesCount(
         this.unreadMessages,
         `Profile${user?.id}`
