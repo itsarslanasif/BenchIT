@@ -1,4 +1,6 @@
-import { useMessageStore } from '../../stores/useMessagesStore';
+import {
+  useMessageStore
+} from '../../stores/useMessagesStore';
 
 const createMessage = (data, messageStore) => {
   try {
@@ -92,12 +94,35 @@ const deleteReaction = (data, messageStore) => {
   }
 };
 
+const editMessage = (data, messageStore) => {
+  try {
+    const messages = messageStore.getMessages;
+    if (data.parent_message_id) {
+      const message = messages.find(element => element.id === data.parent_message_id);
+      const findThreadMessageIndex = message.replies.findIndex(
+        element => element.id === data.id
+      );
+      if (findThreadMessageIndex != -1) {
+        message.replies.indexOf(findThreadMessageIndex) = data;
+      }
+    } else {
+      const findMessageIndex = messages.findIndex(element => element.id === data.id);
+      if (findMessageIndex != -1) {
+        message.indexOf(findMessageIndex) = data;
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};  
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
   MessageDelete: deleteMessage,
   ReactionDelete: deleteReaction,
   MessageUpdate: updateMessage,
+
 };
 
 export const cableActions = data => {

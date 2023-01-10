@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!messageStore.isMessageToEdit(currMessage)"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
@@ -154,6 +155,12 @@
       <EmojiPicker :addReaction="addReaction" />
     </div>
   </div>
+  <div
+    class="bg-yellow-50 pl-16 pr-4"
+    v-if="messageStore.isMessageToEdit(currMessage)"
+  >
+    <TextEditorVue :message="currMessage.content" :editMessage="true" />
+  </div>
 </template>
 
 <script>
@@ -174,7 +181,8 @@ import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
-import emojiModalButtonVue from '../../widgets/emojiModalButton.vue';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import TextEditorVue from '../../components/editor/TextEditor.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -185,6 +193,7 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
+    const messageStore = useMessageStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -192,8 +201,10 @@ export default {
       currentUserStore,
       rightPaneStore,
       userProfileStore,
+      messageStore,
     };
   },
+
   components: {
     NAvatar,
     NCard,
@@ -204,6 +215,7 @@ export default {
     NTooltip,
     NButton,
     NText,
+    TextEditorVue,
   },
   props: {
     currMessage: {
@@ -274,6 +286,9 @@ export default {
         }
         return false;
       });
+    },
+    editMessage() {
+      return this.messageStore.isMessageToEdit(this.currMessage);
     },
   },
   methods: {

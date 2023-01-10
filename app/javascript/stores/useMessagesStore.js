@@ -1,7 +1,15 @@
-import { defineStore } from 'pinia';
-import { getMessageHistory } from '../modules/socket/messageHistory';
-import { deleteMessage } from '../api/messages';
-import { CONSTANTS } from '../assets/constants';
+import {
+  defineStore
+} from 'pinia';
+import {
+  getMessageHistory
+} from '../modules/socket/messageHistory';
+import {
+  deleteMessage
+} from '../api/messages';
+import {
+  CONSTANTS
+} from '../assets/constants';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -9,11 +17,13 @@ export const useMessageStore = () => {
       return {
         messages: [],
         currMessage: null,
+        messageToEdit: null,
       };
     },
 
     getters: {
       getMessages: state => state.messages,
+      getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
@@ -37,6 +47,20 @@ export const useMessageStore = () => {
       },
       async deleteMessage(id) {
         await deleteMessage(id);
+      },
+      setMessageToEdit(message) {
+        this.messageToEdit = message;
+      },
+      removeMessageToEdit() {
+        this.messageToEdit = null;
+      },
+      isMessageToEdit(message) {
+        console.log("mmmmmm",message)
+        if (this.messageToEdit) {
+
+          return this.messageToEdit && (message.id == this.messageToEdit.id)
+        }
+        return false
       },
     },
   });

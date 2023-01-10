@@ -10,7 +10,9 @@
           :message="message"
           :options="options"
           @mouseleave="action"
-          @select="handleSelect($event, message, pinnedConversationStore)"
+          @select="
+            handleSelect($event, message, pinnedConversationStore, messageStore)
+          "
         >
           <span
             @click="action"
@@ -41,6 +43,7 @@ import options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { deleteMessage } from '../../api/messages';
+import { useMessageStore } from '../../stores/useMessagesStore';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -54,12 +57,13 @@ export default {
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore };
+    const messageStore = useMessageStore();
+    return { pinnedConversationStore, messageStore };
   },
   data() {
     return {
       options,
-      handleSelect(key, message, pinnedConversationStore) {
+      handleSelect(key, message, pinnedConversationStore, messageStore) {
         switch (key) {
           case 'copy-link':
             let tempText = document.createElement('input');
@@ -86,6 +90,12 @@ export default {
                 pinnedConversationStore.togglePin();
               }
             }
+            break;
+          case 'edit-message':
+            if(message){
+              console.log(message)
+            messageStore.setMessageToEdit(message);
+          }
             break;
         }
       },

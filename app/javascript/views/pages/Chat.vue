@@ -8,7 +8,7 @@
         <ChatBody />
       </div>
       <div class="px-3">
-        <TextEditorVue :sendMessage="sendMessage" />
+        <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
       </div>
     </div>
   </div>
