@@ -1,6 +1,7 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
-  before_action :fetch_conversation, only: %i[create]
-  before_action :set_message, only: %i[destroy update]
+  include MemberShip
+  before_action :fetch_conversation, :verify_membership, only: %i[create]
+  before_action :set_message, :authenticat_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
@@ -124,5 +125,17 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def set_receiver
     @receiver = Profile.find(params[:id])
     render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
+  end
+
+  def authenticat_message
+    if @message.sender_id.eql?(Current.profile.id)
+      check_membership(@message.bench_conversation)
+    else
+      render json: { message: 'Sorry, this message is not your', status: :unprocessable_entity }
+    end
+  end
+
+  def verify_membership
+    check_membership(@bench_conversation)
   end
 end
