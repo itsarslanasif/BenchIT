@@ -213,6 +213,7 @@ export default {
       );
     },
     isSameUser() {
+      
       if (this.prevMessage === undefined) return false;
       return this.currMessage?.sender_id === this.prevMessage?.sender_id;
     },
@@ -239,6 +240,7 @@ export default {
     },
     async emojiClickListener(emoji) {
       try {
+
         if (emoji.user_id == this.currentUserStore.currentUser.id) {
           await remove_reaction(emoji.id).then(() => {
             this.allReactions = this.allReactions.filter(function (reaction) {
@@ -250,25 +252,20 @@ export default {
         console.error(e);
       }
     },
-
     setEmojiModal() {
       this.openEmojiModal = !this.openEmojiModal;
     },
-
     setOptionsModal() {
       this.showOptions = !this.showOptions;
     },
-
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
     },
-
     showUserProfile() {
       this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
     },
-
     jumpToConversation() {
       if (this.currMessage.conversationable_type == 'BenchChannel') {
         this.$router.push(
@@ -284,16 +281,15 @@ export default {
         );
       }
     },
-
     async setUserProfileForPane() {
       this.userProfileStore.setUserProfile(
         await getUserProfile(1, this.currMessage.sender_id)
       );
     },
-
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       try {
+
         if (this.currMessage.isSaved) {
           save(this.currMessage.id, {
             data: this.currMessage,
