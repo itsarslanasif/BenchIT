@@ -25,6 +25,7 @@ import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
+import { useUnreadStore } from '../../stores/useUnreadStore';
 export default {
   name: 'Chat',
   components: {
@@ -50,10 +51,12 @@ export default {
     }
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
+    const unreadStore = useUnreadStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
     const { messages } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
+    unreadStore.markedChatAsRead(conversation_type, id);
     messageStore.index(conversation_type, id);
     return {
       messages,

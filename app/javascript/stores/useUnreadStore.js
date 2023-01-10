@@ -1,11 +1,27 @@
 import { defineStore } from 'pinia';
 import { getUnreadMessages } from '../api/notification';
 
+const getConversationType = type => {
+  let conversation_type = '';
+  switch (type) {
+    case 'channels':
+      conversation_type = 'BenchChannel';
+      break;
+    case 'groups':
+      conversation_type = 'Group';
+      break;
+    case 'profiles':
+      conversation_type = 'Profile';
+      break;
+  }
+  return conversation_type;
+};
+
 export const useUnreadStore = () => {
   const unreadStore = defineStore('useUnreadStore', {
     state: () => {
       return {
-        unreadMessages: {},
+        unreadMessages: [],
       };
     },
 
@@ -61,6 +77,18 @@ export const useUnreadStore = () => {
         );
         if (findMessageIndex != -1) {
           messages.splice(findMessageIndex, 1);
+        }
+      },
+      markedChatAsRead(conversationable_type, conversationable_id) {
+        const unreadDetails = this.unreadMessages.find(
+          m =>
+            m.bench_conversation ===
+            `${getConversationType(
+              conversationable_type
+            )}${conversationable_id}`
+        );
+        if (unreadDetails) {
+          unreadDetails.messages = [];
         }
       },
     },
