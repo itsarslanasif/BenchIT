@@ -1,12 +1,16 @@
 import { h } from 'vue';
 import { NText, NAvatar } from 'naive-ui';
 import { CONSTANTS } from '../../../assets/constants';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { storeToRefs } from 'pinia';
 
 const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
 };
 
 function renderCustomHeader() {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
   return h(
     'div',
     {
@@ -20,15 +24,23 @@ function renderCustomHeader() {
       }),
       h('div', null, [
         h('div', { class: 'text-md font-bold' }, [
-          h(NText, { depth: 2 }, { default: () => 'BenchIT' }),
+          h(
+            NText,
+            { depth: 2 },
+            { default: () => currentWorkspace.value.company_name }
+          ),
         ]),
         h('div', { class: 'text-xs flex' }, [
-          h(NText, { depth: 3 }, { default: () => 'workspace.benchit.com' }),
+          h(
+            NText,
+            { depth: 3 },
+            { default: () => currentWorkspace.value.bench_it_url }
+          ),
         ]),
       ]),
     ]
   );
-};
+}
 
 export default [
   {
