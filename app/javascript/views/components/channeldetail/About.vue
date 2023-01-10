@@ -32,6 +32,7 @@ import { computed } from '@vue/reactivity';
 import { useRouter } from 'vue-router'
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { useConversationInfoStore } from '../../../stores/useConversationInfoStore';
+import {convertUTCToLocal} from '../../widgets/dateUtils'
 
 export default {
   name: 'About',
@@ -42,19 +43,11 @@ export default {
     
     const router = useRouter()
     const topic = ref('No Topic set')
-    const date = ref(conversationInfo.value.created_at)
-    const months = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
-    ];
-
-    const month = ref(months[new Date(date.value).getUTCMonth()]);
-    const day = ref(new Date(date.value).getUTCDate());
-    const year = ref(new Date(date.value).getUTCFullYear());
-
-
+    const date = computed (()=>{
+    return convertUTCToLocal(conversationInfo.value.created_at)
+    })
     const channelCreator = computed(()=>{
-      return `${conversationInfo.value.creator_name} on ${month.value} ${day.value}, ${year.value}`
+      return `${conversationInfo.value.creator_name} on ${date.value.month} ${date.value.day}, ${date.value.year}`
     })
 
     const leaveChannel = async () =>{
