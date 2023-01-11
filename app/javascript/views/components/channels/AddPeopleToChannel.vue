@@ -64,15 +64,10 @@
 import { NSelect } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { defineComponent } from 'vue';
-import {
-  getMembers,
-  addMemberstoChannel,
-} from '../../../api/members/membersApi';
+import { getMembers,addMemberstoChannel } from '../../../api/members/membersApi';
 import { CONSTANTS } from '../../../assets/constants';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
-import {useChannelDetailStore} from '../../../stores/useChannelDetailStore';
 import benchitAlert from '../../widgets/benchitAlert.vue';
-
 
 export default defineComponent({
   components: {
@@ -87,10 +82,9 @@ export default defineComponent({
   },
   setup() {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
-    const channelDetailStore=useChannelDetailStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     return {
-      currentWorkspace,channelDetailStore,
+      currentWorkspace,
     };
   },
   data() {
@@ -111,13 +105,11 @@ export default defineComponent({
     },
     successMessage() {
       let members = this.response?.data?.members;
-      this.channelDetailStore.appendMembers(members);
-      if (members && members.length > 1){
-        return `${members?.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;}
-      else {
+      if (members && members.length > 1) {
+        return `${members?.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;
+      } else {
         return `${members?.length} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
       }
-
     },
   },
   methods: {

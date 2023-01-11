@@ -12,7 +12,12 @@
         />
       </div>
       <div class="w-3 ml-1">
-        <p v-if="channelDetailStore.channelMembers.length!=0" class="ml-1 font-bold text-black">{{ channelDetailStore.channelMembers.length }}</p>
+        <p
+          v-if="channelDetailStore.channelMembers.length != 0"
+          class="ml-1 font-bold text-black"
+        >
+          {{ channelDetailStore.channelMembers.length }}
+        </p>
       </div>
     </div>
     <n-divider vertical class="self-center text-black" />

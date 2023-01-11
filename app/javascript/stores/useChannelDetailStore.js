@@ -34,9 +34,6 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
     setSlectedOption(option) {
       this.selectedOption = option;
     },
-    appendMembers(members){
-      this.channelMembers=[...this.channelMembers,...members]
-    },
     isAbout() {
       return this.selectedOption == 'about';
     },
