@@ -117,6 +117,7 @@
           :lastThreeRepliesOfUniqueUsers="lastThreeRepliesOfUniqueUsers"
           :repliesCount="repliesCount"
           :toggleThread="toggleThread"
+          :isFirstMessage="isFirstMessage"
         />
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"

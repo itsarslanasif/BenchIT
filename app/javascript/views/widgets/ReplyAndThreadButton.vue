@@ -1,7 +1,7 @@
 <template>
   <div
     @click="toggleThread"
-    :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+    :class="{ 'ml-12': isSameUser && isSameDayMessage && !isFirstMessage }"
     class="hover-trigger hover:bg-white hover:shadow-xs cursor-pointer rounded px-1 py-1 w-150 flex mt-1"
   >
     <span
@@ -12,7 +12,7 @@
       <n-avatar
         size="small"
         class="align-middle"
-        src="../../assets/images/user.png"
+        :src="reply.sender_avatar"
       />
     </span>
     <span
@@ -49,6 +49,7 @@ export default {
     repliesCount: Number,
     lastThreeRepliesOfUniqueUsers: Array,
     lastReply: Object,
+    isFirstMessage: Boolean,
   },
   methods: {
     formatDate(date) {
