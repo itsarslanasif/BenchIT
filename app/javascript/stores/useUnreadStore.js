@@ -17,6 +17,17 @@ const getConversationType = type => {
   return conversation_type;
 };
 
+const isSameChat = (message, conversation_type, conversation_id) => {
+  const conversation_key = `${conversation_type}${conversation_id}`;
+  let message_conversation_key = null;
+  if (message.conversationable_type === 'Profile') {
+    message_conversation_key = `${message.conversationable_type}${message.sender_id}`;
+  } else {
+    message_conversation_key = `${message.conversationable_type}${message.conversationable_id}`;
+  }
+  return message_conversation_key === conversation_key;
+};
+
 export const useUnreadStore = () => {
   const unreadStore = defineStore('useUnreadStore', {
     state: () => {
@@ -53,8 +64,11 @@ export const useUnreadStore = () => {
         });
         if (
           !unreadDetails &&
-          `${message.conversationable_type}${message.conversationable_id}` !==
-            `${getConversationType(conversation_type)}${conversation_id}}`
+          !isSameChat(
+            message,
+            getConversationType(conversation_type),
+            conversation_id
+          )
         ) {
           unreadDetails = {
             bench_conversation: `${message.conversationable_type}${
@@ -68,8 +82,11 @@ export const useUnreadStore = () => {
           return;
         }
         if (
-          unreadDetails.bench_conversation !==
-          `${getConversationType(conversation_type)}${conversation_id}`
+          !isSameChat(
+            message,
+            getConversationType(conversation_type),
+            conversation_id
+          )
         ) {
           unreadDetails.messages.push(message);
         }
