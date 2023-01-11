@@ -1,12 +1,16 @@
 import { h } from 'vue';
 import { NText, NAvatar } from 'naive-ui';
 import { CONSTANTS } from '../../../assets/constants';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { storeToRefs } from 'pinia';
 
 const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
 };
 
-function renderCustomHeader() {
+const renderCustomHeader = () => {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
   return h(
     'div',
     {
@@ -20,10 +24,44 @@ function renderCustomHeader() {
       }),
       h('div', null, [
         h('div', { class: 'text-md font-bold' }, [
-          h(NText, { depth: 2 }, { default: () => 'BenchIT' }),
+          h(
+            NText,
+            { depth: 2 },
+            { default: () => currentWorkspace.value.company_name }
+          ),
         ]),
         h('div', { class: 'text-xs flex' }, [
-          h(NText, { depth: 3 }, { default: () => 'workspace.benchit.com' }),
+          h(
+            NText,
+            { depth: 3 },
+            { default: () => currentWorkspace.value.bench_it_url }
+          ),
+        ]),
+      ]),
+    ]
+  );
+};
+
+const renderMobile = () => {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+  return h(
+    'div',
+    {
+      class:
+        'flex items-center px-4 py-3 cursor-pointer hover:bg-transparent duration-300',
+    },
+    [
+      h('div', null, [
+        h('div', { class: 'text-md' }, [
+          h(
+            NText,
+            { depth: 2 },
+            {
+              default: () =>
+                `${CONSTANTS.SIGN_IN_TO} ${currentWorkspace.value.company_name} ${CONSTANTS.MOBILE}`,
+            }
+          ),
         ]),
       ]),
     ]
@@ -73,8 +111,9 @@ export default [
     key: 'd4',
   },
   {
-    label: CONSTANTS.SIGN_IN_MOBILE,
-    key: generateKey(CONSTANTS.SIGN_IN_MOBILE),
+    key: 'header',
+    type: 'render',
+    render: renderMobile,
   },
   {
     label: CONSTANTS.SIGN_OUT,
