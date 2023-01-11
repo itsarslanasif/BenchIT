@@ -79,7 +79,7 @@ export default {
   computed: {
     ownProfile() {
       return (
-        this.currentProfileStore.currentProfile.id === this.modal_profile.id
+        this.currentProfileStore.currentProfile.id === this.modal_profile?.id
       );
     },
   },
@@ -96,7 +96,7 @@ export default {
               this.showUserProfile();
             },
             class: 'mr-2 w-20 h-20 cursor-pointer',
-            src: this.modal_profile.image_url,
+            src: this.modal_profile?.image_url,
           }),
           h('div', { class: 'text-md' }, [
             h(
@@ -114,7 +114,7 @@ export default {
                     },
                     class: 'cursor-pointer hover:underline',
                   },
-                  { default: () => `${this.modal_profile.username}` }
+                  { default: () => `${this.modal_profile?.username}` }
                 ),
                 h(
                   NText,
