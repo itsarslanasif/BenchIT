@@ -2,11 +2,11 @@
   <div class="flex p-2 rounded-md border border-black-500 shadow-sm">
     <div class="flex cursor-pointer" @click="showMemberClickListener(true)">
       <div v-for="i in channelDetailStore.channelMemberCount" :key="i" class="flex cursor-pointer">
-      <!-- <img
+      <img
         class="w-6 h-6 -ml-1 rounded-md border border-black-500"
-        :src="channelDetailStore.channelMembers[i]."
-      /> -->
-      <p>{{ channelDetailStore.channelMembers }}</p>
+        :src="channelDetailStore.channelMembers[i-1].image_url "
+      />
+      <!-- <p>{{ }}</p> -->
       </div>
       <div class="w-3 ml-1">
         <p class="ml-1 font-bold text-black">{{ count }}</p>
@@ -39,7 +39,6 @@ export default {
   data() {
     return {
       count: '',
-
     };
   },
   methods: {

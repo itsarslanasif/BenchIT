@@ -25,6 +25,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
     async getChannelMembersCount(bench_channel_id) {
       try {
       let members = await getChannelMembers('', bench_channel_id);
+      this.channelMembers=members
       this.channelMemberCount = members.length;
       } catch(e){
         console.error(e)
