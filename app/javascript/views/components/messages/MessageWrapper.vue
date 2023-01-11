@@ -462,9 +462,7 @@ export default {
         await fileDownload(attachment).then(response => {
           this.downloadsStore.downloads.unshift(response.data);
         });
-      } catch (e) {
-        console.error(e);
-      }
+      } catch (e) {}
     },
 
     setFileOptionsModal() {
