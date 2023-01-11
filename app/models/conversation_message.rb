@@ -37,8 +37,10 @@ class ConversationMessage < ApplicationRecord
   private
 
   def broadcast_message
+    response = message_content
+    response[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image)
     result = {
-      content: message_content,
+      content: response,
       type: 'Message'
     }
     result[:action] = if destroyed?
