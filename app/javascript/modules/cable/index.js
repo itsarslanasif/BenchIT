@@ -84,7 +84,7 @@ const deleteReaction = (data, messageStore) => {
     const findMessageReactionIndex = message.reactions.findIndex(
       reaction => reaction.id === data.id
     );
-    if (message != -1) {
+    if (message != -1 && findMessageReactionIndex != -1) {
       message.reactions.splice(findMessageReactionIndex, 1);
     }
   } catch (err) {
