@@ -2,6 +2,7 @@ class BenchConversation < ApplicationRecord
   belongs_to :conversationable, polymorphic: true
   belongs_to :sender, class_name: 'Profile', optional: true
   has_many :conversation_messages, dependent: :destroy
+  has_many :reactions, through: :conversation_messages
   has_many :draft_messages, dependent: :destroy
   has_many :pins, dependent: :destroy
 
