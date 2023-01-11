@@ -40,8 +40,9 @@
           <a
             @click="showUserProfile(selectedChat?.creator_id)"
             class="text-info cursor-pointer bg-slate-50 p-1 rounded"
-            >@{{ selectedChat?.creator_name }}</a
           >
+            @{{ selectedChat?.creator_name }}
+          </a>
           {{ $t('chat.created_this_channel_on') }}
           <a> {{ formatDate(selectedChat?.created_at) }}</a>
         </p>
@@ -132,7 +133,6 @@ export default {
       this.setUserProfileForPane(profile_id);
       this.rightPaneStore.toggleUserProfileShow(true);
     },
-
     setUserProfileForPane(profile_id) {
       const profile = this.profilesStore.profiles.find(
         profile => profile.id === profile_id

@@ -123,10 +123,14 @@ export default defineComponent({
     },
     successMessage() {
       let members = this.response?.data?.members;
-      if (members && members.length === 1)
-        return `${members?.length} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
-      else {
-        return `${members?.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;
+      if (members && members.length > 0) {
+        if (members.length === 1)
+          return `${members.length} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
+        else {
+          return `${members.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;
+        }
+      } else {
+        return CONSTANTS.SOMETHING_WENT_WRONG;
       }
     },
   },
