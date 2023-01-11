@@ -37,6 +37,8 @@
 import memberCardDm from './memberCardDm.vue';
 import { getMembers } from '../../../api/members/membersApi';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 export default {
   mounted() {
     this.searchQuery();
@@ -56,30 +58,31 @@ export default {
     };
   },
   setup() {
-    const selectedDm = useDirectMessagesStore();
-    return { selectedDm };
+    const directMessageStore = useDirectMessagesStore();
+    const messagesStore = useMessageStore();
+    const { selectedChat, setSelectedChat } = storeToRefs(messagesStore);
+    return { directMessageStore, selectedChat, setSelectedChat };
   },
   methods: {
     goToChat(chatURL) {
       this.$router.push(chatURL);
     },
     handleSelect(member) {
-      this.selectedDm.appendToDirectMessagesList(member);
-      this.selectedDm.setSelectedDm(member);
+      this.directMessageStore.appendToDirectMessagesList(member);
+      this.setSelectedChat(member);
       this.goToChat(`/profiles/${member.id}`);
     },
     async searchQuery() {
       try {
         this.members = await getMembers(
-        this.CurrentWorkspaceId,
-        this.query,
-        this.sort
-      );
+          this.CurrentWorkspaceId,
+          this.query,
+          this.sort
+        );
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     },
   },
 };
 </script>
-

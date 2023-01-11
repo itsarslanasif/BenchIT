@@ -46,7 +46,7 @@
         </div>
         <div class="flex items-center justify-end py-4 px-6">
           <button
-            class="border px-4 py-1 rounded hover:bg-transparent"
+            class="border px-4 py-1 rounded hover:bg-transparent focus:outline-none"
             @click="submit()"
           >
             {{ $t('actions.add') }}
@@ -54,8 +54,19 @@
         </div>
       </div>
     </div>
-    <button class="btn btn-blue-400" @click="showModal = true">
-      <i class="fas fa-user-plus fa-lg" />
+    <button
+      class="btn btn-blue-400 focus:outline-none"
+      :class="
+        buttonText &&
+        'text-info cursor-pointer mt-4 py-1 px-2 rounded bg-slate-50'
+      "
+      @click="showModal = true"
+    >
+      <font-awesome-icon
+        icon="fa-user-plus"
+        class="fa-lg align-baseline mr-1"
+      />
+      {{ buttonText }}
     </button>
   </div>
 </template>
@@ -76,6 +87,10 @@ export default defineComponent({
   },
   props: {
     channelName: {
+      type: String,
+      default: undefined,
+    },
+    buttonText: {
       type: String,
       default: undefined,
     },
@@ -105,10 +120,14 @@ export default defineComponent({
     },
     successMessage() {
       let members = this.response?.data?.members;
-      if (members && members.length > 1) {
-        return `${members?.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;
+      if (members && members.length > 0) {
+        if (members.length === 1)
+          return `${members.length} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
+        else {
+          return `${members.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;
+        }
       } else {
-        return `${members?.length} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
+        return CONSTANTS.SOMETHING_WENT_WRONG;
       }
     },
   },

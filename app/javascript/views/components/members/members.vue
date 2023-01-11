@@ -23,7 +23,7 @@
           <member
             :name="member.username"
             :description="member.description"
-            :img-url="member.image_url"
+            :img_url="member.image_url"
             @click="showUserProfile(member.id)"
           />
         </div>
@@ -48,7 +48,7 @@ import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { mapActions } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
 import { getMembers } from '../../../api/members/membersApi';
-import { getUserProfile } from '../../../api/profiles/userProfile';
+import { useProfileStore } from '../../../stores/useProfileStore';
 
 export default {
   props: ['filterComponentData'],
@@ -57,6 +57,12 @@ export default {
     Spinner,
     filters,
     profile,
+  },
+  setup() {
+    const profilesStore = useProfileStore();
+    return {
+      profilesStore,
+    };
   },
   mounted() {
     this.searchQuery();
@@ -95,11 +101,17 @@ export default {
         console.error(e);
       }
     },
-
-    async showUserProfile(member_id) {
-      this.setUserProfile(
-        await getUserProfile(this.CurrentWorkspaceId, member_id)
+    setUserProfileForPane() {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile.id === this.currMessage.sender_id
       );
+      this.userProfileStore.setUserProfile(profile);
+    },
+    async showUserProfile(member_id) {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile.id === member_id
+      );
+      this.setUserProfile(profile);
       this.toggleUserProfileShow(true);
     },
 

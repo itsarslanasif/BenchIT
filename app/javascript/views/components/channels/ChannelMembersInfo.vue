@@ -44,10 +44,10 @@ export default {
     const channelDetailStore = useChannelDetailStore();
     return { channelDetailStore };
   },
-  computed:{
-    getChannelMembers(){
-     return this.channelDetailStore.channelMembers.slice(-3)
-    }
+  computed: {
+    getChannelMembers() {
+      return this.channelDetailStore.channelMembers.slice(-3);
+    },
   },
   data() {
     return {

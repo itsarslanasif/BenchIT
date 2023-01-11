@@ -10,7 +10,7 @@
   >
     <div
       oncontextmenu="return false;"
-      @click="goTo(`/channels/${channel.id}`)"
+      @click="goTo(`/channels/${channel.id}`, channel)"
       @click.right="toggleShow"
       class="flex items-center -ml-4 pl-3 hover:bg-primaryHover cursor-pointer"
     >
