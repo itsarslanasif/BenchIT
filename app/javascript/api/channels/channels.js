@@ -1,5 +1,15 @@
 import axios from '../../modules/axios';
 
+export const getChannel = async (channel_id) => {
+  return await axios
+    .get(`/v1/bench_channels/${channel_id}`, {
+      headers: { Authorization: localStorage.getItem('token') }
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
 export const getChannels = async (query) => {
   return await axios
     .get(`/v1/bench_channels`, {
