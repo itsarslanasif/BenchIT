@@ -70,7 +70,7 @@
             Message in Group {{ message.group_id }}
           </div>
           <br />
-          <span class="text-black-600">{{ message.content }}</span>
+          <span class="text-black-600" v-html="message.content"></span>
         </div>
         <div class="margin-left text-black-600">
           {{ time }}
