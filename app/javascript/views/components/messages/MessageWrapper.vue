@@ -208,6 +208,7 @@ import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import emojiModalButtonVue from '../../widgets/emojiModalButton.vue';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
+import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 
 export default {
   name: 'MessageWrapper',
@@ -218,6 +219,7 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
+    const downloadsStore = useDownloadsStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -225,6 +227,7 @@ export default {
       currentUserStore,
       rightPaneStore,
       userProfileStore,
+      downloadsStore,
     };
   },
   components: {
@@ -436,14 +439,12 @@ export default {
 
     async downloadFile(attachment) {
       try {
-        await fileDownload(attachment);
+        await fileDownload(attachment).then(response => {
+          this.downloadsStore.downloads.unshift(response.data);
+        });
       } catch (e) {
         console.error(e);
       }
-    },
-
-    abc() {
-      console.log('abc');
     },
 
     setFileOptionsModal() {

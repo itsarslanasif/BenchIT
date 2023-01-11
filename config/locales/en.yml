@@ -54,6 +54,8 @@ en:
       downloadsModal:
         download: 'Download'
         share_file: 'Share file...'
+        downloads: 'Downloads'
+        clear_downloads: 'Clear Downloads'
       email:
         gmail: '@gmail.com'
       pinconversation:
