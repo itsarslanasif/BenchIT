@@ -7,7 +7,7 @@
         class="flex cursor-pointer"
       >
         <img
-          class="w-6 h-6 -ml-1 rounded-md border border-black-500"
+          class="w-6 h-6 mr-1 rounded border border-black-500"
           :src="member.image_url"
         />
       </div>
