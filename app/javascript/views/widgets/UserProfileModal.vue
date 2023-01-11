@@ -26,7 +26,7 @@ import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { h } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
-import { getUserProfile } from '../../api/profiles/userProfile';
+import { useProfileStore } from '../../stores/useProfileStore';
 
 export default {
   name: 'UserProfileModal',
@@ -45,7 +45,13 @@ export default {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
-    return { userProfileStore, currentProfileStore, rightPaneStore };
+    const profilesStore = useProfileStore();
+    return {
+      userProfileStore,
+      currentProfileStore,
+      rightPaneStore,
+      profilesStore,
+    };
   },
   beforeUnmount() {
     this.options = null;
@@ -239,13 +245,17 @@ export default {
       this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
     },
-    async setUserProfileForPane() {
-      this.userProfileStore.setUserProfile(
-        await getUserProfile(1, this.profile_id)
+
+    setUserProfileForPane() {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile?.id === this.profile_id
       );
+      this.userProfileStore.setUserProfile(profile);
     },
-    async setUserProfileForModal() {
-      this.modal_profile = await getUserProfile(1, this.profile_id);
+    setUserProfileForModal() {
+      this.modal_profile = this.profilesStore.profiles.find(
+        profile => profile.id === this.profile_id
+      );
     },
     generateKey(label) {
       return label.toLowerCase().replace(/ /g, '-');

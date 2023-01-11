@@ -116,6 +116,20 @@ en:
         replies: 'replies'
         last_reply: 'Last reply'
         view_thread: 'View thread'
+        this_is_the_very_beginning: 'This is the very beginning of the'
+        channel: 'channel'
+        you: '(you)'
+        active: '🟢'
+        away: '⚫'
+        created_this_channel_on: 'created this channel on'
+        edit_description: 'Edit description'
+        add_people: 'Add people'
+        this_space_is_just_for_you: "This space is just for you."
+        own_chat_description: 'Jot down notes, list your to-dos, or
+          keep links and files handy. You can also talk to yourself here, but please
+          bear in mind you’ll have to supply both sides of the conversation.'
+        this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
+          messages and share files with"
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
