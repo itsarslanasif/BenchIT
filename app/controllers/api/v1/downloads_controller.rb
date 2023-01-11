@@ -5,7 +5,7 @@ class Api::V1::DownloadsController < Api::ApiController
   def index; end
 
   def create
-    @download = Download.new(download_params)
+    @download = Current.profile.downloads.new(download_params)
     if @download.save
       render json: @download, status: :ok
     else
@@ -32,9 +32,7 @@ class Api::V1::DownloadsController < Api::ApiController
   private
 
   def download_params
-    params.require(:download).permit(:file_name, :file_link, :file_download_link, :file_type).tap do |param|
-      param[:profile] = Current.profile
-    end
+    params.require(:download).permit(:file_name, :file_link, :file_download_link, :file_type)
   end
 
   def set_download
@@ -43,6 +41,5 @@ class Api::V1::DownloadsController < Api::ApiController
 
   def set_all_downloads
     @downloads = Current.profile.downloads.order(created_at: :desc)
-    render json: { error: 'You have no downloads', status: :unprocessable_entity } if @downloads.nil?
   end
 end

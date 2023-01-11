@@ -1,7 +1,3 @@
 json.array! @downloads do |download|
-  json.id download.id
-  json.file_name download.file_name
-  json.file_link download.file_link
-  json.file_download_link download.file_download_link
-  json.file_type download.file_type
+  json.extract! download, :id, :file_name, :file_link, :file_download_link, :file_type
 end
