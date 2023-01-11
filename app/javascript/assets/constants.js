@@ -125,5 +125,6 @@ export const CONSTANTS = {
   ADD_TO_SAVED_ITEMS: 'Add to saved items',
   EDIT_FILE_DETAILS: 'Edit file details',
   DELETE_FILE: 'Delete file',
-  OPEN_FILE: 'Open file'
+  OPEN_FILE: 'Open file',
+  SOMETHING_WENT_WRONG: 'Something went wrong'
 };
