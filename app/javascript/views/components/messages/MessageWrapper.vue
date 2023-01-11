@@ -23,15 +23,18 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal :profile_id="currMessage.sender_id" />
+      <template v-if="!isSameUser || !isSameDayMessage || isFirstMessage">
+        <user-profile-modal
+          :profile_id="currMessage.sender_id"
+          :sender_avatar="currMessage.sender_avatar"
+        />
       </template>
       <span class="message">
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
               @click="showUserProfile"
-              v-if="!isSameUser || !isSameDayMessage"
+              v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
@@ -39,16 +42,20 @@
             <p
               class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
             >
-              {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
+              {{
+                isSameUser && isSameDayMessage && !isFirstMessage
+                  ? timeWithoutAMPM
+                  : time
+              }}
             </p>
             <span
-              v-if="isSameUser && isSameDayMessage"
+              v-if="isSameUser && isSameDayMessage && !isFirstMessage"
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
           </span>
           <span
-            v-if="!isSameUser || !isSameDayMessage"
+            v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
@@ -104,7 +111,9 @@
         <div
           v-if="currMessage?.replies?.length > 0"
           @click="toggleThread"
-          :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+          :class="{
+            'ml-12': isSameUser && isSameDayMessage && !isFirstMessage,
+          }"
           class="text-info text-xs cursor-pointer hover:underline"
         >
           {{ repliesCount }}
@@ -174,7 +183,7 @@ import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
-import emojiModalButtonVue from '../../widgets/emojiModalButton.vue';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   name: 'MessageWrapper',
@@ -185,6 +194,8 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
+    const messagesStore = useMessageStore();
+
     return {
       threadStore,
       pinnedConversationStore,
@@ -192,6 +203,7 @@ export default {
       currentUserStore,
       rightPaneStore,
       userProfileStore,
+      messagesStore,
     };
   },
   components: {
@@ -264,6 +276,14 @@ export default {
     },
     repliesCount() {
       return `${this.currMessage.replies?.length} replies..`;
+    },
+    isFirstMessage() {
+      if (this.messagesStore.messages) {
+        return this.firstMessageId === this.currMessage?.id;
+      }
+    },
+    firstMessageId() {
+      return this.messagesStore.messages[0]?.id;
     },
     displayReaction() {
       this.currMessage.reactions.filter(reaction => {
