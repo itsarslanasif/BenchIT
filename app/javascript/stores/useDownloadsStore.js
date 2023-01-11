@@ -10,7 +10,6 @@ export const useDownloadsStore = () => {
       getDownloads: state => state.downloads,
     },
   });
-  const store = downloadsStore();
 
-  return store;
+  return downloadsStore();
 };

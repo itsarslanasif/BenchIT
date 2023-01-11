@@ -459,12 +459,14 @@ export default {
       });
     },
 
-    async downloadFile(attachment) {
+    downloadFile(attachment) {
       try {
-        await fileDownload(attachment).then(response => {
+        fileDownload(attachment).then(response => {
           this.downloadsStore.downloads.unshift(response.data);
         });
-      } catch (e) {}
+      } catch (error) {
+        console.error(error)
+      }
     },
 
     setFileOptionsModal() {

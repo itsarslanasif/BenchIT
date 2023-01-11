@@ -47,9 +47,9 @@
       >
         <template #trigger>
           <div
-            @mouseover="mouseover(download.id, download.file_name)"
+            @mouseover="mouseOver(download.id, download.file_name)"
             @mouseleave="
-              mouseleave(download.id, download.file_name, download.file_type)
+              mouseLeave(download.id, download.file_name, download.file_type)
             "
             class="p-3 font-medium rounded-xl border border-black-300 cursor-pointer w-150"
             @click="openInNewTab(download.file_link)"
@@ -105,49 +105,55 @@ export default {
     NPopover,
   },
   methods: {
-    async clearAllDownloads() {
+    clearAllDownloads() {
       try {
-        await deleteAllDownloads().then(() => {
+        deleteAllDownloads().then(() => {
           this.downloadsStore.downloads = [];
         });
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     },
 
-    async clearDownload(download_id) {
+    clearDownload(download_id) {
       try {
-        await deleteDownload(download_id).then(() => {
+        deleteDownload(download_id).then(() => {
           this.downloadsStore.downloads = this.downloadsStore.downloads.filter(
             function (download) {
               return download.id != download_id;
             }
           );
         });
-      } catch (error) {}
+      } catch (error) {
+        console.error(error);
+      }
     },
 
     openInNewTab(url) {
       window.open(url, '_blank', 'noreferrer');
     },
 
-    mouseover(download_id, file_name) {
+    mouseOver(download_id, file_name) {
       const download = document.getElementById(download_id + file_name);
       download.innerHTML = CONSTANTS.OPEN_FILE;
       download.classList.add('bg-black-100');
     },
 
-    mouseleave(download_id, file_name, type) {
+    mouseLeave(download_id, file_name, type) {
       const download = document.getElementById(download_id + file_name);
       download.innerHTML = type;
       download.classList.remove('bg-black-100');
     },
   },
 
-  async mounted() {
+  mounted() {
     try {
-      await getDownloads().then(response => {
+      getDownloads().then(response => {
         this.downloadsStore.downloads = response.data;
       });
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   },
 };
 </script>
