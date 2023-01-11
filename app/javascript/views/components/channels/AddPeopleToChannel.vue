@@ -64,7 +64,7 @@
 import { NSelect } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { defineComponent } from 'vue';
-import { getMembers,addMemberstoChannel } from '../../../api/members/membersApi';
+import { getMembers, addMemberstoChannel } from '../../../api/members/membersApi';
 import { CONSTANTS } from '../../../assets/constants';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import benchitAlert from '../../widgets/benchitAlert.vue';

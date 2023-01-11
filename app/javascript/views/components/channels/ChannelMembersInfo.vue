@@ -2,7 +2,7 @@
   <div class="flex p-2 rounded-md border border-black-500 shadow-sm">
     <div class="flex cursor-pointer" @click="showMemberClickListener(true)">
       <div
-        v-for="member in channelDetailStore.channelMembers.slice(-3)"
+        v-for="member in getChannelMembers"
         :key="member.id"
         class="flex cursor-pointer"
       >
@@ -43,6 +43,11 @@ export default {
   setup() {
     const channelDetailStore = useChannelDetailStore();
     return { channelDetailStore };
+  },
+  computed:{
+    getChannelMembers(){
+     return this.channelDetailStore.channelMembers.slice(-3)
+    }
   },
   data() {
     return {
