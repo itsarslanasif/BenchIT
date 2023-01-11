@@ -56,6 +56,8 @@ en:
         share_file: 'Share file...'
         downloads: 'Downloads'
         clear_downloads: 'Clear Downloads'
+        keep_track: 'Keep track of your downloads'
+        downloaded_files: 'Files you download to your computer will appear here.'
       email:
         gmail: '@gmail.com'
       pinconversation:

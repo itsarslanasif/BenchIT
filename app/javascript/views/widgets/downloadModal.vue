@@ -11,7 +11,7 @@
         $t('downloadsModal.downloads')
       }}</span></template
     >
-    <template #header-extra>
+    <template #header-extra v-if="downloadsStore.downloads.length !== 0">
       <div
         class="h-8 w-8 mr-3 hover:bg-black-100 mb-0 text-center rounded-md flex justify-between items-center p-1"
       >
@@ -20,7 +20,7 @@
             <font-awesome-icon
               class="text-xl text-black-600 cursor-pointer"
               icon="fa-solid fa-broom"
-              @click="click"
+              @click="clearAllDownloads"
             />
           </template>
           {{ $t('downloadsModal.clear_downloads') }}
@@ -28,6 +28,15 @@
       </div>
       <span class="text-3xl text-black-300 mr-1 mb-1">|</span>
     </template>
+    <div
+      v-if="downloadsStore.downloads.length === 0"
+      class="mt-20 flex text-center justify-center items-center flex-col"
+    >
+      <div class="text-lg font-semibold">
+        {{ $t('downloadsModal.keep_track') }}
+      </div>
+      <div>{{ $t('downloadsModal.downloaded_files') }}</div>
+    </div>
     <div v-for="download in downloadsStore.downloads" :key="download.id">
       <n-popover
         class="rounded-xl border-black-300 border text-black-600"
@@ -61,7 +70,8 @@
           </div>
         </template>
         <div
-          class="hover:bg-black-100 mb-0 text-center rounded-md flex justify-between items-center p-2 cursor-pointer"
+          class="hover:bg-black-100 mb-0 text-center rounded-md flex justify-between items-center p-2 cursor-pointer text-lg"
+          @click="clearDownload(download.id)"
         >
           <font-awesome-icon icon="fa-solid fa-xmark" />
         </div>
@@ -72,7 +82,11 @@
 
 <script>
 import { NModal, NTooltip, NPopover } from 'naive-ui';
-import { getDownloads } from '../../api/downloads/downloads.js';
+import {
+  getDownloads,
+  deleteAllDownloads,
+  deleteDownload,
+} from '../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import { CONSTANTS } from '../../assets/constants';
 import { ref } from 'vue';
@@ -91,23 +105,49 @@ export default {
     NPopover,
   },
   methods: {
-    click() {},
+    async clearAllDownloads() {
+      try {
+        await deleteAllDownloads().then(() => {
+          this.downloadsStore.downloads = [];
+        });
+      } catch (error) {}
+    },
+
+    async clearDownload(download_id) {
+      try {
+        await deleteDownload(download_id).then(() => {
+          this.downloadsStore.downloads = this.downloadsStore.downloads.filter(
+            function (download) {
+              return download.id != download_id;
+            }
+          );
+        });
+      } catch (error) {}
+    },
+
     openInNewTab(url) {
       window.open(url, '_blank', 'noreferrer');
     },
+
     mouseover(download_id, file_name) {
       const download = document.getElementById(download_id + file_name);
       download.innerHTML = CONSTANTS.OPEN_FILE;
       download.classList.add('bg-black-100');
     },
+
     mouseleave(download_id, file_name, type) {
       const download = document.getElementById(download_id + file_name);
       download.innerHTML = type;
       download.classList.remove('bg-black-100');
     },
   },
+
   async mounted() {
-    this.downloadsStore.downloads = await getDownloads();
+    try {
+      await getDownloads().then(response => {
+        this.downloadsStore.downloads = response.data;
+      });
+    } catch (error) {}
   },
 };
 </script>
