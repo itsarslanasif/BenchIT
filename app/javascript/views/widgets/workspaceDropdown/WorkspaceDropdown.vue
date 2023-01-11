@@ -8,7 +8,7 @@
   >
     <n-text text color="white">
       <div class="mx-3 my-2 flex text-white">
-        <strong class="text-xl">{{ currentWorkspace.company_name }}</strong>
+        <strong class="text-xl">{{ currentWorkspace?.company_name }}</strong>
         <i class="fa-solid fa-chevron-down self-center fa-xs ml-1 mb-2" />
       </div>
     </n-text>
@@ -30,12 +30,13 @@ export default {
     return {
       options: [],
       showModal: false,
-      currentWorkspace: null,
     };
   },
+  beforeUnmount() {
+    this.options = null;
+  },
   setup() {
-    const currentWorkspaceStore = useCurrentWorkspaceStore();
-    const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+    const currentWorkspace = JSON.parse(sessionStorage.getItem('currentWorkspace'))
     return { currentWorkspace, options };
   },
   methods: {

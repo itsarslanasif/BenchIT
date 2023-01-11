@@ -4,12 +4,11 @@
     <div>
       <SearchBar />
     </div>
-    <splitpanes>
-      <pane max-size="20" min-size="10">
-        <WorkspaceDropdown />
+    <splitpanes @resize="resizePane">
+      <pane max-size="20" size="15" min-size="10" v-if="leftPaneStore.getLeftpaneFlag">
         <LeftPane />
       </pane>
-      <pane class="bg-white" max-size="90" min-size="80">
+      <pane class="bg-white" max-size="100" min-size="80">
         <router-view :key="$route.fullPath" />
       </pane>
       <pane
@@ -42,6 +41,7 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
+import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 
 export default {
   components: {
@@ -55,10 +55,18 @@ export default {
     SearchBar,
     UserProfile,
   },
+  methods: {
+    resizePane(panes) {
+      if (panes[0].size < 11) {
+        this.leftPaneStore.closeLeftPane();
+      }
+    },
+  },
   setup() {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
-    return { screenStore, rightPaneStore };
+    const leftPaneStore = useLeftpaneStore();
+    return { screenStore, rightPaneStore, leftPaneStore };
   },
 };
 </script>
