@@ -6,7 +6,6 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
     selectedOption: 'about',
     channelMemberCount: 0,
     channelMembers: [],
-    memberIconCount:1,
   }),
   getters: {
     getSelectedOption() {
@@ -35,11 +34,8 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
     setSlectedOption(option) {
       this.selectedOption = option;
     },
-    getMemberIconCount(){
-      if (this.channelMembers.length<=3){
-        this.memberIconCount= this.channelMembers.length
-      }
-      return  this.memberIconCount
+    appendMembers(members){
+      this.channelMembers=[...this.channelMembers,...members]
     },
     isAbout() {
       return this.selectedOption == 'about';

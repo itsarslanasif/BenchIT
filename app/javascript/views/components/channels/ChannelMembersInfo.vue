@@ -1,14 +1,18 @@
 <template>
   <div class="flex p-2 rounded-md border border-black-500 shadow-sm">
     <div class="flex cursor-pointer" @click="showMemberClickListener(true)">
-      <div v-for="member in channelDetailStore.channelMembers.slice(-3)" :key="member.id" class="flex cursor-pointer">
-      <img
-        class="w-6 h-6 -ml-1 rounded-md border border-black-500"
-        :src="member.image_url "
-      />
+      <div
+        v-for="member in channelDetailStore.channelMembers.slice(-3)"
+        :key="member.id"
+        class="flex cursor-pointer"
+      >
+        <img
+          class="w-6 h-6 -ml-1 rounded-md border border-black-500"
+          :src="member.image_url"
+        />
       </div>
       <div class="w-3 ml-1">
-        <p class="ml-1 font-bold text-black">{{ count }}</p>
+        <p v-if="channelDetailStore.channelMembers.length!=0" class="ml-1 font-bold text-black">{{ channelDetailStore.channelMembers.length }}</p>
       </div>
     </div>
     <n-divider vertical class="self-center text-black" />
@@ -38,7 +42,6 @@ export default {
   data() {
     return {
       count: '',
-      iconCount:1
     };
   },
   methods: {
@@ -52,10 +55,6 @@ export default {
         console.error(e);
       }
     },
-    getIconCount(){
-      this.channelDetailStore.channelMemberCount< 3 ? this.iconCount= this.channelDetailStore.channelMemberCount:  this.iconCount=3;
-      return iconCount
-    }
   },
 };
 </script>
