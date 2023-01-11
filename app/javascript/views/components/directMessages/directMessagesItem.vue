@@ -53,12 +53,5 @@ export default {
       return this.unreadDetails?.messages.length;
     },
   },
-  // setup() {
-  //   const unreadMessagesStore = useUnreadStore();
-  //   const { unreadMessages } = storeToRefs(unreadMessagesStore);
-  //   return {
-  //     unreadMessages,
-  //   };
-  // },
 };
 </script>
