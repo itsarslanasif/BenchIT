@@ -9,7 +9,7 @@ class Api::V1::DownloadsController < Api::ApiController
   end
 
   def index
-    @downloads = Current.profile.downloads
+    @downloads = Current.profile.downloads.order(created_at: :desc)
   end
 
   private

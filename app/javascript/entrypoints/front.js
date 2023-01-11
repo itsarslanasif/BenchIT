@@ -39,6 +39,7 @@ import {
   faAddressBook,
   faCloudArrowDown,
   faBroom,
+  faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -83,6 +84,7 @@ library.add(
   faAddressBook,
   faCloudArrowDown,
   faBroom,
+  faCircleExclamation,
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

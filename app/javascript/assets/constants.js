@@ -124,5 +124,6 @@ export const CONSTANTS = {
   COPY_LINK_TO_FILE: 'Copy link to file',
   ADD_TO_SAVED_ITEMS: 'Add to saved items',
   EDIT_FILE_DETAILS: 'Edit file details',
-  DELETE_FILE: 'Delete file'
+  DELETE_FILE: 'Delete file',
+  OPEN_FILE: 'Open file'
 };
