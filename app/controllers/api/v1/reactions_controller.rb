@@ -1,21 +1,21 @@
 class Api::V1::ReactionsController < Api::ApiController
-  before_action :set_reaction, :check_profile, only: :destroy
+  include MemberShip
+  before_action :verify_membership, only: [:create]
+  before_action :set_reaction, :authenticate_reaction, only: :destroy
 
   def create
-    @reaction = Current.profile.reactions.new(reaction_params)
-
     if @reaction.save
-      render json: @reaction, status: :ok
+      render json: { message: 'Reaction added successfully.' }, status: :ok
     else
-      render json: @reaction.errors, status: :unprocessable_entity
+      render json: { error: @reaction.errors }, status: :unprocessable_entity
     end
   end
 
   def destroy
     if @reaction.destroy
-      render json: 'reaction removed', status: :ok
+      render json: { message: 'reaction removed' }, status: :ok
     else
-      render json: @reaction.errors, status: :unprocessable_entity
+      render json: { error: @reaction.errors }, status: :unprocessable_entity
     end
   end
 
@@ -29,9 +29,16 @@ class Api::V1::ReactionsController < Api::ApiController
     params.require(:reaction).permit(:conversation_message_id, :emoji)
   end
 
-  def check_profile
-    return if @reaction.profile_id.eql?(Current.profile.id)
+  def authenticate_reaction
+    if @reaction.profile_id.eql?(Current.profile.id)
+      check_membership(@reaction.bench_conversation)
+    else
+      render json: { message: 'Sorry, this reaction is not your' }, status: :unprocessable_entity
+    end
+  end
 
-    render json: { message: 'Sorry, this reaction is not your', status: :unprocessable_entity }
+  def verify_membership
+    @reaction = Current.profile.reactions.new(reaction_params)
+    check_membership(@reaction.bench_conversation)
   end
 end
