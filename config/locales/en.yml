@@ -112,6 +112,10 @@ en:
         today: 'Today'
         replies: 'replies'
         reacted: 'reacted'
+        reply: 'reply'
+        replies: 'replies'
+        last_reply: 'Last reply'
+        view_thread: 'View thread'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'

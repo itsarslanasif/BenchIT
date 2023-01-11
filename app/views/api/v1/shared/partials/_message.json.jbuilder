@@ -5,6 +5,7 @@ json.sender_avatar url_for(message.profile.profile_image) if message.profile.pro
 json.created_at message.created_at
 json.updated_at message.updated_at
 json.is_edited message.created_at != message.updated_at
+json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.isSaved saved?(message)
 json.receiver_name @receiver.username if @receiver.present?
@@ -16,6 +17,7 @@ json.replies message.replies do |reply|
   json.parent_message_id reply.parent_message_id
   json.sender_id reply.sender_id
   json.sender_name reply.profile.username
+  json.sender_avatar url_for(reply.profile.profile_image) if reply.profile.profile_image.attached?
   json.partial! 'api/v1/reactions/partials/reactions', reactions: reply.reactions
   json.sender_avatar url_for(reply.profile.profile_image) if reply.profile.profile_image.attached?
   json.reactions reply.reactions
