@@ -12,7 +12,7 @@
       <n-avatar
         class="mr-1"
         size="large"
-        src="../../../assets/images/user.png"
+        :src="sender_avatar"
         @mouseover="setUserProfileForModal"
       />
     </div>
@@ -31,7 +31,16 @@ import { useProfileStore } from '../../stores/useProfileStore';
 export default {
   name: 'UserProfileModal',
   components: { NDropdown, NAvatar, NText, NButton },
-  props: ['profile_id'],
+  props: {
+    profile_id: {
+      type: Number,
+      default: undefined,
+    },
+    sender_avatar: {
+      type: String,
+      default: undefined,
+    },
+  },
   setup() {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();

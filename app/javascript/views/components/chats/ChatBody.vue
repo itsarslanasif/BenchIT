@@ -51,7 +51,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
