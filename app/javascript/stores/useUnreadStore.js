@@ -33,7 +33,7 @@ export const useUnreadStore = () => {
       async index() {
         this.unreadMessages = await getUnreadMessages();
       },
-      addNewMessage(message) {
+      addNewMessage(message, conversation_type, conversation_id) {
         let unreadDetails = this.unreadMessages.find(m => {
           if (message.conversationable_type === 'Profile') {
             if (
@@ -51,7 +51,11 @@ export const useUnreadStore = () => {
             }
           }
         });
-        if (!unreadDetails) {
+        if (
+          !unreadDetails &&
+          `${message.conversationable_type}${message.conversationable_id}` !==
+            `${getConversationType(conversation_type)}${conversation_id}}`
+        ) {
           unreadDetails = {
             bench_conversation: `${message.conversationable_type}${
               message.conversationable_type === 'Profile'
@@ -63,7 +67,12 @@ export const useUnreadStore = () => {
           this.unreadMessages.push(unreadDetails);
           return;
         }
-        unreadDetails.messages.push(message);
+        if (
+          unreadDetails.bench_conversation !==
+          `${getConversationType(conversation_type)}${conversation_id}`
+        ) {
+          unreadDetails.messages.push(message);
+        }
       },
       removeMessage(message) {
         const unreadDetails = this.unreadMessages.find(m => {

@@ -13,7 +13,8 @@ class UnreadMessagesCreatorService
 
   def generate_key
     if @bench_conversation.conversationable_type.eql?('Profile')
-      @bench_conversation.conversationable_type + @bench_conversation.sender_id.to_s
+      message = ConversationMessage.find(@message_id)
+      @bench_conversation.conversationable_type + message.sender_id.to_s
     else
       @bench_conversation.conversationable_type + @bench_conversation.conversationable_id.to_s
     end

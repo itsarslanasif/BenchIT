@@ -2,9 +2,14 @@ import { useUnreadStore } from '../../stores/useUnreadStore';
 
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
+  const getIndexByParams = param => {
+    return window.location.pathname.split('/')[param];
+  };
+  const conversation_type = getIndexByParams(1);
+  const id = getIndexByParams(2);
   try {
     if (!data.parent_message_id) {
-      unreadMessagesStore.addNewMessage(data);
+      unreadMessagesStore.addNewMessage(data, conversation_type, id);
     }
   } catch (err) {
     console.error(err);

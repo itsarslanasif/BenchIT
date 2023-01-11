@@ -43,9 +43,10 @@
           </n-divider>
         </div>
         <n-divider
-          v-if="oldestUnreadMessageId && oldestUnreadMessageId === message.id"
+          v-if="newMessageFlag && oldestUnreadMessageId === message.id"
+          title-placement="right"
         >
-          <div class="text-danger">New Messages</div>
+          <div class="text-primary">{{ $t('chat.new') }}</div>
         </n-divider>
         <MessageWrapper
           v-if="!message.parent_message_id"
@@ -84,6 +85,7 @@ export default {
       jumpToDateToggle: false,
       prevMessage: null,
       selectedMessage: {},
+      newMessageFlag: true,
     };
   },
   mounted() {
@@ -166,6 +168,7 @@ export default {
       message.classList.add('highlight');
     }
     this.scrollToEnd();
+    this.newMessageFlag = false;
   },
 };
 </script>
