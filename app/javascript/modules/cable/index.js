@@ -197,7 +197,7 @@ const unPinMessage = (data, messageStore, threadStore) => {
 
     if (data.parent_message_id) {
       const message = messages.find(m => m.id === data.parent_message_id);
-      const findThreadMessageIndex = message.replies.findIndex(
+      let findThreadMessageIndex = message.replies.findIndex(
         m => m.id === data.id
       );
 
