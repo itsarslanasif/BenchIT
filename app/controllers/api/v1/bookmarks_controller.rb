@@ -27,7 +27,7 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def destroy
     if @bookmark.destroy
-      render json: { message: 'bookmark removed' }, status: :ok
+      render json: { message: 'Bookmark is successfully removed' }, status: :ok
     else
       render json: { error: @bookmark.errors }, status: :unprocessable_entity
     end
