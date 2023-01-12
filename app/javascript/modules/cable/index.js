@@ -4,10 +4,10 @@ const createMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
     if (data.parent_message_id) {
-      const message = messages.find(m => m.id === data.parent_message_id);
+      const message = messages.find(element => element.id === data.parent_message_id);
       message.replies.push(data);
     } else {
-      const findMessage = messages.find(m => m.id === data.id);
+      const findMessage = messages.find(element => element.id === data.id);
       if (findMessage == undefined) {
         messageStore.addMessage(data);
       }
@@ -21,10 +21,10 @@ const updateMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
     if (data.parent_message_id) {
-      const message = messages.find(m => m.id === data.parent_message_id);
+      const message = messages.find(element => element.id === data.parent_message_id);
       message.replies.push(data);
     } else {
-      const findMessage = messages.find(m => m.id === data.id);
+      const findMessage = messages.find(element => element.id === data.id);
       if (findMessage == undefined) {
         messageStore.addMessage(data);
       }
@@ -38,15 +38,15 @@ const deleteMessage = (data, messageStore) => {
   try {
     const messages = messageStore.getMessages;
     if (data.parent_message_id) {
-      const message = messages.find(m => m.id === data.parent_message_id);
+      const message = messages.find(element => element.id === data.parent_message_id);
       const findThreadMessageIndex = message.replies.findIndex(
-        m => m.id === data.id
+        element => element.id === data.id
       );
       if (findThreadMessageIndex != -1) {
         message.replies.splice(findThreadMessageIndex, 1);
       }
     } else {
-      const findMessageIndex = messages.findIndex(m => m.id === data.id);
+      const findMessageIndex = messages.findIndex(element => element.id === data.id);
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
       }
@@ -61,9 +61,31 @@ const createReaction = (data, messageStore) => {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
       .flat();
-    const message = messages.find(m => m.id === data.conversation_message_id);
+    const message = messages.find(element => element.id === data.conversation_message_id);
     if (message) {
-      message.reactions.push(data);
+      const findMessageReactionIndex = message.reactions.findIndex(
+        reaction => reaction.id === data.id
+      );
+      if (findMessageReactionIndex == -1) {
+        message.reactions.push(data);
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+const deleteReaction = (data, messageStore) => {
+  try {
+    let messages = messageStore.getMessages
+      .flatMap(message => [message, message.replies])
+      .flat();
+    const message = messages.find(element => element.id === data.conversation_message_id);
+    const findMessageReactionIndex = message.reactions.findIndex(
+      reaction => reaction.id === data.id
+    );
+    if (message != -1 && findMessageReactionIndex != -1) {
+      message.reactions.splice(findMessageReactionIndex, 1);
     }
   } catch (err) {
     console.error(err);
@@ -74,6 +96,7 @@ const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
   MessageDelete: deleteMessage,
+  ReactionDelete: deleteReaction,
   MessageUpdate: updateMessage,
 };
 

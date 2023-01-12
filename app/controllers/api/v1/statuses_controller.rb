@@ -31,8 +31,6 @@ class Api::V1::StatusesController < Api::ApiController
 
   def set_status
     @status = Status.find(params[:id])
-
-    return render json: { message: 'Status Not Found.' }, status: :not_found if @status.nil?
   end
 
   def status_params

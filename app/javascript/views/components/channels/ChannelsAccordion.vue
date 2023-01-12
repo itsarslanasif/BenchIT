@@ -4,7 +4,7 @@
       <AccordionItem default-opened="true">
         <template #summary>{{ $t('channels.title') }}</template>
         <h5
-          v-for="channel in channels"
+          v-for="channel in joinedChannels"
           :key="channel.id"
           class="hover:bg-primaryHover"
         >
@@ -35,6 +35,7 @@ import CreateChannel from './CreateChannel.vue';
 import ChannelItem from './ChannelItem.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
   components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
   data() {
@@ -49,16 +50,19 @@ export default {
   },
   setup() {
     const channelStore = useChannelStore();
-    const { channels } = storeToRefs(channelStore);
+    const { joinedChannels } = storeToRefs(channelStore);
+    const messagesStore = useMessageStore();
     return {
-      channels,
+      joinedChannels,
+      messagesStore,
     };
   },
   methods: {
     closeModal() {
       this.modalOpen = !this.modalOpen;
     },
-    goToChannelChat(chatURL) {
+    goToChannelChat(chatURL, channel) {
+      this.messagesStore.setSelectedChat(channel);
       this.$router.push(chatURL);
     },
     toggleChannelOptionShow() {

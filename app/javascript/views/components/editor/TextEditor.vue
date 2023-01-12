@@ -13,7 +13,7 @@
       </div>
     </div>
     <div>
-      <editor v-model="newMessage" api-key="{{ import.meta.env.VITE_EDITOR_API }}" :init="{
+      <editor v-model="newMessage" @keydown.enter="sendMessagePayload" api-key="no-api-key" :init="{
   menubar: false,
   statusbar: false,
   plugins: 'lists link code codesample',
@@ -100,7 +100,7 @@ export default
         const currentMessage = ignoreHTML(curr)
         const oldMessage = ignoreHTML(old)
         const message = ignoreHTML(newMessage.value)
-        
+
         if (message && getLastIndex(currentMessage) == '@' && getLastIndex(oldMessage) == ';') {
           enableMention()
         }
@@ -126,12 +126,36 @@ export default
         return value[value.length - 1]
       }
 
-      const sendMessagePayload = () => {
-        props.sendMessage(newMessage.value, files.value)
-        newMessage.value = ''
-        readerFile.value = []
-        files.value = []
+      const sendMessagePayload = (event) => {
+        if (event.keyCode === 13 && !event.shiftKey) {
+          const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
+          const messagetext = message(newMessage);
+          if (messagetext !== '' && messagetext !== '<p> </p>' && !startWithNonBreakSpace) {
+            props.sendMessage(messagetext, files.value)
+            newMessage.value = ''
+            readerFile.value = []
+            files.value = []
+          }
+        }
       };
+
+      const message = newMessage => {
+        let messageData;
+        let filterData;
+        let actuallData;
+        const startWithBr = newMessage.value.startsWith('<p><br />', 0);
+        const endWithBr = newMessage.value.endsWith("<br /></p>\n<p>&nbsp;</p>");
+        if (startWithBr || endWithBr) {
+          messageData = newMessage.value.split('<br />');
+          filterData = messageData.filter(function (el) { return el !== '' });
+          actuallData = filterData.join().split('\n')[0].replace(/,/g, " ");
+          return actuallData;
+        }
+        else {
+          actuallData = newMessage?.value?.split('\n')[0];
+          return actuallData;
+        }
+      }
 
       const enableMention = () => {
         filteredList.value = profiles.value;

@@ -4,6 +4,7 @@ class Workspace < ApplicationRecord
   has_many :profiles, dependent: :destroy
   has_many :users, through: :profiles, dependent: :destroy
   has_many :workspace_statuses
+  has_many :bench_channels, dependent: :destroy
 
   enum workspace_type: {
     work: 0,

@@ -9,11 +9,7 @@
   >
     <n-button>
       <div class="flex avatar absolute">
-        <n-avatar
-          class="self-baseline"
-          size="medium"
-          src="../../../assets/images/user.png"
-        />
+        <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
       </div>
       <div
         class="flex absolute icon"
@@ -39,6 +35,7 @@ import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import SetProfileStatusModal from '../components/profileStatus/setProfileStatusModal.vue';
 import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js'
+import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { storeToRefs } from 'pinia';
 
 export default {
@@ -46,11 +43,16 @@ export default {
   setup() {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
+    const currentWorkspaceStore = useCurrentWorkspaceStore();
     const { currentProfile } = storeToRefs(profileStore);
-    return { profile: currentProfile,profileStatusStore:profileStatusStore };
+    const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+
+    return { profile: currentProfile, currentWorkspace, profileStatusStore:profileStatusStore };
   },
   beforeUnmount() {
-    this.profile = null;
+    this.status = this.userStatus = null;
+    this.prevStatus = this.profile = null;
+    this.statusIcon = this.options = null;
   },
   data() {
     return {
@@ -146,17 +148,31 @@ export default {
           key: 'd4',
         },
         {
-          label: CONSTANTS.SIGN_OUT_OF_DEVSINC,
-          key: this.generateKey(CONSTANTS.SIGN_OUT_OF_DEVSINC),
+          label: `${CONSTANTS.SIGN_OUT_OF} ${this.currentWorkspace.company_name}`,
+          key: this.generateKey(`${CONSTANTS.SIGN_OUT_OF_WORKSPACE}`),
         },
       ],
     };
   },
+  computed: {
+    profile_avatar() {
+      return this.profile.image_url;
+    },
+  },
   methods: {
-    handleSelect(key) {},
     handleStatusSelect(){
      this.profileStatusStore.toggleProfileStatusPopUp()
     },
+    handleSelect(key) {
+      switch (key) {
+        case 'sign-out-of-workspace':
+          sessionStorage.removeItem('currentWorkspace');
+          sessionStorage.removeItem('currentProfile');
+          this.$router.push('/workspace_dashboard');
+          break;
+      }
+    },
+
     renderCustomHeader() {
       return h(
         'div',
@@ -167,7 +183,7 @@ export default {
           h(NAvatar, {
             size: 'large',
             class: 'mr-3',
-            src: '../../../assets/images/user.png',
+            src: this.profile?.image_url,
           }),
           h('div', null, [
             h('div', { class: 'text-base font-bold' }, [
