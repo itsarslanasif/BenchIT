@@ -1,32 +1,40 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <div class="bg-primary text-sm h-screen flex flex-col">
-    <div>
-      <SearchBar />
+  <n-message-provider>
+    <div class="relative bg-primary text-sm h-screen flex flex-col">
+      <switching-workspace-loader
+        v-if="currentWorkspaceStore.switchingWorkspace"
+      />
+      <div>
+        <SearchBar />
+      </div>
+      <splitpanes>
+        <pane class="border-r border-slate-300" fixed max-size="4" min-size="4">
+          <SwitchWorkspace />
+        </pane>
+        <pane max-size="30" min-size="20">
+          <WorkspaceDropdown />
+          <LeftPane />
+        </pane>
+        <pane class="bg-white" max-size="90" min-size="80">
+          <router-view :key="$route.fullPath" />
+        </pane>
+        <pane
+          v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+          max-size="80"
+          min-size="60"
+          class="bg-white"
+        >
+          <Thread
+            v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+          />
+          <UserProfile
+            v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+          />
+        </pane>
+      </splitpanes>
     </div>
-    <splitpanes>
-      <pane max-size="20" min-size="10">
-        <WorkspaceDropdown />
-        <LeftPane />
-      </pane>
-      <pane class="bg-white" max-size="90" min-size="80">
-        <router-view :key="$route.fullPath" />
-      </pane>
-      <pane
-        v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
-        max-size="80"
-        min-size="60"
-        class="bg-white"
-      >
-        <Thread
-          v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
-        />
-        <UserProfile
-          v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
-        />
-      </pane>
-    </splitpanes>
-  </div>
+  </n-message-provider>
 </template>
 
 <script>
@@ -42,6 +50,10 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
+import SwitchWorkspace from '../components/workspace/SwitchWorkspace.vue';
+import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
+import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
+import { NMessageProvider } from 'naive-ui';
 
 export default {
   components: {
@@ -54,11 +66,16 @@ export default {
     searchDmscreen,
     SearchBar,
     UserProfile,
+    SwitchWorkspace,
+    SwitchingWorkspaceLoader,
+    NMessageProvider,
   },
   setup() {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
-    return { screenStore, rightPaneStore };
+    const currentWorkspaceStore = useCurrentWorkspaceStore();
+
+    return { screenStore, rightPaneStore, currentWorkspaceStore };
   },
 };
 </script>

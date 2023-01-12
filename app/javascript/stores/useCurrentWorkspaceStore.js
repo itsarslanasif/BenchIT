@@ -4,6 +4,7 @@ export const useCurrentWorkspaceStore = () => {
   const currentWorkspaceStore = defineStore('currentWorkspaceStore', {
     state: () => ({
       currentWorkspace: {},
+      switchingWorkspace: false,
     }),
 
     getters: {
