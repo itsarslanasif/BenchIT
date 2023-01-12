@@ -10,7 +10,8 @@
       <i class="fa-solid fa-xmark"></i>
     </p>
     <p class="font-bold text-2xl pl-8">
-      <i class="fas fa-hashtag mr-1"></i>{{ conversationInfo.name }}
+      <i v-if="conversationInfo.is_private" class="fas fa-lock self-center fa-lg mr-1"></i>
+        <i v-else  class="fas fa-hashtag self-center fa-lg mr-1"></i> {{ conversationInfo.name }}
     </p>
     <StarUnstar :channelId="conversationInfo?.id" />
     <div class="flex ml-4">

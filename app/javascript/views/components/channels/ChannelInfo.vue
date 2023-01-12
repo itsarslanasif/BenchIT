@@ -5,7 +5,8 @@
         @click="OpenChannelDetailModal(true)"
         class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
-        <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
+        <i v-if="conversationInfo.is_private" class="fas fa-lock self-center fa-lg mr-1"></i>
+        <i v-else  class="fas fa-hashtag self-center fa-lg mr-1"></i>
         <p class="text-xl font-bold self-center mr-1">{{ conversationInfo.name }}</p>
         <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
       </div>
