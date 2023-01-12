@@ -21,16 +21,7 @@ const createMessage = (data, messageStore) => {
 
 const updateMessage = (data, messageStore) => {
   try {
-    const messages = messageStore.getMessages;
-    if (data.parent_message_id) {
-      const message = messages.find(element => element.id === data.parent_message_id);
-      message.replies.push(data);
-    } else {
-      const findMessage = messages.find(element => element.id === data.id);
-      if (findMessage == undefined) {
-        messageStore.addMessage(data);
-      }
-    }
+    messageStore.updateMessage(data)
   } catch (err) {
     console.error(err);
   }
@@ -94,27 +85,27 @@ const deleteReaction = (data, messageStore) => {
   }
 };
 
-const editMessage = (data, messageStore) => {
-  try {
-    const messages = messageStore.getMessages;
-    if (data.parent_message_id) {
-      const message = messages.find(element => element.id === data.parent_message_id);
-      const findThreadMessageIndex = message.replies.findIndex(
-        element => element.id === data.id
-      );
-      if (findThreadMessageIndex != -1) {
-        message.replies.indexOf(findThreadMessageIndex) = data;
-      }
-    } else {
-      const findMessageIndex = messages.findIndex(element => element.id === data.id);
-      if (findMessageIndex != -1) {
-        message.indexOf(  ) = data;
-      }
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
+// const editMessage = (data, messageStore) => {
+//   try {
+//     const messages = messageStore.getMessages;
+//     if (data.parent_message_id) {
+//       const message = messages.find(element => element.id === data.parent_message_id);
+//       const findThreadMessageIndex = message.replies.findIndex(
+//         element => element.id === data.id
+//       );
+//       if (findThreadMessageIndex != -1) {
+//         message.replies.indexOf(findThreadMessageIndex) = data;
+//       }
+//     } else {
+//       const findMessageIndex = messages.findIndex(element => element.id === data.id);
+//       if (findMessageIndex != -1) {
+//         message.indexOf() = data;
+//       }
+//     }
+//   } catch (err) {
+//     console.error(err);
+//   }
+// };
 
 const actions = {
   MessageCreate: createMessage,

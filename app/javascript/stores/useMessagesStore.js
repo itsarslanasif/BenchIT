@@ -65,6 +65,24 @@ export const useMessageStore = () => {
         }
         return false
       },
+      updateMessage(data){
+        if (data.parent_message_id) {
+
+          const message = this.messages.find(element => element.id === data.parent_message_id);
+          const findThreadMessageIndex = message.replies.findIndex(
+            element => element.id === data.id
+          );
+          if (findThreadMessageIndex != -1) {
+            console.log("reply")
+            message.replies[findThreadMessageIndex] = data;
+          }
+        } else {
+          const findMessageIndex = this.messages.findIndex(element => element.id === data.id);
+          if (findMessageIndex != -1) {
+            this.messages[findMessageIndex]=data
+          }
+        }
+      }
     },
   });
 

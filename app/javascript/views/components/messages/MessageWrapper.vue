@@ -54,11 +54,27 @@
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
+            <EditedAtInfoBoxVue
+              v-if="
+                currMessage?.is_edited &&
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage
+              "
+              :updated_at="currMessage?.updated_at"
+            />
           </span>
           <span
             v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
+          />
+          <EditedAtInfoBoxVue
+            v-if="
+              currMessage?.is_edited &&
+              (!isSameUser || !isSameDayMessage || isFirstMessage)
+            "
+            :updated_at="currMessage?.updated_at"
           />
           <div v-if="currMessage?.attachments" class="flex gap-2">
             <div
@@ -168,7 +184,11 @@
     class="bg-yellow-50 pl-16 pr-4"
     v-if="messagesStore.isMessageToEdit(currMessage)"
   >
-    <TextEditorVue :message="currMessage.content" :editMessage="true" :editMessageCallBack="editMessage" />
+    <TextEditorVue
+      :message="currMessage.content"
+      :editMessage="true"
+      :editMessageCallBack="editMessage"
+    />
   </div>
 </template>
 
@@ -193,6 +213,7 @@ import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import TextEditorVue from '../../components/editor/TextEditor.vue';
 import { updateMessage } from '../../../modules/axios/editorapi';
+import EditedAtInfoBoxVue from './editedAtInfoBox.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -228,6 +249,7 @@ export default {
     NButton,
     NText,
     TextEditorVue,
+    EditedAtInfoBoxVue,
   },
   props: {
     currMessage: {
@@ -309,13 +331,13 @@ export default {
     },
   },
   methods: {
-    editMessage(text){
+    editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
-      updatedMessage.content=text
+      updatedMessage.content = text;
       try {
-        updateMessage(updatedMessage)
+        updateMessage(updatedMessage);
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
     async addReaction(emoji) {
