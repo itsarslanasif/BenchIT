@@ -7,10 +7,10 @@
     <splitpanes @resize="resizePane" class="relative">
       <pane
         max-size="30"
-        :size="isMobileView() ? '300px' : 25"
+        :size="isMobileView() ? '300px' : 15"
         :class="isMobileView() ? 'relative z-10' : ''"
-        min-size="20"
-        v-if="leftPaneStore.getLeftpaneFlag || !isMobileView()"
+        min-size="10"
+        v-if="leftPaneStore.getLeftpaneFlag"
       >
         <LeftPane />
       </pane>
@@ -82,7 +82,7 @@ export default {
       this.startView();
     },
     isMobileView() {
-      return this.screenSize < 1400;
+      return this.screenSize < 1400 && this.screenSize > 0;
     },
     startView() {
       if (this.isMobileView()) {
