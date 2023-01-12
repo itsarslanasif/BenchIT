@@ -1,10 +1,11 @@
 <template>
   <n-modal
     v-model:show="showModal"
-    class="custom-card rounded-lg w-180 h-400 overflow-y-auto overflow-x-hidden"
+    class="custom-card rounded-lg w-180 h-400"
     preset="card"
     :bordered="false"
     size="huge"
+    content-style="overflow-y: auto; overflow-x: hiddden"
   >
     <template #header>
       <span class="text-2xl font-bold"
