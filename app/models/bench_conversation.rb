@@ -12,6 +12,14 @@ class BenchConversation < ApplicationRecord
       none
   }
 
+  def self.previous_or_create_new_profile_conversation(receiver_id)
+    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, receiver_id)
+
+    return conversation if conversation.present?
+
+    BenchConversation.create(conversationable_type: 'Profile', conversationable_id: receiver_id, sender_id: Current.profile.id)
+  end
+
   def self.recent_last_conversation
     BenchConversation.where(
       'conversationable_type = :conversationable_type AND (sender_id = :sender_id OR conversationable_id = :conversationable_id)',

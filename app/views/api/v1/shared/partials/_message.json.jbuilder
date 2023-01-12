@@ -1,8 +1,11 @@
 json.extract! message, :id, :content, :is_threaded, :parent_message_id, :sender_id, :created_at, :updated_at
 json.sender_name message.profile.username
+json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
+json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
+json.created_at message.created_at
+json.updated_at message.updated_at
 json.is_edited message.created_at != message.updated_at
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
-
 json.isSaved saved?(message)
 json.receiver_name @receiver.username if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
@@ -14,6 +17,8 @@ json.replies message.replies do |reply|
   json.sender_id reply.sender_id
   json.sender_name reply.profile.username
   json.partial! 'api/v1/reactions/partials/reactions', reactions: reply.reactions
+  json.sender_avatar url_for(reply.profile.profile_image) if reply.profile.profile_image.attached?
+  json.reactions reply.reactions
   json.created_at reply.created_at
   json.updated_at reply.updated_at
   json.receiver_name @receiver.username if @receiver.present?

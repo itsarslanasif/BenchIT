@@ -6,6 +6,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
+  after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
   def send_message
     @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
@@ -53,30 +54,24 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def bench_channel_messages
-    @messages = ConversationMessage.chat_messages(@bench_channel.bench_conversation.id)
+    @conversation = @bench_channel.bench_conversation
+    @messages = ConversationMessage.chat_messages(@conversation.id)
   end
 
   def group_messages
-    @messages = ConversationMessage.chat_messages(@group.bench_conversation.id)
+    @conversation = @group.bench_conversation
+    @messages = ConversationMessage.chat_messages(@conversation.id)
   end
 
   def profile_messages
-    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
+    @conversation = BenchConversation.previous_or_create_new_profile_conversation(@receiver.id)
 
-    if conversation.blank?
-      conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
-    end
-
-    @messages = ConversationMessage.chat_messages(conversation.id)
+    @messages = ConversationMessage.chat_messages(@conversation.id)
   end
 
   def unread_messages
     str = REDIS.get("unreadMessages#{Current.workspace.id}#{Current.profile.id}")
-    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
-    unread_messages_ids = previous_unread_messages_details.pluck('message_id')
-    @messages = ConversationMessage.messages_by_ids_array(unread_messages_ids)
-                                   .includes(:reactions, :replies, :parent_message, :saved_items)
-                                   .with_attached_message_attachments
+    @previous_unread_messages_details = str.nil? ? {} : JSON.parse(str)
   end
 
   private
@@ -137,5 +132,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def verify_membership
     check_membership(@bench_conversation)
+  end
+
+  def marked_chat_read
+    UnreadMessagesMarkedAsReadService.new(@conversation).call
   end
 end

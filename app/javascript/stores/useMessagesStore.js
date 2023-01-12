@@ -7,6 +7,7 @@ export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
     state: () => {
       return {
+        selectedChat: {},
         messages: [],
         currMessage: null,
       };
@@ -23,8 +24,10 @@ export const useMessageStore = () => {
         }
       },
     },
-
     actions: {
+      setSelectedChat(selectedChat) {
+        this.selectedChat = selectedChat;
+      },
       async index(conversation_type, id) {
         this.messages = await getMessageHistory(
           conversation_type.slice(0, -1),

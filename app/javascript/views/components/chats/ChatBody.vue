@@ -1,6 +1,7 @@
 <template>
   <div class="overflow-auto chatBody" ref="chatBody">
     <PinnedConversationModel />
+    <ChatDetail />
     <div
       v-for="message in messages"
       :key="message.id"
@@ -41,6 +42,12 @@
             </div>
           </n-divider>
         </div>
+        <n-divider
+          v-if="newMessageFlag && oldestUnreadMessageId === message.id"
+          title-placement="right"
+        >
+          <div class="text-primary">{{ $t('chat.new') }}</div>
+        </n-divider>
         <MessageWrapper
           v-if="!message.parent_message_id"
           :currMessage="currMessage"
@@ -50,7 +57,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
@@ -59,6 +65,7 @@ import { storeToRefs } from 'pinia';
 import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
 import JumpToDateVue from '../../widgets/JumpToDate.vue';
 import moment from 'moment';
+import ChatDetail from '../../widgets/ChatDetail.vue';
 export default {
   name: 'ChatBody',
   components: {
@@ -68,7 +75,9 @@ export default {
     NSpace,
     PinnedConversationModel,
     JumpToDateVue,
+    ChatDetail,
   },
+  props: ['oldestUnreadMessageId'],
   data() {
     return {
       messages: [],
@@ -76,6 +85,7 @@ export default {
       jumpToDateToggle: false,
       prevMessage: null,
       selectedMessage: {},
+      newMessageFlag: true,
     };
   },
   mounted() {
@@ -158,6 +168,7 @@ export default {
       message.classList.add('highlight');
     }
     this.scrollToEnd();
+    this.newMessageFlag = false;
   },
 };
 </script>
