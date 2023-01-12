@@ -5,12 +5,12 @@ import { CONSTANTS } from '../assets/constants';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
-    state: () => {
-      return {
+    state: () => ({     
         messages: [],
-        currMessage: null,
-      };
-    },
+        currMessage: [],
+        currentPage: 1,
+        isLoading: false
+    }),
 
     getters: {
       getMessages: state => state.messages,
@@ -26,10 +26,15 @@ export const useMessageStore = () => {
 
     actions: {
       async index(conversation_type, id) {
-        this.messages = await getMessageHistory(
+        this.isLoading = true;
+        let newMessages = await getMessageHistory(
           conversation_type.slice(0, -1),
-          id
-        );
+          id,
+          this.currentPage
+        )
+        this.messages =  [...newMessages.messages, ...this.messages]
+        this.currentPage += 1
+        this.isLoading = false;
       },
       async addMessage(msg) {
         messageStore;

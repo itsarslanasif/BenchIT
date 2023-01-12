@@ -37,11 +37,7 @@ export default {
   data() {
     return {
       chat: {},
-      messages: [],
       Cable: null,
-      conversation_type: null,
-      id: null,
-      currentUser: {},
     };
   },
   setup() {
@@ -52,11 +48,14 @@ export default {
     const currentUserStore = useCurrentUserStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
-    const { messages } = storeToRefs(messageStore);
-    const { currentUser } = storeToRefs(currentUserStore);
     messageStore.index(conversation_type, id);
+    const { messages, currMessage, currentPage } = storeToRefs(messageStore);
+    const { currentUser } = storeToRefs(currentUserStore);
     return {
       messages,
+      currMessage,
+      currentPage,
+      messageStore,
       conversation_type,
       currentUser,
       id,
@@ -73,8 +72,11 @@ export default {
       cableActions(data.message);
     });
   },
-  beforeUnmount() {
+beforeUnmount() {
     this.chat = null;
+    this.messages = []
+    this.currMessage = []
+    this.currentPage = 1;
     unsubscribe();
     this.Cable = null;
   },

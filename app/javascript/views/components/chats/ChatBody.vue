@@ -71,10 +71,9 @@ export default {
   },
   data() {
     return {
-      messages: [],
       jumpToDateTodayToggle: false,
       jumpToDateToggle: false,
-      prevMessage: null,
+      prevMessage: [],
       selectedMessage: {},
     };
   },
@@ -82,7 +81,7 @@ export default {
     this.scrollToEnd();
   },
   beforeUnmount() {
-    this.messages = this.prevMessage = this.selectedMessage = null;
+    this.messages = this.prevMessage = this.selectedMessage = [];
   },
   computed: {
     isToday() {
