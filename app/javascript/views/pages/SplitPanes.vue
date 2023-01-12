@@ -18,7 +18,7 @@
         class="bg-white"
         max-size="100"
         min-size="80"
-        :class="leftPaneStore.getLeftpaneFlag ? 'hidden' : ''"
+        :class="leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''"
       >
         <router-view :key="$route.fullPath" />
       </pane>
