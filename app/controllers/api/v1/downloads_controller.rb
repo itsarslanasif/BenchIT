@@ -36,7 +36,7 @@ class Api::V1::DownloadsController < Api::ApiController
   end
 
   def set_download
-    @download = Download.find(params[:id])
+    @download = Current.profile.downloads.find(params[:id])
   end
 
   def set_all_downloads
