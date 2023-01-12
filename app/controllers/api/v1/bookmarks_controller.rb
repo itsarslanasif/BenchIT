@@ -1,5 +1,6 @@
 class Api::V1::BookmarksController < Api::ApiController
   include MemberShip
+
   before_action :initialize_bookmark, only: %i[create]
   before_action :set_bookmark, only: %i[destroy update]
   before_action :authenticate_bookmark, only: %i[create update destroy]
@@ -10,7 +11,7 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def create
     if @bookmark.save
-      render json: { message: 'Bookmark was successfully created' }, status: :ok
+      render json: { message: 'Bookmark is successfully created' }, status: :ok
     else
       render json: { errors: @bookmark.errors }, status: :unprocessable_entity
     end
@@ -18,7 +19,7 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def update
     if @bookmark.update(bookmark_params)
-      render json: { message: 'bookmark updated' }, status: :ok
+      render json: { message: 'Bookmark is successfully updated' }, status: :ok
     else
       render json: { error: @bookmark.errors }, status: :unprocessable_entity
     end

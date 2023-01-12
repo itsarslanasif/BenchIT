@@ -1,5 +1,6 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   include MemberShip
+
   before_action :fetch_conversation, :verify_membership, only: %i[create]
   before_action :set_message, :authenticat_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
