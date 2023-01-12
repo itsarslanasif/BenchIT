@@ -38,6 +38,8 @@ import memberCardDm from './memberCardDm.vue';
 import { getMembers } from '../../../api/members/membersApi';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 export default {
   mounted() {
     this.searchQuery();
@@ -57,9 +59,11 @@ export default {
     };
   },
   setup() {
-    const selectedDm = useDirectMessagesStore();
+    const directMessageStore = useDirectMessagesStore();
+    const messagesStore = useMessageStore();
     const leftPaneStore = useLeftpaneStore();
-    return { selectedDm, leftPaneStore };
+    const { selectedChat, setSelectedChat } = storeToRefs(messagesStore);
+    return { directMessageStore, selectedChat, setSelectedChat, leftPaneStore };
   },
   methods: {
     goToChat(chatURL) {
@@ -72,8 +76,8 @@ export default {
       return this.screenSize < 1400;
     },
     handleSelect(member) {
-      this.selectedDm.appendToDirectMessagesList(member);
-      this.selectedDm.setSelectedDm(member);
+      this.directMessageStore.appendToDirectMessagesList(member);
+      this.setSelectedChat(member);
       this.goToChat(`/profiles/${member.id}`);
     },
     async searchQuery() {

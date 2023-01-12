@@ -10,7 +10,7 @@
   >
     <div
       oncontextmenu="return false;"
-      @click="goTo(`/channels/${channel.id}`)"
+      @click="goTo(`/channels/${channel.id}`, channel)"
       @click.right="toggleShow"
       class="flex items-center -ml-4 pl-3 hover:bg-primaryHover cursor-pointer"
     >
@@ -22,14 +22,25 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-1">{{ channel.name }}</div>
+      <div class="px-1" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
+        {{ channel.name }}
+      </div>
+      <div
+        v-if="unreadDetails?.messages.length"
+        class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
+      >
+        {{ unreadDetails.messages.length }}
+      </div>
     </div>
   </n-dropdown>
 </template>
 
 <script>
-import { NDropdown } from 'naive-ui';
 import channel_options from './channel_options.js';
+import { NDropdown } from 'naive-ui';
+import { useUnreadStore } from '../../../stores/useUnreadStore';
+import { storeToRefs } from 'pinia';
+import { unreadMessagesCount } from '../../../modules/unreadMessages';
 
 export default {
   name: 'ChannelItem',
@@ -38,7 +49,25 @@ export default {
   data() {
     return {
       channel_options: channel_options,
+      unread: [],
+      unreadDetails: null,
     };
+  },
+  setup() {
+    const unreadStore = useUnreadStore();
+    const { unreadMessages } = storeToRefs(unreadStore);
+    return {
+      unreadMessages,
+    };
+  },
+  methods: {
+    isUnreadChannel(channel) {
+      this.unreadDetails = unreadMessagesCount(
+        this.unreadMessages,
+        `BenchChannel${channel?.id}`
+      );
+      return this.unreadDetails?.messages.length;
+    },
   },
 };
 </script>

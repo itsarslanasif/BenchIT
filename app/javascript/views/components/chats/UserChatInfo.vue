@@ -19,7 +19,7 @@
           />
           <span v-show="chat">
             <p class="text-xl self-center font-semibold pl-1">
-              {{ directMessagesStore.getSelectedDm.username }}
+              {{ selectedChat.username }}
             </p>
           </span>
           <i
@@ -42,13 +42,17 @@
 import { NAvatar, NIcon } from 'naive-ui';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore.js';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
+import { useMessageStore } from '../../../stores/useMessagesStore.js';
+import { storeToRefs } from 'pinia';
 export default {
   name: 'UserChatInfo',
   components: { NAvatar, NIcon },
   setup() {
     const directMessagesStore = useDirectMessagesStore();
     const leftPaneStore = useLeftpaneStore()
-    return { directMessagesStore, leftPaneStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { directMessagesStore, selectedChat, leftPaneStore };
   },
   props: ['chat'],
 };
