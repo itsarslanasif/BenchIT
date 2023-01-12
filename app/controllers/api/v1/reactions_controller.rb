@@ -1,5 +1,6 @@
 class Api::V1::ReactionsController < Api::ApiController
   include MemberShip
+
   before_action :verify_membership, only: %i[create]
   before_action :set_reaction, :authenticate_reaction, only: %i[destroy]
 
