@@ -63,10 +63,7 @@
               />
               <span>{{ download.file_name }}</span>
             </span>
-            <div
-              :id="download.id + download.file_name"
-              class="text-xs mt-1 ml-8"
-            >
+            <div :id="getDivID(download)" class="text-xs mt-1 ml-8">
               {{ download.file_type }}
             </div>
           </div>
@@ -145,6 +142,10 @@ export default {
       const download = document.getElementById(download_id + file_name);
       download.innerHTML = type;
       download.classList.remove('bg-black-100');
+    },
+
+    getDivID(download) {
+      return download.id + download.file_name;
     },
   },
 
