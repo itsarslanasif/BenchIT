@@ -19,6 +19,8 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def create
     params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
+    ConversationMessage.create(content: "#{@users_joined.join(',')} added by #{Current.profile.username}", is_threaded: false,
+                               bench_conversation_id: @channel.bench_conversation.id, sender_id: Current.profile.id)
     render status: :created, json: { members: @users_joined }
   end
 
@@ -26,6 +28,8 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     @channel_participant = ChannelParticipant.new(bench_channel_id: @channel.id, profile_id: Current.profile.id, permission: true)
 
     if @channel_participant.save
+      ConversationMessage.create(content: "#{Current.profile.username} joined this channel.", is_threaded: false,
+                                 bench_conversation_id: @channel.bench_conversation.id, sender_id: Current.profile.id)
       render json: { success: 'Channel joined successfully', channel: @channel, status: :created }
     else
       render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
