@@ -150,14 +150,15 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
-    const mesageStore=useMessageStore();
+    const mesageStore = useMessageStore();
     return {
       threadStore,
       pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
       rightPaneStore,
-      userProfileStore,mesageStore
+      userProfileStore,
+      mesageStore,
     };
   },
   components: {
@@ -215,7 +216,6 @@ export default {
       );
     },
     isSameUser() {
-
       if (this.prevMessage === undefined) return false;
       return this.currMessage?.sender_id === this.prevMessage?.sender_id;
     },
@@ -242,7 +242,6 @@ export default {
     },
     async emojiClickListener(emoji) {
       try {
-
         if (emoji.user_id == this.currentUserStore.currentUser.id) {
           await remove_reaction(emoji.id).then(() => {
             this.allReactions = this.allReactions.filter(function (reaction) {
@@ -270,12 +269,12 @@ export default {
     },
     jumpToConversation() {
       if (this.currMessage.conversationable_type == 'BenchChannel') {
-        this.checkForThreadedMessage(this.currMessage)
+        this.checkForThreadedMessage(this.currMessage);
         this.$router.push(
           `/channels/${this.getConversationId()}/${this.currMessage.id}`
         );
       } else if (this.currMessage.conversationable_type == 'Profile') {
-        this.checkForThreadedMessage(this.currMessage)
+        this.checkForThreadedMessage(this.currMessage);
         this.$router.push(
           `/profiles/${this.getConversationId()}/${this.currMessage.id}`
         );
@@ -285,13 +284,14 @@ export default {
         );
       }
     },
-    checkForThreadedMessage(message){
-      if(message.parent_message_id){
-        if( this.rightPaneStore.showThread)
-        {
+    checkForThreadedMessage(message) {
+      if (message.parent_message_id) {
+        if (this.rightPaneStore.showThread) {
           this.rightPaneStore.toggleThreadShow(false);
         }
-        this.threadStore.setMessage(this.mesageStore.getMessage(message.parent_message_id));
+        this.threadStore.setMessage(
+          this.mesageStore.getMessage(message.parent_message_id)
+        );
         this.rightPaneStore.toggleThreadShow(true);
       }
     },
@@ -303,7 +303,6 @@ export default {
     saveMessage() {
       this.currMessage.isSaved = !this.currMessage.isSaved;
       try {
-
         if (this.currMessage.isSaved) {
           save(this.currMessage.id, {
             data: this.currMessage,

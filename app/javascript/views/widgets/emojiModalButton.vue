@@ -70,10 +70,10 @@ export default {
   },
   methods: {
     handleSelect(key, message, pinnedConversationStore) {
-      function getIndexByParams(param) {
+      const getIndexByParams = param => {
         return window.location.pathname.split('/')[param];
-      }
-      function getConversationType(type) {
+      };
+      const getConversationType = type => {
         switch (type) {
           case 'channels':
             return 'BenchChannel';
@@ -84,7 +84,7 @@ export default {
           default:
             return;
         }
-      }
+      };
       switch (key) {
         case 'copy-link':
           this.copyLinkToMessage(message);

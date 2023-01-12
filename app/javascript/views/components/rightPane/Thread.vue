@@ -18,7 +18,6 @@
     </n-divider>
     <template v-if="threadStore.message.replies">
       <template v-for="reply in threadStore.message.replies" :key="reply.id">
-
         <MessageWrapper :id="reply.id" :curr-message="reply" />
       </template>
     </template>

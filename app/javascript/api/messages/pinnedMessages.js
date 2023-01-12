@@ -31,14 +31,11 @@ export const pinMessage = (conversation_type, conversation_id, message_id) => {
     });
 };
 
-export const unPinMessage = (pin_id) => {
+export const unPinMessage = pin_id => {
   return axios
-    .delete(
-      `v1/pins/${pin_id}`,
-      {
-        headers: { Authorization: localStorage.getItem('token') },
-      }
-    )
+    .delete(`v1/pins/${pin_id}`, {
+      headers: { Authorization: localStorage.getItem('token') },
+    })
     .then(response => {
       return response.data;
     });

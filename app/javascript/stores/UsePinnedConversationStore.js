@@ -31,6 +31,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     },
     unPinMessage(message) {
       const index = this.pinnedConversation.findIndex(m => m.id === message.id);
+
       if (index != -1) {
         this.pinnedConversation.splice(index, 1);
       }
