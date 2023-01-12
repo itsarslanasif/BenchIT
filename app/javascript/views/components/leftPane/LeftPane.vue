@@ -1,5 +1,5 @@
 <template>
-  <WorkspaceDropdown />
+  <WorkspaceDropdown/>
   <div class="bg-primary flex flex-col h-full overflow-auto">
     <hr class="text-slate-400" />
     <div class="mt-4 mb-4 text-white">
@@ -50,8 +50,10 @@ export default {
   },
 
   setup() {
-    const currentWorkspaceStore = useCurrentWorkspaceStore()
-    currentWorkspaceStore.setWorkspace(JSON.parse(sessionStorage.getItem('currentWorkspace')))
+    const currentWorkspaceStore = useCurrentWorkspaceStore();
+    currentWorkspaceStore.setWorkspace(
+      JSON.parse(sessionStorage.getItem('currentWorkspace'))
+    );
   },
 
   methods: {

@@ -4,16 +4,22 @@
     <div>
       <SearchBar />
     </div>
-    <splitpanes @resize="resizePane">
+    <splitpanes @resize="resizePane" class="relative">
       <pane
-        max-size="20"
-        size="15"
-        min-size="10"
-        v-if="leftPaneStore.getLeftpaneFlag"
+        max-size="30"
+        :size="isMobileView() ? '300px' : 25"
+        :class="isMobileView() ? 'relative z-10' : ''"
+        min-size="20"
+        v-if="leftPaneStore.getLeftpaneFlag || !isMobileView()"
       >
         <LeftPane />
       </pane>
-      <pane class="bg-white" max-size="100" min-size="80">
+      <pane
+        class="bg-white"
+        max-size="100"
+        min-size="80"
+        :class="leftPaneStore.getLeftpaneFlag ? 'hidden' : ''"
+      >
         <router-view :key="$route.fullPath" />
       </pane>
       <pane
@@ -60,12 +66,39 @@ export default {
     SearchBar,
     UserProfile,
   },
+  data() {
+    return {
+      screenSize: 0,
+    };
+  },
   methods: {
     resizePane(panes) {
       if (panes[0].size < 11) {
         this.leftPaneStore.closeLeftPane();
       }
     },
+    updateScreenWidth() {
+      this.screenSize = window.innerWidth;
+      this.startView();
+    },
+    isMobileView() {
+      return this.screenSize < 1400;
+    },
+    startView() {
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      } else {
+        this.leftPaneStore.openLeftPane();
+      }
+    },
+  },
+  mounted() {
+    this.screenSize = window.innerWidth;
+    this.startView();
+    window.addEventListener('resize', this.updateScreenWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateScreenWidth);
   },
   setup() {
     const screenStore = useSelectedScreenStore();

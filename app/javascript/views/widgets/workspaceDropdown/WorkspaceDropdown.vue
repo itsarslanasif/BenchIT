@@ -4,7 +4,7 @@
     :options="options"
     @select="handleSelect($event)"
     size="large"
-    class="w-80 rounded-md"
+    class="w-80 rounded-md bg-primary"
   >
     <n-text text color="white">
       <div class="mx-3 my-2 flex text-white">
