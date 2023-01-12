@@ -86,7 +86,7 @@ const deleteReaction = (data, messageStore) => {
     const findMessageReactionIndex = message.reactions.findIndex(
       reaction => reaction.id === data.id
     );
-    if (message != -1) {
+    if (message != -1 && findMessageReactionIndex != -1) {
       message.reactions.splice(findMessageReactionIndex, 1);
     }
   } catch (err) {
@@ -108,13 +108,13 @@ const editMessage = (data, messageStore) => {
     } else {
       const findMessageIndex = messages.findIndex(element => element.id === data.id);
       if (findMessageIndex != -1) {
-        message.indexOf(findMessageIndex) = data;
+        message.indexOf(  ) = data;
       }
     }
   } catch (err) {
     console.error(err);
   }
-};  
+};
 
 const actions = {
   MessageCreate: createMessage,

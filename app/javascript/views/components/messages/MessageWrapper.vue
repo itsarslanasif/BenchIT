@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!messageStore.isMessageToEdit(currMessage)"
+    v-if="!messagesStore.isMessageToEdit(currMessage)"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
@@ -24,15 +24,18 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal :profile_id="currMessage.sender_id" />
+      <template v-if="!isSameUser || !isSameDayMessage || isFirstMessage">
+        <user-profile-modal
+          :profile_id="currMessage.sender_id"
+          :sender_avatar="currMessage.sender_avatar"
+        />
       </template>
       <span class="message">
         <div class="ml-1">
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
               @click="showUserProfile"
-              v-if="!isSameUser || !isSameDayMessage"
+              v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
@@ -40,16 +43,20 @@
             <p
               class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
             >
-              {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
+              {{
+                isSameUser && isSameDayMessage && !isFirstMessage
+                  ? timeWithoutAMPM
+                  : time
+              }}
             </p>
             <span
-              v-if="isSameUser && isSameDayMessage"
+              v-if="isSameUser && isSameDayMessage && !isFirstMessage"
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
           </span>
           <span
-            v-if="!isSameUser || !isSameDayMessage"
+            v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
@@ -105,7 +112,9 @@
         <div
           v-if="currMessage?.replies?.length > 0"
           @click="toggleThread"
-          :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+          :class="{
+            'ml-12': isSameUser && isSameDayMessage && !isFirstMessage,
+          }"
           class="text-info text-xs cursor-pointer hover:underline"
         >
           {{ repliesCount }}
@@ -157,7 +166,7 @@
   </div>
   <div
     class="bg-yellow-50 pl-16 pr-4"
-    v-if="messageStore.isMessageToEdit(currMessage)"
+    v-if="messagesStore.isMessageToEdit(currMessage)"
   >
     <TextEditorVue :message="currMessage.content" :editMessage="true" />
   </div>
@@ -179,8 +188,8 @@ import UserProfileModal from '../../widgets/UserProfileModal.vue';
 import { add_reaction } from '../../../api/reactions/reaction.js';
 import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
-import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
+import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import TextEditorVue from '../../components/editor/TextEditor.vue';
 
@@ -193,7 +202,8 @@ export default {
     const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
     const userProfileStore = useUserProfileStore();
-    const messageStore = useMessageStore();
+    const profilesStore = useProfileStore();
+    const messagesStore = useMessageStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -201,7 +211,8 @@ export default {
       currentUserStore,
       rightPaneStore,
       userProfileStore,
-      messageStore,
+      profilesStore,
+      messagesStore,
     };
   },
 
@@ -277,6 +288,14 @@ export default {
     repliesCount() {
       return `${this.currMessage.replies?.length} replies..`;
     },
+    isFirstMessage() {
+      if (this.messagesStore.messages) {
+        return this.firstMessageId === this.currMessage?.id;
+      }
+    },
+    firstMessageId() {
+      return this.messagesStore.messages[0]?.id;
+    },
     displayReaction() {
       this.currMessage.reactions.filter(reaction => {
         const isDuplicate = this.displayedReactions.includes(reaction.emoji);
@@ -288,7 +307,7 @@ export default {
       });
     },
     editMessage() {
-      return this.messageStore.isMessageToEdit(this.currMessage);
+      return this.messagesStore.isMessageToEdit(this.currMessage);
     },
   },
   methods: {
@@ -341,10 +360,11 @@ export default {
       this.rightPaneStore.toggleUserProfileShow(true);
     },
 
-    async setUserProfileForPane() {
-      this.userProfileStore.setUserProfile(
-        await getUserProfile(1, this.currMessage.sender_id)
+    setUserProfileForPane() {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile.id === this.currMessage.sender_id
       );
+      this.userProfileStore.setUserProfile(profile);
     },
 
     saveMessage() {
