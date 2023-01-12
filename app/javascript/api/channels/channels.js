@@ -1,8 +1,8 @@
 import axios from '../../modules/axios';
 
-export const getChannel = async (channel_id) => {
+export const getChannel = async (channelId) => {
   return await axios
-    .get(`/v1/bench_channels/${channel_id}`, {
+    .get(`/v1/bench_channels/${channelId}`, {
       headers: { Authorization: localStorage.getItem('token') }
     })
     .then(response => {
