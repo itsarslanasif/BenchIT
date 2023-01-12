@@ -6,11 +6,11 @@
     :bordered="false"
     size="huge"
   >
-    <template #header
-      ><span class="text-2xl font-bold">{{
-        $t('downloadsModal.downloads')
-      }}</span></template
-    >
+    <template #header>
+      <span class="text-2xl font-bold"
+        >{{ $t('downloadsModal.downloads') }}
+      </span>
+    </template>
     <template #header-extra v-if="downloadsStore.downloads.length !== 0">
       <div
         class="h-8 w-8 mr-3 hover:bg-black-100 mb-0 text-center rounded-md flex justify-between items-center p-1"
@@ -35,15 +35,16 @@
       <div class="text-lg font-semibold">
         {{ $t('downloadsModal.keep_track') }}
       </div>
-      <div>{{ $t('downloadsModal.downloaded_files') }}</div>
+      <div class="mt-2">{{ $t('downloadsModal.downloaded_files') }}</div>
     </div>
     <div v-for="download in downloadsStore.downloads" :key="download.id">
       <n-popover
-        class="rounded-xl border-black-300 border text-black-600"
+        class="border-black-300 border text-black-600"
         placement="top-end"
         trigger="hover"
         :show-arrow="false"
         :overlap="overlap"
+        style="margin-right: 12px; margin-top: 13px; border-radius: 8px"
       >
         <template #trigger>
           <div
@@ -59,7 +60,7 @@
                 class="text-xl mr-3 mt-1"
                 icon="fa-solid fa-circle-exclamation"
               />
-              <div>{{ download.file_name }}</div>
+              <span>{{ download.file_name }}</span>
             </span>
             <div
               :id="download.id + download.file_name"
@@ -70,7 +71,7 @@
           </div>
         </template>
         <div
-          class="hover:bg-black-100 mb-0 text-center rounded-md flex justify-between items-center p-2 cursor-pointer text-lg"
+          class="hover:bg-black-100 mb-0 text-center rounded-md flex justify-between items-center p-2 cursor-pointer"
           @click="clearDownload(download.id)"
         >
           <font-awesome-icon icon="fa-solid fa-xmark" />
