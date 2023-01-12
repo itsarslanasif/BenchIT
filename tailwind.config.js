@@ -109,7 +109,7 @@ module.exports = {
       blue: {
         100: '#D8E9EF',
         200: '#0DA2FF',
-      }
+      },
     },
     extend: {
       screens: {
@@ -131,7 +131,11 @@ module.exports = {
       },
     },
   },
-  variants: {},
+  variants: {
+    extend: {
+      visibility: ['group-hover'],
+    },
+  },
   plugins: [
     // eslint-disable-next-line
     require('@tailwindcss/typography'),
