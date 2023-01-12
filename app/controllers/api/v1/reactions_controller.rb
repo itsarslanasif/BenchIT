@@ -1,7 +1,7 @@
 class Api::V1::ReactionsController < Api::ApiController
   include MemberShip
-  before_action :verify_membership, only: [:create]
-  before_action :set_reaction, :authenticate_reaction, only: :destroy
+  before_action :verify_membership, only: %i[create]
+  before_action :set_reaction, :authenticate_reaction, only: %i[destroy]
 
   def create
     if @reaction.save

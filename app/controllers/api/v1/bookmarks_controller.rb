@@ -1,8 +1,8 @@
 class Api::V1::BookmarksController < Api::ApiController
   include MemberShip
-  before_action :initialize_bookmark, only: [:create]
-  before_action :set_bookmark, only: [:destroy, :update]
-  before_action :authenticate_bookmark, only: [:create, :update, :destroy]
+  before_action :initialize_bookmark, only: %i[create]
+  before_action :set_bookmark, only: %i[destroy update]
+  before_action :authenticate_bookmark, only: %i[create update destroy]
 
   def index
     @bookmarks = Bookmark.with_bookmarkable_id_and_type(params[:bookmarkable_id], params[:bookmarkable_type])
