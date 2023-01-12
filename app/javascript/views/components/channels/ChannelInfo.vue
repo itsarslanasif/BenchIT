@@ -8,7 +8,7 @@
             @click="leftPaneStore.openLeftPane"
             class="text-2xl px-3 mt-1 hover:bg-slate-50 rounded cursor-pointer"
           >
-            <font-awesome-icon icon="fa-newspaper" />
+            <font-awesome-icon icon="fa-regular fa-rectangle-list" />
           </div>
           <div
             @click="OpenChannelDetailModal(true)"

@@ -5,7 +5,7 @@
     class="text-2xl m-2"
   >
     <font-awesome-icon
-      icon="fa-newspaper"
+      icon="fa-regular fa-rectangle-list"
       class="hover:bg-slate-50 rounded cursor-pointer p-3"
     />
   </div>

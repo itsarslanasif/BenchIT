@@ -37,7 +37,7 @@ import {
   faAt,
   faPaperPlane,
   faAddressBook,
-  faNewspaper,
+  faRectangleList,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -80,7 +80,7 @@ library.add(
   faAt,
   faPaperPlane,
   faAddressBook,
-  faNewspaper
+  faRectangleList
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

@@ -5,7 +5,12 @@
       <SearchBar />
     </div>
     <splitpanes @resize="resizePane">
-      <pane max-size="20" size="15" min-size="10" v-if="leftPaneStore.getLeftpaneFlag">
+      <pane
+        max-size="20"
+        size="15"
+        min-size="10"
+        v-if="leftPaneStore.getLeftpaneFlag"
+      >
         <LeftPane />
       </pane>
       <pane class="bg-white" max-size="100" min-size="80">
@@ -70,3 +75,33 @@ export default {
   },
 };
 </script>
+
+<style>
+.splitpanes__splitter {
+  background-color: #ccc;
+  position: relative;
+}
+.splitpanes__splitter:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 0.4s;
+  background-color: #075985;
+  opacity: 0;
+  z-index: 1;
+}
+.splitpanes__splitter:hover:before {
+  opacity: 1;
+}
+.splitpanes--vertical > .splitpanes__splitter:before {
+  left: -5px;
+  right: -5px;
+  height: 100%;
+}
+.splitpanes--horizontal > .splitpanes__splitter:before {
+  top: -30px;
+  bottom: -30px;
+  width: 100%;
+}
+</style>
