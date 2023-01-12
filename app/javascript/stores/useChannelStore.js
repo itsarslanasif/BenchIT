@@ -1,6 +1,12 @@
 import { defineStore } from 'pinia';
-import { getChannels, createChannel, memberJoinChannel, memberLeaveChannel, getJoinedChannels } from '../api/channels/channels';
-
+import {
+  getChannels,
+  createChannel,
+  memberJoinChannel,
+  memberLeaveChannel,
+  getJoinedChannels,
+} from '../api/channels/channels';
+import { useApiResponseStatusStore as apiResponseStatusStore } from './useApiResponseStatusStore';
 export const useChannelStore = () => {
   const channelStore = defineStore('channelStore', {
     state: () => ({
@@ -27,9 +33,18 @@ export const useChannelStore = () => {
       async createChannel(name, description, is_private) {
         try {
           await createChannel(name, description, is_private).then(response => {
-            this.channels.push(response.data);
-            this.joinedChannels.push(response.data);
-            this.sortChannelsList();
+
+            if (response?.data?.errors) {
+              apiResponseStatusStore().setApiResponseStatus(response.data);
+              return response.data;
+            } else {
+              console.log('create channel:', response);
+              apiResponseStatusStore().setApiResponseStatus(response);
+              this.channels.push(response.data);
+              this.joinedChannels.push(response.data);
+              this.sortChannelsList();
+              return response.data;
+            }
           });
         } catch (e) {
           console.error(e);
@@ -59,23 +74,33 @@ export const useChannelStore = () => {
         try {
           const response = await memberLeaveChannel(id);
           this.channels = this.channels.filter(channel => channel.id != id);
-          this.joinedChannels = this.joinedChannels.filter(channel => channel.id != id);
-          return response
+          this.joinedChannels = this.joinedChannels.filter(
+            channel => channel.id != id
+          );
+          return response;
         } catch (e) {
           console.error(e);
         }
       },
 
       sortChannelsList() {
-        this.joinedChannels = this.joinedChannels.sort((thisChannel, nextChannel) => {
-          if (thisChannel.name.toLowerCase() < nextChannel.name.toLowerCase()) {
-            return -1;
+        this.joinedChannels = this.joinedChannels.sort(
+          (thisChannel, nextChannel) => {
+
+            if (
+              thisChannel.name.toLowerCase() < nextChannel.name.toLowerCase()
+            ) {
+              return -1;
+            }
+
+            if (
+              thisChannel.name.toLowerCase() > nextChannel.name.toLowerCase()
+            ) {
+              return 1;
+            }
+            return 0;
           }
-          if (thisChannel.name.toLowerCase() > nextChannel.name.toLowerCase()) {
-            return 1;
-          }
-          return 0;
-        });
+        );
       },
     },
   });
