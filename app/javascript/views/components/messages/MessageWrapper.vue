@@ -168,7 +168,7 @@
     class="bg-yellow-50 pl-16 pr-4"
     v-if="messagesStore.isMessageToEdit(currMessage)"
   >
-    <TextEditorVue :message="currMessage.content" :editMessage="true" />
+    <TextEditorVue :message="currMessage.content" :editMessage="true" :editMessageCallBack="editMessage" />
   </div>
 </template>
 
@@ -192,6 +192,7 @@ import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import TextEditorVue from '../../components/editor/TextEditor.vue';
+import { updateMessage } from '../../../modules/axios/editorapi';
 
 export default {
   name: 'MessageWrapper',
@@ -306,11 +307,17 @@ export default {
         return false;
       });
     },
-    editMessage() {
-      return this.messagesStore.isMessageToEdit(this.currMessage);
-    },
   },
   methods: {
+    editMessage(text){
+      let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
+      updatedMessage.content=text
+      try {
+        updateMessage(updatedMessage)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async addReaction(emoji) {
       let temp = null;
       if (typeof emoji === 'object') {
