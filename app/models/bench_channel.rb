@@ -34,10 +34,33 @@ class BenchChannel < ApplicationRecord
     channel_participants.exists?(profile: profile)
   end
 
+  def bench_channel_content
+    content = bench_channel_basic_content
+    profiles.each do |profile|
+      content[:profiles] << profile.profile_content
+    end
+
+    content
+  end
+
   private
 
   def set_profile_and_workspace
     self.creator_id = Current.profile.id
     self.workspace_id = Current.workspace.id
+  end
+
+  def bench_channel_basic_content
+    {
+      id: id,
+      name: name,
+      description: description,
+      creator_id: creator_id,
+      created_at: created_at,
+      updated_at: updated_at,
+      is_private: is_private,
+      creator_name: creator.username,
+      profiles: []
+    }
   end
 end
