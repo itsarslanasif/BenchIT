@@ -63,11 +63,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def profile_messages
-    @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
-
-    if @conversation.blank?
-      @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
-    end
+    @conversation = BenchConversation.previous_or_create_new_profile_conversation(@receiver.id)
 
     @messages = ConversationMessage.chat_messages(@conversation.id)
   end
@@ -126,6 +122,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def marked_chat_read
-    UnreadMessagesDestroyerService.new(@conversation).call
+    UnreadMessagesMarkedAsReadService.new(@conversation).call
   end
 end

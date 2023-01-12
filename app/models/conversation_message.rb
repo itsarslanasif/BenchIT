@@ -19,9 +19,6 @@ class ConversationMessage < ApplicationRecord
     includes(:reactions, :replies, :parent_message, :saved_items)
       .with_attached_message_attachments
       .where(id: ids)
-      .order(
-        created_at: :asc
-      )
   }
 
   scope :chat_messages, lambda { |id|
@@ -72,14 +69,14 @@ class ConversationMessage < ApplicationRecord
   def notify_profiles
     return if action_performed.eql?('Update')
 
-    BroadcastMessageService.new(broadcastable_content, bench_conversation).send_notification_ws(eligible_for_notification_profile_ids)
+    BroadcastMessageService.new(broadcastable_content, bench_conversation)
+                           .send_notification_ws(eligible_for_notification_profile_ids)
   end
 
   def add_unread_messages
     return unless action_performed.eql?('Create')
 
-    UnreadMessagesCreatorService.new(bench_conversation, eligible_for_notification_profile_ids,
-                                     id).call
+    UnreadMessagesCreatorService.new(bench_conversation, eligible_for_notification_profile_ids, id).call
   end
 
   def attach_message_attachments

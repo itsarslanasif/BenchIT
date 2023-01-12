@@ -1,4 +1,4 @@
-class UnreadMessagesDestroyerService
+class UnreadMessagesMarkedAsReadService
   def initialize(bench_conversation)
     @bench_conversation = bench_conversation
   end

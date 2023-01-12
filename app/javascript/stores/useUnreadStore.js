@@ -17,15 +17,31 @@ const getConversationType = type => {
   return conversation_type;
 };
 
-const isSameChat = (message, conversation_type, conversation_id) => {
+const isMessageBelongsToChatOpened = (
+  message,
+  conversation_type,
+  conversation_id
+) => {
   const conversation_key = `${conversation_type}${conversation_id}`;
-  let message_conversation_key = null;
-  if (message.conversationable_type === 'Profile') {
-    message_conversation_key = `${message.conversationable_type}${message.sender_id}`;
-  } else {
-    message_conversation_key = `${message.conversationable_type}${message.conversationable_id}`;
-  }
+  const message_conversation_key = `${message.conversationable_type}${
+    message.conversationable_type === 'Profile'
+      ? message.sender_id
+      : message.conversationable_id
+  }`;
   return message_conversation_key === conversation_key;
+};
+
+const getMessageBelongsToUnreadChat = (message, unread_message_detail) => {
+  if (
+    unread_message_detail.bench_conversation ===
+    `${message.conversationable_type}${
+      message.conversationable_type === 'Profile'
+        ? message.sender_id
+        : message.conversationable_id
+    }`
+  ) {
+    return unread_message_detail;
+  }
 };
 
 export const useUnreadStore = () => {
@@ -45,26 +61,12 @@ export const useUnreadStore = () => {
         this.unreadMessages = await getUnreadMessages();
       },
       addNewMessage(message, conversation_type, conversation_id) {
-        let unreadDetails = this.unreadMessages.find(m => {
-          if (message.conversationable_type === 'Profile') {
-            if (
-              m.bench_conversation ===
-              `${message.conversationable_type}${message.sender_id}`
-            ) {
-              return m;
-            }
-          } else {
-            if (
-              m.bench_conversation ===
-              `${message.conversationable_type}${message.conversationable_id}`
-            ) {
-              return m;
-            }
-          }
-        });
+        let unreadDetails = this.unreadMessages.find(unread_message_detail =>
+          getMessageBelongsToUnreadChat(message, unread_message_detail)
+        );
         if (
           !unreadDetails &&
-          !isSameChat(
+          !isMessageBelongsToChatOpened(
             message,
             getConversationType(conversation_type),
             conversation_id
@@ -82,7 +84,7 @@ export const useUnreadStore = () => {
           return;
         }
         if (
-          !isSameChat(
+          !isMessageBelongsToChatOpened(
             message,
             getConversationType(conversation_type),
             conversation_id
@@ -92,23 +94,9 @@ export const useUnreadStore = () => {
         }
       },
       removeMessage(message) {
-        const unreadDetails = this.unreadMessages.find(m => {
-          if (message.conversationable_type === 'Profile') {
-            if (
-              m.bench_conversation ===
-              `${message.conversationable_type}${message.sender_id}`
-            ) {
-              return m;
-            }
-          } else {
-            if (
-              m.bench_conversation ===
-              `${message.conversationable_type}${message.conversationable_id}`
-            ) {
-              return m;
-            }
-          }
-        });
+        const unreadDetails = this.unreadMessages.find(unread_message_detail =>
+          getMessageBelongsToUnreadChat(message, unread_message_detail)
+        );
         const messages = unreadDetails.messages;
         const findMessageIndex = messages.findIndex(
           element => element.id === message.id
@@ -119,8 +107,8 @@ export const useUnreadStore = () => {
       },
       markedChatAsRead(conversationable_type, conversationable_id) {
         const unreadDetails = this.unreadMessages.find(
-          m =>
-            m.bench_conversation ===
+          detail =>
+            detail.bench_conversation ===
             `${getConversationType(
               conversationable_type
             )}${conversationable_id}`
