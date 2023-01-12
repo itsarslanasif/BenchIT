@@ -87,7 +87,7 @@ export default {
   left: 0;
   top: 0;
   transition: opacity 0.4s;
-  background-color: #075985;
+  background-color: #475569;
   opacity: 0;
   z-index: 1;
 }
