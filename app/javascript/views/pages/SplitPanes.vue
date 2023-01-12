@@ -27,6 +27,7 @@
         max-size="80"
         min-size="60"
         class="bg-white"
+        :class="leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''"
       >
         <Thread
           v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
