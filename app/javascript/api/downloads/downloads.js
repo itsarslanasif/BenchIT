@@ -23,7 +23,7 @@ export const getDownloads = async () => {
 };
 
 export const deleteAllDownloads = async () => {
-  return await axios.post('v1/downloads/destroy_all', {
+  return await axios.post('v1/downloads/clear_all', {
     headers: { Authorization: localStorage.getItem('token') },
   });
 }

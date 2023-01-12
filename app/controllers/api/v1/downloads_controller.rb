@@ -1,6 +1,6 @@
 class Api::V1::DownloadsController < Api::ApiController
   before_action :set_download, only: :destroy
-  before_action :set_all_downloads, only: %i[index destroy_all]
+  before_action :set_all_downloads, only: %i[index clear_all]
 
   def index; end
 
@@ -21,7 +21,7 @@ class Api::V1::DownloadsController < Api::ApiController
     end
   end
 
-  def destroy_all
+  def clear_all
     if @downloads.destroy_all
       render json: 'downloads removed', status: :ok
     else

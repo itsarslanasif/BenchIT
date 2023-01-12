@@ -42,6 +42,12 @@
             </div>
           </n-divider>
         </div>
+        <n-divider
+          v-if="newMessageFlag && oldestUnreadMessageId === message.id"
+          title-placement="right"
+        >
+          <div class="text-primary">{{ $t('chat.new') }}</div>
+        </n-divider>
         <MessageWrapper
           v-if="!message.parent_message_id"
           :currMessage="currMessage"
@@ -71,6 +77,7 @@ export default {
     JumpToDateVue,
     ChatDetail,
   },
+  props: ['oldestUnreadMessageId'],
   data() {
     return {
       messages: [],
@@ -78,6 +85,7 @@ export default {
       jumpToDateToggle: false,
       prevMessage: null,
       selectedMessage: {},
+      newMessageFlag: true,
     };
   },
   mounted() {
@@ -160,6 +168,7 @@ export default {
       message.classList.add('highlight');
     }
     this.scrollToEnd();
+    this.newMessageFlag = false;
   },
 };
 </script>

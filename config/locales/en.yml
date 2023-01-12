@@ -117,6 +117,7 @@ en:
         displayed_on_your_profile: 'This will be displayed on your profile.'
       chat:
         today: 'Today'
+        new: 'New'
         replies: 'replies'
         reacted: 'reacted'
         this_is_the_very_beginning: 'This is the very beginning of the'
