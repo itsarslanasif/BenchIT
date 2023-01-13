@@ -1,5 +1,5 @@
 class ChannelParticipant < ApplicationRecord
-  after_commit :broadcast_channel
+  after_commit :broadcast_channel, :broadcast_member_profile
 
   belongs_to :profile
   belongs_to :bench_channel
@@ -8,12 +8,21 @@ class ChannelParticipant < ApplicationRecord
   private
 
   def broadcast_channel
-    return if action_performed.eql?('Create')
+    return unless action_performed.eql?('Create')
 
     message = channel_participant_content
     message[:content] = bench_channel.bench_channel_content
 
     BroadcastMessageService.new(message, bench_channel.bench_conversation).send_notification_ws([profile_id])
+  end
+
+  def broadcast_member_profile
+    return if action_performed.eql?('Update')
+
+    message = channel_participant_content
+    message[:content] = profile.profile_content
+
+    BroadcastMessageService.new(message, bench_channel.bench_conversation).call
   end
 
   def channel_participant_content
