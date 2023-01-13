@@ -8,7 +8,7 @@
           size="medium"
           trigger="click"
           :message="message"
-          :options="options"
+          :options="Options.getOptions()"
           @mouseleave="action"
           @select="
             handleSelect($event, message, pinnedConversationStore, messageStore)
@@ -39,10 +39,12 @@
 </template>
 
 <script>
-import options from './options.js';
+import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { deleteMessage } from '../../api/messages';
+import { pinMessage } from '../../api/messages/pinnedMessages';
+import { unPinMessage } from '../../api/messages/pinnedMessages';
 import { useMessageStore } from '../../stores/useMessagesStore';
 export default {
   name: 'EmojiModalButton',
@@ -60,39 +62,75 @@ export default {
     const messageStore = useMessageStore();
     return { pinnedConversationStore, messageStore };
   },
+  beforeMount() {
+    if (this.message) {
+      this.Options = new Options(this.message.pinned);
+    }
+  },
   data() {
     return {
-      options,
-      handleSelect(key, message, pinnedConversationStore, messageStore) {
-        switch (key) {
-          case 'copy-link':
+      Options: '',
+    };
+  },
+  methods: {
+    handleSelect(key, message, pinnedConversationStore, messageStore) {
+      const getIndexByParams = param => {
+        return window.location.pathname.split('/')[param];
+      };
+      const getConversationType = type => {
+        switch (type) {
+          case 'channels':
+            return 'BenchChannel';
+          case 'profiles':
+            return 'Profile';
+          case 'groups':
+            return 'Group';
+          default:
+            return;
+        }
+      };
+      switch (key) {
+        case 'copy-link':
           this.copyLinkToMessage(message);
-            break;
-          case 'delete-message':
-            deleteMessage(message.id);
-            break;
-          case 'pin-to-this-conversation':
-            if (!pinnedConversationStore.isPinned(message)) {
-              pinnedConversationStore.pinMessage(message);
-            } else {
-              pinnedConversationStore.unPinMessage(message);
-              if (
-                pinnedConversationStore.getCount == 0 &&
-                pinnedConversationStore.getPinToggle
-              ) {
-                pinnedConversationStore.togglePin();
-              }
-            }
-            break;
-          case 'edit-message':
-            if(message){
-              console.log(message)
+          break;
+        case 'delete-message':
+          deleteMessage(message.id);
+          break;
+        case 'pin-to-this-conversation':
+          const conversation_type = getIndexByParams(1);
+          const conversation_id = getIndexByParams(2);
+          try {
+            pinMessage(
+              getConversationType(conversation_type),
+              conversation_id,
+              message.id
+            );
+          } catch (e) {
+            console.error(e);
+          }
+          break;
+        case 'un-pin-from-this-conversation':
+          try {
+            unPinMessage(message.pin.id);
+          } catch (e) {
+            console.error(e);
+          }
+          if (
+            pinnedConversationStore.getCount == 0 &&
+            pinnedConversationStore.getPinToggle
+          ) {
+            pinnedConversationStore.togglePin();
+          }
+          break;
+        case 'edit-message':
+          if (message) {
+            console.log(message);
             messageStore.setMessageToEdit(message);
           }
-            break;
-        }
-      },
-      copyLinkToMessage(message) {
+          break;
+      }
+    },
+    copyLinkToMessage(message) {
       let tempText = null;
       if (message.conversationable_type == 'BenchChannel') {
         tempText = `${import.meta.env.VITE_APP_SERVER_URL}/channels/${
@@ -109,7 +147,6 @@ export default {
       }
       navigator.clipboard.writeText(tempText);
     },
-    };
   },
 };
 </script>

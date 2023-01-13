@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4">
+  <div v-if="selectedChat.id" class="p-4">
     <div
       @click="isProfile ? showUserProfile(selectedChat?.id) : null"
       class="flex"
