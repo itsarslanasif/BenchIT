@@ -97,15 +97,16 @@ export default {
       timeLimit: 0,
       showSpinner: false,
       newMessageFlag: true,
+      firstMount: true
     };
   },
   mounted() {
-    this.scrollToEnd();
     this.setUpInterSectionObserver();
   },
   beforeUnmount() {
     this.messages = this.prevMessage = this.selectedMessage = [];
-    this.currentPage = 1
+    this.hasMoreMessages = true;
+    this.observer.disconnect();
   },
   computed: {
     isToday() {
@@ -131,16 +132,19 @@ export default {
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages, currMessage, currentPage } = storeToRefs(messageStore);
+    const { messages, currMessage, hasMoreMessages, newMessageSent } = storeToRefs(messageStore);
     return {
       messages,
       currMessage,
+      hasMoreMessages,
+      newMessageSent
     };
   },
   methods: {
     setMessage(message) {
       this.prevMessage = this.currMessage;
       this.currMessage = message;
+
     },
     toggleToday() {
       this.jumpToDateTodayToggle = !this.jumpToDateTodayToggle;
@@ -176,25 +180,6 @@ export default {
       const dateInUTC = moment(new Date(created_at));
       return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
-    scrollToEnd() {
-      let node = this.$refs["chatBody"];
-      node.scrollTop = node.scrollHeight;
-    },
-    // handleScroll() {
-    // console.log('scrolling like a champ')
-    //   if (this.$refs.chatBody.scrollTop === 0) {
-    //     const currentTime = new Date().getTime();
-    //     if (currentTime < this.timeLimit + 3000) {
-    //       this.showSpinner = true;
-    //       setTimeout(() => {
-    //         this.showSpinner = false;
-    //       }, 3000);
-    //       return
-    //     }
-    //     this.timeLimit = currentTime
-    //     this.$emit('load-more-messages')
-    //   }
-    // },
     setUpInterSectionObserver() {
       let options = {
         root: this.$refs["chatBody"],
@@ -208,30 +193,32 @@ export default {
     },
     handleIntersection([entry]) {
       if (entry.isIntersecting) {
-        console.log("sentinel intersecting");
-        this.$emit('load-more-messages')
+        console.log('intersection')
         this.recordScrollPosition()
-        this.$nextTick(() => {
-          this.restoreScrollPosition();
-        });
-      }
-      if (entry.isIntersecting && this.canLoadMore && !this.isLoadingMore) {
-        this.loadMore();
+        this.$emit('load-more-messages')
       }
     },
     recordScrollPosition() {
       let node = this.$refs["chatBody"];
       this.previousScrollHeightMinusScrollTop =
         node.scrollHeight - node.scrollTop;
-      console.log(this.previousScrollHeightMinusScrollTop)
     },
     restoreScrollPosition() {
-      console.log('restore')
+      console.log(this.firstMount)
+      if (!this.firstMount){
       let node = this.$refs["chatBody"];
-      console.log(node.scrollHeight)
       node.scrollTop =
         node.scrollHeight - this.previousScrollHeightMinusScrollTop;
-      console.log(node.scrollTop);
+      }
+    },
+    scrollToEnd() {
+      if (this.newMessageSent || this.firstMount)
+      setTimeout(() => {
+    let chatBody = this.$refs.chatBody;
+    chatBody.scrollTop = chatBody.scrollHeight;
+    this.newMessageSent = this.firstMount = false;
+  }, 0);
+
     }
   
   },
@@ -245,8 +232,11 @@ export default {
         return;
       }
     }
-    this.scrollToEnd();
     this.newMessageFlag = false;
+    this.scrollToEnd()
+    this.$nextTick(() => {
+          this.restoreScrollPosition();
+        });
   },
 };
 </script>

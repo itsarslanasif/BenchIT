@@ -14,6 +14,7 @@ export const useMessageStore = () => {
         maxPages : null,
         hasMoreMessages: true,
         selectedChat: {},
+        newMessageSent: false
     }),
 
     getters: {
@@ -32,6 +33,7 @@ export const useMessageStore = () => {
         this.selectedChat = selectedChat;
       },
       async index(conversation_type, id) {
+        try {
         let newMessages = await getMessageHistory(
           conversation_type.slice(0, -1),
           id,
@@ -41,6 +43,9 @@ export const useMessageStore = () => {
         this.currentPage += 1
         this.maxPages = newMessages.page_information.pages
         this.hasMoreMessages = this.currentPage > this.maxPages
+        } catch (e) {
+          console.error(e)
+        }
         if (conversation_type === 'profiles') {
           this.selectedChat = await getUserProfile(
             JSON.parse(sessionStorage.getItem('currentWorkspace')).id,

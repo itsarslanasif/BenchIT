@@ -49,15 +49,13 @@ export default {
     const unreadStore = useUnreadStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
-    // messageStore.index(conversation_type, id);
-    const { messages, currMessage, currentPage, hasMoreMessages } = storeToRefs(messageStore);
+    const { messages, currMessage, currentPage, hasMoreMessages, newMessageSent } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
     const oldestUnreadMessageId = unreadStore.getOldestMessageId(
       conversation_type,
       id
     );
     unreadStore.markedChatAsRead(conversation_type, id);
-    messageStore.index(conversation_type, id);
     return {
       messages,
       currMessage,
@@ -71,6 +69,7 @@ export default {
       conversation_type,
       currentUser,
       oldestUnreadMessageId,
+      newMessageSent,
       id,
     };
   },
@@ -107,6 +106,7 @@ beforeUnmount() {
         conversation(formData).then(() => {
           this.message = '';
         });
+        this.newMessageSent = true
       } catch (e) {
         console.error(e);
       }
@@ -116,12 +116,6 @@ beforeUnmount() {
 </script>
 
 <style scoped>
-/* .editor {
-  bottom: 0;
-  float: left;
-  width: 100%;
-} */
-
 .editor-style {
   flex : 0.3;
 }
