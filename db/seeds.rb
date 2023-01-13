@@ -3,7 +3,8 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               bench_it_url: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
-
+Workspace.last.workspace_avatar.attach(io: Rails.root.join(*%w[app assets images user.png]).open,
+                                       filename: 'user.png', content_type: 'image/png')
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
 user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',
@@ -79,6 +80,8 @@ Workspace.create!(company_name: 'Devsinc',
                   bench_it_url: 'https://www.devsinc.com',
                   capacity: 2000,
                   organization_type: :financial_services)
+Workspace.last.workspace_avatar.attach(io: Rails.root.join(*%w[app assets images user.png]).open,
+                                       filename: 'user.png', content_type: 'image/png')
 user1.profiles.create!(username: 'Alvi', description: 'SE', workspace_id: 2)
 Current.profile = user1.profiles.second
 Current.workspace = Workspace.second
