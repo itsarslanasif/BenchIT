@@ -6,9 +6,12 @@
         class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
         <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
-        <p class="text-xl font-bold self-center mr-1">{{ selectedChat?.name }}</p>
+        <p class="text-xl font-bold self-center mr-1">
+          {{ selectedChat?.name }}
+        </p>
         <i class="fa-solid fa-chevron-down self-center font-semibold"></i>
       </div>
+
       <ChannelMembersInfoVue
         :showMemberClickListener="this.OpenChannelDetailMemberModal"
         :channelId="selectedChat?.id"

@@ -12,22 +12,12 @@
             class="hover-target px-2 p-2 float-right -ml-12 mr-4 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
           />
         </template>
-        <h5
-          v-for="user in sortedDMList"
-          :key="user?.id"
-          class="hover:bg-primaryHover"
-        >
-          <div
-            @click="goToChat(`/profiles/${user?.id}`, user)"
-            class="flex items-center -ml-4 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
-          >
-            <img class="w-5 h-5 rounded-md" :src="user?.image_url" />
-            <p class="ml-2 text-sm text-white">{{ user?.username }}</p>
-            <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
-              {{ $t('pinconversation.you') }}
-            </p>
-          </div>
-        </h5>
+        {{ directMessages }}
+        <directMessagesItemVue
+          :sortedDMList="sortedDMList"
+          :isOwnChat="isOwnChat"
+          :goToChat="goToChat"
+        />
       </AccordionItem>
       <div
         class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
@@ -40,15 +30,23 @@
 </template>
 
 <script>
+import directMessagesItemVue from './directMessagesItem.vue';
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 
 export default {
-  components: { AccordionList, AccordionItem, addTeammatesDropdown },
+  components: {
+    AccordionList,
+    AccordionItem,
+    addTeammatesDropdown,
+    directMessagesItemVue,
+  },
   data() {
     return {
       modalOpen: false,
@@ -64,10 +62,11 @@ export default {
       ],
     };
   },
-  mounted() {
-    this.directMessageStore.getDmList(
+  async mounted() {
+    await this.directMessageStore.getDmList(
       this.currentProfileStore.currentProfile?.workspace_id
     );
+    this.dmList = this.directMessageStore.getDirectMessages;
   },
   beforeUnmount() {
     this.options = null;
@@ -75,8 +74,14 @@ export default {
   setup() {
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
+    const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
-    return { directMessageStore, currentProfileStore, messagesStore };
+    return {
+      directMessageStore,
+      currentProfileStore,
+      messagesStore,
+      leftPaneStore,
+    };
   },
   computed: {
     sortedDMList() {
@@ -92,6 +97,12 @@ export default {
     goToChat(chatURL, user) {
       this.messagesStore.setSelectedChat(user);
       this.$router.push(chatURL);
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      }
+    },
+    isMobileView() {
+      return window.innerWidth < 1400;
     },
     handleClick() {
       this.$router.push('/new_direct_message');

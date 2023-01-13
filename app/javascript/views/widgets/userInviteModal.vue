@@ -92,7 +92,6 @@ export default {
     this.email = null;
   },
   beforeUnmount() {
-    this.workspace = null;
     this.error = null;
     this.errorAlert = null;
     this.email = null;

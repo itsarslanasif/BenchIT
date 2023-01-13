@@ -98,11 +98,6 @@ export default {
           message: CONSTANTS.CHANNEL_NAME_ERROR,
           trigger: ['input'],
         },
-        Description: {
-          required: true,
-          message: CONSTANTS.CHANNEL_DISCRIPTION_ERROR,
-          trigger: ['input'],
-        },
       },
       formValue: {
         channelName: '',
@@ -132,10 +127,7 @@ export default {
     },
     validations() {
       const regex = /^[a-zA-Z0-9-_]+$/;
-      if (
-        this.formValue.channelName == '' ||
-        this.formValue.Description == ''
-      ) {
+      if (this.formValue.channelName == '') {
         this.error = CONSTANTS.FIELDS_REQUIRED_ERROR;
       } else if (!regex.test(this.formValue.channelName)) {
         this.error = CONSTANTS.CHANNEL_NAME_INVALID_ERROR;

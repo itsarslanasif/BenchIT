@@ -39,6 +39,7 @@
 <script>
 import { NAvatar, NIcon } from 'naive-ui';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore.js';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore.js';
 import { storeToRefs } from 'pinia';
 export default {
@@ -46,9 +47,10 @@ export default {
   components: { NAvatar, NIcon },
   setup() {
     const directMessagesStore = useDirectMessagesStore();
+    const leftPaneStore = useLeftpaneStore()
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
-    return { directMessagesStore, selectedChat };
+    return { directMessagesStore, selectedChat, leftPaneStore };
   },
 };
 </script>
