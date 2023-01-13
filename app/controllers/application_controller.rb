@@ -16,10 +16,14 @@ class ApplicationController < ActionController::Base
       render json: { success: false, error: 'Record Not Found.' }, status: :not_found
     when ActiveRecord::RecordInvalid
       render json: { success: false, error: 'Record Invalid.', message: exception.message }, status: :unprocessable_entity
+    when ActiveRecord::RecordNotSaved
+      render json: { success: false, error: 'Record Not saved', message: exception.message }, status: :unprocessable_entity
     when NoMethodError
       render json: { success: false, error: 'No Method Error.', message: exception.message }, status: :unprocessable_entity
     when ActiveRecord::RecordNotUnique
       render json: { success: false, error: 'Record Not Unique.', message: exception.message }, status: :unprocessable_entity
+    when ActiveRecord::RecordNotDestroyed
+      render json: { success: false, error: 'Record Not Destroyed', message: exception.message }, status: :unprocessable_entity
     else
       render json: { success: false, error: 'Internal Server Error.' }, status: :internal_server_error
     end

@@ -9,12 +9,16 @@
     <div class="pt-8">
       <MessageWrapper :curr-message="threadStore.message" />
     </div>
-    <n-divider v-if="threadStore.message.replies" title-placement="left" class="text-black-500 text-xs">
+    <n-divider
+      v-if="threadStore.message.replies"
+      title-placement="left"
+      class="text-black-500 text-xs"
+    >
       <p>{{ repliesCount }}</p>
     </n-divider>
     <template v-if="threadStore.message.replies">
       <template v-for="reply in threadStore.message.replies" :key="reply.id">
-        <MessageWrapper :curr-message="reply" />
+        <MessageWrapper :id="reply.id" :curr-message="reply" />
       </template>
     </template>
   </div>
@@ -31,7 +35,6 @@ import Editor from '@tinymce/tinymce-vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
-import { getMessageHistory } from '../../../modules/socket/messageHistory';
 import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
 
@@ -42,11 +45,11 @@ export default {
     NDivider,
     Editor,
     RightPaneHeader,
-    TextEditorVue
+    TextEditorVue,
   },
   setup() {
     const threadStore = useThreadStore();
-    const currentUserStore = useUserInviteStore()
+    const currentUserStore = useUserInviteStore();
     const { currentUser } = storeToRefs(currentUserStore);
     return { threadStore, currentUser };
   },
@@ -83,7 +86,6 @@ export default {
       } catch (e) {
         let error = e;
       }
-
     },
   },
 };
@@ -91,5 +93,15 @@ export default {
 <style scoped>
 .threadBody {
   max-height: 67vh;
+}
+
+.highlight {
+  animation: background-fade 5s;
+}
+
+@keyframes background-fade {
+  0% {
+    background: rgba(253, 245, 221, 255);
+  }
 }
 </style>
