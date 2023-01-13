@@ -46,6 +46,7 @@ import { deleteMessage } from '../../api/messages';
 import { pinMessage } from '../../api/messages/pinnedMessages';
 import { unPinMessage } from '../../api/messages/pinnedMessages';
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -59,12 +60,16 @@ export default {
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
+    const currentProfileStore = useCurrentProfileStore();
     const messageStore = useMessageStore();
-    return { pinnedConversationStore, messageStore };
+    return { pinnedConversationStore, messageStore, currentProfileStore };
   },
   beforeMount() {
     if (this.message) {
-      this.Options = new Options(this.message.pinned);
+      this.Options = new Options(
+        this.message.pinned,
+        this.isMyMessage(this.currentProfileStore.currentProfile, this.message)
+      );
     }
   },
   data() {
@@ -73,6 +78,9 @@ export default {
     };
   },
   methods: {
+    isMyMessage(currentProfileStore, message) {
+      return message.sender_id == currentProfileStore.id;
+    },
     handleSelect(key, message, pinnedConversationStore, messageStore) {
       const getIndexByParams = param => {
         return window.location.pathname.split('/')[param];

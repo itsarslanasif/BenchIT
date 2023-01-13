@@ -65,18 +65,20 @@
               :updated_at="currMessage?.updated_at"
             />
           </span>
-          <span
-            v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
-            class="text-black-800 text-sm flex-wrap"
-            v-html="currMessage.content"
-          />
-          <EditedAtInfoBoxVue
-            v-if="
-              currMessage?.is_edited &&
-              (!isSameUser || !isSameDayMessage || isFirstMessage)
-            "
-            :updated_at="currMessage?.updated_at"
-          />
+          <span class="items-center flex text-black-800 text-lg m-0">
+            <span
+              v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
+              class="text-black-800 text-sm flex-wrap"
+              v-html="currMessage.content"
+            />
+            <EditedAtInfoBoxVue
+              v-if="
+                currMessage?.is_edited &&
+                (!isSameUser || !isSameDayMessage || isFirstMessage)
+              "
+              :updated_at="currMessage?.updated_at"
+            />
+          </span>
           <div v-if="currMessage?.attachments" class="flex gap-2">
             <div
               v-for="attachment in currMessage?.attachments"

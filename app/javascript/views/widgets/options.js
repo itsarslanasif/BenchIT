@@ -8,8 +8,9 @@ import {
 import { CONSTANTS } from '../../assets/constants';
 
 export default class Options {
-  constructor(isPinned) {
+  constructor(isPinned,isMyMessage) {
     this.isPinned = isPinned;
+    this.isMyMessage=isMyMessage
   }
 
   renderIcon = icon => {
@@ -97,10 +98,12 @@ export default class Options {
       {
         label: CONSTANTS.EDIT,
         key: this.generateKey(CONSTANTS.EDIT),
+        show:this.isMyMessage,
       },
       {
         label: CONSTANTS.DELETE,
         key: this.generateKey(CONSTANTS.DELETE),
+        show:this.isMyMessage,
       },
       {
         type: 'divider',
