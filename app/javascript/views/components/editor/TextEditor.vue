@@ -54,12 +54,10 @@
     </div>
     <div class="flex w-full relative">
       <Attachments :getImages="getImages" />
-      <div class="w-1/12">
         <button @click="sendMessagePayload"
           class="px-4 py-1 bg-success my-4 rounded-md text-white hover:bg-successHover">
           {{ $t('actions.send') }}
         </button>
-      </div>
     </div>
   </div>
 </template>

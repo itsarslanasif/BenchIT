@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import { getMessageHistory } from '../modules/socket/messageHistory';
 import { deleteMessage } from '../api/messages';
 import { CONSTANTS } from '../assets/constants';
+import { getUserProfile } from '../api/profiles/userProfile';
+import { getChannel } from '../api/channels/channels';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -11,6 +13,7 @@ export const useMessageStore = () => {
         currentPage: 1,
         maxPages : null,
         hasMoreMessages: true,
+        selectedChat: {},
     }),
 
     getters: {
@@ -24,8 +27,10 @@ export const useMessageStore = () => {
         }
       },
     },
-
     actions: {
+      setSelectedChat(selectedChat) {
+        this.selectedChat = selectedChat;
+      },
       async index(conversation_type, id) {
         let newMessages = await getMessageHistory(
           conversation_type.slice(0, -1),
@@ -36,6 +41,14 @@ export const useMessageStore = () => {
         this.currentPage += 1
         this.maxPages = newMessages.page_information.pages
         this.hasMoreMessages = this.currentPage > this.maxPages
+        if (conversation_type === 'profiles') {
+          this.selectedChat = await getUserProfile(
+            JSON.parse(sessionStorage.getItem('currentWorkspace')).id,
+            id
+          );
+        } else if (conversation_type === 'channels') {
+          this.selectedChat = await getChannel(id);
+        }
       },
       async addMessage(msg) {
         messageStore;
@@ -43,6 +56,9 @@ export const useMessageStore = () => {
       },
       async deleteMessage(id) {
         await deleteMessage(id);
+      },
+      getMessage(id) {
+        return this.messages.find(message => message.id === id);
       },
     },
   });

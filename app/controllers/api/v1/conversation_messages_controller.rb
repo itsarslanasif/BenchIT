@@ -1,11 +1,14 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
-  before_action :fetch_conversation, only: %i[create]
-  before_action :set_message, only: %i[destroy update]
+  include MemberShip
+  include Pagination
+
+  before_action :fetch_conversation, :verify_membership, only: %i[create]
+  before_action :set_message, :authenticat_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
-  include Pagination
+  after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
   def send_message
     @messages = Current.profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
@@ -53,6 +56,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def bench_channel_messages
+    @conversation = @bench_channel.bench_conversation
     @pagy, @messages = pagination_for_chat_messages(@bench_channel.bench_conversation.id, params[:page])
 
     return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
@@ -61,6 +65,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def group_messages
+    @conversation = @group.bench_conversation
     @pagy, @messages = pagination_for_chat_messages(@group.bench_conversation.id, params[:page])
 
     return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
@@ -84,11 +89,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def unread_messages
     str = REDIS.get("unreadMessages#{Current.workspace.id}#{Current.profile.id}")
-    previous_unread_messages_details = str.nil? ? [] : JSON.parse(str)
-    unread_messages_ids = previous_unread_messages_details.pluck('message_id')
-    @messages = ConversationMessage.messages_by_ids_array(unread_messages_ids)
-                                   .includes(:reactions, :replies, :parent_message, :saved_items)
-                                   .with_attached_message_attachments
+    @previous_unread_messages_details = str.nil? ? {} : JSON.parse(str)
   end
 
   private
@@ -137,5 +138,21 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def set_receiver
     @receiver = Profile.find(params[:id])
     render json: { message: "You can't access this profile.", status: :unprocessable_entity } unless @receiver.workspace_id.eql?(Current.workspace.id)
+  end
+
+  def authenticat_message
+    if @message.sender_id.eql?(Current.profile.id)
+      check_membership(@message.bench_conversation)
+    else
+      render json: { message: 'Sorry, this message is not your', status: :unprocessable_entity }
+    end
+  end
+
+  def verify_membership
+    check_membership(@bench_conversation)
+  end
+
+  def marked_chat_read
+    UnreadMessagesMarkedAsReadService.new(@conversation).call
   end
 end

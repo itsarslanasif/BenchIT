@@ -35,6 +35,8 @@ import CreateChannel from './CreateChannel.vue';
 import ChannelItem from './ChannelItem.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
   components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
   data() {
@@ -48,18 +50,29 @@ export default {
     this.channels = null;
   },
   setup() {
+    const leftPaneStore = useLeftpaneStore();
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
+    const messagesStore = useMessageStore();
     return {
       joinedChannels,
+      leftPaneStore,
+      messagesStore,
     };
   },
   methods: {
     closeModal() {
       this.modalOpen = !this.modalOpen;
     },
-    goToChannelChat(chatURL) {
+    goToChannelChat(chatURL, channel) {
+      this.messagesStore.setSelectedChat(channel);
       this.$router.push(chatURL);
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      }
+    },
+    isMobileView() {
+      return window.innerWidth < 1400;
     },
     toggleChannelOptionShow() {
       this.showChannelOptions = !this.showChannelOptions;

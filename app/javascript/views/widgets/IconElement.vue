@@ -1,6 +1,6 @@
 <template>
   <div
-    class="text-base flex text-center text-slate-50 hover:bg-primaryHover -mr-2 p-0 cursor-pointer"
+    class="text-base flex text-left text-slate-50 hover:bg-primaryHover -mr-2 p-0 cursor-pointer"
     @click="elementClicked"
   >
     <font-awesome-icon :icon="icon" class="w-8 mt-1" />

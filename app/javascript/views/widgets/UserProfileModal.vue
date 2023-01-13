@@ -12,7 +12,7 @@
       <n-avatar
         class="mr-1"
         size="large"
-        src="../../../assets/images/user.png"
+        :src="sender_avatar"
         @mouseover="setUserProfileForModal"
       />
     </div>
@@ -26,17 +26,32 @@ import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { h } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
-import { getUserProfile } from '../../api/profiles/userProfile';
+import { useProfileStore } from '../../stores/useProfileStore';
 
 export default {
   name: 'UserProfileModal',
   components: { NDropdown, NAvatar, NText, NButton },
-  props: ['profile_id'],
+  props: {
+    profile_id: {
+      type: Number,
+      default: undefined,
+    },
+    sender_avatar: {
+      type: String,
+      default: undefined,
+    },
+  },
   setup() {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
-    return { userProfileStore, currentProfileStore, rightPaneStore };
+    const profilesStore = useProfileStore();
+    return {
+      userProfileStore,
+      currentProfileStore,
+      rightPaneStore,
+      profilesStore,
+    };
   },
   beforeUnmount() {
     this.options = null;
@@ -70,7 +85,7 @@ export default {
   computed: {
     ownProfile() {
       return (
-        this.currentProfileStore.currentProfile.id === this.modal_profile.id
+        this.currentProfileStore.currentProfile.id === this.modal_profile?.id
       );
     },
   },
@@ -87,7 +102,7 @@ export default {
               this.showUserProfile();
             },
             class: 'mr-2 w-20 h-20 cursor-pointer',
-            src: this.modal_profile.image_url,
+            src: this.modal_profile?.image_url,
           }),
           h('div', { class: 'text-md' }, [
             h(
@@ -105,7 +120,7 @@ export default {
                     },
                     class: 'cursor-pointer hover:underline',
                   },
-                  { default: () => `${this.modal_profile.username}` }
+                  { default: () => `${this.modal_profile?.username}` }
                 ),
                 h(
                   NText,
@@ -230,13 +245,17 @@ export default {
       this.setUserProfileForPane();
       this.rightPaneStore.toggleUserProfileShow(true);
     },
-    async setUserProfileForPane() {
-      this.userProfileStore.setUserProfile(
-        await getUserProfile(1, this.profile_id)
+
+    setUserProfileForPane() {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile?.id === this.profile_id
       );
+      this.userProfileStore.setUserProfile(profile);
     },
-    async setUserProfileForModal() {
-      this.modal_profile = await getUserProfile(1, this.profile_id);
+    setUserProfileForModal() {
+      this.modal_profile = this.profilesStore.profiles.find(
+        profile => profile.id === this.profile_id
+      );
     },
     generateKey(label) {
       return label.toLowerCase().replace(/ /g, '-');

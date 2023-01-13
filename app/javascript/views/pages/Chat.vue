@@ -4,7 +4,8 @@
         <ChatHeader />
       </div>
       <div v-if="messages" class="break-words chat-style overflow-y-auto">
-        <ChatBody @load-more-messages="loadMoreMessages" />
+        <ChatBody @load-more-messages="loadMoreMessages" 
+        :oldestUnreadMessageId="oldestUnreadMessageId" />
       </div>
       <div class="px-3 editor-style">
         <TextEditorVue :sendMessage="sendMessage" />
@@ -23,6 +24,7 @@ import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
+import { useUnreadStore } from '../../stores/useUnreadStore';
 export default {
   name: 'Chat',
   components: {
@@ -44,11 +46,18 @@ export default {
     }
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
+    const unreadStore = useUnreadStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
     // messageStore.index(conversation_type, id);
     const { messages, currMessage, currentPage, hasMoreMessages } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
+    const oldestUnreadMessageId = unreadStore.getOldestMessageId(
+      conversation_type,
+      id
+    );
+    unreadStore.markedChatAsRead(conversation_type, id);
+    messageStore.index(conversation_type, id);
     return {
       messages,
       currMessage,
@@ -61,6 +70,7 @@ export default {
       },
       conversation_type,
       currentUser,
+      oldestUnreadMessageId,
       id,
     };
   },
