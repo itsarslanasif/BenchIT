@@ -288,8 +288,6 @@ export default {
       showOptions: false,
       displayedReactions: [],
       showFileOptions: false,
-      error: false,
-      response: '',
     };
   },
   beforeUnmount() {
