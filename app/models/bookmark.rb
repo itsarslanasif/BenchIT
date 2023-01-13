@@ -1,5 +1,4 @@
 class Bookmark < ApplicationRecord
-  before_validation :set_profile
   after_commit :broadcast_bookmark
 
   belongs_to :bookmarkable, polymorphic: true
@@ -33,10 +32,6 @@ class Bookmark < ApplicationRecord
                       bookmarkable.bench_conversation
                     end
     BroadcastMessageService.new(result, @conversation).call
-  end
-
-  def set_profile
-    self.profile_id = Current.profile.id
   end
 
   def bookmark_content
