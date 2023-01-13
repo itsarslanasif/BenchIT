@@ -126,7 +126,7 @@ export default {
       this.messageStore.removeMessageToEdit();
     },
   },
-  props: ['sendMessage', 'message', 'editMessage','editMessageCallBack'],
+  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
@@ -175,7 +175,7 @@ export default {
     };
 
     const sendMessagePayload = event => {
-      if (event.keyCode === 13 && !event.shiftKey  && !props.editMessage) {
+      if (event.keyCode === 13 && !event.shiftKey && !props.editMessage) {
         const startWithNonBreakSpace =
           newMessage.value.startsWith('<p>&nbsp;</p>');
         const messagetext = message(newMessage);
@@ -189,10 +189,9 @@ export default {
           readerFile.value = [];
           files.value = [];
         }
-      }
-      else if(props.editMessage){
-       props.editMessageCallBack(newMessage.value)
-       messageStore.removeMessageToEdit();
+      } else if (props.editMessage) {
+        props.editMessageCallBack(newMessage.value);
+        messageStore.removeMessageToEdit();
       }
     };
 

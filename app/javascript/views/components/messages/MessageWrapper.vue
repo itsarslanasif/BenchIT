@@ -128,16 +128,17 @@
             </n-tooltip>
           </div>
         </template>
-        <div
-          v-if="currMessage?.replies?.length > 0"
-          @click="toggleThread"
-          :class="{
-            'ml-12': isSameUser && isSameDayMessage && !isFirstMessage,
-          }"
-          class="text-info text-xs cursor-pointer hover:underline"
-        >
-          {{ repliesCount }}
-        </div>
+        <reply-and-thread-button
+          v-if="currMessage?.replies?.length > 0 && !inThread"
+          :currMessage="currMessage"
+          :isSameDayMessage="isSameDayMessage"
+          :isSameUser="isSameUser"
+          :lastReply="lastReply"
+          :lastThreeRepliesOfUniqueUsers="lastThreeRepliesOfUniqueUsers"
+          :repliesCount="repliesCount"
+          :toggleThread="toggleThread"
+          :isFirstMessage="isFirstMessage"
+        />
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="emojiModalStatus || openEmojiModal || showOptions"
@@ -197,7 +198,7 @@
 
 <script>
 import moment from 'moment';
-import { NAvatar, NCard, NDivider, NTooltip, NButton, NText } from 'naive-ui';
+import { NCard, NDivider, NTooltip, NButton, NText } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -217,6 +218,7 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import TextEditorVue from '../../components/editor/TextEditor.vue';
 import { updateMessage } from '../../../modules/axios/editorapi';
 import EditedAtTime from '../../widgets/editedAtTime.vue';
+import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -242,7 +244,6 @@ export default {
   },
 
   components: {
-    NAvatar,
     NCard,
     NDivider,
     EmojiPicker,
@@ -251,6 +252,7 @@ export default {
     NTooltip,
     NButton,
     NText,
+    ReplyAndThreadButton,
     TextEditorVue,
     EditedAtTime,
   },
@@ -262,6 +264,10 @@ export default {
     prevMessage: {
       type: Object,
       default: undefined,
+    },
+    inThread: {
+      type: Boolean,
+      default: false,
     },
   },
   data() {
@@ -312,7 +318,10 @@ export default {
       );
     },
     repliesCount() {
-      return `${this.currMessage.replies?.length} replies..`;
+      let count = this.currMessage.replies?.length;
+      return count > 1
+        ? `${count} ${CONSTANTS.REPLIES}`
+        : `${count} ${CONSTANTS.REPLY}`;
     },
     isFirstMessage() {
       if (this.messagesStore.messages) {
@@ -331,6 +340,20 @@ export default {
         }
         return false;
       });
+    },
+    lastReply() {
+      return this.currMessage.replies[this.currMessage.replies?.length - 1];
+    },
+    lastThreeRepliesOfUniqueUsers() {
+      return this.currMessage?.replies
+        ?.reduce(
+          (prev, reply) =>
+            prev.find(item => item.sender_id === reply.sender_id)
+              ? prev
+              : [...prev, reply],
+          []
+        )
+        ?.slice(-3);
     },
   },
   methods: {
