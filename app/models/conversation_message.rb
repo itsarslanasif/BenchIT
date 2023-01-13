@@ -32,7 +32,7 @@ class ConversationMessage < ApplicationRecord
   end
 
   def message_content
-    message = message_basic_content
+    message = model_basic_content
     message[:pin] = { id: pin.id, pinned_by: pin.profile.username } if pin.present?
     message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
     message[:attachments] = attach_message_attachments if message_attachments.present?
@@ -43,13 +43,11 @@ class ConversationMessage < ApplicationRecord
   private
 
   def broadcastable_content
-    result = {
+    {
       content: message_content,
-      type: 'Message'
+      type: 'Message',
+      action: action_performed
     }
-    result[:action] = action_performed
-
-    result
   end
 
   def broadcast_message
