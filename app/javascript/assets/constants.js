@@ -126,5 +126,10 @@ export const CONSTANTS = {
   EDIT_FILE_DETAILS: 'Edit file details',
   DELETE_FILE: 'Delete file',
   OPEN_FILE: 'Open file',
-  SOMETHING_WENT_WRONG: 'Something went wrong'
+  SOMETHING_WENT_WRONG: 'Something went wrong',
+  DOWNLOAD_SUCCESS: 'File downloaded succesfully',
+  DOWNLOAD_DELETE: 'Download removed successfully',
+  DOWNLOADS_DELETE: 'All downloads removed successfully',
+  DOWNLOAD_REMOVED: 'download removed',
+  DOWNLOADS_REMOVED: 'downloads removed'
 };

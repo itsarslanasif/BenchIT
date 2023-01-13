@@ -33,7 +33,7 @@ export default [
   },
   {
     type: 'divider',
-    key: 'd1',
+    key: 'divider-1',
   },
   {
     label: CONSTANTS.EDIT_FILE_DETAILS,
@@ -41,7 +41,7 @@ export default [
   },
   {
     type: 'divider',
-    key: 'd2',
+    key: 'divider-2',
   },
   {
     label: CONSTANTS.DELETE_FILE,

@@ -59,9 +59,9 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          <div v-if="currMessage?.attachments" class="flex gap-2">
+          <div v-if="currMessage.attachments" class="flex gap-2">
             <div
-              v-for="attachment in currMessage?.attachments"
+              v-for="attachment in currMessage.attachments"
               :key="attachment.id"
               class="w-64"
             >
@@ -73,7 +73,7 @@
               >
                 <template #trigger>
                   <img
-                    :src="attachment?.attachment_link"
+                    :src="attachment.attachment_link"
                     class="rounded"
                     :class="{ 'ml-12': isSameUser && isSameDayMessage }"
                   />
@@ -218,6 +218,7 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
+import benchitAlert from '../../widgets/benchitAlert.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -255,6 +256,7 @@ export default {
     NText,
     NPopover,
     downloadsModal,
+    benchitAlert,
   },
   props: {
     currMessage: {
@@ -287,6 +289,8 @@ export default {
       showOptions: false,
       displayedReactions: [],
       showFileOptions: false,
+      error: false,
+      response: '',
     };
   },
   beforeUnmount() {
@@ -334,6 +338,9 @@ export default {
         }
         return false;
       });
+    },
+    isSuccessfullResponse() {
+      return this.error === false;
     },
   },
   methods: {
@@ -463,9 +470,12 @@ export default {
       try {
         fileDownload(attachment).then(response => {
           this.downloadsStore.downloads.unshift(response.data);
+          this.downloadsStore.response = response;
+          this.downloadsStore.downloadAlert = true;
         });
+        this.downloadsStore.downloadAlert = false;
       } catch (error) {
-        console.error(error)
+        this.downloadsStore.downloadAlert = true;
       }
     },
 

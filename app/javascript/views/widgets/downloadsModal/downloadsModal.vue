@@ -20,12 +20,7 @@
         </n-dropdown>
       </template>
       <template v-else>
-        <span
-          @click="
-            action(attachment?.attachment_link, attachment.attachment.filename)
-          "
-          class="p-2 text-sm hover:bg-transparent cursor-pointer rounded"
-        >
+        <span class="p-2 text-sm hover:bg-transparent cursor-pointer rounded">
           <font-awesome-icon v-if="icon" :icon="icon" />
         </span>
       </template>
