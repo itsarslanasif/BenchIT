@@ -116,6 +116,8 @@ export const CONSTANTS = {
   NEW_CONVERSATION: 'New conversation',
   YOU: 'you',
   CREATED: 'Created',
+  REPLY: 'reply',
+  REPLIES: 'replies',
   MEMBER_SUCCESS_MESSAGE: 'member added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
   SOMETHING_WENT_WRONG: 'Something went wrong',

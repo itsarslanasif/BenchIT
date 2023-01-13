@@ -9,7 +9,11 @@
     >
       <div :id="message.id">
         {{ setMessage(message) }}
-        <div v-if="!isSameDayMessage && !message.parent_message_id">
+        <div
+          v-if="
+            (!isSameDayMessage && !message.parent_message_id) || isFirstMessage
+          "
+        >
           <n-divider
             v-if="isToday"
             class="text-xs relative"
@@ -106,6 +110,14 @@ export default {
         new Date(this.currMessage?.created_at).toDateString() ===
         new Date(this.prevMessage?.created_at).toDateString()
       );
+    },
+    isFirstMessage() {
+      if (this.messages) {
+        return this.firstMessageId === this.currMessage?.id;
+      }
+    },
+    firstMessageId() {
+      return this.messages[0]?.id;
     },
   },
   setup() {

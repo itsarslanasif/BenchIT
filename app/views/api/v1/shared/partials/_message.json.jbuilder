@@ -3,6 +3,8 @@ json.sender_name message.profile.username
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
 json.is_edited message.created_at != message.updated_at
+json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
+json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.isSaved saved?(message)
 json.pinned message.pin.present?
 if message.pin.present?
