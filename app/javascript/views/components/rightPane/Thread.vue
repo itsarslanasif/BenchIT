@@ -7,7 +7,7 @@
   />
   <div class="overflow-auto threadBody">
     <div class="pt-8">
-      <MessageWrapper :curr-message="threadStore.message" />
+      <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
     </div>
     <n-divider
       v-if="threadStore.message.replies"
@@ -18,7 +18,7 @@
     </n-divider>
     <template v-if="threadStore.message.replies">
       <template v-for="reply in threadStore.message.replies" :key="reply.id">
-        <MessageWrapper :id="reply.id" :curr-message="reply" />
+        <MessageWrapper :id="reply.id" :inThread="true" :curr-message="reply" />
       </template>
     </template>
   </div>
@@ -37,6 +37,7 @@ import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
+import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   name: 'RightPane',
@@ -66,7 +67,10 @@ export default {
   },
   computed: {
     repliesCount() {
-      return this.threadStore.message.replies.length + ' replies';
+      let count = this.threadStore.message.replies.length;
+      return count > 1
+        ? `${count} ${CONSTANTS.REPLIES}`
+        : `${count} ${CONSTANTS.REPLY}`;
     },
   },
   methods: {
@@ -84,7 +88,7 @@ export default {
       try {
         conversation(formData);
       } catch (e) {
-        let error = e;
+        console.error(e);
       }
     },
   },
