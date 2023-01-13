@@ -5,8 +5,15 @@
         @click="OpenChannelDetailModal(true)"
         class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
-        <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
-        <p class="text-xl font-bold self-center mr-1">{{ selectedChat?.name }}</p>
+        <div v-if="selectedChat.is_private" class="self-center mr-1">
+          <font-awesome-icon icon="fa-lock" />
+        </div>
+        <div v-else class="self-center mr-1">
+          <font-awesome-icon icon="fa-hashtag" />
+        </div>
+        <p class="text-xl font-bold self-center mr-1">
+          {{ selectedChat?.name }}
+        </p>
         <i class="fa-solid fa-chevron-down self-center font-semibold"></i>
       </div>
 
@@ -42,7 +49,8 @@ export default {
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
     const leftPaneStore = useLeftpaneStore();
-    return { ChannelDetailStore, selectedChat, leftPaneStore };},
+    return { ChannelDetailStore, selectedChat, leftPaneStore };
+  },
   data() {
     return {
       modalOpen: false,

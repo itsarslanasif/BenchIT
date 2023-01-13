@@ -1,66 +1,65 @@
 <template>
-  <div class="bg-white flex flex-col p-5 gap-3">
-    <div class="bg-white hover:bg-transparent p-2 rounded-md">
-      <p class="font-black">{{ $t('channeldetail.topic') }}</p>
-      <p>{{ this.topic }}</p>
-    </div>
-    <div class="bg-white hover:bg-transparent p-2 rounded-md">
-      <p class="font-black">{{ $t('channeldetail.description') }}</p>
-      <p>{{ this.description }}</p>
-    </div>
-    <div class="bg-white hover:bg-transparent p-2 rounded-md">
-      <p class="font-black">{{ $t('channeldetail.created_by') }}</p>
-      <p>{{ this.created_by }}</p>
-    </div>
-    <div
-      class="bg-danger text-white hover:bg-dangerHover p-2 rounded-md"
+  <div class="bg-white flex flex-col p-5">
+    <span
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 rounded-t-lg border-b-0"
+    >
+      <p class="font-bold">{{ $t('channeldetail.topic') }}</p>
+      <p>{{ selectedChat?.topic }}</p>
+    </span>
+    <span
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 border-b-1"
+    >
+      <p class="font-bold">{{ $t('channeldetail.description') }}</p>
+      <p>{{ selectedChat?.description }}</p>
+    </span>
+    <span
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-3 border-t-0"
+    >
+      <p class="font-bold">{{ $t('channeldetail.created_by') }}</p>
+      <p>
+        {{ selectedChat?.creator_name }} on
+        {{ formatDate(selectedChat?.created_at) }}
+      </p>
+    </span>
+    <span
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 mb-4 border-t-0 rounded-b-lg"
       @click="leaveChannel"
     >
-      <p class="font-black">{{ $t('channeldetail.leave') }}</p>
-    </div>
-    <div class="bg-white hover:bg-transparent p-2 rounded-md">
-      <p class="font-black">{{ $t('channeldetail.files') }}</p>
+      <p class="text-danger font-bold">{{ $t('channeldetail.leave') }}</p>
+    </span>
+    <span
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 rounded-lg"
+    >
+      <p class="font-bold">{{ $t('channeldetail.files') }}</p>
       <p>{{ $t('channeldetail.filecontent') }}</p>
-    </div>
+    </span>
   </div>
 </template>
 
 <script>
+import { storeToRefs } from 'pinia';
 import { useChannelStore } from '../../../stores/useChannelStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import moment from 'moment';
 
 export default {
-  name: 'About',
-  data() {
-    return {
-      topic: 'Add a topic',
-      description: 'Add description',
-      created_by: 'Irfan Nazeer',
-    };
-  },
-  beforeUnmount() {
-    this.topic = null;
-    this.description = null;
-    this.created_by = null;
-  },
-  props: {
-    channelname: String,
-  },
   setup() {
-    function getIndexByParams(param) {
-      return window.location.pathname.split('/')[param];
-    }
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
     const channelStore = useChannelStore();
-    const id = getIndexByParams(2);
     return {
-      id,
       channelStore,
+      selectedChat,
     };
   },
 
   methods: {
     async leaveChannel() {
-        await this.channelStore.leaveChannel(this.id);
-        this.$router.push('/');
+      await this.channelStore.leaveChannel(this.selectedChat?.id);
+      this.$router.push('/');
+    },
+    formatDate(date) {
+      return moment(date).format('MMMM Do, YYYY');
     },
   },
 };

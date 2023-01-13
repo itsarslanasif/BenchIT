@@ -1,12 +1,11 @@
 <template>
-  <div class="flex py-2 w-full cursor-pointer" @click="toggleModal">
-    <div class="text-white text-xl hover:bg-primaryHover flex">
-      <p
-        class="w-5 h-5 ml-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-800 border-slate-200 border border-solid"
-      >
-        +
-      </p>
-      <p class="ml-2 text-xs text-white">
+  <div class="cursor-pointer" @click="toggleModal">
+    <div class="py-1 px-1 flex">
+      <font-awesome-icon
+        icon="fa-plus"
+        class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+      />
+      <p class="text-sm self-center text-white">
         {{ $t('direct_messages.add_teammates') }}
       </p>
     </div>
@@ -23,7 +22,7 @@
             class="hover:bg-primaryHover hover:text-white"
             @click="item.func"
           >
-            <div class="px-4 py-1">
+            <div class="px-4">
               {{ item.title }}
             </div>
           </div>
@@ -60,7 +59,7 @@ export default {
     },
     toggleModal() {
       this.isOpen = !this.isOpen;
-    }
+    },
   },
 };
 </script>

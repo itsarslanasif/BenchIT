@@ -1,10 +1,14 @@
 <template>
-  <div @click="MarkStar">
+  <div class="w-10 cursor-pointer" @click="MarkStar">
     <div v-if="favChannel">
-      <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
+      <i
+        class="fa-solid fa-star border border-black-300 px-4 rounded p-2 ml-6 m-2"
+      ></i>
     </div>
     <div v-else>
-      <i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
+      <i
+        class="fa-regular fa-star border border-black-300 px-4 rounded p-2 ml-6 m-2"
+      ></i>
     </div>
   </div>
 </template>
