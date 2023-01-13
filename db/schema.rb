@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -187,11 +187,11 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
   end
 
   create_table "statuses", force: :cascade do |t|
-    t.string "text"
-    t.string "emoji"
-    t.string "clear_after"
+    t.string "text", null: false
+    t.string "emoji", null: false
+    t.string "clear_after", null: false
     t.integer "profile_id"
-    t.integer "type"
+    t.integer "type", null: false
     t.integer "workspace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
