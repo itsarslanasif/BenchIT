@@ -85,6 +85,9 @@ export default {
 
     const goToChannel = channel_id => {
       router.push(`/channels/${channel_id}`);
+      if (this.isMobileView) {
+        this.leftPaneStore.closeLeftPane();
+      }
     };
 
     const isChannelParticipant = channel_participants => {
