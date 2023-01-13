@@ -1,32 +1,35 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <div class="bg-primary text-sm h-screen flex flex-col">
-    <div>
-      <SearchBar />
+  <n-message-provider placement="top-right">
+    <div class="relative bg-primary text-sm h-screen flex flex-col">
+      <alert v-if="downloadsStore.downloadAlert" />
+      <div>
+        <SearchBar />
+      </div>
+      <splitpanes>
+        <pane max-size="20" min-size="10">
+          <WorkspaceDropdown />
+          <LeftPane />
+        </pane>
+        <pane class="bg-white" max-size="90" min-size="80">
+          <router-view :key="$route.fullPath" />
+        </pane>
+        <pane
+          v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+          max-size="80"
+          min-size="60"
+          class="bg-white"
+        >
+          <Thread
+            v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+          />
+          <UserProfile
+            v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+          />
+        </pane>
+      </splitpanes>
     </div>
-    <splitpanes>
-      <pane max-size="20" min-size="10">
-        <WorkspaceDropdown />
-        <LeftPane />
-      </pane>
-      <pane class="bg-white" max-size="90" min-size="80">
-        <router-view :key="$route.fullPath" />
-      </pane>
-      <pane
-        v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
-        max-size="80"
-        min-size="60"
-        class="bg-white"
-      >
-        <Thread
-          v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
-        />
-        <UserProfile
-          v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
-        />
-      </pane>
-    </splitpanes>
-  </div>
+  </n-message-provider>
 </template>
 
 <script>
@@ -42,6 +45,9 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
+import { NMessageProvider } from 'naive-ui';
+import { useDownloadsStore } from '../../stores/useDownloadsStore';
+import alert from '../widgets/alert.vue';
 
 export default {
   components: {
@@ -54,11 +60,14 @@ export default {
     searchDmscreen,
     SearchBar,
     UserProfile,
+    NMessageProvider,
+    alert,
   },
   setup() {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
-    return { screenStore, rightPaneStore };
+    const downloadsStore = useDownloadsStore();
+    return { screenStore, rightPaneStore, downloadsStore };
   },
 };
 </script>

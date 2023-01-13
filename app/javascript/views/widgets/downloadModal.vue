@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import { NModal, NTooltip, NPopover } from 'naive-ui';
+import { NModal, NTooltip, NPopover, NAlert } from 'naive-ui';
 import {
   getDownloads,
   deleteAllDownloads,
@@ -102,29 +102,47 @@ export default {
     NModal,
     NTooltip,
     NPopover,
+    NAlert,
+  },
+  data() {
+    return {
+      error: false,
+      response: '',
+    };
+  },
+  computed: {
+    isSuccessfullResponse() {
+      return this.error === false;
+    },
   },
   methods: {
     clearAllDownloads() {
       try {
-        deleteAllDownloads().then(() => {
+        deleteAllDownloads().then(response => {
           this.downloadsStore.downloads = [];
+          this.downloadsStore.response = response;
+          this.downloadsStore.downloadAlert = true;
         });
+        this.downloadsStore.downloadAlert = false;
       } catch (error) {
-        console.error(error);
+        this.downloadsStore.downloadAlert = true;
       }
     },
 
     clearDownload(download_id) {
       try {
-        deleteDownload(download_id).then(() => {
+        deleteDownload(download_id).then(response => {
           this.downloadsStore.downloads = this.downloadsStore.downloads.filter(
             function (download) {
               return download.id != download_id;
             }
           );
+          this.downloadsStore.response = response;
+          this.downloadsStore.downloadAlert = true;
         });
+        this.downloadsStore.downloadAlert = false;
       } catch (error) {
-        console.error(error);
+        this.downloadsStore.downloadAlert = true;
       }
     },
 
@@ -155,7 +173,7 @@ export default {
         this.downloadsStore.downloads = response.data;
       });
     } catch (error) {
-      console.error(error);
+      this.downloadsStore.downloadAlert = true;
     }
   },
 };
