@@ -68,12 +68,12 @@ export default {
   methods: {
     goToChat(chatURL) {
       this.$router.push(chatURL);
-      if (this.isMobileView) {
+      if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
     },
     isMobileView() {
-      return this.screenSize < 1400;
+      return window.innerWidth < 1400;
     },
     handleSelect(member) {
       this.directMessageStore.appendToDirectMessagesList(member);

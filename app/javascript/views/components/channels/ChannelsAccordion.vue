@@ -67,12 +67,12 @@ export default {
     goToChannelChat(chatURL, channel) {
       this.messagesStore.setSelectedChat(channel);
       this.$router.push(chatURL);
-      if (this.isMobileView) {
+      if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
     },
     isMobileView() {
-      return this.screenSize < 1400;
+      return window.innerWidth < 1400;
     },
     toggleChannelOptionShow() {
       this.showChannelOptions = !this.showChannelOptions;
