@@ -39,7 +39,6 @@ import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
 import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vue';
 import WorkspaceDropdown from '../../widgets/workspaceDropdown/WorkspaceDropdown.vue';
-import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 
 export default {
   components: {
@@ -47,13 +46,6 @@ export default {
     IconElement,
     DirectMessageAccordian,
     WorkspaceDropdown,
-  },
-
-  setup() {
-    const currentWorkspaceStore = useCurrentWorkspaceStore();
-    currentWorkspaceStore.setWorkspace(
-      JSON.parse(sessionStorage.getItem('currentWorkspace'))
-    );
   },
 
   methods: {
