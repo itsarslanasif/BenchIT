@@ -218,7 +218,6 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
-import benchitAlert from '../../widgets/benchitAlert.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -256,7 +255,6 @@ export default {
     NText,
     NPopover,
     downloadsModal,
-    benchitAlert,
   },
   props: {
     currMessage: {
@@ -289,8 +287,6 @@ export default {
       showOptions: false,
       displayedReactions: [],
       showFileOptions: false,
-      error: false,
-      response: '',
     };
   },
   beforeUnmount() {

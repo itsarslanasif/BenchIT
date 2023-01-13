@@ -104,17 +104,6 @@ export default {
     NPopover,
     NAlert,
   },
-  data() {
-    return {
-      error: false,
-      response: '',
-    };
-  },
-  computed: {
-    isSuccessfullResponse() {
-      return this.error === false;
-    },
-  },
   methods: {
     clearAllDownloads() {
       try {
