@@ -232,6 +232,11 @@ const ChannelParticipantCreate = async data => {
   channelDetailsStore.addMember(data);
 };
 
+const ChannelParticipantDelete = async data => {
+  const channelDetailsStore = useChannelDetailStore();
+  channelDetailsStore.removeMember(data);
+};
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
@@ -241,6 +246,7 @@ const actions = {
   PinCreate: pinMessage,
   PinDelete: unPinMessage,
   ChannelParticipantCreate: ChannelParticipantCreate,
+  ChannelParticipantDelete: ChannelParticipantDelete,
 };
 
 export const cableActions = data => {
