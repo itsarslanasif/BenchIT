@@ -10,9 +10,9 @@
       <i class="fa-solid fa-xmark"></i>
     </p>
     <p class="font-bold text-2xl pl-8">
-      <i class="fas fa-hashtag mr-1"></i>{{ this.channelName }}
+      <i class="fas fa-hashtag mr-1"></i>{{ this.currentChannel.name }}
     </p>
-    <StarUnstar :channelId="this.channelId" :channelName="this.channelName"/>
+    <StarUnstar :currentChannel="this.currentChannel" />
     <div class="flex ml-4">
       <p
         @click="ChannelDetailStore.setSlectedOption('about')"
@@ -53,7 +53,7 @@
     </div>
     <About
       v-if="ChannelDetailStore.isAbout()"
-      :channelName="this.channelName"
+      :channelName="this.currentChannel.name"
     />
     <members v-if="ChannelDetailStore.isMembers()" />
   </div>
@@ -76,13 +76,11 @@ export default {
     return { ChannelDetailStore };
   },
   props: {
-    channelName: String,
-    channelId: Number,
+    currentChannel: Object,
     detailsopen: Function,
   },
   methods: {
     closeModel() {
-      this.detailsopen(false);
     },
   },
 };

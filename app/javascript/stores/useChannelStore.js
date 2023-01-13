@@ -6,11 +6,14 @@ export const useChannelStore = () => {
     state: () => ({
       channels: [],
       joinedChannels: [],
+      starChannels: [],
+      currentChannel: {},
     }),
 
     getters: {
       getChannels: state => state.channels,
       getJoinedChannels: state => state.joinedChannels,
+      getStarredChannels: state => state.starChannels
     },
 
     actions: {
@@ -18,6 +21,8 @@ export const useChannelStore = () => {
         try {
           this.channels = await getChannels();
           this.joinedChannels = await getJoinedChannels();
+          this.starChannels = this.joinedChannels.filter(function (el) { return el.favourite_id !== null });
+          this.joinedChannels = this.joinedChannels.filter(function (el) { return el.favourite_id === null })
           this.sortChannelsList();
         } catch (e) {
           console.error(e);
@@ -77,6 +82,33 @@ export const useChannelStore = () => {
           return 0;
         });
       },
+
+      addJoinChannel(channel) {
+        this.joinedChannels.push(channel);
+      },
+
+      removeJoinChannel(channel) {
+        const index = this.joinedChannels.indexOf(channel);
+        if (index > -1) {
+          this.joinedChannels.splice(index, 1);
+        }
+      },
+
+      setCurrentChannel(channel) {
+        this.currentChannel = channel;
+      },
+
+      removeStarredChannel(channel) {
+        const index = this.starChannels.indexOf(channel);
+        if (index > -1) {
+          this.starChannels.splice(index, 1);
+        }
+      },
+
+      addStarredChannel(channel) {
+        this.starChannels.push(channel);
+      },
+
     },
   });
   const store = channelStore();

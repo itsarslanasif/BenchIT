@@ -117,4 +117,5 @@ export const CONSTANTS = {
   CREATED: 'Created',
   MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
+  UN_STAR_CHANNEL: 'Unstar Channel',
 };
