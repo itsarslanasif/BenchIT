@@ -5,12 +5,20 @@
       v-if="success"
       title="Success"
       type="success"
+      :onClose="setApiResponseStatusNull"
       closable
     >
       {{ successMessage }}
     </n-alert>
 
-    <n-alert v-else class="pr-20" title="Error" type="error" closable>
+    <n-alert
+      v-else
+      class="pr-20"
+      title="Error"
+      type="error"
+      :onClose="setApiResponseStatusNull"
+      closable
+    >
       {{ errorMessage }}
     </n-alert>
   </div>
@@ -18,10 +26,9 @@
 
 <script>
 import { NAlert } from 'naive-ui';
-
 export default {
   name: 'BenchITAlert',
   components: { NAlert },
-  props: ['errorMessage', 'successMessage', 'success'],
+  props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
 };
 </script>
