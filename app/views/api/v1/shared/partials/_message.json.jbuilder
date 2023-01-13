@@ -2,27 +2,21 @@ json.extract! message, :id, :content, :is_threaded, :parent_message_id, :sender_
 json.sender_name message.profile.username
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
-json.created_at message.created_at
-json.updated_at message.updated_at
 json.is_edited message.created_at != message.updated_at
-json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.isSaved saved?(message)
+json.pinned message.pin.present?
+if message.pin.present?
+  json.pin do
+    json.id message.pin.id
+    json.pinned_by message.pin.profile.username
+  end
+end
 json.receiver_name @receiver.username if @receiver.present?
 json.channel_name @bench_channel.name if @bench_channel.present?
-json.replies message.replies do |reply|
-  json.id reply.id
-  json.content reply.content
-  json.is_threaded reply.is_threaded
-  json.parent_message_id reply.parent_message_id
-  json.sender_id reply.sender_id
-  json.sender_name reply.profile.username
-  json.partial! 'api/v1/reactions/partials/reactions', reactions: reply.reactions
-  json.sender_avatar url_for(reply.profile.profile_image) if reply.profile.profile_image.attached?
-  json.reactions reply.reactions
-  json.created_at reply.created_at
-  json.updated_at reply.updated_at
-  json.receiver_name @receiver.username if @receiver.present?
-  json.channel_name @bench_channel.name if @bench_channel.present?
+if message.parent_message_id.blank?
+  json.replies message.replies do |reply|
+    json.partial! 'api/v1/shared/partials/message', message: reply
+  end
 end
 json.bench_conversation_id message.bench_conversation_id
 if message.message_attachments.present?

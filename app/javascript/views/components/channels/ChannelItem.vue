@@ -12,7 +12,15 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-1">{{ channel.name }}</div>
+      <div class="px-1" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
+        {{ channel.name }}
+      </div>
+      <div
+        v-if="unreadDetails?.messages.length"
+        class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
+      >
+        {{ unreadDetails.messages.length }}
+      </div>
     </div>
   </n-dropdown>
 </template>
@@ -23,18 +31,24 @@ import Option from './channel_options.js';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
+import { unreadMessagesCount } from '../../../modules/unreadMessages';
+import { useUnreadStore } from '../../../stores/useUnreadStore';
 export default {
   components: { NDropdown, markStar },
   props: ['goTo', 'toggleShow', 'isShowOptions', 'channel'],
   setup() {
     const channelStore = useChannelStore();
-    return { channelStore, };
+    const unreadStore = useUnreadStore();
+    const { unreadMessages } = storeToRefs(unreadStore);
+    return { channelStore,   unreadMessages, };
   },
   data() {
     return {
       channel_options: [],
       currentChannel: {},
       showChannelOptions: false,
+      unread: [],
+      unreadDetails: null,
     };
   },
   methods: {
@@ -66,6 +80,13 @@ export default {
       if (this.showChannelOptions) {
         this.setCurrentChannel();
       }
+    },
+    isUnreadChannel(channel) {
+      this.unreadDetails = unreadMessagesCount(
+        this.unreadMessages,
+        `BenchChannel${channel?.id}`
+      );
+      return this.unreadDetails?.messages.length;
     },
   },
 };
