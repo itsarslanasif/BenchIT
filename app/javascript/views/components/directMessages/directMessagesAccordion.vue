@@ -76,7 +76,12 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
-    return { directMessageStore, currentProfileStore, messagesStore, leftPaneStore };
+    return {
+      directMessageStore,
+      currentProfileStore,
+      messagesStore,
+      leftPaneStore,
+    };
   },
   computed: {
     sortedDMList() {
@@ -92,12 +97,12 @@ export default {
     goToChat(chatURL, user) {
       this.messagesStore.setSelectedChat(user);
       this.$router.push(chatURL);
-      if (this.isMobileView) {
+      if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
     },
     isMobileView() {
-      return this.screenSize < 1400;
+      return window.innerWidth < 1400;
     },
     handleClick() {
       this.$router.push('/new_direct_message');
