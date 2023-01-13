@@ -14,7 +14,9 @@
         src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
       />
       <div class="w-3 ml-1">
-        <p class="ml-1 font-bold text-black">{{ count }}</p>
+        <p class="ml-1 font-bold text-black">
+          {{ channelDetailStore.channelMembers.length }}
+        </p>
       </div>
     </div>
     <n-divider vertical class="self-center text-black" />
