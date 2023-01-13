@@ -90,6 +90,9 @@
         :successMessage="$t('channels.channel_created_success')"
         :success="!ApiResponseStatusStore.responseStatus?.errors"
         :errorMessage="$t('channels.channel_created_failure')"
+        :setApiResponseStatusNull="
+          ApiResponseStatusStore.setApiResponseStatusNull
+        "
       />
     </div>
   </div>

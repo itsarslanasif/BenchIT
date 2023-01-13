@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { getChannelMembers } from '../api/channels/channels';
 
-
 export const useChannelDetailStore = defineStore('channelDetailStore ', {
   state: () => ({
     selectedOption: 'about',
