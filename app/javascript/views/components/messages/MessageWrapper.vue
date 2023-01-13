@@ -60,17 +60,40 @@
             class="text-black-800 text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          <div v-if="currMessage?.attachments" class="flex gap-2">
+          <div v-if="currMessage.attachments" class="flex gap-2">
             <div
-              v-for="attachment in currMessage?.attachments"
+              v-for="attachment in currMessage.attachments"
               :key="attachment.id"
               class="w-64"
             >
-              <img
-                :src="attachment?.attachment_link"
-                class="rounded"
-                :class="{ 'ml-12': isSameUser && isSameDayMessage }"
-              />
+              <n-popover
+                class="rounded-md border-black-300 border text-black-600"
+                placement="top-end"
+                trigger="hover"
+                :show-arrow="false"
+              >
+                <template #trigger>
+                  <img
+                    :src="attachment.attachment_link"
+                    class="rounded"
+                    :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+                  />
+                </template>
+                <a :href="attachment.attachment_download_link" download
+                  ><span class="mr-3" @click="downloadFile(attachment)"
+                    ><font-awesome-icon
+                      icon="fa-solid fa-cloud-arrow-down" /></span
+                ></a>
+                <downloadsModal
+                  icon="fa-solid fa-share"
+                  :actionText="$t('downloadsModal.share_file')"
+                />
+                <downloadsModal
+                  icon="fa-solid fa-ellipsis-vertical"
+                  :actionText="$t('emojiModalButton.more_actions')"
+                  :action="setFileOptionsModal"
+                />
+              </n-popover>
             </div>
           </div>
         </div>
@@ -169,7 +192,7 @@
 
 <script>
 import moment from 'moment';
-import { NCard, NDivider, NTooltip, NButton, NText } from 'naive-ui';
+import { NCard, NDivider, NTooltip, NButton, NText, NPopover } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -186,6 +209,10 @@ import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
+import { fileDownload } from '../../../api/downloads/downloads.js';
+import { useDownloadsStore } from '../../../stores/useDownloadsStore';
+import benchitAlert from '../../widgets/benchitAlert.vue';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 
 export default {
@@ -199,6 +226,7 @@ export default {
     const userProfileStore = useUserProfileStore();
     const profilesStore = useProfileStore();
     const messagesStore = useMessageStore();
+    const downloadsStore = useDownloadsStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -208,6 +236,7 @@ export default {
       userProfileStore,
       profilesStore,
       messagesStore,
+      downloadsStore,
     };
   },
   components: {
@@ -219,6 +248,9 @@ export default {
     NTooltip,
     NButton,
     NText,
+    NPopover,
+    downloadsModal,
+    benchitAlert,
     ReplyAndThreadButton,
   },
   props: {
@@ -255,6 +287,7 @@ export default {
       openEmojiModal: false,
       showOptions: false,
       displayedReactions: [],
+      showFileOptions: false,
     };
   },
   beforeUnmount() {
@@ -305,6 +338,9 @@ export default {
         }
         return false;
       });
+    },
+    isSuccessfullResponse() {
+      return this.error === false;
     },
     lastReply() {
       return this.currMessage.replies[this.currMessage.replies?.length - 1];
@@ -442,6 +478,23 @@ export default {
           reaction.profile_id === this.currentUserStore.currentUser.id
         );
       });
+    },
+
+    downloadFile(attachment) {
+      try {
+        fileDownload(attachment).then(response => {
+          this.downloadsStore.downloads.unshift(response.data);
+          this.downloadsStore.response = response;
+          this.downloadsStore.downloadAlert = true;
+        });
+        this.downloadsStore.downloadAlert = false;
+      } catch (error) {
+        this.downloadsStore.downloadAlert = true;
+      }
+    },
+
+    setFileOptionsModal() {
+      this.showFileOptions = !this.showFileOptions;
     },
   },
 };

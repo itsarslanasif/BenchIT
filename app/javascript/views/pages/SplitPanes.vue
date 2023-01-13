@@ -1,43 +1,50 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <div class="bg-primary text-sm h-screen flex flex-col">
-    <div>
-      <SearchBar />
+  <n-message-provider placement="top-right">
+    <div class="relative bg-primary text-sm h-screen flex flex-col">
+      <alert v-if="downloadsStore.downloadAlert" />
+      <div>
+        <SearchBar />
+      </div>
+      <splitpanes @resize="resizePane" class="relative">
+        <pane
+          max-size="30"
+          :size="isMobileView() ? '300px' : 15"
+          :class="isMobileView() ? 'relative z-10' : ''"
+          min-size="10"
+          v-if="leftPaneStore.getLeftpaneFlag"
+        >
+          <LeftPane />
+        </pane>
+        <pane
+          class="bg-white"
+          max-size="100"
+          min-size="80"
+          :class="
+            leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
+          "
+        >
+          <router-view :key="$route.fullPath" />
+        </pane>
+        <pane
+          v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+          max-size="80"
+          min-size="60"
+          class="bg-white"
+          :class="
+            leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
+          "
+        >
+          <Thread
+            v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+          />
+          <UserProfile
+            v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+          />
+        </pane>
+      </splitpanes>
     </div>
-    <splitpanes @resize="resizePane" class="relative">
-      <pane
-        max-size="30"
-        :size="isMobileView() ? '300px' : 15"
-        :class="isMobileView() ? 'relative z-10' : ''"
-        min-size="10"
-        v-if="leftPaneStore.getLeftpaneFlag"
-      >
-        <LeftPane />
-      </pane>
-      <pane
-        class="bg-white"
-        max-size="100"
-        min-size="80"
-        :class="leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''"
-      >
-        <router-view :key="$route.fullPath" />
-      </pane>
-      <pane
-        v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
-        max-size="80"
-        min-size="60"
-        class="bg-white"
-        :class="leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''"
-      >
-        <Thread
-          v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
-        />
-        <UserProfile
-          v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
-        />
-      </pane>
-    </splitpanes>
-  </div>
+  </n-message-provider>
 </template>
 
 <script>
@@ -54,6 +61,9 @@ import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
+import { NMessageProvider } from 'naive-ui';
+import { useDownloadsStore } from '../../stores/useDownloadsStore';
+import alert from '../widgets/alert.vue';
 
 export default {
   components: {
@@ -66,6 +76,8 @@ export default {
     searchDmscreen,
     SearchBar,
     UserProfile,
+    NMessageProvider,
+    alert,
   },
   data() {
     return {
@@ -105,7 +117,8 @@ export default {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
     const leftPaneStore = useLeftpaneStore();
-    return { screenStore, rightPaneStore, leftPaneStore };
+    const downloadsStore = useDownloadsStore();
+    return { screenStore, rightPaneStore, leftPaneStore, downloadsStore };
   },
 };
 </script>

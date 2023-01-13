@@ -51,6 +51,13 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      downloadsModal:
+        download: 'Download'
+        share_file: 'Share file...'
+        downloads: 'Downloads'
+        clear_downloads: 'Clear Downloads'
+        keep_track: 'Keep track of your downloads'
+        downloaded_files: 'Files you download to your computer will appear here.'
       email:
         gmail: '@gmail.com'
       pinconversation:
@@ -160,8 +167,7 @@ en:
         selected_channels: 'Selected Channels'
         title: 'Channels'
         create_channel: 'Create a channel'
-        add_channel_dialog:
-          'Channels are where your team communicates. They’re best when
+        add_channel_dialog: 'Channels are where your team communicates. They’re best when
           organized around a topic — #marketing, for example.'
         new_channel_name: 'Name'
         set_channel_private: 'Set Channel Private'
@@ -169,6 +175,8 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        channel_created_success: 'New channel created successfully'
+        channel_created_failure: 'Channel name already exist'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
