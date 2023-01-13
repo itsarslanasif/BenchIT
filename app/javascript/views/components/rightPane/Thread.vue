@@ -10,7 +10,7 @@
       <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
     </div>
     <n-divider
-      v-if="threadStore.message.replies.length > 0"
+      v-if="threadStore.message.replies"
       title-placement="left"
       class="text-black-500 text-xs"
     >
@@ -18,7 +18,7 @@
     </n-divider>
     <template v-if="threadStore.message.replies">
       <template v-for="reply in threadStore.message.replies" :key="reply.id">
-        <MessageWrapper :inThread="true" :curr-message="reply" />
+        <MessageWrapper :id="reply.id" :inThread="true" :curr-message="reply" />
       </template>
     </template>
   </div>
@@ -97,5 +97,15 @@ export default {
 <style scoped>
 .threadBody {
   max-height: 67vh;
+}
+
+.highlight {
+  animation: background-fade 5s;
+}
+
+@keyframes background-fade {
+  0% {
+    background: rgba(253, 245, 221, 255);
+  }
 }
 </style>
