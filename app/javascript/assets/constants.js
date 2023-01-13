@@ -54,6 +54,7 @@ export const CONSTANTS = {
   CUSTOM: 'Custom',
   COPY_LINK: 'Copy link',
   PIN_TO_CONVERSATION: 'Pin to this conversation',
+  UNPIN_FROM_CONVERSATION: 'Un-pin from this conversation',
   EDIT: 'Edit message',
   DELETE: 'Delete message',
   POLLY: 'Create a polly',
@@ -115,8 +116,6 @@ export const CONSTANTS = {
   NEW_CONVERSATION: 'New conversation',
   YOU: 'you',
   CREATED: 'Created',
-  MEMBER_SUCCESS_MESSAGE: 'members added successfully.',
-  MEMBERS_SUCCESS_MESSAGE: 'member added successfully.',
   OPEN: 'Open',
   OPEN_IN_BROWAER: 'Open in browser',
   OPEN_IN_NEW_WINDOW: 'Open in new window',
@@ -131,5 +130,10 @@ export const CONSTANTS = {
   DOWNLOAD_DELETE: 'Download removed successfully',
   DOWNLOADS_DELETE: 'All downloads removed successfully',
   DOWNLOAD_REMOVED: 'download removed',
-  DOWNLOADS_REMOVED: 'downloads removed'
+  DOWNLOADS_REMOVED: 'downloads removed',
+  REPLY: 'reply',
+  REPLIES: 'replies',
+  MEMBER_SUCCESS_MESSAGE: 'member added successfully.',
+  MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
+  SOMETHING_WENT_WRONG: 'Something went wrong',
 };
