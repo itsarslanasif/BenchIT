@@ -38,7 +38,6 @@ export const useChannelStore = () => {
               apiResponseStatusStore().setApiResponseStatus(response.data);
               return response.data;
             } else {
-              console.log('create channel:', response);
               apiResponseStatusStore().setApiResponseStatus(response);
               this.channels.push(response.data);
               this.joinedChannels.push(response.data);
@@ -86,7 +85,6 @@ export const useChannelStore = () => {
       sortChannelsList() {
         this.joinedChannels = this.joinedChannels.sort(
           (thisChannel, nextChannel) => {
-
             if (
               thisChannel.name.toLowerCase() < nextChannel.name.toLowerCase()
             ) {
