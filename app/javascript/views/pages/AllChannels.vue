@@ -109,7 +109,6 @@ export default {
     };
 
     const isMobileView = () => {
-      console.log('inMobile')
       return window.innerWidth < 1400;
     };
 

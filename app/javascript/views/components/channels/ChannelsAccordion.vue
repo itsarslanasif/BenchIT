@@ -72,7 +72,7 @@ export default {
       }
     },
     isMobileView() {
-      return this.screenSize < 1400;
+      return window.innerWidth < 1400;
     },
     toggleChannelOptionShow() {
       this.showChannelOptions = !this.showChannelOptions;
