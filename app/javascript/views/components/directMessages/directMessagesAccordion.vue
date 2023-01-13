@@ -36,6 +36,7 @@ import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 
@@ -73,8 +74,14 @@ export default {
   setup() {
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
+    const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
-    return { directMessageStore, currentProfileStore, messagesStore };
+    return {
+      directMessageStore,
+      currentProfileStore,
+      messagesStore,
+      leftPaneStore,
+    };
   },
   computed: {
     sortedDMList() {
@@ -90,6 +97,12 @@ export default {
     goToChat(chatURL, user) {
       this.messagesStore.setSelectedChat(user);
       this.$router.push(chatURL);
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      }
+    },
+    isMobileView() {
+      return window.innerWidth < 1400;
     },
     handleClick() {
       this.$router.push('/new_direct_message');

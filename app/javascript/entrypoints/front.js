@@ -40,6 +40,7 @@ import {
   faCloudArrowDown,
   faBroom,
   faCircleExclamation,
+  faRectangleList,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -85,6 +86,7 @@ library.add(
   faCloudArrowDown,
   faBroom,
   faCircleExclamation,
+  faRectangleList
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
