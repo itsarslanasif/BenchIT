@@ -55,7 +55,7 @@
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
-            <EditedAtInfoBoxVue
+            <EditedAtTime
               v-if="
                 currMessage?.is_edited &&
                 isSameUser &&
@@ -71,7 +71,7 @@
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
-            <EditedAtInfoBoxVue
+            <EditedAtTime
               v-if="
                 currMessage?.is_edited &&
                 (!isSameUser || !isSameDayMessage || isFirstMessage)
@@ -216,7 +216,7 @@ import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import TextEditorVue from '../../components/editor/TextEditor.vue';
 import { updateMessage } from '../../../modules/axios/editorapi';
-import EditedAtInfoBoxVue from './editedAtInfoBox.vue';
+import EditedAtTime from '../../widgets/editedAtTime.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -252,7 +252,7 @@ export default {
     NButton,
     NText,
     TextEditorVue,
-    EditedAtInfoBoxVue,
+    EditedAtTime,
   },
   props: {
     currMessage: {
