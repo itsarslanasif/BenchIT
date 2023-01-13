@@ -21,7 +21,7 @@
         >
           <font-awesome-icon
             icon="fa-solid fa-plus"
-            class="ml-2 bg-slate-700 p-1 border border-slate-700 rounded text-xs items-center mt-1"
+            class="ml-2 bg-slate-700 p-1 border border-slate-700 rounded text-xs items-center mt-px"
           />
           <h5 class="pl-2">{{ $t('channels.add_new_channel') }}</h5>
         </div>
