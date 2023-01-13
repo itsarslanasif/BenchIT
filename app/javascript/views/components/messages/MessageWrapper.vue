@@ -1,5 +1,35 @@
 <template>
+  <div v-if="this.currMessage.is_info">
+    <div class="flex p-1 px-4 relative hover:bg-transparent">
+      <user-profile-modal
+        :profile_id="currMessage.sender_id"
+        :sender_avatar="currMessage.sender_avatar"
+      />
+      <span class="message">
+        <div class="ml-1">
+          <span class="items-center flex text-black-800 text-lg m-0">
+            <p
+              @click="showUserProfile"
+              class="mr-1 text-sm hover:underline cursor-pointer"
+            >
+              <b>{{ currMessage.sender_name }}</b>
+            </p>
+            <p
+              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
+            >
+              {{ time }}
+            </p>
+          </span>
+          <span
+            class="text-black-600 text-sm flex-wrap"
+            v-html="currMessage.content"
+          />
+        </div>
+      </span>
+    </div>
+  </div>
   <div
+    v-else
     class="py-1"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >

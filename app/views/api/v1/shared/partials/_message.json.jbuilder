@@ -1,4 +1,4 @@
-json.extract! message, :id, :content, :is_threaded, :parent_message_id, :sender_id, :created_at, :updated_at
+json.extract! message, :id, :content, :is_threaded, :parent_message_id, :sender_id, :created_at, :updated_at, :is_info
 json.sender_name message.profile.username
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
