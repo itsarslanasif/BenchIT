@@ -1,6 +1,11 @@
 <template>
+  <div class="infi-scroll-comp-root">
   <div class="overflow-auto chatBody" ref="chatBody">
     <PinnedConversationModel />
+    <div v-if="showSpinner" class="text-center">
+      <div class="spinner"></div>
+    </div>
+    <div class="sentinel" ref="sentinel"></div>
     <div
       v-for="message in messages"
       :key="message.id"
@@ -49,6 +54,7 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
@@ -75,13 +81,17 @@ export default {
       jumpToDateToggle: false,
       prevMessage: [],
       selectedMessage: {},
+      timeLimit: 0,
+      showSpinner: false
     };
   },
   mounted() {
     this.scrollToEnd();
+    this.setUpInterSectionObserver();
   },
   beforeUnmount() {
     this.messages = this.prevMessage = this.selectedMessage = [];
+    this.currentPage = 1
   },
   computed: {
     isToday() {
@@ -99,7 +109,7 @@ export default {
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages, currMessage } = storeToRefs(messageStore);
+    const { messages, currMessage, currentPage } = storeToRefs(messageStore);
     return {
       messages,
       currMessage,
@@ -145,9 +155,63 @@ export default {
       return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
     scrollToEnd() {
-      let body = this.$refs.chatBody;
-      body.scrollTop = body.scrollHeight;
+      let node = this.$refs["chatBody"];
+      node.scrollTop = node.scrollHeight;
     },
+    // handleScroll() {
+    // console.log('scrolling like a champ')
+    //   if (this.$refs.chatBody.scrollTop === 0) {
+    //     const currentTime = new Date().getTime();
+    //     if (currentTime < this.timeLimit + 3000) {
+    //       this.showSpinner = true;
+    //       setTimeout(() => {
+    //         this.showSpinner = false;
+    //       }, 3000);
+    //       return
+    //     }
+    //     this.timeLimit = currentTime
+    //     this.$emit('load-more-messages')
+    //   }
+    // },
+    setUpInterSectionObserver() {
+      let options = {
+        root: this.$refs["chatBody"],
+        margin: "10px",
+      };
+      this.listEndObserver = new IntersectionObserver(
+        this.handleIntersection,
+        options
+      );
+      this.listEndObserver.observe(this.$refs["sentinel"]);
+    },
+    handleIntersection([entry]) {
+      if (entry.isIntersecting) {
+        console.log("sentinel intersecting");
+        this.$emit('load-more-messages')
+        this.recordScrollPosition()
+        this.$nextTick(() => {
+          this.restoreScrollPosition();
+        });
+      }
+      if (entry.isIntersecting && this.canLoadMore && !this.isLoadingMore) {
+        this.loadMore();
+      }
+    },
+    recordScrollPosition() {
+      let node = this.$refs["chatBody"];
+      this.previousScrollHeightMinusScrollTop =
+        node.scrollHeight - node.scrollTop;
+      console.log(this.previousScrollHeightMinusScrollTop)
+    },
+    restoreScrollPosition() {
+      console.log('restore')
+      let node = this.$refs["chatBody"];
+      console.log(node.scrollHeight)
+      node.scrollTop =
+        node.scrollHeight - this.previousScrollHeightMinusScrollTop;
+      console.log(node.scrollTop);
+    }
+  
   },
   updated() {
     const message_id = this.$route.params.message_id;

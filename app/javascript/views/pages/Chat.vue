@@ -1,16 +1,14 @@
 <template>
-  <div class="flex flex-col gap-2">
-    <div v-if="conversation_type && id" class="h-full">
-      <div v-if="chat">
+  <div v-if="conversation_type && id" class="flex flex-col h-full">
+      <div v-if="chat" class="chat-header-style">
         <ChatHeader />
       </div>
-      <div v-if="messages" class="break-words h-1/2">
-        <ChatBody />
+      <div v-if="messages" class="break-words chat-style overflow-y-auto">
+        <ChatBody @load-more-messages="loadMoreMessages" />
       </div>
-      <div class="px-3">
+      <div class="px-3 editor-style">
         <TextEditorVue :sendMessage="sendMessage" />
       </div>
-    </div>
   </div>
 </template>
 
@@ -48,14 +46,19 @@ export default {
     const currentUserStore = useCurrentUserStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
-    messageStore.index(conversation_type, id);
-    const { messages, currMessage, currentPage } = storeToRefs(messageStore);
+    // messageStore.index(conversation_type, id);
+    const { messages, currMessage, currentPage, hasMoreMessages } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
     return {
       messages,
       currMessage,
       currentPage,
-      messageStore,
+      hasMoreMessages,
+      loadMoreMessages() {
+        if (hasMoreMessages) {
+          messageStore.index(conversation_type, id);
+        }
+      },
       conversation_type,
       currentUser,
       id,
@@ -102,13 +105,24 @@ beforeUnmount() {
 };
 </script>
 
-<style>
-.editor {
+<style scoped>
+/* .editor {
   bottom: 0;
   float: left;
   width: 100%;
+} */
+
+.editor-style {
+  flex : 0.3;
 }
 
+.chat-header-style {
+  flex: 0.1;
+}
+
+.chat-style {
+  flex: 1;
+}
 .mce-i-codesample {
   color: transparent !important;
   background-image: url(../../assets/images/codeblock.png) !important;

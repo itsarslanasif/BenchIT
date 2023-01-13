@@ -9,7 +9,8 @@ export const useMessageStore = () => {
         messages: [],
         currMessage: [],
         currentPage: 1,
-        isLoading: false
+        maxPages : null,
+        hasMoreMessages: true,
     }),
 
     getters: {
@@ -26,7 +27,6 @@ export const useMessageStore = () => {
 
     actions: {
       async index(conversation_type, id) {
-        this.isLoading = true;
         let newMessages = await getMessageHistory(
           conversation_type.slice(0, -1),
           id,
@@ -34,7 +34,8 @@ export const useMessageStore = () => {
         )
         this.messages =  [...newMessages.messages, ...this.messages]
         this.currentPage += 1
-        this.isLoading = false;
+        this.maxPages = newMessages.page_information.pages
+        this.hasMoreMessages = this.currentPage > this.maxPages
       },
       async addMessage(msg) {
         messageStore;

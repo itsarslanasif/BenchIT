@@ -31,7 +31,7 @@
         'border-top': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
         'border-bottom': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
         'border-radius': '3px',
-        'font-size': '10px',
+        'font-size': '20px',
         'font-variant-ligatures': 'none',
         'line-height': '1.5',
         'margin-bottom': '14px',
