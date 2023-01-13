@@ -1,19 +1,20 @@
 import axios from '../../modules/axios';
 
-export const getChannel = async (channelId) => {
+export const getChannel = async channelId => {
   return await axios
     .get(`/v1/bench_channels/${channelId}`, {
-      headers: { Authorization: localStorage.getItem('token') }
+      headers: { Authorization: localStorage.getItem('token') },
     })
     .then(response => {
       return response.data;
     });
 };
 
-export const getChannels = async (query) => {
+export const getChannels = async query => {
   return await axios
     .get(`/v1/bench_channels`, {
-      headers: { Authorization: localStorage.getItem('token') }, params: {
+      headers: { Authorization: localStorage.getItem('token') },
+      params: {
         query: query,
       },
     })
@@ -25,7 +26,7 @@ export const getChannels = async (query) => {
 export const getJoinedChannels = async () => {
   return await axios
     .get(`/v1/bench_channels/joined_channels`, {
-      headers: { Authorization: localStorage.getItem('token') }
+      headers: { Authorization: localStorage.getItem('token') },
     })
     .then(response => {
       return response.data;
@@ -73,10 +74,10 @@ export const memberJoinChannel = async channel_id => {
   return await axios.post(
     `/v1/channel_participants/join_public_channel`,
     {
-      "bench_channel_id" : channel_id
+      bench_channel_id: channel_id,
     },
     {
       headers: { Authorization: localStorage.getItem('token') },
     }
   );
-}
+};

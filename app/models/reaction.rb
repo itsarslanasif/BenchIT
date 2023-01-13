@@ -3,6 +3,7 @@ class Reaction < ApplicationRecord
 
   belongs_to :profile
   belongs_to :conversation_message
+  has_one :bench_conversation, through: :conversation_message
 
   private
 

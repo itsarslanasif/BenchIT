@@ -1,8 +1,8 @@
-import axios from '../../modules/axios';
+import axios from "../../modules/axios";
 
-export const deleteMessage = id => {
+export const getUnreadMessages = async id => {
   return axios
-    .delete(`v1/conversation_messages/${id}`, {
+    .get(`v1/conversation_messages/unread_messages`, {
       headers: { Authorization: localStorage.getItem('token') },
     })
     .then(response => {
