@@ -10,6 +10,9 @@
         <SearchBar />
       </div>
       <splitpanes @resize="resizePane" class="relative">
+        <pane min-size="4" max-size="4">
+          <SwitchWorkspace />
+        </pane>
         <pane
           max-size="30"
           :size="isMobileView() ? '300px' : 15"
@@ -128,7 +131,13 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
-    return { screenStore, rightPaneStore, leftPaneStore, currentWorkspaceStore, downloadsStore };
+    return {
+      screenStore,
+      rightPaneStore,
+      leftPaneStore,
+      currentWorkspaceStore,
+      downloadsStore,
+    };
   },
 };
 </script>

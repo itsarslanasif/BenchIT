@@ -1,6 +1,6 @@
 <template>
   <div
-    class="py-1"
+    class="py-1 hover:bg-transparent"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
     <div v-if="currMessage.pinned">
