@@ -46,8 +46,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def leave
     @channel_participant.destroy
 
-    ConversationMessage.create(content: "#{Current.profile.username} left this channel.", is_threaded: false,
-                               bench_conversation_id: @channel.bench_conversation.id, sender_id: Current.profile.id)
+    ConversationMessage.create(content: "left ##{@bench_channel.name}", is_threaded: false,
+                               bench_conversation_id: @channel.bench_conversation.id, sender_id: Current.profile.id, is_info: true)
     render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
   rescue ActiveRecord::RecordNotDestroyed
     render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
