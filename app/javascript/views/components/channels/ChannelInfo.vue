@@ -6,9 +6,7 @@
         class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
         <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
-        <p class="text-xl font-bold self-center mr-1">
-          {{ selectedChat?.name }}
-        </p>
+        <p class="text-xl font-bold self-center mr-1">{{ selectedChat?.name }}</p>
         <i class="fa-solid fa-chevron-down self-center font-semibold"></i>
       </div>
 
@@ -34,6 +32,7 @@ import ChannelMembersInfoVue from './ChannelMembersInfo.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 import { storeToRefs } from 'pinia';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 
 export default {
   name: 'ChannelInfo',
@@ -42,8 +41,8 @@ export default {
     const ChannelDetailStore = useChannelDetailStore();
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
-    return { ChannelDetailStore, selectedChat };
-  },
+    const leftPaneStore = useLeftpaneStore();
+    return { ChannelDetailStore, selectedChat, leftPaneStore };},
   data() {
     return {
       modalOpen: false,
