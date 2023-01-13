@@ -1,22 +1,32 @@
 <template>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <n-message-provider>
+  <n-message-provider placement="top-right">
     <div class="relative bg-primary text-sm h-screen flex flex-col">
+      <alert v-if="downloadsStore.downloadAlert" />
       <switching-workspace-loader
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
       <div>
         <SearchBar />
       </div>
-      <splitpanes>
-        <pane class="border-r border-slate-300" fixed max-size="4" min-size="4">
-          <SwitchWorkspace />
-        </pane>
-        <pane max-size="30" min-size="20">
-          <WorkspaceDropdown />
+      <splitpanes @resize="resizePane" class="relative">
+        <pane
+          max-size="30"
+          :size="isMobileView() ? '300px' : 15"
+          :class="isMobileView() ? 'relative z-10' : ''"
+          min-size="10"
+          v-if="leftPaneStore.getLeftpaneFlag"
+        >
           <LeftPane />
         </pane>
-        <pane class="bg-white" max-size="90" min-size="80">
+        <pane
+          class="bg-white"
+          max-size="100"
+          min-size="80"
+          :class="
+            leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
+          "
+        >
           <router-view :key="$route.fullPath" />
         </pane>
         <pane
@@ -24,6 +34,9 @@
           max-size="80"
           min-size="60"
           class="bg-white"
+          :class="
+            leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
+          "
         >
           <Thread
             v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
@@ -54,6 +67,9 @@ import SwitchWorkspace from '../components/workspace/SwitchWorkspace.vue';
 import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { NMessageProvider } from 'naive-ui';
+import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
+import { useDownloadsStore } from '../../stores/useDownloadsStore';
+import alert from '../widgets/alert.vue';
 
 export default {
   components: {
@@ -69,13 +85,80 @@ export default {
     SwitchWorkspace,
     SwitchingWorkspaceLoader,
     NMessageProvider,
+    NMessageProvider,
+    alert,
+  },
+  data() {
+    return {
+      screenSize: 0,
+    };
+  },
+  methods: {
+    resizePane(panes) {
+      if (panes[0].size < 11) {
+        this.leftPaneStore.closeLeftPane();
+      }
+    },
+    updateScreenWidth() {
+      this.screenSize = window.innerWidth;
+      this.startView();
+    },
+    isMobileView() {
+      return this.screenSize < 1400 && this.screenSize > 0;
+    },
+    startView() {
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      } else {
+        this.leftPaneStore.openLeftPane();
+      }
+    },
+  },
+  mounted() {
+    this.screenSize = window.innerWidth;
+    this.startView();
+    window.addEventListener('resize', this.updateScreenWidth);
+  },
+  beforeUnmount() {
+    window.removeEventListener('resize', this.updateScreenWidth);
   },
   setup() {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
     const currentWorkspaceStore = useCurrentWorkspaceStore();
-
-    return { screenStore, rightPaneStore, currentWorkspaceStore };
+    const leftPaneStore = useLeftpaneStore();
+    const downloadsStore = useDownloadsStore();
+    return { screenStore, rightPaneStore, leftPaneStore, currentWorkspaceStore, downloadsStore };
   },
 };
 </script>
+
+<style>
+.splitpanes__splitter {
+  background-color: #ccc;
+  position: relative;
+}
+.splitpanes__splitter:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 0.4s;
+  background-color: #475569;
+  opacity: 0;
+  z-index: 1;
+}
+.splitpanes__splitter:hover:before {
+  opacity: 1;
+}
+.splitpanes--vertical > .splitpanes__splitter:before {
+  left: -5px;
+  right: -5px;
+  height: 100%;
+}
+.splitpanes--horizontal > .splitpanes__splitter:before {
+  top: -30px;
+  bottom: -30px;
+  width: 100%;
+}
+</style>
