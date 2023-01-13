@@ -22,6 +22,7 @@
       </div>
     </n-button>
   </n-dropdown>
+  <DownloadModal v-model:show="showModal" />
 </template>
 
 <script>
@@ -31,10 +32,11 @@ import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
+import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
 
 export default {
-  components: { NDropdown, NAvatar },
+  components: { NDropdown, NAvatar, DownloadModal },
   setup() {
     const profileStore = useCurrentProfileStore();
     const currentWorkspaceStore = useCurrentWorkspaceStore();
@@ -55,6 +57,7 @@ export default {
       statusIcon: '⚫',
       userStatus: userStatusStore(),
       profile: null,
+      showModal: false,
       options: [
         {
           key: 'header',
@@ -160,6 +163,9 @@ export default {
           sessionStorage.removeItem('currentWorkspace');
           sessionStorage.removeItem('currentProfile');
           this.$router.push('/workspace_dashboard');
+          break;
+        case 'downloads':
+          this.showModal = true;
           break;
       }
     },
