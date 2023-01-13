@@ -20,6 +20,7 @@ export const useMessageStore = () => {
       getMessages: state => state.messages,
       getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
+        
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
           state.currMessage !== null
@@ -37,6 +38,7 @@ export const useMessageStore = () => {
           conversation_type.slice(0, -1),
           id
         );
+
         if (conversation_type === 'profiles') {
           this.selectedChat = await getUserProfile(
             JSON.parse(sessionStorage.getItem('currentWorkspace')).id,
@@ -63,29 +65,28 @@ export const useMessageStore = () => {
         this.messageToEdit = null;
       },
       isMessageToEdit(message) {
-        console.log("mmmmmm",message)
-        if (this.messageToEdit) {
 
+        if (this.messageToEdit)
           return this.messageToEdit && (message.id == this.messageToEdit.id)
-        }
         return false
       },
       updateMessage(data){
-        if (data.parent_message_id) {
 
+        if (data.parent_message_id) {
           const message = this.messages.find(element => element.id === data.parent_message_id);
           const findThreadMessageIndex = message.replies.findIndex(
             element => element.id === data.id
           );
+
           if (findThreadMessageIndex != -1) {
             console.log("reply")
             message.replies[findThreadMessageIndex] = data;
           }
         } else {
           const findMessageIndex = this.messages.findIndex(element => element.id === data.id);
-          if (findMessageIndex != -1) {
+
+          if (findMessageIndex != -1)
             this.messages[findMessageIndex]=data
-          }
         }
       }
     },

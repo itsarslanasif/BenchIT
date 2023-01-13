@@ -6,8 +6,6 @@ export const conversation = async payload => {
   });
 };
 
-
-
 export const updateMessage = async payload => {
   await axios.patch(`/v1/conversation_messages/${payload.id}`, payload, {
     headers: { Authorization: localStorage.getItem('token') },

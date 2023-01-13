@@ -65,6 +65,7 @@ export default {
     return { pinnedConversationStore, messageStore, currentProfileStore };
   },
   beforeMount() {
+    
     if (this.message) {
       this.Options = new Options(
         this.message.pinned,
@@ -131,10 +132,9 @@ export default {
           }
           break;
         case 'edit-message':
-          if (message) {
-            console.log(message);
+
+          if (message)
             messageStore.setMessageToEdit(message);
-          }
           break;
       }
     },
