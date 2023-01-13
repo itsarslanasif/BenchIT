@@ -64,8 +64,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def create_first_bench_channel_participant
-    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
     BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: @bench_channel.id)
+    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
   rescue StandardError
     @bench_channel.destroy
 
