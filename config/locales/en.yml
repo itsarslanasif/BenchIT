@@ -110,8 +110,13 @@ en:
         displayed_on_your_profile: 'This will be displayed on your profile.'
       chat:
         today: 'Today'
+        new: 'New'
         replies: 'replies'
         reacted: 'reacted'
+        reply: 'reply'
+        replies: 'replies'
+        last_reply: 'Last reply'
+        view_thread: 'View thread'
         this_is_the_very_beginning: 'This is the very beginning of the'
         channel: 'channel'
         you: '(you)'
@@ -155,8 +160,7 @@ en:
         selected_channels: 'Selected Channels'
         title: 'Channels'
         create_channel: 'Create a channel'
-        add_channel_dialog:
-          'Channels are where your team communicates. They’re best when
+        add_channel_dialog: 'Channels are where your team communicates. They’re best when
           organized around a topic — #marketing, for example.'
         new_channel_name: 'Name'
         set_channel_private: 'Set Channel Private'
@@ -164,6 +168,8 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        channel_created_success: 'New channel created successfully'
+        channel_created_failure: 'Channel name already exist'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
