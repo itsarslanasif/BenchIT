@@ -227,6 +227,9 @@ en:
         search_by_name: 'Search By Name'
         add_members_modal_title: 'Add members to'
         error_message: 'Member is already present in channel.'
+        members: 'members'
+        member: 'member'
+        dot: '.'
       placeholder:
         email: 'Email'
         phone: 'Phone'
@@ -286,6 +289,10 @@ en:
         last_month: 'Last month'
         the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
+      saved_items:
+        title: 'Add messages and files to come back to later'
+        description: 'Mark your to-dos or save something for another time. Only you can see
+        your saved items, so use them however you’d like.'
     admin:
       title: 'Admin'
       save: 'Save'

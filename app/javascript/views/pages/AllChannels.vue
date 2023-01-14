@@ -15,43 +15,79 @@
               :placeholder="$t('channels.search_by_name_or_desc')"
             />
           </form>
-          <p class="text-small text-gray-900 font-thin">
-            {{ searchedChannels?.length }} {{ $t('channels.result') }}
+          <p class="text-sm text-black-500">
+            {{ searchedChannels?.length }} {{ $t('channels.title') }}
           </p>
         </n-space>
       </div>
     </div>
-    <div class="px-5 py-3">
+
+    <div class="px-6 flex flex-col">
       <div
-        class="hover:bg-slate-100 py-3 rounded-md flex"
-        @mouseover="showButton = true"
-        @mouseleave="showButton = false"
+        class="hover-trigger flex justify-between hover:bg-transparent cursor-pointer py-4 px-2 border-transparent border border-t-1 border-b-0 border-r-0 border-l-0"
         v-for="channel in searchedChannels"
-        :key="channel.id"
+        :key="channel?.id"
       >
-        <div class="w-5/6 px-2 py-3 font-bold relative">
-          #{{ channel.name }}
-        </div>
-        <div class="absolute px-5 py-8 font-thin">
-          {{ channel.description }}
-        </div>
-        <div class="py-3 px-1" v-if="showButton">
-          <n-button>{{ $t('actions.view') }}</n-button>
-        </div>
-        <div
-          class="py-3 px-1"
-          v-if="showButton && isChannelParticipant(channel.profiles)"
-          @click="handleLeave(channel.id)"
-        >
-          <n-button type="error">{{ $t('actions.leave') }}</n-button>
-        </div>
-        <div
-          class="py-3 px-1"
-          @click="handleJoin(channel.id)"
-          v-if="showButton && !isChannelParticipant(channel.profiles)"
-        >
-          <n-button type="success">{{ $t('actions.join') }}</n-button>
-        </div>
+        <span class="flex flex-col">
+          <span class="flex text-black-700">
+            <font-awesome-icon
+              v-if="channel?.is_private"
+              class="text-xs self-center mr-1"
+              icon="fa-lock"
+            />
+            <font-awesome-icon
+              v-else
+              class="text-xs self-center mr-1"
+              icon="fa-hashtag"
+            />
+            <p class="text-base font-semibold self-center">
+              {{ channel?.name }}
+            </p>
+          </span>
+          <span class="flex">
+            <p class="text-black-400 mr-1">
+              {{ channel?.profiles.length }}
+              {{
+                hasOneMember(channel?.profiles)
+                  ? $t('members.member')
+                  : $t('members.members')
+              }}
+            </p>
+            <p class="text-black-400">
+              {{ $t('members.dot') }}
+            </p>
+            <p class="text-black-400 ml-1">
+              {{ channel?.description }}
+            </p>
+          </span>
+        </span>
+
+        <span class="hover-target self-center">
+          <button
+            class="py-1 rounded mx-1 font-medium hover:shadow-inner focus:outline-none bg-white border-black-400 px-4 border"
+            @click="
+              isChannelParticipant(channel?.profiles)
+                ? goToChannel(channel?.id)
+                : null
+            "
+          >
+            {{ $t('actions.view') }}
+          </button>
+          <button
+            class="py-1 rounded mx-1 font-medium hover:shadow-inner focus:outline-none bg-danger hover:bg-dangerHover text-white border-black-400 px-4 border"
+            v-if="isChannelParticipant(channel?.profiles)"
+            @click="handleLeave(channel?.id)"
+          >
+            {{ $t('actions.leave') }}
+          </button>
+          <button
+            class="py-1 rounded mx-1 font-medium hover:shadow-inner focus:outline-none bg-success hover:bg-successHover text-white border-black-400 px-4 border"
+            @click="handleJoin(channel?.id)"
+            v-if="!isChannelParticipant(channel?.profiles)"
+          >
+            {{ $t('actions.join') }}
+          </button>
+        </span>
       </div>
     </div>
   </div>
@@ -67,77 +103,74 @@ import { useRouter } from 'vue-router';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 
 export default {
-  name: 'AllChannels',
-
   components: {
     NInput,
     NSpace,
     NButton,
   },
-
   setup() {
     const term = ref('');
-    const showButton = ref(false);
     const searchedChannels = ref([]);
     const router = useRouter();
-
     const channelStore = useChannelStore();
     const leftPaneStore = useLeftpaneStore();
     const currentProfileStore = useCurrentProfileStore();
     const { channels } = storeToRefs(channelStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
-
     const handleSubmit = async () => {
       searchedChannels.value = await channelStore.searchChannels(term.value);
     };
-
     const handleJoin = async channel_id => {
       await channelStore.joinChannel(channel_id);
       goToChannel(channel_id);
     };
-
     const handleLeave = async channel_id => {
       await channelStore.leaveChannel(channel_id);
       router.push('/');
     };
-
     const goToChannel = channel_id => {
       router.push(`/channels/${channel_id}`);
       if (isMobileView()) {
         leftPaneStore.closeLeftPane();
       }
     };
-
     const isMobileView = () => {
       return window.innerWidth < 1400;
     };
-
     const isChannelParticipant = channel_participants => {
       return channel_participants.some(
         participant => participant.id == currentProfile.value.id
       );
     };
-
     onMounted(() => {
       searchedChannels.value = channels.value;
     });
-
     onBeforeUnmount(() => {
       term.value = null;
-      showButton.value = null;
       searchedChannels.value = null;
     });
-
+    const hasOneMember = channel_members => {
+      return channel_members.length === 1;
+    };
     return {
       term,
-      showButton,
       searchedChannels,
       handleSubmit,
       handleJoin,
       handleLeave,
       goToChannel,
       isChannelParticipant,
+      hasOneMember,
     };
   },
 };
 </script>
+<style scoped>
+.hover-trigger .hover-target {
+  display: none;
+}
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
+}
+</style>

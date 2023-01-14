@@ -79,11 +79,13 @@
                     :class="{ 'ml-12': isSameUser && isSameDayMessage }"
                   />
                 </template>
-                <a :href="attachment.attachment_download_link" download
-                  ><span class="mr-3" @click="downloadFile(attachment)"
-                    ><font-awesome-icon
-                      icon="fa-solid fa-cloud-arrow-down" /></span
-                ></a>
+                <a :href="attachment.attachment_download_link" download>
+                  <span class="mr-3" @click="downloadFile(attachment)">
+                    <font-awesome-icon
+                      icon="fa-solid fa-cloud-arrow-down"
+                    />
+                  </span>
+                </a>
                 <downloadsModal
                   icon="fa-solid fa-share"
                   :actionText="$t('downloadsModal.share_file')"
@@ -184,7 +186,7 @@
         </div>
       </span>
     </div>
-    <div v-if="openEmojiModal" class="absolute right-0 z-50">
+    <div v-if="openEmojiModal" class="float-right mr-4">
       <EmojiPicker :addReaction="addReaction" />
     </div>
   </div>

@@ -32,9 +32,6 @@
     <div class="flex justify-center" v-if="members.length == 0">
       <p>{{ $t('filters.no_results_found') }}</p>
     </div>
-    <div v-if="members.length == 0 && query == ''">
-      {{ searchQuery() }}
-    </div>
   </div>
 </template>
 
