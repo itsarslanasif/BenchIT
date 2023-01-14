@@ -20,7 +20,7 @@
             @click="toggleToday"
           >
             <div>
-              <p class="date hover:bg-slate-50">
+              <p class="date cursor-pointer hover:bg-slate-50">
                 {{ $t('chat.today') }}
               </p>
             </div>
@@ -34,7 +34,7 @@
               />
             </div>
           </n-divider>
-          <n-divider v-else class="text-xs relative">
+          <n-divider v-else class="text-xs relative cursor-pointer">
             <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
               {{ new Date(message.created_at).toDateString() }}
             </p>

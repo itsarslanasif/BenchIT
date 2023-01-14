@@ -30,7 +30,7 @@
               class="cursor-pointer"
               :name="member.username"
               :description="member.description"
-              :img-url="member.image_url"
+              :image_url="member.image_url"
               @click="handleSelect(member)"
             />
           </div>

@@ -53,8 +53,8 @@
                   : $t('members.members')
               }}
             </p>
-            <p class="text-black-400">
-              {{ $t('members.dot') }}
+            <p class="text-black-400 font-bold">
+              {{ $t('channels.dot') }}
             </p>
             <p class="text-black-400 ml-1">
               {{ channel?.description }}

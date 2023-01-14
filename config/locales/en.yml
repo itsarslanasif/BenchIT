@@ -177,6 +177,7 @@ en:
         result: 'result(s)'
         channel_created_success: 'New channel created successfully'
         channel_created_failure: 'Channel name already exist'
+        dot: '·'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -293,6 +294,10 @@ en:
         title: 'Add messages and files to come back to later'
         description: 'Mark your to-dos or save something for another time. Only you can see
         your saved items, so use them however you’d like.'
+      drafts:
+        title: 'Draft messages to send when you’re ready'
+        description: 'Start typing a message anywhere, then find it here. Re-read, revise, and
+        send whenever you’d like.'
     admin:
       title: 'Admin'
       save: 'Save'

@@ -17,7 +17,7 @@
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
     <div
-      class="flex p-1 px-4 relative"
+      class="hover-trigger flex p-1 px-4 hover:bg-transparent relative"
       :class="{
         'bg-yellow-50': currMessage.pinned,
       }"
@@ -40,15 +40,25 @@
             >
               <b>{{ currMessage.sender_name }}</b>
             </p>
-            <p
-              class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
+            <span
+              :class="{
+                'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
+              }"
             >
-              {{
-                isSameUser && isSameDayMessage && !isFirstMessage
-                  ? timeWithoutAMPM
-                  : time
-              }}
-            </p>
+              <p
+                class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
+                :class="{
+                  'hover-target':
+                    isSameUser && isSameDayMessage && !isFirstMessage,
+                }"
+              >
+                {{
+                  isSameUser && isSameDayMessage && !isFirstMessage
+                    ? timeWithoutAMPM
+                    : time
+                }}
+              </p>
+            </span>
             <span
               v-if="isSameUser && isSameDayMessage && !isFirstMessage"
               class="text-black-800 text-sm flex-wrap"
@@ -81,9 +91,7 @@
                 </template>
                 <a :href="attachment.attachment_download_link" download>
                   <span class="mr-3" @click="downloadFile(attachment)">
-                    <font-awesome-icon
-                      icon="fa-solid fa-cloud-arrow-down"
-                    />
+                    <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
                   </span>
                 </a>
                 <downloadsModal
@@ -501,3 +509,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
+}
+</style>
