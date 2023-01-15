@@ -1,41 +1,75 @@
 <template>
   <div class="overflow-auto chatBody" ref="chatBody">
-    <PinnedConversationModel />
-    <div v-for="message in messages" :key="message.id" :id="getDate(message.created_at)">
-      {{ setMessage(message) }}
-      <div v-if="!isSameDayMessage && !message.parent_message_id">
-        <n-divider v-if="isToday" class="text-xs relative" @click="toggleToday">
-          <div>
-            <p class="date hover:bg-slate-50">
-              {{ $t('chat.today') }}
+    <PinnedConversationModal />
+    <ChatDetail />
+    <div
+      v-for="message in messages"
+      :key="message.id"
+      :id="getDate(message.created_at)"
+    >
+      <div :id="message.id">
+        {{ setMessage(message) }}
+        <div
+          v-if="
+            (!isSameDayMessage && !message.parent_message_id) || isFirstMessage
+          "
+        >
+          <n-divider
+            v-if="isToday"
+            class="text-xs relative"
+            @click="toggleToday"
+          >
+            <div>
+              <p class="date hover:bg-slate-50">
+                {{ $t('chat.today') }}
+              </p>
+            </div>
+            <div
+              v-if="jumpToDateTodayToggle"
+              class="absolute top-0 mt-8 w-1/5 z-10"
+            >
+              <JumpToDateVue
+                :scrollToMessageByDate="scrollToMessageByDate"
+                :today="true"
+              />
+            </div>
+          </n-divider>
+          <n-divider v-else class="text-xs relative">
+            <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
+              {{ new Date(message.created_at).toDateString() }}
             </p>
-          </div>
-          <div v-if="jumpToDateTodayToggle" class="absolute top-0 mt-8 w-1/5 z-10">
-            <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :today="true" />
-          </div>
+            <div
+              v-if="jumpToDateToggle && message.id === selectedMessage.id"
+              class="absolute top-0 mt-8 w-1/5 z-10"
+            >
+              <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" />
+            </div>
+          </n-divider>
+        </div>
+        <n-divider
+          v-if="newMessageFlag && oldestUnreadMessageId === message.id"
+          title-placement="right"
+        >
+          <div class="text-primary">{{ $t('chat.new') }}</div>
         </n-divider>
-        <n-divider v-else class="text-xs relative">
-          <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
-            {{ new Date(message.created_at).toDateString() }}
-          </p>
-          <div v-if="jumpToDateToggle && message.id === selectedMessage.id" class="absolute top-0 mt-8 w-1/5 z-10">
-            <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" />
-          </div>
-        </n-divider>
+        <MessageWrapper
+          v-if="!message.parent_message_id"
+          :currMessage="currMessage"
+          :prevMessage="prevMessage"
+        />
       </div>
-      <MessageWrapper v-if="!message.parent_message_id" :currMessage="currMessage" :prevMessage="prevMessage" />
     </div>
   </div>
 </template>
-
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
-import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
+import PinnedConversationModal from '../pinnedConversation/pinnedConversationModal.vue';
 import JumpToDateVue from '../../widgets/JumpToDate.vue';
 import moment from 'moment';
+import ChatDetail from '../../widgets/ChatDetail.vue';
 export default {
   name: 'ChatBody',
   components: {
@@ -43,9 +77,11 @@ export default {
     NDivider,
     NButton,
     NSpace,
-    PinnedConversationModel,
+    PinnedConversationModal,
     JumpToDateVue,
+    ChatDetail,
   },
+  props: ['oldestUnreadMessageId'],
   data() {
     return {
       messages: [],
@@ -53,6 +89,7 @@ export default {
       jumpToDateToggle: false,
       prevMessage: null,
       selectedMessage: {},
+      newMessageFlag: true,
     };
   },
   mounted() {
@@ -73,6 +110,14 @@ export default {
         new Date(this.currMessage?.created_at).toDateString() ===
         new Date(this.prevMessage?.created_at).toDateString()
       );
+    },
+    isFirstMessage() {
+      if (this.messages) {
+        return this.firstMessageId === this.currMessage?.id;
+      }
+    },
+    firstMessageId() {
+      return this.messages[0]?.id;
     },
   },
   setup() {
@@ -131,10 +176,14 @@ export default {
     const message_id = this.$route.params.message_id;
     if (message_id) {
       const message = document.getElementById(message_id);
-      message.scrollIntoView();
-      message.classList.add('highlight');
+      if (message) {
+        message.classList.add('highlight');
+        message.scrollIntoView();
+        return;
+      }
     }
     this.scrollToEnd();
+    this.newMessageFlag = false;
   },
 };
 </script>

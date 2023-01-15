@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="overflow-auto chatBody bg-gray-100">
-      <PinnedConversationModel />
+      <PinnedConversationModal />
       <div v-for="message in messages" :key="message.id" :id="message.id">
         <div class="border border-black-200 m-5">
           <SaveMessageWrapper :currMessage="message" />
@@ -21,14 +21,14 @@
 <script>
 import { getSaveMessages } from '../../../api/save_messages/savemessages.js';
 import SaveMessageWrapper from './SaveMessageWrapper.vue';
-import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
+import PinnedConversationModal from '../pinnedConversation/pinnedConversationModal.vue';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
 
 export default {
   name: 'SaveMessageBody',
   components: {
     SaveMessageWrapper,
-    PinnedConversationModel,
+    PinnedConversationModal,
   },
   setup() {
     const savedItemsStore = useSavedItemsStore();

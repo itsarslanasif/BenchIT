@@ -31,13 +31,13 @@
 
       <button
         @click="saveChanges"
-        class="bg-green-700 text-white mt-8 float-right border px-4 h-9 rounded hover:bg-green-800 focus:outline-none"
+        class="bg-green-700 font-semibold text-white mt-8 float-right border px-4 h-9 rounded hover:bg-green-800 focus:outline-none"
       >
         {{ $t('actions.save_changes') }}
       </button>
       <button
         @click="toggleModal"
-        class="bg-white text-black mt-8 mr-3 float-right border px-4 h-9 rounded hover:bg-transparent focus:outline-none"
+        class="bg-white font-semibold text-black mt-8 mr-3 float-right border px-4 h-9 rounded hover:bg-transparent focus:outline-none"
       >
         {{ $t('actions.cancel') }}
       </button>

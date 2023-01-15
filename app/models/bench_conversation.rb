@@ -2,6 +2,7 @@ class BenchConversation < ApplicationRecord
   belongs_to :conversationable, polymorphic: true
   belongs_to :sender, class_name: 'Profile', optional: true
   has_many :conversation_messages, dependent: :destroy
+  has_many :reactions, through: :conversation_messages
   has_many :draft_messages, dependent: :destroy
   has_many :pins, dependent: :destroy
 
@@ -10,6 +11,14 @@ class BenchConversation < ApplicationRecord
       find_by(conversationable_type: 'Profile', sender_id: receiver_id, conversationable_id: sender_id) ||
       none
   }
+
+  def self.previous_or_create_new_profile_conversation(receiver_id)
+    conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, receiver_id)
+
+    return conversation if conversation.present?
+
+    BenchConversation.create(conversationable_type: 'Profile', conversationable_id: receiver_id, sender_id: Current.profile.id)
+  end
 
   def self.recent_last_conversation
     BenchConversation.where(
