@@ -14,6 +14,9 @@ export const useCurrentProfileStore = () => {
       setProfile(user) {
         this.currentProfile = user.profile;
       },
+      setProfileStatus(status){
+
+      }
     },
   });
   const store = currentProfileStore();

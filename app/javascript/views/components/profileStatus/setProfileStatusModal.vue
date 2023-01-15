@@ -133,6 +133,7 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import { useProfileStatusStore } from '../../../stores/useProfileStatusStore';
 import { ref } from 'vue';
 import { handleDateTime } from '../../../handleDateTime.js';
+
 export default {
   name: 'CreateChannel',
   components: {
@@ -277,9 +278,11 @@ export default {
     },
     onClickSave() {
       this.handleDateTime.convertStringToTimeStamp(
+
         this.formValue.dateTimeString
+
       );
-      console.log(this.handleDateTime.secondsToHoursAndMinutes(360));
+      this.profileStatusStore.setStatusApiCall(this.formValue)
     },
     onClickCancel() {
       this.handleDateTime.incremntTimeStampBySeconds(3600);

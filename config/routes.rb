@@ -65,6 +65,7 @@ Rails.application.routes.draw do
             post :clear_all
           end
         end
+        resources :statuses, only: %i[index create destroy]
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
