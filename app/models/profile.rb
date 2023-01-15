@@ -30,6 +30,7 @@ class Profile < ApplicationRecord
   has_many :recent_statuses, dependent: :destroy
 
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
+  has_many :downloads, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }

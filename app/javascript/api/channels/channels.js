@@ -1,5 +1,15 @@
 import axios from '../../modules/axios';
 
+export const getChannel = async channelId => {
+  return await axios
+    .get(`/v1/bench_channels/${channelId}`, {
+      headers: { Authorization: localStorage.getItem('token') },
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
 export const getChannels = async query => {
   return await axios
     .get(`/v1/bench_channels`, {
@@ -16,7 +26,7 @@ export const getChannels = async query => {
 export const getJoinedChannels = async () => {
   return await axios
     .get(`/v1/bench_channels/joined_channels`, {
-      headers: { Authorization: localStorage.getItem('token') }
+      headers: { Authorization: localStorage.getItem('token') },
     })
     .then(response => {
       return response.data;

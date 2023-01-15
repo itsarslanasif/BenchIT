@@ -22,8 +22,5 @@ export default {
       workspaceStore: WorkspaceStore(),
     };
   },
-  beforeUnmount() {
-    this.workspaceStore = null;
-  },
 };
 </script>
