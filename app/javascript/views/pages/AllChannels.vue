@@ -1,143 +1,84 @@
 <template>
-  <div>
-    <div class="sticky w-full h-auto bg-blue-500 divide-y divide-slate-200">
-      <div class="px-5 py-3 text-xl font-bold">
+  <div class="flex flex-col h-full w-full">
+    <div class=" w-full flex flex-col header-style">
+      <div class="px-5 py-2 text-xl font-bold border-b border-gray-200">
         {{ $t('channels.all_channels') }}
       </div>
-      <div class="px-5 py-3">
-        <n-space vertical class="w-full">
+      <div class="px-5 py-2">
+        <n-space vertical>
           <form @submit.prevent="handleSubmit">
-            <n-input
-              type="text"
-              size="large"
-              v-model:value="term"
-              @keyup.enter="handleSubmit"
-              :placeholder="$t('channels.search_by_name_or_desc')"
-            />
+            <n-input type="text" size="large" v-model:value="term" @keyup.enter="handleSubmit"
+              :placeholder="$t('channels.search_by_name_or_desc')">
+              <template #prefix>
+                <n-icon :component="SearchOutline" />
+              </template>
+            </n-input>
           </form>
-          <p class="text-small text-gray-900 font-thin">
+          <p class="text-small text-gray-900 py-1 font-thin border-b border-gray-200">
             {{ searchedChannels?.length }} {{ $t('channels.result') }}
           </p>
         </n-space>
       </div>
     </div>
-    <div class="px-5 py-3">
-      <div
-        class="hover:bg-slate-100 py-3 rounded-md flex"
-        @mouseover="showButton = true"
-        @mouseleave="showButton = false"
-        v-for="channel in searchedChannels"
-        :key="channel.id"
-      >
-        <div class="w-5/6 px-2 py-3 font-bold relative">
-          #{{ channel.name }}
-        </div>
-        <div class="absolute px-5 py-8 font-thin">
-          {{ channel.description }}
-        </div>
-        <div class="py-3 px-1" v-if="showButton">
-          <n-button>{{ $t('actions.view') }}</n-button>
-        </div>
-        <div
-          class="py-3 px-1"
-          v-if="showButton && isChannelParticipant(channel.profiles)"
-          @click="handleLeave(channel.id)"
-        >
-          <n-button type="error">{{ $t('actions.leave') }}</n-button>
-        </div>
-        <div
-          class="py-3 px-1"
-          @click="handleJoin(channel.id)"
-          v-if="showButton && !isChannelParticipant(channel.profiles)"
-        >
-          <n-button type="success">{{ $t('actions.join') }}</n-button>
-        </div>
+    <div class="px-5 body-style overflow-y-auto flex flex-col border-gray-200">
+      <div v-for="channel in searchedChannels" :key="channel.id">
+        <ChannelList :channelName="channel.name" :channelDescription="channel.description"
+          :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { NInput, NSpace, NButton } from 'naive-ui';
+import { ref, computed, onBeforeUnmount } from 'vue';
+import { NInput, NSpace, NIcon } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
-import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { storeToRefs } from 'pinia';
-import { useRouter } from 'vue-router';
-import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import ChannelList from '../containers/ChannelList.vue'
+import { SearchOutline } from "@vicons/ionicons5";
+
 
 export default {
   name: 'AllChannels',
 
   components: {
+    ChannelList,
     NInput,
     NSpace,
-    NButton,
+    NIcon,
   },
 
   setup() {
     const term = ref('');
-    const showButton = ref(false);
-    const router = useRouter();
-
     const channelStore = useChannelStore();
-    const leftPaneStore = useLeftpaneStore();
-    const currentProfileStore = useCurrentProfileStore();
+    channelStore.index(term.value)
     const { channels } = storeToRefs(channelStore);
-    const { currentProfile } = storeToRefs(currentProfileStore);
-    const searchedChannels = computed(()=> channels.value)
+    const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
-      searchedChannels.value = await channelStore.searchChannels(term.value);
+      searchedChannels.value = await channelStore.searchChannels(term.value)
     };
-
-    const handleJoin = async channel_id => {
-      await channelStore.joinChannel(channel_id);
-      goToChannel(channel_id);
-    };
-
-    const handleLeave = async channel_id => {
-      await channelStore.leaveChannel(channel_id);
-      router.push('/');
-    };
-
-    const goToChannel = channel_id => {
-      router.push(`/channels/${channel_id}`);
-      if (isMobileView()) {
-        leftPaneStore.closeLeftPane();
-      }
-    };
-
-    const isMobileView = () => {
-      return window.innerWidth < 1400;
-    };
-
-    const isChannelParticipant = channel_participants => {
-      return channel_participants.some(
-        participant => participant?.id == currentProfile.value.id
-      );
-    };
-
-    onMounted(() => {
-      channelStore.index(term.value);
-    });
 
     onBeforeUnmount(() => {
       term.value = null;
-      showButton.value = null;
       searchedChannels.value = null;
     });
 
     return {
       term,
-      showButton,
       searchedChannels,
+      SearchOutline,
       handleSubmit,
-      handleJoin,
-      handleLeave,
-      goToChannel,
-      isChannelParticipant,
     };
   },
 };
 </script>
+<style scoped>
+.header-style {
+  flex: 0.1;
+}
+
+.body-style {
+  flex: 0.9;
+}
+</style>

@@ -22,9 +22,8 @@ export const useChannelStore = () => {
     actions: {
       async index() {
         try {
-          let test = await getChannels();
-          this.channels = [...test]
-          console.log("My channels", this.channels);
+          let newChannels = await getChannels();
+          this.channels = [...newChannels]
           this.joinedChannels = await getJoinedChannels();
           this.sortChannelsList();
         } catch (e) {
@@ -64,7 +63,6 @@ export const useChannelStore = () => {
       async joinChannel(channel_id) {
         try {
           const res = await memberJoinChannel(channel_id);
-          // this.channels.push(res.data.channel);
           this.joinedChannels.push(res.data.channel);
           this.sortChannelsList();
         } catch (e) {
