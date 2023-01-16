@@ -301,15 +301,20 @@ export default {
       this.formValue.text_status = selectedOption.text;
       this.formValue.emoji_status = selectedOption.emoji;
       this.formValue.dateTimeString = 'Choose date and time';
+      this.formValue.clear_status_after= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
+      this.dateTimeStamp= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
       this.secondStep=true;
       this.showDateTimeInputFields=true;
-      console.log("....",this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after))
-      if(selectedOption.clear_after!="don't clear")
+      let kk=this.handleDateTime.secondsToHoursAndMinutes(selectedOption.clear_after)
+      console.log(kk);
+      if(kk=='30 minutes' || kk=='4 hours' || kk=='This Week' ||kk=='1 hours'    )
       {
+        this.showDateTimeInputFields=false;
         this.dateTimeStamp = ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
         this.formValue.clear_status_after=this.dateTimeStamp
+        this.formValue.dateTimeString= this.handleDateTime.secondsToHoursAndMinutes(selectedOption.clear_after)
       }
-      else{
+      else if( selectedOption.clear_after=="don't clear"){
         this.showDateTimeInputFields=false;
         this.formValue.dateTimeString= "don't clear";
         this.formValue.clear_status_after= "don't clear";

@@ -21,7 +21,7 @@
               {{ user?.status?.emoji }}
             </p>
           </template>
-          <span> {{ user?.status?.text }} </span>
+          <span> {{ user?.status?.text }} <span class="text-black-500">until</span> {{timeDifference(user?.status?.clear_after)  }}  </span>
         </n-tooltip>
         <div
           v-if="unreadDetails?.messages.length"
@@ -38,6 +38,7 @@ import { useUnreadStore } from '../../../stores/useUnreadStore';
 import { storeToRefs } from 'pinia';
 import { unreadMessagesCount } from '../../../modules/unreadMessages';
 import { NAvatar, NTooltip } from 'naive-ui';
+import moment from 'moment';
 export default {
   props: ['sortedDMList', 'isOwnChat', 'goToChat'],
   components: { NAvatar, NTooltip },
@@ -62,6 +63,12 @@ export default {
       );
       return this.unreadDetails?.messages.length;
     },
+    timeDifference(time){
+      if(!time)
+         return moment().endOf('month').fromNow();
+      else
+         return moment(time).calendar();
+    }
   },
 };
 </script>

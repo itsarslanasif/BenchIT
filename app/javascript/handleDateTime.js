@@ -35,9 +35,10 @@ export class handleDateTime {
 
   secondsToHoursAndMinutes(totalSeconds) {
     if (totalSeconds == "don't clear")
-      return "  -don't clear"
+      return "  don't clear"
       if (totalSeconds == "based on your Google Calender")
-      return "  - based on your Google Calender"
+      return "  based on your Google Calender"
+    totalSeconds=+totalSeconds+60;
     var day = 86400;
     var hour = 3600;
     var minute = 60;
@@ -46,16 +47,17 @@ export class handleDateTime {
     var minutesout = Math.floor((totalSeconds - daysout * day - hoursout * hour) / minute);
 
     if (daysout >= 1) {
-      if (daysout == 6 && hoursout == 23 && minutesout == 59)
-        return "-This Week"
+      if (daysout == 7)
+        return "This Week"
     } else if (hoursout >= 1)
-      return " - " + hoursout + " h " + minutesout + " m"
+      return  hoursout + " hours"
     else
-      return " - " + minutesout + " m"
+      return minutesout + " minutes"
   }
   incremntTimeStampBySeconds(seconds) {
     this.now = new Date();
     this.dateTime = new Date(+this.now + seconds * 1000);
     return this.dateTime
   }
+
 }

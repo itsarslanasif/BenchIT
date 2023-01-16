@@ -11,7 +11,7 @@
     <span
       @click="onSelect(status)"
       class="text-slate-300 cursor-pointer w-3/12"
-      >{{ handleDateTime.secondsToHoursAndMinutes(status.clear_after)}}</span
+      >  -{{ handleDateTime.secondsToHoursAndMinutes(status.clear_after)}}</span
     >
     <span v-if="isRecent" class=" flex-grow mx-3 cursor-pointer">
       <span class="float-right hover-target">X</span>
