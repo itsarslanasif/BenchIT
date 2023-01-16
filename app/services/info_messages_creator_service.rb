@@ -6,8 +6,6 @@ class InfoMessagesCreatorService
     @is_info = true
   end
 
-  def call; end
-
   def join_public_channel(name)
     ConversationMessage.create(
       content: "#{name} joined this channel.",
