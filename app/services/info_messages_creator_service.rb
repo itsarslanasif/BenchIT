@@ -6,9 +6,9 @@ class InfoMessagesCreatorService
     @is_info = true
   end
 
-  def join_public_channel(name)
+  def join_public_channel(_name)
     ConversationMessage.create(
-      content: "#{name} joined this channel.",
+      content: 'joined this channel.',
       is_threaded: @is_threaded,
       bench_conversation_id: @bench_conversation_id,
       sender_id: @sender_id,
