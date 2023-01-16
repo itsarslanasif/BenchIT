@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -101,6 +101,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
   end
 
+  create_table "downloads", force: :cascade do |t|
+    t.integer "profile_id", null: false
+    t.string "file_name", null: false
+    t.string "file_link", null: false
+    t.string "file_download_link", null: false
+    t.string "file_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "draft_messages", force: :cascade do |t|
     t.text "content", null: false
     t.bigint "bench_conversation_id"
@@ -145,6 +155,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bench_conversation_id"], name: "index_pins_on_bench_conversation_id"
+    t.index ["conversation_message_id", "bench_conversation_id"], name: "index_pins_on_conversation_message_id_and_bench_conversation_id", unique: true
     t.index ["conversation_message_id"], name: "index_pins_on_conversation_message_id"
     t.index ["profile_id"], name: "index_pins_on_profile_id"
   end
@@ -182,6 +193,17 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
   create_table "saved_items", force: :cascade do |t|
     t.integer "profile_id"
     t.integer "conversation_message_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.string "text", null: false
+    t.string "emoji", null: false
+    t.string "clear_after", null: false
+    t.integer "profile_id"
+    t.integer "type", null: false
+    t.integer "workspace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -238,6 +260,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_12_30_015159) do
   add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
+  add_foreign_key "downloads", "profiles"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
   add_foreign_key "pins", "bench_conversations"

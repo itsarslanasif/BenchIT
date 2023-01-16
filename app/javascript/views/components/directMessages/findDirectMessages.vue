@@ -37,6 +37,9 @@
 import memberCardDm from './memberCardDm.vue';
 import { getMembers } from '../../../api/members/membersApi';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 export default {
   mounted() {
     this.searchQuery();
@@ -56,30 +59,38 @@ export default {
     };
   },
   setup() {
-    const selectedDm = useDirectMessagesStore();
-    return { selectedDm };
+    const directMessageStore = useDirectMessagesStore();
+    const messagesStore = useMessageStore();
+    const leftPaneStore = useLeftpaneStore();
+    const { selectedChat, setSelectedChat } = storeToRefs(messagesStore);
+    return { directMessageStore, selectedChat, setSelectedChat, leftPaneStore };
   },
   methods: {
     goToChat(chatURL) {
       this.$router.push(chatURL);
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      }
+    },
+    isMobileView() {
+      return window.innerWidth < 1400;
     },
     handleSelect(member) {
-      this.selectedDm.appendToDirectMessagesList(member);
-      this.selectedDm.setSelectedDm(member);
+      this.directMessageStore.appendToDirectMessagesList(member);
+      this.setSelectedChat(member);
       this.goToChat(`/profiles/${member.id}`);
     },
     async searchQuery() {
       try {
         this.members = await getMembers(
-        this.CurrentWorkspaceId,
-        this.query,
-        this.sort
-      );
+          this.CurrentWorkspaceId,
+          this.query,
+          this.sort
+        );
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     },
   },
 };
 </script>
-
