@@ -8,7 +8,16 @@
       class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
     >
       <n-button>
+
         <div class="flex avatar absolute">
+          <n-tooltip v-if="profile_Status" trigger="hover">
+          <template #trigger>
+            <div class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent  self-baseline text-sm ">
+             <p> {{profile_Status.emoji}} </p>
+            </div>
+          </template>
+          <span> {{ profile_Status.emoji}} <span class="text-black-500">until</span> {{statusClearAfterTime(profile_Status.clear_after)}}  </span>
+        </n-tooltip>
           <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
         </div>
         <div
@@ -29,7 +38,7 @@
 </template>
 
 <script>
-import { NDropdown, NAvatar, NText } from 'naive-ui';
+import { NDropdown, NAvatar, NText, NTooltip  } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
@@ -39,9 +48,10 @@ import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
+import moment from 'moment';
 
 export default {
-  components: { NDropdown, NAvatar, DownloadModal, SetProfileStatusModal },
+  components: { NDropdown, NAvatar, DownloadModal, SetProfileStatusModal,NTooltip },
   setup() {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
@@ -165,10 +175,19 @@ export default {
     profile_avatar() {
       return this.profile.image_url;
     },
+    profile_Status() {
+      return this.profile?.status
+    },
   },
   methods: {
     handleStatusSelect() {
       this.profileStatusStore.toggleProfileStatusPopUp();
+    },
+    statusClearAfterTime(time){
+      if(!time)
+         return moment().endOf('month').fromNow();
+      else
+         return moment(time).calendar();
     },
     handleSelect(key) {
       switch (key) {
