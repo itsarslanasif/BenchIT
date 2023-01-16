@@ -1,5 +1,7 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
+  require 'activerecord-import'
   before_action :set_bench_channel, only: %i[index create join_public_channel]
+  before_action :check_profile_ids, only: %i[create]
   before_action :check_channel_participants, only: %i[create]
   before_action :check_workspace, only: %i[join_public_channel]
   before_action :check_already_joined_channel, only: %i[join_public_channel]
@@ -19,9 +21,10 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def create
     ActiveRecord::Base.transaction do
-      params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
+      records_to_insert = params[:profile_ids].map { |profile_id| { bench_channel_id: @channel.id, profile_id: profile_id, permission: true } }
+      ChannelParticipant.import records_to_insert, validate: true
       InfoMessagesCreatorService.new(@channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
-      render status: :created, json: { members: @users_joined }
+      render json: { status: :created }
     end
   end
 
@@ -30,7 +33,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@channel.bench_conversation.id).join_public_channel
-        render json: { success: 'Channel joined successfully', channel: @channel, status: :created }
+        render json: { status: :created }
       else
         render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
       end
@@ -64,5 +67,11 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     return render json: { error: 'One or Many Users already participant of this channel', status: :unprocessable_entity } if @channel_members.present?
 
     @users_joined = Profile.where(id: params[:profile_ids]).pluck(:username)
+  end
+
+  def check_profile_ids
+    return if (Current.workspace.profile_ids & params[:profile_ids]).eql?(params[:profile_ids])
+
+    render json: { error: 'Profiles cannot be found', status: :unprocessable_entity }
   end
 end

@@ -1,6 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, except: %i[index create joined_channels]
-  before_action :set_channel_participant, :set_left_on, only: %i[leave]
+  before_action :set_channel_participant, :set_left_on, only: %i[leave_channel]
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
@@ -45,11 +45,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
                  end
   end
 
-  def leave
+  def leave_channel
     ActiveRecord::Base.transaction do
       if @channel_participant.destroy
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
-        render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
+        render json: { status: :ok }
       else
         render json: { message: "Unable to leave ##{@bench_channel.name}." }, status: :unprocessable_entity
       end
