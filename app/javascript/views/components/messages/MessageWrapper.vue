@@ -17,7 +17,7 @@
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
     <div
-      class="hover-trigger flex p-1 px-4 hover:bg-transparent relative"
+      class="flex p-1 px-4 hover:bg-transparent relative"
       :class="{
         'bg-yellow-50': currMessage.pinned,
       }"
@@ -47,10 +47,6 @@
             >
               <p
                 class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
-                :class="{
-                  'hover-target':
-                    isSameUser && isSameDayMessage && !isFirstMessage,
-                }"
               >
                 {{
                   isSameUser && isSameDayMessage && !isFirstMessage
@@ -509,13 +505,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.hover-trigger .hover-target {
-  display: none;
-}
-
-.hover-trigger:hover .hover-target {
-  display: inline;
-  cursor: pointer;
-}
-</style>
