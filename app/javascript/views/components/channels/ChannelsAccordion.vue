@@ -20,6 +20,7 @@ import ChannelList from './ChannelList.vue';
 import ChannelItem from './ChannelItem.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
   components: { AccordionList, AccordionItem, CreateChannel, ChannelItem, ChannelList },
@@ -32,6 +33,7 @@ export default {
     this.channels = null;
   },
   setup() {
+    const leftPaneStore = useLeftpaneStore();
     const channelStore = useChannelStore();
     const { channels } = storeToRefs(channelStore);
     const messagesStore = useMessageStore();

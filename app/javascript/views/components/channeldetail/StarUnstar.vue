@@ -1,10 +1,10 @@
 <template>
-  <div @click="MarkStar">
+  <div>
     <div v-if="this.currentChannel.favourite_id">
-      <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
+      <span @click="MarkStar"> <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
     </div>
     <div v-else>
-      <i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i>
+      <span @click="MarkStar"><i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
     </div>
   </div>
 </template>

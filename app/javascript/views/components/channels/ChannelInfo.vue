@@ -1,14 +1,31 @@
 <template>
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div @click="OpenChannelDetailModal(true)"
-        class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer">
-        <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
-        <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>
-        <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
+      <div>
+        <div class="flex mx-3 px-1 my-2 gap-2">
+          <div
+            v-if="!leftPaneStore.getLeftpaneFlag"
+            @click="leftPaneStore.openLeftPane"
+            class="text-2xl px-3 mt-1 hover:bg-slate-50 rounded cursor-pointer"
+          >
+            <font-awesome-icon icon="fa-regular fa-rectangle-list" />
+          </div>
+          <div
+            @click="OpenChannelDetailModal(true)"
+            class="flex overflow-x-hidden text-ellipsis px-3 hover:bg-slate-50 rounded cursor-pointer"
+          >
+            <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
+            <p class="text-xl font-bold self-center mr-1">{{ channel.name }}</p>
+            <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
+          </div>
+        </div>
       </div>
-      <ChannelMembersInfoVue :showMemberClickListener="this.OpenChannelDetailMemberModal" :channelId="channel.id"
-        :channelName="channel.name" />
+
+      <ChannelMembersInfoVue
+        :showMemberClickListener="this.OpenChannelDetailMemberModal"
+        :channelId="channel.id"
+        :channelName="channel.name"
+      />
     </div>
   </div>
   <ChannelDetailModal v-if="modalOpen" :currentChannel="this.currentChannel" :detailsopen="this.OpenChannelDetailModal"
@@ -21,6 +38,7 @@ import ChannelMembersInfoVue from './ChannelMembersInfo.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 
 export default {
   name: 'ChannelInfo',
@@ -30,7 +48,8 @@ export default {
     const ChannelDetailStore = useChannelDetailStore();
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
-    return { ChannelDetailStore, joinedChannels, channelStore };
+    const leftPaneStore = useLeftpaneStore();
+    return { ChannelDetailStore, joinedChannels, channelStore, leftPaneStore };
   },
   data() {
     return {

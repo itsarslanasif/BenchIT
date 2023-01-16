@@ -4,13 +4,15 @@ import { unstar } from '../../api/starunstar/unstar.js';
 export const markStar = (currentChannel, channelStore) => {
   try {
     if (!currentChannel.favourite_id) {
-      channelStore.addStarredChannel(currentChannel);
-      channelStore.removeJoinChannel(currentChannel);
       star({
         favourable_type: 'BenchChannel',
         favourable_id: currentChannel.id,
       }).then(response => {
-        currentChannel.favourite_id = response.data.favourite.id;
+        if(response.data.success=="Channel successfully added to favourites") {
+          channelStore.addStarredChannel(currentChannel);
+          channelStore.removeJoinChannel(currentChannel);
+          currentChannel.favourite_id = response.data.favourite.id;
+        }
       });
     }
     else {

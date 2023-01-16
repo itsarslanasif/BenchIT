@@ -1,6 +1,9 @@
 class Api::V1::PinsController < Api::ApiController
+  include MemberShip
+
   before_action :find_conversation, only: %i[index create]
   before_action :set_pin, only: %i[destroy]
+  before_action :authenticate_pin, only: %i[index create destroy]
 
   def index
     @pins = @conversation.pins
@@ -31,5 +34,10 @@ class Api::V1::PinsController < Api::ApiController
 
   def set_pin
     @pin = Pin.find(params[:id])
+    @conversation = @pin.bench_conversation
+  end
+
+  def authenticate_pin
+    check_membership(@conversation)
   end
 end
