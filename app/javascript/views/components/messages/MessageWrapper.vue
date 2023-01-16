@@ -56,8 +56,9 @@
               class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
             >
               {{
-                (isSameUser && isSameDayMessage && !isFirstMessage) ||
                 currMessage.is_info
+                  ? time
+                  : isSameUser && isSameDayMessage && !isFirstMessage
                   ? timeWithoutAMPM
                   : time
               }}
