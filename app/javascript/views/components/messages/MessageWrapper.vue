@@ -130,7 +130,10 @@
             @click="addReaction(emoji)"
             :class="[
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
-              { 'ml-12 -mr-10': isSameUser && isSameDayMessage },
+              {
+                'ml-12 -mr-10':
+                  !currMessage.is_info && isSameUser && isSameDayMessage,
+              },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
