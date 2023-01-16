@@ -48,7 +48,6 @@ export class handleDateTime {
     if (daysout >= 1) {
       if (daysout == 6 && hoursout == 23 && minutesout == 59)
         return "-This Week"
-      return "-Custom"
     } else if (hoursout >= 1)
       return " - " + hoursout + " h " + minutesout + " m"
     else
