@@ -1,10 +1,10 @@
 <template>
   <div>
     <div v-if="this.currentChannel.favourite_id">
-      <span @click="MarkStar"> <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
+      <span @click="markChannel"> <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
     </div>
     <div v-else>
-      <span @click="MarkStar"><i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
+      <span @click="markChannel"><i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
     </div>
   </div>
 </template>
@@ -25,7 +25,7 @@ export default {
     };
   },
   methods: {
-    MarkStar() {
+    markChannel() {
       markStar(this.currentChannel, this.channelStore);
     },
   },

@@ -11,7 +11,7 @@
             <font-awesome-icon icon="fa-regular fa-rectangle-list" />
           </div>
           <div
-            @click="OpenChannelDetailModal(true)"
+            @click="openChannelDetailModal(true)"
             class="flex overflow-x-hidden text-ellipsis px-3 hover:bg-slate-50 rounded cursor-pointer"
           >
             <i class="fas fa-hashtag self-center fa-lg mr-1"></i>
@@ -22,13 +22,13 @@
       </div>
 
       <ChannelMembersInfoVue
-        :showMemberClickListener="this.OpenChannelDetailMemberModal"
+        :showMemberClickListener="this.openChannelDetailModal"
         :channelId="channel.id"
         :channelName="channel.name"
       />
     </div>
   </div>
-  <ChannelDetailModal v-if="modalOpen" :currentChannel="this.currentChannel" :detailsopen="this.OpenChannelDetailModal"
+  <ChannelDetailModal v-if="modalOpen" :currentChannel="this.currentChannel" :detailsopen="this.openChannelDetailModal"
     class="m-auto absolute inset-x-0" />
 </template>
 
@@ -59,7 +59,7 @@ export default {
   },
 
   methods: {
-    OpenChannelDetailModal(open) {
+    openChannelDetailModal(open) {
       this.modalOpen = open;
       this.ChannelDetailStore.setSlectedOption('about');
       this.getCurrentChannel();
