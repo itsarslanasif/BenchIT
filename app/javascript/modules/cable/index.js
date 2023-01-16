@@ -3,7 +3,7 @@ import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useThreadStore } from '../../stores/useThreadStore';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 
-const createMessage = async (data, messageStore, threadStore) => {
+const createMessage = (data, messageStore, threadStore) => {
   try {
     const messages = messageStore.getMessages;
 
@@ -36,7 +36,7 @@ const createMessage = async (data, messageStore, threadStore) => {
   }
 };
 
-const updateMessage = async (data, messageStore, threadStore) => {
+const updateMessage = (data, messageStore, threadStore) => {
   try {
     const messages = messageStore.getMessages;
 
@@ -69,7 +69,7 @@ const updateMessage = async (data, messageStore, threadStore) => {
   }
 };
 
-const deleteMessage = async (data, messageStore, threadStore) => {
+const deleteMessage = (data, messageStore, threadStore) => {
   try {
     const messages = messageStore.getMessages;
 
@@ -107,7 +107,7 @@ const deleteMessage = async (data, messageStore, threadStore) => {
   }
 };
 
-const createReaction = async (data, messageStore) => {
+const createReaction = (data, messageStore) => {
   try {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
@@ -130,7 +130,7 @@ const createReaction = async (data, messageStore) => {
   }
 };
 
-const deleteReaction = async (data, messageStore) => {
+const deleteReaction = (data, messageStore) => {
   try {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
@@ -149,7 +149,7 @@ const deleteReaction = async (data, messageStore) => {
   }
 };
 
-const pinMessage = async (data, messageStore, threadStore) => {
+const pinMessage = (data, messageStore, threadStore) => {
   const pinsStore = usePinnedConversation();
   try {
     const messages = messageStore.getMessages;
@@ -191,7 +191,7 @@ const pinMessage = async (data, messageStore, threadStore) => {
   }
 };
 
-const unPinMessage = async (data, messageStore, threadStore) => {
+const unPinMessage = (data, messageStore, threadStore) => {
   const pinsStore = usePinnedConversation();
   try {
     const messages = messageStore.getMessages;
@@ -227,12 +227,12 @@ const unPinMessage = async (data, messageStore, threadStore) => {
   }
 };
 
-const ChannelParticipantCreate = async data => {
+const ChannelParticipantCreate = data => {
   const channelDetailsStore = useChannelDetailStore();
   channelDetailsStore.addMember(data);
 };
 
-const ChannelParticipantDelete = async data => {
+const ChannelParticipantDelete = data => {
   const channelDetailsStore = useChannelDetailStore();
   channelDetailsStore.removeMember(data);
 };
