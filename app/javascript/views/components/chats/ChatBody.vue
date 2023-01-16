@@ -106,7 +106,6 @@ export default {
   beforeUnmount() {
     this.messages = this.prevMessage = this.selectedMessage = [];
     this.hasMoreMessages = true;
-    this.observer.disconnect();
   },
   computed: {
     isToday() {
@@ -234,9 +233,8 @@ export default {
     }
     this.newMessageFlag = false;
     this.scrollToEnd()
-    this.$nextTick(() => {
-          this.restoreScrollPosition();
-        });
+    this.restoreScrollPosition();
+
   },
 };
 </script>
