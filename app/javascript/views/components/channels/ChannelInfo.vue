@@ -22,7 +22,7 @@
       </div>
 
       <ChannelMembersInfoVue
-        :showMemberClickListener="this.openChannelDetailModal"
+        :showMemberClickListener="this.openChannelDetailMemberModal"
         :channelId="channel.id"
         :channelName="channel.name"
       />
@@ -65,7 +65,7 @@ export default {
       this.getCurrentChannel();
       this.channelStore.setCurrentChannel(this.currentChannel);
     },
-    OpenChannelDetailMemberModal(open) {
+    openChannelDetailMemberModal(open) {
       this.ChannelDetailStore.setSlectedOption('members');
       this.modalOpen = open;
     },
