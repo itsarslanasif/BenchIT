@@ -57,7 +57,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def bench_channel_messages
     @conversation = @bench_channel.bench_conversation
-    @pagy, @messages = pagination_for_chat_messages(@bench_channel.bench_conversation.id, params[:page])
+    @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
     return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
 
@@ -66,7 +66,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def group_messages
     @conversation = @group.bench_conversation
-    @pagy, @messages = pagination_for_chat_messages(@group.bench_conversation.id, params[:page])
+    @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
     return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
 
