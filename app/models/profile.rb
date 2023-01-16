@@ -11,6 +11,7 @@ class Profile < ApplicationRecord
   end
 
   after_commit :add_default_image, on: %i[create]
+  after_commit :broadcast_profile
 
   belongs_to :user
   belongs_to :workspace
@@ -26,7 +27,6 @@ class Profile < ApplicationRecord
   has_many :draft_messages, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
-  has_one :profile_status, dependent: :destroy
   has_many :recent_statuses, dependent: :destroy
 
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
@@ -75,5 +75,39 @@ class Profile < ApplicationRecord
 
   def groups
     Group.where('profile_ids @> ARRAY[?]::integer[]', [id])
+  end
+
+  def broadcast_profile
+    result = {
+      content: profile_content,
+      type: 'Profile'
+    }
+    result[:action] = if destroyed?
+                        'Delete'
+                      elsif created_at.eql?(updated_at)
+                        'Create'
+                      else
+                        'Update'
+                      end
+
+    BroadcastMessageService.new(result, 1).send_notification_ws(Current.workspace.profile_ids)
+  end
+
+  def profile_content
+    {
+      id: id,
+      username: username,
+      description: description,
+      workspace_id: workspace_id,
+      user_id: user_id,
+      display_name: display_name,
+      pronounce_name: pronounce_name,
+      role: role,
+      title: title,
+      status: { text: text_status, emoji: emoji_status },
+      contact_info: { email: user.email, phone: phone },
+      about_me: { skype: skype },
+      local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p')
+    }
   end
 end

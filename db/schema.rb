@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_15_162656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -176,6 +176,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.string "phone", default: "", null: false
     t.string "skype", default: ""
     t.string "time_zone", default: "UTC", null: false
+    t.datetime "clear_status_after"
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"

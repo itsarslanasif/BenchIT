@@ -58,6 +58,10 @@ Rails.application.routes.draw do
             collection do
               get :previous_direct_messages
             end
+            member do
+              post :set_status
+              post :clear_status
+            end
           end
         end
         resources :downloads, only: %i[index create destroy] do
@@ -65,7 +69,7 @@ Rails.application.routes.draw do
             post :clear_all
           end
         end
-        resources :statuses, only: %i[index create destroy]
+        resources :statuses, only: %i[index destroy]
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
