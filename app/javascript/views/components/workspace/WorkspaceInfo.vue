@@ -64,9 +64,6 @@ export default {
       workspaceStore: WorkspaceStore(),
     };
   },
-  beforeUnmount() {
-    this.workspaceStore = null;
-  },
   methods: {
     selectImage() {
       this.$refs.fileInput.click();

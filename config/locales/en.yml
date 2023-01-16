@@ -51,6 +51,13 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      downloadsModal:
+        download: 'Download'
+        share_file: 'Share file...'
+        downloads: 'Downloads'
+        clear_downloads: 'Clear Downloads'
+        keep_track: 'Keep track of your downloads'
+        downloaded_files: 'Files you download to your computer will appear here.'
       email:
         gmail: '@gmail.com'
       pinconversation:
@@ -110,8 +117,27 @@ en:
         displayed_on_your_profile: 'This will be displayed on your profile.'
       chat:
         today: 'Today'
+        new: 'New'
         replies: 'replies'
         reacted: 'reacted'
+        reply: 'reply'
+        replies: 'replies'
+        last_reply: 'Last reply'
+        view_thread: 'View thread'
+        this_is_the_very_beginning: 'This is the very beginning of the'
+        channel: 'channel'
+        you: '(you)'
+        active: '🟢'
+        away: '⚫'
+        created_this_channel_on: 'created this channel on'
+        edit_description: 'Edit description'
+        add_people: 'Add people'
+        this_space_is_just_for_you: "This space is just for you."
+        own_chat_description: 'Jot down notes, list your to-dos, or
+          keep links and files handy. You can also talk to yourself here, but please
+          bear in mind you’ll have to supply both sides of the conversation.'
+        this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
+          messages and share files with"
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
@@ -142,8 +168,7 @@ en:
         selected_channels: 'Selected Channels'
         title: 'Channels'
         create_channel: 'Create a channel'
-        add_channel_dialog:
-          'Channels are where your team communicates. They’re best when
+        add_channel_dialog: 'Channels are where your team communicates. They’re best when
           organized around a topic — #marketing, for example.'
         new_channel_name: 'Name'
         set_channel_private: 'Set Channel Private'
@@ -151,6 +176,8 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        channel_created_success: 'New channel created successfully'
+        channel_created_failure: 'Channel name already exist'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'

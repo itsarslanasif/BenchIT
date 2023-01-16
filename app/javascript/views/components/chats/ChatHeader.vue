@@ -28,7 +28,6 @@ import axios from '../../../modules/axios/index';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import PinnedConversationModelVue from '../pinnedConversation/pinnedConversationModel.vue';
 import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
@@ -44,7 +43,6 @@ export default {
     NSpin,
     Spinner,
     PinnedConversation,
-    PinnedConversationModelVue,
     ChannelInfo,
     UserChatInfo,
   },
@@ -84,6 +82,9 @@ export default {
       pinnedConversationStore,
       conversationType,
     };
+  },
+  beforeUnmount() {
+    this.pinnedConversationStore.closeModal();
   },
   methods: {
     onClickChild(value) {

@@ -60,8 +60,13 @@ Rails.application.routes.draw do
             end
           end
         end
-
-        resources :bookmarks, only: %i[create index]
+        resources :downloads, only: %i[index create destroy] do
+          collection do
+            post :clear_all
+          end
+        end
+        resources :pins, only: %i[index create destroy]
+        resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
         resources :channel_participants, only: %i[create index] do
           collection do

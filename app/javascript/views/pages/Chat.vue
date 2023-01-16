@@ -5,7 +5,7 @@
         <ChatHeader />
       </div>
       <div v-if="messages" class="break-words h-1/2">
-        <ChatBody />
+        <ChatBody :oldestUnreadMessageId="oldestUnreadMessageId" />
       </div>
       <div class="px-3">
         <TextEditorVue :sendMessage="sendMessage" />
@@ -26,7 +26,7 @@ import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { useConversationInfoStore } from '../../stores/useConversationInfoStore';
 import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
-
+import { useUnreadStore } from '../../stores/useUnreadStore';
 export default {
   name: 'Chat',
   components: {
@@ -52,11 +52,17 @@ export default {
     }
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
+    const unreadStore = useUnreadStore();
     const conversation_type = getIndexByParams(1);
     const conversationInfoStore = useConversationInfoStore();
     const id = getIndexByParams(2);
     const { messages } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
+    const oldestUnreadMessageId = unreadStore.getOldestMessageId(
+      conversation_type,
+      id
+    );
+    unreadStore.markedChatAsRead(conversation_type, id);
     messageStore.index(conversation_type, id);
     conversationInfoStore.index(conversation_type, id)
 
@@ -64,6 +70,7 @@ export default {
       messages,
       conversation_type,
       currentUser,
+      oldestUnreadMessageId,
       id,
     };
   },

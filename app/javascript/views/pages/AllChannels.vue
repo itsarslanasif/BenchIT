@@ -7,8 +7,13 @@
       <div class="px-5 py-3">
         <n-space vertical class="w-full">
           <form @submit.prevent="handleSubmit">
-            <n-input type="text" size="large" v-model:value="term" @keyup.enter="handleSubmit"
-              :placeholder="$t('channels.search_by_name_or_desc')" />
+            <n-input
+              type="text"
+              size="large"
+              v-model:value="term"
+              @keyup.enter="handleSubmit"
+              :placeholder="$t('channels.search_by_name_or_desc')"
+            />
           </form>
           <p class="text-small text-gray-900 font-thin">
             {{ searchedChannels?.length }} {{ $t('channels.result') }}
@@ -17,8 +22,13 @@
       </div>
     </div>
     <div class="px-5 py-3">
-      <div class="hover:bg-slate-100 py-3 rounded-md flex" @mouseover="showButton = true"
-        @mouseleave="showButton = false" v-for="channel in searchedChannels" :key="channel.id">
+      <div
+        class="hover:bg-slate-100 py-3 rounded-md flex"
+        @mouseover="showButton = true"
+        @mouseleave="showButton = false"
+        v-for="channel in searchedChannels"
+        :key="channel.id"
+      >
         <div class="w-5/6 px-2 py-3 font-bold relative">
           #{{ channel.name }}
         </div>
@@ -28,12 +38,18 @@
         <div class="py-3 px-1" v-if="showButton">
           <n-button>{{ $t('actions.view') }}</n-button>
         </div>
-        <div class="py-3 px-1" v-if="showButton && isChannelParticipant(channel.profiles)"
-          @click="handleLeave(channel.id)">
+        <div
+          class="py-3 px-1"
+          v-if="showButton && isChannelParticipant(channel.profiles)"
+          @click="handleLeave(channel.id)"
+        >
           <n-button type="error">{{ $t('actions.leave') }}</n-button>
         </div>
-        <div class="py-3 px-1" @click="handleJoin(channel.id)"
-          v-if="showButton && !isChannelParticipant(channel.profiles)">
+        <div
+          class="py-3 px-1"
+          @click="handleJoin(channel.id)"
+          v-if="showButton && !isChannelParticipant(channel.profiles)"
+        >
           <n-button type="success">{{ $t('actions.join') }}</n-button>
         </div>
       </div>
@@ -45,6 +61,7 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { NInput, NSpace, NButton } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
+import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { storeToRefs } from 'pinia';
 import { useRouter } from 'vue-router';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
@@ -65,6 +82,7 @@ export default {
     const router = useRouter();
 
     const channelStore = useChannelStore();
+    const leftPaneStore = useLeftpaneStore();
     const currentProfileStore = useCurrentProfileStore();
     const { channels } = storeToRefs(channelStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
@@ -78,13 +96,20 @@ export default {
       goToChannel(channel_id);
     };
 
-    const handleLeave = async (channel_id) => {
+    const handleLeave = async channel_id => {
       await channelStore.leaveChannel(channel_id);
       router.push('/');
-    }
+    };
 
     const goToChannel = channel_id => {
       router.push(`/channels/${channel_id}`);
+      if (isMobileView()) {
+        leftPaneStore.closeLeftPane();
+      }
+    };
+
+    const isMobileView = () => {
+      return window.innerWidth < 1400;
     };
 
     const isChannelParticipant = channel_participants => {
@@ -98,10 +123,10 @@ export default {
     });
 
     onBeforeUnmount(() => {
-      term.value = null
-      showButton.value = null
-      searchedChannels.value = null
-    })
+      term.value = null;
+      showButton.value = null;
+      searchedChannels.value = null;
+    });
 
     return {
       term,

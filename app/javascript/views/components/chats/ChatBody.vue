@@ -1,6 +1,7 @@
 <template>
   <div class="overflow-auto chatBody" ref="chatBody">
-    <PinnedConversationModel />
+    <PinnedConversationModal />
+    <ChatDetail />
     <div
       v-for="message in messages"
       :key="message.id"
@@ -8,7 +9,11 @@
     >
       <div :id="message.id">
         {{ setMessage(message) }}
-        <div v-if="!isSameDayMessage && !message.parent_message_id">
+        <div
+          v-if="
+            (!isSameDayMessage && !message.parent_message_id) || isFirstMessage
+          "
+        >
           <n-divider
             v-if="isToday"
             class="text-xs relative"
@@ -41,6 +46,12 @@
             </div>
           </n-divider>
         </div>
+        <n-divider
+          v-if="newMessageFlag && oldestUnreadMessageId === message.id"
+          title-placement="right"
+        >
+          <div class="text-primary">{{ $t('chat.new') }}</div>
+        </n-divider>
         <MessageWrapper
           v-if="!message.parent_message_id"
           :currMessage="currMessage"
@@ -50,15 +61,15 @@
     </div>
   </div>
 </template>
-
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
-import PinnedConversationModel from '../pinnedConversation/pinnedConversationModel.vue';
+import PinnedConversationModal from '../pinnedConversation/pinnedConversationModal.vue';
 import JumpToDateVue from '../../widgets/JumpToDate.vue';
 import moment from 'moment';
+import ChatDetail from '../../widgets/ChatDetail.vue';
 export default {
   name: 'ChatBody',
   components: {
@@ -66,9 +77,11 @@ export default {
     NDivider,
     NButton,
     NSpace,
-    PinnedConversationModel,
+    PinnedConversationModal,
     JumpToDateVue,
+    ChatDetail,
   },
+  props: ['oldestUnreadMessageId'],
   data() {
     return {
       messages: [],
@@ -76,6 +89,7 @@ export default {
       jumpToDateToggle: false,
       prevMessage: null,
       selectedMessage: {},
+      newMessageFlag: true,
     };
   },
   mounted() {
@@ -96,6 +110,14 @@ export default {
         new Date(this.currMessage?.created_at).toDateString() ===
         new Date(this.prevMessage?.created_at).toDateString()
       );
+    },
+    isFirstMessage() {
+      if (this.messages) {
+        return this.firstMessageId === this.currMessage?.id;
+      }
+    },
+    firstMessageId() {
+      return this.messages[0]?.id;
     },
   },
   setup() {
@@ -154,10 +176,14 @@ export default {
     const message_id = this.$route.params.message_id;
     if (message_id) {
       const message = document.getElementById(message_id);
-      message.scrollIntoView();
-      message.classList.add('highlight');
+      if (message) {
+        message.classList.add('highlight');
+        message.scrollIntoView();
+        return;
+      }
     }
     this.scrollToEnd();
+    this.newMessageFlag = false;
   },
 };
 </script>

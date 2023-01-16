@@ -8,7 +8,7 @@
           size="medium"
           trigger="click"
           :message="message"
-          :options="options"
+          :options="Options.getOptions()"
           @mouseleave="action"
           @select="handleSelect($event, message, pinnedConversationStore)"
         >
@@ -37,10 +37,12 @@
 </template>
 
 <script>
-import options from './options.js';
+import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { deleteMessage } from '../../api/messages';
+import { pinMessage } from '../../api/messages/pinnedMessages';
+import { unPinMessage } from '../../api/messages/pinnedMessages';
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -56,13 +58,33 @@ export default {
     const pinnedConversationStore = usePinnedConversation();
     return { pinnedConversationStore };
   },
+  beforeMount() {
+    if (this.message) {
+      this.Options = new Options(this.message.pinned);
+    }
+  },
   data() {
     return {
-      options,
+      Options: '',
     };
   },
   methods: {
     handleSelect(key, message, pinnedConversationStore) {
+      const getIndexByParams = param => {
+        return window.location.pathname.split('/')[param];
+      };
+      const getConversationType = type => {
+        switch (type) {
+          case 'channels':
+            return 'BenchChannel';
+          case 'profiles':
+            return 'Profile';
+          case 'groups':
+            return 'Group';
+          default:
+            return;
+        }
+      };
       switch (key) {
         case 'copy-link':
           this.copyLinkToMessage(message);
@@ -71,16 +93,29 @@ export default {
           deleteMessage(message.id);
           break;
         case 'pin-to-this-conversation':
-          if (!pinnedConversationStore.isPinned(message)) {
-            pinnedConversationStore.pinMessage(message);
-          } else {
-            pinnedConversationStore.unPinMessage(message);
-            if (
-              pinnedConversationStore.getCount == 0 &&
-              pinnedConversationStore.getPinToggle
-            ) {
-              pinnedConversationStore.togglePin();
-            }
+          const conversation_type = getIndexByParams(1);
+          const conversation_id = getIndexByParams(2);
+          try {
+            pinMessage(
+              getConversationType(conversation_type),
+              conversation_id,
+              message.id
+            );
+          } catch (e) {
+            console.error(e);
+          }
+          break;
+        case 'un-pin-from-this-conversation':
+          try {
+            unPinMessage(message.pin.id);
+          } catch (e) {
+            console.error(e);
+          }
+          if (
+            pinnedConversationStore.getCount == 0 &&
+            pinnedConversationStore.getPinToggle
+          ) {
+            pinnedConversationStore.togglePin();
           }
           break;
       }
