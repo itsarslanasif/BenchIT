@@ -84,8 +84,8 @@ export default {
     },
     handleSelect(member) {
       this.directMessageStore.appendToDirectMessagesList(member);
-      this.setSelectedChat(member);
       this.goToChat(`/profiles/${member.id}`);
+      this.setSelectedChat(member);
     },
     async searchQuery() {
       try {
