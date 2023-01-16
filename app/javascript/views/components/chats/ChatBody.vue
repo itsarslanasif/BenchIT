@@ -106,7 +106,6 @@ export default {
   beforeUnmount() {
     this.messages = this.prevMessage = this.selectedMessage = [];
     this.hasMoreMessages = true;
-    this.observer.disconnect();
   },
   computed: {
     isToday() {
@@ -220,7 +219,7 @@ export default {
   }, 0);
 
     }
-  
+
   },
   updated() {
     const message_id = this.$route.params.message_id;
