@@ -21,10 +21,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
 
-    if @bench_channel.save
-      create_first_bench_channel_participant
-    else
-      render json: { status: false, message: 'There was an error creating the channel.', errors: @bench_channel.errors }
+    ActiveRecord::Base.transaction do
+      if @bench_channel.save
+        create_first_bench_channel_participant
+      else
+        render json: { status: false, message: 'There was an error creating the channel.', errors: @bench_channel.errors }
+      end
     end
   end
 
@@ -44,13 +46,14 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def leave
-    @channel_participant.destroy
-
-    ConversationMessage.create(content: "left ##{@bench_channel.name}", is_threaded: false,
-                               bench_conversation_id: @channel.bench_conversation.id, sender_id: Current.profile.id, is_info: true)
-    render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
-  rescue ActiveRecord::RecordNotDestroyed
-    render json: { message: 'Error while leaving channel!' }, status: :unprocessable_entity
+    ActiveRecord::Base.transaction do
+      if @channel_participant.destroy
+        InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
+        render json: { message: "You successfully leaves ##{@bench_channel.name}!" }, status: :ok
+      else
+        render json: { message: "Unable to leave ##{@bench_channel.name}." }, status: :unprocessable_entity
+      end
+    end
   end
 
   def joined_channels
@@ -66,10 +69,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def create_first_bench_channel_participant
     BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: @bench_channel.id)
     @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
-  rescue StandardError
-    @bench_channel.destroy
-
-    render json: { status: false, message: 'There was an error creating the channel.' }
   end
 
   def set_bench_channel

@@ -18,26 +18,22 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def create
-    params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
-    remaining_users = @users_joined.reject { |user| user.eql?(@users_joined[0]) }
-    ConversationMessage.create(
-      content: "added by #{Current.profile.username}#{remaining_users.empty? ? '.' : " along with #{remaining_users.join(',')}."}",
-      is_threaded: false,
-      bench_conversation_id: @channel.bench_conversation.id,
-      sender_id: Profile.find_by!(username: @users_joined[0]).id, is_info: true
-    )
-    render status: :created, json: { members: @users_joined }
+    ActiveRecord::Base.transaction do
+      params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
+      InfoMessagesCreatorService.new(@channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
+      render status: :created, json: { members: @users_joined }
+    end
   end
 
   def join_public_channel
     @channel_participant = ChannelParticipant.new(bench_channel_id: @channel.id, profile_id: Current.profile.id, permission: true)
-
-    if @channel_participant.save
-      ConversationMessage.create(content: "#{Current.profile.username} joined this channel.", is_threaded: false,
-                                 bench_conversation_id: @channel.bench_conversation.id, sender_id: Current.profile.id, is_info: true)
-      render json: { success: 'Channel joined successfully', channel: @channel, status: :created }
-    else
-      render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
+    ActiveRecord::Base.transaction do
+      if @channel_participant.save
+        InfoMessagesCreatorService.new(@channel.bench_conversation.id).join_public_channel(Current.profile.username)
+        render json: { success: 'Channel joined successfully', channel: @channel, status: :created }
+      else
+        render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
+      end
     end
   end
 
