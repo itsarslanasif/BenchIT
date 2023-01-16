@@ -8,7 +8,8 @@ const useUserStatusStore = defineStore('useUserStatusStore', {
   },
   getters: {
     status: state => state.status
-  }
+  },
+
 })
 
 export default useUserStatusStore

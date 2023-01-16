@@ -70,7 +70,7 @@
         </div>
         <div class="p-2">
           <n-button
-
+            v-if="!profile.status"
             @click="onClickSave"
             class="bg-success text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
           >
@@ -86,7 +86,7 @@
 
           <n-button
             v-if="profile.status"
-            @click="onClickCancel"
+            @click="onClickClearStatus"
             class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
           >
             clear status
@@ -99,8 +99,8 @@
         <div class="m-0 relative mt-5">
           <div class="mb-6">
             <p class="font-bold text-black-500">Recent</p>
-            <div v-for="status in recentStatuses" :key="status.id">
-              <statusRow :status="status" :selectOption="onSelectStatus" />
+            <div v-for="status in profileStatusStore.recent_statuses" :key="status.id">
+              <statusRow :status="status" :selectOption="onSelectStatus" :recent="true" />
             </div>
           </div>
         </div>
@@ -108,8 +108,8 @@
         <div class="m-0 relative mt-5">
           <div class="mb-6">
             <p class="font-bold text-black-500">For Devsinc</p>
-            <div v-for="status in workspaceStatuses" :key="status.id">
-              <statusRow :status="status" :selectOption="this.onSelectStatus" />
+            <div v-for="status in profileStatusStore.workspace_statuses" :key="status.id">
+              <statusRow :status="status" :selectOption="this.onSelectStatus" :recent="false"  />
             </div>
           </div>
         </div>
@@ -146,6 +146,9 @@ import { handleDateTime } from '../../../handleDateTime.js';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { setProfileStatus } from '../../../api/profiles/profileStatus';
+import { clearStatus } from '../../../api/profiles/profileStatus';
+import { getRecentStatuses } from '../../../api/profiles/profileStatus';
+
 
 
 export default {
@@ -161,6 +164,12 @@ export default {
     NDropdown,
     NModal,
     NTimePicker,
+  },
+  mounted(){
+    getRecentStatuses().then((response=>{
+      this.profileStatusStore.setRecentStatus(response);
+      console.log(response)
+    }))
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
@@ -223,60 +232,11 @@ export default {
           key: 'Choose date and time',
         },
       ],
-      recentStatuses: [
-        {
-          id: 1,
-          emoji: '🌏',
-          text: 'AFkasdasdasdadasd',
-          clear_after: 3600,
-          dateTimeString: 'Today',
-          recent: true,
-        },
-        {
-          id: 2,
-          emoji: '🍑',
-          text: 'Having_funasdasdasdasd',
-          clear_after: 9600,
-          dateTimeString: 'Today',
-          recent: true,
-        },
-        {
-          id: 3,
-          emoji: '🎃',
-          text: 'On_leaveasdasdasdasd',
-          clear_after: 360,
-          dateTimeString: 'Today',
-          recent: true,
-        },
-      ],
-      workspaceStatuses: [
-        {
-          id: 1,
-          emoji: '🍉',
-          text: 'Luncasdasdh',
-          clear_after: 3600,
-          recent: false,
-        },
-        {
-          id: 2,
-          emoji: '🍇',
-          text: 'dinnsadadser',
-          clear_after: 12000,
-          recent: false,
-        },
-        {
-          id: 3,
-          emoji: '🌏',
-          text: 'vocatasdasdion',
-          clear_after: 1600,
-          recent: false,
-        },
-      ],
       automaticallyUpdates: {
         id: 1,
-        emoji: '🍉',
-        text: 'Lunch',
-        clear_after: 1183135260000,
+        emoji: '📆',
+        text: 'In meeting',
+        clear_after: 'based on your Google Calender',
         recent: false,
       },
     };
@@ -287,7 +247,15 @@ export default {
       this.secondStep = true;
       this.formValue.text = this.profile?.status?.text
       this.formValue.emoji = this.profile?.status?.emoji
-      this.clear_after=this.profile?.status?.clear_after
+      if(this.profile?.status?.clear_after){
+      this.showDateTimeInputFields = true;
+      this.formValue.dateTimeString = 'Choose date and time';
+      this.dateTimeStamp=  ref(new Date(this.profile?.status?.clear_after));
+      }
+      else{
+        this.showDateTimeInputFields = false;
+        this.formValue.dateTimeString = "don't clear";
+      }
      }
     },
   methods: {
@@ -303,32 +271,35 @@ export default {
       this.toggleEmojiModal();
     },
     onSelectClearAfterOption(key) {
-      this.formValue.dateTimeString = String(key);
+      this.formValue.dateTimeString =  String(key);
+      this.formValue.clear_after=this.handleDateTime.convertStringToTimeStamp(String(key))
+      console.log(this.handleDateTime.convertStringToTimeStamp(String(key)))
       this.onSelectTimeDate();
     },
     onClickSave() {
-      // this.handleDateTime.convertStringToTimeStamp(
-
-      //   this.formValue.dateTimeString
-
-      // );
+      console.log("savinnnnnnnnnnnnn",this.formValue.clear_after)
       let obj={
         "text_status":this.formValue.text,
         "emoji_status":this.formValue.emoji,
-        "clear_status_after":"2023-01-06 19:41:00"
+        "clear_status_after":this.formValue.clear_after
     }
+
       setProfileStatus(this.workspace.id,this.profile.id,obj).then(
           (response) => {
-            console.log("andar aya ha ",response.status,this.profile.status)
             this.currentProfileStore.setProfileStatus(response.status)
           },)
-      // this.profileStatusStore.setStatusApiCall(this.workspace.id,this.profile.id,this.formValue)
       this.profileStatusStore.toggleProfileStatusPopUp()
     },
     onClickCancel() {
       this.profileStatusStore.toggleProfileStatusPopUp()
     },
-    onClickClearStatus() {},
+    onClickClearStatus() {
+      clearStatus(this.workspace.id,this.profile.id).then(
+          (response) => {
+            this.currentProfileStore.setProfileStatus(null)
+          },)
+      this.profileStatusStore.toggleProfileStatusPopUp()
+    },
     onSelectStatus(selectedOption) {
       this.formValue.text = selectedOption.text;
       this.formValue.emoji = selectedOption.emoji;
@@ -336,7 +307,17 @@ export default {
       this.secondStep=true;
       this.showDateTimeInputFields=true;
       console.log("....",this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after))
-      this.dateTimeStamp = ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
+      if(selectedOption.clear_after!="don't clear")
+      {
+        this.dateTimeStamp = ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
+        this.formValue.clear_after=this.dateTimeStamp
+      }
+      else{
+        this.showDateTimeInputFields=false;
+        this.formValue.dateTimeString= "don't clear";
+        this.formValue.clear_after= "don't clear";
+
+      }
     },
     onSelectTimeDate() {
       this.showDateTimeInputFields =

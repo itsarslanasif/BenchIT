@@ -9,6 +9,8 @@ export const useProfileStatusStore = defineStore('ProfileStatusStore', {
   state: () => ({
     showProfileStatusPopUp: false,
     showProfileStatusPopUpSubModel:false,
+    recent_statuses:[],
+    workspace_statuses:[],
   }),
   actions: {
     async getChannelMembers(query, bench_channel_id) {
@@ -18,6 +20,10 @@ export const useProfileStatusStore = defineStore('ProfileStatusStore', {
       this.showProfileStatusPopUp = !this.showProfileStatusPopUp;
       console.log("closeing                k")
     },
+     setRecentStatus(response){
+      this.recent_statuses=response.recent_statuses
+      this.workspace_statuses=response.workspace_statuses
+    }
     // setStatusApiCall(currentWorkspaceId,currentProfileId,payload){
     //   let obj={
     //     "text_status":payload.text,

@@ -1,8 +1,8 @@
 export class handleDateTime {
   constructor() {
-    this.now=new Date();
+    this.now = new Date();
     this.dateTime = new Date();
-    this.dontClear=false;
+    this.dontClear = false;
   }
   convertStringToTimeStamp(time) {
     this.now = new Date();
@@ -12,8 +12,8 @@ export class handleDateTime {
         this.dateTime.setTime(this.now.getTime() + 30 * 60 * 1000);
         break;
       case "Don't clear":
-        this.dontClear=true
-          break;
+        this.dontClear = true
+        break;
       case '1 hour':
         this.dateTime.setTime(this.now.getTime() + 60 * 60 * 1000);
         break;
@@ -27,29 +27,36 @@ export class handleDateTime {
         this.dateTime.setTime(this.now.setHours(24, 0, 0, 0));
         break;
     }
-    if( this.dontClear){
-      console.log("Don't Clear")
-      return "Don't Clear"
+    if (this.dontClear) {
+      return "don't clear"
     }
-    console.log( this.dateTime)
-    return  this.dateTime
+    return this.dateTime
   }
 
   secondsToHoursAndMinutes(totalSeconds) {
-    const totalMinutes = Math.floor(totalSeconds / 60);
-    const hours = Math.floor(totalMinutes / 60);
-    const minutes = totalMinutes % 60;
-    if (hours > 1) {
-      return "- " + hours + " hours"
-    } else if (hours == 1) {
-      return "- " + hours + " hour"
-    } else {
-      return "- " + minutes + " minutes"
-    }
+    if (totalSeconds == "don't clear")
+      return "  -don't clear"
+      if (totalSeconds == "based on your Google Calender")
+      return "  - based on your Google Calender"
+    var day = 86400;
+    var hour = 3600;
+    var minute = 60;
+    var daysout = Math.floor(totalSeconds / day);
+    var hoursout = Math.floor((totalSeconds - daysout * day) / hour);
+    var minutesout = Math.floor((totalSeconds - daysout * day - hoursout * hour) / minute);
+
+    if (daysout >= 1) {
+      if (daysout == 6 && hoursout == 23 && minutesout == 59)
+        return "-This Week"
+      return "-Custom"
+    } else if (hoursout >= 1)
+      return " - " + hoursout + " h " + minutesout + " m"
+    else
+      return " - " + minutesout + " m"
   }
-  incremntTimeStampBySeconds(seconds){
+  incremntTimeStampBySeconds(seconds) {
     this.now = new Date();
-    this.dateTime=new Date(+this.now + seconds * 1000);
+    this.dateTime = new Date(+this.now + seconds * 1000);
     return this.dateTime
   }
 }

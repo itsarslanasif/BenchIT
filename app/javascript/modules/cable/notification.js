@@ -2,6 +2,10 @@ import {
   useUnreadStore
 } from '../../stores/useUnreadStore';
 
+import {
+  useDirectMessagesStore
+} from '../../stores/useDirectMessagesStore';
+
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
   const getIndexByParams = param => {
@@ -31,7 +35,9 @@ const deleteMessage = data => {
 
 const updateProfileStatus = data => {
   console.log("action Cable", data)
-  
+  const dmStore = useDirectMessagesStore();
+  dmStore.updateProfileStatus(data)
+
 }
 
 const notificationActions = {

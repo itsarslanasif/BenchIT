@@ -13,7 +13,7 @@
       class="text-slate-300 cursor-pointer w-3/12"
       >{{ handleDateTime.secondsToHoursAndMinutes(status.clear_after)}}</span
     >
-    <span v-if="status.recent" class=" flex-grow mx-3 cursor-pointer">
+    <span v-if="recent" class=" flex-grow mx-3 cursor-pointer">
       <span class="float-right hover-target">X</span>
     </span>
   </div>
@@ -24,7 +24,7 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import { handleDateTime } from '../../../handleDateTime.js';
 export default {
   components: { EmojiPicker },
-  props: ['status', 'selectOption'],
+  props: ['status', 'selectOption','recent'],
   data() {
     return {
       handleDateTime: new handleDateTime(),
@@ -33,7 +33,6 @@ export default {
       emoji: '👍',
       text: 'AFKsdadassdccccdsknjfansfjanj',
       time: '- 24 hour',
-      recent: true,
     };
   },
   methods: {
