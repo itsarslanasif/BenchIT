@@ -4,6 +4,7 @@ import { deleteMessage } from '../api/messages';
 import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
+import { decryption } from '../modules/crypto/crypto';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -36,8 +37,9 @@ export const useMessageStore = () => {
           id
         );
         if (conversation_type === 'profiles') {
+          const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
           this.selectedChat = await getUserProfile(
-            JSON.parse(sessionStorage.getItem('currentWorkspace')).id,
+            currentWorkspace.id,
             id
           );
         } else if (conversation_type === 'channels') {

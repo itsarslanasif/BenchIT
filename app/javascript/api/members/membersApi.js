@@ -1,8 +1,9 @@
 import axios from '../../modules/axios/index';
+import { getHeaders } from '../../modules/auth';
 
 export const getMembers = async (workspace, query, sort) => {
   let result = axios.get(`/v1/workspaces/${workspace}/profiles`, {
-    headers: { Authorization: localStorage.getItem('token') },
+    headers: getHeaders(),
     params: {
       workspace: workspace,
       query: query,
@@ -19,6 +20,6 @@ export const addMemberstoChannel = async (channel_id, members) => {
       bench_channel_id: channel_id,
       profile_ids: members,
     },
-    { headers: { Authorization: localStorage.getItem('token') } }
+    { headers: getHeaders() }
   );
 };
