@@ -1,4 +1,3 @@
-# json.partial! 'api/v1/shared/partials/messages', messages: @messages
 json.messages @messages do |message|
   json.partial! 'api/v1/shared/partials/message', message: message
 end

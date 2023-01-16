@@ -219,7 +219,7 @@ export default {
   }, 0);
 
     }
-  
+
   },
   updated() {
     const message_id = this.$route.params.message_id;
