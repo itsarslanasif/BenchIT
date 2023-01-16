@@ -1,39 +1,9 @@
 <template>
-  <div v-if="this.currMessage.is_info">
-    <div class="flex p-1 px-4 relative hover:bg-transparent">
-      <user-profile-modal
-        :profile_id="currMessage.sender_id"
-        :sender_avatar="currMessage.sender_avatar"
-      />
-      <span class="message">
-        <div class="ml-1">
-          <span class="items-center flex text-black-800 text-lg m-0">
-            <p
-              @click="showUserProfile"
-              class="mr-1 text-sm hover:underline cursor-pointer"
-            >
-              <b>{{ currMessage.sender_name }}</b>
-            </p>
-            <p
-              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
-            >
-              {{ time }}
-            </p>
-          </span>
-          <span
-            class="text-black-600 text-sm flex-wrap"
-            v-html="currMessage.content"
-          />
-        </div>
-      </span>
-    </div>
-  </div>
   <div
-    v-else
     class="py-1"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
-    <div v-if="currMessage.pinned">
+    <div v-if="!currMessage.info && currMessage.pinned">
       <span
         class="pl-4 items-center text-black-800 text-xs flex bg-yellow-50 relative"
       >
@@ -54,7 +24,14 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="!isSameUser || !isSameDayMessage || isFirstMessage">
+      <template
+        v-if="
+          !isSameUser ||
+          !isSameDayMessage ||
+          isFirstMessage ||
+          currMessage.is_info
+        "
+      >
         <user-profile-modal
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
@@ -65,7 +42,12 @@
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
               @click="showUserProfile"
-              v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
+              v-if="
+                !isSameUser ||
+                !isSameDayMessage ||
+                isFirstMessage ||
+                currMessage.is_info
+              "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
@@ -74,23 +56,38 @@
               class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
             >
               {{
-                isSameUser && isSameDayMessage && !isFirstMessage
+                (isSameUser && isSameDayMessage && !isFirstMessage) ||
+                currMessage.is_info
                   ? timeWithoutAMPM
                   : time
               }}
             </p>
             <span
-              v-if="isSameUser && isSameDayMessage && !isFirstMessage"
+              v-if="
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage &&
+                !currMessage.is_info
+              "
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
           </span>
           <span
-            v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
-            class="text-black-800 text-sm flex-wrap"
+            v-if="
+              !isSameUser ||
+              !isSameDayMessage ||
+              isFirstMessage ||
+              currMessage.is_info
+            "
+            :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
+            class="text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          <div v-if="currMessage.attachments" class="flex gap-2">
+          <div
+            v-if="!currMessage.info && currMessage.attachments"
+            class="flex gap-2"
+          >
             <div
               v-for="attachment in currMessage.attachments"
               :key="attachment.id"
@@ -163,7 +160,9 @@
           </div>
         </template>
         <reply-and-thread-button
-          v-if="currMessage?.replies?.length > 0 && !inThread"
+          v-if="
+            !currMessage.info && currMessage?.replies?.length > 0 && !inThread
+          "
           :currMessage="currMessage"
           :isSameDayMessage="isSameDayMessage"
           :isSameUser="isSameUser"
@@ -190,7 +189,7 @@
             :action="setEmojiModal"
           />
           <EmojiModalButton
-            v-if="!currMessage.parent_message_id"
+            v-if="!currMessage.parent_message_id && !currMessage.is_info"
             icon="fa-solid fa-comment-dots"
             :actionText="$t('emojiModalButton.reply_in_thread')"
             :action="toggleThread"
