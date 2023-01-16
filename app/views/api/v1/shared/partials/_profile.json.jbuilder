@@ -11,6 +11,7 @@ json.title profile.title
 json.status do
   json.text profile.text_status
   json.emoji profile.emoji_status
+  json.clear_after profile.clear_status_after
 end
 json.contact_info do
   json.email profile.user.email

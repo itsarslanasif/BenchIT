@@ -90,7 +90,7 @@ class Profile < ApplicationRecord
                         'Update'
                       end
 
-  BroadcastMessageService.new(result, 1).send_notification_ws(Current.workspace.profile_ids)
+    BroadcastMessageService.new(result, 1).send_notification_ws(workspace.profile_ids)
   end
 
   def profile_content
@@ -104,7 +104,7 @@ class Profile < ApplicationRecord
       pronounce_name: pronounce_name,
       role: role,
       title: title,
-      status: { text: text_status, emoji: emoji_status },
+      status: { text: text_status, emoji: emoji_status, clear_after: clear_status_after },
       contact_info: { email: user.email, phone: phone },
       about_me: { skype: skype },
       local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p')
