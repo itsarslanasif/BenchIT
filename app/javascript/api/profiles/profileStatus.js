@@ -1,8 +1,8 @@
 import axios from '../../modules/axios/index';
 
-export const setProfileStatus = async statusPayload => {
+export const setProfileStatus = async (currentWorkspaceID,currentProfileID,statusPayload) => {
   return await axios
-    .post(`/v1/statuses`,statusPayload, {
+    .post(`/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/set_status`,statusPayload, {
       headers: {
         Authorization: localStorage.getItem('token')
       },

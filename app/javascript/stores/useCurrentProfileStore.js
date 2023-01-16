@@ -1,4 +1,7 @@
-import { defineStore } from 'pinia';
+import {
+  defineStore
+} from 'pinia';
+
 
 export const useCurrentProfileStore = () => {
   const currentProfileStore = defineStore('currentProfileStore', {
@@ -14,8 +17,9 @@ export const useCurrentProfileStore = () => {
       setProfile(user) {
         this.currentProfile = user.profile;
       },
-      setProfileStatus(status){
-
+      setProfileStatus(status) {
+        this.currentProfile.status = status
+        sessionStorage.setItem('currentProfile', JSON.stringify(this.currentProfile))
       }
     },
   });

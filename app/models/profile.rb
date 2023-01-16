@@ -90,7 +90,7 @@ class Profile < ApplicationRecord
                         'Update'
                       end
 
-    BroadcastMessageService.new(result, 1).send_notification_ws(Current.workspace.profile_ids)
+  BroadcastMessageService.new(result, 1).send_notification_ws(Current.workspace.profile_ids)
   end
 
   def profile_content

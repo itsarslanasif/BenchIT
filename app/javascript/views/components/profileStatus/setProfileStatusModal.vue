@@ -70,16 +70,26 @@
         </div>
         <div class="p-2">
           <n-button
+
             @click="onClickSave"
             class="bg-success text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
           >
             {{ $t('actions.save') }}
           </n-button>
           <n-button
+           v-if="!profile.status"
             @click="onClickCancel"
             class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
           >
             {{ $t('actions.cancel') }}
+          </n-button>
+
+          <n-button
+            v-if="profile.status"
+            @click="onClickCancel"
+            class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
+          >
+            clear status
           </n-button>
         </div>
       </div>
@@ -133,6 +143,10 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import { useProfileStatusStore } from '../../../stores/useProfileStatusStore';
 import { ref } from 'vue';
 import { handleDateTime } from '../../../handleDateTime.js';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { setProfileStatus } from '../../../api/profiles/profileStatus';
+
 
 export default {
   name: 'CreateChannel',
@@ -150,7 +164,12 @@ export default {
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
+    const currentProfile=useCurrentProfileStore();
+    const currentWorkspace=useCurrentWorkspaceStore();
     return {
+      currentProfileStore:currentProfile,
+      profile: currentProfile.getCurrentProfile,
+      workspace:currentWorkspace.getCurrentWorkspace,
       profileStatusStore,
       dateTimeStamp: ref(null),
     };
@@ -262,7 +281,18 @@ export default {
       },
     };
   },
+  beforeMount() {
+
+     if(this.profile.status){
+      this.secondStep = true;
+      this.formValue.text = this.profile?.status?.text
+      this.formValue.emoji = this.profile?.status?.emoji
+      this.clear_after=this.profile?.status?.clear_after
+     }
+    },
   methods: {
+
+
     addReaction(emoji) {
       this.formValue.emoji = emoji.i;
       this.setEmojiModal();
@@ -277,16 +307,26 @@ export default {
       this.onSelectTimeDate();
     },
     onClickSave() {
-      this.handleDateTime.convertStringToTimeStamp(
+      // this.handleDateTime.convertStringToTimeStamp(
 
-        this.formValue.dateTimeString
+      //   this.formValue.dateTimeString
 
-      );
-      this.profileStatusStore.setStatusApiCall(this.formValue)
+      // );
+      let obj={
+        "text_status":this.formValue.text,
+        "emoji_status":this.formValue.emoji,
+        "clear_status_after":"2023-01-06 19:41:00"
+    }
+      setProfileStatus(this.workspace.id,this.profile.id,obj).then(
+          (response) => {
+            console.log("andar aya ha ",response.status,this.profile.status)
+            this.currentProfileStore.setProfileStatus(response.status)
+          },)
+      // this.profileStatusStore.setStatusApiCall(this.workspace.id,this.profile.id,this.formValue)
+      this.profileStatusStore.toggleProfileStatusPopUp()
     },
     onClickCancel() {
-      this.handleDateTime.incremntTimeStampBySeconds(3600);
-      //this.handleDateTime.convertStringToTimeStamp(this.formValue.dateTimeString);
+      this.profileStatusStore.toggleProfileStatusPopUp()
     },
     onClickClearStatus() {},
     onSelectStatus(selectedOption) {

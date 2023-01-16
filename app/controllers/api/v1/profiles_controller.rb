@@ -43,7 +43,7 @@ class Api::V1::ProfilesController < Api::ApiController
     if @profile.update(profile_params)
       @profile.recent_statuses.create(text: params[:text_status], emoji: params[:emoji_status], clear_after: params[:clear_status_after].to_time - DateTime.now)
       ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
-      render json: { profile: @profile, message: 'Status has been set.' }, status: :ok
+      # render json: { profile: @profile, message: 'Status has been set.' }, status: :ok
     else
       render json: { errors: @profile.errors }, status: :unprocessable_entity
     end

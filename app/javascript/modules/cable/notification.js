@@ -1,4 +1,6 @@
-import { useUnreadStore } from '../../stores/useUnreadStore';
+import {
+  useUnreadStore
+} from '../../stores/useUnreadStore';
 
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
@@ -27,9 +29,15 @@ const deleteMessage = data => {
   }
 };
 
+const updateProfileStatus = data => {
+  console.log("action Cable", data)
+  
+}
+
 const notificationActions = {
   MessageCreate: createMessage,
   MessageDelete: deleteMessage,
+  ProfileUpdate: updateProfileStatus,
 };
 
 export const notifyActions = data => {

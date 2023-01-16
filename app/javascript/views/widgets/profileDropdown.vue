@@ -1,31 +1,31 @@
 <template>
   <div>
-  <n-dropdown
-    trigger="click"
-    size="medium"
-    :options="options"
-    @select="handleSelect"
-    class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
-  >
-    <n-button>
-      <div class="flex avatar absolute">
-        <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
-      </div>
-      <div
-        class="flex absolute icon"
-        :class="
-          userStatus.active
-            ? 'active text-green-700 border-2 border-black-900 rounded-xl'
-            : 'away text-black border-2 border-white rounded-xl'
-        "
-      >
-        <i class="fa-solid fa-circle"></i>
-      </div>
-    </n-button>
-  </n-dropdown>
-  <DownloadModal v-model:show="showModal" />
-  <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp"/>
-</div>
+    <n-dropdown
+      trigger="click"
+      size="medium"
+      :options="options"
+      @select="handleSelect"
+      class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
+    >
+      <n-button>
+        <div class="flex avatar absolute">
+          <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
+        </div>
+        <div
+          class="flex absolute icon"
+          :class="
+            userStatus.active
+              ? 'active text-green-700 border-2 border-black-900 rounded-xl'
+              : 'away text-black border-2 border-white rounded-xl'
+          "
+        >
+          <i class="fa-solid fa-circle"></i>
+        </div>
+      </n-button>
+    </n-dropdown>
+    <DownloadModal v-model:show="showModal" />
+    <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp" />
+  </div>
 </template>
 
 <script>
@@ -35,13 +35,13 @@ import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import SetProfileStatusModal from '../components/profileStatus/setProfileStatusModal.vue';
-import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js'
+import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
 
 export default {
-  components: { NDropdown, NAvatar, DownloadModal,SetProfileStatusModal },
+  components: { NDropdown, NAvatar, DownloadModal, SetProfileStatusModal },
   setup() {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
@@ -49,7 +49,11 @@ export default {
     const { currentProfile } = storeToRefs(profileStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
 
-    return { profile: currentProfile, currentWorkspace, profileStatusStore:profileStatusStore };
+    return {
+      profile: currentProfile,
+      currentWorkspace,
+      profileStatusStore: profileStatusStore,
+    };
   },
   beforeUnmount() {
     this.status = this.userStatus = null;
@@ -163,8 +167,8 @@ export default {
     },
   },
   methods: {
-    handleStatusSelect(){
-     this.profileStatusStore.toggleProfileStatusPopUp()
+    handleStatusSelect() {
+      this.profileStatusStore.toggleProfileStatusPopUp();
     },
     handleSelect(key) {
       switch (key) {
@@ -213,15 +217,24 @@ export default {
         {
           class:
             'hover:border-black-600 border rounded border-black-300 flex items-center px-3 pt-1 pb-1 cursor-pointer my-px mx-3',
-            onClick:this.handleStatusSelect
+          onClick: this.handleStatusSelect,
         },
         [
-          h('div', [h(NText, { class: 'text-xl' }, { default: () => '🙂' })]),
+          h('div', [
+            h(
+              NText,
+              { class: 'text-xl' },
+              { default: () => (this.profile.status ? this.profile.status?.emoji : '🙂') }
+            ),
+          ]),
           h('div', { class: 'w-full' }, [
             h(
               NText,
               { class: 'ml-12 text-black-800' },
-              { default: () => 'Update your status' }
+              {
+                default: () =>
+                this.profile.status ? this.profile.status?.text : 'Update your status',
+              }
             ),
           ]),
         ]
