@@ -1,7 +1,7 @@
 <template>
-    <div :class="{ 'flex flex-col rounded hover:bg-blue-100': hovered === channelId }" @mouseover="onHover"
+    <div :class="{ 'flex flex-col rounded hover:bg-slate-50': hovered === channelId }" @mouseover="onHover"
       @mouseleave="onHoverLeave">
-      <div class="flex justify-between border-b ">
+      <div class="flex justify-between border-b border-slate-50 ">
         <div class="flex flex-col p-5">
           <div class="font-bold flex">
             <span>
@@ -24,14 +24,14 @@
             </div>
           </div>
         </div>
-        <div class="flex items-center	">
-          <div class="py-3 px-1" v-if="hovered === channelId">
+        <div class="flex items-center	gap-x-2	px-3">
+          <div v-if="hovered === channelId" @click="handleView">
             <n-button>{{ $t('actions.view') }}</n-button>
           </div>
-          <div class="py-3 px-1" v-if="hovered === channelId && isChannelParticipant" @click="handleLeave">
+          <div v-if="hovered === channelId && isChannelParticipant" @click="handleLeave">
             <n-button type="error">{{ $t('actions.leave') }}</n-button>
           </div>
-          <div class="py-3 px-1" @click="handleJoin()" v-if="hovered === channelId && !isChannelParticipant">
+          <div @click="handleJoin()" v-if="hovered === channelId && !isChannelParticipant">
             <n-button type="success">{{ $t('actions.join') }}</n-button>
           </div>
         </div>
@@ -109,6 +109,10 @@ export default {
       router.push('/');
     };
 
+    const handleView = async () => {
+      goToChannel(channelId.value);
+    }
+
     const goToChannel = () => {
       router.push(`/channels/${channelId.value}`);
       if (isMobileView()) {
@@ -138,6 +142,7 @@ export default {
       isChannelParticipant,
       handleJoin,
       handleLeave,
+      handleView,
       onHover,
       onHoverLeave,
     }

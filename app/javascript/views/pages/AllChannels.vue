@@ -1,8 +1,15 @@
 <template>
   <div class="flex flex-col h-full w-full">
     <div class=" w-full flex flex-col header-style">
-      <div class="px-5 py-2 text-xl font-bold border-b border-gray-200">
-        {{ $t('channels.all_channels') }}
+      <div class="flex justify-between items-center px-5 py-2 border-b border-slate-100">
+        <div class="text-xl font-bold">
+          {{ $t('channels.all_channels') }}
+        </div>
+        <div>
+          <div @click="closeModal">
+            <n-button type="success">{{ $t('channels.add_new_channel') }}</n-button>
+          </div>
+        </div>
       </div>
       <div class="px-5 py-2">
         <n-space vertical>
@@ -14,13 +21,14 @@
               </template>
             </n-input>
           </form>
-          <p class="text-small text-gray-900 py-1 font-thin border-b border-gray-200">
+          <p class="text-small text-gray-900 py-1 font-thin border-b border-slate-100">
             {{ searchedChannels?.length }} {{ $t('channels.result') }}
           </p>
         </n-space>
       </div>
     </div>
-    <div class="px-5 body-style overflow-y-auto flex flex-col border-gray-200">
+    <div class="px-5 body-style overflow-y-auto flex flex-col">
+      <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
       <div v-for="channel in searchedChannels" :key="channel.id">
         <ChannelList :channelName="channel.name" :channelDescription="channel.description"
           :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
@@ -31,11 +39,12 @@
 
 <script>
 import { ref, computed, onBeforeUnmount } from 'vue';
-import { NInput, NSpace, NIcon } from 'naive-ui';
+import { NInput, NSpace, NIcon, NButton } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import ChannelList from '../containers/ChannelList.vue'
 import { SearchOutline } from "@vicons/ionicons5";
+import CreateChannel from '../components/channels/CreateChannel.vue';
 
 
 export default {
@@ -43,21 +52,28 @@ export default {
 
   components: {
     ChannelList,
+    CreateChannel,
     NInput,
     NSpace,
     NIcon,
+    NButton,
   },
 
   setup() {
     const term = ref('');
-    const channelStore = useChannelStore();
+    const modalOpen = ref(false)
+    const channelStore = useChannelStore()
     channelStore.index(term.value)
-    const { channels } = storeToRefs(channelStore);
+    const { channels } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
       searchedChannels.value = await channelStore.searchChannels(term.value)
     };
+
+    const closeModal = () => {
+      modalOpen.value = !modalOpen.value;
+    }
 
     onBeforeUnmount(() => {
       term.value = null;
@@ -67,8 +83,10 @@ export default {
     return {
       term,
       searchedChannels,
+      modalOpen,
       SearchOutline,
       handleSubmit,
+      closeModal,
     };
   },
 };
