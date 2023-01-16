@@ -111,14 +111,10 @@ export const useChannelStore = () => {
           element => element.id === channel.id
         );
 
-        if (channel_item != undefined) {
-          if (joinedChannel == undefined) this.joinedChannels.push(channel);
-        } else {
-          if (joinedChannel == undefined) {
-            this.channels.push(channel);
-            this.joinedChannels.push(channel);
-          }
+        if (channel_item == undefined) {
+          this.channels.push(channel);
         }
+        if (joinedChannel == undefined) this.joinedChannels.push(channel);
       },
 
       removeChannelJoined(channel) {
