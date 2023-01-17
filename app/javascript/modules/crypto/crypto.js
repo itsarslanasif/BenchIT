@@ -2,7 +2,7 @@ import CryptoJS from "crypto-js";
 
 export const encryption = async (storage, key, value) => {
   if (value) {
-    const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(value), 'secret key 123').toString()
+    const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(value), import.meta.env.VITE_APP_SECRET_KEY).toString()
     console.log(ciphertext)
     storage.setItem(key, ciphertext)
   }
@@ -11,7 +11,7 @@ export const encryption = async (storage, key, value) => {
 export const decryption = (storage, key) => {
   const value = storage.getItem(key)
   if (value) {
-    const plaintext = CryptoJS.AES.decrypt(value, 'secret key 123').toString(CryptoJS.enc.Utf8)
+    const plaintext = CryptoJS.AES.decrypt(value, import.meta.env.VITE_APP_SECRET_KEY).toString(CryptoJS.enc.Utf8)
     return JSON.parse(plaintext)
   }
 }
