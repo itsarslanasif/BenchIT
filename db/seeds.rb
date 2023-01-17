@@ -3,9 +3,8 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               bench_it_url: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
-                              
-Current.workspace = workspace
 
+Current.workspace = workspace
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
 user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',

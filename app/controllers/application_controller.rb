@@ -11,7 +11,6 @@ class ApplicationController < ActionController::Base
   private
 
   def render_error(exception)
-    puts exception
     case exception
     when ActiveRecord::RecordNotFound
       render json: { success: false, error: 'Record Not Found.' }, status: :not_found

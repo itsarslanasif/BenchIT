@@ -41,13 +41,7 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def set_status
     if @profile.update(profile_params)
-      if params[:clear_status_after] == "don't clear"
-        @profile.recent_statuses.create(text: params[:text_status], emoji: params[:emoji_status], clear_after: "don't clear")
-      else
-        @profile.recent_statuses.create(text: params[:text_status], emoji: params[:emoji_status],
-                                        clear_after: params[:clear_status_after].to_time - DateTime.now)
-        ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
-      end
+      set_job
     else
       render json: { errors: @profile.errors }, status: :unprocessable_entity
     end
@@ -66,6 +60,16 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   private
+
+  def set_job
+    if params[:clear_status_after] == "don't clear"
+      @profile.recent_statuses.create(text: params[:text_status], emoji: params[:emoji_status], clear_after: "don't clear")
+    else
+      @profile.recent_statuses.create(text: params[:text_status], emoji: params[:emoji_status],
+                                      clear_after: params[:clear_status_after].to_time - DateTime.now)
+      ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
+    end
+  end
 
   def find_profile
     @profile = Profile.find(params[:id])
