@@ -8,9 +8,10 @@ export const setProfileStatus = async (
   return await axios
     .post(
       `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/set_status`,
-      statusPayload,
-      {
-        headers: { Authorization: localStorage.getItem('token') },
+      statusPayload, {
+        headers: {
+          Authorization: localStorage.getItem('token')
+        },
       }
     )
     .then(response => {
@@ -30,12 +31,26 @@ export const getRecentStatuses = async () => {
     });
 };
 
+export const deleteRecentStatus = async (id) => {
+  return await axios
+    .delete(`/v1/statuses/${id}`, {
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
 export const clearStatus = async (currentWorkspaceID, currentProfileID) => {
+  console.log(localStorage.getItem('token'))
   return await axios
     .post(
-      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/clear_status`,
-      {
-        headers: { Authorization: localStorage.getItem('token') },
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/clear_status`, {
+        headers: {
+          Authorization: JSON.stringify(localStorage.getItem('token'))
+        },
       }
     )
     .then(response => {

@@ -11,6 +11,7 @@
       <div class="m-0 relative mt-5">
         <div class="mb-6">
           <n-input
+            maxlength="23"
             v-model:value="formValue.text_status"
             @keyup="toggleSteps()"
             :on-change="clearInputFields"
@@ -94,7 +95,7 @@
       <!-- step one -->
       <div v-if="!secondStep">
         <div class="m-0 relative mt-5">
-          <div class="mb-6">
+          <div v-if="profileStatusStore.recent_statuses.length" class="mb-6">
             <p class="font-bold text-black-500">
               {{ $t('profilestatus.recent') }}
             </p>
@@ -106,6 +107,7 @@
                 :status="status"
                 :onSelect="onSelectRecentStatus"
                 :isRecent="true"
+                :deleteRecentStatus="deleteRecentStatus"
               />
             </div>
           </div>
@@ -182,10 +184,7 @@ export default {
     NTimePicker,
   },
   mounted() {
-    getRecentStatuses().then(response => {
-      this.profileStatusStore.setRecentStatus(response);
-      console.log(response);
-    });
+    this.profileStatusStore.setRecentAndWorkspaceStatus()
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
@@ -211,8 +210,8 @@ export default {
       formValue: {
         text_status: '',
         emoji_status: '🙂',
-        clear_status_after: ref(null),
-        dateTimeString: 'Select time',
+        clear_status_after: ref(new Date(new Date().setHours(23, 59, 59, 999))),
+        dateTimeString: 'Today',
       },
       clearAfterOptions: [
         {
@@ -248,7 +247,7 @@ export default {
         id: 1,
         emoji: '📆',
         text: 'In meeting',
-        clear_after: 'based on your Google Calender',
+        clear_after: 1740,
         recent: false,
       },
     };
@@ -288,6 +287,9 @@ export default {
       else this.showDateTimeInputFields = false;
     },
 
+    deleteRecentStatus(id){
+     this.profileStatusStore.deleteRecentStatus(id)
+    },
     onClickSave() {
       let obj = {
         text_status: this.formValue.text_status,
@@ -307,6 +309,7 @@ export default {
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
     isDontCLear() {
+      console.log('end of day:', this.formValue.clear_status_after);
       if (
         this.formValue.dateTimeString == "don't clear" ||
         this.formValue.dateTimeString == "Don't clear"
@@ -316,10 +319,14 @@ export default {
       return new Date(this.formValue.clear_status_after);
     },
     onClickClearStatus() {
-      clearStatus(this.workspace.id, this.profile.id).then(response   => {
-        this.currentProfileStore.setProfileStatus(null);
-        this.directMessagesStore.clearMyStatus(this.profile);
-      });
+      clearStatus(this.workspace.id, this.profile.id)
+        .then(response => {
+          this.currentProfileStore.setProfileStatus(null);
+          this.directMessagesStore.clearMyStatus(this.profile);
+        })
+        .catch(err => {
+          console.log(err);
+        });
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
 
@@ -364,6 +371,11 @@ export default {
         this.formValue.dateTimeString = "don't clear";
         this.formValue.clear_status_after = ref(null);
       }
+      else if (selectedOption.clear_after == "Today") {
+        this.showDateTimeInputFields = false;
+        this.formValue.dateTimeString = "Today";
+        this.formValue.clear_status_after = ref(this.handleDateTime.getEndOfDayTime());
+      }
     },
     toggleEmojiModal() {
       this.showEmojiModal = !this.showEmojiModal;
@@ -373,6 +385,7 @@ export default {
         this.formValue.text_status != '' ||
         this.formValue.emoji_status != '🙂'
       ) {
+        console.log(this.formValue);
         this.secondStep = true;
       } else {
         this.secondStep = false;
@@ -382,10 +395,14 @@ export default {
       this.showModal = false;
     },
     clearInputFields() {
-      this.formValue.dateTimeString = 'Select time';
-      this.formValue.emoji_status = '🙂';
+      this.formValue.dateTimeString = 'Today';
+      if (this.formValue.text_status == '') {
+        this.formValue.emoji_status = '🙂';
+      }
       this.showDateTimeInputFields = false;
-      this.formValue.clear_status_after = ref(null);
+      this.formValue.clear_status_after = ref(
+        new Date(new Date().setHours(23, 59, 59, 999))
+      );
       this.toggleSteps();
     },
   },

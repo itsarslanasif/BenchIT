@@ -36,8 +36,8 @@ export class handleDateTime {
   secondsToHoursAndMinutes(totalSeconds) {
     if (totalSeconds == "don't clear")
       return "  don't clear"
-      if (totalSeconds == "based on your Google Calender")
-      return "  based on your Google Calender"
+      if (totalSeconds == "Today")
+      return "  Today"
     totalSeconds=+totalSeconds+60;
     var day = 86400;
     var hour = 3600;
@@ -60,4 +60,7 @@ export class handleDateTime {
     return this.dateTime
   }
 
+  getEndOfDayTime(){
+    return new Date(new Date().setHours(23,59,59,999));
+  }
 }

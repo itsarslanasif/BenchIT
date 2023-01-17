@@ -6,6 +6,7 @@ import {
   useDirectMessagesStore
 } from '../../stores/useDirectMessagesStore';
 
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
   const getIndexByParams = param => {
@@ -34,6 +35,11 @@ const deleteMessage = data => {
 };
 
 const updateProfileStatus = data => {
+  const currentProfileStore = useCurrentProfileStore();
+  let profile=currentProfileStore.currentProfile;
+  if(profile.id==data.id){
+    currentProfileStore.setProfileStatus(data.status)
+  }
   const dmStore = useDirectMessagesStore();
   dmStore.updateProfileStatus(data)
 

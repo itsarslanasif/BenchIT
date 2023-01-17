@@ -16,7 +16,7 @@
              <p> {{profile_Status.emoji}} </p>
             </div>
           </template>
-          <span> {{ profile_Status.emoji}} <span class="text-black-500">until</span> {{statusClearAfterTime(profile_Status.clear_after)}}  </span>
+          <span>{{ profile_Status.emoji}}  {{ profile_Status.text}} <span class="text-black-500">until</span> {{statusClearAfterTime(profile_Status.clear_after)}}  </span>
         </n-tooltip>
           <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
         </div>
@@ -223,7 +223,7 @@ export default {
               { style: 'font-size: 7px; float: left; margin-top: 6px;' },
               [h(NText, { depth: 3 }, { default: () => `${this.statusIcon}` })]
             ),
-            h('div', { class: 'text-sm flex ml-4' }, [
+            h('div', { class: 'text-sm  flex ml-4' }, [
               h(NText, { depth: 3 }, { default: () => `${this.status}` }),
             ]),
           ]),

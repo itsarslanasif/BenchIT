@@ -5,6 +5,12 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               organization_type: :financial_services)
 
 Current.workspace = workspace
+workspace.workspace_statuses.create!(text:'In a meeting', emoji:'🗓️', clear_after:'3600')
+workspace.workspace_statuses.create!(text:'Commuting', emoji:'🚌', clear_after:'1740')
+workspace.workspace_statuses.create!(text:'Out sick', emoji:'🤒', clear_after:'Today')
+workspace.workspace_statuses.create!(text:'Vacationing', emoji:'🌴', clear_after:"don't clear")
+workspace.workspace_statuses.create!(text:'Working remotely', emoji:'🏡', clear_after:'Today')
+
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
 user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',
@@ -94,3 +100,5 @@ Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bo
 Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 1)
 Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 2)
 User.create(name: 'Michael', email: 'michael@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
+
+

@@ -14,7 +14,7 @@
       >  -{{ handleDateTime.secondsToHoursAndMinutes(status.clear_after)}}</span
     >
     <span v-if="isRecent" class=" flex-grow mx-3 cursor-pointer">
-      <span class="float-right hover-target">X</span>
+      <span @click="deleteRecentStatus(status.id)" class="float-right hover-target">X</span>
     </span>
   </div>
 </template>
@@ -24,7 +24,7 @@ import EmojiPicker from '../../widgets/emojipicker.vue';
 import { handleDateTime } from '../../../handleDateTime.js';
 export default {
   components: { EmojiPicker },
-  props: ['status', 'onSelect','isRecent'],
+  props: ['status', 'onSelect','isRecent','deleteRecentStatus'],
   data() {
     return {
       handleDateTime: new handleDateTime(),
