@@ -1,5 +1,4 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  require 'activerecord-import'
   before_action :set_bench_channel, only: %i[index create join_public_channel]
   before_action :check_profile_ids, only: %i[create]
   before_action :check_channel_participants, only: %i[create]
@@ -21,10 +20,9 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def create
     ActiveRecord::Base.transaction do
-      records_to_insert = params[:profile_ids].map { |profile_id| { bench_channel_id: @channel.id, profile_id: profile_id, permission: true } }
-      ChannelParticipant.import records_to_insert, validate: true
+      params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
       InfoMessagesCreatorService.new(@channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
-      render json: { status: :created }
+      render json: { status: :ok, member_count: @users_joined.count }
     end
   end
 
@@ -33,7 +31,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@channel.bench_conversation.id).join_public_channel
-        render json: { status: :created }
+        render json: { status: :ok }
       else
         render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
       end
@@ -70,7 +68,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_profile_ids
-    return if (Current.workspace.profile_ids & params[:profile_ids]).eql?(params[:profile_ids])
+    return if (Current.workspace.profile_ids & params[:profile_ids]).sort.eql?(params[:profile_ids].sort)
 
     render json: { error: 'Profiles cannot be found', status: :unprocessable_entity }
   end
