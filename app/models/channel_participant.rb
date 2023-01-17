@@ -5,8 +5,6 @@ class ChannelParticipant < ApplicationRecord
   belongs_to :bench_channel
   validates :permission, presence: true
 
-  private
-
   def broadcast_channel
     return unless action_performed.eql?('Create')
 

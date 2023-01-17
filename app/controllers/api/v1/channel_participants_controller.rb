@@ -68,7 +68,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_profile_ids
-    return if (Current.workspace.profile_ids & params[:profile_ids]).sort.eql?(params[:profile_ids].sort)
+    return if (params[:profile_ids] - Current.workspace.profile_ids).blank?
 
     render json: { error: 'Profiles cannot be found', status: :unprocessable_entity }
   end
