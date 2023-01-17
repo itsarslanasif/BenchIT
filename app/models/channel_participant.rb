@@ -1,9 +1,11 @@
 class ChannelParticipant < ApplicationRecord
-  after_commit :broadcast_channel, :broadcast_member_profile
-
   belongs_to :profile
   belongs_to :bench_channel
   validates :permission, presence: true
+
+  after_commit :broadcast_channel, :broadcast_member_profile
+
+  private
 
   def broadcast_channel
     return unless action_performed.eql?('Create')
