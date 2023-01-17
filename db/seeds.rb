@@ -3,6 +3,8 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               bench_it_url: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
+                              
+Current.workspace = workspace
 
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
@@ -35,7 +37,7 @@ Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admi
                                   filename: 'admin.png', content_type: 'image/png')
 Current.user = user1
 Current.profile = user1.profiles.first
-Current.workspace = workspace
+
 BenchChannel.create(name: 'dev', description: 'dev')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 1)

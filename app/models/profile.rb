@@ -104,10 +104,13 @@ class Profile < ApplicationRecord
       pronounce_name: pronounce_name,
       role: role,
       title: title,
-      status: { text: text_status, emoji: emoji_status, clear_after: clear_status_after },
+      status: text_status.present? ? { text: text_status, emoji: emoji_status, clear_after: clear_status_after } :  nil,
       contact_info: { email: user.email, phone: phone },
       about_me: { skype: skype },
       local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p')
     }
+  end
+  def update_profile(text_status, emoji_status, clear_status_after)
+    update(text_status: text_status, emoji_status: emoji_status, clear_status_after: clear_status_after)
   end
 end

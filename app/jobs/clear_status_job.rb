@@ -3,6 +3,8 @@ class ClearStatusJob < ApplicationJob
 
   def perform(profile_id)
     profile = Profile.find(profile_id)
-    profile.update(text_status: "", emoji_status: "", clear_status_after: "")
+    Current.profile = profile
+    Current.workspace = profile.workspace
+    profile.update_profile("", "", "")
   end
 end
