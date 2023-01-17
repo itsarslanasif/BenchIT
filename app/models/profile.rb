@@ -75,7 +75,6 @@ class Profile < ApplicationRecord
   end
 
   def get_favourite_id(favourable_id, favourable_type)
-    @favourite = Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)
-    @favourite&.id
+    Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
   end
 end
