@@ -27,8 +27,8 @@ export const useChannelStore = () => {
         try {
           this.channels = await getChannels();
           this.joinedChannels = await getJoinedChannels();
-          this.starChannels = this.joinedChannels.filter(function (el) { return el.favourite_id !== null });
-          this.joinedChannels = this.joinedChannels.filter(function (el) { return el.favourite_id === null })
+          this.starChannels = this.joinedChannels.filter(el => el.favourite_id !== null);
+          this.joinedChannels = this.joinedChannels.filter(el => el.favourite_id === null);
           this.sortChannelsList();
         } catch (e) {
           console.error(e);
