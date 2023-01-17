@@ -34,7 +34,6 @@ const deleteMessage = data => {
 };
 
 const updateProfileStatus = data => {
-  console.log("action Cable", data)
   const dmStore = useDirectMessagesStore();
   dmStore.updateProfileStatus(data)
 

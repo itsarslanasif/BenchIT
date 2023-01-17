@@ -2,11 +2,11 @@
   <transition name="modal-fade">
     <n-modal
       :on-after-leave="profileStatusStore.toggleProfileStatusPopUp"
-      class="w-4/12"
+      class="modal-width"
       v-model:show="showModal"
       preset="card"
-      title="Set a status"
-      content="Are you sure?"
+      :title="$t('profilestatus.set_a_status')"
+      :content="$t('profilestatus.are_you_sure')"
     >
       <div class="m-0 relative mt-5">
         <div class="mb-6">
@@ -15,7 +15,7 @@
             @keyup="toggleSteps()"
             :on-change="clearInputFields"
             clearable
-            placeholder="What's your status?"
+            :placeholder="$t('profilestatus.what_is_your_status')"
           >
             <template #prefix>
               <n-icon class="px-1">
@@ -28,10 +28,7 @@
         </div>
       </div>
       <div v-if="showEmojiModal" class="absolute z-50">
-        <EmojiPicker
-          :toggleModal="toggleEmojiModal"
-          :addReaction="pickEmoji"
-        />
+        <EmojiPicker :toggleModal="toggleEmojiModal" :addReaction="pickEmoji" />
       </div>
 
       <!-- step two -->
@@ -77,7 +74,7 @@
             {{ $t('actions.save') }}
           </n-button>
           <n-button
-           v-if="!profile.status"
+            v-if="!profile.status"
             @click="onClickCancel"
             class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
           >
@@ -89,7 +86,7 @@
             @click="onClickClearStatus"
             class="bg-slate-600 text-white py-2 ml-2 px-5 text-base float-right my-3 rounded"
           >
-            clear status
+            {{ $t('profilestatus.clear_status') }}
           </n-button>
         </div>
       </div>
@@ -98,25 +95,45 @@
       <div v-if="!secondStep">
         <div class="m-0 relative mt-5">
           <div class="mb-6">
-            <p class="font-bold text-black-500">Recent</p>
-            <div v-for="status in profileStatusStore.recent_statuses" :key="status.id">
-              <statusRow :status="status" :onSelect="onSelectRecentStatus" :isRecent="true" />
+            <p class="font-bold text-black-500">
+              {{ $t('profilestatus.recent') }}
+            </p>
+            <div
+              v-for="status in profileStatusStore.recent_statuses"
+              :key="status.id"
+            >
+              <statusRow
+                :status="status"
+                :onSelect="onSelectRecentStatus"
+                :isRecent="true"
+              />
             </div>
           </div>
         </div>
 
         <div class="m-0 relative mt-5">
           <div class="mb-6">
-            <p class="font-bold text-black-500">For Devsinc</p>
-            <div v-for="status in profileStatusStore.workspace_statuses" :key="status.id">
-              <statusRow :status="status" :onSelect="this.onSelectRecentStatus" :isRecent="false"  />
+            <p class="font-bold text-black-500">
+              {{ $t('profilestatus.for_workspace') }}
+            </p>
+            <div
+              v-for="status in profileStatusStore.workspace_statuses"
+              :key="status.id"
+            >
+              <statusRow
+                :status="status"
+                :onSelect="this.onSelectRecentStatus"
+                :isRecent="false"
+              />
             </div>
           </div>
         </div>
 
         <div class="m-0 relative mt-5">
           <div class="mb-6">
-            <p class="font-bold text-black-500">Automatically updates</p>
+            <p class="font-bold text-black-500">
+              {{ $t('profilestatus.automatically_updates') }}
+            </p>
             <statusRow
               :status="automaticallyUpdates"
               :onSelect="onSelectRecentStatus"
@@ -148,8 +165,7 @@ import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceSto
 import { setProfileStatus } from '../../../api/profiles/profileStatus';
 import { clearStatus } from '../../../api/profiles/profileStatus';
 import { getRecentStatuses } from '../../../api/profiles/profileStatus';
-
-
+import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 
 export default {
   name: 'CreateChannel',
@@ -165,21 +181,23 @@ export default {
     NModal,
     NTimePicker,
   },
-  mounted(){
-    getRecentStatuses().then((response=>{
+  mounted() {
+    getRecentStatuses().then(response => {
       this.profileStatusStore.setRecentStatus(response);
-      console.log(response)
-    }))
+      console.log(response);
+    });
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
-    const currentProfile=useCurrentProfileStore();
-    const currentWorkspace=useCurrentWorkspaceStore();
+    const currentProfile = useCurrentProfileStore();
+    const currentWorkspace = useCurrentWorkspaceStore();
+    const directMessagesStore = useDirectMessagesStore();
     return {
-      currentProfileStore:currentProfile,
+      currentProfileStore: currentProfile,
       profile: currentProfile.getCurrentProfile,
-      workspace:currentWorkspace.getCurrentWorkspace,
+      workspace: currentWorkspace.getCurrentWorkspace,
       profileStatusStore,
+      directMessagesStore,
     };
   },
   data() {
@@ -194,15 +212,9 @@ export default {
         text_status: '',
         emoji_status: '🙂',
         clear_status_after: ref(null),
-        dateTimeString: 'Today',
-
+        dateTimeString: 'Select time',
       },
       clearAfterOptions: [
-        {
-          label: 'Clear selection',
-          key: 'Clear selection',
-          disabled: true,
-        },
         {
           label: "Don't clear",
           key: "Don't clear",
@@ -242,22 +254,22 @@ export default {
     };
   },
   beforeMount() {
-
-     if(this.profile.status){
+    if (this.profile.status) {
       this.secondStep = true;
-      this.formValue.text_status = this.profile?.status?.text
-      this.formValue.emoji_status = this.profile?.status?.emoji
-      if(this.profile?.status?.clear_after){
-      this.showDateTimeInputFields = true;
-      this.formValue.dateTimeString = 'Choose date and time';
-      this.formValue.clear_status_after=  ref(new Date(this.profile?.status?.clear_after));
-      }
-      else{
+      this.formValue.text_status = this.profile?.status?.text;
+      this.formValue.emoji_status = this.profile?.status?.emoji;
+      if (this.profile?.status?.clear_after) {
+        this.showDateTimeInputFields = true;
+        this.formValue.dateTimeString = 'Choose date and time';
+        this.formValue.clear_status_after = ref(
+          new Date(this.profile?.status?.clear_after)
+        );
+      } else {
         this.showDateTimeInputFields = false;
         this.formValue.dateTimeString = "don't clear";
       }
-     }
-    },
+    }
+  },
   methods: {
     pickEmoji(emoji) {
       this.formValue.emoji_status = emoji.i;
@@ -268,74 +280,99 @@ export default {
       this.toggleEmojiModal();
     },
     onSelectClearAfterOption(key) {
-      this.formValue.dateTimeString =  String(key);
-      this.formValue.clear_status_after=this.handleDateTime.convertStringToTimeStamp(String(key))
-      if(String(key)=='Choose date and time')
-        this.showDateTimeInputFields=true
-      else
-      this.showDateTimeInputFields=false
+      this.formValue.dateTimeString = String(key);
+      this.formValue.clear_status_after =
+        this.handleDateTime.convertStringToTimeStamp(String(key));
+      if (String(key) == 'Choose date and time')
+        this.showDateTimeInputFields = true;
+      else this.showDateTimeInputFields = false;
     },
 
     onClickSave() {
-      let obj={
-           text_status:this.formValue.text_status,
-           emoji_status:this.formValue.emoji_status,
-           clear_status_after:this.isDontCLear()
-}
-      setProfileStatus(this.workspace.id,this.profile.id,obj).then(
-          (response) => {
-            this.currentProfileStore.setProfileStatus(response.status)
-          },)
-      this.profileStatusStore.toggleProfileStatusPopUp()
+      let obj = {
+        text_status: this.formValue.text_status,
+        emoji_status: this.formValue.emoji_status,
+        clear_status_after: this.isDontCLear(),
+      };
+      setProfileStatus(this.workspace.id, this.profile.id, obj).then(
+        response => {
+          this.currentProfileStore.setProfileStatus(response.status);
+          this.directMessagesStore.updateProfileStatus(response);
+        }
+      );
+      this.profileStatusStore.toggleProfileStatusPopUp();
     },
 
     onClickCancel() {
-      this.profileStatusStore.toggleProfileStatusPopUp()
+      this.profileStatusStore.toggleProfileStatusPopUp();
     },
-    isDontCLear(){
-      if(this.formValue.dateTimeString=="don't clear" || this.formValue.dateTimeString=="Don't clear" ){
-        return "don't clear"
+    isDontCLear() {
+      if (
+        this.formValue.dateTimeString == "don't clear" ||
+        this.formValue.dateTimeString == "Don't clear"
+      ) {
+        return "don't clear";
       }
-      return new Date(this.formValue.clear_status_after)
-
+      return new Date(this.formValue.clear_status_after);
     },
-
     onClickClearStatus() {
-
-      clearStatus(this.workspace.id,this.profile.id).then(
-          (response) => {
-            this.currentProfileStore.setProfileStatus(null)
-          },)
-      this.profileStatusStore.toggleProfileStatusPopUp()
+      clearStatus(this.workspace.id, this.profile.id).then(response   => {
+        this.currentProfileStore.setProfileStatus(null);
+        this.directMessagesStore.clearMyStatus(this.profile);
+      });
+      this.profileStatusStore.toggleProfileStatusPopUp();
     },
 
     onSelectRecentStatus(selectedOption) {
       this.formValue.text_status = selectedOption.text;
       this.formValue.emoji_status = selectedOption.emoji;
       this.formValue.dateTimeString = 'Choose date and time';
-      this.formValue.clear_status_after= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
-      this.formValue.clear_status_after= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
-      this.secondStep=true;
-      this.showDateTimeInputFields=true;
-      let kk=this.handleDateTime.secondsToHoursAndMinutes(selectedOption.clear_after)
+      this.formValue.clear_status_after = ref(
+        this.handleDateTime.incremntTimeStampBySeconds(
+          selectedOption.clear_after
+        )
+      );
+      this.formValue.clear_status_after = ref(
+        this.handleDateTime.incremntTimeStampBySeconds(
+          selectedOption.clear_after
+        )
+      );
+      this.secondStep = true;
+      this.showDateTimeInputFields = true;
+      let kk = this.handleDateTime.secondsToHoursAndMinutes(
+        selectedOption.clear_after
+      );
       console.log(kk);
-      if(kk=='30 minutes' || kk=='4 hours' || kk=='This Week' ||kk=='1 hours'    )
-      {
-        this.showDateTimeInputFields=false;
-        this.formValue.clear_status_after = ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
-        this.formValue.dateTimeString= this.handleDateTime.secondsToHoursAndMinutes(selectedOption.clear_after)
-      }
-      else if( selectedOption.clear_after=="don't clear"){
-        this.showDateTimeInputFields=false;
-        this.formValue.dateTimeString= "don't clear";
-        this.formValue.clear_status_after= ref(null);;
+      if (
+        kk == '30 minutes' ||
+        kk == '4 hours' ||
+        kk == 'This Week' ||
+        kk == '1 hours'
+      ) {
+        this.showDateTimeInputFields = false;
+        this.formValue.clear_status_after = ref(
+          this.handleDateTime.incremntTimeStampBySeconds(
+            selectedOption.clear_after
+          )
+        );
+        this.formValue.dateTimeString =
+          this.handleDateTime.secondsToHoursAndMinutes(
+            selectedOption.clear_after
+          );
+      } else if (selectedOption.clear_after == "don't clear") {
+        this.showDateTimeInputFields = false;
+        this.formValue.dateTimeString = "don't clear";
+        this.formValue.clear_status_after = ref(null);
       }
     },
     toggleEmojiModal() {
       this.showEmojiModal = !this.showEmojiModal;
     },
     toggleSteps() {
-      if (this.formValue.text_status != '' || this.formValue.emoji_status != '🙂') {
+      if (
+        this.formValue.text_status != '' ||
+        this.formValue.emoji_status != '🙂'
+      ) {
         this.secondStep = true;
       } else {
         this.secondStep = false;
@@ -345,7 +382,7 @@ export default {
       this.showModal = false;
     },
     clearInputFields() {
-      this.formValue.dateTimeString = 'Today';
+      this.formValue.dateTimeString = 'Select time';
       this.formValue.emoji_status = '🙂';
       this.showDateTimeInputFields = false;
       this.formValue.clear_status_after = ref(null);
@@ -354,3 +391,8 @@ export default {
   },
 };
 </script>
+<style>
+.modal-width {
+  width: 400px;
+}
+</style>
