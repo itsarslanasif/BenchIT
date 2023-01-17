@@ -62,8 +62,7 @@ export default {
     checkCurrentChannel(channel) {
       if (channel.favourite_id) {
         return true;
-      }
-      else {
+      } else {
         return false;
       }
     },
