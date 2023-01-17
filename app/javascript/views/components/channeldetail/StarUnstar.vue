@@ -1,6 +1,6 @@
 <template>
-  <div class="w-10 cursor-pointer" @click="MarkStar">
-    <div v-if="favChannel">
+  <div class="w-10 cursor-pointer" @click="markChannel">
+    <div v-if="selectedChat.favourite_id">
       <i
         class="fa-solid fa-star border border-black-300 px-4 rounded p-2 ml-6 m-2"
       ></i>
@@ -14,41 +14,25 @@
 </template>
 
 <script>
-import { star } from '../../../api/starunstar/star.js';
-import { unstar } from '../../../api/starunstar/unstar.js';
+
+import { useChannelStore } from '../../../stores/useChannelStore';
+import { storeToRefs } from 'pinia';
+import { markStar } from '../../../modules/starunstar/starunstar.js';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
-  name: 'StarUnstar',
-
-  props: {
-    channelId: Number,
-  },
-
-  data() {
+  components: { markStar },
+   setup() {
+     const channelStore = useChannelStore();
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
-      favChannel: false,
-      favChannelId: 0,
+      selectedChat,
+      channelStore
     };
   },
-  beforeUnmount() {
-    this.favChannelId = 0;
-  },
   methods: {
-    MarkStar() {
-      this.favChannel = !this.favChannel;
-      try {
-        if (this.favChannel) {
-          star({
-            favourable_type: 'BenchChannel',
-            favourable_id: this.channelId,
-          }).then(response => {
-            this.favChannelId = response.data.favourite.id;
-          });
-        } else {
-          unstar(this.favChannelId);
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    markChannel() {
+      markStar(this.selectedChat, this.channelStore);
     },
   },
 };

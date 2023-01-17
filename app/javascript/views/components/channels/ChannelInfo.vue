@@ -2,7 +2,7 @@
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
       <div
-        @click="OpenChannelDetailModal(true)"
+        @click="openChannelDetailModal(true)"
         class="flex mx-3 px-1 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
         <div v-if="selectedChat.is_private" class="self-center mr-1">
@@ -27,9 +27,7 @@
   </div>
   <ChannelDetailModal
     v-if="modalOpen && selectedChat"
-    :channelName="selectedChat.name"
-    :channelId="selectedChat.id"
-    :detailsopen="this.OpenChannelDetailModal"
+    :detailsopen="openChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />
 </template>
@@ -55,18 +53,25 @@ export default {
   data() {
     return {
       modalOpen: false,
+      currentChannel: {},
     };
   },
 
   methods: {
-    OpenChannelDetailModal(open) {
+    openChannelDetailModal(open) {
       this.modalOpen = open;
       this.ChannelDetailStore.setSlectedOption('about');
+      this.getCurrentChannel();
+      this.channelStore.setCurrentChannel(this.currentChannel);
     },
-    OpenChannelDetailMemberModal(open) {
+    openChannelDetailMemberModal(open) {
       this.ChannelDetailStore.setSlectedOption('members');
       this.modalOpen = open;
     },
+    getCurrentChannel() {
+      this.currentChannel = this.channelStore.joinedChannels.find(obj => obj.id === Number(this.channel.id)) ||
+        this.channelStore.starChannels.find(obj => obj.id === Number(this.channel.id));
+    }
   },
 };
 </script>

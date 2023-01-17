@@ -161,7 +161,7 @@ en:
         save_message: 'Save items'
       channels:
         channels: 'Channels'
-        add_new_channel: 'Add New Channel'
+        add_new_channel: 'Add new channel'
         search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
         selected_channels: 'Selected Channels'
@@ -175,9 +175,11 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        starred: 'Starred'
         channel_created_success: 'New channel created successfully'
         channel_created_failure: 'Channel name already exist'
         dot: '·'
+        starred: 'Starred'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'

@@ -1,12 +1,8 @@
 <template>
   <div
-    v-click-outside="closeModel"
+    v-click-outside="closeModal"
     class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
-    <p
-      @click="detailsopen(false)"
-      class="float-right mr-2 p-2 hover:bg-transparent rounded self-center"
-    ></p>
     <div class="self-center px-3 mt-2 mr-1 text-base ml-4 font-bold">
       <font-awesome-icon v-if="selectedChat.is_private" icon="fa-lock" />
       <font-awesome-icon v-else icon="fa-hashtag" />
@@ -80,7 +76,7 @@ export default {
     detailsopen: Function,
   },
   methods: {
-    closeModel() {
+    closeModal() {
       this.detailsopen(false);
     },
   },

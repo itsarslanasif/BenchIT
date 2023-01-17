@@ -1,6 +1,6 @@
 <template>
   <div class="cursor-pointer" @click="toggleModal">
-    <div class="py-1 px-1 flex">
+    <div class="px-2 flex hover:bg-primaryHover cursor-pointer py-1">
       <font-awesome-icon
         icon="fa-plus"
         class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"

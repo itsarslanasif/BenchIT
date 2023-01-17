@@ -1,20 +1,10 @@
 <template>
-  <n-dropdown
-    class="rounded-md"
-    placement="bottom-end"
-    size="medium"
-    :show="isShowOptions"
-    :options="channel_options"
-    @mouseleave="toggleShow"
-    :on-clickoutside="toggleShow"
-  >
-    <div
-      oncontextmenu="return false;"
-      @click="goTo(`/channels/${channel.id}`, channel)"
-      @click.right="toggleShow"
-      class="flex items-center -ml-4 py-1 px-5 cursor-pointer hover:bg-primaryHover"
-    >
-      <div class="w-5 pl-1">
+  <n-dropdown class="rounded-md" placement="bottom-end" size="medium" :show="showChannelOptions"
+    :options="channel_options" @mouseleave="toggleChannelOptionShow" @select="handleSelect($event)"
+    :on-clickoutside="toggleChannelOptionShow">
+    <div oncontextmenu="return false;" class="flex items-center -ml-4 pl-3 py-1 hover:bg-primaryHover cursor-pointer" @click="goTo(`/channels/${channel.id}`, this.channel)"
+      @click.right="toggleChannelOptionShow">
+      <div class="w-5">
         <div v-if="channel.is_private">
           <font-awesome-icon icon="fa-lock" />
         </div>
@@ -25,10 +15,7 @@
       <div class="px-2" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
         {{ channel.name }}
       </div>
-      <div
-        v-if="unreadDetails?.messages.length"
-        class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
-      >
+      <div v-if="unreadDetails?.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
         {{ unreadDetails.messages.length }}
       </div>
     </div>
@@ -36,31 +23,60 @@
 </template>
 
 <script>
-import channel_options from './channel_options.js';
 import { NDropdown } from 'naive-ui';
-import { useUnreadStore } from '../../../stores/useUnreadStore';
+import Option from './channel_options.js';
+import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
+import { markStar } from '../../../modules/starunstar/starunstar.js';
 import { unreadMessagesCount } from '../../../modules/unreadMessages';
-
+import { useUnreadStore } from '../../../stores/useUnreadStore';
 export default {
-  name: 'ChannelItem',
-  components: { NDropdown },
+  components: { NDropdown, markStar },
   props: ['goTo', 'toggleShow', 'isShowOptions', 'channel'],
+  setup() {
+    const channelStore = useChannelStore();
+    const unreadStore = useUnreadStore();
+    const { unreadMessages } = storeToRefs(unreadStore);
+    return { channelStore, unreadMessages, };
+  },
   data() {
     return {
-      channel_options: channel_options,
+      channel_options: [],
+      currentChannel: {},
+      showChannelOptions: false,
       unread: [],
       unreadDetails: null,
     };
   },
-  setup() {
-    const unreadStore = useUnreadStore();
-    const { unreadMessages } = storeToRefs(unreadStore);
-    return {
-      unreadMessages,
-    };
-  },
   methods: {
+    handleSelect(key) {
+      switch (key) {
+        case 'star-channel':
+          markStar(this.currentChannel, this.channelStore);
+          break;
+        case 'unstar-channel':
+          markStar(this.currentChannel, this.channelStore);
+          break;
+      }
+    },
+    checkCurrentChannel(channel) {
+      if (channel.favourite_id) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    setCurrentChannel() {
+      this.currentChannel = this.channelStore.joinedChannels.find(obj => obj.id === Number(this.channel.id)) || this.channelStore.starChannels.find(obj => obj.id === Number(this.channel.id));
+      this.channelStore.setCurrentChannel(this.currentChannel);
+      this.channel_options = new Option(this.checkCurrentChannel(this.currentChannel)).getOptions();
+    },
+    toggleChannelOptionShow() {
+      this.showChannelOptions = !this.showChannelOptions
+      if (this.showChannelOptions) {
+        this.setCurrentChannel();
+      }
+    },
     isUnreadChannel(channel) {
       this.unreadDetails = unreadMessagesCount(
         this.unreadMessages,

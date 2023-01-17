@@ -5,7 +5,7 @@
       icon="fa-plus"
       class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
     />
-    <AccordionList class="mt-5 ml-3 text-base text-slate-50">
+    <AccordionList class="mt-5 ml-4 text-base text-slate-50">
       <AccordionItem :default-opened="true">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
@@ -19,7 +19,7 @@
         />
       </AccordionItem>
     </AccordionList>
-    <div class="px-3 hover:bg-primaryHover cursor-pointer" @click="closeModal">
+    <div class="px-1 hover:bg-primaryHover cursor-pointer" @click="closeModal">
       <addTeammatesDropdown :items="options" />
     </div>
   </div>
