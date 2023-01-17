@@ -2,8 +2,6 @@ import { NIcon } from 'naive-ui';
 import { h } from 'vue';
 import { Albums } from '@vicons/ionicons5';
 import { CONSTANTS } from '../../../assets/constants';
-
-
 export default class Option {
   constructor(favourite_id) {
     this.favourite_id = favourite_id;

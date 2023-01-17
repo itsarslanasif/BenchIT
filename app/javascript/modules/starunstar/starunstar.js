@@ -8,7 +8,6 @@ export const markStar = (currentChannel, channelStore) => {
         favourable_type: 'BenchChannel',
         favourable_id: currentChannel.id,
       }).then(response => {
-
         if (response.data.success === 'Channel successfully added to favourites') {
           channelStore.addStarredChannel(currentChannel);
           channelStore.removeJoinChannel(currentChannel);

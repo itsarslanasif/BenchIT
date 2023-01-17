@@ -15,10 +15,7 @@
       <div class="px-1" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
         {{ channel.name }}
       </div>
-      <div
-        v-if="unreadDetails?.messages.length"
-        class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
-      >
+      <div v-if="unreadDetails?.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
         {{ unreadDetails.messages.length }}
       </div>
     </div>
@@ -40,7 +37,7 @@ export default {
     const channelStore = useChannelStore();
     const unreadStore = useUnreadStore();
     const { unreadMessages } = storeToRefs(unreadStore);
-    return { channelStore,   unreadMessages, };
+    return { channelStore, unreadMessages, };
   },
   data() {
     return {
