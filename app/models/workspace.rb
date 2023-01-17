@@ -30,6 +30,6 @@ class Workspace < ApplicationRecord
   }
 
   validates :company_name, presence: true
-  validates :bench_it_url, presence: true
+  validates :bench_it_url, uniqueness: true, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 end

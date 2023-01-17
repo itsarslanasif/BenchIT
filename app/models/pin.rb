@@ -5,6 +5,8 @@ class Pin < ApplicationRecord
   belongs_to :profile
   belongs_to :bench_conversation
 
+  validates :bench_conversation, uniqueness: { scope: [:conversation_message] }
+
   private
 
   def broadcast_pin

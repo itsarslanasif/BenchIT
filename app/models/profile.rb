@@ -36,6 +36,7 @@ class Profile < ApplicationRecord
   validates :pronounce_name, length: { maximum: 20 }
 
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validates :workspace, uniqueness: { scope: [:user] }
   enum role: {
     primary_owner: 0,
     workspace_owner: 1,

@@ -5,6 +5,8 @@ class Reaction < ApplicationRecord
   belongs_to :conversation_message
   has_one :bench_conversation, through: :conversation_message
 
+  validates :emoji, uniqueness: { scope: [:conversation_message, :profile] }
+
   private
 
   def reaction_broadcast
