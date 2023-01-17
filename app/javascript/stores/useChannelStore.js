@@ -28,10 +28,10 @@ export const useChannelStore = () => {
           this.channels = await getChannels();
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
-            el => el.favourite_id !== null
+            channel => channel.favourite_id !== null
           );
           this.joinedChannels = this.joinedChannels.filter(
-            el => el.favourite_id === null
+            channel => channel.favourite_id === null
           );
           this.sortChannelsList();
         } catch (e) {
