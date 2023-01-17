@@ -135,5 +135,6 @@ export const CONSTANTS = {
   REPLIES: 'replies',
   MEMBER_SUCCESS_MESSAGE: 'member added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
+  UN_STAR_CHANNEL: 'Unstar Channel',
   SOMETHING_WENT_WRONG: 'Something went wrong',
 };
