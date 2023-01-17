@@ -1,27 +1,28 @@
 <template>
-  <div>
+  <div v-if="sortedDMList">
     <h5
       v-for="user in sortedDMList"
-      :key="user?.id"
+      :key="user"
       class="hover:bg-primaryHover"
     >
       <div
-        @click="goToChat(`/profiles/${user?.id}`, user)"
+        v-if="user"
+        @click="goToChat(`/profiles/${user.id}`, user)"
         class="flex items-center -ml-4 py-1 px-5 cursor-pointer hover:bg-primaryHover"
         :class="isUnreadDM(user) ? 'font-bold' : ''"
       >
-        <n-avatar :size="25" :src="user?.image_url" />
-        <p class="ml-2 text-sm text-white">{{ user?.username }}</p>
+        <n-avatar :size="25" :src="user.image_url" />
+        <p class="ml-2 text-sm text-white">{{ user.username }}</p>
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
         <n-tooltip trigger="hover">
           <template #trigger>
             <p class="ml-2 text-sm self-center text-white">
-              {{ user?.status.emoji }}
+              {{ user.status.emoji }}
             </p>
           </template>
-          <span> {{ user?.status?.text }} </span>
+          <span> {{ user.status?.text }} </span>
         </n-tooltip>
         <div
           v-if="unreadDetails?.messages.length"
@@ -59,7 +60,7 @@ export default {
     isUnreadDM(user) {
       this.unreadDetails = unreadMessagesCount(
         this.unreadMessages,
-        `Profile${user?.id}`
+        `Profile${user.id}`
       );
       return this.unreadDetails?.messages.length;
     },

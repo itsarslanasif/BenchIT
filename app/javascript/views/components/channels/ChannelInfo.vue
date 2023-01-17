@@ -12,22 +12,23 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
         <p class="text-xl font-bold self-center mr-1">
-          {{ selectedChat?.name }}
+          {{ selectedChat.name }}
         </p>
         <i class="fa-solid fa-chevron-down self-center font-semibold"></i>
       </div>
 
       <ChannelMembersInfoVue
+        v-if="selectedChat"
         :showMemberClickListener="this.OpenChannelDetailMemberModal"
-        :channelId="selectedChat?.id"
-        :channelName="selectedChat?.name"
+        :channelId="selectedChat.id"
+        :channelName="selectedChat.name"
       />
     </div>
   </div>
   <ChannelDetailModal
-    v-if="modalOpen"
-    :channelName="selectedChat?.name"
-    :channelId="selectedChat?.id"
+    v-if="modalOpen && selectedChat"
+    :channelName="selectedChat.name"
+    :channelId="selectedChat.id"
     :detailsopen="this.OpenChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />

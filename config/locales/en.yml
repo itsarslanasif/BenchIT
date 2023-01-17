@@ -298,6 +298,10 @@ en:
         title: 'Draft messages to send when you’re ready'
         description: 'Start typing a message anywhere, then find it here. Re-read, revise, and
         send whenever you’d like.'
+      conversations:
+        channels: 'channels'
+        groups: 'groups'
+        profiles: 'profiles'
     admin:
       title: 'Admin'
       save: 'Save'

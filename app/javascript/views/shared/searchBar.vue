@@ -191,9 +191,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.avatar {
-  left: 20px;
-  top: 8px;
-}
-</style>

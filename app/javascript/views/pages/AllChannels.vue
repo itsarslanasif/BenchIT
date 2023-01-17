@@ -15,8 +15,8 @@
               :placeholder="$t('channels.search_by_name_or_desc')"
             />
           </form>
-          <p class="text-sm text-black-500">
-            {{ searchedChannels?.length }} {{ $t('channels.title') }}
+          <p v-if="searchedChannels" class="text-sm text-black-500">
+            {{ searchedChannels.length }} {{ $t('channels.title') }}
           </p>
         </n-space>
       </div>
@@ -26,12 +26,12 @@
       <div
         class="hover-trigger flex justify-between hover:bg-transparent cursor-pointer py-4 px-2 border-transparent border border-t-1 border-b-0 border-r-0 border-l-0"
         v-for="channel in searchedChannels"
-        :key="channel?.id"
+        :key="channel.id"
       >
         <span class="flex flex-col">
           <span class="flex text-black-700">
             <font-awesome-icon
-              v-if="channel?.is_private"
+              v-if="channel.is_private"
               class="text-xs self-center mr-1"
               icon="fa-lock"
             />
@@ -41,14 +41,14 @@
               icon="fa-hashtag"
             />
             <p class="text-base font-semibold self-center">
-              {{ channel?.name }}
+              {{ channel.name }}
             </p>
           </span>
           <span class="flex">
             <p class="text-black-400 mr-1">
-              {{ channel?.profiles.length }}
+              {{ channel.profiles.length }}
               {{
-                hasOneMember(channel?.profiles)
+                hasOneMember(channel.profiles)
                   ? $t('members.member')
                   : $t('members.members')
               }}
@@ -57,7 +57,7 @@
               {{ $t('channels.dot') }}
             </p>
             <p class="text-black-400 ml-1">
-              {{ channel?.description }}
+              {{ channel.description }}
             </p>
           </span>
         </span>
@@ -66,8 +66,8 @@
           <button
             class="py-1 rounded mx-1 font-medium hover:shadow-inner focus:outline-none bg-white border-black-400 px-4 border"
             @click="
-              isChannelParticipant(channel?.profiles)
-                ? goToChannel(channel?.id)
+              isChannelParticipant(channel.profiles)
+                ? goToChannel(channel.id)
                 : null
             "
           >
@@ -75,15 +75,15 @@
           </button>
           <button
             class="py-1 rounded mx-1 font-medium hover:shadow-inner focus:outline-none bg-danger hover:bg-dangerHover text-white border-black-400 px-4 border"
-            v-if="isChannelParticipant(channel?.profiles)"
-            @click="handleLeave(channel?.id)"
+            v-if="isChannelParticipant(channel.profiles)"
+            @click="handleLeave(channel.id)"
           >
             {{ $t('actions.leave') }}
           </button>
           <button
             class="py-1 rounded mx-1 font-medium hover:shadow-inner focus:outline-none bg-success hover:bg-successHover text-white border-black-400 px-4 border"
-            @click="handleJoin(channel?.id)"
-            v-if="!isChannelParticipant(channel?.profiles)"
+            @click="handleJoin(channel.id)"
+            v-if="!isChannelParticipant(channel.profiles)"
           >
             {{ $t('actions.join') }}
           </button>

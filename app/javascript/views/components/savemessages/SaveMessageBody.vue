@@ -59,7 +59,6 @@ export default {
   async beforeMount() {
     try {
       this.savedItemsStore.savedItems = await getSaveMessages();
-      console.log(this.savedItemsStore.savedItems);
     } catch (e) {
       console.error(e);
     }

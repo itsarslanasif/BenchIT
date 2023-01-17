@@ -1,5 +1,6 @@
 <template>
   <n-dropdown
+    v-if="currentWorkspace"
     trigger="click"
     :options="options"
     @select="handleSelect($event)"
@@ -7,7 +8,7 @@
     class="w-80 rounded-md bg-white"
   >
     <div class="mx-3 my-2 flex text-white cursor-pointer">
-      <strong class="text-xl">{{ currentWorkspace?.company_name }}</strong>
+      <strong class="text-xl">{{ currentWorkspace.company_name }}</strong>
       <i class="fa-solid fa-chevron-down self-center fa-lg ml-1" />
     </div>
   </n-dropdown>

@@ -1,24 +1,24 @@
 <template>
-  <div class="bg-white flex flex-col p-5">
+  <div v-if="selectedChat" class="bg-white flex flex-col p-5">
     <span
       class="border border-black-300 cursor-pointer hover:bg-transparent p-2 rounded-t-lg border-b-0"
     >
       <p class="font-bold">{{ $t('channeldetail.topic') }}</p>
-      <p>{{ selectedChat?.topic }}</p>
+      <p>{{ selectedChat.topic }}</p>
     </span>
     <span
       class="border border-black-300 cursor-pointer hover:bg-transparent p-2 border-b-1"
     >
       <p class="font-bold">{{ $t('channeldetail.description') }}</p>
-      <p>{{ selectedChat?.description }}</p>
+      <p>{{ selectedChat.description }}</p>
     </span>
     <span
       class="border border-black-300 cursor-pointer hover:bg-transparent p-3 border-t-0"
     >
       <p class="font-bold">{{ $t('channeldetail.created_by') }}</p>
       <p>
-        {{ selectedChat?.creator_name }} on
-        {{ formatDate(selectedChat?.created_at) }}
+        {{ selectedChat.creator_name }} on
+        {{ formatDate(selectedChat.created_at) }}
       </p>
     </span>
     <span
@@ -55,7 +55,7 @@ export default {
 
   methods: {
     async leaveChannel() {
-      await this.channelStore.leaveChannel(this.selectedChat?.id);
+      await this.channelStore.leaveChannel(this.selectedChat.id);
       this.$router.push('/');
     },
     formatDate(date) {
