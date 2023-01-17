@@ -6,7 +6,7 @@
       class="hover-target px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
     />
     <AccordionList class="mt-4 ml-3 text-base text-slate-50">
-      <AccordionItem default-opened="true">
+      <AccordionItem :default-opened="true">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
             {{ $t('channels.title') }}
