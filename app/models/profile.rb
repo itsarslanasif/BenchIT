@@ -78,6 +78,6 @@ class Profile < ApplicationRecord
     @favourite = Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)
     return nil if @favourite.nil?
 
-    @favourite.id
+    @favourite&.id
   end
 end

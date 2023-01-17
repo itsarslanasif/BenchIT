@@ -81,6 +81,9 @@ export const useChannelStore = () => {
           this.joinedChannels = this.joinedChannels.filter(
             channel => channel.id != id
           );
+          this.starChannels = this.starChannels.filter(
+            channel => channel.id != id
+          );
           return response;
         } catch (e) {
           console.error(e);
@@ -107,7 +110,10 @@ export const useChannelStore = () => {
       },
 
       addJoinChannel(channel) {
-        this.joinedChannels.push(channel);
+        const index = this.joinedChannels.indexOf(channel);
+        if (index === -1) {
+          this.joinedChannels.push(channel);
+        }
       },
 
       removeJoinChannel(channel) {
@@ -129,7 +135,10 @@ export const useChannelStore = () => {
       },
 
       addStarredChannel(channel) {
-        this.starChannels.push(channel);
+        const index = this.starChannels.indexOf(channel);
+        if (index === -1) {
+          this.starChannels.push(channel);
+        }
       },
 
     },

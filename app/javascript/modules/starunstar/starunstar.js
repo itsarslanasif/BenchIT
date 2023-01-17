@@ -8,7 +8,8 @@ export const markStar = (currentChannel, channelStore) => {
         favourable_type: 'BenchChannel',
         favourable_id: currentChannel.id,
       }).then(response => {
-        if(response.data.success=="Channel successfully added to favourites") {
+
+        if (response.data.success === 'Channel successfully added to favourites') {
           channelStore.addStarredChannel(currentChannel);
           channelStore.removeJoinChannel(currentChannel);
           currentChannel.favourite_id = response.data.favourite.id;
@@ -16,10 +17,13 @@ export const markStar = (currentChannel, channelStore) => {
       });
     }
     else {
-      unstar(currentChannel.favourite_id);
-      channelStore.removeStarredChannel(currentChannel);
-      channelStore.addJoinChannel(currentChannel);
-      currentChannel.favourite_id = null;
+      unstar(currentChannel.favourite_id).then(response => {
+        if (response.data.status === 'success') {
+          channelStore.removeStarredChannel(currentChannel);
+          channelStore.addJoinChannel(currentChannel);
+          currentChannel.favourite_id = null;
+        }
+      });
     }
   } catch (e) {
     console.error(e);
