@@ -19,6 +19,7 @@ import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue
 import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
+import { decryption } from './modules/crypto/crypto';
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
   routes: [
@@ -159,11 +160,9 @@ router.beforeEach((to, from, next) => {
   const currentProfileStore = useCurrentProfileStore();
   const currentWorkspaceStore = useCurrentWorkspaceStore();
 
-  const currentWorkspace = JSON.parse(
-    sessionStorage.getItem('currentWorkspace')
-  );
-  const currentProfile = JSON.parse(sessionStorage.getItem('currentProfile'));
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const currentUser = decryption(localStorage, 'currentUser')
+  const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
+  const currentProfile = decryption(sessionStorage, 'currentProfile')
 
   currentProfileStore.setProfile({
     profile: currentProfile,
@@ -173,19 +172,19 @@ router.beforeEach((to, from, next) => {
 
   if (
     !localStorage.getItem('token') &&
-    currentWorkspace === null &&
+    !currentWorkspace &&
     to.meta.auth
   ) {
     next('/sign_in');
   } else if (
     localStorage.getItem('token') &&
-    currentWorkspace === null &&
+    !currentWorkspace &&
     to.meta.auth
   ) {
     next('/workspace_dashboard');
   } else if (
     localStorage.getItem('token') &&
-    currentWorkspace !== null &&
+    currentWorkspace &&
     !to.meta.auth
   ) {
     next('/');

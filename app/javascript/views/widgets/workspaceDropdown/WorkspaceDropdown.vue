@@ -20,6 +20,7 @@ import { NDropdown, NButton } from 'naive-ui';
 import options from './options.js';
 import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
+import { decryption } from '../../../modules/crypto/crypto';
 
 export default {
   components: { NButton, NDropdown, UserInviteModal },
@@ -33,16 +34,14 @@ export default {
     this.options = null;
   },
   setup() {
-    const currentWorkspace = JSON.parse(
-      sessionStorage.getItem('currentWorkspace')
-    );
+    const currentWorkspace = decryption(sessionStorage, 'currentWorkspace');
     return { currentWorkspace, options };
   },
   methods: {
     handleSelect(key) {
       switch (key) {
         case 'sign-out-of-your-account':
-          let token = localStorage.getItem('token');
+          let token = decryption(localStorage, 'token');
           userSignOut(token).then(res => {
             this.response = res;
             this.$router.push('/sign_in');
