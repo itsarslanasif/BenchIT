@@ -70,6 +70,7 @@ const updateMessage = (data, messageStore, threadStore) => {
 };
 
 const deleteMessage = (data, messageStore, threadStore) => {
+  let parent_message = null
   try {
     const messages = messageStore.getMessages;
 
@@ -95,11 +96,17 @@ const deleteMessage = (data, messageStore, threadStore) => {
       }
     } else {
       const findMessageIndex = messages.findIndex(
-        element => element.id === data.id
+        element => (parent_message = element, element.id === data.id)
       );
 
       if (findMessageIndex != -1) {
-        messages.splice(findMessageIndex, 1);
+        if (parent_message.replies.length === 0) {
+          messages.splice(findMessageIndex, 1);
+        } else {
+          parent_message.content = parent_message.sender_name = null
+          parent_message.pinned = false
+          console.log(parent_message)
+        }
       }
     }
   } catch (err) {

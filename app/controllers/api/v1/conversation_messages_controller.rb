@@ -3,7 +3,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   include Pagination
 
   before_action :fetch_conversation, :verify_membership, only: %i[create]
-  before_action :set_message, :authenticat_message, only: %i[destroy update]
+  before_action :set_message, :authenticat_message, only: %i[delete_message update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
@@ -33,8 +33,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     end
   end
 
-  def destroy
-    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
+  def delete_message
+    if @message.parent_message_id
+      render json: @message.destroy ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
+    else
+    render json: @message.update(content: nil) ? { message: 'Message deleted successfully.' } : { message: @message.errors, status: :unprocessable_entity }
+    end
   end
 
   def index_saved_messages

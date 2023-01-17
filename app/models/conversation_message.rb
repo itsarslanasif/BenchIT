@@ -8,12 +8,12 @@ class ConversationMessage < ApplicationRecord
   has_many_attached :message_attachments, dependent: :purge_later
 
   has_many :replies, class_name: 'ConversationMessage',
-                     foreign_key: :parent_message_id, dependent: :delete_all
+                     foreign_key: :parent_message_id
   has_many :saved_items, dependent: :delete_all
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :delete
 
-  validates :content, presence: true, length: { minimum: 1, maximum: 100 }
+  # validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
   scope :messages_by_ids_array, lambda { |ids|
     includes(:reactions, :replies, :parent_message, :saved_items)

@@ -26,11 +26,23 @@
     >
       <template
         v-if="
-          !isSameUser ||
+          currMessage.content === null">
+        <n-avatar
+          class="mr-1 cursor-pointer"
+          size="large"
+          src="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?s=612x612&w=0&k=20&c=XKhLwI2MWL50fDGzsaGLTuta-oFOQzwWusI6DXFenzo="
+        />
+      </template>
+      <template
+        v-if="
+          (!isSameUser ||
           !isSameDayMessage ||
           isFirstMessage ||
           currMessage.is_info
+        ) &&
+          currMessage.content !== null
         "
+
       >
         <user-profile-modal
           :profile_id="currMessage.sender_id"
@@ -53,6 +65,7 @@
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
+              v-if="currMessage.content !== null"
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
               }"
@@ -63,7 +76,7 @@
                   'hover-target':
                     isSameUser && isSameDayMessage && !isFirstMessage,
                 }"
-              >
+            >
                 {{
                   currMessage.is_info
                   ? time
@@ -78,23 +91,44 @@
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
-                !currMessage.is_info
+                !currMessage.is_info &&
+                currMessage.content !== null
               "
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
+            <span
+              v-if="
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage &&
+                currMessage.content === null
+              "
+              class="text-black-800 text-sm flex-wrap"
+              >This message was deleted</span
+            >
           </span>
           <span
             v-if="
-              !isSameUser ||
+              (!isSameUser ||
               !isSameDayMessage ||
               isFirstMessage ||
               currMessage.is_info
+            ) &&
+              currMessage.content !== null
             "
             :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
             class="text-sm flex-wrap"
             v-html="currMessage.content"
           />
+          <span
+            v-if="
+              (!isSameUser || !isSameDayMessage || isFirstMessage) &&
+              currMessage.content === null
+            "
+            class="text-black-800 text-sm flex-wrap"
+            >This message was deleted</span
+          >
           <div
             v-if="!currMessage.info && currMessage.attachments"
             class="flex gap-2"
@@ -114,7 +148,7 @@
                   <img
                     :src="attachment.attachment_link"
                     class="rounded"
-                    :class="{ 'ml-12': isSameUser && isSameDayMessage}"
+                    :class="{ 'ml-12': isSameUser && isSameDayMessage }"
                   />
                 </template>
                 <a :href="attachment.attachment_download_link" download>
@@ -188,7 +222,10 @@
         />
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
-          v-if="emojiModalStatus || openEmojiModal || showOptions"
+          v-if="
+            (emojiModalStatus || openEmojiModal || showOptions) &&
+            currMessage.content !== null
+          "
         >
           <template v-for="emoji in topReactions" :key="emoji">
             <EmojiModalButton
@@ -241,7 +278,15 @@
 
 <script>
 import moment from 'moment';
-import { NCard, NDivider, NTooltip, NButton, NText, NPopover } from 'naive-ui';
+import {
+  NCard,
+  NDivider,
+  NTooltip,
+  NButton,
+  NText,
+  NPopover,
+  NAvatar,
+} from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -303,6 +348,7 @@ export default {
     benchitAlert,
     ReplyAndThreadButton,
     DeleteMessageModal,
+    NAvatar,
   },
   props: {
     currMessage: {

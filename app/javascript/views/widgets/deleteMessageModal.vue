@@ -176,6 +176,7 @@ export default {
 
     deleteMessage() {
       deleteMessage(this.message.id);
+      this.setDeleteModal();
     },
 
     getTitle(message) {
