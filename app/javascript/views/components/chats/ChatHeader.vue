@@ -34,6 +34,7 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
+import { getHeaders } from '../../../modules/auth';
 
 export default {
   name: 'ChatHeader',
@@ -61,7 +62,7 @@ export default {
   mounted() {
     axios
       .get(`v1/bench_channels/${1}/bookmarks`, {
-        headers: { Authorization: localStorage.getItem('token') },
+        headers: getHeaders(),
       })
       .then(response => {
         this.bookmarks = response.data.bookmarks;
@@ -109,7 +110,7 @@ export default {
         .post(
           `v1/bench_channels/${1}/bookmarks`,
           {
-            headers: { Authorization: localStorage.getItem('token') },
+            headers: getHeaders(),
           },
           {
             name: value.name,

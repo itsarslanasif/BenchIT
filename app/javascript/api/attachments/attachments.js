@@ -1,9 +1,10 @@
 import axios from '../../modules/axios'
+import { getHeaders } from '../../modules/auth'
 
 export const getAllRecentAttachments = () => {
   return axios
     .get('v1/conversation_messages/recent_files', {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data

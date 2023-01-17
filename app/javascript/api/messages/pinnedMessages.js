@@ -1,3 +1,4 @@
+import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios';
 
 export const pinnedMessages = (conversation_type, conversation_id) => {
@@ -5,7 +6,7 @@ export const pinnedMessages = (conversation_type, conversation_id) => {
     .get(
       `v1/pins?conversation_type=${conversation_type}&conversation_id=${conversation_id}`,
       {
-        headers: { Authorization: localStorage.getItem('token') },
+        headers: getHeaders(),
       }
     )
     .then(response => {
@@ -23,7 +24,7 @@ export const pinMessage = (conversation_type, conversation_id, message_id) => {
         conversation_message_id: message_id,
       },
       {
-        headers: { Authorization: localStorage.getItem('token') },
+        headers: getHeaders(),
       }
     )
     .then(response => {
@@ -34,7 +35,7 @@ export const pinMessage = (conversation_type, conversation_id, message_id) => {
 export const unPinMessage = pin_id => {
   return axios
     .delete(`v1/pins/${pin_id}`, {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;
