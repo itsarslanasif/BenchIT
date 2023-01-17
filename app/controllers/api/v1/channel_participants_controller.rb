@@ -20,7 +20,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def create
     ActiveRecord::Base.transaction do
-      params[:profile_ids].map { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
+      params[:profile_ids].each { |profile_id| ChannelParticipant.create(bench_channel_id: @channel.id, profile_id: profile_id, permission: true) }
       InfoMessagesCreatorService.new(@channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
       render json: { status: :ok, member_count: @users_joined.count }
     end

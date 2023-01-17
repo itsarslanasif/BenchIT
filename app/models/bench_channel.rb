@@ -36,8 +36,8 @@ class BenchChannel < ApplicationRecord
 
   def bench_channel_content
     content = bench_channel_basic_content
-    profiles.each do |profile|
-      content[:profiles] << profile.profile_content
+    content[:profiles] = profiles.inject([]) do |result, profile|
+      result << profile.profile_content
     end
 
     content

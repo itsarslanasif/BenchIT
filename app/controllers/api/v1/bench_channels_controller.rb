@@ -1,6 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, except: %i[index create joined_channels]
-  before_action :set_channel_participant, :set_left_on, only: %i[leave_channel]
+  before_action :set_channel_participant, :set_bench_channel_from_participant, :set_left_on, only: %i[leave_channel]
   before_action :bench_channel_cannot_be_public_again, only: %i[update]
 
   def index
@@ -80,6 +80,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @channel_participant = Current.profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
 
     render json: { message: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
+  end
+
+  def set_bench_channel_from_participant
     @channel = @channel_participant.bench_channel
   end
 

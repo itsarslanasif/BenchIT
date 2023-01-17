@@ -119,9 +119,7 @@ export const useChannelStore = () => {
           element => element.id === channel.id
         );
 
-        if (channel_item == undefined) {
-          this.channels.push(channel);
-        }
+        if (channel_item == undefined) this.channels.push(channel);
         if (joinedChannel == undefined) this.joinedChannels.push(channel);
       },
 
