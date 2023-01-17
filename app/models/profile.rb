@@ -91,4 +91,8 @@ class Profile < ApplicationRecord
       local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p')
     }
   end
+
+  def get_favourite_id(favourable_id, favourable_type)
+    Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
+  end
 end
