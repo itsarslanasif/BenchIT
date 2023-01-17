@@ -10,17 +10,17 @@
               {{ channelName }}
             </span>
           </div>
-          <div class="flex flex-start items-center font-thin">
+          <div class="flex flex-start items-center font-thin gap-x-2 px-3">
             <div v-if="isChannelParticipant">
-              <span class="text-green-500 text-xs flex items-center">
+              <span class="text-green-500 text-sm flex items-center">
                 <i class="fas fa-check mr-0"></i> {{ $t('actions.joined') }}
               </span>
             </div>
             <div>
-              &nbsp; {{ channelParticipants.length }} {{ $t('channeldetail.members') }}
+               {{ channelParticipants.length }} {{ $t('channeldetail.members') }}
             </div>
             <div>
-              &nbsp; {{ channelDescription }}
+               {{ channelDescription }}
             </div>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default {
       router.push('/');
     };
 
-    const handleView = async () => {
+    const handleView = () => {
       goToChannel(channelId.value);
     }
 

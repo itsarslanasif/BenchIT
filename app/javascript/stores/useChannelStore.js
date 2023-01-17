@@ -54,7 +54,6 @@ export const useChannelStore = () => {
       async searchChannels(query) {
         try {
           this.channels = await getChannels(query);
-          
         } catch (e) {
           console.error(e);
         }
