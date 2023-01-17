@@ -114,7 +114,7 @@
                   <img
                     :src="attachment.attachment_link"
                     class="rounded"
-                    :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+                    :class="{ 'ml-12': isSameUser && isSameDayMessage}"
                   />
                 </template>
                 <a :href="attachment.attachment_download_link" download>
@@ -223,6 +223,7 @@
             :action="setOptionsModal"
             :message="currMessage"
             :pinnedConversationStore="pinnedConversationStore"
+            :setDeleteModal="setDeleteModal"
           />
         </div>
       </span>
@@ -231,6 +232,11 @@
       <EmojiPicker :addReaction="addReaction" />
     </div>
   </div>
+  <DeleteMessageModal
+    v-model:show="showDeleteModal"
+    :message="currMessage"
+    :setDeleteModal="setDeleteModal"
+  />
 </template>
 
 <script>
@@ -257,6 +263,7 @@ import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import benchitAlert from '../../widgets/benchitAlert.vue';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
+import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -295,6 +302,7 @@ export default {
     downloadsModal,
     benchitAlert,
     ReplyAndThreadButton,
+    DeleteMessageModal,
   },
   props: {
     currMessage: {
@@ -331,6 +339,7 @@ export default {
       showOptions: false,
       displayedReactions: [],
       showFileOptions: false,
+      showDeleteModal: false,
     };
   },
   beforeUnmount() {
@@ -541,6 +550,10 @@ export default {
     },
     getSavedItemText(message) {
       return message.isSaved ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS : CONSTANTS.ADD_TO_SAVED_ITEMS;
+    },
+
+    setDeleteModal() {
+      this.showDeleteModal = !this.showDeleteModal;
     },
   },
 };
