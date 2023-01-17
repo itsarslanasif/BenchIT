@@ -58,12 +58,12 @@
           <div v-if="showDateTimeInputFields" class="flex mt-6 justify-between">
             <n-date-picker
               class="w-6/12"
-              v-model:value="dateTimeStamp"
+              v-model:value="formValue.clear_status_after"
               type="date"
             />
             <n-time-picker
               class="w-2/5"
-              v-model:value="dateTimeStamp"
+              v-model:value="formValue.clear_status_after"
               size="medium"
             />
           </div>
@@ -180,7 +180,6 @@ export default {
       profile: currentProfile.getCurrentProfile,
       workspace:currentWorkspace.getCurrentWorkspace,
       profileStatusStore,
-      dateTimeStamp: ref(null),
     };
   },
   data() {
@@ -194,7 +193,7 @@ export default {
       formValue: {
         text_status: '',
         emoji_status: '🙂',
-        clear_status_after: 1183135260000,
+        clear_status_after: ref(null),
         dateTimeString: 'Today',
 
       },
@@ -251,7 +250,7 @@ export default {
       if(this.profile?.status?.clear_after){
       this.showDateTimeInputFields = true;
       this.formValue.dateTimeString = 'Choose date and time';
-      this.dateTimeStamp=  ref(new Date(this.profile?.status?.clear_after));
+      this.formValue.clear_status_after=  ref(new Date(this.profile?.status?.clear_after));
       }
       else{
         this.showDateTimeInputFields = false;
@@ -278,7 +277,12 @@ export default {
     },
 
     onClickSave() {
-      setProfileStatus(this.workspace.id,this.profile.id,this.formValue).then(
+      let obj={
+           text_status:this.formValue.text_status,
+           emoji_status:this.formValue.emoji_status,
+           clear_status_after:this.isDontCLear()
+}
+      setProfileStatus(this.workspace.id,this.profile.id,obj).then(
           (response) => {
             this.currentProfileStore.setProfileStatus(response.status)
           },)
@@ -288,8 +292,16 @@ export default {
     onClickCancel() {
       this.profileStatusStore.toggleProfileStatusPopUp()
     },
+    isDontCLear(){
+      if(this.formValue.dateTimeString=="don't clear" || this.formValue.dateTimeString=="Don't clear" ){
+        return "don't clear"
+      }
+      return new Date(this.formValue.clear_status_after)
+
+    },
 
     onClickClearStatus() {
+
       clearStatus(this.workspace.id,this.profile.id).then(
           (response) => {
             this.currentProfileStore.setProfileStatus(null)
@@ -302,7 +314,7 @@ export default {
       this.formValue.emoji_status = selectedOption.emoji;
       this.formValue.dateTimeString = 'Choose date and time';
       this.formValue.clear_status_after= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
-      this.dateTimeStamp= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
+      this.formValue.clear_status_after= ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
       this.secondStep=true;
       this.showDateTimeInputFields=true;
       let kk=this.handleDateTime.secondsToHoursAndMinutes(selectedOption.clear_after)
@@ -310,14 +322,13 @@ export default {
       if(kk=='30 minutes' || kk=='4 hours' || kk=='This Week' ||kk=='1 hours'    )
       {
         this.showDateTimeInputFields=false;
-        this.dateTimeStamp = ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
-        this.formValue.clear_status_after=this.dateTimeStamp
+        this.formValue.clear_status_after = ref(this.handleDateTime.incremntTimeStampBySeconds(selectedOption.clear_after));
         this.formValue.dateTimeString= this.handleDateTime.secondsToHoursAndMinutes(selectedOption.clear_after)
       }
       else if( selectedOption.clear_after=="don't clear"){
         this.showDateTimeInputFields=false;
         this.formValue.dateTimeString= "don't clear";
-        this.formValue.clear_status_after= "don't clear";
+        this.formValue.clear_status_after= ref(null);;
       }
     },
     toggleEmojiModal() {
@@ -337,7 +348,7 @@ export default {
       this.formValue.dateTimeString = 'Today';
       this.formValue.emoji_status = '🙂';
       this.showDateTimeInputFields = false;
-      this.dateTimeStamp = ref(null);
+      this.formValue.clear_status_after = ref(null);
       this.toggleSteps();
     },
   },
