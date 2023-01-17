@@ -51,7 +51,7 @@ class ConversationMessage < ApplicationRecord
   end
 
   def broadcast_message
-    BroadcastMessageService.new(broadcastable_content, bench_conversation).call
+    BroadcastMessageChatService.new(broadcastable_content, bench_conversation).call
   end
 
   def action_performed
@@ -76,8 +76,7 @@ class ConversationMessage < ApplicationRecord
   def notify_profiles
     return if action_performed.eql?('Update')
 
-    BroadcastMessageService.new(broadcastable_content, bench_conversation)
-                           .send_notification_ws(eligible_for_notification_profile_ids)
+    BroadcastMessageNotificationService.new(broadcastable_content, eligible_for_notification_profile_ids).call
   end
 
   def add_unread_messages

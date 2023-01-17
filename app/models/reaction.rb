@@ -19,7 +19,7 @@ class Reaction < ApplicationRecord
                       else
                         'Update'
                       end
-    BroadcastMessageService.new(result, conversation_message.bench_conversation).call
+    BroadcastMessageChatService.new(result, conversation_message.bench_conversation).call
   end
 
   def reaction_content

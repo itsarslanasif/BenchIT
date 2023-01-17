@@ -5,6 +5,6 @@ class ClearStatusJob < ApplicationJob
     profile = Profile.find(profile_id)
     Current.profile = profile
     Current.workspace = profile.workspace
-    profile.update_profile("", "", "")
+    profile.update_profile('', '', '')
   end
 end

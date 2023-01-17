@@ -20,6 +20,6 @@ class Pin < ApplicationRecord
                       else
                         'Update'
                       end
-    BroadcastMessageService.new(result, bench_conversation).call
+    BroadcastMessageChatService.new(result, bench_conversation).call
   end
 end

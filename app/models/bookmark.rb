@@ -31,7 +31,7 @@ class Bookmark < ApplicationRecord
                     else
                       bookmarkable.bench_conversation
                     end
-    BroadcastMessageService.new(result, @conversation).call
+    BroadcastMessageChatService.new(result, @conversation).call
   end
 
   def bookmark_content
