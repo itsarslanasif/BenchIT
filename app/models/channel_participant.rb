@@ -3,5 +3,5 @@ class ChannelParticipant < ApplicationRecord
   belongs_to :bench_channel
 
   validates :permission, presence: true
-  validates :bench_channel, uniqueness: { scope: [:profile] }
+  validates :bench_channel, uniqueness: { scope: %i[profile_id] }
 end
