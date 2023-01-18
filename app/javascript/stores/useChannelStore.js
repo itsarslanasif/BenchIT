@@ -19,7 +19,7 @@ export const useChannelStore = () => {
     getters: {
       getChannels: state => state.channels,
       getJoinedChannels: state => state.joinedChannels,
-      getStarredChannels: state => state.starChannels
+      getStarredChannels: state => state.starChannels,
     },
 
     actions: {
@@ -27,8 +27,12 @@ export const useChannelStore = () => {
         try {
           this.channels = await getChannels();
           this.joinedChannels = await getJoinedChannels();
-          this.starChannels = this.joinedChannels.filter(el => el.favourite_id !== null);
-          this.joinedChannels = this.joinedChannels.filter(el => el.favourite_id === null);
+          this.starChannels = this.joinedChannels.filter(
+            channel => channel.favourite_id !== null
+          );
+          this.joinedChannels = this.joinedChannels.filter(
+            channel => channel.favourite_id === null
+          );
           this.sortChannelsList();
         } catch (e) {
           console.error(e);
@@ -38,7 +42,6 @@ export const useChannelStore = () => {
       async createChannel(name, description, is_private) {
         try {
           await createChannel(name, description, is_private).then(response => {
-
             if (response?.data?.errors) {
               apiResponseStatusStore().setApiResponseStatus(response.data);
               return response.data;
@@ -98,7 +101,6 @@ export const useChannelStore = () => {
             ) {
               return -1;
             }
-
             if (
               thisChannel.name.toLowerCase() > nextChannel.name.toLowerCase()
             ) {
@@ -107,6 +109,28 @@ export const useChannelStore = () => {
             return 0;
           }
         );
+      },
+
+      addChannelJoined(channel) {
+        const channel_item = this.channels.find(
+          element => element.id === channel.id
+        );
+        const joinedChannel = this.joinedChannels.find(
+          element => element.id === channel.id
+        );
+
+        if (channel_item == undefined) this.channels.push(channel);
+        if (joinedChannel == undefined) this.joinedChannels.push(channel);
+      },
+
+      removeChannelJoined(channel) {
+        const joinedChannelIndex = this.joinedChannels.findIndex(
+          element => element.id === channel.id
+        );
+
+        if (joinedChannelIndex != -1) {
+          this.joinedChannels.splice(joinedChannelIndex, 1);
+        }
       },
 
       addJoinChannel(channel) {
@@ -140,7 +164,6 @@ export const useChannelStore = () => {
           this.starChannels.push(channel);
         }
       },
-
     },
   });
   const store = channelStore();

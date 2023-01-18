@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
         resources :bench_channels, except: %i[new edit] do
           member do
-            delete :leave
+            delete :leave_channel
           end
 
           collection do
