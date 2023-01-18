@@ -8,8 +8,8 @@ export const getMessageHistory = async (conversation_type, id, page) => {
     .get(`/v1/conversation_messages/${id}/${conversation_type}_messages`, {
       headers: { Authorization: localStorage.getItem('token') },
       params: {
-        page
-      }
+        page,
+      },
     })
     .then(response => {
       return response.data;

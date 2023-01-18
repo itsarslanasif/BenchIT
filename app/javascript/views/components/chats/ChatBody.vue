@@ -192,18 +192,20 @@ export default {
   },
   updated() {
     const message_id = this.$route.params.message_id;
+
     if (message_id) {
       const message = document.getElementById(message_id);
+
       if (message) {
         message.classList.add('highlight');
         message.scrollIntoView();
         return;
       }
     }
-    this.newMessageFlag = false;
-    this.scrollToEnd()
-    this.restoreScrollPosition();
 
+    this.newMessageFlag = false;
+    this.scrollToEnd();
+    this.restoreScrollPosition();
   },
 };
 </script>

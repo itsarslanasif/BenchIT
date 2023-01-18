@@ -1,15 +1,14 @@
 <template>
   <div v-if="conversation_type && id" class="flex flex-col h-full">
-      <div v-if="chat" class="chat-header-style">
-        <ChatHeader />
-      </div>
-      <div v-if="messages" class="break-words chat-style overflow-y-auto">
-        <ChatBody @load-more-messages="loadMoreMessages" 
-        :oldestUnreadMessageId="oldestUnreadMessageId" />
-      </div>
-      <div class="px-3 editor-style">
-        <TextEditorVue :sendMessage="sendMessage" />
-      </div>
+    <div v-if="chat" class="chat-header-style">
+      <ChatHeader />
+    </div>
+    <div v-if="messages" class="break-words chat-style overflow-y-auto">
+      <ChatBody @load-more-messages="loadMoreMessages" :oldestUnreadMessageId="oldestUnreadMessageId" />
+    </div>
+    <div class="px-3 editor-style">
+      <TextEditorVue :sendMessage="sendMessage" />
+    </div>
   </div>
 </template>
 

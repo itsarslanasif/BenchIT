@@ -7,14 +7,14 @@ import { getChannel } from '../api/channels/channels';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
-    state: () => ({     
-        messages: [],
-        currMessage: [],
-        currentPage: 1,
-        maxPages : null,
-        hasMoreMessages: true,
-        selectedChat: {},
-        newMessageSent: false
+    state: () => ({
+      messages: [],
+      currMessage: [],
+      currentPage: 1,
+      maxPages: null,
+      hasMoreMessages: true,
+      selectedChat: {},
+      newMessageSent: false,
     }),
 
     getters: {
@@ -34,17 +34,17 @@ export const useMessageStore = () => {
       },
       async index(conversation_type, id) {
         try {
-        let newMessages = await getMessageHistory(
-          conversation_type.slice(0, -1),
-          id,
-          this.currentPage
-        )
-        this.messages =  [...newMessages.messages, ...this.messages]
-        this.currentPage += 1
-        this.maxPages = newMessages.page_information.pages
-        this.hasMoreMessages = this.currentPage > this.maxPages
+          let newMessages = await getMessageHistory(
+            conversation_type.slice(0, -1),
+            id,
+            this.currentPage
+          );
+          this.messages = [...newMessages.messages, ...this.messages];
+          this.currentPage += 1;
+          this.maxPages = newMessages.page_information.pages;
+          this.hasMoreMessages = this.currentPage > this.maxPages;
         } catch (e) {
-          console.error(e)
+          console.error(e);
         }
         if (conversation_type === 'profiles') {
           this.selectedChat = await getUserProfile(
