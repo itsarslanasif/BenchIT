@@ -32,8 +32,6 @@
         <EmojiPicker :toggleModal="toggleEmojiModal" :addReaction="pickEmoji" />
       </div>
 
-      <!-- step two -->
-
       <div v-if="secondStep" class="m-0 relative mt-5">
         <div class="mb-6">
           <n-dropdown
@@ -92,7 +90,6 @@
         </div>
       </div>
 
-      <!-- step one -->
       <div v-if="!secondStep">
         <div class="m-0 relative mt-5">
           <div v-if="profileStatusStore.recent_statuses.length" class="mb-6">
@@ -166,8 +163,8 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { setProfileStatus } from '../../../api/profiles/profileStatus';
 import { clearStatus } from '../../../api/profiles/profileStatus';
-import { getRecentStatuses } from '../../../api/profiles/profileStatus';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
+import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   name: 'CreateChannel',
@@ -182,9 +179,6 @@ export default {
     NDropdown,
     NModal,
     NTimePicker,
-  },
-  mounted() {
-    this.profileStatusStore.setRecentAndWorkspaceStatus()
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
@@ -205,53 +199,56 @@ export default {
       showDateTimeInputFields: false,
       showEmojiModal: false,
       showModal: true,
-      title: 'Set Status.',
       secondStep: false,
       formValue: {
         text_status: '',
         emoji_status: '🙂',
         clear_status_after: ref(new Date(new Date().setHours(23, 59, 59, 999))),
-        dateTimeString: 'Today',
+        dateTimeString: CONSTANTS.TODAY,
       },
       clearAfterOptions: [
         {
-          label: "Don't clear",
-          key: "Don't clear",
+          label: CONSTANTS.DONT_CLEAR,
+          key: CONSTANTS.DONT_CLEAR,
         },
         {
-          label: '30 minutes',
-          key: '30 minutes',
+          label: CONSTANTS.THIRTY_MINUTES,
+          key: CONSTANTS.THIRTY_MINUTES,
         },
         {
-          label: '1 hour',
-          key: '1 hour',
+          label: CONSTANTS.ONE_HOUR_,
+          key: CONSTANTS.ONE_HOUR_,
         },
         {
-          label: '4 hours',
-          key: '4 hours',
+          label: CONSTANTS.FOUR_HOURS,
+          key: CONSTANTS.FOUR_HOURS,
         },
         {
-          label: 'Today',
-          key: 'Today',
+          label: CONSTANTS.TODAY,
+          key: CONSTANTS.TODAY,
         },
         {
-          label: 'This Week',
-          key: 'This Week',
+          label: CONSTANTS.THIS_WEEK,
+          key: CONSTANTS.THIS_WEEK,
         },
         {
-          label: 'Choose date and time',
-          key: 'Choose date and time',
+          label: CONSTANTS.CHOOSE_DATE_TIME,
+          key: CONSTANTS.CHOOSE_DATE_TIME,
         },
       ],
       automaticallyUpdates: {
         id: 1,
         emoji: '📆',
-        text: 'In meeting',
+        text: CONSTANTS.IN_MEETING,
         clear_after: 1740,
-        recent: false,
       },
     };
   },
+
+  mounted() {
+    this.profileStatusStore.setRecentAndWorkspaceStatus();
+  },
+
   beforeMount() {
     if (this.profile.status) {
       this.secondStep = true;
@@ -259,37 +256,41 @@ export default {
       this.formValue.emoji_status = this.profile?.status?.emoji;
       if (this.profile?.status?.clear_after) {
         this.showDateTimeInputFields = true;
-        this.formValue.dateTimeString = 'Choose date and time';
+        this.formValue.dateTimeString = CONSTANTS.CHOOSE_DATE_TIME;
         this.formValue.clear_status_after = ref(
           new Date(this.profile?.status?.clear_after)
         );
       } else {
         this.showDateTimeInputFields = false;
-        this.formValue.dateTimeString = "don't clear";
+        this.formValue.dateTimeString = CONSTANTS.DONT_CLEAR;
       }
     }
   },
+
   methods: {
     pickEmoji(emoji) {
       this.formValue.emoji_status = emoji.i;
       this.setEmojiModal();
     },
+
     setEmojiModal() {
       this.toggleSteps();
       this.toggleEmojiModal();
     },
+
     onSelectClearAfterOption(key) {
       this.formValue.dateTimeString = String(key);
       this.formValue.clear_status_after =
         this.handleDateTime.convertStringToTimeStamp(String(key));
-      if (String(key) == 'Choose date and time')
+      if (String(key) == CONSTANTS.CHOOSE_DATE_TIME)
         this.showDateTimeInputFields = true;
       else this.showDateTimeInputFields = false;
     },
 
-    deleteRecentStatus(id){
-     this.profileStatusStore.deleteRecentStatus(id)
+    deleteRecentStatus(id) {
+      this.profileStatusStore.deleteRecentStatus(id);
     },
+
     onClickSave() {
       let obj = {
         text_status: this.formValue.text_status,
@@ -308,16 +309,7 @@ export default {
     onClickCancel() {
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
-    isDontCLear() {
-      console.log('end of day:', this.formValue.clear_status_after);
-      if (
-        this.formValue.dateTimeString == "don't clear" ||
-        this.formValue.dateTimeString == "Don't clear"
-      ) {
-        return "don't clear";
-      }
-      return new Date(this.formValue.clear_status_after);
-    },
+
     onClickClearStatus() {
       clearStatus(this.workspace.id, this.profile.id)
         .then(response => {
@@ -330,10 +322,17 @@ export default {
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
 
+    isDontCLear() {
+      if (this.formValue.dateTimeString == CONSTANTS.DONT_CLEAR) {
+        return CONSTANTS.DONT_CLEAR;
+      }
+      return new Date(this.formValue.clear_status_after);
+    },
+
     onSelectRecentStatus(selectedOption) {
       this.formValue.text_status = selectedOption.text;
       this.formValue.emoji_status = selectedOption.emoji;
-      this.formValue.dateTimeString = 'Choose date and time';
+      this.formValue.dateTimeString = CONSTANTS.CHOOSE_DATE_TIME;
       this.formValue.clear_status_after = ref(
         this.handleDateTime.incremntTimeStampBySeconds(
           selectedOption.clear_after
@@ -346,15 +345,14 @@ export default {
       );
       this.secondStep = true;
       this.showDateTimeInputFields = true;
-      let kk = this.handleDateTime.secondsToHoursAndMinutes(
+      let convertedClearAterTime = this.handleDateTime.secondsToHoursAndMinutes(
         selectedOption.clear_after
       );
-      console.log(kk);
       if (
-        kk == '30 minutes' ||
-        kk == '4 hours' ||
-        kk == 'This Week' ||
-        kk == '1 hours'
+        convertedClearAterTime == CONSTANTS.THIRTY_MINUTES ||
+        CONSTANTS.FOUR_HOURS ||
+        CONSTANTS.THIS_WEEK ||
+        CONSTANTS.ONE_HOUR_
       ) {
         this.showDateTimeInputFields = false;
         this.formValue.clear_status_after = ref(
@@ -366,20 +364,23 @@ export default {
           this.handleDateTime.secondsToHoursAndMinutes(
             selectedOption.clear_after
           );
-      } else if (selectedOption.clear_after == "don't clear") {
+      } else if (selectedOption.clear_after == CONSTANTS.DONT_CLEAR) {
         this.showDateTimeInputFields = false;
-        this.formValue.dateTimeString = "don't clear";
+        this.formValue.dateTimeString = CONSTANTS.DONT_CLEAR;
         this.formValue.clear_status_after = ref(null);
-      }
-      else if (selectedOption.clear_after == "Today") {
+      } else if (selectedOption.clear_after == CONSTANTS.TODAY) {
         this.showDateTimeInputFields = false;
-        this.formValue.dateTimeString = "Today";
-        this.formValue.clear_status_after = ref(this.handleDateTime.getEndOfDayTime());
+        this.formValue.dateTimeString = CONSTANTS.TODAY;
+        this.formValue.clear_status_after = ref(
+          this.handleDateTime.getEndOfDayTime()
+        );
       }
     },
+
     toggleEmojiModal() {
       this.showEmojiModal = !this.showEmojiModal;
     },
+
     toggleSteps() {
       if (
         this.formValue.text_status != '' ||
@@ -391,11 +392,13 @@ export default {
         this.secondStep = false;
       }
     },
+
     closeProfileStatusModal() {
       this.showModal = false;
     },
+
     clearInputFields() {
-      this.formValue.dateTimeString = 'Today';
+      this.formValue.dateTimeString = CONSTANTS.TODAY;
       if (this.formValue.text_status == '') {
         this.formValue.emoji_status = '🙂';
       }

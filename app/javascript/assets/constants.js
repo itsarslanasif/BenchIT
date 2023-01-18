@@ -96,8 +96,7 @@ export const CONSTANTS = {
   SIGN_OUT_OF: 'Sign out of',
   SIGN_OUT_OF_WORKSPACE: 'Sign out of Workspace',
   SET_STATUS: 'Set status',
-  CHANNEL_NAME_INVALID_ERROR:
-    "Channel names can't contain spaces, periods, or most punctuation. Try again?",
+  CHANNEL_NAME_INVALID_ERROR: "Channel names can't contain spaces, periods, or most punctuation. Try again?",
   FIELDS_REQUIRED_ERROR: "Fields are required and can't be blank !",
   CHANNEL_NAME_ERROR: 'Please enter channel name.',
   CHANNEL_DISCRIPTION_ERROR: 'Please enter channel description.',
@@ -136,4 +135,12 @@ export const CONSTANTS = {
   MEMBER_SUCCESS_MESSAGE: 'member added successfully.',
   MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
   SOMETHING_WENT_WRONG: 'Something went wrong',
+  DONT_CLEAR: "don't clear",
+  THIRTY_MINUTES: '30 minutes',
+  ONE_HOUR_: '1 hour',
+  FOUR_HOURS: '4 hours',
+  TODAY: 'Today',
+  THIS_WEEK: 'This Week',
+  CHOOSE_DATE_TIME: 'Choose date and time',
+  IN_MEETING: 'In meeting',
 };
