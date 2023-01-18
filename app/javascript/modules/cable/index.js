@@ -69,10 +69,8 @@ const deleteMessage = (data, messageStore, threadStore) => {
         messages.splice(findMessageIndex, 1);
         const threadMessage = threadStore.getMessages;
         threadMessage.replies.splice(0,threadMessage.replies.length);
-        messages[findMessageIndex].reactions = []
-        let msg = null
-        msg.reactions = null
         threadMessage.setMessage(msg)
+        messages[findMessageIndex].reactions = []
       }
     }
   } catch (err) {
@@ -91,27 +89,36 @@ const updateMessage = (data, messageStore, threadStore) => {
       const findMessageIndex = message.replies.findIndex(
         element => element.id === data.id
       );
-      if (findMessageIndex !== -1 && messages[findMessageIndex].content !== data.content) {
-        message.replies[findMessageIndex] = data;
+      if (findMessageIndex === -1 && data.attachments)
+      {
+        createMessage(data, messageStore, threadStore);
       }
-      const threadMessage = threadStore.getMessages;
-      const findThreadMessageIndex = threadMessage.replies.findIndex(
-        element => element.id === data.id
-      );
-      if (findThreadMessageIndex !== -1 && threadMessage[findThreadMessageIndex].content !== data.content) {
-        threadMessage.replies[findThreadMessageIndex] = data;
+      else{
+        if (findMessageIndex !== -1) {
+          message.replies[findMessageIndex] = data;
+        }
+        const threadMessage = threadStore.getMessages;
+        const findThreadMessageIndex = threadMessage.replies.findIndex(
+          element => element.id === data.id
+        );
+        if (findThreadMessageIndex !== -1) {
+          threadMessage.replies[findThreadMessageIndex] = data;
+        }
       }
     } else {
       const findMessageIndex = messages.findIndex(
         element => element.id === data.id
       );
       if (findMessageIndex !== -1 && messages[findMessageIndex].content !== data.content) {
-        messages[findMessageIndex] = data;
         if(data.replies.length > 0)
         {
-          //const threadMessage = threadStore.getMessages;
           threadStore.setMessage(data)
         }
+        messages[findMessageIndex] = data;
+      }
+      if (findMessageIndex === -1 && data.attachments)
+      {
+        createMessage(data, messageStore, threadStore);
       }
     }
   } catch (err) {

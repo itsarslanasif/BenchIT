@@ -11,7 +11,7 @@ class ConversationMessage < ApplicationRecord
                      foreign_key: :parent_message_id, dependent: :delete_all
   has_many :saved_items, dependent: :delete_all
   has_many :reactions, dependent: :delete_all
-  has_one :pin, dependent: :delete
+  has_one :pin, dependent: :destroy
 
   # validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 

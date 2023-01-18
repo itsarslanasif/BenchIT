@@ -34,17 +34,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def destroy
-    if @message.parent_message_id && @message.parent_message.content.eql?(nil) && @message.parent_message.replies.count.eql?(1)
+    if should_delete_parent_message?
       @message.parent_message.destroy!
-    elsif @message.parent_message_id && @message.parent_message.content.eql?(nil) && @message.parent_message.replies.count > 1
-      @message.destroy!
-    elsif @message.replies.count.positive?
-      @message.pin.destroy if @message.pin
-      @message.reactions.delete_all if @message.reactions.count.positive?
-      @message.saved_items.delete_all if @message.saved_items.count.positive?
-      @message.update!(content: nil)
-    elsif @message.parent_message_id && !@message.parent_message.content.eql?(nil)
-      @message.destroy!
+    elsif should_soft_delete_message?
+      soft_delete_message
     else
       @message.destroy!
     end
@@ -162,5 +155,23 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def marked_chat_read
     UnreadMessagesMarkedAsReadService.new(@conversation).call
+  end
+
+  def should_delete_parent_message?
+    @message.parent_message_id && @message.parent_message.content.eql?(nil) && @message.parent_message.replies.count.eql?(1)
+  end
+
+  def should_soft_delete_message?
+    @message.parent_message_id.nil? && @message.replies.count.positive?
+  end
+
+  def soft_delete_message
+    ActiveRecord::Base.transaction do
+      @message.pin&.destroy!
+      @message.reactions&.delete_all
+      @message.saved_items&.delete_all
+      @message.message_attachments&.delete_all
+      @message.update!(content: nil)
+    end
   end
 end
