@@ -60,7 +60,7 @@ export default {
   },
   beforeMount() {
     if (this.message) {
-      this.Options = new Options(this.message.pinned);
+      this.Options = new Options(this.message.pinned, this.message.is_info);
     }
   },
   data() {
