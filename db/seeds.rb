@@ -56,14 +56,13 @@ ConversationMessage.create(content: 'Hi User from Alva', is_threaded: false, ben
 
 BenchChannel.create(name: 'watercooler', description: 'memes')
 BenchChannel.create(name: 'Benchit-devs', description: 'developers', is_private: true)
-ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
-ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 2)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 2)
+ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 2)
 ConversationMessage.create(content: 'Hi from watercooler', is_threaded: false, bench_conversation_id: 4, sender_id: 1)
 
 BenchChannel.create(name: 'general', description: 'general')
-ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 4)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
+ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 4)
 ConversationMessage.create(content: 'Hi from general', is_threaded: false, bench_conversation_id: 5, sender_id: 2)
 Favourite.create(profile_id: 1, favourable_type: 'Profile', favourable_id: 4)
 Favourite.create(profile_id: 1, favourable_type: 'Group', favourable_id: 1)
@@ -73,6 +72,7 @@ Favourite.create(profile_id: 2, favourable_type: 'BenchChannel', favourable_id: 
 Favourite.create(profile_id: 2, favourable_type: 'Group', favourable_id: 2)
 ConversationMessage.create(content: '1st reply', is_threaded: false, bench_conversation_id: 1, sender_id: 1, parent_message_id: 1)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
+ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
 ConversationMessage.create(content: 'Hi from developer', is_threaded: false, bench_conversation_id: 6, sender_id: 1)
 Workspace.create!(company_name: 'Devsinc',
                   workspace_type: :work,
@@ -83,8 +83,8 @@ user1.profiles.create!(username: 'Alvi', description: 'SE', workspace_id: 2)
 Current.profile = user1.profiles.second
 Current.workspace = Workspace.second
 BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
-ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 5)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 5)
+ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 5)
 ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 7, sender_id: 6)
 
 Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')

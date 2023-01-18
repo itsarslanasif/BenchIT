@@ -175,6 +175,7 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        starred: 'Starred'
         channel_created_success: 'New channel created successfully'
         channel_created_failure: 'Channel name already exist'
       bookmark:
@@ -201,6 +202,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        joined: 'Joined'
         leave: 'Leave'
         update: 'Update'
         search: 'Search'

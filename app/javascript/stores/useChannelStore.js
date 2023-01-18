@@ -12,18 +12,28 @@ export const useChannelStore = () => {
     state: () => ({
       channels: [],
       joinedChannels: [],
+      starChannels: [],
+      currentChannel: {},
     }),
 
     getters: {
       getChannels: state => state.channels,
       getJoinedChannels: state => state.joinedChannels,
+      getStarredChannels: state => state.starChannels,
     },
 
     actions: {
       async index() {
         try {
-          this.channels = await getChannels();
+          let newChannels = await getChannels();
+          this.channels = [...newChannels]
           this.joinedChannels = await getJoinedChannels();
+          this.starChannels = this.joinedChannels.filter(
+            channel => channel.favourite_id !== null
+          );
+          this.joinedChannels = this.joinedChannels.filter(
+            channel => channel.favourite_id === null
+          );
           this.sortChannelsList();
         } catch (e) {
           console.error(e);
@@ -33,7 +43,6 @@ export const useChannelStore = () => {
       async createChannel(name, description, is_private) {
         try {
           await createChannel(name, description, is_private).then(response => {
-
             if (response?.data?.errors) {
               apiResponseStatusStore().setApiResponseStatus(response.data);
               return response.data;
@@ -52,7 +61,7 @@ export const useChannelStore = () => {
 
       async searchChannels(query) {
         try {
-          return await getChannels(query);
+          this.channels = await getChannels(query);
         } catch (e) {
           console.error(e);
         }
@@ -61,7 +70,6 @@ export const useChannelStore = () => {
       async joinChannel(channel_id) {
         try {
           const res = await memberJoinChannel(channel_id);
-          this.channels.push(res.data.channel);
           this.joinedChannels.push(res.data.channel);
           this.sortChannelsList();
         } catch (e) {
@@ -72,8 +80,10 @@ export const useChannelStore = () => {
       async leaveChannel(id) {
         try {
           const response = await memberLeaveChannel(id);
-          this.channels = this.channels.filter(channel => channel.id != id);
           this.joinedChannels = this.joinedChannels.filter(
+            channel => channel.id != id
+          );
+          this.starChannels = this.starChannels.filter(
             channel => channel.id != id
           );
           return response;
@@ -90,7 +100,6 @@ export const useChannelStore = () => {
             ) {
               return -1;
             }
-
             if (
               thisChannel.name.toLowerCase() > nextChannel.name.toLowerCase()
             ) {
@@ -99,6 +108,60 @@ export const useChannelStore = () => {
             return 0;
           }
         );
+      },
+
+      addChannelJoined(channel) {
+        const channel_item = this.channels.find(
+          element => element.id === channel.id
+        );
+        const joinedChannel = this.joinedChannels.find(
+          element => element.id === channel.id
+        );
+
+        if (channel_item == undefined) this.channels.push(channel);
+        if (joinedChannel == undefined) this.joinedChannels.push(channel);
+      },
+
+      removeChannelJoined(channel) {
+        const joinedChannelIndex = this.joinedChannels.findIndex(
+          element => element.id === channel.id
+        );
+
+        if (joinedChannelIndex != -1) {
+          this.joinedChannels.splice(joinedChannelIndex, 1);
+        }
+      },
+
+      addJoinChannel(channel) {
+        const index = this.joinedChannels.indexOf(channel);
+        if (index === -1) {
+          this.joinedChannels.push(channel);
+        }
+      },
+
+      removeJoinChannel(channel) {
+        const index = this.joinedChannels.indexOf(channel);
+        if (index > -1) {
+          this.joinedChannels.splice(index, 1);
+        }
+      },
+
+      setCurrentChannel(channel) {
+        this.currentChannel = channel;
+      },
+
+      removeStarredChannel(channel) {
+        const index = this.starChannels.indexOf(channel);
+        if (index > -1) {
+          this.starChannels.splice(index, 1);
+        }
+      },
+
+      addStarredChannel(channel) {
+        const index = this.starChannels.indexOf(channel);
+        if (index === -1) {
+          this.starChannels.push(channel);
+        }
       },
     },
   });

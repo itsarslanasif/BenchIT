@@ -10,20 +10,9 @@
       />
       <IconElement icon="fa-at" :name="$t('sidebar.mentions_and_reactions')" />
       <IconElement icon="fa-paper-plane" :name="$t('sidebar.draft_and_sent')" />
-      <IconElement
-        icon="fa-regular fa-address-book"
-        :name="$t('sidebar.people_and_user_group')"
-      />
-      <IconElement
-        icon="fa-regular fa-bookmark"
-        :name="$t('sidebar.save_message')"
-        @click="getdata(`/savemessages`)"
-      />
-      <IconElement
-        icon="fa-hashtag"
-        :name="$t('sidebar.all_channels')"
-        @click="getdata(`/browse-channels`)"
-      />
+      <IconElement icon="fa-regular fa-address-book" :name="$t('sidebar.people_and_user_group')" />
+      <IconElement icon="fa-regular fa-bookmark" :name="$t('sidebar.save_message')" @click="getdata(`/savemessages`)" />
+      <IconElement icon="fa-hashtag" :name="$t('sidebar.all_channels')" @click="getdata(`/browse-channels`)" />
       <IconElement icon="fa-ellipsis-vertical" :name="$t('sidebar.more')" />
     </div>
     <hr class="text-slate-400" />

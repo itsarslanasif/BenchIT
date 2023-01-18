@@ -63,7 +63,7 @@ export const createChannel = async (name, description, is_private) => {
 
 export const memberLeaveChannel = async channel_id => {
   return await axios
-    .delete(`v1/bench_channels/${channel_id}/leave`, {
+    .delete(`v1/bench_channels/${channel_id}/leave_channel`, {
       headers: getHeaders(),
     })
     .then(response => {
