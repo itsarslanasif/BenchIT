@@ -67,9 +67,12 @@ const deleteMessage = (data, messageStore, threadStore) => {
 
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
-          const threadMessage = threadStore.getMessages;
-          threadMessage.replies.splice(0,threadMessage.replies.length);
-          threadMessage.setMessage(null)
+        const threadMessage = threadStore.getMessages;
+        threadMessage.replies.splice(0,threadMessage.replies.length);
+        messages[findMessageIndex].reactions = []
+        let msg = null
+        msg.reactions = null
+        threadMessage.setMessage(msg)
       }
     }
   } catch (err) {
