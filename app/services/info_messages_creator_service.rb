@@ -29,7 +29,7 @@ class InfoMessagesCreatorService
 
   def left_channel(channel_name)
     ConversationMessage.create(
-      content: "left ##{channel_name}",
+      content: "left ##{channel_name}.",
       is_threaded: @is_threaded,
       bench_conversation_id: @bench_conversation_id,
       sender_id: @sender_id,
