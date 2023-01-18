@@ -4,6 +4,7 @@ import { getDirectMessagesList } from '../api/directMessages/directMessages';
 export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
   state: () => ({
     directMessagesList: [],
+    error: {}
   }),
 
   actions: {
@@ -24,7 +25,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       try {
         this.directMessagesList = await getDirectMessagesList(workspace_id);
       } catch (e) {
-        console.error(e);
+        this.handleError(e)
       }
     },
     getSortedDMList(currentProfileID) {
@@ -69,5 +70,8 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     addOwnChatAtTop(ownChat) {
       this.directMessagesList.unshift(ownChat);
     },
+    handleError(error) {
+      this.error = error;
+    }
   },
 });

@@ -6,6 +6,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
     selectedOption: 'about',
     channelMemberCount: 0,
     channelMembers: [],
+    error: {}
   }),
   getters: {
     getSelectedOption() {
@@ -17,7 +18,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       try {
         this.channelMembers = await getChannelMembers(query, bench_channel_id);
       } catch (e) {
-        console.error(e);
+        this.handleError(e);
       }
     },
     async getChannelMembersCount(bench_channel_id) {
@@ -25,7 +26,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
         this.channelMembers = await getChannelMembers('', bench_channel_id);
         this.channelMemberCount = this.channelMembers.length;
       } catch (e) {
-        console.error(e);
+        this.handleError(e);
       }
       return this.channelMemberCount;
     },
@@ -62,5 +63,8 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
         this.channelMemberCount -= 1;
       }
     },
+    handleError(error) {
+      return this.error = error;
+    }
   },
 });

@@ -14,6 +14,7 @@ export const useChannelStore = () => {
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
+      error: {}
     }),
 
     getters: {
@@ -35,7 +36,7 @@ export const useChannelStore = () => {
           );
           this.sortChannelsList();
         } catch (e) {
-          console.error(e);
+          this.handleError(e)
         }
       },
 
@@ -54,7 +55,7 @@ export const useChannelStore = () => {
             }
           });
         } catch (e) {
-          console.error(e);
+          this.handleError(e)
         }
       },
 
@@ -62,7 +63,7 @@ export const useChannelStore = () => {
         try {
           return await getChannels(query);
         } catch (e) {
-          console.error(e);
+          this.handleError(e)
         }
       },
 
@@ -73,7 +74,7 @@ export const useChannelStore = () => {
           this.joinedChannels.push(res.data.channel);
           this.sortChannelsList();
         } catch (e) {
-          console.error(e);
+          this.handleError(e)
         }
       },
 
@@ -89,7 +90,7 @@ export const useChannelStore = () => {
           );
           return response;
         } catch (e) {
-          console.error(e);
+          this.handleError(e)
         }
       },
 
@@ -164,6 +165,10 @@ export const useChannelStore = () => {
           this.starChannels.push(channel);
         }
       },
+
+      handleError(error) {
+        this.error = error;
+      }
     },
   });
   const store = channelStore();

@@ -49,6 +49,7 @@ export const useUnreadStore = () => {
     state: () => {
       return {
         unreadMessages: [],
+        error: {},
       };
     },
 
@@ -58,7 +59,11 @@ export const useUnreadStore = () => {
 
     actions: {
       async index() {
+        try {
         this.unreadMessages = await getUnreadMessages();
+        } catch (err) {
+          this.handleError(err);
+        }
       },
       addNewMessage(message, conversation_type, conversation_id) {
         let unreadDetails = this.unreadMessages.find(unread_message_detail =>
@@ -132,6 +137,9 @@ export const useUnreadStore = () => {
         }
         return null;
       },
+      handleError (error) {
+        this.error = error;
+      }
     },
   });
 

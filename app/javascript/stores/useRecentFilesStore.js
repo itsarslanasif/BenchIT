@@ -16,9 +16,12 @@ export const useRecentFilesStore = () => {
         try {
           this.recentFiles = await getAllRecentAttachments()
         } catch (e) {
-          console.error(e)
+          this.handleError(e)
         }
       },
+      handleError(err) {
+        this.error = err
+      }
     },
   });
   const store = recentFilesStore();

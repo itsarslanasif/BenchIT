@@ -7,6 +7,7 @@ export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
     state: () => ({
       profiles: [],
+      error: {}
     }),
 
     getters: {
@@ -21,9 +22,12 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          console.error(e)
+          this.handleError(e);
         }
       },
+      handleError(err) {
+        this.error = err
+      }
     },
   });
   const store = profileStore();

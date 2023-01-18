@@ -13,6 +13,7 @@ export const useMessageStore = () => {
         selectedChat: {},
         messages: [],
         currMessage: null,
+        error: {}
       };
     },
 
@@ -32,18 +33,30 @@ export const useMessageStore = () => {
         this.selectedChat = selectedChat;
       },
       async index(conversation_type, id) {
+        try {
         this.messages = await getMessageHistory(
           conversation_type.slice(0, -1),
           id
         );
+        } catch (error) {
+          this.handleError(error)
+        }
         if (conversation_type === 'profiles') {
           const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
+          try {
           this.selectedChat = await getUserProfile(
             currentWorkspace.id,
             id
           );
+          } catch (error) {
+            this.handleError(error)
+          }
         } else if (conversation_type === 'channels') {
+          try {
           this.selectedChat = await getChannel(id);
+          } catch (error) {
+            this.handleError(error)
+          }
         }
       },
       async addMessage(msg) {
@@ -51,11 +64,18 @@ export const useMessageStore = () => {
         this.messages.push(msg);
       },
       async deleteMessage(id) {
+        try {
         await deleteMessage(id);
+        } catch (error) {
+          this.handleError(error)
+        }
       },
       getMessage(id) {
         return this.messages.find(message => message.id === id);
       },
+      handleError (error) {
+        this.error = error
+      }
     },
   });
 

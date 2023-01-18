@@ -4,6 +4,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
   state: () => ({
     pinnedConversation: [],
     pinToggle: false,
+    error: {}
   }),
 
   getters: {
@@ -20,8 +21,13 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
 
   actions: {
     async index(conversation_type, id) {
+      try {
       this.pinnedConversation = await pinnedMessages(conversation_type, id);
       this.pinToggle = false;
+      }
+      catch (error) {
+        this.handleError(error)
+      }
     },
     pinMessage(message) {
       this.pinnedConversation.push(message);
@@ -41,6 +47,9 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     },
     closeModal() {
       this.pinToggle = false;
+    },
+    handleError(error) {
+      this.error = error;
     },
   },
 });
