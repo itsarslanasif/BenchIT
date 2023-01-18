@@ -66,6 +66,7 @@
               <div
                 v-for="item in filteredList"
                 :key="item.id"
+                @click="goToChat(item)"
                 class="hover:bg-slate-600 p-2 rounded"
               >
                 <div class="flex">
@@ -147,8 +148,25 @@ export default {
     },
     filterData() {
       this.filteredList = this.filteredList.filter(item =>
-        item.name.toLowerCase().includes(this.search.toLowerCase())
+        (item['workspace_id'] ? item['username'] : item['name'])
+          .toLowerCase()
+          .includes(this.search.toLowerCase())
       );
+    },
+    goToChat(item) {
+      const conversationType = item['workspace_id']
+        ? 'profiles'
+        : item['creator_id']
+        ? 'channels'
+        : 'groups';
+      this.$router.push(`/${conversationType}/${item.id}`);
+      if (this.isMobileView()) {
+        this.leftPaneStore.closeLeftPane();
+      }
+      this.closeSearchModal();
+    },
+    isMobileView() {
+      return window.innerWidth < 1400;
     },
   },
   watch: {
