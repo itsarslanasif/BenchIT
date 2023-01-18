@@ -5,6 +5,8 @@ module Pagination
   included do
     def pagination_for_chat_messages(conversation_id, page_no)
       @pagy, @messages = pagy(ConversationMessage.chat_messages(conversation_id), page: page_no || 1, items: 30)
+      @messages = @messages.reverse
+      [@pagy, @messages]
     rescue StandardError
       @pagy = nil
     end

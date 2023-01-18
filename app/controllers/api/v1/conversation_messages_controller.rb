@@ -60,8 +60,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
     return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
-
-    @messages = @messages.reverse
   end
 
   def group_messages
@@ -69,8 +67,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
     return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
-
-    @messages = @messages.reverse
   end
 
   def profile_messages
@@ -83,7 +79,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
       return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
 
-      @messages = @messages.reverse
     end
   end
 
