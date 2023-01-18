@@ -8,7 +8,7 @@ class ConversationMessage < ApplicationRecord
   has_many_attached :message_attachments, dependent: :purge_later
 
   has_many :replies, class_name: 'ConversationMessage',
-                     foreign_key: :parent_message_id
+                     foreign_key: :parent_message_id, dependent: :delete_all
   has_many :saved_items, dependent: :delete_all
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :delete
@@ -109,7 +109,7 @@ class ConversationMessage < ApplicationRecord
       reactions: reactions,
       created_at: created_at,
       updated_at: updated_at,
-      isSaved: saved?(id),
+      isSaved: false,
       pinned: pin.present?,
       replies: replies,
       bench_conversation_id: bench_conversation_id,

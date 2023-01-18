@@ -48,19 +48,19 @@ const updateMessage = (data, messageStore, threadStore) => {
       const findMessage = message.replies.find(
         element => element.id === data.id
       );
-      if (findMessage === undefined) {
+      if (findMessage !== undefined) {
         message.replies.push(data);
       }
       const findThreadMessage = threadMessage.replies.find(
         element => element.id === data.id
       );
-      if (findThreadMessage === undefined) {
+      if (findThreadMessage !== undefined) {
         threadMessage.replies.push(data);
       }
     } else {
       const findMessage = messages.find(element => element.id === data.id);
 
-      if (findMessage == undefined) {
+      if (findMessage != undefined) {
         messageStore.addMessage(data);
       }
     }
@@ -70,7 +70,6 @@ const updateMessage = (data, messageStore, threadStore) => {
 };
 
 const deleteMessage = (data, messageStore, threadStore) => {
-  let parent_message = null
   try {
     const messages = messageStore.getMessages;
 
@@ -96,17 +95,11 @@ const deleteMessage = (data, messageStore, threadStore) => {
       }
     } else {
       const findMessageIndex = messages.findIndex(
-        element => (parent_message = element, element.id === data.id)
+        element => element.id === data.id
       );
 
       if (findMessageIndex != -1) {
-        if (parent_message.replies.length === 0) {
-          messages.splice(findMessageIndex, 1);
-        } else {
-          parent_message.content = parent_message.sender_name = null
-          parent_message.pinned = false
-          console.log(parent_message)
-        }
+        messages.splice(findMessageIndex, 1);
       }
     }
   } catch (err) {
