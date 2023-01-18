@@ -1,4 +1,5 @@
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useThreadStore } from '../../stores/useThreadStore';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 
@@ -226,6 +227,16 @@ const unPinMessage = (data, messageStore, threadStore) => {
   }
 };
 
+const ChannelParticipantCreate = data => {
+  const channelDetailsStore = useChannelDetailStore();
+  channelDetailsStore.addMember(data);
+};
+
+const ChannelParticipantDelete = data => {
+  const channelDetailsStore = useChannelDetailStore();
+  channelDetailsStore.removeMember(data);
+};
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
@@ -234,6 +245,8 @@ const actions = {
   MessageUpdate: updateMessage,
   PinCreate: pinMessage,
   PinDelete: unPinMessage,
+  ChannelParticipantCreate: ChannelParticipantCreate,
+  ChannelParticipantDelete: ChannelParticipantDelete,
 };
 
 export const cableActions = data => {

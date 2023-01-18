@@ -1,4 +1,5 @@
 import { useUnreadStore } from '../../stores/useUnreadStore';
+import { useChannelStore } from '../../stores/useChannelStore';
 
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
@@ -27,9 +28,21 @@ const deleteMessage = data => {
   }
 };
 
+const ChannelParticipantCreate = async data => {
+  const channelsStore = useChannelStore();
+  channelsStore.addChannelJoined(data);
+};
+
+const ChannelParticipantDelete = async data => {
+  const channelsStore = useChannelStore();
+  channelsStore.removeChannelJoined(data);
+};
+
 const notificationActions = {
   MessageCreate: createMessage,
   MessageDelete: deleteMessage,
+  ChannelParticipantCreate: ChannelParticipantCreate,
+  ChannelParticipantDelete: ChannelParticipantDelete,
 };
 
 export const notifyActions = data => {
