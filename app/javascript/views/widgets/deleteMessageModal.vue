@@ -36,14 +36,14 @@
             </p>
           </span>
           <span
-            class="text-black-800 text-md flex-wrap"
+            class="text-black-800 text-sm flex-wrap"
             v-html="message.content"
           />
           <div v-if="message.attachments">
             <n-collapse arrow-placement="right" :default-expanded-names="['1']">
               <n-collapse-item name="1">
                 <template #header>
-                  <span class="text-black-600 text-sm">{{
+                  <span class="text-black-600 text-xs">{{
                     getTitle(message)
                   }}</span>
                 </template>

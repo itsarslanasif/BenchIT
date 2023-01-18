@@ -24,14 +24,15 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template
-        v-if="
-          currMessage.content === null">
-        <n-avatar
-          class="mr-1 cursor-pointer"
-          size="large"
-          src="https://media.istockphoto.com/id/1298957635/vector/garbage-bin-line-vector-icon-editable-stroke-pixel-perfect-for-mobile-and-web.jpg?s=612x612&w=0&k=20&c=XKhLwI2MWL50fDGzsaGLTuta-oFOQzwWusI6DXFenzo="
-        />
+      <template v-if="currMessage.content === null">
+        <div
+          class="h-10 w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-trash-can"
+            class="text-xl text-black-500"
+          />
+        </div>
       </template>
       <template
         v-if="
@@ -55,10 +56,12 @@
             <p
               @click="showUserProfile"
               v-if="
-                !isSameUser ||
+                (!isSameUser ||
                 !isSameDayMessage ||
                 isFirstMessage ||
                 currMessage.is_info
+              ) &&
+                currMessage.content !== null
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
@@ -104,8 +107,8 @@
                 !isFirstMessage &&
                 currMessage.content === null
               "
-              class="text-black-800 text-sm flex-wrap"
-              >This message was deleted</span
+              class="text-black-600 text-sm flex mt-2"
+              >{{ $t('deleteMessageModal.deleted_message') }}</span
             >
           </span>
           <span
@@ -126,13 +129,11 @@
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
               currMessage.content === null
             "
-            class="text-black-800 text-sm flex-wrap"
-            >This message was deleted</span
+            class="text-black-600 text-sm flex mt-2"
           >
-          <div
-            v-if="!currMessage.info && currMessage.attachments"
-            class="flex gap-2"
+            {{ $t('deleteMessageModal.deleted_message') }}</span
           >
+          <div v-if="currMessage.info && currMessage.attachments" class="flex gap-2">
             <div
               v-for="attachment in currMessage.attachments"
               :key="attachment.id"
@@ -148,7 +149,10 @@
                   <img
                     :src="attachment.attachment_link"
                     class="rounded"
-                    :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
                   />
                 </template>
                 <a :href="attachment.attachment_download_link" download>
@@ -176,8 +180,11 @@
             :class="[
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
               {
+
                 'ml-12 -mr-10':
-                  !currMessage.is_info && isSameUser && isSameDayMessage,
+                  !currMessage.is_info &&
+                  isSameUser && isSameDayMessage
+                  && !isFirstMessage,
               },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
@@ -200,7 +207,9 @@
                   emoji
                 }}</span>
                 <span class="text-md"
-                  >{{ getUsers(emoji, currentUserStore.currentUser.name) }}
+                  >{{
+                    getUsers(emoji, currentProfileStore.currentProfile.username)
+                  }}
                   {{ $t('chat.reacted') }}</span
                 >
               </div>
@@ -309,6 +318,7 @@ import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import benchitAlert from '../../widgets/benchitAlert.vue';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 
 export default {
   name: 'MessageWrapper',
@@ -322,6 +332,7 @@ export default {
     const profilesStore = useProfileStore();
     const messagesStore = useMessageStore();
     const downloadsStore = useDownloadsStore();
+    const currentProfileStore = useCurrentProfileStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -332,6 +343,7 @@ export default {
       profilesStore,
       messagesStore,
       downloadsStore,
+      currentProfileStore,
     };
   },
   components: {
@@ -437,9 +449,6 @@ export default {
         return false;
       });
     },
-    isSuccessfullResponse() {
-      return this.error === false;
-    },
     lastReply() {
       return this.currMessage.replies[this.currMessage.replies?.length - 1];
     },
@@ -469,7 +478,7 @@ export default {
           return (
             (emoji_id = reaction.id),
             reaction.emoji === temp &&
-              reaction.profile_id === this.currentUserStore.currentUser.id
+              reaction.profile_id === this.currentProfileStore.currentProfile.id
           );
         })
       ) {
@@ -573,7 +582,7 @@ export default {
       return this.currMessage.reactions.some(reaction => {
         return (
           reaction.emoji === emoji &&
-          reaction.profile_id === this.currentUserStore.currentUser.id
+          reaction.profile_id === this.currentProfileStore.currentProfile.id
         );
       });
     },
@@ -601,6 +610,9 @@ export default {
     setDeleteModal() {
       this.showDeleteModal = !this.showDeleteModal;
     },
+  },
+  mounted() {
+    console.log(this.currMessage);
   },
 };
 </script>

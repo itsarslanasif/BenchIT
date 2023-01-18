@@ -1,7 +1,7 @@
 <template>
   <div
     @click="toggleThread"
-    :class="{ 'ml-12': isSameUser && isSameDayMessage && !isFirstMessage }"
+    :class="{ 'ml-12': isSameUser && isSameDayMessage && !isFirstMessage && currMessage.content !== null }"
     class="group hover:bg-white hover:shadow-xs cursor-pointer rounded px-1 py-1 w-150 mt-1"
   >
     <span

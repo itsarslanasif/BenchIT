@@ -63,6 +63,7 @@ en:
         header: 'Delete message'
         cancel: 'Cancel'
         delete: 'Delete'
+        deleted_message: 'This message was deleted.'
       email:
         gmail: '@gmail.com'
       pinconversation:
