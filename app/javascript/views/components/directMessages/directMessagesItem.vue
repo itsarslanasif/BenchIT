@@ -1,10 +1,6 @@
 <template>
   <div v-if="sortedDMList">
-    <h5
-      v-for="user in sortedDMList"
-      :key="user"
-      class="hover:bg-primaryHover"
-    >
+    <h5 v-for="user in sortedDMList" :key="user" class="hover:bg-primaryHover">
       <div
         v-if="user"
         @click="goToChat(`/profiles/${user.id}`, user)"
@@ -16,14 +12,9 @@
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
-        <n-tooltip trigger="hover">
-          <template #trigger>
-            <p class="ml-2 text-sm self-center text-white">
-              {{ user.status.emoji }}
-            </p>
-          </template>
-          <span> {{ user.status?.text }} </span>
-        </n-tooltip>
+        <p class="ml-2 text-sm self-center text-white">
+          {{ user.status.emoji }}
+        </p>
         <div
           v-if="unreadDetails?.messages.length"
           class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
@@ -38,10 +29,10 @@
 import { useUnreadStore } from '../../../stores/useUnreadStore';
 import { storeToRefs } from 'pinia';
 import { unreadMessagesCount } from '../../../modules/unreadMessages';
-import { NAvatar, NTooltip } from 'naive-ui';
+import { NAvatar } from 'naive-ui';
 
 export default {
-  components: { NAvatar, NTooltip },
+  components: { NAvatar },
   props: ['sortedDMList', 'isOwnChat', 'goToChat'],
   data() {
     return {
