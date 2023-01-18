@@ -21,7 +21,13 @@
               {{ user?.status?.emoji }}
             </p>
           </template>
-          <span> {{ user?.status?.text }} <span class="text-black-500">until</span> {{statusClearAfterTime(user?.status?.clear_after)  }}  </span>
+          <span>
+            {{ user?.status?.text }}
+            <span class="text-black-500">
+              {{ $t('profilestatus.until') }}
+            </span>
+            {{ statusClearAfterTime(user?.status?.clear_after) }}
+          </span>
         </n-tooltip>
         <div
           v-if="unreadDetails?.messages.length"
@@ -63,12 +69,10 @@ export default {
       );
       return this.unreadDetails?.messages.length;
     },
-    statusClearAfterTime(time){
-      if(!time)
-         return moment().endOf('month').fromNow();
-      else
-         return moment(time).calendar();
-    }
+    statusClearAfterTime(time) {
+      if (!time) return moment().endOf('month').fromNow();
+      else return moment(time).calendar();
+    },
   },
 };
 </script>

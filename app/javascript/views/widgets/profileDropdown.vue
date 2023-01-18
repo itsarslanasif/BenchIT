@@ -8,16 +8,23 @@
       class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
     >
       <n-button>
-
         <div class="flex avatar absolute">
           <n-tooltip v-if="profile_Status" trigger="hover">
-          <template #trigger>
-            <div class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent  self-baseline text-sm ">
-             <p> {{profile_Status.emoji}} </p>
-            </div>
-          </template>
-          <span>{{ profile_Status.emoji}}  {{ profile_Status.text}} <span class="text-black-500">until</span> {{statusClearAfterTime(profile_Status.clear_after)}}  </span>
-        </n-tooltip>
+            <template #trigger>
+              <div
+                class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent self-baseline text-sm"
+              >
+                <p>{{ profile_Status.emoji }}</p>
+              </div>
+            </template>
+            <span
+              >{{ profile_Status.emoji }} {{ profile_Status.text }}
+              <span class="text-black-500">
+                {{ $t('profilestatus.until') }}
+              </span>
+              {{ statusClearAfterTime(profile_Status.clear_after) }}
+            </span>
+          </n-tooltip>
           <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
         </div>
         <div
@@ -38,7 +45,7 @@
 </template>
 
 <script>
-import { NDropdown, NAvatar, NText, NTooltip  } from 'naive-ui';
+import { NDropdown, NAvatar, NText, NTooltip } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
@@ -51,7 +58,13 @@ import { storeToRefs } from 'pinia';
 import moment from 'moment';
 
 export default {
-  components: { NDropdown, NAvatar, DownloadModal, SetProfileStatusModal,NTooltip },
+  components: {
+    NDropdown,
+    NAvatar,
+    DownloadModal,
+    SetProfileStatusModal,
+    NTooltip,
+  },
   setup() {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
@@ -176,18 +189,16 @@ export default {
       return this.profile.image_url;
     },
     profile_Status() {
-      return this.profile?.status
+      return this.profile?.status;
     },
   },
   methods: {
     handleStatusSelect() {
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
-    statusClearAfterTime(time){
-      if(!time)
-         return moment().endOf('month').fromNow();
-      else
-         return moment(time).calendar();
+    statusClearAfterTime(time) {
+      if (!time) return moment().endOf('month').fromNow();
+      else return moment(time).calendar();
     },
     handleSelect(key) {
       switch (key) {
@@ -243,7 +254,10 @@ export default {
             h(
               NText,
               { class: 'text-xl' },
-              { default: () => (this.profile.status ? this.profile.status?.emoji : '🙂') }
+              {
+                default: () =>
+                  this.profile.status ? this.profile.status?.emoji : '🙂',
+              }
             ),
           ]),
           h('div', { class: 'w-full' }, [
@@ -252,7 +266,9 @@ export default {
               { class: 'ml-12 text-black-800' },
               {
                 default: () =>
-                this.profile.status ? this.profile.status?.text : 'Update your status',
+                  this.profile.status
+                    ? this.profile.status?.text
+                    : 'Update your status',
               }
             ),
           ]),

@@ -265,6 +265,7 @@ en:
         recent : 'Recent'
         for_workspace: 'For Workspace'
         automatically_updates: 'Automatically updates'
+        until: 'until'
       channeldetail:
         about: 'About'
         members: 'Members'
