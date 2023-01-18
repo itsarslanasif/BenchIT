@@ -498,10 +498,10 @@ export default {
     },
     getSavedItemText(message) {
     if(message.isSaved) {
-      return 'Remove from saved items';
+      return CONSTANTS.REMOVE_FROM_SAVED_ITEMS;
     }
     else {
-      return 'Add to saved items';
+      return CONSTANTS.ADD_TO_SAVED_ITEMS;
     }
    },
   },
