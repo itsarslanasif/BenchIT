@@ -326,6 +326,7 @@ export default {
       if (this.formValue.dateTimeString == CONSTANTS.DONT_CLEAR) {
         return CONSTANTS.DONT_CLEAR;
       }
+      
       return new Date(this.formValue.clear_status_after);
     },
 
@@ -349,10 +350,10 @@ export default {
         selectedOption.clear_after
       );
       if (
-        convertedClearAterTime == CONSTANTS.THIRTY_MINUTES ||
-        CONSTANTS.FOUR_HOURS ||
-        CONSTANTS.THIS_WEEK ||
-        CONSTANTS.ONE_HOUR_
+        convertedClearAterTime  == '30 minutes' ||
+        convertedClearAterTime == '4 hours' ||
+        convertedClearAterTime == 'This Week' ||
+        convertedClearAterTime == '1 hours'
       ) {
         this.showDateTimeInputFields = false;
         this.formValue.clear_status_after = ref(

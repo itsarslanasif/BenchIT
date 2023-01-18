@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { getHeaders } from '../modules/auth';
 
 export const SampleStore = defineStore('users', {
   state: () => {
@@ -12,7 +13,7 @@ export const SampleStore = defineStore('users', {
     async index() {
       return this.axios
         .get('/users', {
-          headers: { Authorization: localStorage.getItem('token') },
+          headers: getHeaders(),
         })
         .then(response => {
           this.users = response.data.users;
@@ -21,7 +22,7 @@ export const SampleStore = defineStore('users', {
     async show(id) {
       return this.axios
         .get(`/user/${id}`, {
-          headers: { Authorization: localStorage.getItem('token') },
+          headers: getHeaders(),
         })
         .then(response => {
           this.user = response.data.user;

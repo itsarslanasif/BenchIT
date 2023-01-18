@@ -2,6 +2,7 @@ import {
   defineStore
 } from 'pinia';
 
+import { encryption } from '../modules/crypto/crypto'
 
 export const useCurrentProfileStore = () => {
   const currentProfileStore = defineStore('currentProfileStore', {
@@ -19,7 +20,8 @@ export const useCurrentProfileStore = () => {
       },
       setProfileStatus(status) {
         this.currentProfile.status = status
-        sessionStorage.setItem('currentProfile', JSON.stringify(this.currentProfile))
+        encryption(sessionStorage,'currentProfile',this.currentProfile)
+       // sessionStorage.setItem('currentProfile', JSON.stringify(this.currentProfile))
       }
     },
   });

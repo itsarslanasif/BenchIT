@@ -120,4 +120,8 @@ class Profile < ApplicationRecord
   def update_profile(text_status, emoji_status, clear_status_after)
     update(text_status: text_status, emoji_status: emoji_status, clear_status_after: clear_status_after)
   end
+  
+  def get_favourite_id(favourable_id, favourable_type)
+    Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
+  end
 end
