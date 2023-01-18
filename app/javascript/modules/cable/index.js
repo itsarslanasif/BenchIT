@@ -36,39 +36,6 @@ const createMessage = (data, messageStore, threadStore) => {
   }
 };
 
-const updateMessage = (data, messageStore, threadStore) => {
-  try {
-    const messages = messageStore.getMessages;
-
-    if (data.parent_message_id) {
-      const message = messages.find(
-        element => element.id === data.parent_message_id
-      );
-      const threadMessage = threadStore.getMessages;
-      const findMessage = message.replies.find(
-        element => element.id === data.id
-      );
-      if (findMessage !== undefined) {
-        message.replies.push(data);
-      }
-      const findThreadMessage = threadMessage.replies.find(
-        element => element.id === data.id
-      );
-      if (findThreadMessage !== undefined) {
-        threadMessage.replies.push(data);
-      }
-    } else {
-      const findMessage = messages.find(element => element.id === data.id);
-
-      if (findMessage != undefined) {
-        messageStore.addMessage(data);
-      }
-    }
-  } catch (err) {
-    console.error(err);
-  }
-};
-
 const deleteMessage = (data, messageStore, threadStore) => {
   try {
     const messages = messageStore.getMessages;
@@ -100,12 +67,54 @@ const deleteMessage = (data, messageStore, threadStore) => {
 
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
+          const threadMessage = threadStore.getMessages;
+          threadMessage.replies.splice(0,threadMessage.replies.length);
+          threadMessage.setMessage(null)
       }
     }
   } catch (err) {
     console.error(err);
   }
 };
+
+const updateMessage = (data, messageStore, threadStore) => {
+  try {
+    const messages = messageStore.getMessages;
+
+    if (data.parent_message_id) {
+      const message = messages.find(
+        element => element.id === data.parent_message_id
+      );
+      const findMessageIndex = message.replies.findIndex(
+        element => element.id === data.id
+      );
+      if (findMessageIndex !== -1 && messages[findMessageIndex].content !== data.content) {
+        message.replies[findMessageIndex] = data;
+      }
+      const threadMessage = threadStore.getMessages;
+      const findThreadMessageIndex = threadMessage.replies.findIndex(
+        element => element.id === data.id
+      );
+      if (findThreadMessageIndex !== -1 && threadMessage[findThreadMessageIndex].content !== data.content) {
+        threadMessage.replies[findThreadMessageIndex] = data;
+      }
+    } else {
+      const findMessageIndex = messages.findIndex(
+        element => element.id === data.id
+      );
+      if (findMessageIndex !== -1 && messages[findMessageIndex].content !== data.content) {
+        messages[findMessageIndex] = data;
+        if(data.replies.length > 0)
+        {
+          //const threadMessage = threadStore.getMessages;
+          threadStore.setMessage(data)
+        }
+      }
+    }
+  } catch (err) {
+    console.error(err);
+  }
+}
 
 const createReaction = (data, messageStore) => {
   try {
