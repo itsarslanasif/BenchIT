@@ -109,7 +109,7 @@ class ConversationMessage < ApplicationRecord
       reactions: reactions,
       created_at: created_at,
       updated_at: updated_at,
-      isSaved: false,
+      isSaved: saved?(id),
       pinned: pin.present?,
       replies: replies,
       bench_conversation_id: bench_conversation_id,
