@@ -1,4 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
+  include Pagination
+
   before_action :set_bench_channel, only: %i[show update destroy leave_channel]
   before_action :set_channel_participant, :set_left_on, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
@@ -10,6 +12,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
       @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
                                                             match: :word_start)
     end
+    paginate_bench_channels
+    @bench_channels = sort_bench_channels(@bench_channels, params[:sort_by]) if params[:sort_by].present?
 
     @bench_channels = @bench_channels.reject do |channel|
       channel.is_private && !channel.participant?(Current.profile)
@@ -94,5 +98,29 @@ class Api::V1::BenchChannelsController < Api::ApiController
     return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
 
     render json: { message: "You cannot change ##{@bench_channel.name} to public again." }, status: :unprocessable_entity
+  end
+
+  def sort_bench_channels(bench_channels, sort_by)
+    sort_methods = ActiveSupport::HashWithIndifferentAccess.new({
+                                                                  'newest' => ->(bc) { bc.sort_by(&:created_at).reverse },
+                                                                  'oldest' => ->(bc) { bc.sort_by(&:created_at) },
+                                                                  'most_participants' => lambda { |bc|
+                                                                                           bc.left_joins(:channel_participants)
+                                                                                           .group(:id).order('count(channel_participants.id) DESC')
+                                                                                         },
+                                                                  'fewest_participants' => lambda { |bc|
+                                                                                             bc.left_joins(:channel_participants)
+                                                                                             .group(:id).order('count(channel_participants.id) ASC')
+                                                                                           },
+                                                                  'a_to_z' => ->(bc) { bc.sort_by(&:name) },
+                                                                  'z_to_a' => ->(bc) { bc.sort_by(&:name).reverse }
+                                                                })
+    sort_methods[sort_by].call(bench_channels)
+  end
+
+  def paginate_bench_channels
+    @pagy, @bench_channels = pagination_for_bench_channels(@bench_channels, params[:page] || 1)
+
+    return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
   end
 end
