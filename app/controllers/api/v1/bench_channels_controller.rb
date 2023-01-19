@@ -72,7 +72,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
-    render json: { error_message: 'User is not part this of channel.' }, status: :not_found unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
+    render json: { error: 'User is not part of channel.' }, status: :not_found unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_channel_participant

@@ -126,23 +126,22 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           when 'profiles'
                             BenchConversation.profile_to_profile_conversation(Current.profile.id, conversation_id)
                           end
-
     render json: { error_message: 'wrong type' }, status: :bad_request if @bench_conversation.blank?
   end
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    render json: { error_message: 'User is not part of this channel' }, status: :not_found  unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
+    render json: { error: 'User is not part of channel' }, status: :not_found unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
   end
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { error_message: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(Current.profile.id)
+    render json: { error: 'User is not part of group' }, status: :not_found unless @group.profile_ids.include?(Current.profile.id)
   end
 
   def set_receiver
     @receiver = Profile.find(params[:id])
-    render json: { error_message: "You can't access this profile." }, status: :unprocessable_entity unless @receiver.workspace_id.eql?(Current.workspace.id)
+    render json: { error: "You can't access this profile." }, status: :unprocessable_entity unless @receiver.workspace_id.eql?(Current.workspace.id)
   end
 
   def authenticat_message
