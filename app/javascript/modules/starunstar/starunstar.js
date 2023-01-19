@@ -10,6 +10,7 @@ export const markStar = (currentChannel, channelStore) => {
       }).then(response => {
         if (response.data.success === 'Channel successfully added to favourites') {
           channelStore.addStarredChannel(currentChannel);
+          channelStore.removeJoinChannel(currentChannel);
           currentChannel.favourite_id = response.data.favourite.id;
         }
       });
@@ -18,6 +19,7 @@ export const markStar = (currentChannel, channelStore) => {
       unstar(currentChannel.favourite_id).then(response => {
         if (response.data.status === 'success') {
           channelStore.removeStarredChannel(currentChannel);
+          channelStore.addJoinChannel(currentChannel);
           currentChannel.favourite_id = null;
         }
       });

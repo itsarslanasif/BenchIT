@@ -1,14 +1,10 @@
 <template>
-  <div class="w-10 cursor-pointer" @click="markChannel">
-    <div v-if="selectedChat.favourite_id">
-      <i
-        class="fa-solid fa-star border border-black-300 px-4 rounded p-2 ml-6 m-2"
-      ></i>
+  <div>
+    <div v-if="this.currentChannel.favourite_id">
+      <span @click="markChannel"> <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
     </div>
     <div v-else>
-      <i
-        class="fa-regular fa-star border border-black-300 px-4 rounded p-2 ml-6 m-2"
-      ></i>
+      <span @click="markChannel"><i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
     </div>
   </div>
 </template>
@@ -18,21 +14,19 @@
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
-import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
   components: { markStar },
-   setup() {
-     const channelStore = useChannelStore();
-    const messagesStore = useMessageStore();
-    const { selectedChat } = storeToRefs(messagesStore);
+  setup() {
+    const channelStore = useChannelStore();
+    const { currentChannel } = storeToRefs(channelStore);
     return {
-      selectedChat,
-      channelStore
+      channelStore,
+      currentChannel,
     };
   },
   methods: {
     markChannel() {
-      markStar(this.selectedChat, this.channelStore);
+      markStar(this.currentChannel, this.channelStore);
     },
   },
 };
