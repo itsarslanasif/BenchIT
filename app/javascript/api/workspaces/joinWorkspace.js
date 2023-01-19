@@ -1,3 +1,4 @@
+import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios/index';
 
 export const joinWorkspace = async (workspace_id, username, description) => {
@@ -10,7 +11,7 @@ export const joinWorkspace = async (workspace_id, username, description) => {
         workspace_id: workspace_id,
       },
       {
-        headers: { Authorization: localStorage.getItem('token') },
+        headers: getHeaders(),
       }
     )
     .then(response => {

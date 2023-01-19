@@ -51,6 +51,13 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      downloadsModal:
+        download: 'Download'
+        share_file: 'Share file...'
+        downloads: 'Downloads'
+        clear_downloads: 'Clear Downloads'
+        keep_track: 'Keep track of your downloads'
+        downloaded_files: 'Files you download to your computer will appear here.'
       email:
         gmail: '@gmail.com'
       pinconversation:
@@ -168,6 +175,7 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        starred: 'Starred'
         channel_created_success: 'New channel created successfully'
         channel_created_failure: 'Channel name already exist'
       bookmark:
@@ -194,6 +202,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        joined: 'Joined'
         leave: 'Leave'
         update: 'Update'
         search: 'Search'

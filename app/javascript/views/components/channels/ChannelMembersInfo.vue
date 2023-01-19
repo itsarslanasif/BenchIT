@@ -7,15 +7,12 @@
         class="flex cursor-pointer"
       >
         <img
-          class="w-6 h-6 mr-1 rounded border border-black-500"
+          class="w-6 h-6 mr-1 rounded "
           :src="member.image_url"
         />
       </div>
       <div class="w-3 ml-1">
-        <p
-          v-if="channelDetailStore.channelMembers.length != 0"
-          class="ml-1 font-bold text-black"
-        >
+        <p class="ml-1 font-bold text-black">
           {{ channelDetailStore.channelMembers.length }}
         </p>
       </div>

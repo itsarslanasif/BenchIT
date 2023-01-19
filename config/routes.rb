@@ -40,7 +40,7 @@ Rails.application.routes.draw do
 
         resources :bench_channels, except: %i[new edit] do
           member do
-            delete :leave
+            delete :leave_channel
           end
 
           collection do
@@ -60,7 +60,11 @@ Rails.application.routes.draw do
             end
           end
         end
-
+        resources :downloads, only: %i[index create destroy] do
+          collection do
+            post :clear_all
+          end
+        end
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
