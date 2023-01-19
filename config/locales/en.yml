@@ -204,6 +204,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        joined: 'Joined'
         leave: 'Leave'
         update: 'Update'
         search: 'Search'

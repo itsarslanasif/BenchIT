@@ -1,62 +1,42 @@
 <template>
-  <div class="overflow-auto chatBody" ref="chatBody">
-    <PinnedConversationModal />
-    <ChatDetail />
-    <div
-      v-for="message in messages"
-      :key="message.id"
-      :id="getDate(message.created_at)"
-    >
-      <div :id="message.id">
-        {{ setMessage(message) }}
-        <div
-          v-if="
+  <div class="infi-scroll-comp-root">
+    <div class="overflow-auto chatBody" ref="chatBody">
+      <PinnedConversationModal />
+      <ChatDetail />
+      <div v-if="showSpinner" class="text-center">
+        <div class="spinner"></div>
+      </div>
+      <div class="sentinel" ref="sentinel"></div>
+      <div v-for="message in messages" :key="message.id" :id="getDate(message.created_at)">
+        <div :id="message.id">
+          {{ setMessage(message) }}
+          <div v-if="
             (!isSameDayMessage && !message.parent_message_id) || isFirstMessage
-          "
-        >
-          <n-divider
-            v-if="isToday"
-            class="text-xs relative"
-            @click="toggleToday"
-          >
-            <div>
-              <p class="date cursor-pointer hover:bg-slate-50">
-                {{ $t('chat.today') }}
+          ">
+            <n-divider v-if="isToday" class="text-xs relative" @click="toggleToday">
+              <div>
+                <p class="date hover:bg-slate-50">
+                  {{ $t('chat.today') }}
+                </p>
+              </div>
+              <div v-if="jumpToDateTodayToggle" class="absolute top-0 mt-8 w-1/5 z-10">
+                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :today="true" />
+              </div>
+            </n-divider>
+            <n-divider v-else class="text-xs relative">
+              <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
+                {{ new Date(message.created_at).toDateString() }}
               </p>
-            </div>
-            <div
-              v-if="jumpToDateTodayToggle"
-              class="absolute top-0 mt-8 w-1/5 z-10"
-            >
-              <JumpToDateVue
-                :scrollToMessageByDate="scrollToMessageByDate"
-                :today="true"
-              />
-            </div>
+              <div v-if="jumpToDateToggle && message.id === selectedMessage.id" class="absolute top-0 mt-8 w-1/5 z-10">
+                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" />
+              </div>
+            </n-divider>
+          </div>
+          <n-divider v-if="newMessageFlag && oldestUnreadMessageId === message.id" title-placement="right">
+            <div class="text-primary">{{ $t('chat.new') }}</div>
           </n-divider>
-          <n-divider v-else class="text-xs relative cursor-pointer">
-            <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
-              {{ new Date(message.created_at).toDateString() }}
-            </p>
-            <div
-              v-if="jumpToDateToggle && message.id === selectedMessage.id"
-              class="absolute top-0 mt-8 w-1/5 z-10"
-            >
-              <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" />
-            </div>
-          </n-divider>
+          <MessageWrapper v-if="!message.parent_message_id" :currMessage="currMessage" :prevMessage="prevMessage" />
         </div>
-        <n-divider
-          v-if="newMessageFlag && oldestUnreadMessageId === message.id"
-          title-placement="right"
-        >
-          <div class="text-primary">{{ $t('chat.new') }}</div>
-        </n-divider>
-        <MessageWrapper
-          v-if="!message.parent_message_id"
-          :currMessage="currMessage"
-          :prevMessage="prevMessage"
-        />
       </div>
     </div>
   </div>
@@ -84,19 +64,22 @@ export default {
   props: ['oldestUnreadMessageId'],
   data() {
     return {
-      messages: [],
       jumpToDateTodayToggle: false,
       jumpToDateToggle: false,
-      prevMessage: null,
+      prevMessage: [],
       selectedMessage: {},
+      timeLimit: 0,
+      showSpinner: false,
       newMessageFlag: true,
+      firstMount: true
     };
   },
   mounted() {
-    this.scrollToEnd();
+    this.setUpInterSectionObserver();
   },
   beforeUnmount() {
-    this.messages = this.prevMessage = this.selectedMessage = null;
+    this.messages = this.prevMessage = this.selectedMessage = [];
+    this.hasMoreMessages = true;
   },
   computed: {
     isToday() {
@@ -122,10 +105,12 @@ export default {
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages, currMessage } = storeToRefs(messageStore);
+    const { messages, currMessage, hasMoreMessages, newMessageSent } = storeToRefs(messageStore);
     return {
       messages,
       currMessage,
+      hasMoreMessages,
+      newMessageSent
     };
   },
   methods: {
@@ -167,23 +152,60 @@ export default {
       const dateInUTC = moment(new Date(created_at));
       return `${dateInUTC.year()}-${dateInUTC.month()}-${dateInUTC.date()}`;
     },
-    scrollToEnd() {
-      let body = this.$refs.chatBody;
-      body.scrollTop = body.scrollHeight;
+    setUpInterSectionObserver() {
+      let options = {
+        root: this.$refs["chatBody"],
+        margin: "10px",
+      };
+      this.listEndObserver = new IntersectionObserver(
+        this.handleIntersection,
+        options
+      );
+      this.listEndObserver.observe(this.$refs["sentinel"]);
     },
+    handleIntersection([entry]) {
+      if (entry.isIntersecting) {
+        this.recordScrollPosition()
+        this.$emit('load-more-messages')
+      }
+    },
+    recordScrollPosition() {
+      let node = this.$refs["chatBody"];
+      this.previousScrollHeightMinusScrollTop =
+        node.scrollHeight - node.scrollTop;
+    },
+    restoreScrollPosition() {
+      if (!this.firstMount) {
+        let node = this.$refs["chatBody"];
+        node.scrollTop =
+          node.scrollHeight - this.previousScrollHeightMinusScrollTop;
+      }
+    },
+    scrollToEnd() {
+      if (this.newMessageSent || this.firstMount)
+        setTimeout(() => {
+          let chatBody = this.$refs.chatBody;
+          chatBody.scrollTop = chatBody.scrollHeight;
+          this.newMessageSent = this.firstMount = false;
+        }, 0);
+    }
   },
   updated() {
     const message_id = this.$route.params.message_id;
+
     if (message_id) {
       const message = document.getElementById(message_id);
+
       if (message) {
         message.classList.add('highlight');
         message.scrollIntoView();
         return;
       }
     }
-    this.scrollToEnd();
+
     this.newMessageFlag = false;
+    this.scrollToEnd();
+    this.restoreScrollPosition();
   },
 };
 </script>

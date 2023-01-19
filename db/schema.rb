@@ -96,6 +96,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.datetime "updated_at", null: false
     t.bigint "bench_conversation_id"
     t.bigint "sender_id"
+    t.boolean "is_info", default: false, null: false
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"

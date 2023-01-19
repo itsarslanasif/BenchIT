@@ -3,7 +3,7 @@
     class="py-1"
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
-    <div v-if="currMessage.pinned">
+    <div v-if="!currMessage.info && currMessage.pinned">
       <span
         class="pl-4 items-center text-black-800 text-xs flex bg-yellow-50 relative"
       >
@@ -24,7 +24,14 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="!isSameUser || !isSameDayMessage || isFirstMessage">
+      <template
+        v-if="
+          !isSameUser ||
+          !isSameDayMessage ||
+          isFirstMessage ||
+          currMessage.is_info
+        "
+      >
         <user-profile-modal
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
@@ -35,7 +42,12 @@
           <span class="items-center flex text-black-800 text-lg m-0">
             <p
               @click="showUserProfile"
-              v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
+              v-if="
+                !isSameUser ||
+                !isSameDayMessage ||
+                isFirstMessage ||
+                currMessage.is_info
+              "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
@@ -53,24 +65,40 @@
                 }"
               >
                 {{
-                  isSameUser && isSameDayMessage && !isFirstMessage
-                    ? timeWithoutAMPM
-                    : time
+                  currMessage.is_info
+                  ? time
+                  : isSameUser && isSameDayMessage && !isFirstMessage
+                  ? timeWithoutAMPM
+                  : time
                 }}
               </p>
             </span>
             <span
-              v-if="isSameUser && isSameDayMessage && !isFirstMessage"
+              v-if="
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage &&
+                !currMessage.is_info
+              "
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
           </span>
           <span
-            v-if="!isSameUser || !isSameDayMessage || isFirstMessage"
-            class="text-black-800 text-sm flex-wrap"
+            v-if="
+              !isSameUser ||
+              !isSameDayMessage ||
+              isFirstMessage ||
+              currMessage.is_info
+            "
+            :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
+            class="text-sm flex-wrap"
             v-html="currMessage.content"
           />
-          <div v-if="currMessage.attachments" class="flex gap-2">
+          <div
+            v-if="!currMessage.info && currMessage.attachments"
+            class="flex gap-2"
+          >
             <div
               v-for="attachment in currMessage.attachments"
               :key="attachment.id"
@@ -113,7 +141,10 @@
             @click="addReaction(emoji)"
             :class="[
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
-              { 'ml-12 -mr-10': isSameUser && isSameDayMessage },
+              {
+                'ml-12 -mr-10':
+                  !currMessage.is_info && isSameUser && isSameDayMessage,
+              },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
@@ -143,7 +174,9 @@
           </div>
         </template>
         <reply-and-thread-button
-          v-if="currMessage?.replies?.length > 0 && !inThread"
+          v-if="
+            !currMessage.info && currMessage?.replies?.length > 0 && !inThread
+          "
           :currMessage="currMessage"
           :isSameDayMessage="isSameDayMessage"
           :isSameUser="isSameUser"
@@ -170,7 +203,7 @@
             :action="setEmojiModal"
           />
           <EmojiModalButton
-            v-if="!currMessage.parent_message_id"
+            v-if="!currMessage.parent_message_id && !currMessage.is_info"
             icon="fa-solid fa-comment-dots"
             :actionText="$t('emojiModalButton.reply_in_thread')"
             :action="toggleThread"
@@ -181,7 +214,7 @@
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
-            :actionText="$t('emojiModalButton.add_to_saved_items')"
+            :actionText="this.getSavedItemText(this.currMessage)"
             :action="saveMessage"
           />
           <EmojiModalButton
@@ -301,8 +334,8 @@ export default {
     };
   },
   beforeUnmount() {
-    this.topReactions = null;
-    this.displayedReactions = null;
+    this.topReactions = [];
+    this.displayedReactions = [];
   },
   computed: {
     time() {
@@ -340,7 +373,7 @@ export default {
       return this.messagesStore.messages[0]?.id;
     },
     displayReaction() {
-      this.currMessage.reactions.filter(reaction => {
+      this.currMessage.reactions?.filter(reaction => {
         const isDuplicate = this.displayedReactions.includes(reaction.emoji);
         if (!isDuplicate) {
           this.displayedReactions.push(reaction.emoji);
@@ -505,6 +538,9 @@ export default {
 
     setFileOptionsModal() {
       this.showFileOptions = !this.showFileOptions;
+    },
+    getSavedItemText(message) {
+      return message.isSaved ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS : CONSTANTS.ADD_TO_SAVED_ITEMS;
     },
   },
 };

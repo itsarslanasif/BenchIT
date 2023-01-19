@@ -1,5 +1,6 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   include MemberShip
+  include Pagination
 
   before_action :fetch_conversation, :verify_membership, only: %i[create]
   before_action :set_message, :authenticat_message, only: %i[destroy update]
@@ -56,18 +57,22 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def bench_channel_messages
     @conversation = @bench_channel.bench_conversation
-    @messages = ConversationMessage.chat_messages(@conversation.id)
+    paginate_messages
   end
 
   def group_messages
     @conversation = @group.bench_conversation
-    @messages = ConversationMessage.chat_messages(@conversation.id)
+    paginate_messages
   end
 
   def profile_messages
-    @conversation = BenchConversation.previous_or_create_new_profile_conversation(@receiver.id)
+    @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
+    create_conversation if @conversation.blank?
+    paginate_messages
+  end
 
-    @messages = ConversationMessage.chat_messages(@conversation.id)
+  def create_conversation
+    @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: Current.profile.id)
   end
 
   def unread_messages
@@ -76,6 +81,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   private
+
+  def paginate_messages
+    @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
+
+    return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
+  end
 
   def set_saved_item
     @saved_item = Current.profile.saved_items.find_by(conversation_message_id: params[:id])
