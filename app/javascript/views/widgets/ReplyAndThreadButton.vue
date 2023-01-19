@@ -1,7 +1,7 @@
 <template>
   <div
     @click="toggleThread"
-    :class="{ 'ml-12': isSameUser && isSameDayMessage && !isFirstMessage && currMessage.content !== null }"
+    :class="{ 'ml-12': isSameUser && isSameDayMessage && !isFirstMessage && currMessage.content !== $t('deleteMessageModal.deleted_message') }"
     class="group hover:bg-white hover:shadow-xs cursor-pointer rounded px-1 py-1 w-150 mt-1"
   >
     <span

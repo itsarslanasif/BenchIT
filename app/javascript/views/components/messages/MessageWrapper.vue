@@ -24,7 +24,9 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="currMessage.content === null">
+      <template
+        v-if="currMessage.content === $t('deleteMessageModal.deleted_message')"
+      >
         <div
           class="h-10 w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
         >
@@ -40,7 +42,7 @@
             !isSameDayMessage ||
             isFirstMessage ||
             currMessage.is_info) &&
-          currMessage.content !== null
+          currMessage.content !== $t('deleteMessageModal.deleted_message')
         "
       >
         <user-profile-modal
@@ -58,14 +60,16 @@
                   !isSameDayMessage ||
                   isFirstMessage ||
                   currMessage.is_info) &&
-                currMessage.content !== null
+                currMessage.content !== $t('deleteMessageModal.deleted_message')
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
-              v-if="currMessage.content !== null"
+              v-if="
+                currMessage.content !== $t('deleteMessageModal.deleted_message')
+              "
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
               }"
@@ -76,13 +80,13 @@
                   'hover-target':
                     isSameUser && isSameDayMessage && !isFirstMessage,
                 }"
-            >
+              >
                 {{
                   currMessage.is_info
-                  ? time
-                  : isSameUser && isSameDayMessage && !isFirstMessage
-                  ? timeWithoutAMPM
-                  : time
+                    ? time
+                    : isSameUser && isSameDayMessage && !isFirstMessage
+                    ? timeWithoutAMPM
+                    : time
                 }}
               </p>
             </span>
@@ -92,7 +96,7 @@
                 isSameDayMessage &&
                 !isFirstMessage &&
                 !currMessage.is_info &&
-                currMessage.content !== null
+                currMessage.content !== $t('deleteMessageModal.deleted_message')
               "
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
@@ -102,7 +106,7 @@
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
-                currMessage.content === null
+                currMessage.content === $t('deleteMessageModal.deleted_message')
               "
               class="text-black-600 text-sm flex mt-2"
               >{{ $t('deleteMessageModal.deleted_message') }}</span
@@ -114,7 +118,7 @@
                 !isSameDayMessage ||
                 isFirstMessage ||
                 currMessage.is_info) &&
-              currMessage.content !== null
+              currMessage.content !== $t('deleteMessageModal.deleted_message')
             "
             :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
             class="text-sm flex-wrap"
@@ -123,7 +127,7 @@
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
-              currMessage.content === null
+              currMessage.content === $t('deleteMessageModal.deleted_message')
             "
             class="text-black-600 text-sm flex mt-2"
           >
@@ -232,7 +236,7 @@
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
             (emojiModalStatus || openEmojiModal || showOptions) &&
-            currMessage.content !== null
+            currMessage.content !== $t('deleteMessageModal.deleted_message')
           "
         >
           <template v-for="emoji in topReactions" :key="emoji">
@@ -601,7 +605,9 @@ export default {
       this.showFileOptions = !this.showFileOptions;
     },
     getSavedItemText(message) {
-      return message.isSaved ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS : CONSTANTS.ADD_TO_SAVED_ITEMS;
+      return message.isSaved
+        ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS
+        : CONSTANTS.ADD_TO_SAVED_ITEMS;
     },
 
     setDeleteModal() {
