@@ -5,6 +5,7 @@ export class handleDateTime {
     this.dateTime = new Date();
     this.dontClear = false;
   }
+
   convertStringToTimeStamp(time) {
     this.now = new Date();
     this.dateTime = new Date();
@@ -13,9 +14,9 @@ export class handleDateTime {
         this.dateTime.setTime(this.now.getTime() + 30 * 60 * 1000);
         break;
       case CONSTANTS.DONT_CLEAR:
-        this.dontClear = true
+        this.dontClear = true;
         break;
-      case CONSTANTS.ONE_HOUR_:
+      case CONSTANTS.ONE_HOUR:
         this.dateTime.setTime(this.now.getTime() + 60 * 60 * 1000);
         break;
       case CONSTANTS.FOUR_HOURS:
@@ -29,39 +30,41 @@ export class handleDateTime {
         break;
     }
     if (this.dontClear) {
-      return CONSTANTS.DONT_CLEAR
+      return CONSTANTS.DONT_CLEAR;
     }
-    return this.dateTime
+    return this.dateTime;
   }
 
   secondsToHoursAndMinutes(totalSeconds) {
     if (totalSeconds == CONSTANTS.DONT_CLEAR)
-      return  "  "+CONSTANTS.DONT_CLEAR
-      if (totalSeconds == CONSTANTS.TODAY)
-      return "  "+CONSTANTS.TODAY
-    totalSeconds=+totalSeconds+60;
-    var day = 86400;
-    var hour = 3600;
-    var minute = 60;
-    var daysout = Math.floor(totalSeconds / day);
-    var hoursout = Math.floor((totalSeconds - daysout * day) / hour);
-    var minutesout = Math.floor((totalSeconds - daysout * day - hoursout * hour) / minute);
+      return '  ' + CONSTANTS.DONT_CLEAR;
+    if (totalSeconds == CONSTANTS.TODAY) return '  ' + CONSTANTS.TODAY;
+    totalSeconds = +totalSeconds + 60;
+    let day = 86400;
+    let hour = 3600;
+    let minute = 60;
+    let daysout = Math.floor(totalSeconds / day);
+    let hoursout = Math.floor((totalSeconds - daysout * day) / hour);
+    let minutesout = Math.floor(
+      (totalSeconds - daysout * day - hoursout * hour) / minute
+    );
 
-    if (daysout >= 1) {
-      if (daysout == 7)
-        return CONSTANTS.THIS_WEEK
-    } else if (hoursout >= 1)
-      return  hoursout + CONSTANTS.HOURS
+    if (daysout == 7)
+     return CONSTANTS.THIS_WEEK;
+    else if (hoursout > 1)
+      return hoursout + CONSTANTS.HOURS;
+    else if (hoursout==1)
+      return hoursout + CONSTANTS.HOUR;
     else
-      return minutesout + CONSTANTS.MINUTES
+      return minutesout + CONSTANTS.MINUTES;
   }
   incremntTimeStampBySeconds(seconds) {
     this.now = new Date();
     this.dateTime = new Date(+this.now + seconds * 1000);
-    return this.dateTime
+    return this.dateTime;
   }
 
-  getEndOfDayTime(){
-    return new Date(new Date().setHours(23,59,59,999));
+  getEndOfDayTime() {
+    return new Date(new Date().setHours(23, 59, 59, 999));
   }
 }

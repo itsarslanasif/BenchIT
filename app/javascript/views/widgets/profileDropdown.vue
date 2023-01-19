@@ -197,8 +197,9 @@ export default {
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
     statusClearAfterTime(time) {
-      if (!time) return moment().endOf('month').fromNow();
-      else return moment(time).calendar();
+      return !time
+        ? moment().endOf('month').fromNow()
+        : moment(time).calendar();
     },
     handleSelect(key) {
       switch (key) {

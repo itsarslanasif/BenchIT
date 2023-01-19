@@ -216,8 +216,8 @@ export default {
           key: CONSTANTS.THIRTY_MINUTES,
         },
         {
-          label: CONSTANTS.ONE_HOUR_,
-          key: CONSTANTS.ONE_HOUR_,
+          label: CONSTANTS.ONE_HOUR,
+          key: CONSTANTS.ONE_HOUR,
         },
         {
           label: CONSTANTS.FOUR_HOURS,
@@ -254,6 +254,7 @@ export default {
       this.secondStep = true;
       this.formValue.text_status = this.profile?.status?.text;
       this.formValue.emoji_status = this.profile?.status?.emoji;
+
       if (this.profile?.status?.clear_after) {
         this.showDateTimeInputFields = true;
         this.formValue.dateTimeString = CONSTANTS.CHOOSE_DATE_TIME;
@@ -282,9 +283,7 @@ export default {
       this.formValue.dateTimeString = String(key);
       this.formValue.clear_status_after =
         this.handleDateTime.convertStringToTimeStamp(String(key));
-      if (String(key) == CONSTANTS.CHOOSE_DATE_TIME)
-        this.showDateTimeInputFields = true;
-      else this.showDateTimeInputFields = false;
+        this.showDateTimeInputFields = String(key) === CONSTANTS.CHOOSE_DATE_TIME;
     },
 
     deleteRecentStatus(id) {
@@ -353,7 +352,7 @@ export default {
         convertedClearAterTime  == CONSTANTS.THIRTY_MINUTES ||
         convertedClearAterTime == CONSTANTS.FOUR_HOURS ||
         convertedClearAterTime == CONSTANTS.THIS_WEEK ||
-        convertedClearAterTime == CONSTANTS.ONE_HOURS
+        convertedClearAterTime == CONSTANTS.ONE_HOUR
       ) {
         this.showDateTimeInputFields = false;
         this.formValue.clear_status_after = ref(
@@ -383,14 +382,7 @@ export default {
     },
 
     toggleSteps() {
-      if (
-        this.formValue.text_status != '' ||
-        this.formValue.emoji_status != '🙂'
-      ) {
-        this.secondStep = true;
-      } else {
-        this.secondStep = false;
-      }
+      this.secondStep  =  this.formValue.text_status != '' || this.formValue.emoji_status != '🙂';
     },
 
     closeProfileStatusModal() {

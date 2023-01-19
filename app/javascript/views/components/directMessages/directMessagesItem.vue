@@ -68,8 +68,7 @@ export default {
       return this.unreadDetails?.messages.length;
     },
     statusClearAfterTime(time) {
-      if (!time) return moment().endOf('month').fromNow();
-      else return moment(time).calendar();
+      return time ? moment(time).calendar() : moment().endOf('month').fromNow();
     },
   },
 };
