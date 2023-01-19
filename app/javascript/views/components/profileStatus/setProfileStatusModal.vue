@@ -314,7 +314,7 @@ export default {
       clearStatus(this.workspace.id, this.profile.id)
         .then(response => {
           this.currentProfileStore.setProfileStatus(null);
-          this.directMessagesStore.clearMyStatus(this.profile);
+          this.directMessagesStore.updateProfileStatus(response);
         })
         .catch(err => {
           console.log(err);
@@ -326,7 +326,7 @@ export default {
       if (this.formValue.dateTimeString == CONSTANTS.DONT_CLEAR) {
         return CONSTANTS.DONT_CLEAR;
       }
-      
+
       return new Date(this.formValue.clear_status_after);
     },
 
@@ -350,10 +350,10 @@ export default {
         selectedOption.clear_after
       );
       if (
-        convertedClearAterTime  == '30 minutes' ||
-        convertedClearAterTime == '4 hours' ||
-        convertedClearAterTime == 'This Week' ||
-        convertedClearAterTime == '1 hours'
+        convertedClearAterTime  == CONSTANTS.THIRTY_MINUTES ||
+        convertedClearAterTime == CONSTANTS.FOUR_HOURS ||
+        convertedClearAterTime == CONSTANTS.THIS_WEEK ||
+        convertedClearAterTime == CONSTANTS.ONE_HOURS
       ) {
         this.showDateTimeInputFields = false;
         this.formValue.clear_status_after = ref(
@@ -387,7 +387,6 @@ export default {
         this.formValue.text_status != '' ||
         this.formValue.emoji_status != '🙂'
       ) {
-        console.log(this.formValue);
         this.secondStep = true;
       } else {
         this.secondStep = false;

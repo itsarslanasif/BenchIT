@@ -144,4 +144,7 @@ export const CONSTANTS = {
   THIS_WEEK: 'This Week',
   CHOOSE_DATE_TIME: 'Choose date and time',
   IN_MEETING: 'In meeting',
+  HOURS: ' hours',
+  MINUTES: ' minutes',
+  ONE_HOURS: '1 hours',
 };

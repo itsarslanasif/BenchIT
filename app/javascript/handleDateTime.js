@@ -1,3 +1,4 @@
+import { CONSTANTS } from './assets/constants';
 export class handleDateTime {
   constructor() {
     this.now = new Date();
@@ -8,36 +9,36 @@ export class handleDateTime {
     this.now = new Date();
     this.dateTime = new Date();
     switch (time) {
-      case '30 minutes':
+      case CONSTANTS.THIRTY_MINUTES:
         this.dateTime.setTime(this.now.getTime() + 30 * 60 * 1000);
         break;
-      case "Don't clear":
+      case CONSTANTS.DONT_CLEAR:
         this.dontClear = true
         break;
-      case '1 hour':
+      case CONSTANTS.ONE_HOUR_:
         this.dateTime.setTime(this.now.getTime() + 60 * 60 * 1000);
         break;
-      case '4 hours':
+      case CONSTANTS.FOUR_HOURS:
         this.dateTime.setTime(this.now.getTime() + 4 * 60 * 60 * 1000);
         break;
-      case 'This Week':
+      case CONSTANTS.THIS_WEEK:
         this.dateTime.setDate(this.now.getDate() + 7);
         break;
-      case 'Today':
+      case CONSTANTS.TODAY:
         this.dateTime.setTime(this.now.setHours(24, 0, 0, 0));
         break;
     }
     if (this.dontClear) {
-      return "don't clear"
+      return CONSTANTS.DONT_CLEAR
     }
     return this.dateTime
   }
 
   secondsToHoursAndMinutes(totalSeconds) {
-    if (totalSeconds == "don't clear")
-      return "  don't clear"
-      if (totalSeconds == "Today")
-      return "  Today"
+    if (totalSeconds == CONSTANTS.DONT_CLEAR)
+      return  "  "+CONSTANTS.DONT_CLEAR
+      if (totalSeconds == CONSTANTS.TODAY)
+      return "  "+CONSTANTS.TODAY
     totalSeconds=+totalSeconds+60;
     var day = 86400;
     var hour = 3600;
@@ -48,11 +49,11 @@ export class handleDateTime {
 
     if (daysout >= 1) {
       if (daysout == 7)
-        return "This Week"
+        return CONSTANTS.THIS_WEEK
     } else if (hoursout >= 1)
-      return  hoursout + " hours"
+      return  hoursout + CONSTANTS.HOURS
     else
-      return minutesout + " minutes"
+      return minutesout + CONSTANTS.MINUTES
   }
   incremntTimeStampBySeconds(seconds) {
     this.now = new Date();

@@ -9,23 +9,23 @@
     >
       <n-button>
         <div class="flex avatar absolute">
-          <n-tooltip v-if="profile_Status" trigger="hover">
+          <n-tooltip v-if="profileStatus" trigger="hover">
             <template #trigger>
               <div
                 class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent self-baseline text-sm"
               >
-                <p>{{ profile_Status.emoji }}</p>
+                <p>{{ profileStatus.emoji }}</p>
               </div>
             </template>
             <span
-              >{{ profile_Status.emoji }} {{ profile_Status.text }}
+              >{{ profileStatus.emoji }} {{ profileStatus.text }}
               <span class="text-black-500">
                 {{ $t('profilestatus.until') }}
               </span>
-              {{ statusClearAfterTime(profile_Status.clear_after) }}
+              {{ statusClearAfterTime(profileStatus.clear_after) }}
             </span>
           </n-tooltip>
-          <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
+          <n-avatar class="self-baseline" size="medium" :src="profileAvatar" />
         </div>
         <div
           class="flex absolute icon"
@@ -185,10 +185,10 @@ export default {
     };
   },
   computed: {
-    profile_avatar() {
+    profileAvatar() {
       return this.profile.image_url;
     },
-    profile_Status() {
+    profileStatus() {
       return this.profile?.status;
     },
   },

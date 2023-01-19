@@ -21,7 +21,6 @@ export const useCurrentProfileStore = () => {
       setProfileStatus(status) {
         this.currentProfile.status = status
         encryption(sessionStorage,'currentProfile',this.currentProfile)
-       // sessionStorage.setItem('currentProfile', JSON.stringify(this.currentProfile))
       }
     },
   });

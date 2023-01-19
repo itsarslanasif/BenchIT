@@ -27,19 +27,11 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
         console.error(e);
       }
     },
-    clearMyStatus(profile){
-      let index =this.directMessagesList.findIndex(
+    updateProfileStatus(profile) {
+      let index = this.directMessagesList.findIndex(
         element => element.id == profile.id
       );
-      if(index!=-1)
-      this.directMessagesList[index].status=null
-    },
-    updateProfileStatus(profile){
-      let index =this.directMessagesList.findIndex(
-        element => element.id == profile.id
-      );
-      if(index!=-1)
-        this.directMessagesList[index].status=profile.status;
+      if (index != -1) this.directMessagesList[index].status = profile.status;
     },
     getSortedDMList(currentProfileID) {
       const ownChat = this.getOwnChat(currentProfileID);
