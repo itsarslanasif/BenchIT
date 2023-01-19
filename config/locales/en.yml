@@ -161,7 +161,7 @@ en:
         save_message: 'Save items'
       channels:
         channels: 'Channels'
-        add_new_channel: 'Add New Channel'
+        add_new_channel: 'Add new channel'
         search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
         selected_channels: 'Selected Channels'
@@ -178,6 +178,8 @@ en:
         starred: 'Starred'
         channel_created_success: 'New channel created successfully'
         channel_created_failure: 'Channel name already exist'
+        dot: '·'
+        starred: 'Starred'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -229,6 +231,9 @@ en:
         search_by_name: 'Search By Name'
         add_members_modal_title: 'Add members to'
         error_message: 'Member is already present in channel.'
+        members: 'members'
+        member: 'member'
+        dot: '.'
       placeholder:
         email: 'Email'
         phone: 'Phone'
@@ -288,6 +293,18 @@ en:
         last_month: 'Last month'
         the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
+      saved_items:
+        title: 'Add messages and files to come back to later'
+        description: 'Mark your to-dos or save something for another time. Only you can see
+        your saved items, so use them however you’d like.'
+      drafts:
+        title: 'Draft messages to send when you’re ready'
+        description: 'Start typing a message anywhere, then find it here. Re-read, revise, and
+        send whenever you’d like.'
+      conversations:
+        channels: 'channels'
+        groups: 'groups'
+        profiles: 'profiles'
     admin:
       title: 'Admin'
       save: 'Save'

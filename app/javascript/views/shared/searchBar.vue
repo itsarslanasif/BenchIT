@@ -1,6 +1,14 @@
 <template>
   <div>
     <div
+      v-if="!leftPaneStore.getLeftpaneFlag"
+      @click="leftPaneStore.openLeftPane"
+      class="flex absolute text-xl ml-2 mt-1 items-center text-white hover:bg-slate-600 rounded cursor-pointer"
+    >
+      <font-awesome-icon class="p-2" icon="fa-solid fa-bars" />
+    </div>
+
+    <div
       class="flex items-center justify-center flex-col p-2 border-b border-slate-400 bg-secondary h-12"
     >
       <div v-click-outside="closeSearchModal" class="flex w-1/2">
@@ -100,13 +108,12 @@
 <script>
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useChannelStore } from '../../stores/useChannelStore';
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { storeToRefs } from 'pinia';
 import ProfileDropdown from '../widgets/profileDropdown.vue';
 import vClickOutside from 'click-outside-vue3';
 import benchitAlert from '../widgets/benchitAlert.vue';
 import { useApiResponseStatusStore } from '../../stores/useApiResponseStatusStore';
-import { useMessage } from 'naive-ui';
+import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 export default {
   name: 'SearchBar',
   components: { ProfileDropdown, benchitAlert },
@@ -172,12 +179,14 @@ export default {
     const ApiResponseStatusStore = useApiResponseStatusStore();
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
+    const leftPaneStore = useLeftpaneStore();
     profileStore.index();
     channelStore.index();
     return {
       ApiResponseStatusStore,
       allProfiles: profiles,
       allChannels: channels,
+      leftPaneStore,
     };
   },
 };

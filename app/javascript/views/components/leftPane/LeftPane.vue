@@ -17,6 +17,7 @@
     </div>
     <hr class="text-slate-400" />
     <div>
+      <StarredChannelsAccordion />
       <ChannelsAccordion />
       <DirectMessageAccordian />
     </div>
@@ -28,13 +29,14 @@ import ChannelsAccordion from '../channels/ChannelsAccordion.vue';
 import IconElement from '../../widgets/IconElement.vue';
 import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vue';
 import WorkspaceDropdown from '../../widgets/workspaceDropdown/WorkspaceDropdown.vue';
-
+import StarredChannelsAccordion from '../channels/StarredChannelsAccordion.vue';
 export default {
   components: {
     ChannelsAccordion,
     IconElement,
     DirectMessageAccordian,
     WorkspaceDropdown,
+    StarredChannelsAccordion
   },
 
   methods: {

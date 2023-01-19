@@ -1,31 +1,27 @@
 <template>
   <div class="hover-trigger">
-    <AccordionList class="my-5 ml-3 text-base text-slate-50">
-      <AccordionItem default-opened="true">
+    <font-awesome-icon
+      @click="goToNewDMList"
+      icon="fa-plus"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+    />
+    <AccordionList class="mt-5 ml-4 text-base text-slate-50">
+      <AccordionItem :default-opened="true">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
             {{ $t('direct_messages.direct_messages') }}
           </span>
-          <font-awesome-icon
-            @click="handleClick"
-            icon="fa-plus"
-            class="hover-target px-2 p-2 float-right -ml-12 mr-4 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
-          />
         </template>
-        {{ directMessages }}
         <directMessagesItemVue
           :sortedDMList="sortedDMList"
           :isOwnChat="isOwnChat"
           :goToChat="goToChat"
         />
       </AccordionItem>
-      <div
-        class="-ml-3 flex items-start py-1 hover:bg-primaryHover"
-        @click="closeModal"
-      >
-        <addTeammatesDropdown :items="options" />
-      </div>
     </AccordionList>
+    <div class="px-1 hover:bg-primaryHover cursor-pointer" @click="closeModal">
+      <addTeammatesDropdown :items="options" />
+    </div>
   </div>
 </template>
 
@@ -38,7 +34,6 @@ import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import { storeToRefs } from 'pinia';
 
 export default {
   components: {
@@ -104,7 +99,7 @@ export default {
     isMobileView() {
       return window.innerWidth < 1400;
     },
-    handleClick() {
+    goToNewDMList() {
       this.$router.push('/new_direct_message');
     },
     isOwnChat(user) {
