@@ -324,8 +324,8 @@ export default {
     };
   },
   beforeUnmount() {
-    this.topReactions = null;
-    this.displayedReactions = null;
+    this.topReactions = [];
+    this.displayedReactions = [];
   },
   computed: {
     time() {
@@ -363,7 +363,7 @@ export default {
       return this.messagesStore.messages[0]?.id;
     },
     displayReaction() {
-      this.currMessage.reactions.filter(reaction => {
+      this.currMessage.reactions?.filter(reaction => {
         const isDuplicate = this.displayedReactions.includes(reaction.emoji);
         if (!isDuplicate) {
           this.displayedReactions.push(reaction.emoji);
