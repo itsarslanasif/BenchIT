@@ -8,7 +8,7 @@
         :class="isUnreadDM(user) ? 'font-bold' : ''"
       >
         <n-avatar :size="25" :src="user.image_url" />
-        <p class="ml-2 text-sm text-white">{{ user.username }}</p>
+        <p class="ml-2 text-sm text-white truncate">{{ user.username }}</p>
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
