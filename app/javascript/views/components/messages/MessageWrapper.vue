@@ -497,13 +497,8 @@ export default {
       this.showFileOptions = !this.showFileOptions;
     },
     getSavedItemText(message) {
-    if(message.isSaved) {
-      return CONSTANTS.REMOVE_FROM_SAVED_ITEMS;
-    }
-    else {
-      return CONSTANTS.ADD_TO_SAVED_ITEMS;
-    }
-   },
+      return message.isSaved ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS : CONSTANTS.ADD_TO_SAVED_ITEMS;
+    },
   },
 };
 </script>
