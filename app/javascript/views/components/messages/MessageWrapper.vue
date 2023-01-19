@@ -1,7 +1,7 @@
 <template>
   <div
     class="py-1"
-    v-if="!messagesStore.isMessageToEdit(currMessage)"
+
     :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
   >
     <div v-if="currMessage.pinned">
@@ -186,7 +186,7 @@
   </div>
   <div
     class="bg-yellow-50 pl-16 pr-4"
-    v-if="messagesStore.isMessageToEdit(currMessage)"
+    v-if="messagesStore.isMessageToEdit(currMessage) &&  (!inThread || !currMessage.is_threaded)"
   >
     <TextEditorVue
       :message="currMessage.content"
