@@ -66,6 +66,9 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
+  mounted() {
+    console.log(this.currentChannel)
+  },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     const messagesStore = useMessageStore();
