@@ -10,9 +10,6 @@
         <SearchBar />
       </div>
       <splitpanes @resize="resizePane" class="relative">
-        <pane min-size="4" max-size="4">
-          <SwitchWorkspace />
-        </pane>
         <pane
           max-size="30"
           :size="isMobileView() ? '300px' : 15"
@@ -66,7 +63,6 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
-import SwitchWorkspace from '../components/workspace/SwitchWorkspace.vue';
 import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { NMessageProvider } from 'naive-ui';
@@ -85,7 +81,6 @@ export default {
     searchDmscreen,
     SearchBar,
     UserProfile,
-    SwitchWorkspace,
     SwitchingWorkspaceLoader,
     NMessageProvider,
     NMessageProvider,

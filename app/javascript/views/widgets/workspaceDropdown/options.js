@@ -2,8 +2,19 @@ import { h } from 'vue';
 import { NText, NAvatar } from 'naive-ui';
 import { CONSTANTS } from '../../../assets/constants';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
+import {
+  joinedWorkspaces,
+  switchWorkspace,
+} from '../../../api/workspaces/workspacesApi';
+import { encryption } from '../../../modules/crypto/crypto';
 
+let workspaceKey = 1;
+let joinedWorkspacesArray = [];
+joinedWorkspaces().then(res => {
+  joinedWorkspacesArray = res;
+});
 const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
 };
@@ -68,6 +79,58 @@ const renderMobile = () => {
   );
 };
 
+const renderWorkspaces = () => {
+  for (let index = 0; index < joinedWorkspacesArray.length; index++) {
+    workspaceKey = index;
+    return h(
+      'div',
+      {
+        class:
+          'flex items-center px-4 py-3 cursor-pointer hover:bg-transparent duration-300',
+      },
+      [
+        h('div', null, [
+          h('div', { class: 'text-md' }, [
+            h(
+              NText,
+              {
+                onClick: () =>
+                  handleSwitchWorkspace(joinedWorkspacesArray[index + 1].id),
+              },
+              {
+                default: () =>
+                  `${joinedWorkspacesArray[index + 1].company_name}`,
+              }
+            ),
+          ]),
+        ]),
+      ]
+    );
+  }
+};
+const isCurrentWorkspace = workspace_id => {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+  return currentWorkspace.id === workspace_id;
+};
+
+const handleSwitchWorkspace = async workspace_id => {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const currentProfileStore = useCurrentProfileStore();
+  currentWorkspaceStore.switchingWorkspace = true;
+  const response = await switchWorkspace(workspace_id);
+  if (response) {
+    encryption(sessionStorage, 'currentProfile', response.profile);
+    encryption(sessionStorage, 'currentWorkspace', response.workspace);
+    currentProfileStore.setProfile(response.profile);
+    currentWorkspaceStore.setWorkspace(response.workspace);
+    currentWorkspaceStore.switchingWorkspace = false;
+    window.location.reload();
+  } else {
+    isError = true;
+  }
+};
+
 export default [
   {
     key: 'header',
@@ -122,6 +185,18 @@ export default [
   {
     type: 'divider',
     key: 'd5',
+  },
+  {
+    label: CONSTANTS.SWITCH_WORKSPACE,
+    key: generateKey(CONSTANTS.SWITCH_WORKSPACE),
+
+    children: [
+      {
+        key: workspaceKey,
+        type: 'render',
+        render: renderWorkspaces,
+      },
+    ],
   },
   {
     label: CONSTANTS.ADD_WORKSPACE,

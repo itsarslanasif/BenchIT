@@ -82,7 +82,8 @@ Workspace.create!(company_name: 'Devsinc',
                   organization_type: :financial_services)
 Workspace.last.workspace_avatar.attach(io: Rails.root.join(*%w[app assets images user.png]).open,
                                        filename: 'user.png', content_type: 'image/png')
-user1.profiles.create!(username: 'Alvi', description: 'SE', workspace_id: 2)
+user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: 2, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
+                       text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
 Current.profile = user1.profiles.second
 Current.workspace = Workspace.second
 BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')

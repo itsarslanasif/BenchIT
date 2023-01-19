@@ -12,11 +12,11 @@
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
-        <p class="ml-2 text-sm self-center text-white">
+        <p v-if="user.status" class="ml-2 text-sm self-center text-white">
           {{ user.status.emoji }}
         </p>
         <div
-          v-if="unreadDetails?.messages.length"
+          v-if="unreadDetails.messages.length"
           class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
         >
           {{ unreadDetails.messages.length }}

@@ -139,4 +139,6 @@ export const CONSTANTS = {
   SOMETHING_WENT_WRONG: 'Something went wrong',
   SWITCHING_WORKSPACE: 'Switching workspace... Please wait.',
   REMOVE_FROM_SAVED_ITEMS:'Remove from saved items',
+  SWITCH_WORKSPACE: 'Switch workspace',
+  JOINED_WORKSPACES: 'Joined workspaces'
 };
