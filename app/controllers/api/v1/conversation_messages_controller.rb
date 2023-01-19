@@ -121,12 +121,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    render json: { json: 'user is not part of this channel', status: :not_found } unless Current.profile.bench_channel_ids.include?(@bench_channel.id)
+    return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
+
+    render json: { errors: 'User is not part of this channel' }, status: :not_found
   end
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { json: 'user is not part of this group', status: :not_found } unless @group.profile_ids.include?(Current.profile.id)
+    render json: { errors: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(Current.profile.id)
   end
 
   def set_receiver
