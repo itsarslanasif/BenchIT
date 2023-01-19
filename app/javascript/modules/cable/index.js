@@ -2,6 +2,7 @@ import { useMessageStore } from '../../stores/useMessagesStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useThreadStore } from '../../stores/useThreadStore';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
+import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
 const createMessage = (data, messageStore, threadStore) => {
   try {
@@ -36,7 +37,7 @@ const createMessage = (data, messageStore, threadStore) => {
   }
 };
 
-const deleteMessage = (data, messageStore, threadStore) => {
+const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
   try {
     const messages = messageStore.getMessages;
 
@@ -68,9 +69,10 @@ const deleteMessage = (data, messageStore, threadStore) => {
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
         const threadMessage = threadStore.getMessages;
-        threadMessage.replies.splice(0,threadMessage.replies.length);
-        threadMessage.setMessage(msg)
-        messages[findMessageIndex].reactions = []
+        threadMessage.replies.splice(0, threadMessage.replies.length);
+        threadStore.setMessage(null)
+        // messages[findMessageIndex].reactions = []
+        rightPaneStore.toggleThreadShow(false);
       }
     }
   } catch (err) {
@@ -89,11 +91,10 @@ const updateMessage = (data, messageStore, threadStore) => {
       const findMessageIndex = message.replies.findIndex(
         element => element.id === data.id
       );
-      if (findMessageIndex === -1 && data.attachments)
-      {
+      if (findMessageIndex === -1 && data.attachments) {
         createMessage(data, messageStore, threadStore);
       }
-      else{
+      else {
         if (findMessageIndex !== -1) {
           message.replies[findMessageIndex] = data;
         }
@@ -109,15 +110,16 @@ const updateMessage = (data, messageStore, threadStore) => {
       const findMessageIndex = messages.findIndex(
         element => element.id === data.id
       );
-      if (findMessageIndex !== -1 && messages[findMessageIndex].content !== data.content) {
-        if(data.replies.length > 0)
-        {
-          threadStore.setMessage(data)
+      if (findMessageIndex !== -1) {
+        let messsageToUpdate = { ...data }
+        messsageToUpdate.replies = messageStore.messages[findMessageIndex].replies
+        messageStore.messages[findMessageIndex] = messsageToUpdate
+        if (threadStore?.message && threadStore.message.id == data.id) {
+          threadStore.message = messsageToUpdate
         }
-        messages[findMessageIndex] = data;
+        messages[findMessageIndex] = messsageToUpdate;
       }
-      if (findMessageIndex === -1 && data.attachments)
-      {
+      if (findMessageIndex === -1 && data.attachments) {
         createMessage(data, messageStore, threadStore);
       }
     }
@@ -271,9 +273,10 @@ const actions = {
 export const cableActions = data => {
   const messageStore = useMessageStore();
   const threadStore = useThreadStore();
+  const rightPaneStore = useRightPaneStore();
   try {
     const key = data.type + data.action;
-    actions[key](data.content, messageStore, threadStore);
+    actions[key](data.content, messageStore, threadStore, rightPaneStore);
   } catch (err) {
     console.error(err);
   }

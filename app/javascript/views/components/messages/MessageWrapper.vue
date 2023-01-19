@@ -37,13 +37,11 @@
       <template
         v-if="
           (!isSameUser ||
-          !isSameDayMessage ||
-          isFirstMessage ||
-          currMessage.is_info
-        ) &&
+            !isSameDayMessage ||
+            isFirstMessage ||
+            currMessage.is_info) &&
           currMessage.content !== null
         "
-
       >
         <user-profile-modal
           :profile_id="currMessage.sender_id"
@@ -57,10 +55,9 @@
               @click="showUserProfile"
               v-if="
                 (!isSameUser ||
-                !isSameDayMessage ||
-                isFirstMessage ||
-                currMessage.is_info
-              ) &&
+                  !isSameDayMessage ||
+                  isFirstMessage ||
+                  currMessage.is_info) &&
                 currMessage.content !== null
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
@@ -114,10 +111,9 @@
           <span
             v-if="
               (!isSameUser ||
-              !isSameDayMessage ||
-              isFirstMessage ||
-              currMessage.is_info
-            ) &&
+                !isSameDayMessage ||
+                isFirstMessage ||
+                currMessage.is_info) &&
               currMessage.content !== null
             "
             :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
@@ -133,7 +129,10 @@
           >
             {{ $t('deleteMessageModal.deleted_message') }}</span
           >
-          <div v-if="currMessage.info && currMessage.attachments" class="flex gap-2">
+          <div
+            v-if="!currMessage.info && currMessage.attachments"
+            class="flex gap-2"
+          >
             <div
               v-for="attachment in currMessage.attachments"
               :key="attachment.id"
@@ -180,11 +179,11 @@
             :class="[
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
               {
-
                 'ml-12 -mr-10':
                   !currMessage.is_info &&
-                  isSameUser && isSameDayMessage
-                  && !isFirstMessage,
+                  isSameUser &&
+                  isSameDayMessage &&
+                  !isFirstMessage,
               },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
@@ -315,7 +314,6 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
-import benchitAlert from '../../widgets/benchitAlert.vue';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
@@ -357,7 +355,6 @@ export default {
     NText,
     NPopover,
     downloadsModal,
-    benchitAlert,
     ReplyAndThreadButton,
     DeleteMessageModal,
     NAvatar,
@@ -610,9 +607,6 @@ export default {
     setDeleteModal() {
       this.showDeleteModal = !this.showDeleteModal;
     },
-  },
-  mounted() {
-    console.log(this.currMessage);
   },
 };
 </script>
