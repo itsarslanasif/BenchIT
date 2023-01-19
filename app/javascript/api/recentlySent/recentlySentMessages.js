@@ -1,9 +1,10 @@
+import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios/index';
 
 export const getMessages = async () => {
   return await axios
     .get(`/v1/conversation_messages/send_message`, {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;

@@ -1,20 +1,20 @@
 <template>
   <div class="flex p-2 rounded-md border border-black-500 shadow-sm">
-    <div @click="showMemberClickListener(true)" class="flex cursor-pointer">
-      <img
-        class="w-6 h-6 -ml-1 rounded-md border border-black-500"
-        src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
-      />
-      <img
-        class="w-6 h-6 -ml-1 rounded-md border border-black-500"
-        src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
-      />
-      <img
-        class="w-6 h-6 -ml-1 rounded-md border border-black-500"
-        src="https://i.pinimg.com/736x/55/0f/49/550f49a459548599a5a4ea1c67fc0244.jpg"
-      />
+    <div class="flex cursor-pointer" @click="showMemberClickListener(true)">
+      <div
+        v-for="member in getChannelMembers"
+        :key="member.id"
+        class="flex cursor-pointer"
+      >
+        <img
+          class="w-6 h-6 mr-1 rounded "
+          :src="member.image_url"
+        />
+      </div>
       <div class="w-3 ml-1">
-        <p class="ml-1 font-bold text-black">{{ count }}</p>
+        <p class="ml-1 font-bold text-black">
+          {{ channelDetailStore.channelMembers.length }}
+        </p>
       </div>
     </div>
     <n-divider vertical class="self-center text-black" />
@@ -40,6 +40,11 @@ export default {
   setup() {
     const channelDetailStore = useChannelDetailStore();
     return { channelDetailStore };
+  },
+  computed: {
+    getChannelMembers() {
+      return this.channelDetailStore.channelMembers.slice(-3);
+    },
   },
   data() {
     return {

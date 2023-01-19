@@ -3,25 +3,22 @@
     <div v-for="message in messages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
-        <div
-          v-if="isToday"
-          class="text-xs text-black ml-10 text-xs font-bold m-4"
-        >
+        <div v-if="isToday" class="text-black ml-10 text-xs font-bold m-4">
           <p>Today</p>
         </div>
-        <div v-else class="text-xs text-black ml-10 text-xs font-bold m-4">
+        <div v-else class="text-black ml-10 text-xs font-bold m-4">
           <p>{{ new Date(message.created_at).toDateString() }}</p>
         </div>
       </div>
       <div
         @click="handleClick(message)"
-        class="ml-2 mr-2 bg-white border border-black-100 cursor-pointer flex p-4 hover:bg-gray-100 flex"
+        class="ml-2 mr-2 bg-white border border-black-100 cursor-pointer p-4 hover:bg-gray-100 flex"
       >
         <div class="min-w-fit ml-1">
           <n-avatar
             class="mr-1 self-baseline"
             size="large"
-            src="../../../assets/images/user.png"
+            :src="message.sender_avatar"
           />
         </div>
         <div class="ml-3 leading-3">

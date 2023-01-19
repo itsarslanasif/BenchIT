@@ -22,7 +22,8 @@ class ConversationMessage < ApplicationRecord
   }
 
   scope :chat_messages, lambda { |id|
-    includes(:profile, :replies, :reactions).where(parent_message_id: nil, bench_conversation_id: id).with_attached_message_attachments
+    includes(:profile, :replies, :reactions).where(parent_message_id: nil,
+                                                   bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
   }
 
   def self.recent_last_conversation(conversation_ids)
@@ -113,7 +114,8 @@ class ConversationMessage < ApplicationRecord
       replies: replies,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,
-      conversationable_id: bench_conversation.conversationable_id
+      conversationable_id: bench_conversation.conversationable_id,
+      is_info: is_info
     }
   end
 

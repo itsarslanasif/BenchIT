@@ -1,8 +1,17 @@
 <template>
-  <div>
-    <AccordionList class="my-5 ml-3 text-base text-slate-50">
-      <AccordionItem default-opened="true">
-        <template #summary>{{ $t('channels.title') }}</template>
+  <div class="hover-trigger">
+    <font-awesome-icon
+      @click="goToChannels"
+      icon="fa-plus"
+      class="hover-target px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+    />
+    <AccordionList class="mt-5 ml-4 text-base text-slate-50">
+      <AccordionItem :default-opened="true">
+        <template class="flex justify-between items-center" #summary>
+          <span class="ml-2 cursor-pointer">
+            {{ $t('channels.title') }}
+          </span>
+        </template>
         <h5
           v-for="channel in joinedChannels"
           :key="channel.id"
@@ -15,16 +24,22 @@
             :isShowOptions="showChannelOptions"
           />
         </h5>
-        <div
-          class="mt-2 -ml-3 cursor-pointer hover:bg-primaryHover"
-          @click="closeModal"
-        >
-          <h5 class="pl-3">{{ $t('channels.add_new_channel') }}</h5>
-        </div>
       </AccordionItem>
     </AccordionList>
+    <div
+      @click="toggleModal"
+      class="px-2 flex hover:bg-primaryHover cursor-pointer py-1"
+    >
+      <font-awesome-icon
+        icon="fa-plus"
+        class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+      />
+      <p class="text-sm self-center text-white">
+        {{ $t('channels.add_new_channel') }}
+      </p>
+    </div>
     <div v-if="modalOpen">
-      <CreateChannel :close-modal="closeModal" />
+      <CreateChannel :close-modal="toggleModal" />
     </div>
   </div>
 </template>
@@ -61,7 +76,7 @@ export default {
     };
   },
   methods: {
-    closeModal() {
+    toggleModal() {
       this.modalOpen = !this.modalOpen;
     },
     goToChannelChat(chatURL, channel) {
@@ -77,6 +92,19 @@ export default {
     toggleChannelOptionShow() {
       this.showChannelOptions = !this.showChannelOptions;
     },
+    goToChannels() {
+      this.$router.push('/browse-channels');
+    },
   },
 };
 </script>
+<style scoped>
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
+}
+</style>

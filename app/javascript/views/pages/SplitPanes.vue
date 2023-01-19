@@ -98,7 +98,7 @@ export default {
   },
   methods: {
     resizePane(panes) {
-      if (panes[0].size < 11) {
+      if (panes[0].size < 13) {
         this.leftPaneStore.closeLeftPane();
       }
     },

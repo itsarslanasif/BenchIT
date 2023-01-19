@@ -1,6 +1,5 @@
 <template>
   <n-modal
-    v-model:show="showModal"
     class="custom-card rounded-lg w-180 h-400"
     preset="card"
     :bordered="false"

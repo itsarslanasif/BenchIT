@@ -1,3 +1,4 @@
+import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios';
 
 export const add_reaction = async (message_id, emoji) => {
@@ -7,12 +8,12 @@ export const add_reaction = async (message_id, emoji) => {
       conversation_message_id: message_id,
       emoji: emoji,
     },
-    { headers: { Authorization: localStorage.getItem('token') } }
+    { headers: getHeaders() }
   );
 };
 
 export const remove_reaction = async id => {
   return await axios.delete(`/v1/reactions/${id}`, {
-    headers: { Authorization: localStorage.getItem('token') },
+    headers: getHeaders(),
   });
 };

@@ -1,12 +1,19 @@
 <template>
   <div class="bg-secondary text-white border border-slate-600 h-screen -mb-12">
     <div class="grid text-slate-600 grid-cols-1 divide-y">
-      <div class="p-2 text-white text-xl">
-        {{ $t('direct_messages.direct_messages') }}
-      </div>
+      <span class="flex justify-between">
+        <div class="p-2 text-white text-xl">
+          {{ $t('direct_messages.direct_messages') }}
+        </div>
+        <font-awesome-icon
+          @click="closeNewDmList"
+          icon="fa-xmark"
+          class="self-center mr-6 p-2 text-base text-white rounded-md hover:bg-slate-600"
+        />
+      </span>
       <div>
         <div class="flex p-3">
-          <p>{{ $t('request.to') }}:</p>
+          <p>{{ $t('request.to') }}</p>
           <input
             type="text"
             :placeholder="$t('find_direct_messages.somebody')"
@@ -23,7 +30,7 @@
               class="cursor-pointer"
               :name="member.username"
               :description="member.description"
-              :img-url="member.image_url"
+              :image_url="member.image_url"
               @click="handleSelect(member)"
             />
           </div>
@@ -77,8 +84,8 @@ export default {
     },
     handleSelect(member) {
       this.directMessageStore.appendToDirectMessagesList(member);
-      this.setSelectedChat(member);
       this.goToChat(`/profiles/${member.id}`);
+      this.setSelectedChat(member);
     },
     async searchQuery() {
       try {
@@ -90,6 +97,9 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    closeNewDmList() {
+      this.$router.push('/');
     },
   },
 };

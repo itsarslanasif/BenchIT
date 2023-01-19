@@ -10,30 +10,18 @@
       />
     </div>
     <filters v-if="!showProfile" @sort_filter="getSortFilter"></filters>
-
     <div class="justify-center flex h-full w-full" v-if="showSpinner">
       <Spinner />
     </div>
     <div class="justify-items-start flex align-top" v-if="members.length > 0">
-      <div
-        class="render-member-row items-start flex-wrap flex"
-        style="min-width: 725px"
-      >
+      <div class="mx-4 items-start flex-wrap flex">
         <div v-for="member in members" :key="member.id">
-          <member
-            :name="member.username"
-            :description="member.description"
-            :img_url="member.image_url"
-            @click="showUserProfile(member.id)"
-          />
+          <member :profile="member" @click="showUserProfile(member.id)" />
         </div>
       </div>
     </div>
     <div class="flex justify-center" v-if="members.length == 0">
       <p>{{ $t('filters.no_results_found') }}</p>
-    </div>
-    <div v-if="members.length == 0 && query == ''">
-      {{ searchQuery() }}
     </div>
   </div>
 </template>

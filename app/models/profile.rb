@@ -34,8 +34,9 @@ class Profile < ApplicationRecord
   validates :display_name, length: { maximum: 80 }
   validates :text_status, length: { maximum: 100 }
   validates :pronounce_name, length: { maximum: 20 }
-
   validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validates :workspace, uniqueness: { scope: %i[user_id] }
+
   enum role: {
     primary_owner: 0,
     workspace_owner: 1,
@@ -72,5 +73,27 @@ class Profile < ApplicationRecord
 
   def groups
     Group.where('profile_ids @> ARRAY[?]::integer[]', [id])
+  end
+
+  def profile_content
+    {
+      id: id,
+      username: username,
+      description: description,
+      workspace_id: workspace_id,
+      user_id: user_id,
+      display_name: display_name,
+      pronounce_name: pronounce_name,
+      role: role,
+      title: title,
+      status: { text: text_status, emoji: emoji_status },
+      contact_info: { email: user.email, phone: phone },
+      about_me: { skype: skype },
+      local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p')
+    }
+  end
+
+  def get_favourite_id(favourable_id, favourable_type)
+    Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
   end
 end

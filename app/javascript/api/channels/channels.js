@@ -1,9 +1,10 @@
 import axios from '../../modules/axios';
+import { getHeaders } from '../../modules/auth';
 
 export const getChannel = async channelId => {
   return await axios
     .get(`/v1/bench_channels/${channelId}`, {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;
@@ -13,7 +14,7 @@ export const getChannel = async channelId => {
 export const getChannels = async query => {
   return await axios
     .get(`/v1/bench_channels`, {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
       params: {
         query: query,
       },
@@ -26,7 +27,7 @@ export const getChannels = async query => {
 export const getJoinedChannels = async () => {
   return await axios
     .get(`/v1/bench_channels/joined_channels`, {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;
@@ -36,7 +37,7 @@ export const getJoinedChannels = async () => {
 export const getChannelMembers = async (query, bench_channel_id) => {
   return await axios
     .get(`/v1/channel_participants`, {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
       params: { query: query, bench_channel_id: bench_channel_id },
     })
     .then(response => {
@@ -55,15 +56,15 @@ export const createChannel = async (name, description, is_private) => {
       },
     },
     {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     }
   );
 };
 
 export const memberLeaveChannel = async channel_id => {
   return await axios
-    .delete(`v1/bench_channels/${channel_id}/leave`, {
-      headers: { Authorization: localStorage.getItem('token') },
+    .delete(`v1/bench_channels/${channel_id}/leave_channel`, {
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;
@@ -77,7 +78,7 @@ export const memberJoinChannel = async channel_id => {
       bench_channel_id: channel_id,
     },
     {
-      headers: { Authorization: localStorage.getItem('token') },
+      headers: getHeaders(),
     }
   );
 };
