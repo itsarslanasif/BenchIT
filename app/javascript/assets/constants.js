@@ -137,4 +137,5 @@ export const CONSTANTS = {
   MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
   UN_STAR_CHANNEL: 'Unstar Channel',
   SOMETHING_WENT_WRONG: 'Something went wrong',
+  REMOVE_FROM_SAVED_ITEMS:'Remove from saved items',
 };
