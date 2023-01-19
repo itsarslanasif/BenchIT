@@ -1,3 +1,4 @@
 class Status < ApplicationRecord
-  enum type: { ProfileStatus: 0, RecentStatus: 1, WorkspaceStatus: 2 }
+  belongs_to :profile, optional: true
+  belongs_to :workspace, optional: true
 end

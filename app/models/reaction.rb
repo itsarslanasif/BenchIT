@@ -14,13 +14,7 @@ class Reaction < ApplicationRecord
       content: reaction_content,
       type: 'Reaction'
     }
-    result[:action] = if destroyed?
-                        'Delete'
-                      elsif created_at.eql?(updated_at)
-                        'Create'
-                      else
-                        'Update'
-                      end
+    result[:action] = ActionPerformed.new.action_performed(self)
     BroadcastMessageChatService.new(result, conversation_message.bench_conversation).call
   end
 

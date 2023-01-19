@@ -10,7 +10,7 @@ class ChannelParticipant < ApplicationRecord
   private
 
   def broadcast_channel
-    return unless action_performed.eql?('Create')
+    return unless ActionPerformed.new.action_performed(self).eql?('Create')
 
     message = channel_participant_content
     message[:content] = bench_channel.bench_channel_content
@@ -19,7 +19,7 @@ class ChannelParticipant < ApplicationRecord
   end
 
   def broadcast_member_profile
-    return if action_performed.eql?('Update')
+    return if ActionPerformed.new.action_performed(self).eql?('Update')
 
     message = channel_participant_content
     message[:content] = profile.profile_content
@@ -30,17 +30,7 @@ class ChannelParticipant < ApplicationRecord
   def channel_participant_content
     {
       type: 'ChannelParticipant',
-      action: action_performed
+      action: ActionPerformed.new.action_performed(self)
     }
-  end
-
-  def action_performed
-    if destroyed?
-      'Delete'
-    elsif created_at.eql?(updated_at)
-      'Create'
-    else
-      'Update'
-    end
   end
 end

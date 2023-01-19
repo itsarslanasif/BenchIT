@@ -2,8 +2,8 @@ class Api::V1::StatusesController < Api::ApiController
   before_action :set_status, only: :destroy
 
   def index
-    @recent_statuses = Current.profile.recent_statuses.last(4)
-    @workspace_statuses = Current.workspace.workspace_statuses
+    @recent_statuses = Current.profile.statuses.last(4)
+    @workspace_statuses = Current.workspace.statuses
   end
 
   def destroy

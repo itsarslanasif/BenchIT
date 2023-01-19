@@ -27,8 +27,7 @@ class Profile < ApplicationRecord
   has_many :draft_messages, dependent: :destroy
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
-  has_many :recent_statuses, dependent: :destroy
-
+  has_many :statuses, dependent: :destroy
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :downloads, dependent: :destroy
 
@@ -82,22 +81,12 @@ class Profile < ApplicationRecord
     {
       content: profile_content,
       type: 'Profile',
-      action: action_performed
+      action: ActionPerformed.new.action_performed(self)
     }
   end
 
   def broadcast_profile
     BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call
-  end
-
-  def action_performed
-    if destroyed?
-      'Delete'
-    elsif created_at.eql?(updated_at)
-      'Create'
-    else
-      'Update'
-    end
   end
 
   def profile_content
