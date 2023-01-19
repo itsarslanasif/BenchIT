@@ -69,9 +69,11 @@
                 @click="goToChat(item)"
                 class="hover:bg-slate-600 p-2 rounded"
               >
-                <div class="flex">
+                <div class="flex items-center">
                   <div v-if="!item.creator_id" class="mx-3">
-                    <font-awesome-icon icon="fa-user" />
+                    <div v-if="item.username">
+                      <img :src="item.image_url" class="w-6 rounded" />
+                    </div>
                   </div>
                   <div v-if="item.creator_id" class="mx-3">
                     <div v-if="item.is_private">
