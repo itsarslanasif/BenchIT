@@ -57,7 +57,7 @@
               message.conversationable_type == $t('conversation.channel')
             "
           >
-            {{ $t('heading.thread_in') }} {{ message.channel_name }}
+            {{ $t('heading.thread_in') + message.channel_name }}
           </div>
           <div
             v-else-if="
@@ -65,7 +65,7 @@
               message.conversationable_type == $t('conversation.profile')
             "
           >
-            {{ $t('heading.thread_in') }} {{ message.receiver_name }}
+            {{ $t('heading.thread_in') + message.receiver_name }}
           </div>
           <div
             v-else-if="
@@ -73,7 +73,7 @@
               message.conversationable_type == $t('conversation.group')
             "
           >
-            {{ $t('heading.thread_in_group') }} {{ message.group_id }}
+            {{ $t('heading.thread_in_group') + message.group_id }}
           </div>
           <div
             v-else-if="
@@ -81,7 +81,7 @@
               message.conversationable_type == $t('conversation.group')
             "
           >
-            {{ $t('heading.message_in_group') }} {{ message.group_id }}
+            {{ $t('heading.message_in_group') + message.group_id }}
           </div>
           <br />
           <span class="text-black-600" v-html="message.content"></span>
