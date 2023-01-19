@@ -38,7 +38,7 @@
           <div
             v-if="
               !message.is_threaded &&
-              message.conversationable_type == $t('conversation.profile')
+              message.conversationable_type === $t('conversation.profile')
             "
           >
             {{ message.receiver_name }}
@@ -46,7 +46,7 @@
           <div
             v-else-if="
               !message.is_threaded &&
-              message.conversationable_type == $t('conversation.channel')
+              message.conversationable_type === $t('conversation.channel')
             "
           >
             {{ message.channel_name }}
@@ -54,7 +54,7 @@
           <div
             v-else-if="
               message.is_threaded &&
-              message.conversationable_type == $t('conversation.channel')
+              message.conversationable_type === $t('conversation.channel')
             "
           >
             {{ $t('heading.thread_in') + message.channel_name }}
@@ -62,7 +62,7 @@
           <div
             v-else-if="
               message.is_threaded &&
-              message.conversationable_type == $t('conversation.profile')
+              message.conversationable_type === $t('conversation.profile')
             "
           >
             {{ $t('heading.thread_in') + message.receiver_name }}
@@ -70,7 +70,7 @@
           <div
             v-else-if="
               message.is_threaded &&
-              message.conversationable_type == $t('conversation.group')
+              message.conversationable_type === $t('conversation.group')
             "
           >
             {{ $t('heading.thread_in_group') + message.group_id }}
@@ -78,7 +78,7 @@
           <div
             v-else-if="
               !message.is_threaded &&
-              message.conversationable_type == $t('conversation.group')
+              message.conversationable_type === $t('conversation.group')
             "
           >
             {{ $t('heading.message_in_group') + message.group_id }}
@@ -132,13 +132,13 @@ export default {
       this.message = message;
     },
     handleClick(message) {
-      if (message.conversationable_type == 'BenchChannel') {
+      if (message.conversationable_type === 'BenchChannel') {
         this.$router.push(
           `/channels/${message.conversationable_id}/${message.id}`
         );
-      } else if (message.conversationable_type == 'Profile') {
+      } else if (message.conversationable_type === 'Profile') {
         this.$router.push(`/profiles/${message.receiver_id}/${message.id}`);
-      } else if (message.conversationable_type == 'Group') {
+      } else if (message.conversationable_type === 'Group') {
         this.$router.push(`/groups/${message.group_id}/${message.id}`);
       }
     },
@@ -152,11 +152,7 @@ export default {
       const channelDetail = this.channels.find(
         channel => channel.id === message.conversationable_id
       );
-      if (channelDetail.is_private) {
-        return 'fa-lock';
-      } else {
-        return 'fa-hashtag';
-      }
+      return `fa-${channelDetail.is_private ? 'lock' : 'hashtag'}`;
     },
   },
   async mounted() {
