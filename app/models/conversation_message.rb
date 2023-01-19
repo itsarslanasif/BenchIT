@@ -13,6 +13,8 @@ class ConversationMessage < ApplicationRecord
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :destroy
 
+  validates :content, presence: true, length: { minimum: 1, maximum: 100 }
+
   scope :messages_by_ids_array, lambda { |ids|
     includes(:reactions, :replies, :parent_message, :saved_items)
       .with_attached_message_attachments
@@ -20,8 +22,7 @@ class ConversationMessage < ApplicationRecord
   }
 
   scope :chat_messages, lambda { |id|
-    includes(:profile, :replies, :reactions).where(parent_message_id: nil,
-                                                   bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
+    includes(:profile, :replies, :reactions).where(parent_message_id: nil, bench_conversation_id: id).with_attached_message_attachments
   }
 
   def self.recent_last_conversation(conversation_ids)
@@ -32,9 +33,8 @@ class ConversationMessage < ApplicationRecord
 
   def message_content
     message = model_basic_content
-    message[:pin] = { id: pin.id, pinned_by: pin.profile.username } if pin.present?
-    message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
-    message[:attachments] = attach_message_attachments if message_attachments.present?
+    message = message_data(message)
+    message[:replies] = replies.map(&:message_content) if parent_message_id.nil?
 
     message
   end
@@ -109,15 +109,20 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at,
       isSaved: saved?(id),
       pinned: pin.present?,
-      replies: replies,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,
-      conversationable_id: bench_conversation.conversationable_id,
-      is_info: is_info
+      conversationable_id: bench_conversation.conversationable_id
     }
   end
 
   def saved?(id)
     Current.profile.saved_items.exists?(conversation_message_id: id)
+  end
+
+  def message_data(message)
+    message[:pin] = { id: pin.id, pinned_by: pin.profile.username } if pin.present?
+    message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
+    message[:attachments] = attach_message_attachments if message_attachments.present?
+    message
   end
 end

@@ -22,7 +22,7 @@ const createMessage = (data, messageStore, threadStore) => {
       const findThreadMessage = threadMessage.replies.find(
         element => element.id === data.id
       );
-      if (findThreadMessage === undefined) {
+      if (findThreadMessage === undefined && threadMessage.id === data.parent_message_id) {
         threadMessage.replies.push(data);
       }
     } else {
