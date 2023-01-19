@@ -20,7 +20,7 @@ export const useMessageStore = () => {
       getMessages: state => state.messages,
       getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
-        
+
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
           state.currMessage !== null
@@ -79,14 +79,16 @@ export const useMessageStore = () => {
           );
 
           if (findThreadMessageIndex != -1) {
-            console.log("reply")
             message.replies[findThreadMessageIndex] = data;
           }
         } else {
           const findMessageIndex = this.messages.findIndex(element => element.id === data.id);
 
-          if (findMessageIndex != -1)
-            this.messages[findMessageIndex]=data
+          if (findMessageIndex != -1){
+            let messsageToUpdate={...data}
+            messsageToUpdate.replies=this.messages[findMessageIndex].replies
+            this.messages[findMessageIndex]=messsageToUpdate
+          }
         }
       }
     },

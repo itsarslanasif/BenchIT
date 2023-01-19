@@ -36,10 +36,28 @@ const createMessage = (data, messageStore, threadStore) => {
 };
 
 const updateMessage = (data, messageStore, threadStore) => {
-  try {
-    messageStore.updateMessage(data)
-  } catch (err) {
-    console.error(err);
+  {
+    if (data.parent_message_id) {
+      const message = messageStore.messages.find(element => element.id === data.parent_message_id);
+      const findThreadMessageIndex = message.replies.findIndex(
+        element => element.id === data.id
+      );
+
+      if (findThreadMessageIndex != -1) {
+        message.replies[findThreadMessageIndex] = data;
+      }
+    } else {
+      const findMessageIndex = messageStore.messages.findIndex(element => element.id === data.id);
+
+      if (findMessageIndex != -1){
+        let messsageToUpdate={...data}
+        messsageToUpdate.replies=messageStore.messages[findMessageIndex].replies
+        messageStore.messages[findMessageIndex]=messsageToUpdate
+        if(threadStore?.message && threadStore.message.id==data.id){
+          threadStore.message=messsageToUpdate
+        }
+      }
+    }
   }
 };
 
