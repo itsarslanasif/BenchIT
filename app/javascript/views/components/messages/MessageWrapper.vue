@@ -17,7 +17,7 @@
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
     <div
-      class="flex p-1 px-4 relative"
+      class="hover-trigger flex p-1 px-4 hover:bg-transparent relative"
       :class="{
         'bg-yellow-50': currMessage.pinned,
       }"
@@ -52,17 +52,27 @@
             >
               <b>{{ currMessage.sender_name }}</b>
             </p>
-            <p
-              class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
+            <span
+              :class="{
+                'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
+              }"
             >
-              {{
-                currMessage.is_info
+              <p
+                class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
+                :class="{
+                  'hover-target':
+                    isSameUser && isSameDayMessage && !isFirstMessage,
+                }"
+              >
+                {{
+                  currMessage.is_info
                   ? time
                   : isSameUser && isSameDayMessage && !isFirstMessage
                   ? timeWithoutAMPM
                   : time
-              }}
-            </p>
+                }}
+              </p>
+            </span>
             <span
               v-if="
                 isSameUser &&
@@ -107,11 +117,11 @@
                     :class="{ 'ml-12': isSameUser && isSameDayMessage }"
                   />
                 </template>
-                <a :href="attachment.attachment_download_link" download
-                  ><span class="mr-3" @click="downloadFile(attachment)"
-                    ><font-awesome-icon
-                      icon="fa-solid fa-cloud-arrow-down" /></span
-                ></a>
+                <a :href="attachment.attachment_download_link" download>
+                  <span class="mr-3" @click="downloadFile(attachment)">
+                    <font-awesome-icon icon="fa-solid fa-cloud-arrow-down" />
+                  </span>
+                </a>
                 <downloadsModal
                   icon="fa-solid fa-share"
                   :actionText="$t('downloadsModal.share_file')"
@@ -212,7 +222,7 @@
             :actionText="$t('emojiModalButton.more_actions')"
             :action="setOptionsModal"
             :message="currMessage"
-            :pinnedConversationStore="usePinnedConversation"
+            :pinnedConversationStore="pinnedConversationStore"
           />
         </div>
       </span>
@@ -324,8 +334,8 @@ export default {
     };
   },
   beforeUnmount() {
-    this.topReactions = null;
-    this.displayedReactions = null;
+    this.topReactions = [];
+    this.displayedReactions = [];
   },
   computed: {
     time() {
@@ -363,7 +373,7 @@ export default {
       return this.messagesStore.messages[0]?.id;
     },
     displayReaction() {
-      this.currMessage.reactions.filter(reaction => {
+      this.currMessage.reactions?.filter(reaction => {
         const isDuplicate = this.displayedReactions.includes(reaction.emoji);
         if (!isDuplicate) {
           this.displayedReactions.push(reaction.emoji);
@@ -535,3 +545,12 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hover-trigger .hover-target {
+  display: none;
+}
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
+}
+</style>

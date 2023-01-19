@@ -39,6 +39,9 @@
               >
                 <n-input
                   v-model:value="formValue.channelName"
+                  :maxlength="80"
+                  :count-graphemes="countGraphemes"
+                  show-count
                   :placeholder="$t('channels.new_channel_name_placeholder')"
                 />
               </n-form-item>
@@ -49,6 +52,9 @@
               >
                 <n-input
                   v-model:value="formValue.Description"
+                  :maxlength="500"
+                  :count-graphemes="countGraphemes"
+                  show-count
                   :placeholder="$t('channels.new_channel_desc_placeholder')"
                 />
               </n-form-item>
@@ -77,6 +83,7 @@ import { NForm, NFormItem, NButton, NInput, NSwitch, NSpace } from 'naive-ui';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { CONSTANTS } from '../../../assets/constants';
 import vClickOutside from 'click-outside-vue3';
+import GraphemeSplitter from 'grapheme-splitter';
 export default {
   components: {
     NForm,
@@ -109,20 +116,23 @@ export default {
   },
   setup() {
     const channelStore = useChannelStore();
+    const splitter = new GraphemeSplitter();
     return {
       channelStore,
+      countGraphemes: value => splitter.countGraphemes(value),
     };
   },
   methods: {
     onSubmit() {
       this.validations();
       if (!this.error) {
-        this.channelStore.createChannel(
-          this.formValue.channelName,
-          this.formValue.Description,
-          this.formValue.isPrivate
-        );
-        this.closeModal();
+        this.channelStore
+          .createChannel(
+            this.formValue.channelName,
+            this.formValue.Description,
+            this.formValue.isPrivate
+          )
+          .then(() => this.closeModal());
       }
     },
     validations() {

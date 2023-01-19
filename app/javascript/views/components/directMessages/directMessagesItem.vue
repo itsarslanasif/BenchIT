@@ -1,17 +1,14 @@
 <template>
-  <div>
-    <h5
-      v-for="user in sortedDMList"
-      :key="user?.id"
-      class="hover:bg-primaryHover"
-    >
+  <div v-if="sortedDMList">
+    <h5 v-for="user in sortedDMList" :key="user" class="hover:bg-primaryHover">
       <div
-        @click="goToChat(`/profiles/${user?.id}`, user)"
-        class="flex items-center -ml-4 pl-3 py-1 cursor-pointer hover:bg-primaryHover"
+        v-if="user"
+        @click="goToChat(`/profiles/${user.id}`, user)"
+        class="flex items-center -ml-4 pl-3 py-1 hover:bg-primaryHover cursor-pointer"
         :class="isUnreadDM(user) ? 'font-bold' : ''"
       >
-        <img class="w-5 h-5 rounded-md" :src="user?.image_url" />
-        <p class="ml-2 text-sm text-white">{{ user?.username }}</p>
+        <n-avatar :size="25" :src="user.image_url" />
+        <p class="ml-2 text-sm text-white">{{ user.username }}</p>
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
@@ -46,6 +43,7 @@ import { unreadMessagesCount } from '../../../modules/unreadMessages';
 import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
 export default {
+  components: { NAvatar },
   props: ['sortedDMList', 'isOwnChat', 'goToChat'],
   components: { NAvatar, NTooltip },
   data() {
@@ -65,7 +63,7 @@ export default {
     isUnreadDM(user) {
       this.unreadDetails = unreadMessagesCount(
         this.unreadMessages,
-        `Profile${user?.id}`
+        `Profile${user.id}`
       );
       return this.unreadDetails?.messages.length;
     },

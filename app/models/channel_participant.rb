@@ -1,7 +1,9 @@
 class ChannelParticipant < ApplicationRecord
   belongs_to :profile
   belongs_to :bench_channel
+
   validates :permission, presence: true
+  validates :bench_channel, uniqueness: { scope: %i[profile_id] }
 
   after_commit :broadcast_channel, :broadcast_member_profile
 

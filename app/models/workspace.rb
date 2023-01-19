@@ -6,6 +6,10 @@ class Workspace < ApplicationRecord
   has_many :workspace_statuses
   has_many :bench_channels, dependent: :destroy
 
+  validates :company_name, presence: true
+  validates :bench_it_url, uniqueness: true, presence: true
+  validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
+
   enum workspace_type: {
     work: 0,
     school: 1,
@@ -29,8 +33,4 @@ class Workspace < ApplicationRecord
     business_owner: 3,
     customer_support: 4
   }
-
-  validates :company_name, presence: true
-  validates :bench_it_url, presence: true
-  validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 end
