@@ -136,6 +136,7 @@ export const CONSTANTS = {
   MEMBERS_SUCCESS_MESSAGE: 'members added successfully.',
   UN_STAR_CHANNEL: 'Unstar Channel',
   SOMETHING_WENT_WRONG: 'Something went wrong',
+  REMOVE_FROM_SAVED_ITEMS:'Remove from saved items',
   DONT_CLEAR: "don't clear",
   THIRTY_MINUTES: '30 minutes',
   ONE_HOUR_: '1 hour',

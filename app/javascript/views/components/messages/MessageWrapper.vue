@@ -204,7 +204,7 @@
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
-            :actionText="$t('emojiModalButton.add_to_saved_items')"
+            :actionText="this.getSavedItemText(this.currMessage)"
             :action="saveMessage"
           />
           <EmojiModalButton
@@ -528,6 +528,9 @@ export default {
 
     setFileOptionsModal() {
       this.showFileOptions = !this.showFileOptions;
+    },
+    getSavedItemText(message) {
+      return message.isSaved ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS : CONSTANTS.ADD_TO_SAVED_ITEMS;
     },
   },
 };
