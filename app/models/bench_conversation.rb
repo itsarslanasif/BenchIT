@@ -6,6 +6,8 @@ class BenchConversation < ApplicationRecord
   has_many :draft_messages, dependent: :destroy
   has_many :pins, dependent: :destroy
 
+  validates :sender, uniqueness: { scope: %i[conversationable_id conversationable_type] }
+
   scope :profile_to_profile_conversation, lambda { |sender_id, receiver_id|
     find_by(conversationable_type: 'Profile', sender_id: sender_id, conversationable_id: receiver_id) ||
       find_by(conversationable_type: 'Profile', sender_id: receiver_id, conversationable_id: sender_id) ||
