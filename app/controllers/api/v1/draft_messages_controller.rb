@@ -8,22 +8,26 @@ class Api::V1::DraftMessagesController < Api::ApiController
     @draft_message = DraftMessage.new(draft_messages_params)
 
     if @draft_message.save
-      render json: { success: 'Draft Message successfully created', draft_message: @draft_message, status: :created }
+      render json: { message: 'Draft Message successfully created', draft_message: @draft_message }, status: :ok
     else
-      render json: { error: @draft_message.errors, status: :unprocessable_entity }
+      render json: { error_message: 'Unable to create draft message', errors: @draft_message.errors }, status: :unprocessable_entity
     end
   end
 
   def update
     if @draft_message.update(draft_messages_params)
-      render json: { success: 'Draft updated', draft_message: @draft_message, status: :updated }
+      render json: { message: 'Draft updated', draft_message: @draft_message }, status: :updated
     else
-      render json: { errors: @draft_message.errors, status: :unprocessable_entity }
+      render json: { error_message: 'Draft not updated', errors: @draft_message.errors }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    render json: @draft_message.destroy ? { message: 'Draft deleted successfully.' } : { error: @draft_message.errors, status: :unprocessable_entity }
+    if @draft_message.destroy
+      render json: { message: 'Draft deleted successfully.' }, status: :ok
+    else
+      render json: { error_message: 'Draft not deleted', errors: @draft_message.errors }, status: :unprocessable_entity
+    end
   end
 
   private
