@@ -13,7 +13,7 @@
       <TextEditorVue :sendMessage="sendMessage" />
     </div>
     <div v-else>
-      <JoinChannel />
+      <JoinChannel :joinedTheChannel="joinedTheChannel" />
     </div>
   </div>
 </template>
@@ -143,6 +143,9 @@ export default {
         console.error(e);
       }
     },
+    joinedTheChannel() {
+      this.isMember = !this.isMember
+    }
   },
 };
 </script>
