@@ -3,7 +3,7 @@
     <n-tooltip placement="top" :style="{ width: '150px' }" trigger="hover">
       <template #trigger>
         <n-text
-          class="text-center text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
+          class="text-center text-xs ml-2 text-black-500 hover:underline cursor-pointer"
           >{{ $t('actions.edited') }}</n-text
         >
       </template>

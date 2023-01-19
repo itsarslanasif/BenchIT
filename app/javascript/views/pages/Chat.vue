@@ -1,15 +1,13 @@
 <template>
-  <div class="flex flex-col gap-2">
-    <div v-if="conversation_type && id" class="h-full">
-      <div v-if="chat">
-        <ChatHeader />
-      </div>
-      <div v-if="messages" class="break-words h-1/2">
-        <ChatBody :oldestUnreadMessageId="oldestUnreadMessageId" />
-      </div>
-      <div class="px-3">
-        <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
-      </div>
+  <div v-if="conversation_type && id" class="flex flex-col h-full">
+    <div v-if="chat" class="chat-header-style">
+      <ChatHeader />
+    </div>
+    <div v-if="messages" class="break-words chat-style overflow-y-auto">
+      <ChatBody @load-more-messages="loadMoreMessages" :oldestUnreadMessageId="oldestUnreadMessageId" />
+    </div>
+    <div class="px-3 editor-style">
+      <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
     </div>
   </div>
 </template>
@@ -38,11 +36,7 @@ export default {
   data() {
     return {
       chat: {},
-      messages: [],
       Cable: null,
-      conversation_type: null,
-      id: null,
-      currentUser: {},
     };
   },
   setup() {
@@ -54,19 +48,27 @@ export default {
     const unreadStore = useUnreadStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
-    const { messages } = storeToRefs(messageStore);
+    const { messages, currMessage, currentPage, hasMoreMessages, newMessageSent } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
     const oldestUnreadMessageId = unreadStore.getOldestMessageId(
       conversation_type,
       id
     );
     unreadStore.markedChatAsRead(conversation_type, id);
-    messageStore.index(conversation_type, id);
     return {
       messages,
+      currMessage,
+      currentPage,
+      hasMoreMessages,
+      loadMoreMessages() {
+        if (hasMoreMessages) {
+          messageStore.index(conversation_type, id);
+        }
+      },
       conversation_type,
       currentUser,
       oldestUnreadMessageId,
+      newMessageSent,
       id,
     };
   },
@@ -81,8 +83,11 @@ export default {
       cableActions(data.message);
     });
   },
-  beforeUnmount() {
+beforeUnmount() {
     this.chat = null;
+    this.messages = []
+    this.currMessage = []
+    this.currentPage = 1;
     unsubscribe();
     this.Cable = null;
   },
@@ -100,6 +105,7 @@ export default {
         conversation(formData).then(() => {
           this.message = '';
         });
+        this.newMessageSent = true
       } catch (e) {
         console.error(e);
       }
@@ -108,13 +114,18 @@ export default {
 };
 </script>
 
-<style>
-.editor {
-  bottom: 0;
-  float: left;
-  width: 100%;
+<style scoped>
+.editor-style {
+  flex : 0.3;
 }
 
+.chat-header-style {
+  flex: 0.1;
+}
+
+.chat-style {
+  flex: 1;
+}
 .mce-i-codesample {
   color: transparent !important;
   background-image: url(../../assets/images/codeblock.png) !important;

@@ -1,8 +1,6 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.2'
-
 gem 'bootsnap', require: false
 gem 'brakeman'
 gem 'bundler-audit'
@@ -14,9 +12,11 @@ gem 'elasticsearch', '~> 7.0'
 gem 'foreman'
 gem 'jbuilder'
 gem 'kaminari'
+gem 'pagy'
 gem 'pg'
 gem 'puma', '~> 5.0'
 gem 'rack-cors'
+gem 'rails', '~> 7.0.2'
 gem 'ransack'
 gem 'redis', '~> 4.0'
 gem 'redis-namespace'

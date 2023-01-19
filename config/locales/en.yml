@@ -51,6 +51,13 @@ en:
         share_message: 'Share message...'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
+      downloadsModal:
+        download: 'Download'
+        share_file: 'Share file...'
+        downloads: 'Downloads'
+        clear_downloads: 'Clear Downloads'
+        keep_track: 'Keep track of your downloads'
+        downloaded_files: 'Files you download to your computer will appear here.'
       email:
         gmail: '@gmail.com'
       pinconversation:
@@ -89,6 +96,10 @@ en:
         people: 'People'
         channels: 'Channels'
         tagline: "I'm looking for"
+      conversation:
+        channel: 'BenchChannel'
+        profile: 'Profile'
+        group: 'Group'
       rightpane:
         send: 'Send'
         replies: 'replies'
@@ -134,6 +145,10 @@ en:
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
+      heading:
+        thread_in: 'Thread in'
+        thread_in_group: 'Thread in group'
+        message_in_group: 'Message in group'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -154,14 +169,13 @@ en:
         save_message: 'Save items'
       channels:
         channels: 'Channels'
-        add_new_channel: 'Add New Channel'
+        add_new_channel: 'Add new channel'
         search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
         selected_channels: 'Selected Channels'
         title: 'Channels'
         create_channel: 'Create a channel'
-        add_channel_dialog:
-          'Channels are where your team communicates. They’re best when
+        add_channel_dialog: 'Channels are where your team communicates. They’re best when
           organized around a topic — #marketing, for example.'
         new_channel_name: 'Name'
         set_channel_private: 'Set Channel Private'
@@ -169,6 +183,11 @@ en:
         new_channel_desc_placeholder: 'Description is optional'
         new_channel_description: 'Description'
         result: 'result(s)'
+        starred: 'Starred'
+        channel_created_success: 'New channel created successfully'
+        channel_created_failure: 'Channel name already exist'
+        dot: '·'
+        starred: 'Starred'
       bookmark:
         title: 'Bookmark'
         url: 'Enter URL'
@@ -193,6 +212,7 @@ en:
         close: 'Close'
         create: 'Create'
         join: 'Join'
+        joined: 'Joined'
         leave: 'Leave'
         update: 'Update'
         search: 'Search'
@@ -220,6 +240,9 @@ en:
         search_by_name: 'Search By Name'
         add_members_modal_title: 'Add members to'
         error_message: 'Member is already present in channel.'
+        members: 'members'
+        member: 'member'
+        dot: '.'
       placeholder:
         email: 'Email'
         phone: 'Phone'
@@ -279,6 +302,18 @@ en:
         last_month: 'Last month'
         the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
+      saved_items:
+        title: 'Add messages and files to come back to later'
+        description: 'Mark your to-dos or save something for another time. Only you can see
+        your saved items, so use them however you’d like.'
+      drafts:
+        title: 'Draft messages to send when you’re ready'
+        description: 'Start typing a message anywhere, then find it here. Re-read, revise, and
+        send whenever you’d like.'
+      conversations:
+        channels: 'channels'
+        groups: 'groups'
+        profiles: 'profiles'
     admin:
       title: 'Admin'
       save: 'Save'

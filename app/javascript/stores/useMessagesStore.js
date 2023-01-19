@@ -4,17 +4,20 @@ import { deleteMessage } from '../api/messages';
 import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
+import { decryption } from '../modules/crypto/crypto';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
-    state: () => {
-      return {
-        selectedChat: {},
-        messages: [],
-        currMessage: null,
+    state: () => ({
+      messages: [],
+      currMessage: [],
+      currentPage: 1,
+      maxPages: null,
+      hasMoreMessages: true,
+      selectedChat: {},
+      newMessageSent: false,
         messageToEdit: null,
-      };
-    },
+    }),
 
     getters: {
       getMessages: state => state.messages,
@@ -34,14 +37,23 @@ export const useMessageStore = () => {
         this.selectedChat = selectedChat;
       },
       async index(conversation_type, id) {
-        this.messages = await getMessageHistory(
-          conversation_type.slice(0, -1),
-          id
-        );
-
+        try {
+          let newMessages = await getMessageHistory(
+            conversation_type.slice(0, -1),
+            id,
+            this.currentPage
+          );
+          this.messages = [...newMessages.messages, ...this.messages];
+          this.currentPage += 1;
+          this.maxPages = newMessages.page_information.pages;
+          this.hasMoreMessages = this.currentPage > this.maxPages;
+        } catch (e) {
+          console.error(e);
+        }
         if (conversation_type === 'profiles') {
+          const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
           this.selectedChat = await getUserProfile(
-            JSON.parse(sessionStorage.getItem('currentWorkspace')).id,
+            currentWorkspace.id,
             id
           );
         } else if (conversation_type === 'channels') {

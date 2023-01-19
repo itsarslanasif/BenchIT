@@ -65,12 +65,12 @@ export default {
     return { pinnedConversationStore, messageStore, currentProfileStore };
   },
   beforeMount() {
-    
+
     if (this.message) {
       this.Options = new Options(
         this.message.pinned,
         this.isMyMessage(this.currentProfileStore.currentProfile, this.message)
-      );
+      , this.message.is_info);
     }
   },
   data() {

@@ -85,6 +85,7 @@ import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
+import { encryption, decryption } from '../../modules/crypto/crypto'
 
 export default {
   name: 'UserSignIn',
@@ -120,8 +121,8 @@ export default {
         commit: 'Log in',
       }).then(res => {
         if (res.headers.authorization) {
-          localStorage.setItem('token', res.headers.authorization);
-          localStorage.setItem('currentUser', JSON.stringify(res.data.user));
+          encryption(localStorage, 'token', res.headers.authorization);
+          encryption(localStorage, 'currentUser', res.data.user)
         }
         this.response = res.data;
         if (res.data?.user) {

@@ -75,10 +75,7 @@
 import { NSelect } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { defineComponent } from 'vue';
-import {
-  getMembers,
-  addMemberstoChannel,
-} from '../../../api/members/membersApi';
+import { getMembers, addMemberstoChannel } from '../../../api/members/membersApi';
 import { CONSTANTS } from '../../../assets/constants';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import benchitAlert from '../../widgets/benchitAlert.vue';
@@ -119,16 +116,12 @@ export default defineComponent({
   },
   computed: {
     isSuccessfullResponse() {
-      return this.response.statusText === CONSTANTS.CREATED;
+      return this.response.data.status === 'ok';
     },
     successMessage() {
-      let members = this.response?.data?.members;
-      if (members && members.length > 0) {
-        if (members.length === 1)
-          return `${members.length} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
-        else {
-          return `${members.length} ${CONSTANTS.MEMBERS_SUCCESS_MESSAGE}`;
-        }
+      let status = this.response?.data.status;
+      if (status && status == 'ok') {
+        return `${this.response.data.member_count} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
       } else {
         return CONSTANTS.SOMETHING_WENT_WRONG;
       }

@@ -8,7 +8,7 @@ class User < ApplicationRecord
   has_many :profiles, dependent: :destroy
   has_many :workspaces, through: :profiles, dependent: :destroy
 
-  validates_presence_of :email
+  validates :email, presence: true, uniqueness: true
 
   scope :workspace_users, -> { joins(:profiles).where(workspace_id: Current.workspace).distinct }
 end

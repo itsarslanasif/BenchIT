@@ -1,5 +1,7 @@
 <template>
-  <div class="h-screen -mb-12 text-center flex flex-col justify-center items-center">
+  <div
+    class="h-screen -mb-12 text-center flex flex-col justify-center items-center"
+  >
     <div class="text-5xl -mt-10">
       <font-awesome-icon icon="fa-message" />
     </div>
@@ -11,6 +13,3 @@
     </div>
   </div>
 </template>
-<script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-</script>

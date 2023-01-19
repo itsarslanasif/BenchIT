@@ -23,7 +23,7 @@
     <div>
       <editor
         v-model="newMessage"
-        @keydown.enter="sendMessagePayload"
+        @keydown.enter="sendMessagePayload($event,false)"
         api-key="no-api-key"
         :init="{
           menubar: false,
@@ -88,7 +88,7 @@
           {{ $t('actions.cancel') }}
         </button>
         <button
-          @click="sendMessagePayload"
+          @click="sendMessagePayload($event,true)"
           class="px-4 mr-3 bg-success my-4 rounded-md text-white hover:bg-successHover"
         >
           {{ editMessage ? $t('actions.save') : $t('actions.send') }}
@@ -125,6 +125,7 @@ export default {
     handleCancelEdit() {
       this.messageStore.removeMessageToEdit();
     },
+
   },
   props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
   setup(props) {
@@ -173,35 +174,39 @@ export default {
     const getLastIndex = value => {
       return value[value.length - 1];
     };
-
-    const sendMessagePayload = event => {
-      if (event.keyCode === 13 && !event.shiftKey && !props.editMessage) {
-        const startWithNonBreakSpace =
-          newMessage.value.startsWith('<p>&nbsp;</p>');
-        const messagetext = message(newMessage);
-        if (
-          messagetext !== '' &&
-          messagetext !== '<p> </p>' &&
-          !startWithNonBreakSpace
-        ) {
-          props.sendMessage(messagetext, files.value);
-          newMessage.value = '';
-          readerFile.value = [];
-          files.value = [];
-        }
-      } else if (props.editMessage) {
-        props.editMessageCallBack(newMessage.value);
-        messageStore.removeMessageToEdit();
-      }
-    };
+    const sendMessagePayload = (event,buttonClicked) => {
+      console.log(event)
+       if (((event.keyCode === 13 && !event.shiftKey) || buttonClicked ) && !props.editMessage) {
+         const startWithNonBreakSpace =
+           newMessage.value.startsWith('<p>&nbsp;</p>');
+         const messagetext = message(newMessage);
+         if (
+           messagetext !== '' &&
+           messagetext !== '<p> </p>' &&
+           !startWithNonBreakSpace
+         ) {
+           props.sendMessage(messagetext, files.value);
+           newMessage.value = '';
+           readerFile.value = [];
+           files.value = [];
+         }
+       } else if (((event.keyCode === 13 && !event.shiftKey) || buttonClicked ) && props.editMessage) {
+        console.log("asdasdasdasdasd")
+         props.editMessageCallBack(newMessage.value);
+         messageStore.removeMessageToEdit();
+       }
+     };
 
     const message = newMessage => {
       let messageData;
       let filterData;
       let actuallData;
       const startWithBr = newMessage.value.startsWith('<p><br />', 0);
-      const endWithBr = newMessage.value.endsWith('<br /></p>\n<p>&nbsp;</p>');
-      if (startWithBr || endWithBr) {
+      const endWithBr = newMessage.value.endsWith('<br /></p>');
+      const endWithBrAndP = newMessage.value.endsWith(
+        '<br /></p>\n<p>&nbsp;</p>'
+      );
+      if (startWithBr || endWithBr || endWithBrAndP) {
         messageData = newMessage.value.split('<br />');
         filterData = messageData.filter(function (el) {
           return el !== '';
