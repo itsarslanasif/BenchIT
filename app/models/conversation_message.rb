@@ -13,8 +13,6 @@ class ConversationMessage < ApplicationRecord
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :destroy
 
-  # validates :content, presence: true, length: { minimum: 1, maximum: 100 }
-
   scope :messages_by_ids_array, lambda { |ids|
     includes(:reactions, :replies, :parent_message, :saved_items)
       .with_attached_message_attachments

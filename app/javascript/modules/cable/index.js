@@ -71,7 +71,6 @@ const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
         const threadMessage = threadStore.getMessages;
         threadMessage.replies.splice(0, threadMessage.replies.length);
         threadStore.setMessage(null)
-        // messages[findMessageIndex].reactions = []
         rightPaneStore.toggleThreadShow(false);
       }
     }
