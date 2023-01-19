@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full w-full">
-    <div class=" w-full flex flex-col header-style">
+    <div class=" w-full flex flex-col border-b border-slate-100 header-style">
       <div class="flex justify-between items-center px-5 py-2 border-b border-slate-100">
         <div class="text-xl font-bold">
           {{ $t('channels.all_channels') }}
@@ -21,10 +21,16 @@
               </template>
             </n-input>
           </form>
-          <p class="text-small text-gray-900 py-1 font-thin border-b border-slate-100">
-            {{ searchedChannels?.length }} {{ $t('channels.result') }}
-          </p>
         </n-space>
+        <div class="flex items-center py-1 justify-between">
+          <div class="text-small text-gray-900 font-thin">
+            {{ searchedChannels?.length }} {{ $t('channels.result') }}
+          </div>
+          <div class="flex gap-2">
+            <div>Sort:</div>
+            <div>Filter</div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="px-5 body-style overflow-y-auto flex flex-col">
