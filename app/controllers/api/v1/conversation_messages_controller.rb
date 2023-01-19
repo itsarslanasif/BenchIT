@@ -158,7 +158,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def should_delete_parent_message?
-    @message.parent_message_id && @message.parent_message.content.eql?('This message has deleted.') && @message.parent_message.replies.count.eql?(1)
+    @message.parent_message_id && @message.parent_message.content.eql?('This message was deleted.') && @message.parent_message.replies.count.eql?(1)
   end
 
   def should_soft_delete_message?
@@ -171,7 +171,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.reactions&.delete_all
       @message.saved_items&.delete_all
       @message.message_attachments&.delete_all
-      @message.update!(content: 'This message has deleted.')
+      @message.update!(content: 'This message was deleted.')
     end
   end
 end
