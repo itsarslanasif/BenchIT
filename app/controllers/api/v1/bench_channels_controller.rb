@@ -115,6 +115,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                                   'a_to_z' => ->(bc) { bc.sort_by(&:name) },
                                                                   'z_to_a' => ->(bc) { bc.sort_by(&:name).reverse }
                                                                 })
+    raise 'Invalid sort_by parameter' unless sort_methods.key?(sort_by)
+
     sort_methods[sort_by].call(bench_channels)
   end
 
