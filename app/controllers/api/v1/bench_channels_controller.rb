@@ -120,7 +120,5 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def paginate_bench_channels
     @pagy, @bench_channels = pagination_for_bench_channels(@bench_channels, params[:page] || 1)
-
-    return render json: { errors: 'Page not Found.', status: :unprocessable_entity } if @pagy.nil?
   end
 end
