@@ -23,7 +23,6 @@ export const useMessageStore = () => {
       getMessages: state => state.messages,
       getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
-
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
           state.currMessage !== null
@@ -77,13 +76,11 @@ export const useMessageStore = () => {
         this.messageToEdit = null;
       },
       isMessageToEdit(message) {
-
         if (this.messageToEdit)
           return this.messageToEdit && (message.id == this.messageToEdit.id)
         return false
       },
       updateMessage(data){
-
         if (data.parent_message_id) {
           const message = this.messages.find(element => element.id === data.parent_message_id);
           const findThreadMessageIndex = message.replies.findIndex(
