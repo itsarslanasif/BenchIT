@@ -152,13 +152,8 @@ const deleteReaction = (data, messageStore) => {
   }
 };
 
-const check = () => {
-  console.log('asdadsad');
-};
-
 const pinMessage = (data, messageStore, threadStore, pinStore) => {
   try {
-    check;
     const pinnedMessages = pinStore.getPinnedConversation;
     const pin = pinnedMessages.find(msg => msg.pin.id === data.pin.id);
 
