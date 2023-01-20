@@ -54,8 +54,6 @@ import CreateChannel from '../components/channels/CreateChannel.vue';
 
 
 export default {
-  name: 'AllChannels',
-
   components: {
     ChannelList,
     CreateChannel,
@@ -64,7 +62,6 @@ export default {
     NIcon,
     NButton,
   },
-
   setup() {
     const term = ref('');
     const modalOpen = ref(false)
@@ -85,7 +82,9 @@ export default {
       term.value = null;
       searchedChannels.value = null;
     });
-
+    const hasOneMember = channel_members => {
+      return channel_members.length === 1;
+    };
     return {
       term,
       searchedChannels,

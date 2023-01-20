@@ -46,7 +46,7 @@ export default {
     toggleThread: Function,
     isSameUser: Boolean,
     isSameDayMessage: Boolean,
-    repliesCount: Number,
+    repliesCount: String,
     lastThreeRepliesOfUniqueUsers: Array,
     lastReply: Object,
     isFirstMessage: Boolean,
