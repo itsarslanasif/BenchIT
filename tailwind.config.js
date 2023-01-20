@@ -112,6 +112,12 @@ module.exports = {
       },
     },
     extend: {
+      padding: {
+        'flexible-xs': '3%',
+        'flexible-sm': '5%',
+        'flexible-md': '8%',
+        'flexible-lg': '10%',
+      },
       screens: {
         dark: { raw: '(prefers-color-scheme: dark)' },
       },
@@ -123,13 +129,17 @@ module.exports = {
         95: '20rem',
         90: '18rem',
         80: '18.75rem',
+        'flexible-xs': '20%',
+        'flexible-sm': '30%',
+        'flexible-md': '40%',
+        'flexible-lg': '60%',
       },
       height: {
         7: '1.5rem',
         9: '2.1875rem',
         12: '3rem',
         15: '5rem',
-        400: '28rem'
+        400: '28rem',
       },
       minWidth: {
         '10': '2.5rem',

@@ -3,7 +3,7 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show update]
-  before_action :find_profile, only: %i[show update]
+  before_action :find_profile, only: %i[show update set_status clear_status]
 
   def index
     @profiles = if params[:query].presence
@@ -25,9 +25,9 @@ class Api::V1::ProfilesController < Api::ApiController
     @profile = current_user.profiles.new(profile_params)
 
     if @profile.save
-      render json: "Profile Added to #{@workspace.company_name}"
+      render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
     else
-      render json: { errors: @profile.errors, message: 'There was an error creating the profile' }, status: :unprocessable_entity
+      render json: { errors: @profile.errors, error: 'There was an error creating the profile' }, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,23 @@ class Api::V1::ProfilesController < Api::ApiController
     if (@profile = Current.profile.update(profile_params))
       render json: { message: 'Profile Updated Successfully.' }, status: :ok
     else
-      render json: { errors: @profile.errors, message: 'There was an error updating the profile' }, status: :unprocessable_entity
+      render json: { errors: @profile.errors, error: 'There was an error updating the profile' }, status: :unprocessable_entity
+    end
+  end
+
+  def set_status
+    if @profile.update(profile_params)
+      set_job
+    else
+      render json: { errors: @profile.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def clear_status
+    if @profile.update(text_status: '', emoji_status: '', clear_status_after: '')
+      render json: { message: 'status cleared.' }, status: :ok
+    else
+      render json: { errors: @profile.errors }, status: :unprocessable_entity
     end
   end
 
@@ -44,6 +60,16 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   private
+
+  def set_job
+    if params[:clear_status_after].eql?("don't clear")
+      @profile.statuses.create(profile_params)
+    else
+      @profile.statuses.create(text: params[:text_status],
+                               emoji: params[:emoji_status], clear_after: params[:clear_status_after].to_time - DateTime.now)
+      ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
+    end
+  end
 
   def find_profile
     @profile = Profile.find(params[:id])
@@ -64,6 +90,7 @@ class Api::V1::ProfilesController < Api::ApiController
       :title,
       :text_status,
       :emoji_status,
+      :clear_status_after,
       :time_zone,
       :pronounce_name,
       :phone,
@@ -76,13 +103,13 @@ class Api::V1::ProfilesController < Api::ApiController
   def check_user_member_of_workspace
     return if Current.workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { message: 'You are not member of specified  workspace.', status: :unprocessable_entity }
+    render json: { error: 'You are not member of specified  workspace.' }, status: :unauthorized
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { message: 'You already have a profile in this workspace.', status: :unprocessable_entity }
+    render json: { error: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
   end
 
   def set_previous_direct_messages
