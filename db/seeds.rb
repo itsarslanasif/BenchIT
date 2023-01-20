@@ -5,11 +5,11 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               organization_type: :financial_services)
 
 Current.workspace = workspace
-workspace.workspace_statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
-workspace.workspace_statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
-workspace.workspace_statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today')
-workspace.workspace_statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
-workspace.workspace_statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
+workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
+workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
+workspace.statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today')
+workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
+workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
 
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
