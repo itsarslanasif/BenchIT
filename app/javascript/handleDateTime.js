@@ -31,8 +31,6 @@ export class handleDateTime {
   }
 
   secondsToHoursAndMinutes(totalSeconds) {
-
-
     switch (totalSeconds) {
       case CONSTANTS.DONT_CLEAR:
         return '  ' + CONSTANTS.DONT_CLEAR;
@@ -40,7 +38,7 @@ export class handleDateTime {
         return '  ' + CONSTANTS.TODAY;
     }
 
-    totalSeconds = +totalSeconds + 60;
+    totalSeconds = parseInt(totalSeconds) + 60;
     let day = 86400;
     let hour = 3600;
     let minute = 60;
