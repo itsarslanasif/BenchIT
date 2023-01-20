@@ -138,4 +138,8 @@ export const CONSTANTS = {
   UN_STAR_CHANNEL: 'Unstar Channel',
   SOMETHING_WENT_WRONG: 'Something went wrong',
   REMOVE_FROM_SAVED_ITEMS:'Remove from saved items',
+  NEWEST_CHANNELS: "Newest Channels",
+  OLDEST_CHANNELS: "Oldest Channels",
+  MOST_MEMBERS: "Most Members",
+  FEWEST_MEMBERS: "Fewest Members",
 };

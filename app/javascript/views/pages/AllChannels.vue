@@ -27,8 +27,9 @@
             {{ searchedChannels?.length }} {{ $t('channels.result') }}
           </div>
           <div class="flex gap-2">
-            <div>Sort:</div>
-            <div>Filter</div>
+            <div> <n-popselect v-model:value="value" :options="options">
+                <n-button>Sort: {{ selectedLabel || 'Select Option' }}</n-button>
+              </n-popselect></div>
           </div>
         </div>
       </div>
@@ -39,19 +40,22 @@
         <ChannelList :channelName="channel.name" :channelDescription="channel.description"
           :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
+      <div class="flex justify-center p-3">
+      <n-pagination v-model:page="currentPage" :default-page-size="50" :page-count	="pageInfo.pages" />
+    </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed, onBeforeUnmount } from 'vue';
-import { NInput, NSpace, NIcon, NButton } from 'naive-ui';
+import { ref, computed, onBeforeUnmount, watch } from 'vue';
+import { NInput, NSpace, NIcon, NButton, NPopselect, NPagination } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import ChannelList from '../containers/ChannelList.vue'
 import { SearchOutline } from "@vicons/ionicons5";
 import CreateChannel from '../components/channels/CreateChannel.vue';
-
+import { CONSTANTS } from '../../assets/constants';
 
 export default {
   components: {
@@ -61,11 +65,15 @@ export default {
     NSpace,
     NIcon,
     NButton,
+    NPopselect,
+    NPagination
   },
   setup() {
     const term = ref('');
     const modalOpen = ref(false)
     const channelStore = useChannelStore()
+    const value = ref('')
+    const {currentPage, pageInfo} = channelStore
     channelStore.index(term.value)
     const { channels } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
@@ -78,13 +86,32 @@ export default {
       modalOpen.value = !modalOpen.value;
     }
 
+    const selectedLabel = computed(() => {
+      switch (value.value) {
+        case 'newest':
+          return CONSTANTS.NEWEST_CHANNELS
+        case 'oldest':
+          return CONSTANTS.OLDEST_CHANNELS
+        case 'most_participants':
+          return CONSTANTS.MOST_MEMBERS
+        case 'fewest_participants':
+          return CONSTANTS.FEWEST_MEMBERS
+        case 'a_to_z':
+          return CONSTANTS.A_TO_Z
+        case 'z_to_a':
+          return CONSTANTS.Z_TO_A
+      }
+    })
+
+    watch(value, async (newValue, oldValue) => {
+      searchedChannels.value = await channelStore.searchChannels(term.value, newValue)
+    })
+
     onBeforeUnmount(() => {
       term.value = null;
       searchedChannels.value = null;
     });
-    const hasOneMember = channel_members => {
-      return channel_members.length === 1;
-    };
+
     return {
       term,
       searchedChannels,
@@ -92,6 +119,36 @@ export default {
       SearchOutline,
       handleSubmit,
       closeModal,
+      value,
+      currentPage,
+      pageInfo,
+      selectedLabel,
+      options: [
+        {
+          label: CONSTANTS.NEWEST_CHANNELS,
+          value: "newest"
+        },
+        {
+          label: CONSTANTS.OLDEST_CHANNELS,
+          value: "oldest"
+        },
+        {
+          label: CONSTANTS.MOST_MEMBERS,
+          value: "most_participants",
+        },
+        {
+          label: CONSTANTS.FEWEST_MEMBERS,
+          value: "fewest_participants"
+        },
+        {
+          label: CONSTANTS.A_TO_Z,
+          value: "a_to_z"
+        },
+        {
+          label: CONSTANTS.Z_TO_A,
+          value: "z_to_a"
+        },
+      ]
     };
   },
 };

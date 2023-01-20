@@ -14,6 +14,8 @@ export const useChannelStore = () => {
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
+      currentPage: 1,
+      pageInfo: []
     }),
 
     getters: {
@@ -26,7 +28,8 @@ export const useChannelStore = () => {
       async index() {
         try {
           let newChannels = await getChannels();
-          this.channels = [...newChannels]
+          this.channels = [...this.channels, ...newChannels.bench_channels]
+          this.pageInfo = newChannels.page_information
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
             channel => channel.favourite_id !== null
@@ -59,9 +62,10 @@ export const useChannelStore = () => {
         }
       },
 
-      async searchChannels(query) {
+      async searchChannels(query, sort) {
         try {
-          this.channels = await getChannels(query);
+          let newChannels = await getChannels(query, sort, this.currentPage);
+          this.channels = [...newChannels.bench_channels];
         } catch (e) {
           console.error(e);
         }
