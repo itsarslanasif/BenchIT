@@ -38,6 +38,7 @@ const createMessage = (data, messageStore, threadStore) => {
 
 const updateMessage = (data, messageStore, threadStore) => {
   try {
+
     if (data.parent_message_id) {
       const message = messageStore.messages.find(
         element => element.id === data.parent_message_id
@@ -59,7 +60,7 @@ const updateMessage = (data, messageStore, threadStore) => {
         messsageToUpdate.replies =
           messageStore.messages[findMessageIndex].replies;
         messageStore.messages[findMessageIndex] = messsageToUpdate;
-        if (threadStore?.message && threadStore.message.id == data.id) {
+        if (threadStore?.message && threadStore.message.id === data.id) {
           threadStore.message = messsageToUpdate;
         }
       }

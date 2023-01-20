@@ -85,12 +85,12 @@
             />
             <EditedAtTime
               v-if="
-                currMessage?.is_edited &&
+                currMessage.is_edited &&
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage
               "
-              :updated_at="currMessage?.updated_at"
+              :updated_at="currMessage.updated_at"
             />
           </span>
           <span

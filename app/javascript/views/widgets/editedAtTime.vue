@@ -8,7 +8,7 @@
         >
       </template>
       <div class="flex flex-col items-center">
-        <span class="text-md">{{ time }}</span>
+        <span class="text-md">{{ time() }}</span>
       </div>
     </n-tooltip>
   </div>
@@ -22,7 +22,7 @@ export default {
   components: {
     NTooltip,
   },
-  computed: {
+  methods:{
     time() {
       return moment(new Date(this.updated_at).getTime()).fromNow();
     },
