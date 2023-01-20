@@ -12,9 +12,20 @@
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
-        <p class="ml-2 text-sm self-center text-white">
-          {{ user.status.emoji }}
-        </p>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <p class="ml-2 text-sm self-center text-white">
+              {{ user?.status?.emoji }}
+            </p>
+          </template>
+          <span>
+            {{ user?.status?.text }}
+            <span class="text-black-500">
+              {{ $t('profilestatus.until') }}
+            </span>
+            {{ statusClearAfterTime(user?.status?.clear_after) }}
+          </span>
+        </n-tooltip>
         <div
           v-if="unreadDetails?.messages.length"
           class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
@@ -29,11 +40,12 @@
 import { useUnreadStore } from '../../../stores/useUnreadStore';
 import { storeToRefs } from 'pinia';
 import { unreadMessagesCount } from '../../../modules/unreadMessages';
-import { NAvatar } from 'naive-ui';
-
+import { NAvatar, NTooltip } from 'naive-ui';
+import moment from 'moment';
 export default {
   components: { NAvatar },
   props: ['sortedDMList', 'isOwnChat', 'goToChat'],
+  components: { NAvatar, NTooltip },
   data() {
     return {
       unreadMessagesCount: 0,
@@ -54,6 +66,9 @@ export default {
         `Profile${user.id}`
       );
       return this.unreadDetails?.messages.length;
+    },
+    statusClearAfterTime(time) {
+      return time ? moment(time).calendar() : moment().endOf('month').fromNow();
     },
   },
 };
