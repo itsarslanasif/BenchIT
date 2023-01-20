@@ -96,6 +96,10 @@ en:
         people: 'People'
         channels: 'Channels'
         tagline: "I'm looking for"
+      conversation:
+        channel: 'BenchChannel'
+        profile: 'Profile'
+        group: 'Group'
       rightpane:
         send: 'Send'
         replies: 'replies'
@@ -141,6 +145,10 @@ en:
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
+      heading:
+        thread_in: 'Thread in'
+        thread_in_group: 'Thread in group'
+        message_in_group: 'Message in group'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -217,6 +225,8 @@ en:
         copied: 'Copied!'
         edit: 'Edit'
         view: 'View'
+        join_channel: 'Join Channel'
+        details: 'Details'
         go: 'Go'
         set_a_status: 'Set a status'
         view_as: 'View as'
