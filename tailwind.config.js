@@ -131,6 +131,9 @@ module.exports = {
         15: '5rem',
         400: '28rem'
       },
+      minWidth: {
+        '10': '2.5rem',
+      }
     },
   },
   variants: {

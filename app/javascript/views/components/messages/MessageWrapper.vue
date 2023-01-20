@@ -28,7 +28,7 @@
         v-if="currMessage.content === $t('deleteMessageModal.deleted_message')"
       >
         <div
-          class="h-10 w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
+          class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
         >
           <font-awesome-icon
             icon="fa-solid fa-trash-can"
@@ -623,5 +623,8 @@ export default {
 .hover-trigger:hover .hover-target {
   display: inline;
   cursor: pointer;
+}
+.icon-width {
+  min-width: 40px;
 }
 </style>

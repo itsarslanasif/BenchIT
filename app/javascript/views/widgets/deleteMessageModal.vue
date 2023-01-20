@@ -97,13 +97,13 @@
         class="font-semibold text-black border px-4 h-9 rounded-md border-black-400 mr-2 hover:bg-black-100"
         @click="setDeleteModal"
       >
-        {{ $t('deleteMessageModal.cancel') }}
+        {{ $t('actions.cancel') }}
       </button>
       <button
         class="font-semibold bg-red-700 text-white border px-4 h-9 rounded-md"
         @click="deleteMessage"
       >
-        {{ $t('deleteMessageModal.delete') }}
+        {{ $t('actions.delete') }}
       </button>
     </div>
   </n-modal>

@@ -61,8 +61,6 @@ en:
       deleteMessageModal:
         delete_message: 'Are you sure you want to delete this message? This cannot be undone.'
         header: 'Delete message'
-        cancel: 'Cancel'
-        delete: 'Delete'
         deleted_message: 'This message was deleted.'
       email:
         gmail: '@gmail.com'
