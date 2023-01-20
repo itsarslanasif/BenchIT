@@ -8,7 +8,7 @@ class Api::V1::ReactionsController < Api::ApiController
     if @reaction.save
       render json: { message: 'Reaction added successfully.' }, status: :ok
     else
-      render json: { error_message: 'Unable to add reaction.', errors: @reaction.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to add reaction.', errors: @reaction.errors }, status: :unprocessable_entity
     end
   end
 
@@ -16,7 +16,7 @@ class Api::V1::ReactionsController < Api::ApiController
     if @reaction.destroy
       render json: { message: 'reaction removed' }, status: :ok
     else
-      render json: { error_message: 'Unable to remove reaction.', errors: @reaction.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to remove reaction.', errors: @reaction.errors }, status: :unprocessable_entity
     end
   end
 
@@ -34,7 +34,7 @@ class Api::V1::ReactionsController < Api::ApiController
     if @reaction.profile_id.eql?(Current.profile.id)
       check_membership(@reaction.bench_conversation)
     else
-      render json: { error_message: 'Sorry, this reaction is not yours' }, status: :unauthorized
+      render json: { error: 'Sorry, this reaction is not yours' }, status: :unauthorized
     end
   end
 

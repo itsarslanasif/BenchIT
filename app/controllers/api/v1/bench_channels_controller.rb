@@ -25,7 +25,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
       if @bench_channel.save
         create_first_bench_channel_participant
       else
-        render json: { error_message: 'There was an error creating the channel.', errors: @bench_channel.errors }, status: :unprocessable_entity
+        render json: { error: 'There was an error creating the channel.', errors: @bench_channel.errors }, status: :unprocessable_entity
       end
     end
   end
@@ -33,14 +33,14 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def update
     return if @bench_channel.update(bench_channel_params)
 
-    render json: { error_message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
+    render json: { error: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   def destroy
     if @bench_channel.destroy
       render json: { message: 'Channel was successfully deleted.' }, status: :ok
     else
-      render json: { error_message: 'Error while deleting', errors: @bench_channel.errors }, status: :unprocessable_entity
+      render json: { error: 'Error while deleting', errors: @bench_channel.errors }, status: :unprocessable_entity
     end
   end
 
@@ -50,7 +50,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
         render json: { message: 'Channel left ' }, status: :ok
       else
-        render json: { error_message: "Unable to leave ##{@bench_channel.name}." }, status: :unprocessable_entity
+        render json: { error: "Unable to leave ##{@bench_channel.name}." }, status: :unprocessable_entity
       end
     end
   end
@@ -74,13 +74,13 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
     return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { error_message: 'User is not part of channel.' }, status: :not_found
+    render json: { error: 'User is not part of channel.' }, status: :not_found
   end
 
   def set_channel_participant
     @channel_participant = Current.profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
 
-    render json: { error_message: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
+    render json: { error: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
   end
 
   def set_left_on
@@ -88,12 +88,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
     return if @channel_participant.save
 
-    render json: { error_message: 'There was an error leaving channel.', errors: @channel_participant.errors }, status: :unprocessable_entity
+    render json: { error: 'There was an error leaving channel.', errors: @channel_participant.errors }, status: :unprocessable_entity
   end
 
   def bench_channel_cannot_be_public_again
     return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
 
-    render json: { error_message: "You cannot change ##{@bench_channel.name} to public again." }, status: :bad_request
+    render json: { error: "You cannot change ##{@bench_channel.name} to public again." }, status: :bad_request
   end
 end

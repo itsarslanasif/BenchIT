@@ -27,7 +27,7 @@ class Api::V1::ProfilesController < Api::ApiController
     if @profile.save
       render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
     else
-      render json: { errors: @profile.errors, error_message: 'There was an error creating the profile' }, status: :unprocessable_entity
+      render json: { errors: @profile.errors, error: 'There was an error creating the profile' }, status: :unprocessable_entity
     end
   end
 
@@ -35,7 +35,7 @@ class Api::V1::ProfilesController < Api::ApiController
     if (@profile = Current.profile.update(profile_params))
       render json: { message: 'Profile Updated Successfully.' }, status: :ok
     else
-      render json: { errors: @profile.errors, error_message: 'There was an error updating the profile' }, status: :unprocessable_entity
+      render json: { errors: @profile.errors, error: 'There was an error updating the profile' }, status: :unprocessable_entity
     end
   end
 
@@ -76,13 +76,13 @@ class Api::V1::ProfilesController < Api::ApiController
   def check_user_member_of_workspace
     return if Current.workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { error_message: 'You are not member of specified  workspace.' }, status: :unauthorized
+    render json: { error: 'You are not member of specified  workspace.' }, status: :unauthorized
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { error_message: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
+    render json: { error: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
   end
 
   def set_previous_direct_messages

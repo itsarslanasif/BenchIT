@@ -15,7 +15,7 @@ class Api::V1::PinsController < Api::ApiController
     if @pin.save
       render json: { message: 'Pin was successfully created' }, status: :ok
     else
-      render json: { error_message: 'Error while creating pin', errors: @pin.errors }, status: :unprocessable_entity
+      render json: { error: 'Error while creating pin', errors: @pin.errors }, status: :unprocessable_entity
     end
   end
 
@@ -23,7 +23,7 @@ class Api::V1::PinsController < Api::ApiController
     if @pin.destroy
       render json: { message: 'Pin was successfully deleted' }, status: :ok
     else
-      render json: { error_message: 'Error while deleting pin', errors: @pin.errors }, status: :unprocessable_entity
+      render json: { error: 'Error while deleting pin', errors: @pin.errors }, status: :unprocessable_entity
     end
   end
 
@@ -36,7 +36,7 @@ class Api::V1::PinsController < Api::ApiController
                       BenchConversation.find_by!(conversationable_type: params[:conversation_type],
                                                  conversationable_id: params[:conversation_id])
                     end
-    render json: { error_message: 'wrong type' }, status: :bad_request if @conversation.blank?
+    render json: { error: 'wrong type' }, status: :bad_request if @conversation.blank?
   end
 
   def set_pin

@@ -17,7 +17,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
-    render json: @message.save ? { message: 'Message sent.' } : { error_message: 'Message not sent', errors: @message.errors },
+    render json: @message.save ? { message: 'Message sent.' } : { error: 'Message not sent', errors: @message.errors },
            status: @message.save ? :ok : :unprocessable_entity
   end
 
@@ -25,12 +25,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     if @message.update(conversation_messages_params)
       render json: { success: 'Message updated', message: @message }, status: :ok
     else
-      render json: { error_message: 'Message not updated', errors: @message.errors }, status: :unprocessable_entity
+      render json: { error: 'Message not updated', errors: @message.errors }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { error_message: 'Message not deleted', errors: @message.errors },
+    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { error: 'Message not deleted', errors: @message.errors },
            status: @message.destroy ? :ok : :unprocessable_entity
   end
 
@@ -44,7 +44,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     if @saved_item.save
       render json: { message: 'Added to saved items' }, status: :ok
     else
-      render json: { error_message: 'Added to saved items', errors: @saved_item.errors }, status: :unprocessable_entity
+      render json: { error: 'Added to saved items', errors: @saved_item.errors }, status: :unprocessable_entity
     end
   end
 
@@ -52,7 +52,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     if @saved_item.destroy
       render json: { message: 'Removed from saved items' }, status: :ok
     else
-      render json: { error_message: 'Unable to remove from saved items', errors: @saved_item.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to remove from saved items', errors: @saved_item.errors }, status: :unprocessable_entity
     end
   end
 
@@ -90,7 +90,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def paginate_messages
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
-    return render json: { error_message: 'Page not Found.' }, status: :not_found if @pagy.nil?
+    return render json: { error: 'Page not Found.' }, status: :not_found if @pagy.nil?
   end
 
   def set_saved_item
@@ -120,14 +120,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           when 'profiles'
                             BenchConversation.profile_to_profile_conversation(Current.profile.id, conversation_id)
                           end
-    render json: { error_message: 'wrong type' }, status: :bad_request if @bench_conversation.blank?
+    render json: { error: 'wrong type' }, status: :bad_request if @bench_conversation.blank?
   end
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
     return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { error_message: 'User is not part of this channel' }, status: :not_found
+    render json: { error: 'User is not part of this channel' }, status: :not_found
   end
 
   def set_group
@@ -144,7 +144,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     if @message.sender_id.eql?(Current.profile.id)
       check_membership(@message.bench_conversation)
     else
-      render json: { error_message: 'Sorry, this message is not yours.' }, status: :unauthorized
+      render json: { error: 'Sorry, this message is not yours.' }, status: :unauthorized
     end
   end
 
