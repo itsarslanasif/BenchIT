@@ -18,20 +18,14 @@ class Bookmark < ApplicationRecord
       content: bookmark_content,
       type: 'Bookmark'
     }
-    result[:action] = if destroyed?
-                        'Delete'
-                      elsif created_at.eql?(updated_at)
-                        'Create'
-                      else
-                        'Update'
-                      end
+    result[:action] = ActionPerformed.new.action_performed(self)
     @conversation = case bookmarkable_type
                     when 'Profile'
                       BenchConversation.profile_to_profile_conversation(bookmarkable_id, profile_id)
                     else
                       bookmarkable.bench_conversation
                     end
-    BroadcastMessageService.new(result, @conversation).call
+    BroadcastMessageChatService.new(result, @conversation).call
   end
 
   def bookmark_content

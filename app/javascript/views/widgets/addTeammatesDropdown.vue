@@ -5,7 +5,7 @@
         icon="fa-plus"
         class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
       />
-      <p class="text-sm self-center text-white">
+      <p class="text-sm self-center text-white truncate">
         {{ $t('direct_messages.add_teammates') }}
       </p>
     </div>

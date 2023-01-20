@@ -51,8 +51,8 @@ export default class Options {
             key: this.generateKey(CONSTANTS.TWENTY_MINUTES),
           },
           {
-            label: CONSTANTS.ONE_HOUR,
-            key: this.generateKey(CONSTANTS.ONE_HOUR),
+            label: CONSTANTS.IN_ONE_HOUR,
+            key: this.generateKey(CONSTANTS.IN_ONE_HOUR),
           },
           {
             label: CONSTANTS.THREE_HOURS,

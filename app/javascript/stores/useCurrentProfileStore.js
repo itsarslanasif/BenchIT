@@ -1,4 +1,8 @@
-import { defineStore } from 'pinia';
+import {
+  defineStore
+} from 'pinia';
+
+import { encryption } from '../modules/crypto/crypto'
 
 export const useCurrentProfileStore = () => {
   const currentProfileStore = defineStore('currentProfileStore', {
@@ -14,6 +18,10 @@ export const useCurrentProfileStore = () => {
       setProfile(user) {
         this.currentProfile = user.profile;
       },
+      setProfileStatus(status) {
+        this.currentProfile.status = status
+        encryption(sessionStorage,'currentProfile',this.currentProfile)
+      }
     },
   });
   const store = currentProfileStore();
