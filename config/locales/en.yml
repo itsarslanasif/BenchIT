@@ -274,6 +274,15 @@ en:
         no_results_found: 'No Results Found !'
         sort: 'Sort'
         account_type: 'Account Type'
+      profilestatus:
+        what_is_your_status: 'Whats your status?'
+        set_a_status: 'Set a status'
+        are_you_sure: 'Are you sure?'
+        clear_status: 'clear status'
+        recent : 'Recent'
+        for_workspace: 'For Workspace'
+        automatically_updates: 'Automatically updates'
+        until: 'until'
       channeldetail:
         about: 'About'
         members: 'Members'

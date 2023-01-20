@@ -1,49 +1,82 @@
 <template>
-  <n-dropdown
-    trigger="click"
-    size="medium"
-    :options="options"
-    @select="handleSelect"
-    class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
-  >
-    <n-button>
-      <div class="flex avatar absolute">
-        <n-avatar class="self-baseline" size="medium" :src="profile_avatar" />
-      </div>
-      <div
-        class="flex absolute icon"
-        :class="
-          userStatus.active
-            ? 'active text-green-700 border-2 border-black-900 rounded-xl'
-            : 'away text-black border-2 border-white rounded-xl'
-        "
-      >
-        <i class="fa-solid fa-circle"></i>
-      </div>
-    </n-button>
-  </n-dropdown>
-  <DownloadModal v-model:show="showModal" />
+  <div>
+    <n-dropdown
+      trigger="click"
+      size="medium"
+      :options="options"
+      @select="handleSelect"
+      class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
+    >
+      <n-button>
+        <div class="flex avatar absolute">
+          <n-tooltip v-if="profileStatus" trigger="hover">
+            <template #trigger>
+              <div
+                class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent self-baseline text-sm"
+              >
+                <p>{{ profileStatus.emoji }}</p>
+              </div>
+            </template>
+            <span
+              >{{ profileStatus.emoji }} {{ profileStatus.text }}
+              <span class="text-black-500">
+                {{ $t('profilestatus.until') }}
+              </span>
+              {{ statusClearAfterTime(profileStatus.clear_after) }}
+            </span>
+          </n-tooltip>
+          <n-avatar class="self-baseline" size="medium" :src="profileAvatar" />
+        </div>
+        <div
+          class="flex absolute icon"
+          :class="
+            userStatus.active
+              ? 'active text-green-700 border-2 border-black-900 rounded-xl'
+              : 'away text-black border-2 border-white rounded-xl'
+          "
+        >
+          <i class="fa-solid fa-circle"></i>
+        </div>
+      </n-button>
+    </n-dropdown>
+    <DownloadModal v-model:show="showModal" />
+    <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp" />
+  </div>
 </template>
 
 <script>
-import { NDropdown, NAvatar, NText } from 'naive-ui';
+import { NDropdown, NAvatar, NText, NTooltip } from 'naive-ui';
 import { h } from 'vue';
 import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import SetProfileStatusModal from '../components/profileStatus/setProfileStatusModal.vue';
+import { useProfileStatusStore } from '../../stores/useProfileStatusStore.js';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
+import moment from 'moment';
 
 export default {
-  components: { NDropdown, NAvatar, DownloadModal },
+  components: {
+    NDropdown,
+    NAvatar,
+    DownloadModal,
+    SetProfileStatusModal,
+    NTooltip,
+  },
   setup() {
+    const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const { currentProfile } = storeToRefs(profileStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
 
-    return { profile: currentProfile, currentWorkspace };
+    return {
+      profile: currentProfile,
+      currentWorkspace,
+      profileStatusStore: profileStatusStore,
+    };
   },
   beforeUnmount() {
     this.status = this.userStatus = null;
@@ -152,11 +185,22 @@ export default {
     };
   },
   computed: {
-    profile_avatar() {
+    profileAvatar() {
       return this.profile.image_url;
+    },
+    profileStatus() {
+      return this.profile?.status;
     },
   },
   methods: {
+    handleStatusSelect() {
+      this.profileStatusStore.toggleProfileStatusPopUp();
+    },
+    statusClearAfterTime(time) {
+      return !time
+        ? moment().endOf('month').fromNow()
+        : moment(time).calendar();
+    },
     handleSelect(key) {
       switch (key) {
         case 'sign-out-of-workspace':
@@ -191,7 +235,7 @@ export default {
               { style: 'font-size: 7px; float: left; margin-top: 6px;' },
               [h(NText, { depth: 3 }, { default: () => `${this.statusIcon}` })]
             ),
-            h('div', { class: 'text-sm flex ml-4' }, [
+            h('div', { class: 'text-sm  flex ml-4' }, [
               h(NText, { depth: 3 }, { default: () => `${this.status}` }),
             ]),
           ]),
@@ -204,14 +248,29 @@ export default {
         {
           class:
             'hover:border-black-600 border rounded border-black-300 flex items-center px-3 pt-1 pb-1 cursor-pointer my-px mx-3',
+          onClick: this.handleStatusSelect,
         },
         [
-          h('div', [h(NText, { class: 'text-xl' }, { default: () => '🙂' })]),
+          h('div', [
+            h(
+              NText,
+              { class: 'text-xl' },
+              {
+                default: () =>
+                  this.profile.status ? this.profile.status?.emoji : '🙂',
+              }
+            ),
+          ]),
           h('div', { class: 'w-full' }, [
             h(
               NText,
               { class: 'ml-12 text-black-800' },
-              { default: () => 'Update your status' }
+              {
+                default: () =>
+                  this.profile.status
+                    ? this.profile.status?.text
+                    : 'Update your status',
+              }
             ),
           ]),
         ]
