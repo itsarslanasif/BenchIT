@@ -10,6 +10,6 @@ module MemberShip
 
     return if profile_ids.include?(Current.profile.id)
 
-    render json: { message: 'Sorry, you are not authorized.', status: :unprocessable_entity }
+    render json: { message: 'Sorry, you are not authorized.' }, status: :unauthorized
   end
 end
