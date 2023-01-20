@@ -1,14 +1,12 @@
 import { CONSTANTS } from './assets/constants';
 export class handleDateTime {
   constructor() {
-    this.now = new Date();
-    this.dateTime = new Date();
+    this.now = this.dateTime = new Date();
     this.dontClear = false;
   }
 
   convertStringToTimeStamp(time) {
-    this.now = new Date();
-    this.dateTime = new Date();
+    this.now = this.dateTime = new Date();
     switch (time) {
       case CONSTANTS.THIRTY_MINUTES:
         this.dateTime.setTime(this.now.getTime() + 30 * 60 * 1000);
@@ -29,16 +27,19 @@ export class handleDateTime {
         this.dateTime.setTime(this.now.setHours(24, 0, 0, 0));
         break;
     }
-    if (this.dontClear) {
-      return CONSTANTS.DONT_CLEAR;
-    }
-    return this.dateTime;
+    return this.dontClear ? CONSTANTS.DONT_CLEAR : this.dateTime;
   }
 
   secondsToHoursAndMinutes(totalSeconds) {
-    if (totalSeconds == CONSTANTS.DONT_CLEAR)
-      return '  ' + CONSTANTS.DONT_CLEAR;
-    if (totalSeconds == CONSTANTS.TODAY) return '  ' + CONSTANTS.TODAY;
+
+
+    switch (totalSeconds) {
+      case CONSTANTS.DONT_CLEAR:
+        return '  ' + CONSTANTS.DONT_CLEAR;
+      case CONSTANTS.TODAY:
+        return '  ' + CONSTANTS.TODAY;
+    }
+
     totalSeconds = +totalSeconds + 60;
     let day = 86400;
     let hour = 3600;
@@ -49,15 +50,9 @@ export class handleDateTime {
       (totalSeconds - daysout * day - hoursout * hour) / minute
     );
 
-    if (daysout == 7)
-     return CONSTANTS.THIS_WEEK;
-    else if (hoursout > 1)
-      return hoursout + CONSTANTS.HOURS;
-    else if (hoursout==1)
-      return hoursout + CONSTANTS.HOUR;
-    else
-      return minutesout + CONSTANTS.MINUTES;
+    return daysout == 7 ? CONSTANTS.THIS_WEEK : hoursout > 1 ? hoursout + CONSTANTS.HOURS : hoursout==1 ? hoursout + CONSTANTS.HOUR : minutesout + CONSTANTS.MINUTES;
   }
+
   incremntTimeStampBySeconds(seconds) {
     this.now = new Date();
     this.dateTime = new Date(+this.now + seconds * 1000);
