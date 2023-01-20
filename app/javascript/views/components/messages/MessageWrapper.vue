@@ -624,7 +624,4 @@ export default {
   display: inline;
   cursor: pointer;
 }
-.icon-width {
-  min-width: 40px;
-}
 </style>
