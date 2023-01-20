@@ -17,11 +17,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     @message = ConversationMessage.new(conversation_messages_params)
     @message.bench_conversation_id = @bench_conversation.id
-    if @message.save
-      render json: { message: 'Message sent.' }, status: :ok
-    else
-      render json: { error_message: 'Message not sent', errors: @message.errors }, status: :unprocessable_entity
-    end
+    render json: @message.save ? { message: 'Message sent.' } : { error_message: 'Message not sent', errors: @message.errors },
+           status: @message.save ? :ok : :unprocessable_entity
   end
 
   def update
@@ -33,11 +30,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def destroy
-    if @message.destroy
-      render json:  { message: 'Message deleted successfully.' }, status: :ok
-    else
-      render json:  { error_message: 'Message not deleted', errors: @message.errors }, status: :unprocessable_entity
-    end
+    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { error_message: 'Message not deleted', errors: @message.errors },
+           status: @message.destroy ? :ok : :unprocessable_entity
   end
 
   def index_saved_messages
