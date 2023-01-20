@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_15_162656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sender_id"
+    t.index ["conversationable_id", "conversationable_type", "sender_id"], name: "bench_conversation_index", unique: true
     t.index ["conversationable_type", "conversationable_id"], name: "index_chat_conversations_on_conversationable"
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"
   end
@@ -84,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.datetime "updated_at", null: false
     t.bigint "bench_channel_id", null: false
     t.bigint "profile_id", null: false
+    t.index ["bench_channel_id", "profile_id"], name: "index_channel_participants_on_bench_channel_id_and_profile_id", unique: true
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
     t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
   end
@@ -129,6 +131,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
+    t.index ["favourable_id", "favourable_type", "profile_id"], name: "favourite_index", unique: true
     t.index ["favourable_type", "favourable_id"], name: "index_favourites_on_favourable"
     t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
@@ -188,6 +191,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
+    t.index ["emoji", "conversation_message_id", "profile_id"], name: "reaction_index", unique: true
     t.index ["profile_id"], name: "index_reactions_on_profile_id"
   end
 
@@ -196,17 +200,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.integer "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "statuses", force: :cascade do |t|
-    t.string "text", null: false
-    t.string "emoji", null: false
-    t.string "clear_after", null: false
-    t.integer "profile_id"
-    t.integer "type", null: false
-    t.integer "workspace_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -249,6 +243,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_13_111145) do
     t.integer "admin_role", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["bench_it_url"], name: "index_workspaces_on_bench_it_url", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"

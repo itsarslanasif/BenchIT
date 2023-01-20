@@ -9,11 +9,11 @@
       <AccordionItem :default-opened="true">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
-            {{ $t('channels.title') }}
+            {{ $t('channels.starred') }}
           </span>
         </template>
         <h5
-          v-for="channel in joinedChannels"
+          v-for="channel in starChannels"
           :key="channel.id"
           class="hover:bg-primaryHover"
         >
@@ -26,38 +26,21 @@
         </h5>
       </AccordionItem>
     </AccordionList>
-    <div
-      @click="toggleModal"
-      class="px-2 flex hover:bg-primaryHover cursor-pointer py-1"
-    >
-      <font-awesome-icon
-        icon="fa-plus"
-        class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
-      />
-      <p class="text-sm self-center text-white">
-        {{ $t('channels.add_new_channel') }}
-      </p>
-    </div>
-    <div v-if="modalOpen">
-      <CreateChannel :close-modal="toggleModal" />
-    </div>
   </div>
 </template>
 
 <script>
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
-import CreateChannel from './CreateChannel.vue';
 import ChannelItem from './ChannelItem.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
-  components: { AccordionList, AccordionItem, CreateChannel, ChannelItem },
+  components: { AccordionList, AccordionItem, ChannelItem },
   data() {
     return {
       channels: [],
-      modalOpen: false,
       showChannelOptions: false,
     };
   },
@@ -67,18 +50,15 @@ export default {
   setup() {
     const leftPaneStore = useLeftpaneStore();
     const channelStore = useChannelStore();
-    const { joinedChannels } = storeToRefs(channelStore);
+    const { starChannels } = storeToRefs(channelStore);
     const messagesStore = useMessageStore();
     return {
-      joinedChannels,
+      starChannels,
       leftPaneStore,
       messagesStore,
     };
   },
   methods: {
-    toggleModal() {
-      this.modalOpen = !this.modalOpen;
-    },
     goToChannelChat(chatURL, channel) {
       this.messagesStore.setSelectedChat(channel);
       this.$router.push(chatURL);

@@ -1,18 +1,14 @@
 <template>
   <div
-    v-click-outside="closeModel"
-    class="modal cursor-pointer w-1/3 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-2xl m-10"
+    v-click-outside="closeModal"
+    class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
-    <p
-      @click="detailsopen(false)"
-      class="float-right mr-2 p-2 hover:bg-transparent rounded self-center"
-    >
-      <i class="fa-solid fa-xmark"></i>
-    </p>
-    <p class="font-bold text-2xl pl-8">
-      <i class="fas fa-hashtag mr-1"></i>{{ this.currentChannel.name }}
-    </p>
-    <StarUnstar :currentChannel="this.currentChannel" />
+    <div class="self-center px-3 mt-2 mr-1 text-base ml-4 font-bold">
+      <font-awesome-icon v-if="selectedChat.is_private" icon="fa-lock" />
+      <font-awesome-icon v-else icon="fa-hashtag" />
+      {{ selectedChat.name }}
+    </div>
+    <StarUnstar :channelId="selectedChat.id" />
     <div class="flex ml-4">
       <p
         @click="ChannelDetailStore.setSlectedOption('about')"
@@ -51,10 +47,7 @@
         {{ $t('channeldetail.settings') }}
       </p>
     </div>
-    <About
-      v-if="ChannelDetailStore.isAbout()"
-      :channelName="this.currentChannel.name"
-    />
+    <About v-if="ChannelDetailStore.isAbout()" />
     <members v-if="ChannelDetailStore.isMembers()" />
   </div>
 </template>
@@ -65,6 +58,8 @@ import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import vClickOutside from 'click-outside-vue3';
+import { useMessageStore } from '../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 export default {
   name: 'ChannelDetailModal',
   components: { About, StarUnstar, Members },
@@ -73,14 +68,16 @@ export default {
   },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
-    return { ChannelDetailStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { ChannelDetailStore, selectedChat };
   },
   props: {
-    currentChannel: Object,
     detailsopen: Function,
   },
   methods: {
-    closeModel() {
+    closeModal() {
+      this.detailsopen(false);
     },
   },
 };

@@ -8,14 +8,16 @@ import { decryption } from '../modules/crypto/crypto';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
-    state: () => {
-      return {
-        selectedChat: {},
-        messages: [],
-        currMessage: null,
-        error: {}
-      };
-    },
+    state: () => ({
+      messages: [],
+      currMessage: [],
+      currentPage: 1,
+      maxPages: null,
+      hasMoreMessages: true,
+      selectedChat: {},
+      newMessageSent: false,
+      error: {},
+    }),
 
     getters: {
       getMessages: state => state.messages,
@@ -34,11 +36,16 @@ export const useMessageStore = () => {
       },
       async index(conversation_type, id) {
         try {
-        this.messages = await getMessageHistory(
-          conversation_type.slice(0, -1),
-          id
-        );
-        } catch (error) {
+          let newMessages = await getMessageHistory(
+            conversation_type.slice(0, -1),
+            id,
+            this.currentPage
+          );
+          this.messages = [...newMessages.messages, ...this.messages];
+          this.currentPage += 1;
+          this.maxPages = newMessages.page_information.pages;
+          this.hasMoreMessages = this.currentPage > this.maxPages;
+        } catch (e) {
           this.handleError(error)
         }
         if (conversation_type === 'profiles') {

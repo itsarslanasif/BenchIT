@@ -21,6 +21,18 @@
       </div>
     </nav>
     <router-view :key="$route.fullPath" />
+    <div class="flex flex-col justify-center items-center mt-10">
+      <font-awesome-icon
+        icon="fa-solid fa-pencil"
+        class="text-2xl mb-2"
+      ></font-awesome-icon>
+      <p class="font-bold text-base text-center w-100">
+        {{ $t('drafts.title') }}
+      </p>
+      <p class="text-base text-center w-100">
+        {{ $t('drafts.description') }}
+      </p>
+    </div>
   </div>
 </template>
 
