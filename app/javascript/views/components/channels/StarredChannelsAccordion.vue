@@ -1,5 +1,5 @@
 <template>
-  <div class="hover-trigger">
+  <div v-if="starChannels.length > 0" class="hover-trigger">
     <font-awesome-icon
       @click="goToChannels"
       icon="fa-plus"

@@ -8,7 +8,7 @@
     <AccordionList class="mt-5 ml-4 text-base text-slate-50">
       <AccordionItem :default-opened="true">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer">
+          <span class="ml-2 cursor-pointer truncate">
             {{ $t('direct_messages.direct_messages') }}
           </span>
         </template>
