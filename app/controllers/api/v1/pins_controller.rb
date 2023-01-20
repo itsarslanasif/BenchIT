@@ -10,15 +10,21 @@ class Api::V1::PinsController < Api::ApiController
   end
 
   def create
-    @pin = @conversation.pins.create!(profile_id: Current.profile.id, conversation_message_id: params[:conversation_message_id])
+    @pin = @conversation.pins.new(profile_id: Current.profile.id, conversation_message_id: params[:conversation_message_id])
 
-    render json: { message: 'Pin was successfully created' }, status: :ok
+    if @pin.save
+      render json: { message: 'Pin was successfully created' }, status: :ok
+    else
+      render json: { error_message: 'Error while creating pin', errors: @pin.errors }, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    @pin.destroy!
-
-    render json: { message: 'Pin was successfully deleted' }, status: :ok
+    if @pin.destroy
+      render json: { message: 'Pin was successfully deleted' }, status: :ok
+    else
+      render json: { error_message: 'Error while deleting pin', errors: @pin.errors }, status: :unprocessable_entity
+    end
   end
 
   private
@@ -30,6 +36,7 @@ class Api::V1::PinsController < Api::ApiController
                       BenchConversation.find_by!(conversationable_type: params[:conversation_type],
                                                  conversationable_id: params[:conversation_id])
                     end
+    render json: { error_message: 'wrong type' }, status: :bad_request if @conversation.blank?
   end
 
   def set_pin
