@@ -8,9 +8,14 @@ json.display_name profile.display_name
 json.pronounce_name profile.pronounce_name
 json.role profile.role
 json.title profile.title
-json.status do
-  json.text profile.text_status
-  json.emoji profile.emoji_status
+if profile.emoji_status.present?
+  json.status do
+    json.text profile.text_status
+    json.emoji profile.emoji_status
+    json.clear_after profile.clear_status_after
+  end
+else
+  json.status nil
 end
 json.contact_info do
   json.email profile.user.email
