@@ -15,7 +15,7 @@
         <div class="w-full" @click="searchModalToggle = true">
           <input
             type="text"
-            :placeholder="$t('actions.search')"
+            :placeholder="getPlaceholder()"
             class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
             v-model="search"
           />
@@ -117,6 +117,7 @@ import vClickOutside from 'click-outside-vue3';
 import benchitAlert from '../widgets/benchitAlert.vue';
 import { useApiResponseStatusStore } from '../../stores/useApiResponseStatusStore';
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
+import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 export default {
   name: 'SearchBar',
   components: { ProfileDropdown, benchitAlert },
@@ -154,6 +155,9 @@ export default {
           .toLowerCase()
           .includes(this.search.toLowerCase())
       );
+    },
+    getPlaceholder() {
+      return `${this.$t('actions.search')} ${this.currentWorkspace.company_name}`
     },
     goToChat(item) {
       const conversationType = item['workspace_id']
@@ -196,9 +200,11 @@ export default {
   setup() {
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
+    const currentWorkspaceStore = useCurrentWorkspaceStore();
     const ApiResponseStatusStore = useApiResponseStatusStore();
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
+    const currentWorkspace = currentWorkspaceStore.getCurrentWorkspace;
     const leftPaneStore = useLeftpaneStore();
     profileStore.index();
     channelStore.index();
@@ -207,6 +213,7 @@ export default {
       allProfiles: profiles,
       allChannels: channels,
       leftPaneStore,
+      currentWorkspace,
     };
   },
 };
