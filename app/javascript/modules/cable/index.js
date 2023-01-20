@@ -2,6 +2,7 @@ import { useMessageStore } from '../../stores/useMessagesStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useThreadStore } from '../../stores/useThreadStore';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
+import useUserStatusStore from '../../stores/useUserStatusStore';
 
 const createMessage = (data, messageStore, threadStore) => {
   try {

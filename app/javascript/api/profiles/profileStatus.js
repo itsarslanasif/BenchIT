@@ -1,0 +1,50 @@
+import axios from '../../modules/axios/index';
+import { getHeaders } from '../../modules/auth';
+
+export const setProfileStatus = async (
+  currentWorkspaceID,
+  currentProfileID,
+  statusPayload
+) => {
+  return await axios
+    .post(
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/set_status`,
+      statusPayload, {
+        headers: getHeaders()
+      }
+    )
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const getRecentStatuses = async () => {
+  return await axios
+    .get(`/v1/statuses`, {
+      headers: getHeaders()
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const deleteRecentStatus = async (id) => {
+  return await axios
+    .delete(`/v1/statuses/${id}`, {
+      headers: getHeaders()
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const clearStatus = async (currentWorkspaceID, currentProfileID) => {
+  return await axios
+    .post(
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/clear_status`, {
+        headers: getHeaders()
+      })
+    .then(response => {
+      return response.data;
+    });
+};

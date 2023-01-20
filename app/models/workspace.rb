@@ -3,6 +3,7 @@ class Workspace < ApplicationRecord
 
   has_many :profiles, dependent: :destroy
   has_many :users, through: :profiles, dependent: :destroy
+  has_many :statuses
   has_many :bench_channels, dependent: :destroy
 
   validates :company_name, presence: true

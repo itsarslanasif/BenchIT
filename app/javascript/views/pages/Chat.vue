@@ -4,16 +4,23 @@
       <ChatHeader />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
-      <ChatBody @load-more-messages="loadMoreMessages" :oldestUnreadMessageId="oldestUnreadMessageId" />
+      <ChatBody
+        @load-more-messages="loadMoreMessages"
+        :oldestUnreadMessageId="oldestUnreadMessageId"
+      />
     </div>
-    <div class="px-3 editor-style">
+    <div class="px-3 editor-style" v-if="isMember">
       <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
+    </div>
+    <div v-else>
+      <JoinChannel :joinedTheChannel="joinedTheChannel" />
     </div>
   </div>
 </template>
 
 <script>
 import ChatHeader from '../components/chats/ChatHeader.vue';
+import JoinChannel from '../widgets/JoinChannel.vue';
 import { NInput, NSpace } from 'naive-ui';
 import ChatBody from '../components/chats/ChatBody.vue';
 import TextEditorVue from '../components/editor/TextEditor.vue';
@@ -24,6 +31,8 @@ import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
 import { cableActions } from '../../modules/cable';
 import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
+import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 export default {
   name: 'Chat',
   components: {
@@ -32,11 +41,16 @@ export default {
     NInput,
     NSpace,
     TextEditorVue,
+    JoinChannel,
   },
   data() {
     return {
       chat: {},
       Cable: null,
+      conversation_type: null,
+      id: null,
+      currentUser: {},
+      isMember: true,
     };
   },
   setup() {
@@ -46,10 +60,20 @@ export default {
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
     const unreadStore = useUnreadStore();
+    const channelDetailStore = useChannelDetailStore();
+    const currentProfileStore = useCurrentProfileStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
-    const { messages, currMessage, currentPage, hasMoreMessages, newMessageSent } = storeToRefs(messageStore);
+    const {
+      messages,
+      currMessage,
+      currentPage,
+      hasMoreMessages,
+      newMessageSent,
+    } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
+    const { channelMembers } = storeToRefs(channelDetailStore);
+    const currentProfile = currentProfileStore.getCurrentProfile;
     const oldestUnreadMessageId = unreadStore.getOldestMessageId(
       conversation_type,
       id
@@ -70,7 +94,16 @@ export default {
       oldestUnreadMessageId,
       newMessageSent,
       id,
+      channelMembers,
+      currentProfile,
     };
+  },
+  watch: {
+    channelMembers() {
+      this.isMember = this.channelMembers.some(
+        profile => profile.id === this.currentProfile.id
+      );
+    },
   },
   mounted() {
     this.Cable = createCable({
@@ -83,10 +116,10 @@ export default {
       cableActions(data.message);
     });
   },
-beforeUnmount() {
+  beforeUnmount() {
     this.chat = null;
-    this.messages = []
-    this.currMessage = []
+    this.messages = [];
+    this.currMessage = [];
     this.currentPage = 1;
     unsubscribe();
     this.Cable = null;
@@ -105,10 +138,13 @@ beforeUnmount() {
         conversation(formData).then(() => {
           this.message = '';
         });
-        this.newMessageSent = true
+        this.newMessageSent = true;
       } catch (e) {
         console.error(e);
       }
+    },
+    joinedTheChannel() {
+      this.isMember = !this.isMember
     }
   },
 };
@@ -116,7 +152,7 @@ beforeUnmount() {
 
 <style scoped>
 .editor-style {
-  flex : 0.3;
+  flex: 0.3;
 }
 
 .chat-header-style {

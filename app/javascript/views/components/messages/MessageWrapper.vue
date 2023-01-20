@@ -248,8 +248,8 @@
         </div>
       </span>
     </div>
-    <div v-if="openEmojiModal" class="float-right mr-4">
-      <EmojiPicker :addReaction="addReaction" />
+    <div v-if="openEmojiModal" class="absolute right-0 z-50">
+      <EmojiPicker :toggleModal="setEmojiModal" :addReaction="addReaction" />
     </div>
   </div>
   <div
