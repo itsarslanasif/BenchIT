@@ -225,6 +225,8 @@ en:
         copied: 'Copied!'
         edit: 'Edit'
         view: 'View'
+        join_channel: 'Join Channel'
+        details: 'Details'
         go: 'Go'
         set_a_status: 'Set a status'
         view_as: 'View as'

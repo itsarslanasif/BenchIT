@@ -45,6 +45,9 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
+    return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
+
+    render json: { errors: 'User is not part of channel.' }, status: :not_found
   end
 
   def check_workspace
