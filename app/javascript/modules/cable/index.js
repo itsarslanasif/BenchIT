@@ -37,37 +37,37 @@ const createMessage = (data, messageStore, threadStore) => {
   }
 };
 
+const findThreadMessageIndex = (message, data) =>
+  message.replies.findIndex(element => element.id === data.id);
+
+const findMessageIndex = (messages, data) =>
+  messages.findIndex(element => element.id === data.id);
+
 const updateMessage = (data, messageStore, threadStore) => {
   try {
-
     if (data.parent_message_id) {
       const message = messageStore.messages.find(
         element => element.id === data.parent_message_id
       );
-      const findThreadMessageIndex = message.replies.findIndex(
-        element => element.id === data.id
-      );
+      const ThreadMessageIndex = findThreadMessageIndex(message, data);
 
-      if (findThreadMessageIndex != -1) {
-        message.replies[findThreadMessageIndex] = data;
+      if (ThreadMessageIndex != -1) {
+        message.replies[ThreadMessageIndex] = data;
       }
     } else {
-      const findMessageIndex = messageStore.messages.findIndex(
-        element => element.id === data.id
-      );
+      const MessageIndex = findMessageIndex(messageStore.messages, data);
 
-      if (findMessageIndex != -1) {
+      if (MessageIndex != -1) {
         let messsageToUpdate = { ...data };
-        messsageToUpdate.replies =
-          messageStore.messages[findMessageIndex].replies;
-        messageStore.messages[findMessageIndex] = messsageToUpdate;
+        messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
+        messageStore.messages[MessageIndex] = messsageToUpdate;
 
         if (threadStore?.message && threadStore.message.id === data.id) {
           threadStore.message = messsageToUpdate;
         }
       }
     }
-  }  catch (err) {
+  } catch (err) {
     console.error(err);
   }
 };
@@ -152,8 +152,13 @@ const deleteReaction = (data, messageStore) => {
   }
 };
 
+const check = () => {
+  console.log('asdadsad');
+};
+
 const pinMessage = (data, messageStore, threadStore, pinStore) => {
   try {
+    check;
     const pinnedMessages = pinStore.getPinnedConversation;
     const pin = pinnedMessages.find(msg => msg.pin.id === data.pin.id);
 
@@ -161,26 +166,20 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
       const message = messageStore.messages.find(
         element => element.id === data.parent_message_id
       );
-      const findThreadMessageIndex = message.replies.findIndex(
-        element => element.id === data.id
-      );
-
-      if (findThreadMessageIndex != -1) {
-        message.replies[findThreadMessageIndex] = data;
+      const ThreadMessageIndex = findThreadMessageIndex(message, data);
+      if (ThreadMessageIndex != -1) {
+        message.replies[ThreadMessageIndex] = data;
         if (!pin) {
-          pinStore.pinMessage(message.replies[findThreadMessageIndex]);
+          pinStore.pinMessage(message.replies[ThreadMessageIndex]);
         }
       }
     } else {
-      const findMessageIndex = messageStore.messages.findIndex(
-        element => element.id === data.id
-      );
+      const MessageIndex = findMessageIndex(messageStore.messages, data);
 
-      if (findMessageIndex != -1) {
+      if (MessageIndex != -1) {
         let messsageToUpdate = { ...data };
-        messsageToUpdate.replies =
-          messageStore.messages[findMessageIndex].replies;
-        messageStore.messages[findMessageIndex] = messsageToUpdate;
+        messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
+        messageStore.messages[MessageIndex] = messsageToUpdate;
         if (!pin) {
           pinStore.pinMessage(messsageToUpdate);
         }
@@ -189,7 +188,7 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
         }
       }
     }
-  } catch (error) {
+  } catch (err) {
     console.error(err);
   }
 };
@@ -203,26 +202,21 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
       const message = messageStore.messages.find(
         element => element.id === data.parent_message_id
       );
-      const findThreadMessageIndex = message.replies.findIndex(
-        element => element.id === data.id
-      );
+      const ThreadMessageIndex = findThreadMessageIndex(message, data);
 
-      if (findThreadMessageIndex != -1) {
-        message.replies[findThreadMessageIndex] = data;
+      if (ThreadMessageIndex != -1) {
+        message.replies[ThreadMessageIndex] = data;
         if (pin) {
-          pinStore.unPinMessage(message.replies[findThreadMessageIndex]);
+          pinStore.unPinMessage(message.replies[ThreadMessageIndex]);
         }
       }
     } else {
-      const findMessageIndex = messageStore.messages.findIndex(
-        element => element.id === data.id
-      );
+      const MessageIndex = findMessageIndex(messageStore.messages, data);
 
-      if (findMessageIndex != -1) {
+      if (MessageIndex != -1) {
         let messsageToUpdate = { ...data };
-        messsageToUpdate.replies =
-          messageStore.messages[findMessageIndex].replies;
-        messageStore.messages[findMessageIndex] = messsageToUpdate;
+        messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
+        messageStore.messages[MessageIndex] = messsageToUpdate;
         if (pin) {
           pinStore.unPinMessage(messsageToUpdate);
         }
@@ -231,7 +225,7 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
         }
       }
     }
-  }  catch (err) {
+  } catch (err) {
     console.error(err);
   }
 };
