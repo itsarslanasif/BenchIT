@@ -442,7 +442,6 @@ export default {
   },
   methods: {
     editMessage(text) {
-      console.log('i am innn');
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
       updatedMessage.content = text;
       try {

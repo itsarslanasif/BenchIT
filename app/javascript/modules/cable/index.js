@@ -203,7 +203,6 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
       const findThreadMessageIndex = message.replies.findIndex(
         element => element.id === data.id
       );
-      console.log(findThreadMessageIndex);
 
       if (findThreadMessageIndex != -1) {
         message.replies[findThreadMessageIndex] = data;
