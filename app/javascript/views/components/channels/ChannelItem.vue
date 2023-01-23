@@ -12,7 +12,7 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-2" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
+      <div class="px-2 truncate" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
         {{ channel.name }}
       </div>
       <div v-if="unreadDetails?.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">

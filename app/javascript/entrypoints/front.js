@@ -42,6 +42,7 @@ import {
   faCircleExclamation,
   faRectangleList,
   faBars,
+  faUserGroup,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -89,6 +90,7 @@ library.add(
   faCircleExclamation,
   faRectangleList,
   faBars,
+  faUserGroup
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
