@@ -204,8 +204,7 @@ export default {
     };
   },
   watch: {
-    profileCurrentStatus(newValue, oldValue) {
-      console.log('newValue:', newValue);
+    profileCurrentStatus(newValue) {
       if (newValue === null) {
         this.options[2].show = false;
       } else {
