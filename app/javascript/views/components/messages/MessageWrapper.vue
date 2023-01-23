@@ -1,7 +1,9 @@
 <template>
   <div
-    class="py-1 hover:bg-transparent"
-    :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
+    class="py-1"
+    :class="{
+      'bg-yellow-100': currMessage.isSaved,
+    }"
   >
     <div v-if="!currMessage.info && currMessage.pinned">
       <span
@@ -66,10 +68,10 @@
               >
                 {{
                   currMessage.is_info
-                  ? time
-                  : isSameUser && isSameDayMessage && !isFirstMessage
-                  ? timeWithoutAMPM
-                  : time
+                    ? time
+                    : isSameUser && isSameDayMessage && !isFirstMessage
+                    ? timeWithoutAMPM
+                    : time
                 }}
               </p>
             </span>
@@ -540,7 +542,9 @@ export default {
       this.showFileOptions = !this.showFileOptions;
     },
     getSavedItemText(message) {
-      return message.isSaved ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS : CONSTANTS.ADD_TO_SAVED_ITEMS;
+      return message.isSaved
+        ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS
+        : CONSTANTS.ADD_TO_SAVED_ITEMS;
     },
   },
 };
