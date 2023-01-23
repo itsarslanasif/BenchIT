@@ -141,8 +141,12 @@ module.exports = {
         15: '5rem',
         400: '28rem',
       },
+      maxHeight: {
+        '500': '42rem',
+      },
       minWidth: {
         '10': '2.5rem',
+        180: '37.5rem',
       }
     },
   },

@@ -296,6 +296,7 @@
             :message="currMessage"
             :pinnedConversationStore="pinnedConversationStore"
             :setDeleteModal="setDeleteModal"
+            :setUnpinModal="setUnpinModal"
           />
         </div>
       </span>
@@ -303,6 +304,11 @@
     <div v-if="openEmojiModal" class="absolute right-0 z-50">
       <EmojiPicker :toggleModal="setEmojiModal" :addReaction="addReaction" />
     </div>
+    <UnPinModal
+      v-model:show="showUnpinModal"
+      :currMessage="currMessage"
+      :setUnpinModal="setUnpinModal"
+    />
   </div>
   <DeleteMessageModal
     v-model:show="showDeleteModal"
@@ -360,6 +366,7 @@ import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import UnPinModal from '../pinnedConversation/unpinModal.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -404,6 +411,7 @@ export default {
     NAvatar,
     TextEditorVue,
     EditedAtTime,
+    UnPinModal,
   },
   props: {
     currMessage: {
@@ -441,6 +449,7 @@ export default {
       displayedReactions: [],
       showFileOptions: false,
       showDeleteModal: false,
+      showUnpinModal: false,
     };
   },
   beforeUnmount() {
@@ -664,6 +673,10 @@ export default {
 
     setDeleteModal() {
       this.showDeleteModal = !this.showDeleteModal;
+    },
+
+    setUnpinModal() {
+      this.showUnpinModal = !this.showUnpinModal;
     },
   },
 };

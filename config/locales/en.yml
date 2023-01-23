@@ -69,6 +69,8 @@ en:
         pinned_by: 'Pinned by'
         you: 'you'
         pinned: 'Pinned'
+        title: 'Remove pinned item'
+        confirmation: 'Are you sure you want to remove this pinned item?'
       direct_messages:
         direct_messages: 'Direct Messages'
         add_teammates: 'Add Teammates'
