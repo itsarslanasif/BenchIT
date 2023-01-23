@@ -90,10 +90,12 @@
       <span class="flex float-left mt-2">
         <button
           @click="
-            goToChat(
-              `/profiles/${userProfileStore.userProfile.id}`,
-              userProfileStore.userProfile
-            )
+            ownProfile
+              ? null
+              : goToChat(
+                  `/profiles/${userProfileStore.userProfile.id}`,
+                  userProfileStore.userProfile
+                )
           "
           class="flex border border-black-800 rounded h-10 px-flexible-xs truncate ml-4 hover:bg-transparent focus:outline-none"
         >
