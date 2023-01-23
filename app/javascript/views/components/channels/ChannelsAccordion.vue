@@ -12,35 +12,37 @@
             {{ $t('channels.title') }}
           </span>
         </template>
-        <h5
-          v-for="channel in joinedChannels"
-          :key="channel.id"
-          class="hover:bg-primaryHover"
-        >
-          <ChannelItem
-            :channel="channel"
-            :goTo="goToChannelChat"
-            :toggleShow="toggleChannelOptionShow"
-            :isShowOptions="showChannelOptions"
-          />
-        </h5>
+        <div class="-ml-4">
+          <h5
+            v-for="channel in joinedChannels"
+            :key="channel.id"
+            class="hover:bg-primaryHover"
+          >
+            <ChannelItem
+              :channel="channel"
+              :goTo="goToChannelChat"
+              :toggleShow="toggleChannelOptionShow"
+              :isShowOptions="showChannelOptions"
+            />
+          </h5>
+          <div
+            @click="toggleModal"
+            class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2"
+          >
+            <font-awesome-icon
+              icon="fa-plus"
+              class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+            />
+            <p class="text-sm self-center text-white truncate">
+              {{ $t('channels.add_new_channel') }}
+            </p>
+          </div>
+        </div>
+        <div v-if="modalOpen">
+          <CreateChannel :close-modal="toggleModal" />
+        </div>
       </AccordionItem>
     </AccordionList>
-    <div
-      @click="toggleModal"
-      class="px-2 flex hover:bg-primaryHover cursor-pointer py-1"
-    >
-      <font-awesome-icon
-        icon="fa-plus"
-        class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
-      />
-      <p class="text-sm self-center text-white truncate">
-        {{ $t('channels.add_new_channel') }}
-      </p>
-    </div>
-    <div v-if="modalOpen">
-      <CreateChannel :close-modal="toggleModal" />
-    </div>
   </div>
 </template>
 
