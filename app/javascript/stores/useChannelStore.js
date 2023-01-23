@@ -74,7 +74,8 @@ export const useChannelStore = () => {
       async joinChannel(channel_id) {
         try {
           const res = await memberJoinChannel(channel_id);
-          this.joinedChannels.push(res.data.channel);
+          const joinedChannel = this.channels.find((channel) => channel.id === channel_id)
+          this.joinedChannels.push(joinedChannel);
           this.sortChannelsList();
         } catch (e) {
           console.error(e);

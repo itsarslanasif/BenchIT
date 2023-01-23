@@ -28,8 +28,8 @@
         </pane>
         <pane
           v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
-          max-size="80"
-          min-size="60"
+          max-size="60"
+          min-size="40"
           class="bg-white"
           :class="
             leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''

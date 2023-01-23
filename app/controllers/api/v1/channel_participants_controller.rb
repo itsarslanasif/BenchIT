@@ -25,7 +25,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
       end
 
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
-      render json: { status: :ok, member_count: @users_joined.count }
+      render json: { member_count: @users_joined.count }, status: :ok
     end
   end
 
@@ -34,9 +34,9 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
-        render json: { status: :ok }
+        render json: { message: "Joined ##{@bench_channel.name}." }, status: :ok
       else
-        render json: { errors: @channel_participant.errors, status: :unprocessable_entity }
+        render json: { error: "Unable to join ##{@bench_channel.name}.", errors: @channel_participant.errors }, status: :unprocessable_entity
       end
     end
   end
@@ -45,27 +45,30 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
+    return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
+
+    render json: { errors: 'User is not part of channel.' }, status: :not_found
   end
 
   def check_workspace
     return if Current.profile.workspace.eql?(@bench_channel.workspace)
 
-    render json: { error: 'This Channel is not part of your workspace.', status: :unprocessable_entity }
+    render json: { error: 'This Channel is not part of your workspace.' }, status: :forbidden
   end
 
   def check_already_joined_channel
     is_channel_participant = @bench_channel.profile_ids.include?(Current.profile.id)
 
-    render json: { error: 'Already part of this channel.', status: :unprocessable_entity } if is_channel_participant
+    render json: { error: 'User already part of this channel.' }, status: :unprocessable_entity if is_channel_participant
   end
 
   def check_private_channel
-    return render json: { error: 'You cannot join Private Channel yourself.', status: :unprocessable_entity } if @bench_channel.is_private?
+    return render json: { error: 'You cannot join Private Channel yourself.' }, status: :forbidden if @bench_channel.is_private?
   end
 
   def check_channel_participants
     @channel_members = ChannelParticipant.where(profile_id: params[:profile_ids], bench_channel_id: @bench_channel.id).ids
-    return render json: { error: 'One or Many Users already participant of this channel', status: :unprocessable_entity } if @channel_members.present?
+    return render json: { error: 'One or Many Users already participant of this channel' }, status: :forbidden if @channel_members.present?
 
     @users_joined = Profile.where(id: params[:profile_ids]).pluck(:username)
   end
@@ -73,6 +76,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def check_profile_ids
     return if (params[:profile_ids] - Current.workspace.profile_ids).blank?
 
-    render json: { error: 'Profiles cannot be found', status: :unprocessable_entity }
+    render json: { error: 'Profiles cannot be found' }, status: :not_found
   end
 end

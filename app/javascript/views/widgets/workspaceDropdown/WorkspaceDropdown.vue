@@ -13,6 +13,9 @@
     </div>
   </n-dropdown>
   <UserInviteModal v-model:show="showModal" />
+  <div v-if="showChannelModal">
+    <CreateChannel :close-modal="toggleCreateChannelModal" />
+  </div>
 </template>
 
 <script>
@@ -21,13 +24,15 @@ import options from './options.js';
 import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
 import { decryption } from '../../../modules/crypto/crypto';
+import CreateChannel from '../../components/channels/CreateChannel.vue';
 
 export default {
-  components: { NButton, NDropdown, UserInviteModal },
+  components: { NButton, NDropdown, UserInviteModal, CreateChannel },
   data() {
     return {
       options: [],
       showModal: false,
+      showChannelModal: false,
     };
   },
   beforeUnmount() {
@@ -50,7 +55,13 @@ export default {
         case 'invite-people':
           this.showModal = true;
           break;
+        case 'create-a-channel':
+          this.showChannelModal = true;
+          break;
       }
+    },
+    toggleCreateChannelModal() {
+      this.showChannelModal = !this.showChannelModal;
     },
   },
 };

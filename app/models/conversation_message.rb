@@ -47,22 +47,12 @@ class ConversationMessage < ApplicationRecord
     {
       content: message_content,
       type: 'Message',
-      action: action_performed
+      action: ActionPerformed.new.action_performed(self)
     }
   end
 
   def broadcast_message
-    BroadcastMessageService.new(broadcastable_content, bench_conversation).call
-  end
-
-  def action_performed
-    if destroyed?
-      'Delete'
-    elsif created_at.eql?(updated_at)
-      'Create'
-    else
-      'Update'
-    end
+    BroadcastMessageChatService.new(broadcastable_content, bench_conversation).call
   end
 
   def eligible_for_notification_profile_ids
@@ -75,14 +65,13 @@ class ConversationMessage < ApplicationRecord
   end
 
   def notify_profiles
-    return if action_performed.eql?('Update')
+    return if ActionPerformed.new.action_performed(self).eql?('Update')
 
-    BroadcastMessageService.new(broadcastable_content, bench_conversation)
-                           .send_notification_ws(eligible_for_notification_profile_ids)
+    BroadcastMessageNotificationService.new(broadcastable_content, eligible_for_notification_profile_ids).call
   end
 
   def add_unread_messages
-    return unless action_performed.eql?('Create')
+    return unless ActionPerformed.new.action_performed(self).eql?('Create')
 
     UnreadMessagesCreatorService.new(bench_conversation, eligible_for_notification_profile_ids, id).call
   end
