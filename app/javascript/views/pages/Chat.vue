@@ -89,6 +89,7 @@ export default {
           messageStore.index(conversation_type, id);
         }
       },
+      messageStore,
       conversation_type,
       currentUser,
       oldestUnreadMessageId,
@@ -125,12 +126,13 @@ export default {
     this.Cable = null;
   },
   methods: {
-    sendMessage(message, files) {
+    sendMessage(message, files, schedule) {
       let formData = new FormData();
       formData.append('content', message);
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
+      formData.append('schedule', schedule);
       files.forEach(file => {
         formData.append('message_attachments[]', file);
       });
@@ -144,8 +146,8 @@ export default {
       }
     },
     joinedTheChannel() {
-      this.isMember = !this.isMember
-    }
+      this.isMember = !this.isMember;
+    },
   },
 };
 </script>

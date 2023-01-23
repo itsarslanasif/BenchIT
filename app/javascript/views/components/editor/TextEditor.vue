@@ -1,231 +1,322 @@
 <template>
   <div>
-    <div v-if="showMentions || showChannels"
-      class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10">
-      <div v-if="
-        (showMentions && hasMentionCommand) ||
-        (showChannels && hasChannelCommand)
-      ">
-        <div v-for="item in filteredList" :key="item.name" class="p-1 rounded-md hover:bg-secondaryHover"
-          @click="addMentionToText">
+    <div
+      v-if="showMentions || showChannels"
+      class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
+    >
+      <div
+        v-if="
+          (showMentions && hasMentionCommand) ||
+          (showChannels && hasChannelCommand)
+        "
+      >
+        <div
+          v-for="item in filteredList"
+          :key="item.name"
+          class="p-1 rounded-md hover:bg-secondaryHover"
+          @click="addMentionToText"
+        >
           {{ item.creator_id ? item.name : item.username }}
         </div>
       </div>
     </div>
     <div>
-      <editor v-model="newMessage" @keydown.enter="sendMessagePayload" api-key="no-api-key" :init="{
-        menubar: false,
-        statusbar: false,
-        plugins: 'lists link code codesample',
-        toolbar:
-          'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
-        codesample_languages: [none],
-        formats: {
-          code: {
-            selector: 'p',
-            styles: {
-              background:
-                'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-              'border-left': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-              'border-right': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-              'border-top': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-              'border-bottom': '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-              'border-radius': '3px',
-              'font-size': '10px',
-              'font-variant-ligatures': 'none',
-              'line-height': '1.5',
-              'margin-bottom': '14px',
-              'padding-left': '8px',
-              'padding-right': '8px',
-              position: 'relative',
-              'font-family': 'monospace',
+      <div
+        v-if="schedule"
+        class="bg-slate-50 border-l border-t border-r border-slate-100 px-2 py-1 rounded-t"
+      >
+        {{ getScheduleNotification() }}
+      </div>
+      <editor
+        v-model="newMessage"
+        @keydown.enter="sendMessagePayload"
+        api-key="no-api-key"
+        :init="{
+          menubar: false,
+          statusbar: false,
+          plugins: 'lists link code codesample',
+          toolbar:
+            'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
+          codesample_languages: [none],
+          formats: {
+            code: {
+              selector: 'p',
+              styles: {
+                background:
+                  'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
+                'border-left':
+                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-right':
+                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-top':
+                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-bottom':
+                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                'border-radius': '3px',
+                'font-size': '10px',
+                'font-variant-ligatures': 'none',
+                'line-height': '1.5',
+                'margin-bottom': '14px',
+                'padding-left': '8px',
+                'padding-right': '8px',
+                position: 'relative',
+                'font-family': 'monospace',
+              },
             },
           },
-        },
-      }" />
+        }"
+      />
     </div>
     <div>
       <div v-if="readerFile.length" class="flex mt-2">
-        <div v-for="file in readerFile" :key="file" class="w-12 h-12 border-primary border mr-3 rounded-md">
-          <font-awesome-icon icon="fa-circle-xmark" class="float-right" @click="removeFile(file)" />
+        <div
+          v-for="file in readerFile"
+          :key="file"
+          class="w-12 h-12 border-primary border mr-3 rounded-md"
+        >
+          <font-awesome-icon
+            icon="fa-circle-xmark"
+            class="float-right"
+            @click="removeFile(file)"
+          />
           <img :src="file" class="self-baseline" />
         </div>
       </div>
     </div>
     <div class="flex w-full relative">
       <Attachments :getImages="getImages" />
-      <div class="w-1/12">
-        <button @click="dispatchKeydownEnterEvent"
-          class="px-4 py-1 bg-success my-4 rounded-md text-white hover:bg-successHover">
-          {{ $t('actions.send') }}
-        </button>
+      <div
+        class="w-1/12 cursor-pointer flex justify-center items-center text-white"
+      >
+        <font-awesome-icon
+          icon="fa-paper-plane"
+          class="bg-success hover:bg-successHover px-3 py-2 border-r rounded-l"
+          @click="dispatchKeydownEnterEvent"
+        />
+        <font-awesome-icon
+          @click="toggleSchedule"
+          icon="fa-solid fa-chevron-down"
+          class="bg-success hover:bg-successHover p-2 rounded-r"
+        />
+      </div>
+      <div v-if="scheduleModalFlag" >
+        <ScheduleModal :setSchedule="setSchedule" :toggleSchedule="toggleSchedule" />
+      </div>
     </div>
-  </div>
   </div>
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
 import Attachments from '../attachments/Attachments.vue';
-import { useProfileStore } from '../../../stores/useProfileStore'
-import { useChannelStore } from '../../../stores/useChannelStore'
-import { storeToRefs } from 'pinia'
+import { useProfileStore } from '../../../stores/useProfileStore';
+import { useChannelStore } from '../../../stores/useChannelStore';
+import { storeToRefs } from 'pinia';
 import { NMention } from 'naive-ui';
+import ScheduleModal from '../../widgets/schedule.vue';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import moment from 'moment';
+import vClickOutside from 'click-outside-vue3';
 
-export default
-  {
-    components:
-    {
-      editor: Editor,
-      Attachments,
-      NMention
+export default {
+  components: {
+    editor: Editor,
+    Attachments,
+    NMention,
+    ScheduleModal,
+  },
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+  methods: {
+    dispatchKeydownEnterEvent() {
+      const event = new KeyboardEvent('keydown', { keyCode: 13 });
+      this.sendMessagePayload(event);
     },
-    methods: {
-      dispatchKeydownEnterEvent() {
-        const event = new KeyboardEvent('keydown', { keyCode: 13 });
-        this.sendMessagePayload(event);
-      },
-    },
-    props: ["sendMessage"],
-    setup(props) {
-      const channelStore = useChannelStore()
-      const profileStore = useProfileStore()
-      const { channels } = storeToRefs(channelStore)
-      const { profiles } = storeToRefs(profileStore)
-      const newMessage = ref('')
-      const showMentions = ref(false)
-      const showChannels = ref(false)
-      const hasMentionCommand = ref(false)
-      const hasChannelCommand = ref(false)
-      const readerFile = ref([])
-      const files = ref([])
-      const filteredList = ref([])
+  },
+  props: ['sendMessage'],
+  setup(props) {
+    const channelStore = useChannelStore();
+    const profileStore = useProfileStore();
+    const messageStore = useMessageStore();
+    const { channels } = storeToRefs(channelStore);
+    const { profiles } = storeToRefs(profileStore);
+    const { selectedChat } = storeToRefs(messageStore);
+    const newMessage = ref('');
+    const scheduleModalFlag = ref(false);
+    const showMentions = ref(false);
+    const showChannels = ref(false);
+    const hasMentionCommand = ref(false);
+    const hasChannelCommand = ref(false);
+    const readerFile = ref([]);
+    const files = ref([]);
+    const filteredList = ref([]);
+    const schedule = ref(null);
 
-      watch(newMessage, (curr, old) => {
-        const currentMessage = ignoreHTML(curr)
-        const oldMessage = ignoreHTML(old)
-        const message = ignoreHTML(newMessage.value)
+    watch(newMessage, (curr, old) => {
+      const currentMessage = ignoreHTML(curr);
+      const oldMessage = ignoreHTML(old);
+      const message = ignoreHTML(newMessage.value);
 
-        if (message && getLastIndex(currentMessage) == '@' && getLastIndex(oldMessage) == ';') {
-          enableMention()
-        }
-        else if (message && getLastIndex(currentMessage) == '#' && getLastIndex(oldMessage) == ';') {
-          enableChannels()
-        }
-        else if (message.length === 1 && getLastIndex(currentMessage) == '@') {
-          enableMention()
-        }
-        else if (message.length === 1 && getLastIndex(currentMessage) == '#') {
-          enableChannels()
-        }
-        else if (!message) {
-          disableAll()
-        }
-        else {
-          disableAll()
-        }
+      if (
+        message &&
+        getLastIndex(currentMessage) == '@' &&
+        getLastIndex(oldMessage) == ';'
+      ) {
+        enableMention();
+      } else if (
+        message &&
+        getLastIndex(currentMessage) == '#' &&
+        getLastIndex(oldMessage) == ';'
+      ) {
+        enableChannels();
+      } else if (message.length === 1 && getLastIndex(currentMessage) == '@') {
+        enableMention();
+      } else if (message.length === 1 && getLastIndex(currentMessage) == '#') {
+        enableChannels();
+      } else if (!message) {
+        disableAll();
+      } else {
+        disableAll();
       }
-      )
+    });
 
-      const getLastIndex = (value) => {
-        return value[value.length - 1]
-      }
+    const getLastIndex = value => {
+      return value[value.length - 1];
+    };
 
-      const sendMessagePayload = (event) => {
-        if (!event.shiftKey) {
-          const startWithNonBreakSpace = newMessage.value.startsWith('<p>&nbsp;</p>');
-          const messagetext = message(newMessage);
-          if (messagetext !== '' && messagetext !== '<p> </p>' && !startWithNonBreakSpace) {
-            props.sendMessage(messagetext, files.value)
-            newMessage.value = ''
-            readerFile.value = []
-            files.value = []
-          }
-        }
-      };
+    const setSchedule = value => {
+      schedule.value = value;
+      toggleSchedule();
+    };
 
-      const message = newMessage => {
-        let messageData;
-        let filterData;
-        let actuallData;
-        const startWithBr = newMessage.value.startsWith('<p><br />', 0);
-        const endWithBr = newMessage.value.endsWith("<br /></p>");
-        const endWithBrAndP = newMessage.value.endsWith("<br /></p>\n<p>&nbsp;</p>");
-        if (startWithBr || endWithBr || endWithBrAndP) {
-          messageData = newMessage.value.split('<br />');
-          filterData = messageData.filter(function (el) { return el !== '' });
-          actuallData = filterData.join().split('\n')[0].replace(/,/g, " ");
-          return actuallData;
-        }
-        else {
-          actuallData = newMessage?.value?.split('\n')[0];
-          return actuallData;
+    const sendMessagePayload = event => {
+      if (!event.shiftKey) {
+        const startWithNonBreakSpace =
+          newMessage.value.startsWith('<p>&nbsp;</p>');
+        const messagetext = message(newMessage);
+        if (
+          messagetext !== '' &&
+          messagetext !== '<p> </p>' &&
+          !startWithNonBreakSpace
+        ) {
+          props.sendMessage(messagetext, files.value, schedule);
+          newMessage.value = '';
+          readerFile.value = [];
+          files.value = [];
+          schedule.value = null;
         }
       }
+    };
 
-      const enableMention = () => {
-        filteredList.value = profiles.value;
-        hasMentionCommand.value = true;
-        showMentions.value = true;
-        hasChannelCommand.value = false;
-        showChannels.value = false;
+    const message = newMessage => {
+      let messageData;
+      let filterData;
+      let actuallData;
+      const startWithBr = newMessage.value.startsWith('<p><br />', 0);
+      const endWithBr = newMessage.value.endsWith('<br /></p>');
+      const endWithBrAndP = newMessage.value.endsWith(
+        '<br /></p>\n<p>&nbsp;</p>'
+      );
+      if (startWithBr || endWithBr || endWithBrAndP) {
+        messageData = newMessage.value.split('<br />');
+        filterData = messageData.filter(function (el) {
+          return el !== '';
+        });
+        actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
+        return actuallData;
+      } else {
+        actuallData = newMessage?.value?.split('\n')[0];
+        return actuallData;
       }
+    };
 
-      const enableChannels = () => {
-        filteredList.value = channels.value;
-        hasChannelCommand.value = true;
-        showChannels.value = true;
-        hasMentionCommand.value = false;
-        showMentions.value = false;
-      }
+    const getScheduleNotification = () => {
+      console.log(selectedChat.value);
+      console.log(schedule.value);
+      console.log(schedule);
+      const date = moment(schedule.value);
+      return `Your message will be sent to ${
+        selectedChat.value['user_id']
+          ? selectedChat.value.username
+          : selectedChat.value.name
+      } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
+    };
 
-      const disableAll = () => {
-        hasMentionCommand.value = false;
-        showMentions.value = false;
-        hasChannelCommand.value = false;
-        showChannels.value = false;
-      }
+    const enableMention = () => {
+      filteredList.value = profiles.value;
+      hasMentionCommand.value = true;
+      showMentions.value = true;
+      hasChannelCommand.value = false;
+      showChannels.value = false;
+    };
 
-      const addMentionToText = (e) => {
-        newMessage.value = `${newMessage.value.slice(0, -4)}<span>${e.target.outerText}</span> ${newMessage.value.slice(-4)}`
-        showMentions.value = false;
-        hasMentionCommand.value = false;
-      }
+    const enableChannels = () => {
+      filteredList.value = channels.value;
+      hasChannelCommand.value = true;
+      showChannels.value = true;
+      hasMentionCommand.value = false;
+      showMentions.value = false;
+    };
 
-      const ignoreHTML = (message) => {
-        return message.replace(/<[^>]+>/g, '');
-      }
+    const disableAll = () => {
+      hasMentionCommand.value = false;
+      showMentions.value = false;
+      hasChannelCommand.value = false;
+      showChannels.value = false;
+    };
 
-      const removeFile = (file) => {
-        const index = readerFile.value.indexOf(file);
-        files.value.splice(index, 1);
-        readerFile.value.splice(index, 1);
-      }
+    const addMentionToText = e => {
+      newMessage.value = `${newMessage.value.slice(0, -4)}<span>${
+        e.target.outerText
+      }</span> ${newMessage.value.slice(-4)}`;
+      showMentions.value = false;
+      hasMentionCommand.value = false;
+    };
 
-      const getImages = (file) => {
-        files.value[files.value?.length] = file;
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => readerFile.value.push(reader.result);
-      }
+    const ignoreHTML = message => {
+      return message.replace(/<[^>]+>/g, '');
+    };
 
-      return {
-        newMessage,
-        readerFile,
-        files,
-        showMentions,
-        showChannels,
-        hasChannelCommand,
-        hasMentionCommand,
-        filteredList,
-        channels,
-        profiles,
-        removeFile,
-        sendMessagePayload,
-        getImages,
-        addMentionToText
-      }
-    }
-  }
+    const removeFile = file => {
+      const index = readerFile.value.indexOf(file);
+      files.value.splice(index, 1);
+      readerFile.value.splice(index, 1);
+    };
+
+    const getImages = file => {
+      files.value[files.value?.length] = file;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => readerFile.value.push(reader.result);
+    };
+
+    const toggleSchedule = () => {
+      scheduleModalFlag.value = !scheduleModalFlag.value;
+    };
+
+    return {
+      newMessage,
+      readerFile,
+      files,
+      showMentions,
+      showChannels,
+      hasChannelCommand,
+      hasMentionCommand,
+      filteredList,
+      channels,
+      profiles,
+      schedule,
+      scheduleModalFlag,
+      removeFile,
+      sendMessagePayload,
+      getImages,
+      addMentionToText,
+      toggleSchedule,
+      setSchedule,
+      getScheduleNotification,
+    };
+  },
+};
 </script>

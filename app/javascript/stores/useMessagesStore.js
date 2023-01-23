@@ -11,6 +11,7 @@ export const useMessageStore = () => {
     state: () => ({
       messages: [],
       currMessage: [],
+      scheduleMessage: [],
       currentPage: 1,
       maxPages: null,
       hasMoreMessages: true,
@@ -67,6 +68,9 @@ export const useMessageStore = () => {
       getMessage(id) {
         return this.messages.find(message => message.id === id);
       },
+      addScheduleMessage(message) {
+        this.scheduleMessage.push(message)
+      }
     },
   });
 
