@@ -57,6 +57,7 @@ import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
 import { ref, watch } from 'vue';
+import { clearStatus } from '../../api/profiles/profileStatus';
 
 export default {
   components: {
@@ -100,12 +101,6 @@ export default {
 
       options: [
         {
-          type: 'render',
-          render: this.renderClearStatusOption,
-          show: this.hasStatus(),
-          key: this.generateKey(CONSTANTS.CLEAR_STATUS),
-        },
-        {
           key: 'header',
           type: 'render',
           render: this.renderCustomHeader,
@@ -114,6 +109,17 @@ export default {
           key: 'button',
           type: 'render',
           render: this.renderCustomButton,
+        },
+        {
+          type: 'render',
+          render: this.renderClearStatusOption,
+          show: this.hasStatus(),
+          props: {
+            onClick: () => {
+              this.clearProfileStatus();
+            },
+          },
+          key: this.generateKey(CONSTANTS.CLEAR_STATUS),
         },
         {
           type: 'render',
@@ -199,14 +205,12 @@ export default {
   },
   watch: {
     profileCurrentStatus(newValue, oldValue) {
-      console.log("newValue:" ,newValue)
-      if(newValue===null){
-        this.options[0].show= false;
+      console.log('newValue:', newValue);
+      if (newValue === null) {
+        this.options[2].show = false;
+      } else {
+        this.options[2].show = true;
       }
-      else{
-        this.options[0].show= true;
-      }
-
     },
   },
   computed: {
@@ -219,7 +223,7 @@ export default {
   },
   methods: {
     hasStatus() {
-     if (this.profile.status) return true;
+      if (this.profile.status) return true;
       return false;
     },
     initializeOptions() {
@@ -232,6 +236,15 @@ export default {
       return !time
         ? moment().endOf('month').fromNow()
         : moment(time).calendar();
+    },
+    clearProfileStatus() {
+      clearStatus(this.currentWorkspace.id, this.profile.id)
+        .then(response => {
+          this.currentProfile.setProfileStatus(null);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     },
     handleSelect(key) {
       switch (key) {
