@@ -360,9 +360,6 @@ export default {
     goToChat(chatURL, user) {
       this.messagesStore.setSelectedChat(user);
       this.$router.push(chatURL);
-      if (this.isMobileView()) {
-        this.leftPaneStore.closeLeftPane();
-      }
     },
   },
 };
