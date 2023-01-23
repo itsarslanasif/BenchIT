@@ -59,9 +59,9 @@ en:
         keep_track: 'Keep track of your downloads'
         downloaded_files: 'Files you download to your computer will appear here.'
       deleteMessageModal:
-        delete_message: 'Are you sure you want to delete this message? This cannot be undone.'
-        header: 'Delete message'
-        deleted_message: 'This message was deleted.'
+        confirmation: 'Are you sure you want to delete this message? This cannot be undone.'
+        title: 'Delete message'
+        success: 'This message was deleted.'
       email:
         gmail: '@gmail.com'
       pinconversation:

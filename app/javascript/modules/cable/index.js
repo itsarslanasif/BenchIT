@@ -13,16 +13,19 @@ const createMessage = (data, messageStore, threadStore) => {
       const message = messages.find(
         element => element.id === data.parent_message_id
       );
-      const threadMessage = threadStore.getMessages;
+      const threadMessage = threadStore.getMessage;
       const findMessage = message.replies.find(
         element => element.id === data.id
       );
+
       if (findMessage === undefined) {
         message.replies.push(data);
       }
+
       const findThreadMessage = threadMessage.replies.find(
         element => element.id === data.id
       );
+
       if (findThreadMessage === undefined && threadMessage.id === data.parent_message_id) {
         threadMessage.replies.push(data);
       }
@@ -54,7 +57,7 @@ const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
         message.replies.splice(findThreadMessageIndex, 1);
       }
 
-      const threadMessage = threadStore.getMessages;
+      const threadMessage = threadStore.getMessage;
       findThreadMessageIndex = threadMessage.replies.findIndex(
         element => element.id === data.id
       );
@@ -69,7 +72,7 @@ const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
 
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
-        const threadMessage = threadStore.getMessages;
+        const threadMessage = threadStore.getMessage;
         threadMessage.replies.splice(0, threadMessage.replies.length);
         threadStore.setMessage(null)
         rightPaneStore.toggleThreadShow(false);
@@ -91,6 +94,7 @@ const updateMessage = (data, messageStore, threadStore) => {
       const findMessageIndex = message.replies.findIndex(
         element => element.id === data.id
       );
+
       if (findMessageIndex === -1 && data.attachments) {
         createMessage(data, messageStore, threadStore);
       }
@@ -98,10 +102,11 @@ const updateMessage = (data, messageStore, threadStore) => {
         if (findMessageIndex !== -1) {
           message.replies[findMessageIndex] = data;
         }
-        const threadMessage = threadStore.getMessages;
+        const threadMessage = threadStore.getMessage;
         const findThreadMessageIndex = threadMessage.replies.findIndex(
           element => element.id === data.id
         );
+
         if (findThreadMessageIndex !== -1) {
           threadMessage.replies[findThreadMessageIndex] = data;
         }
@@ -110,15 +115,18 @@ const updateMessage = (data, messageStore, threadStore) => {
       const findMessageIndex = messages.findIndex(
         element => element.id === data.id
       );
+
       if (findMessageIndex !== -1) {
         let messsageToUpdate = { ...data }
         messsageToUpdate.replies = messageStore.messages[findMessageIndex].replies
         messageStore.messages[findMessageIndex] = messsageToUpdate
+
         if (threadStore?.message && threadStore.message.id == data.id) {
           threadStore.message = messsageToUpdate
         }
         messages[findMessageIndex] = messsageToUpdate;
       }
+
       if (findMessageIndex === -1 && data.attachments) {
         createMessage(data, messageStore, threadStore);
       }
@@ -162,6 +170,7 @@ const deleteReaction = (data, messageStore) => {
     const findMessageReactionIndex = message.reactions.findIndex(
       reaction => reaction.id === data.id
     );
+
     if (message != -1 && findMessageReactionIndex != -1) {
       message.reactions.splice(findMessageReactionIndex, 1);
     }
@@ -185,7 +194,7 @@ const pinMessage = (data, messageStore, threadStore) => {
         message.replies[findThreadMessageIndex] = data;
       }
 
-      const threadMessage = threadStore.getMessages;
+      const threadMessage = threadStore.getMessage;
       findThreadMessageIndex = threadMessage.replies.findIndex(
         element => element.id === data.id
       );
@@ -227,7 +236,7 @@ const unPinMessage = (data, messageStore, threadStore) => {
         message.replies[findThreadMessageIndex] = data;
       }
 
-      const threadMessage = threadStore.getMessages;
+      const threadMessage = threadStore.getMessage;
       findThreadMessageIndex = threadMessage.replies.findIndex(
         element => element.id === data.id
       );
