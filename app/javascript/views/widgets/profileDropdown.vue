@@ -295,11 +295,11 @@ export default {
             'hover:bg-gray-50 m-1 cursor-pointer border rounded border-gray-100 mt-2 ',
         },
         [
-          h('div', { class: 'w-full bg-slate-500 h-9 items-center flex  ' }, [
+          h('div', { class: 'w-full  h-9 items-center flex' }, [
             h(
               NText,
               { class: 'ml-2 text-black-800' },
-              { default: () => `Clear status` }
+              { default: () => CONSTANTS.CLEAR_STATUS }
             ),
           ]),
         ]
