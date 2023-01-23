@@ -148,4 +148,5 @@ export const CONSTANTS = {
   HOURS: ' hours',
   HOUR:' hour',
   MINUTES: ' minutes',
+  CLEAR_STATUS:'Clear status'
 };

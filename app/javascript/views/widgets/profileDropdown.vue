@@ -56,6 +56,7 @@ import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore'
 import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
+import { ref, watch } from 'vue';
 
 export default {
   components: {
@@ -71,27 +72,39 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const { currentProfile } = storeToRefs(profileStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+    const { status } = storeToRefs(profileStore);
 
     return {
       profile: currentProfile,
+      currentProfile,
       currentWorkspace,
       profileStatusStore: profileStatusStore,
+      profileCurrentStatus: status,
     };
   },
+
   beforeUnmount() {
     this.status = this.userStatus = null;
     this.prevStatus = this.profile = null;
     this.statusIcon = this.options = null;
   },
+
   data() {
     return {
+      myStatus: ref(this.profile.status),
       status: 'Away',
       prevStatus: 'active',
       statusIcon: '⚫',
       userStatus: userStatusStore(),
-      profile: null,
       showModal: false,
+
       options: [
+        {
+          type: 'render',
+          render: this.renderClearStatusOption,
+          show: this.hasStatus(),
+          key: this.generateKey(CONSTANTS.CLEAR_STATUS),
+        },
         {
           key: 'header',
           type: 'render',
@@ -184,6 +197,18 @@ export default {
       ],
     };
   },
+  watch: {
+    profileCurrentStatus(newValue, oldValue) {
+      console.log("newValue:" ,newValue)
+      if(newValue===null){
+        this.options[0].show= false;
+      }
+      else{
+        this.options[0].show= true;
+      }
+
+    },
+  },
   computed: {
     profileAvatar() {
       return this.profile.image_url;
@@ -193,6 +218,13 @@ export default {
     },
   },
   methods: {
+    hasStatus() {
+     if (this.profile.status) return true;
+      return false;
+    },
+    initializeOptions() {
+      this.options[0].show = this.profile.status ? true : false;
+    },
     handleStatusSelect() {
       this.profileStatusStore.toggleProfileStatusPopUp();
     },
@@ -238,6 +270,24 @@ export default {
             h('div', { class: 'text-sm  flex ml-4' }, [
               h(NText, { depth: 3 }, { default: () => `${this.status}` }),
             ]),
+          ]),
+        ]
+      );
+    },
+    renderClearStatusOption() {
+      return h(
+        'div',
+        {
+          class:
+            'hover:bg-gray-50 m-1 cursor-pointer border rounded border-gray-100 mt-2 ',
+        },
+        [
+          h('div', { class: 'w-full bg-slate-500 h-9 items-center flex  ' }, [
+            h(
+              NText,
+              { class: 'ml-2 text-black-800' },
+              { default: () => `Clear status` }
+            ),
           ]),
         ]
       );
