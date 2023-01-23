@@ -10,11 +10,24 @@ import {
 } from '../../../api/workspaces/workspacesApi';
 import { encryption } from '../../../modules/crypto/crypto';
 
-let workspaceKey = 1;
-let joinedWorkspacesArray = [];
-joinedWorkspaces().then(res => {
-  joinedWorkspacesArray = res;
+let listOfJoinedWorkspaces = [];
+
+joinedWorkspaces().then(workspaces => {
+  workspaces.map(workspace => {
+    let workspaceOption = {
+      label: workspace.company_name,
+      key: workspace.company_name,
+      disabled: isCurrentWorkspace(workspace.id),
+      props: {
+        onClick: () => {
+          handleSwitchWorkspace(workspace.id);
+        },
+      },
+    };
+    listOfJoinedWorkspaces.push(workspaceOption);
+  });
 });
+
 const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
 };
@@ -79,39 +92,10 @@ const renderMobile = () => {
   );
 };
 
-const renderWorkspaces = () => {
-  for (let index = 0; index < joinedWorkspacesArray.length; index++) {
-    workspaceKey = index;
-    return h(
-      'div',
-      {
-        class:
-          'flex items-center px-4 py-3 cursor-pointer hover:bg-transparent duration-300',
-      },
-      [
-        h('div', null, [
-          h('div', { class: 'text-md' }, [
-            h(
-              NText,
-              {
-                onClick: () =>
-                  handleSwitchWorkspace(joinedWorkspacesArray[index + 1].id),
-              },
-              {
-                default: () =>
-                  `${joinedWorkspacesArray[index + 1].company_name}`,
-              }
-            ),
-          ]),
-        ]),
-      ]
-    );
-  }
-};
 const isCurrentWorkspace = workspace_id => {
   const currentWorkspaceStore = useCurrentWorkspaceStore();
   const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
-  return currentWorkspace.id === workspace_id;
+  return currentWorkspace.value.id === workspace_id;
 };
 
 const handleSwitchWorkspace = async workspace_id => {
@@ -125,7 +109,7 @@ const handleSwitchWorkspace = async workspace_id => {
     currentProfileStore.setProfile(response.profile);
     currentWorkspaceStore.setWorkspace(response.workspace);
     currentWorkspaceStore.switchingWorkspace = false;
-    window.location.reload();
+    window.location.replace('/');
   } else {
     isError = true;
   }
@@ -189,14 +173,7 @@ export default [
   {
     label: CONSTANTS.SWITCH_WORKSPACE,
     key: generateKey(CONSTANTS.SWITCH_WORKSPACE),
-
-    children: [
-      {
-        key: workspaceKey,
-        type: 'render',
-        render: renderWorkspaces,
-      },
-    ],
+    children: listOfJoinedWorkspaces,
   },
   {
     label: CONSTANTS.ADD_WORKSPACE,
