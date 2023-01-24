@@ -8,9 +8,10 @@ import {
 import { CONSTANTS } from '../../assets/constants';
 
 export default class Options {
-  constructor(isPinned, isInfo) {
+  constructor(isPinned, isInfo, isMyMessage) {
     this.isPinned = isPinned;
     this.isInfo = isInfo;
+    this.isMyMessage = isMyMessage;
   }
 
   renderIcon = icon => {
@@ -51,8 +52,8 @@ export default class Options {
             key: this.generateKey(CONSTANTS.TWENTY_MINUTES),
           },
           {
-            label: CONSTANTS.ONE_HOUR,
-            key: this.generateKey(CONSTANTS.ONE_HOUR),
+            label: CONSTANTS.IN_ONE_HOUR,
+            key: this.generateKey(CONSTANTS.IN_ONE_HOUR),
           },
           {
             label: CONSTANTS.THREE_HOURS,
@@ -107,7 +108,7 @@ export default class Options {
       {
         label: CONSTANTS.DELETE,
         key: this.generateKey(CONSTANTS.DELETE),
-        show: !this.isInfo,
+        show: !this.isInfo && this.isMyMessage,
       },
       {
         type: 'divider',

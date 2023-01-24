@@ -13,7 +13,7 @@ class Api::V1::BookmarksController < Api::ApiController
     if @bookmark.save
       render json: { message: 'Bookmark is successfully created' }, status: :ok
     else
-      render json: { error_message: 'Unable to create bookmark', errors: @bookmark.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to create bookmark', errors: @bookmark.errors }, status: :unprocessable_entity
     end
   end
 
@@ -21,7 +21,7 @@ class Api::V1::BookmarksController < Api::ApiController
     if @bookmark.update(bookmark_params)
       render json: { message: 'Bookmark is successfully updated' }, status: :ok
     else
-      render json: { error_message: 'Unable to update bookmark', errors: @bookmark.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to update bookmark', errors: @bookmark.errors }, status: :unprocessable_entity
     end
   end
 
@@ -29,7 +29,7 @@ class Api::V1::BookmarksController < Api::ApiController
     if @bookmark.destroy
       render json: { message: 'Bookmark is successfully removed' }, status: :ok
     else
-      render json: { error_message: 'Unable to update bookmark', errors: @bookmark.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to update bookmark', errors: @bookmark.errors }, status: :unprocessable_entity
     end
   end
 

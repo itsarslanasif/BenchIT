@@ -2,7 +2,7 @@
   <n-dropdown class="rounded-md" placement="bottom-end" size="medium" :show="showChannelOptions"
     :options="channel_options" @mouseleave="toggleChannelOptionShow" @select="handleSelect($event)"
     :on-clickoutside="toggleChannelOptionShow">
-    <div oncontextmenu="return false;" class="flex items-center -ml-4 pl-3 py-1 hover:bg-primaryHover cursor-pointer" @click="goTo(`/channels/${channel.id}`, this.channel)"
+    <div oncontextmenu="return false;" class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer" @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleChannelOptionShow">
       <div class="w-5">
         <div v-if="channel.is_private">
@@ -12,7 +12,7 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-2" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
+      <div class="px-2 truncate" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
         {{ channel.name }}
       </div>
       <div v-if="unreadDetails?.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">

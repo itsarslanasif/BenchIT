@@ -68,8 +68,10 @@
 </template>
 
 <script>
-import { joinedWorkspaces } from '../../../api/workspaces/workspacesApi';
-import { switchWorkspace } from '../../../api/switchWorkspace/switchWorkspace';
+import {
+  joinedWorkspaces,
+  switchWorkspace,
+} from '../../../api/workspaces/workspacesApi';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
@@ -101,8 +103,8 @@ export default {
     },
     async goToWorkspaceDashboard(workspace) {
       let currentProfile = await switchWorkspace(workspace.id);
-      encryption(sessionStorage, 'currentProfile', currentProfile.profile)
-      encryption(sessionStorage, 'currentWorkspace', workspace)
+      encryption(sessionStorage, 'currentProfile', currentProfile.profile);
+      encryption(sessionStorage, 'currentWorkspace', workspace);
       this.currentWorkspace.setWorkspace(workspace);
       this.currentProfile.setProfile(currentProfile);
       this.$router.push('/');

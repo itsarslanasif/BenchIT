@@ -12,6 +12,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
     getSelectedOption() {
       return this.selectedOption;
     },
+    getMembers: state => state.channelMembers,
   },
   actions: {
     async getChannelMembers(query, bench_channel_id) {

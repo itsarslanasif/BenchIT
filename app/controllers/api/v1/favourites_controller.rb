@@ -6,7 +6,7 @@ class Api::V1::FavouritesController < Api::ApiController
     if @favourite.id
       render json: { message: 'Channel successfully added to favourites', favourite: @favourite }, status: :ok
     else
-      render json: { error_message: 'Channel not added to favourites', errors: @favourite.errors }, status: :unprocessable_entity
+      render json: { error: 'Channel not added to favourites', errors: @favourite.errors }, status: :unprocessable_entity
     end
   end
 
@@ -14,7 +14,7 @@ class Api::V1::FavouritesController < Api::ApiController
     if @favourite.destroy
       render json: { message: 'Channel successfully removed from favourites' }, status: :ok
     else
-      render json: { error_message: 'Channel not removed to favourites', errors: @favourite.errors }, status: :unprocessable_entity
+      render json: { error: 'Channel not removed to favourites', errors: @favourite.errors }, status: :unprocessable_entity
     end
   end
 
@@ -28,6 +28,6 @@ class Api::V1::FavouritesController < Api::ApiController
 
   def set_favourite
     @favourite = Favourite.find_by(id: params[:id])
-    render json: { error_message: 'Channel could not be found in favourites' }, status: :not_found if @favourite.nil?
+    render json: { error: 'Channel could not be found in favourites' }, status: :not_found if @favourite.nil?
   end
 end

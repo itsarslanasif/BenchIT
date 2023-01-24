@@ -15,7 +15,7 @@ class Api::V1::WorkspacesController < Api::ApiController
     if @workspace.save
       render json: @workspace, status: :ok
     else
-      render json: { error_message: 'Error while creating workspace', errors: @workspace.errors }, status: :unprocessable_entity
+      render json: { error: 'Error while creating workspace', errors: @workspace.errors }, status: :unprocessable_entity
     end
   end
 
@@ -26,7 +26,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
     if @invitable.errors.any?
       render json: {
-        error_message: 'There was an error in inviting the user to workspace',
+        error: 'There was an error in inviting the user to workspace',
         errors: @invitable.errors
       }, status: :unprocessable_entity
     end
@@ -48,18 +48,18 @@ class Api::V1::WorkspacesController < Api::ApiController
   def find_workspace
     @workspace = Workspace.find_by(id: params[:id])
 
-    render json: { error_message: 'Workspace not found' }, status: :not_found if @workspace.nil?
+    render json: { error: 'Workspace not found' }, status: :not_found if @workspace.nil?
   end
 
   def find_profile
     @profile = Current.user.profiles.find_by(workspace_id: @workspace)
 
-    render json: { error_message: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
+    render json: { error: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
   end
 
   def find_user
     @user = User.find_by(email: params[:email])
 
-    render json: { error_message: 'Email not found' }, status: :not_found if @user.nil?
+    render json: { error: 'Email not found' }, status: :not_found if @user.nil?
   end
 end

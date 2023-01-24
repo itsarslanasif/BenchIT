@@ -4,7 +4,7 @@
     @click="elementClicked"
   >
     <font-awesome-icon :icon="icon" class="w-8 mt-1" />
-    <div>{{ name }}</div>
+    <div class="truncate">{{ name }}</div>
   </div>
 </template>
 

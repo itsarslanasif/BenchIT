@@ -11,7 +11,7 @@ class ConversationMessage < ApplicationRecord
                      foreign_key: :parent_message_id, dependent: :delete_all
   has_many :saved_items, dependent: :delete_all
   has_many :reactions, dependent: :delete_all
-  has_one :pin, dependent: :delete
+  has_one :pin, dependent: :destroy
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
@@ -34,9 +34,8 @@ class ConversationMessage < ApplicationRecord
 
   def message_content
     message = model_basic_content
-    message[:pin] = { id: pin.id, pinned_by: pin.profile.username } if pin.present?
-    message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
-    message[:attachments] = attach_message_attachments if message_attachments.present?
+    message = message_data(message)
+    message[:replies] = replies.map(&:message_content) if parent_message_id.nil?
 
     message
   end
@@ -47,22 +46,12 @@ class ConversationMessage < ApplicationRecord
     {
       content: message_content,
       type: 'Message',
-      action: action_performed
+      action: ActionPerformed.new.action_performed(self)
     }
   end
 
   def broadcast_message
-    BroadcastMessageService.new(broadcastable_content, bench_conversation).call
-  end
-
-  def action_performed
-    if destroyed?
-      'Delete'
-    elsif created_at.eql?(updated_at)
-      'Create'
-    else
-      'Update'
-    end
+    BroadcastMessageChatService.new(broadcastable_content, bench_conversation).call
   end
 
   def eligible_for_notification_profile_ids
@@ -75,14 +64,13 @@ class ConversationMessage < ApplicationRecord
   end
 
   def notify_profiles
-    return if action_performed.eql?('Update')
+    return if ActionPerformed.new.action_performed(self).eql?('Update')
 
-    BroadcastMessageService.new(broadcastable_content, bench_conversation)
-                           .send_notification_ws(eligible_for_notification_profile_ids)
+    BroadcastMessageNotificationService.new(broadcastable_content, eligible_for_notification_profile_ids).call
   end
 
   def add_unread_messages
-    return unless action_performed.eql?('Create')
+    return unless ActionPerformed.new.action_performed(self).eql?('Create')
 
     UnreadMessagesCreatorService.new(bench_conversation, eligible_for_notification_profile_ids, id).call
   end
@@ -111,15 +99,20 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at,
       isSaved: saved?(id),
       pinned: pin.present?,
-      replies: replies,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,
-      conversationable_id: bench_conversation.conversationable_id,
-      is_info: is_info
+      conversationable_id: bench_conversation.conversationable_id
     }
   end
 
   def saved?(id)
     Current.profile.saved_items.exists?(conversation_message_id: id)
+  end
+
+  def message_data(message)
+    message[:pin] = { id: pin.id, pinned_by: pin.profile.username } if pin.present?
+    message[:sender_avatar] = Rails.application.routes.url_helpers.rails_storage_proxy_url(profile.profile_image) if profile.profile_image.present?
+    message[:attachments] = attach_message_attachments if message_attachments.present?
+    message
   end
 end

@@ -9,7 +9,7 @@ class Api::V1::DownloadsController < Api::ApiController
     if @download.save
       render json: @download, status: :created
     else
-      render json: { error_message: 'Unable to download file', errors: @download.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to download file', errors: @download.errors }, status: :unprocessable_entity
     end
   end
 
@@ -17,7 +17,7 @@ class Api::V1::DownloadsController < Api::ApiController
     if @download.destroy
       render json: { message: 'Download removed' }, status: :ok
     else
-      render json: { error_message: 'Unable to remove download', errors: @download.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to remove download', errors: @download.errors }, status: :unprocessable_entity
     end
   end
 
@@ -25,7 +25,7 @@ class Api::V1::DownloadsController < Api::ApiController
     if @downloads.destroy_all
       render json: { message: 'Downloads removed' }, status: :ok
     else
-      render json: { error_message: 'Unable to remove downloads', errors: @downloads.errors }, status: :unprocessable_entity
+      render json: { error: 'Unable to remove downloads', errors: @downloads.errors }, status: :unprocessable_entity
     end
   end
 

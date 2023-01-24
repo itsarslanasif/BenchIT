@@ -1,5 +1,7 @@
 import { useUnreadStore } from '../../stores/useUnreadStore';
+import { useDirectMessagesStore } from '../../stores/useDirectMessagesStore';
 import { useChannelStore } from '../../stores/useChannelStore';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
@@ -38,11 +40,23 @@ const ChannelParticipantDelete = async data => {
   channelsStore.removeChannelJoined(data);
 };
 
+const updateProfileStatus = data => {
+  const currentProfileStore = useCurrentProfileStore();
+  let profile = currentProfileStore.currentProfile;
+  
+  if (profile.id === data.id) {
+    currentProfileStore.setProfileStatus(data.status);
+  }
+  const dmStore = useDirectMessagesStore();
+  dmStore.updateProfileStatus(data);
+};
+
 const notificationActions = {
   MessageCreate: createMessage,
   MessageDelete: deleteMessage,
   ChannelParticipantCreate: ChannelParticipantCreate,
   ChannelParticipantDelete: ChannelParticipantDelete,
+  ProfileUpdate: updateProfileStatus,
 };
 
 export const notifyActions = data => {

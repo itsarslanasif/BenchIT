@@ -1,5 +1,5 @@
 <template>
-  <div class="hover-trigger">
+  <div v-if="starChannels.length > 0" class="hover-trigger">
     <font-awesome-icon
       @click="goToChannels"
       icon="fa-plus"
@@ -8,7 +8,7 @@
     <AccordionList class="mt-5 ml-4 text-base text-slate-50">
       <AccordionItem :default-opened="true">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer">
+          <span class="cursor-pointer ml-2">
             {{ $t('channels.starred') }}
           </span>
         </template>
@@ -17,12 +17,14 @@
           :key="channel.id"
           class="hover:bg-primaryHover"
         >
+        <div class="-ml-4">
           <ChannelItem
             :channel="channel"
             :goTo="goToChannelChat"
             :toggleShow="toggleChannelOptionShow"
             :isShowOptions="showChannelOptions"
           />
+        </div>
         </h5>
       </AccordionItem>
     </AccordionList>

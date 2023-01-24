@@ -4,6 +4,13 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               capacity: 2000,
                               organization_type: :financial_services)
 
+Current.workspace = workspace
+workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
+workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
+workspace.statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today')
+workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
+workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
+
 user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 user1.save!
 user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',
@@ -35,7 +42,7 @@ Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admi
                                   filename: 'admin.png', content_type: 'image/png')
 Current.user = user1
 Current.profile = user1.profiles.first
-Current.workspace = workspace
+
 BenchChannel.create(name: 'dev', description: 'dev')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 1)
@@ -79,7 +86,10 @@ Workspace.create!(company_name: 'Devsinc',
                   bench_it_url: 'https://www.devsinc.com',
                   capacity: 2000,
                   organization_type: :financial_services)
-user1.profiles.create!(username: 'Alvi', description: 'SE', workspace_id: 2)
+Workspace.last.workspace_avatar.attach(io: Rails.root.join(*%w[app assets images user.png]).open,
+                                       filename: 'user.png', content_type: 'image/png')
+user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: 2, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
+                       text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
 Current.profile = user1.profiles.second
 Current.workspace = Workspace.second
 BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_15_162656) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -91,7 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_15_162656) do
   end
 
   create_table "conversation_messages", force: :cascade do |t|
-    t.text "content", null: false
+    t.text "content"
     t.boolean "is_threaded"
     t.bigint "parent_message_id"
     t.datetime "created_at", null: false
@@ -180,6 +180,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_15_162656) do
     t.string "phone", default: "", null: false
     t.string "skype", default: ""
     t.string "time_zone", default: "UTC", null: false
+    t.datetime "clear_status_after"
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
@@ -201,6 +202,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_15_162656) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true
+  end
+
+  create_table "statuses", force: :cascade do |t|
+    t.string "text", null: false
+    t.string "emoji", null: false
+    t.string "clear_after", null: false
+    t.integer "profile_id"
+    t.integer "workspace_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade do |t|
