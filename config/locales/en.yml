@@ -279,6 +279,7 @@ en:
         copy_member_id: 'Copy member ID'
         no_results_found: 'No Results Found !'
         sort: 'Sort'
+        sort_label: 'Sort:'
         account_type: 'Account Type'
       profilestatus:
         what_is_your_status: 'Whats your status?'
