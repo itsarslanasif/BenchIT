@@ -23,7 +23,6 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 import MessageWrapper from '../messages/MessageWrapper.vue';
 import PinnedMessageWrapperVue from './pinnedMessageWrapper.vue';
 import vClickOutside from 'click-outside-vue3';
-import { NModal } from 'naive-ui';
 
 export default {
   setup() {
@@ -37,7 +36,6 @@ export default {
   components: {
     MessageWrapper,
     PinnedMessageWrapperVue,
-    NModal,
   },
 };
 </script>

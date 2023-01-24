@@ -37,12 +37,12 @@
               class="rounded-md border-black-400 border object-cover h-12 w-12"
             />
             <div class="ml-2 flex flex-col">
-              <span class="font-semibold text-base text-black-800">{{
-                attachment.attachment.filename
-              }}</span>
-              <span class="text-black-600">{{
-                attachment.attachment.content_type
-              }}</span>
+              <span class="font-semibold text-base text-black-800">
+                {{ attachment.attachment.filename }}
+              </span>
+              <span class="text-black-600">
+                {{ attachment.attachment.content_type }}
+              </span>
             </div>
           </div>
         </div>
@@ -63,6 +63,7 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { NAvatar } from 'naive-ui';
 import moment from 'moment';
+
 export default {
   setup() {
     const rightPaneStore = useRightPaneStore();
@@ -106,12 +107,15 @@ export default {
     getConversationId() {
       return window.location.pathname.split('/')[2];
     },
+
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
     },
+
     jumpToConversation() {
       this.pinnedConversationStore.showAlert = false;
+
       if (this.currMessage.conversationable_type == 'BenchChannel') {
         this.checkForThreadedMessage(this.currMessage);
         this.$router.push(
@@ -128,6 +132,7 @@ export default {
         );
       }
     },
+
     checkForThreadedMessage(message) {
       if (message.parent_message_id) {
         if (this.rightPaneStore.showThread) {
@@ -139,6 +144,7 @@ export default {
         this.rightPaneStore.toggleThreadShow(true);
       }
     },
+
     openInNewTab(url) {
       window.open(url, '_blank', 'noreferrer');
     },
