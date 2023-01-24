@@ -30,13 +30,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def destroy
-    if should_delete_parent_message?
+    if delete_parent_message?
       @message.parent_message.destroy!
-    elsif should_soft_delete_message?
+    elsif soft_delete_message?
       soft_delete_message
     else
       @message.destroy!
     end
+
     render json: { message: 'Message deleted successfully.' }
   end
 
@@ -162,12 +163,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     UnreadMessagesMarkedAsReadService.new(@conversation).call
   end
 
-  def should_delete_parent_message?
+  def delete_parent_message?
     @message.parent_message_id && @message.parent_message.content.eql?('This message was deleted.') && @message.parent_message.replies.count.eql?(1)
   end
 
-  def should_soft_delete_message?
-    @message.parent_message_id.nil? && @message.replies.count.positive?
+  def soft_delete_message?
+    @message.parent_message_id.blank? && @message.replies.count.positive?
   end
 
   def soft_delete_message

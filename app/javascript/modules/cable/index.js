@@ -73,9 +73,12 @@ const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
       if (findMessageIndex != -1) {
         messages.splice(findMessageIndex, 1);
         const threadMessage = threadStore.getMessage;
-        threadMessage.replies.splice(0, threadMessage.replies.length);
-        threadStore.setMessage(null)
-        rightPaneStore.toggleThreadShow(false);
+
+        if (threadMessage.id === data.id){
+          threadMessage.replies.splice(0, threadMessage.replies.length);
+          threadStore.setMessage(null)
+          rightPaneStore.toggleThreadShow(false);
+      }
       }
     }
   } catch (err) {
