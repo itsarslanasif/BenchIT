@@ -1,6 +1,9 @@
 <template>
   <right-pane-header :paneTitle="$t('rightpane.profile')" />
-  <div v-if="userProfileStore.userProfile" class="flex flex-col overflow-auto paneBody">
+  <div
+    v-if="userProfileStore.userProfile"
+    class="flex flex-col overflow-auto paneBody"
+  >
     <div class="flex items-center justify-center p-2">
       <img
         :src="userProfileStore.userProfile.image_url"
@@ -86,6 +89,14 @@
       </span>
       <span class="flex float-left mt-2">
         <button
+          @click="
+            ownProfile
+              ? null
+              : goToChat(
+                  `/profiles/${userProfileStore.userProfile.id}`,
+                  userProfileStore.userProfile
+                )
+          "
           class="flex border border-black-800 rounded h-10 px-flexible-xs truncate ml-4 hover:bg-transparent focus:outline-none"
         >
           <p class="w-24 self-center text-md truncate">
@@ -251,7 +262,10 @@
           {{ $t('actions.edit') }}
         </p>
       </span>
-      <span v-if="userProfileStore.userProfile.about_me" class="grid grid-cols-8 float-left mt-2 text-black-800">
+      <span
+        v-if="userProfileStore.userProfile.about_me"
+        class="grid grid-cols-8 float-left mt-2 text-black-800"
+      >
         <span class="col-span-2 float-left text-md text-black-800">
           <p class="text-sm truncate">{{ $t('rightpane.skype') }}</p>
           <p
@@ -292,6 +306,7 @@ import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
 import EditAboutMeModal from '../../widgets/EditAboutMeModal.vue';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   components: {
@@ -310,7 +325,8 @@ export default {
   setup() {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();
-    return { userProfileStore, currentProfileStore };
+    const messagesStore = useMessageStore();
+    return { userProfileStore, currentProfileStore, messagesStore };
   },
   computed: {
     ownProfile() {
@@ -337,6 +353,13 @@ export default {
     },
     toggleEditAboutMeModal() {
       this.showAboutMeModal = !this.showAboutMeModal;
+    },
+    toggleEditAboutMeModal() {
+      this.showAboutMeModal = !this.showAboutMeModal;
+    },
+    goToChat(chatURL, user) {
+      this.messagesStore.setSelectedChat(user);
+      this.$router.push(chatURL);
     },
   },
 };

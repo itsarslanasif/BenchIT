@@ -42,11 +42,11 @@
 import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
-import { deleteMessage } from '../../api/messages';
 import { pinMessage } from '../../api/messages/pinnedMessages';
 import { unPinMessage } from '../../api/messages/pinnedMessages';
-import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useMessageStore } from '../../stores/useMessagesStore';
+
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -57,20 +57,21 @@ export default {
     'action',
     'message',
     'pinnedConversationStore',
+    'setDeleteModal'
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
     const currentProfileStore = useCurrentProfileStore();
     const messageStore = useMessageStore();
-    return { pinnedConversationStore, messageStore, currentProfileStore };
+    return { pinnedConversationStore, currentProfileStore, messageStore };
   },
   beforeMount() {
 
     if (this.message) {
       this.Options = new Options(
-        this.message.pinned,
+        this.message.pinned, this.message.is_info,
         this.isMyMessage(this.currentProfileStore.currentProfile, this.message)
-      , this.message.is_info);
+      );
     }
   },
   data() {
@@ -103,7 +104,7 @@ export default {
           this.copyLinkToMessage(message);
           break;
         case 'delete-message':
-          deleteMessage(message.id);
+          this.setDeleteModal();
           break;
         case 'pin-to-this-conversation':
           const conversation_type = getIndexByParams(1);
