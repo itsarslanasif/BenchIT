@@ -1,7 +1,7 @@
 <template>
   <n-modal v-model:show="customScheduleFlag">
     <n-card
-      style="width: 600px"
+      class="w-2/6"
       :title="$t('schedule.custom_time')"
       :bordered="false"
       size="huge"

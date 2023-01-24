@@ -233,9 +233,6 @@ export default {
     };
 
     const getScheduleNotification = () => {
-      console.log(selectedChat.value);
-      console.log(schedule.value);
-      console.log(schedule);
       const date = moment(schedule.value);
       return `Your message will be sent to ${
         selectedChat.value['user_id']
