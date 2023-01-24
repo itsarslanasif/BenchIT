@@ -41,7 +41,7 @@
           :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
       <div class="flex justify-center p-3">
-        <n-pagination v-model:page="currentPage" :default-page-size="50" :page-count="pageInfo.pages"
+        <n-pagination v-model:page="currentPage" :page-count="pageInfo.pages"
           :on-update:page="changePage" />
       </div>
     </div>
@@ -112,9 +112,8 @@ export default {
     })
 
     onBeforeUnmount(() => {
-      term.value = null;
       searchedChannels.value = [];
-      channels.value = []
+      channels.value = [];
     });
 
     return {
