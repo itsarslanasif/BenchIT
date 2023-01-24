@@ -182,7 +182,9 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
       const MessageIndex = findMessageIndex(messageStore.messages, data);
 
       if (MessageIndex != -1) {
-        let messsageToUpdate = { ...data };
+        let messsageToUpdate = {
+          ...data
+        };
         messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
         messageStore.messages[MessageIndex] = messsageToUpdate;
 
@@ -218,7 +220,9 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
       const MessageIndex = findMessageIndex(messageStore.messages, data);
 
       if (MessageIndex != -1) {
-        let messsageToUpdate = { ...data };
+        let messsageToUpdate = {
+          ...data
+        };
         messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
         messageStore.messages[MessageIndex] = messsageToUpdate;
 
