@@ -45,7 +45,6 @@ import { unPinMessage } from '../../api/messages/pinnedMessages';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 
-
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },

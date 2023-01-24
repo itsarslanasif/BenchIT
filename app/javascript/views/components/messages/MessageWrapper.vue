@@ -25,7 +25,7 @@
       @mouseleave="emojiModalStatus = false"
     >
       <template
-        v-if="currMessage.content === $t('deleteMessageModal.deleted_message')"
+        v-if="currMessage.content === $t('deleteMessageModal.success')"
       >
         <div
           class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
@@ -42,7 +42,7 @@
             !isSameDayMessage ||
             isFirstMessage ||
             currMessage.is_info) &&
-          currMessage.content !== $t('deleteMessageModal.deleted_message')
+          currMessage.content !== $t('deleteMessageModal.success')
         "
       >
         <user-profile-modal
@@ -60,7 +60,7 @@
                   !isSameDayMessage ||
                   isFirstMessage ||
                   currMessage.is_info) &&
-                currMessage.content !== $t('deleteMessageModal.deleted_message')
+                currMessage.content !== $t('deleteMessageModal.success')
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
@@ -68,7 +68,7 @@
             </p>
             <span
               v-if="
-                currMessage.content !== $t('deleteMessageModal.deleted_message')
+                currMessage.content !== $t('deleteMessageModal.success')
               "
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
@@ -96,7 +96,7 @@
                 isSameDayMessage &&
                 !isFirstMessage &&
                 !currMessage.is_info &&
-                currMessage.content !== $t('deleteMessageModal.deleted_message')
+                currMessage.content !== $t('deleteMessageModal.success')
               "
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
@@ -106,10 +106,10 @@
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
-                currMessage.content === $t('deleteMessageModal.deleted_message')
+                currMessage.content === $t('deleteMessageModal.success')
               "
               class="text-black-600 text-sm flex mt-2"
-              >{{ $t('deleteMessageModal.deleted_message') }}</span
+              >{{ $t('deleteMessageModal.success') }}</span
             >
           </span>
           <span
@@ -118,7 +118,7 @@
                 !isSameDayMessage ||
                 isFirstMessage ||
                 currMessage.is_info) &&
-              currMessage.content !== $t('deleteMessageModal.deleted_message')
+              currMessage.content !== $t('deleteMessageModal.success')
             "
             :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
             class="text-sm flex-wrap"
@@ -127,11 +127,11 @@
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
-              currMessage.content === $t('deleteMessageModal.deleted_message')
+              currMessage.content === $t('deleteMessageModal.success')
             "
             class="text-black-600 text-sm flex mt-2"
           >
-            {{ $t('deleteMessageModal.deleted_message') }}</span
+            {{ $t('deleteMessageModal.success') }}</span
           >
           <div
             v-if="!currMessage.info && currMessage.attachments"
@@ -236,7 +236,7 @@
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
             (emojiModalStatus || openEmojiModal || showOptions) &&
-            currMessage.content !== $t('deleteMessageModal.deleted_message')
+            currMessage.content !== $t('deleteMessageModal.success')
           "
         >
           <template v-for="emoji in topReactions" :key="emoji">

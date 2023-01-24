@@ -9,11 +9,11 @@
   >
     <template #header>
       <span class="text-2xl font-bold">
-        {{ $t('deleteMessageModal.header') }}
+        {{ $t('deleteMessageModal.title') }}
       </span>
     </template>
     <div>
-      <span>{{ $t('deleteMessageModal.delete_message') }}</span>
+      <span>{{ $t('deleteMessageModal.confirmation') }}</span>
     </div>
     <div class="flex border-black-300 border p-3 rounded-md mt-4">
       <div @click="handleClick">
