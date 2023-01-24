@@ -164,7 +164,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def delete_parent_message?
-    @message.parent_message_id.present? && @message.parent_message.content.eql?('This message was deleted.') && @message.parent_message.replies.count.eql?(1)
+    msg = 'This message was deleted.'
+    @message.parent_message_id.present? && @message.parent_message.content.eql?(msg) && @message.parent_message.replies.count.eql?(1)
   end
 
   def soft_delete_message?
