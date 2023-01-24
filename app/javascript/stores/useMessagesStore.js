@@ -16,6 +16,7 @@ export const useMessageStore = () => {
       hasMoreMessages: true,
       selectedChat: {},
       newMessageSent: false,
+      selectedChannel: {},
     }),
 
     getters: {
@@ -32,6 +33,7 @@ export const useMessageStore = () => {
     actions: {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
+        this.selectedChannel = selectedChat;
       },
       async index(conversation_type, id) {
         try {
