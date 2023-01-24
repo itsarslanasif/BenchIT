@@ -132,7 +132,6 @@ export default {
           }
           break;
         case 'edit-message':
-
           if (message)
             messageStore.setMessageToEdit(message);
           break;

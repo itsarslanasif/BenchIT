@@ -80,26 +80,6 @@ export const useMessageStore = () => {
           return this.messageToEdit && (message.id == this.messageToEdit.id)
         return false
       },
-      updateMessage(data){
-        if (data.parent_message_id) {
-          const message = this.messages.find(element => element.id === data.parent_message_id);
-          const findThreadMessageIndex = message.replies.findIndex(
-            element => element.id === data.id
-          );
-
-          if (findThreadMessageIndex != -1) {
-            message.replies[findThreadMessageIndex] = data;
-          }
-        } else {
-          const findMessageIndex = this.messages.findIndex(element => element.id === data.id);
-
-          if (findMessageIndex != -1){
-            let messsageToUpdate={...data}
-            messsageToUpdate.replies=this.messages[findMessageIndex].replies
-            this.messages[findMessageIndex]=messsageToUpdate
-          }
-        }
-      }
     },
   });
 
