@@ -142,9 +142,9 @@ export default {
         });
         if (schedule.value) {
           this.messageStore.addScheduleMessage({
-            selectedChat: this.messageStore.getSelectedChat,
-            message: message,
-            schedule: schedule.value,
+            receiver: this.messageStore.getSelectedChat,
+            content: message,
+            scheduled_at: schedule.value,
           });
         }
         this.newMessageSent = true;
