@@ -1,7 +1,9 @@
 <template>
   <div
     class="py-1"
-    :style="this.currMessage.isSaved ? { 'background-color': '#fffff0' } : null"
+    :class="{
+      'bg-yellow-100': currMessage.isSaved,
+    }"
   >
     <div v-if="!currMessage.info && currMessage.pinned">
       <span
@@ -604,6 +606,7 @@ export default {
     setFileOptionsModal() {
       this.showFileOptions = !this.showFileOptions;
     },
+    
     getSavedItemText(message) {
       return message.isSaved
         ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS

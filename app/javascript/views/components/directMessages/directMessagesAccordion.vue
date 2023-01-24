@@ -12,16 +12,18 @@
             {{ $t('direct_messages.direct_messages') }}
           </span>
         </template>
-        <directMessagesItemVue
-          :sortedDMList="sortedDMList"
-          :isOwnChat="isOwnChat"
-          :goToChat="goToChat"
-        />
+        <div class="-ml-4">
+          <directMessagesItemVue
+            :sortedDMList="sortedDMList"
+            :isOwnChat="isOwnChat"
+            :goToChat="goToChat"
+          />
+          <div class="hover:bg-primaryHover cursor-pointer" @click="closeModal">
+            <addTeammatesDropdown :items="options" />
+          </div>
+        </div>
       </AccordionItem>
     </AccordionList>
-    <div class="px-1 hover:bg-primaryHover cursor-pointer" @click="closeModal">
-      <addTeammatesDropdown :items="options" />
-    </div>
   </div>
 </template>
 
