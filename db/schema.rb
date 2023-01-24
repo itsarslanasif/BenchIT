@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_24_075350) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -204,6 +204,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
     t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true
   end
 
+  create_table "schedule_messages", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "scheduled_at", null: false
+    t.string "job_id", default: "", null: false
+    t.bigint "profile_id", null: false
+    t.bigint "bench_conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bench_conversation_id"], name: "index_schedule_messages_on_bench_conversation_id"
+    t.index ["profile_id"], name: "index_schedule_messages_on_profile_id"
+  end
+
   create_table "statuses", force: :cascade do |t|
     t.string "text", null: false
     t.string "emoji", null: false
@@ -276,4 +288,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "profiles"
+  add_foreign_key "schedule_messages", "bench_conversations"
+  add_foreign_key "schedule_messages", "profiles"
 end

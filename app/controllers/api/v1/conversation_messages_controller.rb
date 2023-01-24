@@ -15,10 +15,24 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def create
-    @message = ConversationMessage.new(conversation_messages_params)
-    @message.bench_conversation_id = @bench_conversation.id
-    render json: @message.save ? { message: 'Message sent.' } : { error: 'Message not sent', errors: @message.errors },
-           status: @message.save ? :ok : :unprocessable_entity
+    if !params[:schedule].eql?(nil)
+      t = params[:schedule].to_time.in_time_zone(Current.profile.time_zone)
+      ss = ScheduleMessage.new(profile_id: Current.profile.id, content: params[:content], bench_conversation_id: @bench_conversation.id, scheduled_at: t)
+      ss.save!
+      s = ScheduleMessageJob.set(wait_until: t).perform_later(Current.profile.id, ss.id)
+      ss.job_id = s.job_id
+      ss.save!
+      render json: { message: "Message will be sent at #{t} and current time is #{Time.now} the job is #{s.job_id}" }
+    else
+      @message = ConversationMessage.new(conversation_messages_params)
+      @message.bench_conversation_id = @bench_conversation.id
+      response = if @message.save
+                   { message: 'Message sent.' }
+                 else
+                   { message: @message.errors, status: :unprocessable_entity }
+                 end
+      render json: response
+    end
   end
 
   def update
