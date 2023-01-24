@@ -149,7 +149,6 @@ export default {
       return value[value.length - 1];
     };
     const sendMessagePayload = (event, buttonClicked) => {
-      console.log(event);
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
         !props.editMessage
