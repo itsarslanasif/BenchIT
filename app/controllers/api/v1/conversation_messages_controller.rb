@@ -15,7 +15,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def create
-    if !params[:schedule].eql?(nil)
+    if !params[:schedule].eql?('null')
       t = params[:schedule].to_time.in_time_zone(Current.profile.time_zone)
       ss = ScheduleMessage.new(profile_id: Current.profile.id, content: params[:content], bench_conversation_id: @bench_conversation.id, scheduled_at: t)
       ss.save!
