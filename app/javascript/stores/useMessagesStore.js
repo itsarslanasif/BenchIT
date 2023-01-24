@@ -5,6 +5,7 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
+import { getScheduleMessages } from '../api/scheduleMessages';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -29,6 +30,7 @@ export const useMessageStore = () => {
           state.messages.find(m => m.id == state.currMessage.id).replies.length;
         }
       },
+      getSelectedChat: state => state.selectedChat
     },
     actions: {
       setSelectedChat(selectedChat) {
@@ -68,8 +70,11 @@ export const useMessageStore = () => {
       getMessage(id) {
         return this.messages.find(message => message.id === id);
       },
-      addScheduleMessage(message) {
-        this.scheduleMessage.push(message)
+      addScheduleMessage(payload) {
+        this.scheduleMessage.push(payload)
+      },
+      async getAllScheduleMessages() {
+        this.scheduleMessage = await getScheduleMessages()
       }
     },
   });

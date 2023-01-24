@@ -140,6 +140,13 @@ export default {
         conversation(formData).then(() => {
           this.message = '';
         });
+        if (schedule.value) {
+          this.messageStore.addScheduleMessage({
+            selectedChat: this.messageStore.getSelectedChat,
+            message: message,
+            schedule: schedule.value,
+          });
+        }
         this.newMessageSent = true;
       } catch (e) {
         console.error(e);
