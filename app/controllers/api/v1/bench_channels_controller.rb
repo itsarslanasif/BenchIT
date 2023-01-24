@@ -9,11 +9,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channels = Current.workspace.bench_channels
 
     if params[:query].present?
-      @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
-                                                            match: :word_start)
+      search_results = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
+                                                           match: :word_start)
+      @bench_channels = BenchChannel.where(id: search_results.map(&:id))
     end
+    sort_bench_channels if params[:sort_by].present?
     paginate_bench_channels
-    @bench_channels = sort_bench_channels(@bench_channels, params[:sort_by]) if params[:sort_by].present?
 
     @bench_channels = @bench_channels.reject do |channel|
       channel.is_private && !channel.participant?(Current.profile)
@@ -29,7 +30,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
       if @bench_channel.save
         create_first_bench_channel_participant
       else
-        render json: { status: false, message: 'There was an error creating the channel.', errors: @bench_channel.errors }
+        render json: { error: 'There was an error creating the channel.', errors: @bench_channel.errors }, status: :unprocessable_entity
       end
     end
   end
@@ -37,25 +38,24 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def update
     return if @bench_channel.update(bench_channel_params)
 
-    render json: { message: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
+    render json: { error: 'Error while updating!', errors: @bench_channel.errors }, status: :unprocessable_entity
   end
 
   def destroy
-    render json: if @bench_channel.destroy
-                   { message: 'Channel was successfully deleted.' }
-                 else
-                   { message: @bench_channel.errors,
-                     status: :unprocessable_entity }
-                 end
+    if @bench_channel.destroy
+      render json: { message: 'Channel was successfully deleted.' }, status: :ok
+    else
+      render json: { error: 'Error while deleting', errors: @bench_channel.errors }, status: :unprocessable_entity
+    end
   end
 
   def leave_channel
     ActiveRecord::Base.transaction do
       if @channel_participant.destroy
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
-        render json: { status: :ok }
+        render json: { message: 'Channel left ' }, status: :ok
       else
-        render json: { message: "Unable to leave ##{@bench_channel.name}." }, status: :unprocessable_entity
+        render json: { error: "Unable to leave ##{@bench_channel.name}." }, status: :unprocessable_entity
       end
     end
   end
@@ -79,13 +79,13 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
     return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { errors: 'User is not part of channel.' }, status: :not_found
+    render json: { error: 'User is not part of channel.' }, status: :not_found
   end
 
   def set_channel_participant
     @channel_participant = Current.profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
 
-    render json: { message: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
+    render json: { error: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
   end
 
   def set_left_on
@@ -93,36 +93,42 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
     return if @channel_participant.save
 
-    render json: { message: 'There was an error.', errors: @channel_participant.errors }, status: :unprocessable_entity
+    render json: { error: 'There was an error leaving channel.', errors: @channel_participant.errors }, status: :unprocessable_entity
   end
 
   def bench_channel_cannot_be_public_again
     return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
 
-    render json: { message: "You cannot change ##{@bench_channel.name} to public again." }, status: :unprocessable_entity
+    render json: { error: "You cannot change ##{@bench_channel.name} to public again." }, status: :bad_request
   end
 
-  def sort_bench_channels(bench_channels, sort_by)
+  def sort_bench_channels
     sort_methods = ActiveSupport::HashWithIndifferentAccess.new({
-                                                                  'newest' => ->(bc) { bc.sort_by(&:created_at).reverse },
-                                                                  'oldest' => ->(bc) { bc.sort_by(&:created_at) },
-                                                                  'most_participants' => lambda { |bc|
-                                                                                           bc.left_joins(:channel_participants)
-                                                                                           .group(:id).order('count(channel_participants.id) DESC')
-                                                                                         },
-                                                                  'fewest_participants' => lambda { |bc|
-                                                                                             bc.left_joins(:channel_participants)
-                                                                                             .group(:id).order('count(channel_participants.id) ASC')
-                                                                                           },
-                                                                  'a_to_z' => ->(bc) { bc.sort_by(&:name) },
-                                                                  'z_to_a' => ->(bc) { bc.sort_by(&:name).reverse }
+                                                                  'newest' => -> { sort_by_bench_channels('created_at', true) },
+                                                                  'oldest' => -> { sort_by_bench_channels('created_at', false) },
+                                                                  'most_participants' => -> { sort_by_participants(true) },
+                                                                  'fewest_participants' => -> { sort_by_participants(false) },
+                                                                  'a_to_z' => -> { sort_by_bench_channels('name', false) },
+                                                                  'z_to_a' => -> { sort_by_bench_channels('name', true) }
                                                                 })
-    raise 'Invalid sort_by parameter' unless sort_methods.key?(sort_by)
+    raise 'Invalid sort_by parameter' unless sort_methods.key?(params[:sort_by])
 
-    sort_methods[sort_by].call(bench_channels)
+    sort_methods[params[:sort_by]].call
   end
 
   def paginate_bench_channels
     @pagy, @bench_channels = pagination_for_bench_channels(@bench_channels, params[:page] || 1)
+  end
+
+  def sort_by_bench_channels(sort_by_param, reverse)
+    @bench_channels = @bench_channels.order(sort_by_param => (reverse ? :desc : :asc))
+  end
+
+  def sort_by_participants(desc)
+    @bench_channels = if desc
+                        @bench_channels.left_joins(:channel_participants).group(:id).order('count(channel_participants.id) DESC')
+                      else
+                        @bench_channels.left_joins(:channel_participants).group(:id).order('count(channel_participants.id) ASC')
+                      end
   end
 end
