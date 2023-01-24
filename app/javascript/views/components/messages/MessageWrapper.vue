@@ -27,11 +27,24 @@
       @mouseleave="emojiModalStatus = false"
     >
       <template
+        v-if="currMessage.content === $t('deleteMessageModal.success')"
+      >
+        <div
+          class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
+        >
+          <font-awesome-icon
+            icon="fa-solid fa-trash-can"
+            class="text-xl text-black-500"
+          />
+        </div>
+      </template>
+      <template
         v-if="
-          !isSameUser ||
-          !isSameDayMessage ||
-          isFirstMessage ||
-          currMessage.is_info
+          (!isSameUser ||
+            !isSameDayMessage ||
+            isFirstMessage ||
+            currMessage.is_info) &&
+          currMessage.content !== $t('deleteMessageModal.success')
         "
       >
         <user-profile-modal
@@ -45,16 +58,20 @@
             <p
               @click="showUserProfile"
               v-if="
-                !isSameUser ||
-                !isSameDayMessage ||
-                isFirstMessage ||
-                currMessage.is_info
+                (!isSameUser ||
+                  !isSameDayMessage ||
+                  isFirstMessage ||
+                  currMessage.is_info) &&
+                currMessage.content !== $t('deleteMessageModal.success')
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
+              v-if="
+                currMessage.content !== $t('deleteMessageModal.success')
+              "
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
               }"
@@ -80,23 +97,44 @@
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
-                !currMessage.is_info
+                !currMessage.is_info &&
+                currMessage.content !== $t('deleteMessageModal.success')
               "
               class="text-black-800 text-sm flex-wrap"
               v-html="currMessage.content"
             />
+            <span
+              v-if="
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage &&
+                currMessage.content === $t('deleteMessageModal.success')
+              "
+              class="text-black-600 text-sm flex mt-2"
+              >{{ $t('deleteMessageModal.success') }}</span
+            >
           </span>
           <span
             v-if="
-              !isSameUser ||
-              !isSameDayMessage ||
-              isFirstMessage ||
-              currMessage.is_info
+              (!isSameUser ||
+                !isSameDayMessage ||
+                isFirstMessage ||
+                currMessage.is_info) &&
+              currMessage.content !== $t('deleteMessageModal.success')
             "
             :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
             class="text-sm flex-wrap"
             v-html="currMessage.content"
           />
+          <span
+            v-if="
+              (!isSameUser || !isSameDayMessage || isFirstMessage) &&
+              currMessage.content === $t('deleteMessageModal.success')
+            "
+            class="text-black-600 text-sm flex mt-2"
+          >
+            {{ $t('deleteMessageModal.success') }}</span
+          >
           <div
             v-if="!currMessage.info && currMessage.attachments"
             class="flex gap-2"
@@ -116,7 +154,10 @@
                   <img
                     :src="attachment.attachment_link"
                     class="rounded"
-                    :class="{ 'ml-12': isSameUser && isSameDayMessage }"
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
                   />
                 </template>
                 <a :href="attachment.attachment_download_link" download>
@@ -145,7 +186,10 @@
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
               {
                 'ml-12 -mr-10':
-                  !currMessage.is_info && isSameUser && isSameDayMessage,
+                  !currMessage.is_info &&
+                  isSameUser &&
+                  isSameDayMessage &&
+                  !isFirstMessage,
               },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
@@ -168,7 +212,9 @@
                   emoji
                 }}</span>
                 <span class="text-md"
-                  >{{ getUsers(emoji, currentUserStore.currentUser.name) }}
+                  >{{
+                    getUsers(emoji, currentProfileStore.currentProfile.username)
+                  }}
                   {{ $t('chat.reacted') }}</span
                 >
               </div>
@@ -190,7 +236,10 @@
         />
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
-          v-if="emojiModalStatus || openEmojiModal || showOptions"
+          v-if="
+            (emojiModalStatus || openEmojiModal || showOptions) &&
+            currMessage.content !== $t('deleteMessageModal.success')
+          "
         >
           <template v-for="emoji in topReactions" :key="emoji">
             <EmojiModalButton
@@ -225,6 +274,7 @@
             :action="setOptionsModal"
             :message="currMessage"
             :pinnedConversationStore="pinnedConversationStore"
+            :setDeleteModal="setDeleteModal"
           />
         </div>
       </span>
@@ -233,11 +283,24 @@
       <EmojiPicker :toggleModal="setEmojiModal" :addReaction="addReaction" />
     </div>
   </div>
+  <DeleteMessageModal
+    v-model:show="showDeleteModal"
+    :message="currMessage"
+    :setDeleteModal="setDeleteModal"
+  />
 </template>
 
 <script>
 import moment from 'moment';
-import { NCard, NDivider, NTooltip, NButton, NText, NPopover } from 'naive-ui';
+import {
+  NCard,
+  NDivider,
+  NTooltip,
+  NButton,
+  NText,
+  NPopover,
+  NAvatar,
+} from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
@@ -257,8 +320,9 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
-import benchitAlert from '../../widgets/benchitAlert.vue';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
+import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 
 export default {
   name: 'MessageWrapper',
@@ -272,6 +336,7 @@ export default {
     const profilesStore = useProfileStore();
     const messagesStore = useMessageStore();
     const downloadsStore = useDownloadsStore();
+    const currentProfileStore = useCurrentProfileStore();
     return {
       threadStore,
       pinnedConversationStore,
@@ -282,6 +347,7 @@ export default {
       profilesStore,
       messagesStore,
       downloadsStore,
+      currentProfileStore,
     };
   },
   components: {
@@ -295,8 +361,9 @@ export default {
     NText,
     NPopover,
     downloadsModal,
-    benchitAlert,
     ReplyAndThreadButton,
+    DeleteMessageModal,
+    NAvatar,
   },
   props: {
     currMessage: {
@@ -333,6 +400,7 @@ export default {
       showOptions: false,
       displayedReactions: [],
       showFileOptions: false,
+      showDeleteModal: false,
     };
   },
   beforeUnmount() {
@@ -384,9 +452,6 @@ export default {
         return false;
       });
     },
-    isSuccessfullResponse() {
-      return this.error === false;
-    },
     lastReply() {
       return this.currMessage.replies[this.currMessage.replies?.length - 1];
     },
@@ -416,7 +481,7 @@ export default {
           return (
             (emoji_id = reaction.id),
             reaction.emoji === temp &&
-              reaction.profile_id === this.currentUserStore.currentUser.id
+              reaction.profile_id === this.currentProfileStore.currentProfile.id
           );
         })
       ) {
@@ -520,7 +585,7 @@ export default {
       return this.currMessage.reactions.some(reaction => {
         return (
           reaction.emoji === emoji &&
-          reaction.profile_id === this.currentUserStore.currentUser.id
+          reaction.profile_id === this.currentProfileStore.currentProfile.id
         );
       });
     },
@@ -541,10 +606,15 @@ export default {
     setFileOptionsModal() {
       this.showFileOptions = !this.showFileOptions;
     },
+    
     getSavedItemText(message) {
       return message.isSaved
         ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS
         : CONSTANTS.ADD_TO_SAVED_ITEMS;
+    },
+
+    setDeleteModal() {
+      this.showDeleteModal = !this.showDeleteModal;
     },
   },
 };

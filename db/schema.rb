@@ -91,7 +91,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
   end
 
   create_table "conversation_messages", force: :cascade do |t|
-    t.text "content", null: false
+    t.text "content"
     t.boolean "is_threaded"
     t.bigint "parent_message_id"
     t.datetime "created_at", null: false
