@@ -234,6 +234,7 @@ en:
         join_channel: 'Join Channel'
         details: 'Details'
         go: 'Go'
+        edited: '(edited)'
         set_a_status: 'Set a status'
         view_as: 'View as'
         copy_display_name: 'Copy display name'

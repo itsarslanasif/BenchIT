@@ -6,3 +6,9 @@ export const conversation = async payload => {
     headers: getHeaders(),
   });
 };
+
+export const updateMessage = async payload => {
+  await axios.patch(`/v1/conversation_messages/${payload.id}`, payload, {
+    headers: getHeaders(),
+  });
+};
