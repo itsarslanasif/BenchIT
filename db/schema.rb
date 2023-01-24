@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,7 +61,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "sender_id"
-    t.index ["conversationable_id", "conversationable_type", "sender_id"], name: "bench_conversation_index", unique: true
     t.index ["conversationable_type", "conversationable_id"], name: "index_chat_conversations_on_conversationable"
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"
   end
@@ -131,7 +130,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
-    t.index ["favourable_id", "favourable_type", "profile_id"], name: "favourite_index", unique: true
     t.index ["favourable_type", "favourable_id"], name: "index_favourites_on_favourable"
     t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
@@ -181,6 +179,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
     t.string "skype", default: ""
     t.string "time_zone", default: "UTC", null: false
     t.datetime "clear_status_after"
+    t.boolean "online_status", default: false, null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
@@ -192,7 +191,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_20_211850) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
-    t.index ["emoji", "conversation_message_id", "profile_id"], name: "reaction_index", unique: true
     t.index ["profile_id"], name: "index_reactions_on_profile_id"
   end
 

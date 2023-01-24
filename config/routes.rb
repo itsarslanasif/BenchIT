@@ -61,6 +61,8 @@ Rails.application.routes.draw do
             member do
               post :set_status
               post :clear_status
+              get :set_online_status
+              get :remove_online_status
             end
           end
         end
