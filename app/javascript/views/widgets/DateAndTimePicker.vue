@@ -1,19 +1,13 @@
 <template>
-  <div
-    class="bg-slate-50 p-10 border rounded"
-    v-click-outside="toggleCustomScheduleFlag"
-  >
-    <div class="my-2 text-base">
-      {{ $t('schedule.custom_time') }}
-    </div>
+  <div>
     <div class="flex gap-3">
-      <n-date-picker v-model:value="dateTimestamp" />
-      <n-time-picker v-model:value="timeTimestamp" />
+      <n-date-picker v-model:value="dateTimestamp" class="w-1/2" />
+      <n-time-picker v-model:value="timeTimestamp" class="w-1/2" />
     </div>
     <div class="w-full">
       <button
         @click="setCustom"
-        class="bg-success right-0 text-white hover:bg-successHover px-4 py-1 my-3 rounded mr-auto"
+        class="bg-success float-right text-white hover:bg-successHover px-4 py-1 my-3 rounded"
       >
         {{ $t('actions.go') }}
       </button>
@@ -22,15 +16,13 @@
 </template>
 <script>
 import moment from 'moment';
-import { NDatePicker, NTimePicker } from 'naive-ui';
-import vClickOutside from 'click-outside-vue3';
+import { NDatePicker, NTimePicker, NModal, NCard } from 'naive-ui';
 export default {
   components: {
     NDatePicker,
     NTimePicker,
-  },
-  directives: {
-    clickOutside: vClickOutside.directive,
+    NModal,
+    NCard,
   },
   props: ['setSchedule', 'toggleCustomScheduleFlag'],
   data() {

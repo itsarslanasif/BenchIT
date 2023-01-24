@@ -1,16 +1,19 @@
 <template>
-  <DateAndTimePicker
-    v-if="customScheduleFlag"
-    :setSchedule="setSchedule"
-    :toggleCustomScheduleFlag="toggleCustomScheduleFlag"
-    class="w-1/2"
-    v-bind:style="{
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-    }"
-  />
+  <n-modal v-model:show="customScheduleFlag">
+    <n-card
+      style="width: 600px"
+      :title="$t('schedule.custom_time')"
+      :bordered="false"
+      size="huge"
+      role="dialog"
+      aria-modal="true"
+    >
+      <DateAndTimePicker
+        :setSchedule="setSchedule"
+        :toggleCustomScheduleFlag="toggleCustomScheduleFlag"
+      />
+    </n-card>
+  </n-modal>
   <div
     class="bottom-0 right-0 w-1/6 py-3 text-left mb-10 absolute bg-primary text-white rounded-md h-auto"
   >
@@ -42,6 +45,7 @@
 import moment from 'moment';
 import vClickOutside from 'click-outside-vue3';
 import DateAndTimePicker from './DateAndTimePicker.vue';
+import { NModal, NCard } from 'naive-ui';
 export default {
   data() {
     return {
@@ -54,6 +58,8 @@ export default {
   props: ['setSchedule', 'toggleSchedule'],
   components: {
     DateAndTimePicker,
+    NModal,
+    NCard,
   },
   methods: {
     scheduleTomorrow() {
