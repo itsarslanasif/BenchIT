@@ -35,6 +35,19 @@
           formats: {
             code: {
               selector: 'p',
+              styles: {
+                 background:
+                  'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
+                  'border': '1px solid gray',
+                  'border-radius': '3px',
+                  'font-size': '10px',
+                  'font-variant-ligatures': 'none',
+                  'line-height': '1.5',
+                  'margin-bottom': '14px',
+                  'padding': '0px 8px 0px 8px',
+                 position: 'relative',
+                  'font-family': 'monospace',
+               },
             },
           },
         }"
