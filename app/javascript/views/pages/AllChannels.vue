@@ -24,7 +24,7 @@
         </n-space>
         <div class="flex items-center py-1 justify-between">
           <div class="text-small text-gray-900 font-thin">
-            {{ searchedChannels?.length }} {{ $t('channels.result') }}
+            {{ pageInfo.count }} {{ $t('channels.result') }}
           </div>
           <div class="flex gap-2">
             <div> <n-popselect v-model:value="value" :options="options">
@@ -41,7 +41,7 @@
           :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
       <div class="flex justify-center p-3">
-      <n-pagination v-model:page="currentPage" :default-page-size="50" :page-count	="pageInfo.pages" />
+      <n-pagination v-model:page="currentPage" :default-page-size="50" :page-count="pageInfo.pages" :on-update:page="changePage" :on-update:page-size="newPage" />
     </div>
     </div>
   </div>
@@ -73,14 +73,21 @@ export default {
     const modalOpen = ref(false)
     const channelStore = useChannelStore()
     const value = ref('')
-    const {currentPage, pageInfo} = channelStore
-    channelStore.index(term.value)
-    const { channels } = storeToRefs(channelStore)
+    channelStore.index(term.value, value.value, 1)
+    const { channels, currentPage, pageInfo } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
       searchedChannels.value = await channelStore.searchChannels(term.value)
     };
+
+    const changePage =  (page) => {
+      channelStore.index(term.value, value.value, page)
+    }
+
+    const newPage = (pageSize) => {
+      console.log('hi' + pageSize)
+    }
 
     const closeModal = () => {
       modalOpen.value = !modalOpen.value;
@@ -103,13 +110,14 @@ export default {
       }
     })
 
-    watch(value, async (newValue, oldValue) => {
-      searchedChannels.value = await channelStore.searchChannels(term.value, newValue)
+    watch(value, async (newValue) => {
+      channelStore.index(term.value, newValue)
     })
 
     onBeforeUnmount(() => {
       term.value = null;
-      searchedChannels.value = null;
+      searchedChannels.value = [];
+      channels.value =[]
     });
 
     return {
@@ -119,6 +127,8 @@ export default {
       SearchOutline,
       handleSubmit,
       closeModal,
+      changePage,
+      newPage,
       value,
       currentPage,
       pageInfo,
