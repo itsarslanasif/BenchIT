@@ -2,7 +2,7 @@
   <n-dropdown class="rounded-md" placement="bottom-end" size="medium" :show="showChannelOptions"
     :options="channel_options" @mouseleave="toggleChannelOptionShow" @select="handleSelect($event)"
     :on-clickoutside="toggleChannelOptionShow">
-    <div oncontextmenu="return false;" class="flex items-center -ml-4 pl-3 py-1 hover:bg-primaryHover cursor-pointer" @click="goTo(`/channels/${channel.id}`, this.channel)"
+    <div oncontextmenu="return false;" class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer" @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleChannelOptionShow">
       <div class="w-5">
         <div v-if="channel.is_private">

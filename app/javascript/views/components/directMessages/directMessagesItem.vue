@@ -4,7 +4,7 @@
       <div
         v-if="user"
         @click="goToChat(`/profiles/${user.id}`, user)"
-        class="flex items-center -ml-4 pl-3 py-1 hover:bg-primaryHover cursor-pointer"
+        class="flex items-center pl-2 py-1 hover:bg-primaryHover cursor-pointer"
         :class="isUnreadDM(user) ? 'font-bold' : ''"
       >
         <n-avatar :size="25" :src="user.image_url" />
