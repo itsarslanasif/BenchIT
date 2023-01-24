@@ -125,10 +125,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def sort_by_participants(desc)
-    @bench_channels = if desc
-                        @bench_channels.left_joins(:channel_participants).group(:id).order('count(channel_participants.id) DESC')
-                      else
-                        @bench_channels.left_joins(:channel_participants).group(:id).order('count(channel_participants.id) ASC')
-                      end
+    order_keyword = desc ? 'DESC' : 'ASC'
+    @bench_channels = @bench_channels.left_joins(:channel_participants).group(:id).order("count(channel_participants) #{order_keyword}")
   end
 end
