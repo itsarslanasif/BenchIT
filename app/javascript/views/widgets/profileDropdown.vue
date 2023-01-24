@@ -56,7 +56,6 @@ import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore'
 import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
-import { ref, watch } from 'vue';
 import { clearStatus } from '../../api/profiles/profileStatus';
 
 export default {
@@ -77,10 +76,10 @@ export default {
 
     return {
       profile: currentProfile,
-      currentProfile,
-      currentWorkspace,
       profileStatusStore: profileStatusStore,
       profileCurrentStatus: status,
+      profileStore,
+      currentWorkspace,
     };
   },
 
@@ -92,7 +91,6 @@ export default {
 
   data() {
     return {
-      myStatus: ref(this.profile.status),
       status: 'Away',
       prevStatus: 'active',
       statusIcon: '⚫',
@@ -239,10 +237,10 @@ export default {
     clearProfileStatus() {
       clearStatus(this.currentWorkspace.id, this.profile.id)
         .then(response => {
-          this.currentProfile.setProfileStatus(null);
+          this.profileStore.setProfileStatus(null);
         })
         .catch(err => {
-          console.log(err);
+          console.error(err);
         });
     },
     handleSelect(key) {
