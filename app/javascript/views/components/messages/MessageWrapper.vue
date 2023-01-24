@@ -149,9 +149,9 @@
           >
             <EditedAtTime
               v-if="
-                currMessage?.is_edited
+                currMessage.is_edited
               "
-              :updated_at="currMessage?.updated_at"
+              :updated_at="currMessage.updated_at"
             />
           </div>
 
@@ -514,7 +514,7 @@ export default {
       try {
         updateMessage(updatedMessage);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     async addReaction(emoji) {
