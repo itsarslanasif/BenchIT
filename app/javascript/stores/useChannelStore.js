@@ -14,7 +14,6 @@ export const useChannelStore = () => {
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
-      currentPage: 1,
       pageInfo: []
     }),
 
@@ -25,10 +24,10 @@ export const useChannelStore = () => {
     },
 
     actions: {
-      async index() {
+      async index(query, sort, page) {
         try {
-          let newChannels = await getChannels();
-          this.channels = [...this.channels, ...newChannels.bench_channels]
+          let newChannels = await getChannels(query, sort, page);
+          this.channels = [...newChannels.bench_channels]
           this.pageInfo = newChannels.page_information
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
@@ -57,15 +56,6 @@ export const useChannelStore = () => {
               return response.data;
             }
           });
-        } catch (e) {
-          console.error(e);
-        }
-      },
-
-      async searchChannels(query, sort) {
-        try {
-          let newChannels = await getChannels(query, sort, this.currentPage);
-          this.channels = [...newChannels.bench_channels];
         } catch (e) {
           console.error(e);
         }

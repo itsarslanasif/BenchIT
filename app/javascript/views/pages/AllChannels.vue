@@ -27,8 +27,8 @@
             {{ pageInfo.count }} {{ $t('channels.result') }}
           </div>
           <div class="flex gap-2">
-            <div> <n-popselect v-model:value="value" :options="options">
-                <n-button>Sort: {{ selectedLabel || 'Select Option' }}</n-button>
+            <div> <n-popselect v-model:value="sortValue" :options="options">
+                <n-button>{{ $t('filters.sort_label') }} {{ selectedLabel }}</n-button>
               </n-popselect></div>
           </div>
         </div>
@@ -41,8 +41,9 @@
           :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
       <div class="flex justify-center p-3">
-      <n-pagination v-model:page="currentPage" :default-page-size="50" :page-count="pageInfo.pages" :on-update:page="changePage" :on-update:page-size="newPage" />
-    </div>
+        <n-pagination v-model:page="currentPage" :default-page-size="50" :page-count="pageInfo.pages"
+          :on-update:page="changePage" />
+      </div>
     </div>
   </div>
 </template>
@@ -72,21 +73,17 @@ export default {
     const term = ref('');
     const modalOpen = ref(false)
     const channelStore = useChannelStore()
-    const value = ref('')
-    channelStore.index(term.value, value.value, 1)
+    const sortValue = ref('newest')
+    channelStore.index(term.value, sortValue.value)
     const { channels, currentPage, pageInfo } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
-      searchedChannels.value = await channelStore.searchChannels(term.value)
+      channelStore.index(term.value, sortValue.value)
     };
 
-    const changePage =  (page) => {
-      channelStore.index(term.value, value.value, page)
-    }
-
-    const newPage = (pageSize) => {
-      console.log('hi' + pageSize)
+    const changePage = (page) => {
+      channelStore.index(term.value, sortValue.value, page)
     }
 
     const closeModal = () => {
@@ -94,7 +91,7 @@ export default {
     }
 
     const selectedLabel = computed(() => {
-      switch (value.value) {
+      switch (sortValue.value) {
         case 'newest':
           return CONSTANTS.NEWEST_CHANNELS
         case 'oldest':
@@ -110,14 +107,14 @@ export default {
       }
     })
 
-    watch(value, async (newValue) => {
+    watch(sortValue, async (newValue) => {
       channelStore.index(term.value, newValue)
     })
 
     onBeforeUnmount(() => {
       term.value = null;
       searchedChannels.value = [];
-      channels.value =[]
+      channels.value = []
     });
 
     return {
@@ -128,8 +125,7 @@ export default {
       handleSubmit,
       closeModal,
       changePage,
-      newPage,
-      value,
+      sortValue,
       currentPage,
       pageInfo,
       selectedLabel,
