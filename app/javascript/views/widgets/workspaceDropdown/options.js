@@ -2,7 +2,31 @@ import { h } from 'vue';
 import { NText, NAvatar } from 'naive-ui';
 import { CONSTANTS } from '../../../assets/constants';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
+import {
+  joinedWorkspaces,
+  switchWorkspace,
+} from '../../../api/workspaces/workspacesApi';
+import { encryption } from '../../../modules/crypto/crypto';
+
+let listOfJoinedWorkspaces = [];
+
+joinedWorkspaces().then(workspaces => {
+  workspaces.map(workspace => {
+    let workspaceOption = {
+      label: workspace.company_name,
+      key: workspace.company_name,
+      disabled: isCurrentWorkspace(workspace.id),
+      props: {
+        onClick: () => {
+          handleSwitchWorkspace(workspace.id);
+        },
+      },
+    };
+    listOfJoinedWorkspaces.push(workspaceOption);
+  });
+});
 
 const generateKey = label => {
   return label.toLowerCase().replace(/ /g, '-');
@@ -68,6 +92,29 @@ const renderMobile = () => {
   );
 };
 
+const isCurrentWorkspace = workspace_id => {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
+  return currentWorkspace.value.id === workspace_id;
+};
+
+const handleSwitchWorkspace = async workspace_id => {
+  const currentWorkspaceStore = useCurrentWorkspaceStore();
+  const currentProfileStore = useCurrentProfileStore();
+  currentWorkspaceStore.switchingWorkspace = true;
+  const response = await switchWorkspace(workspace_id);
+  if (response) {
+    encryption(sessionStorage, 'currentProfile', response.profile);
+    encryption(sessionStorage, 'currentWorkspace', response.workspace);
+    currentProfileStore.setProfile(response.profile);
+    currentWorkspaceStore.setWorkspace(response.workspace);
+    currentWorkspaceStore.switchingWorkspace = false;
+    window.location.replace('/');
+  } else {
+    isError = true;
+  }
+};
+
 export default [
   {
     key: 'header',
@@ -122,6 +169,11 @@ export default [
   {
     type: 'divider',
     key: 'd5',
+  },
+  {
+    label: CONSTANTS.SWITCH_WORKSPACE,
+    key: generateKey(CONSTANTS.SWITCH_WORKSPACE),
+    children: listOfJoinedWorkspaces,
   },
   {
     label: CONSTANTS.ADD_WORKSPACE,

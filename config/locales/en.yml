@@ -45,6 +45,7 @@ en:
         company_size_info: 'How big is your company?'
         admin_role_type: 'What is your role there?'
         continue_company_button: 'Continue to Company Name'
+        add_new_workspace: 'Add new workspace'
       emojiModalButton:
         find_another_reaction: 'Find another reaction'
         reply_in_thread: 'Reply in thread'
@@ -92,6 +93,7 @@ en:
         password_save: 'Save'
       errors:
         title: 'Error pages'
+        something_went_wrong: 'Something went wrong'
       search_bar:
         people: 'People'
         channels: 'Channels'

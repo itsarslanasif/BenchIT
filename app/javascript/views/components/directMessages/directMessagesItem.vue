@@ -27,7 +27,7 @@
           </span>
         </n-tooltip>
         <div
-          v-if="unreadDetails?.messages.length"
+          v-if="unreadDetails.messages.length"
           class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
         >
           {{ unreadDetails.messages.length }}
