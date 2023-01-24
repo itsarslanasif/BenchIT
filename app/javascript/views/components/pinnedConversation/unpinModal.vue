@@ -16,7 +16,7 @@
     </template>
     <span>{{ $t('pinconversation.confirmation') }}</span>
     <div
-      class="bg-white border border-black-400 rounded-md drop-shadow-md p-1 mt-4"
+      class="bg-white border border-black-300 rounded-md drop-shadow-md p-1 mt-4"
     >
       <PinnedMessageContent :currMessage="currMessage" />
     </div>

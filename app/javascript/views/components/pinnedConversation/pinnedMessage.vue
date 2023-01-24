@@ -11,11 +11,11 @@
     <div class="flex">
       <n-avatar
         @click="showUserProfile"
-        class="mr-2 cursor-pointer"
-        size="small"
+        class="mr-2 mt-1 cursor-pointer"
+        :size="20"
         :src="currMessage.sender_avatar"
       />
-      <span class="text-black-800 m-0">
+      <span class="text-black-800">
         <p
           @click="showUserProfile"
           class="text-lg hover:underline cursor-pointer"
@@ -24,12 +24,12 @@
         </p>
       </span>
     </div>
-    <div class="mt-3">
-      <span class="text-black-900 text-base" v-html="currMessage.content" />
+    <div class="mt-px">
+      <span class="text-black-900 text-sm" v-html="currMessage.content" />
       <div v-if="currMessage.attachments">
         <div v-for="attachment in currMessage.attachments" :key="attachment.id">
           <div
-            class="flex gap-2 mt-2 border rounded-xl border-black-400 p-4 cursor-pointer"
+            class="flex gap-2 mt-2 border rounded-xl border-black-300 p-3 cursor-zoomin"
             @click="openInNewTab(attachment.attachment_link)"
           >
             <img
@@ -37,7 +37,7 @@
               class="rounded-md border-black-400 border object-cover h-12 w-12"
             />
             <div class="ml-2 flex flex-col">
-              <span class="font-semibold text-base text-black-800">
+              <span class="font-semibold text-sm text-black-800">
                 {{ attachment.attachment.filename }}
               </span>
               <span class="text-black-600">
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      <p class="text-sm mt-3 text-black-600 hover:underline cursor-pointer">
+      <p class="text-xs mt-3 text-black-600 hover:underline cursor-pointer">
         {{ formatDate(currMessage.created_at) }}
       </p>
     </div>
