@@ -16,8 +16,7 @@ export const useMessageStore = () => {
       hasMoreMessages: true,
       selectedChat: {},
       newMessageSent: false,
-      selectedChannel: {},
-        messageToEdit: null,
+      messageToEdit: null,
     }),
 
     getters: {
@@ -71,9 +70,6 @@ export const useMessageStore = () => {
       },
       getMessage(id) {
         return this.messages.find(message => message.id === id);
-      },
-      setSelectedChannel(channel) {
-        this.selectedChannel = channel;
       },
       setMessageToEdit(message) {
         this.messageToEdit = message;

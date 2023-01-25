@@ -66,6 +66,7 @@ export default {
       starChannels,
       leftPaneStore,
       messagesStore,
+      channelStore,
     };
   },
   methods: {
@@ -89,13 +90,13 @@ export default {
     },
     toggleList() {
       this.listOpen = !this.listOpen
+      this.setChannel(this.messagesStore.selectedChat);
     },
     setChannel(channel) {
-      this.messagesStore.setSelectedChannel(channel);
-      this.selectedChannel = this.messagesStore.selectedChannel;
+      this.selectedChannel = this.channelStore.joinedChannels.find(obj => obj.id === Number(channel.id)) || this.starChannels.find(obj => obj.id === Number(channel.id));
     },
     checkSetChannel() {
-      if (this.selectedChannel.id === this.messagesStore.selectedChannel.id && this.selectedChannel.favourite_id) {
+      if (this.selectedChannel.id === this.messagesStore.selectedChat.id && this.selectedChannel.favourite_id) {
         return true;
       }
       else {
