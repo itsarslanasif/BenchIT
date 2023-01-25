@@ -45,6 +45,7 @@ en:
         company_size_info: 'How big is your company?'
         admin_role_type: 'What is your role there?'
         continue_company_button: 'Continue to Company Name'
+        add_new_workspace: 'Add new workspace'
       emojiModalButton:
         find_another_reaction: 'Find another reaction'
         reply_in_thread: 'Reply in thread'
@@ -58,6 +59,10 @@ en:
         clear_downloads: 'Clear Downloads'
         keep_track: 'Keep track of your downloads'
         downloaded_files: 'Files you download to your computer will appear here.'
+      deleteMessageModal:
+        confirmation: 'Are you sure you want to delete this message? This cannot be undone.'
+        title: 'Delete message'
+        success: 'This message was deleted.'
       email:
         gmail: '@gmail.com'
       pinconversation:
@@ -92,6 +97,7 @@ en:
         password_save: 'Save'
       errors:
         title: 'Error pages'
+        something_went_wrong: 'Something went wrong'
       search_bar:
         people: 'People'
         channels: 'Channels'
@@ -228,6 +234,7 @@ en:
         join_channel: 'Join Channel'
         details: 'Details'
         go: 'Go'
+        edited: '(edited)'
         set_a_status: 'Set a status'
         view_as: 'View as'
         copy_display_name: 'Copy display name'
@@ -273,6 +280,7 @@ en:
         copy_member_id: 'Copy member ID'
         no_results_found: 'No Results Found !'
         sort: 'Sort'
+        sort_label: 'Sort:'
         account_type: 'Account Type'
       profilestatus:
         what_is_your_status: 'Whats your status?'

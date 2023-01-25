@@ -4,7 +4,7 @@
       <div
         v-if="user"
         @click="goToChat(`/profiles/${user.id}`, user)"
-        class="flex items-center -ml-4 pl-3 py-1 hover:bg-primaryHover cursor-pointer"
+        class="flex items-center pl-2 py-1 hover:bg-primaryHover cursor-pointer"
         :class="isUnreadDM(user) ? 'font-bold' : ''"
       >
         <n-avatar :size="25" :src="user.image_url" />
@@ -27,7 +27,7 @@
           </span>
         </n-tooltip>
         <div
-          v-if="unreadDetails?.messages.length"
+          v-if="unreadDetails.messages.length"
           class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
         >
           {{ unreadDetails.messages.length }}

@@ -3,6 +3,9 @@
   <n-message-provider placement="top-right">
     <div class="relative bg-primary text-sm h-screen flex flex-col">
       <alert v-if="downloadsStore.downloadAlert" />
+      <switching-workspace-loader
+        v-if="currentWorkspaceStore.switchingWorkspace"
+      />
       <div>
         <SearchBar />
       </div>
@@ -60,8 +63,10 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
-import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
+import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
+import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { NMessageProvider } from 'naive-ui';
+import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import alert from '../widgets/alert.vue';
 
@@ -76,6 +81,8 @@ export default {
     searchDmscreen,
     SearchBar,
     UserProfile,
+    SwitchingWorkspaceLoader,
+    NMessageProvider,
     NMessageProvider,
     alert,
   },
@@ -116,9 +123,16 @@ export default {
   setup() {
     const screenStore = useSelectedScreenStore();
     const rightPaneStore = useRightPaneStore();
+    const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
-    return { screenStore, rightPaneStore, leftPaneStore, downloadsStore };
+    return {
+      screenStore,
+      rightPaneStore,
+      leftPaneStore,
+      currentWorkspaceStore,
+      downloadsStore,
+    };
   },
 };
 </script>

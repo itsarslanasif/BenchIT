@@ -6,7 +6,7 @@ export const useThreadStore = defineStore('threadStore', {
   }),
 
   getters: {
-    getMessages: state => state.message,
+    getMessage: state => state.message,
   },
 
   actions: {

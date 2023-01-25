@@ -106,7 +106,6 @@ export default {
 
     const handleLeave = async () => {
       await channelStore.leaveChannel(channelId.value);
-      router.push('/');
     };
 
     const handleView = () => {
