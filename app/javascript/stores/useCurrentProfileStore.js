@@ -5,6 +5,7 @@ export const useCurrentProfileStore = () => {
   const currentProfileStore = defineStore('currentProfileStore', {
     state: () => ({
       currentProfile: {},
+      status: {},
     }),
 
     getters: {
@@ -16,12 +17,13 @@ export const useCurrentProfileStore = () => {
         this.currentProfile = user.profile;
       },
       setProfileStatus(status) {
-        this.currentProfile.status = status;
+        this.status = status;
+        this.currentProfile.status = status;;
         encryption(sessionStorage, 'currentProfile', this.currentProfile);
       },
       setProfileActiveStatus(is_active) {
         this.currentProfile.is_active = is_active;
-        encryption(sessionStorage, 'currentProfile', this.currentProfile);
+        encryption(sessionStorage, 'currentProfile',  this.currentProfile);;
       },
     },
   });

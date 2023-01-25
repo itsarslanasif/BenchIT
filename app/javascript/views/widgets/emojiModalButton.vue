@@ -43,7 +43,7 @@ import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { pinMessage } from '../../api/messages/pinnedMessages';
-import { unPinMessage } from '../../api/messages/pinnedMessages';
+
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 
@@ -57,7 +57,8 @@ export default {
     'action',
     'message',
     'pinnedConversationStore',
-    'setDeleteModal'
+    'setDeleteModal',
+    'setUnpinModal',
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
@@ -120,17 +121,7 @@ export default {
           }
           break;
         case 'un-pin-from-this-conversation':
-          try {
-            unPinMessage(message.pin.id);
-          } catch (e) {
-            console.error(e);
-          }
-          if (
-            pinnedConversationStore.getCount == 0 &&
-            pinnedConversationStore.getPinToggle
-          ) {
-            pinnedConversationStore.togglePin();
-          }
+          this.setUnpinModal();
           break;
         case 'edit-message':
           if (message)
