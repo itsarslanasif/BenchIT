@@ -121,6 +121,9 @@ module.exports = {
       screens: {
         dark: { raw: '(prefers-color-scheme: dark)' },
       },
+      cursor: {
+        zoomin: 'zoom-in',
+      },
       width: {
         180: '37.5rem',
         160: '35rem',
@@ -141,8 +144,13 @@ module.exports = {
         15: '5rem',
         400: '28rem',
       },
+      maxHeight: {
+        '500': '42rem',
+      },
       minWidth: {
         '10': '2.5rem',
+        180: '37.5rem',
+        95: '20rem',
       }
     },
   },
