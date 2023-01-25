@@ -160,10 +160,10 @@ export default defineComponent({
     },
     async getMembersList(query) {
       let options = await getMembers(this.currentWorkspace?.id, query);
-      this.options = options.map(item => {
+      this.options = options.map(option => {
         return {
-          label: item.username,
-          value: item.id,
+          label: option.username,
+          value: option.id,
         };
       });
     },
