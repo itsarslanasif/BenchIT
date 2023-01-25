@@ -14,6 +14,7 @@ export const useChannelStore = () => {
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
+      pageInfo: []
     }),
 
     getters: {
@@ -23,10 +24,11 @@ export const useChannelStore = () => {
     },
 
     actions: {
-      async index() {
+      async index(query, sort, page) {
         try {
-          let newChannels = await getChannels();
-          this.channels = [...newChannels]
+          let newChannels = await getChannels(query, sort, page);
+          this.channels = [...newChannels.bench_channels]
+          this.pageInfo = newChannels.page_information
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
             channel => channel.favourite_id !== null
@@ -54,14 +56,6 @@ export const useChannelStore = () => {
               return response.data;
             }
           });
-        } catch (e) {
-          console.error(e);
-        }
-      },
-
-      async searchChannels(query) {
-        try {
-          this.channels = await getChannels(query);
         } catch (e) {
           console.error(e);
         }

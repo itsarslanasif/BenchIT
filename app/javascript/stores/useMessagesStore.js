@@ -18,10 +18,12 @@ export const useMessageStore = () => {
       hasMoreMessages: true,
       selectedChat: {},
       newMessageSent: false,
+        messageToEdit: null,
     }),
 
     getters: {
       getMessages: state => state.messages,
+      getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
@@ -76,6 +78,17 @@ export const useMessageStore = () => {
       async getAllScheduleMessages() {
         this.scheduleMessage = await getScheduleMessages()
       }
+      setMessageToEdit(message) {
+        this.messageToEdit = message;
+      },
+      removeMessageToEdit() {
+        this.messageToEdit = null;
+      },
+      isMessageToEdit(message) {
+        if (this.messageToEdit)
+          return this.messageToEdit && (message.id == this.messageToEdit.id)
+        return false
+      },
     },
   });
 
