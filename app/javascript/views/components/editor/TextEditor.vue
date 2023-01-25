@@ -77,36 +77,46 @@
     </div>
     <div class="flex bg-transparent border border-black-300 w-full relative">
       <Attachments :getImages="getImages" />
-      <div class="w-1/12 flex justify-end">
-        <button
-          v-if="editMessage"
-          @click="handleCancelEdit"
-          class="px-2 mr-3 my-4 rounded-md text-black hover:bg-transparent border border-black focus:outline-none"
-        >
-          {{ $t('actions.cancel') }}
-        </button>
-        <button
-          @click="sendMessagePayload($event, true)"
-          class="px-4 mr-3 bg-success my-4 rounded-md text-white hover:bg-successHover"
-        >
-          {{ editMessage ? $t('actions.save') : $t('actions.send') }}
-        </button>
-      <div
-        class="w-1/12 cursor-pointer flex justify-center items-center text-white"
-      >
-        <font-awesome-icon
-          icon="fa-paper-plane"
-          class="bg-success hover:bg-successHover px-3 py-2 border-r rounded-l"
-          @click="dispatchKeydownEnterEvent"
-        />
-        <font-awesome-icon
-          @click="toggleSchedule"
-          icon="fa-solid fa-chevron-down"
-          class="bg-success hover:bg-successHover p-2 rounded-r"
-        />
-      </div>
-      <div v-if="scheduleModalFlag" >
-        <ScheduleModal :setSchedule="setSchedule" :toggleSchedule="toggleSchedule" />
+      <div class="w-1/12 flex justify-end mr-12">
+        <div v-if="editMessage" class="flex">
+          <button
+            @click="handleCancelEdit"
+            class="px-2 my-4 rounded-md text-white"
+          >
+            <font-awesome-icon
+              icon="fa-xmark"
+              class="bg-danger mt-1 hover:bg-dangerHover px-3 py-2 rounded"
+            />
+          </button>
+          <button
+            @click="sendMessagePayload($event, true)"
+            class="px-2 my-4 rounded-md text-white"
+          >
+          <font-awesome-icon icon="fa-check" class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"/>
+          </button>
+        </div>
+        <div v-else>
+          <div
+            class="w-1/12 cursor-pointer ml-5 my-2 flex justify-center items-center text-white"
+          >
+            <font-awesome-icon
+              icon="fa-paper-plane"
+              class="bg-success hover:bg-successHover px-3 py-2 border-r rounded-l"
+              @click="dispatchKeydownEnterEvent"
+            />
+            <font-awesome-icon
+              @click="toggleSchedule"
+              icon="fa-solid fa-chevron-down"
+              class="bg-success hover:bg-successHover p-2 rounded-r"
+            />
+          </div>
+        </div>
+        <div v-if="scheduleModalFlag">
+          <ScheduleModal
+            :setSchedule="setSchedule"
+            :toggleSchedule="toggleSchedule"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -125,7 +135,6 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import moment from 'moment';
 import vClickOutside from 'click-outside-vue3';
 
-
 export default {
   beforeMount() {
     if (this.message) {
@@ -142,7 +151,6 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
-  },
   methods: {
     dispatchKeydownEnterEvent() {
       const event = new KeyboardEvent('keydown', { keyCode: 13 });
@@ -158,8 +166,8 @@ export default {
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat } = storeToRefs(messageStore);
-    const newMessage = ref('');
-    const scheduleModalFlag = ref(false);    const { profiles } = storeToRefs(profileStore);
+    const scheduleModalFlag = ref(false);
+    const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
     const showMentions = ref(false);
     const showChannels = ref(false);
@@ -169,7 +177,6 @@ export default {
     const files = ref([]);
     const filteredList = ref([]);
     const schedule = ref(null);
-    const messageStore = useMessageStore();
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -261,7 +268,7 @@ export default {
           : selectedChat.value.name
       } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
-    
+
     const enableMention = () => {
       filteredList.value = profiles.value;
       hasMentionCommand.value = true;
@@ -326,6 +333,7 @@ export default {
       profiles,
       schedule,
       scheduleModalFlag,
+      messageStore,
       removeFile,
       sendMessagePayload,
       getImages,
@@ -333,7 +341,6 @@ export default {
       toggleSchedule,
       setSchedule,
       getScheduleNotification,
-      messageStore,
     };
   },
 };

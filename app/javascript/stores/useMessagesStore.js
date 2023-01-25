@@ -77,7 +77,7 @@ export const useMessageStore = () => {
       },
       async getAllScheduleMessages() {
         this.scheduleMessage = await getScheduleMessages()
-      }
+      },
       setMessageToEdit(message) {
         this.messageToEdit = message;
       },
