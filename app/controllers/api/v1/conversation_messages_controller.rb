@@ -16,23 +16,16 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def create
     if params[:schedule].eql?('null')
-      @message = ConversationMessage.new(conversation_messages_params)
-      @message.bench_conversation_id = @bench_conversation.id
-      response = if @message.save
+      @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      response = if @message.save!
                    { message: 'Message sent.' }
                  else
                    { message: @message.errors, status: :unprocessable_entity }
                  end
       render json: response
     else
-      t = params[:schedule].to_time.in_time_zone(Current.profile.time_zone)
-      ss = ScheduleMessage.new(profile_id: Current.profile.id, content: params[:content], bench_conversation_id: @bench_conversation.id,
-                               scheduled_at: t)
-      ss.save!
-      s = ScheduleMessageJob.set(wait_until: t).perform_later(Current.profile.id, ss.id)
-      ss.job_id = s.job_id
-      ss.save!
-      render json: { message: "Message will be sent at #{t} and current time is #{Time.zone.now} the job is #{s.job_id}" }
+      @bench_conversation.schedule_messages.create!(schedule_messages_params)
+      render json: { message: 'Message has been scheduled.' }
     end
   end
 
@@ -128,6 +121,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def conversation_messages_params
     params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
       param[:sender_id] = Current.profile.id
+    end
+  end
+
+  def schedule_messages_params
+    params[:scheduled_at] = params[:schedule]
+    params.permit(:content, :scheduled_at).tap do |param|
+      param[:profile_id] = Current.profile.id
     end
   end
 
