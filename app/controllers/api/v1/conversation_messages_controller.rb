@@ -15,15 +15,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def create
-    if !params[:schedule].eql?('null')
-      t = params[:schedule].to_time.in_time_zone(Current.profile.time_zone)
-      ss = ScheduleMessage.new(profile_id: Current.profile.id, content: params[:content], bench_conversation_id: @bench_conversation.id, scheduled_at: t)
-      ss.save!
-      s = ScheduleMessageJob.set(wait_until: t).perform_later(Current.profile.id, ss.id)
-      ss.job_id = s.job_id
-      ss.save!
-      render json: { message: "Message will be sent at #{t} and current time is #{Time.now} the job is #{s.job_id}" }
-    else
+    if params[:schedule].eql?('null')
       @message = ConversationMessage.new(conversation_messages_params)
       @message.bench_conversation_id = @bench_conversation.id
       response = if @message.save
@@ -32,6 +24,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                    { message: @message.errors, status: :unprocessable_entity }
                  end
       render json: response
+    else
+      t = params[:schedule].to_time.in_time_zone(Current.profile.time_zone)
+      ss = ScheduleMessage.new(profile_id: Current.profile.id, content: params[:content], bench_conversation_id: @bench_conversation.id,
+                               scheduled_at: t)
+      ss.save!
+      s = ScheduleMessageJob.set(wait_until: t).perform_later(Current.profile.id, ss.id)
+      ss.job_id = s.job_id
+      ss.save!
+      render json: { message: "Message will be sent at #{t} and current time is #{Time.zone.now} the job is #{s.job_id}" }
     end
   end
 
