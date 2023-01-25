@@ -118,7 +118,8 @@
                 currMessage.is_edited &&
                 isSameUser &&
                 isSameDayMessage &&
-                !isFirstMessage
+                !isFirstMessage &&
+                currMessage.content !== $t('deleteMessageModal.success')
               "
               :updated_at="currMessage.updated_at"
             />
@@ -138,6 +139,14 @@
               class="text-sm flex-wrap"
               v-html="currMessage.content"
             />
+            <EditedAtTime
+              v-if="
+                currMessage.is_edited && currMessage.content !== $t('deleteMessageModal.success')
+              "
+              :updated_at="currMessage.updated_at"
+            />
+          </div>
+          </span>
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
@@ -147,15 +156,6 @@
           >
             {{ $t('deleteMessageModal.success') }}</span
           >
-            <EditedAtTime
-              v-if="
-                currMessage.is_edited
-              "
-              :updated_at="currMessage.updated_at"
-            />
-          </div>
-
-          </span>
           <div
             v-if="!currMessage.info && currMessage.attachments"
             class="flex gap-2"

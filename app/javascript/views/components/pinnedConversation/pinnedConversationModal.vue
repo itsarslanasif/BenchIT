@@ -2,8 +2,8 @@
   <div
     v-click-outside="pinnedConversationStore.closeModal"
     v-if="pinnedConversationStore.pinToggle && pinnedConversationStore.getCount"
-    class="flex overflow-auto z-10 -mt-1 px-2 py-2 ml-1 fixed flex-col drop-shadow-2xl border-black-300 bg-gray-50 w-2/6 max-h-500 border min-w-95 rounded-lg"
-    :class="{ hidden: pinnedConversationStore.showAlert }"
+    class="flex overflow-auto z-10 -mt-1 px-2 py-2 ml-1 absolute flex-col drop-shadow-2xl border-black-300 bg-gray-50 w-2/6 max-h-500 border min-w-95 rounded-lg"
+    :class="{ 'hidden': pinnedConversationStore.showAlert}"
   >
     <div
       v-for="message in pinnedConversationStore.getPinnedConversation"
