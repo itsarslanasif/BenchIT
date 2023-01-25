@@ -30,8 +30,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def destroy
-    render json: @message.destroy ? { message: 'Message deleted successfully.' } : { error: 'Message not deleted', errors: @message.errors },
-           status: @message.destroy ? :ok : :unprocessable_entity
+    if delete_parent_message?
+      @message.parent_message.destroy!
+    elsif soft_delete_message?
+      soft_delete_message
+    else
+      @message.destroy!
+    end
+
+    render json: { message: 'Message deleted successfully.' }
   end
 
   def index_saved_messages
@@ -154,5 +161,24 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def marked_chat_read
     UnreadMessagesMarkedAsReadService.new(@conversation).call
+  end
+
+  def delete_parent_message?
+    msg = 'This message was deleted.'
+    @message.parent_message_id.present? && @message.parent_message.content.eql?(msg) && @message.parent_message.replies.count.eql?(1)
+  end
+
+  def soft_delete_message?
+    @message.parent_message_id.blank? && @message.replies.count.positive?
+  end
+
+  def soft_delete_message
+    ActiveRecord::Base.transaction do
+      @message.pin&.destroy!
+      @message.reactions&.delete_all
+      @message.saved_items&.delete_all
+      @message.message_attachments&.delete_all
+      @message.update!(content: 'This message was deleted.')
+    end
   end
 end

@@ -10,7 +10,7 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <TextEditorVue :sendMessage="sendMessage" />
+      <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
     </div>
     <div v-else>
       <JoinChannel :joinedTheChannel="joinedTheChannel" />

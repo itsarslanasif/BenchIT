@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col h-full w-full">
-    <div class=" w-full flex flex-col header-style">
+    <div class=" w-full flex flex-col border-b border-slate-100 header-style">
       <div class="flex justify-between items-center px-5 py-2 border-b border-slate-100">
         <div class="text-xl font-bold">
           {{ $t('channels.all_channels') }}
@@ -21,10 +21,17 @@
               </template>
             </n-input>
           </form>
-          <p class="text-small text-gray-900 py-1 font-thin border-b border-slate-100">
-            {{ searchedChannels?.length }} {{ $t('channels.result') }}
-          </p>
         </n-space>
+        <div class="flex items-center py-1 justify-between">
+          <div class="text-small text-gray-900 font-thin">
+            {{ pageInfo.count }} {{ $t('channels.result') }}
+          </div>
+          <div class="flex gap-2">
+            <div> <n-popselect v-model:value="sortValue" :options="options">
+                <n-button>{{ $t('filters.sort_label') }} {{ selectedLabel }}</n-button>
+              </n-popselect></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="px-5 body-style overflow-y-auto flex flex-col">
@@ -33,19 +40,23 @@
         <ChannelList :channelName="channel.name" :channelDescription="channel.description"
           :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
+      <div class="flex justify-center p-3">
+        <n-pagination v-model:page="currentPage" :page-count="pageInfo.pages"
+          :on-update:page="changePage" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed, onBeforeUnmount } from 'vue';
-import { NInput, NSpace, NIcon, NButton } from 'naive-ui';
+import { ref, computed, onBeforeUnmount, watch } from 'vue';
+import { NInput, NSpace, NIcon, NButton, NPopselect, NPagination } from 'naive-ui';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import ChannelList from '../containers/ChannelList.vue'
 import { SearchOutline } from "@vicons/ionicons5";
 import CreateChannel from '../components/channels/CreateChannel.vue';
-
+import { CONSTANTS } from '../../assets/constants';
 
 export default {
   components: {
@@ -55,30 +66,56 @@ export default {
     NSpace,
     NIcon,
     NButton,
+    NPopselect,
+    NPagination
   },
   setup() {
     const term = ref('');
     const modalOpen = ref(false)
     const channelStore = useChannelStore()
-    channelStore.index(term.value)
-    const { channels } = storeToRefs(channelStore)
+    const sortValue = ref('newest')
+    channelStore.index(term.value, sortValue.value)
+    const { channels, currentPage, pageInfo } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
-      searchedChannels.value = await channelStore.searchChannels(term.value)
+      channelStore.index(term.value, sortValue.value)
     };
+
+    const changePage = (page) => {
+      channelStore.index(term.value, sortValue.value, page)
+    }
 
     const closeModal = () => {
       modalOpen.value = !modalOpen.value;
     }
 
+    const selectedLabel = computed(() => {
+      switch (sortValue.value) {
+        case 'newest':
+          return CONSTANTS.NEWEST_CHANNELS
+        case 'oldest':
+          return CONSTANTS.OLDEST_CHANNELS
+        case 'most_participants':
+          return CONSTANTS.MOST_MEMBERS
+        case 'fewest_participants':
+          return CONSTANTS.FEWEST_MEMBERS
+        case 'a_to_z':
+          return CONSTANTS.A_TO_Z
+        case 'z_to_a':
+          return CONSTANTS.Z_TO_A
+      }
+    })
+
+    watch(sortValue, async (newValue) => {
+      channelStore.index(term.value, newValue)
+    })
+
     onBeforeUnmount(() => {
-      term.value = null;
-      searchedChannels.value = null;
+      searchedChannels.value = [];
+      channels.value = [];
     });
-    const hasOneMember = channel_members => {
-      return channel_members.length === 1;
-    };
+
     return {
       term,
       searchedChannels,
@@ -86,6 +123,37 @@ export default {
       SearchOutline,
       handleSubmit,
       closeModal,
+      changePage,
+      sortValue,
+      currentPage,
+      pageInfo,
+      selectedLabel,
+      options: [
+        {
+          label: CONSTANTS.NEWEST_CHANNELS,
+          value: "newest"
+        },
+        {
+          label: CONSTANTS.OLDEST_CHANNELS,
+          value: "oldest"
+        },
+        {
+          label: CONSTANTS.MOST_MEMBERS,
+          value: "most_participants",
+        },
+        {
+          label: CONSTANTS.FEWEST_MEMBERS,
+          value: "fewest_participants"
+        },
+        {
+          label: CONSTANTS.A_TO_Z,
+          value: "a_to_z"
+        },
+        {
+          label: CONSTANTS.Z_TO_A,
+          value: "z_to_a"
+        },
+      ]
     };
   },
 };

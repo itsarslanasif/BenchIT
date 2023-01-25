@@ -1,14 +1,19 @@
 <template>
   <div class="bg-white border border-black-200 rounded-md drop-shadow-md">
-    <div
-      @click="jumpToConversation"
-      class="cursor-pointer"
-      v-if="currMessage.pinned"
-    >
-      <span class="p-1 items-center text-black-800 text-xs flex relative">
+    <div class="flex">
+      <span
+        @click="jumpToConversation"
+        class="p-1 cursor-pointer w-11/12 items-center text-black-800 text-xs flex relative"
+      >
         <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
         {{ $t('pinconversation.pinned_by') }}
         {{ currMessage.pin.pinned_by }}
+      </span>
+      <span
+        class="text-black-500 hover:text-black-800 flex-grow cursor-pointer text-right mr-2"
+        @click="unPinMessage"
+      >
+        X
       </span>
     </div>
     <div
@@ -17,7 +22,10 @@
       @mouseleave="emojiModalStatus = false"
     >
       <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal :profile_id="currMessage.sender_id" />
+        <user-profile-modal
+          :profile_id="currMessage.sender_id"
+          :sender_avatar="currMessage.sender_avatar"
+        />
       </template>
       <span class="message">
         <div class="ml-1">
@@ -74,45 +82,6 @@
         >
           {{ repliesCount }}
         </div>
-        <div
-          class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
-          v-if="emojiModalStatus || openEmojiModal || showOptions"
-        >
-          <template v-for="emoji in topReactions" :key="emoji">
-            <EmojiModalButton
-              :emoji="emoji"
-              :actionText="emoji.n"
-              :action="addReaction"
-            />
-          </template>
-          <EmojiModalButton
-            icon="fa-solid fa-icons"
-            :actionText="$t('emojiModalButton.find_another_reaction')"
-            :action="setEmojiModal"
-          />
-          <EmojiModalButton
-            v-if="!currMessage.parent_message_id"
-            icon="fa-solid fa-comment-dots"
-            :actionText="$t('emojiModalButton.reply_in_thread')"
-            :action="toggleThread"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-share"
-            :actionText="$t('emojiModalButton.share_message')"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-bookmark"
-            :actionText="$t('emojiModalButton.add_to_saved_items')"
-            :action="saveMessage"
-          />
-          <EmojiModalButton
-            icon="fa-solid fa-ellipsis-vertical"
-            :actionText="$t('emojiModalButton.more_actions')"
-            :action="setOptionsModal"
-            :message="currMessage"
-            :pinnedConversationStore="usePinnedConversation"
-          />
-        </div>
       </span>
     </div>
     <div v-if="openEmojiModal" class="absolute right-0 z-50">
@@ -140,6 +109,7 @@ import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { getUserProfile } from '../../../api/profiles/userProfile';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { unPinMessage } from '../../../api/messages/pinnedMessages';
 
 export default {
   name: 'MessageWrapper',
@@ -235,6 +205,19 @@ export default {
         await add_reaction(this.currMessage.id, emoji.i);
       } catch (e) {
         console.error(e);
+      }
+    },
+    unPinMessage() {
+      try {
+        unPinMessage(this.currMessage.pin.id);
+      } catch (e) {
+        console.error(e);
+      }
+      if (
+        this.pinnedConversationStore.getCount == 0 &&
+        this.pinnedConversationStore.getPinToggle
+      ) {
+        this.pinnedConversationStore.togglePin();
       }
     },
     getConversationId() {

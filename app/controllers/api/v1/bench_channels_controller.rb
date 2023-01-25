@@ -1,4 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
+  include Pagination
+
   before_action :set_bench_channel, only: %i[show update destroy leave_channel]
   before_action :set_channel_participant, :set_left_on, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
@@ -7,10 +9,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channels = Current.workspace.bench_channels
 
     if params[:query].present?
-      @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
-                                                            match: :word_start)
+      search_results = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
+                                                           match: :word_start)
+      @bench_channels = BenchChannel.where(id: search_results.map(&:id))
     end
-    @bench_channels = sort_bench_channels(@bench_channels, params[:sort_by]) if params[:sort_by].present?
+    sort_bench_channels if params[:sort_by].present?
+    paginate_bench_channels
 
     @bench_channels = @bench_channels.reject do |channel|
       channel.is_private && !channel.participant?(Current.profile)
@@ -98,21 +102,30 @@ class Api::V1::BenchChannelsController < Api::ApiController
     render json: { error: "You cannot change ##{@bench_channel.name} to public again." }, status: :bad_request
   end
 
-  def sort_bench_channels(bench_channels, sort_by)
+  def sort_bench_channels
     sort_methods = ActiveSupport::HashWithIndifferentAccess.new({
-                                                                  'newest' => ->(bc) { bc.sort_by(&:created_at).reverse },
-                                                                  'oldest' => ->(bc) { bc.sort_by(&:created_at) },
-                                                                  'most_participants' => lambda { |bc|
-                                                                                           bc.left_joins(:channel_participants)
-                                                                                           .group(:id).order('count(channel_participants.id) DESC')
-                                                                                         },
-                                                                  'fewest_participants' => lambda { |bc|
-                                                                                             bc.left_joins(:channel_participants)
-                                                                                             .group(:id).order('count(channel_participants.id) ASC')
-                                                                                           },
-                                                                  'a_to_z' => ->(bc) { bc.sort_by(&:name) },
-                                                                  'z_to_a' => ->(bc) { bc.sort_by(&:name).reverse }
+                                                                  'newest' => -> { sort_by_bench_channels('created_at', true) },
+                                                                  'oldest' => -> { sort_by_bench_channels('created_at', false) },
+                                                                  'most_participants' => -> { sort_by_participants(true) },
+                                                                  'fewest_participants' => -> { sort_by_participants(false) },
+                                                                  'a_to_z' => -> { sort_by_bench_channels('name', false) },
+                                                                  'z_to_a' => -> { sort_by_bench_channels('name', true) }
                                                                 })
-    sort_methods[sort_by].call(bench_channels)
+    raise 'Invalid sort_by parameter' unless sort_methods.key?(params[:sort_by])
+
+    sort_methods[params[:sort_by]].call
+  end
+
+  def paginate_bench_channels
+    @pagy, @bench_channels = pagination_for_bench_channels(@bench_channels, params[:page] || 1)
+  end
+
+  def sort_by_bench_channels(sort_by_param, reverse)
+    @bench_channels = @bench_channels.order(sort_by_param => (reverse ? :desc : :asc))
+  end
+
+  def sort_by_participants(desc)
+    order_keyword = desc ? 'DESC' : 'ASC'
+    @bench_channels = @bench_channels.left_joins(:channel_participants).group(:id).order("count(channel_participants) #{order_keyword}")
   end
 end

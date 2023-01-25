@@ -10,7 +10,9 @@
           :message="message"
           :options="Options.getOptions()"
           @mouseleave="action"
-          @select="handleSelect($event, message, pinnedConversationStore)"
+          @select="
+            handleSelect($event, message, pinnedConversationStore, messageStore)
+          "
         >
           <span
             @click="action"
@@ -40,9 +42,11 @@
 import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
-import { deleteMessage } from '../../api/messages';
 import { pinMessage } from '../../api/messages/pinnedMessages';
 import { unPinMessage } from '../../api/messages/pinnedMessages';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useMessageStore } from '../../stores/useMessagesStore';
+
 export default {
   name: 'EmojiModalButton',
   components: { NPopover, NDropdown },
@@ -53,14 +57,21 @@ export default {
     'action',
     'message',
     'pinnedConversationStore',
+    'setDeleteModal'
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore };
+    const currentProfileStore = useCurrentProfileStore();
+    const messageStore = useMessageStore();
+    return { pinnedConversationStore, currentProfileStore, messageStore };
   },
   beforeMount() {
+
     if (this.message) {
-      this.Options = new Options(this.message.pinned, this.message.is_info);
+      this.Options = new Options(
+        this.message.pinned, this.message.is_info,
+        this.isMyMessage(this.currentProfileStore.currentProfile, this.message)
+      );
     }
   },
   data() {
@@ -69,7 +80,10 @@ export default {
     };
   },
   methods: {
-    handleSelect(key, message, pinnedConversationStore) {
+    isMyMessage(currentProfileStore, message) {
+      return message.sender_id == currentProfileStore.id;
+    },
+    handleSelect(key, message, pinnedConversationStore, messageStore) {
       const getIndexByParams = param => {
         return window.location.pathname.split('/')[param];
       };
@@ -90,7 +104,7 @@ export default {
           this.copyLinkToMessage(message);
           break;
         case 'delete-message':
-          deleteMessage(message.id);
+          this.setDeleteModal();
           break;
         case 'pin-to-this-conversation':
           const conversation_type = getIndexByParams(1);
@@ -118,9 +132,12 @@ export default {
             pinnedConversationStore.togglePin();
           }
           break;
+        case 'edit-message':
+          if (message)
+            messageStore.setMessageToEdit(message);
+          break;
       }
     },
-
     copyLinkToMessage(message) {
       let tempText = null;
       if (message.conversationable_type == 'BenchChannel') {
