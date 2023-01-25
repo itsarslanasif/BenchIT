@@ -30,7 +30,7 @@
         <div
           class="flex absolute icon"
           :class="
-            userStatus.active
+            profileActiveStatus
               ? 'active text-green-700 border-2 border-black-900 rounded-xl'
               : 'away text-black border-2 border-white rounded-xl'
           "
@@ -47,7 +47,6 @@
 <script>
 import { NDropdown, NAvatar, NText, NTooltip } from 'naive-ui';
 import { h } from 'vue';
-import userStatusStore from '../../stores/useUserStatusStore';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import SetProfileStatusModal from '../components/profileStatus/setProfileStatusModal.vue';
@@ -81,11 +80,12 @@ export default {
     };
   },
   beforeUnmount() {
-    this.status = this.userStatus = null;
+    this.status = null;
     this.prevStatus = this.profile = null;
     this.statusIcon = this.options = null;
   },
-  mounted() {
+  mounted() {},
+  beforeMount() {
     this.setProfileActiveStatus();
   },
   data() {
@@ -93,7 +93,6 @@ export default {
       status: '',
       prevStatus: '',
       statusIcon: '',
-      userStatus: userStatusStore(),
       profile: null,
       showModal: false,
       options: [
@@ -112,7 +111,7 @@ export default {
           render: this.renderCustomOption,
           props: {
             onClick: () => {
-              this.updateStatus();
+              this.toggleActiveStatus();
             },
           },
           key: this.generateKey(CONSTANTS.SET_STATUS),
@@ -195,6 +194,9 @@ export default {
     },
     profileStatus() {
       return this.profile?.status;
+    },
+    profileActiveStatus() {
+      return this.profile?.is_active;
     },
   },
   methods: {
@@ -306,30 +308,24 @@ export default {
       if (this.profile.is_active) {
         this.status = 'Active';
         this.prevStatus = 'away';
-        this.statusIcon = '⚫';
+        this.statusIcon = '🟢';
       } else {
         this.status = 'away';
         this.prevStatus = 'Active';
-        this.statusIcon = '🟢';
+        this.statusIcon = '⚫';
       }
     },
-    updateStatus() {
-      if (!this.userStatus.active) {
-        this.userStatus.active = !this.userStatus.active;
-        setActiveStatus(this.currentWorkspace, this.profile.id).then(value => {
-          this.status = 'Active';
-          this.prevStatus = 'away';
-          this.statusIcon = '🟢';
-        });
+    async toggleActiveStatus() {
+      if (!this.profileActiveStatus) {
+        await setActiveStatus(this.currentWorkspace, this.profile.id);
+        this.status = 'Active';
+        this.prevStatus = 'away';
+        this.statusIcon = '🟢';
       } else {
-        this.userStatus.active = !this.userStatus.active;
-        removeActiveStatus(this.currentWorkspace, this.profile.id).then(
-          value => {
-            this.status = 'Away';
-            this.prevStatus = 'active';
-            this.statusIcon = '⚫';
-          }
-        );
+        await removeActiveStatus(this.currentWorkspace, this.profile.id);
+        this.status = 'Away';
+        this.prevStatus = 'active';
+        this.statusIcon = '⚫';
       }
     },
   },

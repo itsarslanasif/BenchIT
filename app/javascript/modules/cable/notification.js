@@ -43,10 +43,10 @@ const ChannelParticipantDelete = async data => {
 const updateProfileStatus = data => {
   const currentProfileStore = useCurrentProfileStore();
   let profile = currentProfileStore.currentProfile;
-  console.log("updated profile:",data)
 
   if (profile.id === data.id) {
     currentProfileStore.setProfileStatus(data.status);
+    currentProfileStore.setProfileActiveStatus(data.is_active)
   }
   const dmStore = useDirectMessagesStore();
   dmStore.updateProfileStatus(data);
