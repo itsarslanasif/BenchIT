@@ -48,7 +48,7 @@ export const useMessageStore = () => {
           console.error(e);
         }
         if (conversation_type === 'profiles') {
-          const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
+          const currentWorkspace = decryption(localStorage, 'currentWorkspace')
           this.selectedChat = await getUserProfile(
             currentWorkspace.id,
             id

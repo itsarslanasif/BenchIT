@@ -161,8 +161,8 @@ router.beforeEach((to, from, next) => {
   const currentWorkspaceStore = useCurrentWorkspaceStore();
 
   const currentUser = decryption(localStorage, 'currentUser')
-  const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
-  const currentProfile = decryption(sessionStorage, 'currentProfile')
+  const currentWorkspace = decryption(localStorage, 'currentWorkspace')
+  const currentProfile = decryption(localStorage, 'currentProfile')
 
   currentProfileStore.setProfile({
     profile: currentProfile,

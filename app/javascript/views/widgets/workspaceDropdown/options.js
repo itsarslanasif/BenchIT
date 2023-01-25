@@ -104,8 +104,8 @@ const handleSwitchWorkspace = async workspace_id => {
   currentWorkspaceStore.switchingWorkspace = true;
   const response = await switchWorkspace(workspace_id);
   if (response) {
-    encryption(sessionStorage, 'currentProfile', response.profile);
-    encryption(sessionStorage, 'currentWorkspace', response.workspace);
+    encryption(localStorage, 'currentProfile', response.profile);
+    encryption(localStorage, 'currentWorkspace', response.workspace);
     currentProfileStore.setProfile(response.profile);
     currentWorkspaceStore.setWorkspace(response.workspace);
     currentWorkspaceStore.switchingWorkspace = false;

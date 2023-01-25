@@ -6,7 +6,7 @@ export const userSignOut = async token => {
   });
   localStorage.removeItem('token');
   localStorage.removeItem('currentUser')
-  sessionStorage.removeItem('currentWorkspace')
-  sessionStorage.removeItem('currentProfile')
+  localStorage.removeItem('currentWorkspace')
+  localStorage.removeItem('currentProfile')
   return result;
 };
