@@ -118,12 +118,7 @@ export default {
       this.selectedChat = this.messagesStore.selectedChat;
     },
     checkSetChat() {
-      if (this.selectedChat.id === this.messagesStore.selectedChat.id) {
-        return true;
-      }
-      else {
-        return false;
-      }
+       return this.selectedChat.id === this.messagesStore.selectedChat.id;
     },
   },
 };
