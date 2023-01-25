@@ -116,20 +116,25 @@ export default {
     jumpToConversation() {
       this.pinnedConversationStore.showAlert = false;
 
-      if (this.currMessage.conversationable_type == 'BenchChannel') {
-        this.checkForThreadedMessage(this.currMessage);
-        this.$router.push(
-          `/channels/${this.getConversationId()}/${this.currMessage.id}`
-        );
-      } else if (this.currMessage.conversationable_type == 'Profile') {
-        this.checkForThreadedMessage(this.currMessage);
-        this.$router.push(
-          `/profiles/${this.getConversationId()}/${this.currMessage.id}`
-        );
-      } else if (message.conversationable_type == 'Group') {
-        this.$router.push(
-          `/groups/${this.getConversationId()}/${this.currMessage.id}`
-        );
+      switch (this.currMessage.conversationable_type) {
+        case 'BenchChannel':
+          this.checkForThreadedMessage(this.currMessage);
+          this.$router.push(
+            `/channels/${this.getConversationId()}/${this.currMessage.id}`
+          );
+          break;
+        case 'Profile':
+          this.checkForThreadedMessage(this.currMessage);
+          this.$router.push(
+            `/profiles/${this.getConversationId()}/${this.currMessage.id}`
+          );
+          break;
+        case 'Group':
+          this.checkForThreadedMessage(this.currMessage);
+          this.$router.push(
+            `/groups/${this.getConversationId()}/${this.currMessage.id}`
+          );
+          break;
       }
     },
 
