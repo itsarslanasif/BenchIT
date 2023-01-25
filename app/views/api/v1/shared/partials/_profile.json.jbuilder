@@ -25,4 +25,4 @@ json.about_me do
   json.skype profile.skype
 end
 json.local_time Time.current.in_time_zone(profile.time_zone).strftime('%I:%M %p')
-json.online_status profile.online_status
+json.is_active profile.is_active

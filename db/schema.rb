@@ -179,7 +179,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
     t.string "skype", default: ""
     t.string "time_zone", default: "UTC", null: false
     t.datetime "clear_status_after"
-    t.boolean "online_status", default: false, null: false
+    t.boolean "is_active", default: false, null: false
     t.index ["user_id"], name: "index_profiles_on_user_id"
     t.index ["workspace_id", "user_id"], name: "index_profiles_on_workspace_id_and_user_id", unique: true
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"

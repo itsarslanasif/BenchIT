@@ -104,7 +104,7 @@ class Profile < ApplicationRecord
       contact_info: { email: user.email, phone: phone },
       about_me: { skype: skype },
       local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p'),
-      online_status: online_status
+      is_active: is_active
     }
   end
 
