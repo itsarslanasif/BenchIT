@@ -17,15 +17,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     if params[:schedule].eql?('null')
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
-      response = if @message.save!
-                   { message: 'Message sent.' }
-                 else
-                   { message: @message.errors, status: :unprocessable_entity }
-                 end
-      render json: response
+      if @message.save!
+        render json: { success: 'Message sent', message: @message }, status: :ok
+      else
+        render json: { error: 'Message not sent', errors: @message.errors }, status: :unprocessable_entity
+      end
     else
       @bench_conversation.schedule_messages.create!(schedule_messages_params)
-      render json: { message: 'Message has been scheduled.' }
+      render json: { message: 'Message has been scheduled.' }, status: :ok
     end
   end
 
