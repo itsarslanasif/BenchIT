@@ -2,6 +2,7 @@
   <div
     class="p-1 cursor-pointer w-11/12 items-center text-black-800 text-xs flex relative"
     @click="jumpToConversation"
+    v-if="currMessage.pin"
   >
     <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
     {{ $t('pinconversation.pinned_by') }}
