@@ -56,6 +56,8 @@ import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore'
 import DownloadModal from './downloadModal.vue';
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
+import { setActiveStatus } from '../../api/profiles/profileStatus';
+import { removeActiveStatus } from '../../api/profiles/profileStatus';
 
 export default {
   components: {
@@ -83,11 +85,14 @@ export default {
     this.prevStatus = this.profile = null;
     this.statusIcon = this.options = null;
   },
+  mounted() {
+    this.setProfileActiveStatus();
+  },
   data() {
     return {
-      status: 'Away',
-      prevStatus: 'active',
-      statusIcon: '⚫',
+      status: '',
+      prevStatus: '',
+      statusIcon: '',
       userStatus: userStatusStore(),
       profile: null,
       showModal: false,
@@ -297,17 +302,34 @@ export default {
     generateKey(label) {
       return label.toLowerCase().replace(/ /g, '-');
     },
+    setProfileActiveStatus() {
+      if (this.profile.is_active) {
+        this.status = 'Active';
+        this.prevStatus = 'away';
+        this.statusIcon = '⚫';
+      } else {
+        this.status = 'away';
+        this.prevStatus = 'Active';
+        this.statusIcon = '🟢';
+      }
+    },
     updateStatus() {
       if (!this.userStatus.active) {
         this.userStatus.active = !this.userStatus.active;
-        this.status = 'Active';
-        this.prevStatus = 'away';
-        this.statusIcon = '🟢';
+        setActiveStatus(this.currentWorkspace, this.profile.id).then(value => {
+          this.status = 'Active';
+          this.prevStatus = 'away';
+          this.statusIcon = '🟢';
+        });
       } else {
         this.userStatus.active = !this.userStatus.active;
-        this.status = 'Away';
-        this.prevStatus = 'active';
-        this.statusIcon = '⚫';
+        removeActiveStatus(this.currentWorkspace, this.profile.id).then(
+          value => {
+            this.status = 'Away';
+            this.prevStatus = 'active';
+            this.statusIcon = '⚫';
+          }
+        );
       }
     },
   },
