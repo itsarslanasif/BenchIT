@@ -33,7 +33,6 @@ export const useMessageStore = () => {
     actions: {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
-        this.selectedChannel = selectedChat;
       },
       async index(conversation_type, id) {
         try {
@@ -55,8 +54,10 @@ export const useMessageStore = () => {
             currentWorkspace.id,
             id
           );
+          this.selectedChat.conversation_type = 'Profile';
         } else if (conversation_type === 'channels') {
           this.selectedChat = await getChannel(id);
+          this.selectedChat.conversation_type = 'Channel';
         }
       },
       async addMessage(msg) {
@@ -68,6 +69,9 @@ export const useMessageStore = () => {
       },
       getMessage(id) {
         return this.messages.find(message => message.id === id);
+      },
+      setSelectedChannel(channel) {
+        this.selectedChannel = channel;
       },
     },
   });
