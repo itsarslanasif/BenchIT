@@ -81,13 +81,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @last_messages = []
     params[:dmIDs].each do |id|
       conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, id)
-      @last_messages.push(conversation.conversation_messages.last)
-      puts "+++++++++++++"
-      puts conversation.conversation_messages.last
+      @last_messages << conversation.conversation_messages.last if conversation.present?
     end
-    puts '________________________'
-    puts '@last_messages'
-    puts @last_messages
   end
 
   def profile_messages
@@ -124,7 +119,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :dmIDs, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
+    params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
       param[:sender_id] = Current.profile.id
     end
   end
