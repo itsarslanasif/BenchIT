@@ -6,7 +6,6 @@ import JoinWorkspace from '@/views/components/workspace/JoinWorkspace.vue';
 import Members from '@/views/components/members/members.vue';
 import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
-import SplitPanes from './views/pages/SplitPanes.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
@@ -19,6 +18,7 @@ import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue
 import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
+import DirectMessages from './views/components/directMessages/directMessages.vue';
 import { decryption } from './modules/crypto/crypto';
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -108,6 +108,11 @@ const router = createRouter({
           name: 'group-chat',
         },
         {
+          path: '/direct_messages',
+          component: DirectMessages,
+          name: 'direct-messages',
+        },
+        {
           path: '/new_direct_message',
           component: NewDirectMessages,
           name: 'new-direct-message',
@@ -160,9 +165,9 @@ router.beforeEach((to, from, next) => {
   const currentProfileStore = useCurrentProfileStore();
   const currentWorkspaceStore = useCurrentWorkspaceStore();
 
-  const currentUser = decryption(localStorage, 'currentUser')
-  const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
-  const currentProfile = decryption(sessionStorage, 'currentProfile')
+  const currentUser = decryption(localStorage, 'currentUser');
+  const currentWorkspace = decryption(sessionStorage, 'currentWorkspace');
+  const currentProfile = decryption(sessionStorage, 'currentProfile');
 
   currentProfileStore.setProfile({
     profile: currentProfile,
@@ -170,11 +175,7 @@ router.beforeEach((to, from, next) => {
   currentUserStore.setUser(currentUser);
   currentWorkspaceStore.setWorkspace(currentWorkspace);
 
-  if (
-    !localStorage.getItem('token') &&
-    !currentWorkspace &&
-    to.meta.auth
-  ) {
+  if (!localStorage.getItem('token') && !currentWorkspace && to.meta.auth) {
     next('/sign_in');
   } else if (
     localStorage.getItem('token') &&

@@ -10,3 +10,18 @@ export const getDirectMessagesList = async id => {
       return response.data;
     });
 };
+
+export const getLastDirectMessagesList = async dmIDs => {
+  console.log(dmIDs);
+  return axios
+    .post(
+      `v1/conversation_messages/last_messages`,
+      { dmIDs: dmIDs },
+      {
+        headers: getHeaders(),
+      }
+    )
+    .then(response => {
+      return response.data;
+    });
+};

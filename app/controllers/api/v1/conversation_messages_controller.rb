@@ -77,6 +77,19 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     paginate_messages
   end
 
+  def last_messages
+    @last_messages = []
+    params[:dmIDs].each do |id|
+      conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, id)
+      @last_messages.push(conversation.conversation_messages.last)
+      puts "+++++++++++++"
+      puts conversation.conversation_messages.last
+    end
+    puts '________________________'
+    puts '@last_messages'
+    puts @last_messages
+  end
+
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
     create_conversation if @conversation.blank?
@@ -111,7 +124,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
+    params.permit(:content, :dmIDs, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
       param[:sender_id] = Current.profile.id
     end
   end
