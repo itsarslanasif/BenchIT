@@ -113,6 +113,15 @@
               class="text-black-600 text-sm flex mt-2"
               >{{ $t('deleteMessageModal.success') }}</span
             >
+            <EditedAtTime
+              v-if="
+                currMessage.is_edited &&
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage
+              "
+              :updated_at="currMessage.updated_at"
+            />
           </span>
           <span
             v-if="
@@ -122,10 +131,13 @@
                 currMessage.is_info) &&
               currMessage.content !== $t('deleteMessageModal.success')
             "
-            :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
-            class="text-sm flex-wrap"
-            v-html="currMessage.content"
-          />
+          >
+          <div class="flex">
+            <span
+              :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
+              class="text-sm flex-wrap"
+              v-html="currMessage.content"
+            />
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
@@ -135,6 +147,15 @@
           >
             {{ $t('deleteMessageModal.success') }}</span
           >
+            <EditedAtTime
+              v-if="
+                currMessage.is_edited
+              "
+              :updated_at="currMessage.updated_at"
+            />
+          </div>
+
+          </span>
           <div
             v-if="!currMessage.info && currMessage.attachments"
             class="flex gap-2"
@@ -288,6 +309,19 @@
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
   />
+  <div
+    class="bg-yellow-50 pl-16 pr-4"
+    v-if="
+      messagesStore.isMessageToEdit(currMessage) &&
+      (!inThread || !currMessage.is_threaded)
+    "
+  >
+    <TextEditorVue
+      :message="currMessage.content"
+      :editMessage="true"
+      :editMessageCallBack="editMessage"
+    />
+  </div>
 </template>
 
 <script>
@@ -317,6 +351,9 @@ import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import TextEditorVue from '../../components/editor/TextEditor.vue';
+import { updateMessage } from '../../../modules/axios/editorapi';
+import EditedAtTime from '../../widgets/editedAtTime.vue';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
@@ -350,6 +387,7 @@ export default {
       currentProfileStore,
     };
   },
+
   components: {
     NCard,
     NDivider,
@@ -364,6 +402,8 @@ export default {
     ReplyAndThreadButton,
     DeleteMessageModal,
     NAvatar,
+    TextEditorVue,
+    EditedAtTime,
   },
   props: {
     currMessage: {
@@ -468,6 +508,15 @@ export default {
     },
   },
   methods: {
+    editMessage(text) {
+      let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
+      updatedMessage.content = text;
+      try {
+        updateMessage(updatedMessage);
+      } catch (error) {
+        console.error(error);
+      }
+    },
     async addReaction(emoji) {
       let temp = null;
       if (typeof emoji === 'object') {
@@ -606,7 +655,7 @@ export default {
     setFileOptionsModal() {
       this.showFileOptions = !this.showFileOptions;
     },
-    
+
     getSavedItemText(message) {
       return message.isSaved
         ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS

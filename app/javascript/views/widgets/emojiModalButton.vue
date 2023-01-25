@@ -10,7 +10,9 @@
           :message="message"
           :options="Options.getOptions()"
           @mouseleave="action"
-          @select="handleSelect($event, message, pinnedConversationStore)"
+          @select="
+            handleSelect($event, message, pinnedConversationStore, messageStore)
+          "
         >
           <span
             @click="action"
@@ -64,6 +66,7 @@ export default {
     return { pinnedConversationStore, currentProfileStore, messageStore };
   },
   beforeMount() {
+
     if (this.message) {
       this.Options = new Options(
         this.message.pinned, this.message.is_info,
@@ -77,7 +80,10 @@ export default {
     };
   },
   methods: {
-    handleSelect(key, message, pinnedConversationStore) {
+    isMyMessage(currentProfileStore, message) {
+      return message.sender_id == currentProfileStore.id;
+    },
+    handleSelect(key, message, pinnedConversationStore, messageStore) {
       const getIndexByParams = param => {
         return window.location.pathname.split('/')[param];
       };
@@ -126,13 +132,12 @@ export default {
             pinnedConversationStore.togglePin();
           }
           break;
+        case 'edit-message':
+          if (message)
+            messageStore.setMessageToEdit(message);
+          break;
       }
     },
-
-    isMyMessage(currentProfileStore, message) {
-      return message.sender_id == currentProfileStore.id;
-    },
-
     copyLinkToMessage(message) {
       let tempText = null;
       if (message.conversationable_type == 'BenchChannel') {

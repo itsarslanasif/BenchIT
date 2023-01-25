@@ -234,6 +234,7 @@ en:
         join_channel: 'Join Channel'
         details: 'Details'
         go: 'Go'
+        edited: '(edited)'
         set_a_status: 'Set a status'
         view_as: 'View as'
         copy_display_name: 'Copy display name'
@@ -279,6 +280,7 @@ en:
         copy_member_id: 'Copy member ID'
         no_results_found: 'No Results Found !'
         sort: 'Sort'
+        sort_label: 'Sort:'
         account_type: 'Account Type'
       profilestatus:
         what_is_your_status: 'Whats your status?'

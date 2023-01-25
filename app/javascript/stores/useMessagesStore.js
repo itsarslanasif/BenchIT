@@ -17,10 +17,12 @@ export const useMessageStore = () => {
       selectedChat: {},
       newMessageSent: false,
       selectedChannel: {},
+        messageToEdit: null,
     }),
 
     getters: {
       getMessages: state => state.messages,
+      getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
@@ -72,6 +74,17 @@ export const useMessageStore = () => {
       },
       setSelectedChannel(channel) {
         this.selectedChannel = channel;
+      },
+      setMessageToEdit(message) {
+        this.messageToEdit = message;
+      },
+      removeMessageToEdit() {
+        this.messageToEdit = null;
+      },
+      isMessageToEdit(message) {
+        if (this.messageToEdit)
+          return this.messageToEdit && (message.id == this.messageToEdit.id)
+        return false
       },
     },
   });
