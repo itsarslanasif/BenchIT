@@ -140,6 +140,8 @@ export default {
       const token = localStorage.getItem('token');
       if (!token) {
         clearInterval(this.intervalId);
+        sessionStorage.removeItem('currentWorkspace');
+        sessionStorage.removeItem('currentProfile');
         this.$router.push('/sign_in');
       }
     }, 5000);

@@ -20,7 +20,7 @@ export const useCurrentProfileStore = () => {
       },
       setProfileStatus(status) {
         this.currentProfile.status = status
-        encryption(localStorage,'currentProfile',this.currentProfile)
+        encryption(sessionStorage, 'currentProfile',this.currentProfile)
       }
     },
   });

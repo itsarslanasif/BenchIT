@@ -204,8 +204,8 @@ export default {
     handleSelect(key) {
       switch (key) {
         case 'sign-out-of-workspace':
-          localStorage.removeItem('currentWorkspace');
-          localStorage.removeItem('currentProfile');
+          sessionStorage.removeItem('currentWorkspace');
+          sessionStorage.removeItem('currentProfile');
           this.$router.push('/workspace_dashboard');
           break;
         case 'downloads':

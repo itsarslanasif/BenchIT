@@ -103,8 +103,8 @@ export default {
     },
     async goToWorkspaceDashboard(workspace) {
       let currentProfile = await switchWorkspace(workspace.id);
-      encryption(localStorage, 'currentProfile', currentProfile.profile);
-      encryption(localStorage, 'currentWorkspace', workspace);
+      encryption(sessionStorage, 'currentProfile', currentProfile.profile);
+      encryption(sessionStorage, 'currentWorkspace', workspace);
       this.currentWorkspace.setWorkspace(workspace);
       this.currentProfile.setProfile(currentProfile);
       this.$router.push('/');

@@ -39,7 +39,7 @@ export default {
     this.options = null;
   },
   setup() {
-    const currentWorkspace = decryption(localStorage, 'currentWorkspace');
+    const currentWorkspace = decryption(sessionStorage, 'currentWorkspace');
     return { currentWorkspace, options };
   },
   methods: {
