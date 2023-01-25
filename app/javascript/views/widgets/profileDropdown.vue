@@ -203,11 +203,7 @@ export default {
   },
   watch: {
     profileCurrentStatus(newValue) {
-      if (newValue === null) {
-        this.options[2].show = false;
-      } else {
-        this.options[2].show = true;
-      }
+      this.options[2].show = newValue !== null;
     },
   },
   computed: {
@@ -220,11 +216,7 @@ export default {
   },
   methods: {
     hasStatus() {
-      if (this.profile.status) return true;
-      return false;
-    },
-    initializeOptions() {
-      this.options[0].show = this.profile.status ? true : false;
+      return this.profile.status !== null;
     },
     handleStatusSelect() {
       this.profileStatusStore.toggleProfileStatusPopUp();
