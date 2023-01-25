@@ -1,13 +1,11 @@
-import {
-  defineStore
-} from 'pinia';
-
-import { encryption } from '../modules/crypto/crypto'
+import { defineStore } from 'pinia';
+import { encryption } from '../modules/crypto/crypto';
 
 export const useCurrentProfileStore = () => {
   const currentProfileStore = defineStore('currentProfileStore', {
     state: () => ({
       currentProfile: {},
+      status: {},
     }),
 
     getters: {
@@ -19,9 +17,10 @@ export const useCurrentProfileStore = () => {
         this.currentProfile = user.profile;
       },
       setProfileStatus(status) {
-        this.currentProfile.status = status
-        encryption(sessionStorage, 'currentProfile',this.currentProfile)
-      }
+        this.status = status;
+        this.currentProfile.status = status;
+        encryption(sessionStorage, 'currentProfile', this.currentProfile);
+      },
     },
   });
   const store = currentProfileStore();
