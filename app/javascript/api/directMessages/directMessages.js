@@ -12,7 +12,6 @@ export const getDirectMessagesList = async id => {
 };
 
 export const getLastDirectMessagesList = async dmIDs => {
-  console.log(dmIDs);
   return axios
     .post(
       `v1/conversation_messages/last_messages`,

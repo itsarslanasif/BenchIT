@@ -1,7 +1,7 @@
 <template>
   <div class="hover-trigger">
     <font-awesome-icon
-      @click="goToNewDMList"
+      @click="goToDirectMessages"
       icon="fa-plus"
       class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
     />
@@ -101,8 +101,8 @@ export default {
     isMobileView() {
       return window.innerWidth < 1400;
     },
-    goToNewDMList() {
-      this.$router.push('/new_direct_message');
+    goToDirectMessages() {
+      this.$router.push('/direct_messages');
     },
     isOwnChat(user) {
       return this.currentProfileStore.currentProfile?.id === user?.id;

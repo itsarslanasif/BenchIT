@@ -62,7 +62,6 @@ import Thread from '../components/rightPane/Thread.vue';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
-import searchDmscreen from '../components/directMessages/findDirectMessages.vue';
 import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { NMessageProvider } from 'naive-ui';
@@ -78,7 +77,6 @@ export default {
     WorkspaceDropdown,
     LeftPane,
     Thread,
-    searchDmscreen,
     SearchBar,
     UserProfile,
     SwitchingWorkspaceLoader,
