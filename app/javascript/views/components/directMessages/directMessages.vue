@@ -46,12 +46,14 @@
                       <div class="flex gap-2">
                         <p class="font-semibold">
                           {{ chat.username }}
-                          {{ ownProfile(chat) ? '(you)' : '' }}
+                          {{ ownProfile(chat) ? $t('chat.you') : '' }}
                         </p>
                         <span
                           style="font-size: 7px; float: left; margin-top: 6px"
                         >
-                          {{ chat.isActive ? '🟢' : ' ⚫' }}
+                          {{
+                            chat.isActive ? $t('chat.active') : $t('chat.away')
+                          }}
                         </span>
 
                         <p>
@@ -72,7 +74,7 @@
       class="scrollable bg-slate-700 rounded text-white h-screen overflow-hidden"
     >
       <div class="m-4">
-        <div v-for="message in sortedMessages" :key="message.id">
+        <div v-for="message in last_messages" :key="message.id">
           {{ setMessage(message) }}
           <div v-if="!isSameDayMessage || isFirstMessage">
             <div v-if="isToday" class="text-xs text-white font-bold m-4">
@@ -215,11 +217,6 @@ export default {
     },
   },
   computed: {
-    sortedMessages() {
-      return this.last_messages.sort((a, b) => {
-        return new Date(b.created_at) - new Date(a.created_at);
-      });
-    },
     isToday() {
       return (
         new Date(this.currMessage.created_at).toDateString() ===
@@ -241,21 +238,18 @@ export default {
       );
     },
     isFirstMessage() {
-      if (this.last_messages) {
-        return this.last_messages[0].id === this.currMessage.id;
-      }
+      return (
+        this.last_messages && this.last_messages[0].id === this.currMessage.id
+      );
     },
     getProfileAvatar() {
-      let user = {};
-      if (this.currMessage.receiver_id === this.currentProfile.id) {
-        user = this.allProfiles.find(
-          profile => profile.id === this.currMessage.sender_id
-        );
-      } else {
-        user = this.allProfiles.find(
-          profile => profile.id === this.currMessage.receiver_id
-        );
-      }
+      const user = this.allProfiles.find(
+        profile =>
+          profile.id ===
+          (this.currMessage.receiver_id === this.currentProfile.id
+            ? this.currMessage.sender_id
+            : this.currMessage.receiver_id)
+      );
       return user.image_url;
     },
   },
