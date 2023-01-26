@@ -6,7 +6,7 @@
         type="text"
         v-model="query"
         :placeholder="$t('members.search_by_name')"
-        @keyup.enter="searchQuery()"
+        @keyup="searchQuery()"
       />
     </div>
     <filters v-if="!showProfile" @sort_filter="getSortFilter"></filters>

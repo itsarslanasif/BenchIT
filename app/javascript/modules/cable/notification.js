@@ -2,6 +2,7 @@ import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useDirectMessagesStore } from '../../stores/useDirectMessagesStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useProfileStore } from '../../stores/useProfileStore';
 
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
@@ -48,8 +49,11 @@ const updateProfileStatus = data => {
     currentProfileStore.setProfileStatus(data.status);
     currentProfileStore.setProfileActiveStatus(data.is_active)
   }
+  const profileStore= useProfileStore();
   const dmStore = useDirectMessagesStore();
+  profileStore.updateProfileStatus(data);
   dmStore.updateProfileStatus(data);
+
 };
 
 const notificationActions = {
