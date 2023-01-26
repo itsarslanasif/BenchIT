@@ -18,12 +18,12 @@ export const useCurrentProfileStore = () => {
       },
       setProfileStatus(status) {
         this.status = status;
-        this.currentProfile.status = status;;
+        this.currentProfile.status = status;
         encryption(sessionStorage, 'currentProfile', this.currentProfile);
       },
       setProfileActiveStatus(is_active) {
         this.currentProfile.is_active = is_active;
-        encryption(sessionStorage, 'currentProfile',  this.currentProfile);;
+        encryption(sessionStorage, 'currentProfile',  this.currentProfile);
       },
     },
   });
