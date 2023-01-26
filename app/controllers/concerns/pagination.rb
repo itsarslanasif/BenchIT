@@ -1,3 +1,5 @@
+class PaginationError < StandardError; end
+
 module Pagination
   extend ActiveSupport::Concern
   include Pagy::Backend
@@ -9,6 +11,13 @@ module Pagination
       [@pagy, @messages]
     rescue StandardError
       @pagy = nil
+    end
+
+    def pagination_for_bench_channels(bench_channels, page_no)
+      @pagy, @bench_channels = pagy(bench_channels, page: page_no, items: 50)
+      [@pagy, @bench_channels]
+    rescue Pagy::OverflowError, Pagy::VariableError => e
+      raise PaginationError, e.message
     end
   end
 end

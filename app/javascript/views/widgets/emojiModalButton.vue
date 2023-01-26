@@ -10,7 +10,9 @@
           :message="message"
           :options="Options.getOptions()"
           @mouseleave="action"
-          @select="handleSelect($event, message, pinnedConversationStore)"
+          @select="
+            handleSelect($event, message, pinnedConversationStore, messageStore)
+          "
         >
           <span
             @click="action"
@@ -41,7 +43,7 @@ import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { pinMessage } from '../../api/messages/pinnedMessages';
-import { unPinMessage } from '../../api/messages/pinnedMessages';
+
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 
@@ -55,7 +57,8 @@ export default {
     'action',
     'message',
     'pinnedConversationStore',
-    'setDeleteModal'
+    'setDeleteModal',
+    'setUnpinModal',
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
@@ -64,6 +67,7 @@ export default {
     return { pinnedConversationStore, currentProfileStore, messageStore };
   },
   beforeMount() {
+
     if (this.message) {
       this.Options = new Options(
         this.message.pinned, this.message.is_info,
@@ -77,7 +81,10 @@ export default {
     };
   },
   methods: {
-    handleSelect(key, message, pinnedConversationStore) {
+    isMyMessage(currentProfileStore, message) {
+      return message.sender_id == currentProfileStore.id;
+    },
+    handleSelect(key, message, pinnedConversationStore, messageStore) {
       const getIndexByParams = param => {
         return window.location.pathname.split('/')[param];
       };
@@ -114,25 +121,14 @@ export default {
           }
           break;
         case 'un-pin-from-this-conversation':
-          try {
-            unPinMessage(message.pin.id);
-          } catch (e) {
-            console.error(e);
-          }
-          if (
-            pinnedConversationStore.getCount == 0 &&
-            pinnedConversationStore.getPinToggle
-          ) {
-            pinnedConversationStore.togglePin();
-          }
+          this.setUnpinModal();
+          break;
+        case 'edit-message':
+          if (message)
+            messageStore.setMessageToEdit(message);
           break;
       }
     },
-
-    isMyMessage(currentProfileStore, message) {
-      return message.sender_id == currentProfileStore.id;
-    },
-
     copyLinkToMessage(message) {
       let tempText = null;
       if (message.conversationable_type == 'BenchChannel') {

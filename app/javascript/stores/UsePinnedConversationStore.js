@@ -4,6 +4,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
   state: () => ({
     pinnedConversation: [],
     pinToggle: false,
+    showAlert: false,
   }),
 
   getters: {

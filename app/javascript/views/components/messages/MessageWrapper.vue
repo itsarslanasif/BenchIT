@@ -112,6 +112,16 @@
               class="text-black-600 text-sm flex mt-2"
               >{{ $t('deleteMessageModal.success') }}</span
             >
+            <EditedAtTime
+              v-if="
+                currMessage.is_edited &&
+                isSameUser &&
+                isSameDayMessage &&
+                !isFirstMessage &&
+                currMessage.content !== $t('deleteMessageModal.success')
+              "
+              :updated_at="currMessage.updated_at"
+            />
           </span>
           <span
             v-if="
@@ -121,10 +131,21 @@
                 currMessage.is_info) &&
               currMessage.content !== $t('deleteMessageModal.success')
             "
-            :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
-            class="text-sm flex-wrap"
-            v-html="currMessage.content"
-          />
+          >
+          <div class="flex">
+            <span
+              :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
+              class="text-sm flex-wrap"
+              v-html="currMessage.content"
+            />
+            <EditedAtTime
+              v-if="
+                currMessage.is_edited && currMessage.content !== $t('deleteMessageModal.success')
+              "
+              :updated_at="currMessage.updated_at"
+            />
+          </div>
+          </span>
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
@@ -274,6 +295,7 @@
             :message="currMessage"
             :pinnedConversationStore="pinnedConversationStore"
             :setDeleteModal="setDeleteModal"
+            :setUnpinModal="setUnpinModal"
           />
         </div>
       </span>
@@ -281,12 +303,30 @@
     <div v-if="openEmojiModal" class="absolute right-0 z-50">
       <EmojiPicker :toggleModal="setEmojiModal" :addReaction="addReaction" />
     </div>
+    <UnPinModal
+      v-model:show="showUnpinModal"
+      :currMessage="currMessage"
+      :setUnpinModal="setUnpinModal"
+    />
   </div>
   <DeleteMessageModal
     v-model:show="showDeleteModal"
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
   />
+  <div
+    class="bg-yellow-50 pl-16 pr-4"
+    v-if="
+      messagesStore.isMessageToEdit(currMessage) &&
+      (!inThread || !currMessage.is_threaded)
+    "
+  >
+    <TextEditorVue
+      :message="currMessage.content"
+      :editMessage="true"
+      :editMessageCallBack="editMessage"
+    />
+  </div>
 </template>
 
 <script>
@@ -316,6 +356,9 @@ import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import TextEditorVue from '../../components/editor/TextEditor.vue';
+import { updateMessage } from '../../../modules/axios/editorapi';
+import EditedAtTime from '../../widgets/editedAtTime.vue';
 import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
@@ -323,6 +366,7 @@ import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
+import UnPinModal from '../pinnedConversation/unpinModal.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -354,6 +398,7 @@ export default {
       currentProfile,
     };
   },
+
   components: {
     NCard,
     NDivider,
@@ -368,6 +413,9 @@ export default {
     ReplyAndThreadButton,
     DeleteMessageModal,
     NAvatar,
+    TextEditorVue,
+    EditedAtTime,
+    UnPinModal,
   },
   props: {
     currMessage: {
@@ -405,6 +453,7 @@ export default {
       displayedReactions: [],
       showFileOptions: false,
       showDeleteModal: false,
+      showUnpinModal: false,
     };
   },
   beforeUnmount() {
@@ -479,6 +528,15 @@ export default {
           item.profile.id === this.currentProfile.id
       );
       return savedMessage ? true : false;
+    },
+    editMessage(text) {
+      let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
+      updatedMessage.content = text;
+      try {
+        updateMessage(updatedMessage);
+      } catch (error) {
+        console.error(error);
+      }
     },
     async addReaction(emoji) {
       let temp = null;
@@ -633,6 +691,10 @@ export default {
 
     setDeleteModal() {
       this.showDeleteModal = !this.showDeleteModal;
+    },
+
+    setUnpinModal() {
+      this.showUnpinModal = !this.showUnpinModal;
     },
   },
 };
