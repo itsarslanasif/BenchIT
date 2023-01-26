@@ -86,20 +86,20 @@ export default {
 
   beforeUnmount() {
     this.status = null;
-    this.prevStatus = this.profile = null;
+    this.prevStatus = null;
     this.statusIcon = this.options = null;
   },
+
   beforeMount() {
     this.setProfileActiveStatus();
   },
+
   data() {
     return {
       status: '',
       prevStatus: '',
       statusIcon: '',
-      profile: null,
       showModal: false,
-
       options: [
         {
           key: 'header',
@@ -253,7 +253,6 @@ export default {
           break;
       }
     },
-
     renderCustomHeader() {
       return h(
         'div',
@@ -356,28 +355,21 @@ export default {
       return label.toLowerCase().replace(/ /g, '-');
     },
     setProfileActiveStatus() {
-      if (this.profile.is_active) {
-        this.status = 'Active';
-        this.prevStatus = 'away';
-        this.statusIcon = '🟢';
-      } else {
-        this.status = 'away';
-        this.prevStatus = 'Active';
-        this.statusIcon = '⚫';
-      }
+      this.status = this.profile.is_active
+        ? CONSTANTS.ACTIVE
+        : CONSTANTS.AWAY;
+      this.prevStatus = this.profile.is_active
+        ? CONSTANTS.AWAY
+        : CONSTANTS.ACTIVE;
+      this.statusIcon = this.profile.is_active
+        ? CONSTANTS.ACTIVE_ICON
+        : CONSTANTS.AWAY_ICON;
     },
     async toggleActiveStatus() {
-      if (!this.profileActiveStatus) {
-        await setActiveStatus(this.currentWorkspace, this.profile.id);
-        this.status = 'Active';
-        this.prevStatus = 'away';
-        this.statusIcon = '🟢';
-      } else {
-        await removeActiveStatus(this.currentWorkspace, this.profile.id);
-        this.status = 'Away';
-        this.prevStatus = 'active';
-        this.statusIcon = '⚫';
-      }
+      this.profileActiveStatus
+        ? await removeActiveStatus(this.currentWorkspace, this.profile.id)
+        : await setActiveStatus(this.currentWorkspace, this.profile.id);
+      this.setProfileActiveStatus();
     },
   },
 };

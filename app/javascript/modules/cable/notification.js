@@ -52,8 +52,6 @@ const updateProfileStatus = data => {
   dmStore.updateProfileStatus(data);
 };
 
-
-
 const notificationActions = {
   MessageCreate: createMessage,
   MessageDelete: deleteMessage,
