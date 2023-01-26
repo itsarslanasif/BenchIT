@@ -22,6 +22,15 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
     render json: { success: 'true', message: 'Message deleted' }, status: :ok
   end
 
+  def send_now
+    ActiveRecord::Base.transaction do
+      delete_job
+      Current.profile.conversation_messages.create!(content: @schedule_message.content, bench_conversation_id: @schedule_message.bench_conversation_id)
+      @schedule_message.destroy!
+    end
+    render json: { success: 'true', message: 'Message send' }, status: :ok
+  end
+
   private
 
   def schedule_message_params
