@@ -2,7 +2,7 @@
   <div
     class="py-1"
     :class="{
-      'bg-yellow-100': currMessage.isSaved,
+      'bg-yellow-50': currMessage.isSaved,
     }"
   >
     <div v-if="!currMessage.info && currMessage.pinned">
@@ -14,7 +14,10 @@
         {{ currMessage.pin.pinned_by }}
       </span>
     </div>
-    <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">
+    <div
+      v-if="isSavedMessage(currMessage)"
+      class="flex ml-4 items-center bg-yellow-50"
+    >
       <i class="far fa-bookmark text-red-500"></i>
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
@@ -26,9 +29,7 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template
-        v-if="currMessage.content === $t('deleteMessageModal.success')"
-      >
+      <template v-if="currMessage.content === $t('deleteMessageModal.success')">
         <div
           class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
         >
@@ -69,9 +70,7 @@
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
-              v-if="
-                currMessage.content !== $t('deleteMessageModal.success')
-              "
+              v-if="currMessage.content !== $t('deleteMessageModal.success')"
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
               }"
@@ -323,6 +322,7 @@ import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   name: 'MessageWrapper',
@@ -337,6 +337,8 @@ export default {
     const messagesStore = useMessageStore();
     const downloadsStore = useDownloadsStore();
     const currentProfileStore = useCurrentProfileStore();
+    const currentProfile = currentProfileStore.getCurrentProfile;
+    const { savedItems } = storeToRefs(savedItemsStore);
     return {
       threadStore,
       pinnedConversationStore,
@@ -348,6 +350,8 @@ export default {
       messagesStore,
       downloadsStore,
       currentProfileStore,
+      savedItems,
+      currentProfile,
     };
   },
   components: {
@@ -468,6 +472,14 @@ export default {
     },
   },
   methods: {
+    isSavedMessage(currMessage) {
+      const savedMessage = this.savedItems.find(
+        item =>
+          item.message.id === currMessage.id &&
+          item.profile.id === this.currentProfile.id
+      );
+      return savedMessage ? true : false;
+    },
     async addReaction(emoji) {
       let temp = null;
       if (typeof emoji === 'object') {
@@ -531,11 +543,17 @@ export default {
           save(this.currMessage.id, {
             data: this.currMessage,
           }).then(() => {
-            this.savedItemsStore.addSavedItem(this.currMessage);
+            this.savedItemsStore.addSavedItem({
+              message: this.currMessage,
+              profile: this.currentProfileStore.currentProfile,
+            });
           });
         } else {
           unsave(this.currMessage.id).then(() => {
-            this.savedItemsStore.removeSavedItem(this.currMessage);
+            this.savedItemsStore.removeSavedItem({
+              message: this.currMessage,
+              profile: this.currentProfile,
+            });
           });
         }
       } catch (e) {
@@ -606,7 +624,7 @@ export default {
     setFileOptionsModal() {
       this.showFileOptions = !this.showFileOptions;
     },
-    
+
     getSavedItemText(message) {
       return message.isSaved
         ? CONSTANTS.REMOVE_FROM_SAVED_ITEMS
