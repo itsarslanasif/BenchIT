@@ -10,6 +10,7 @@ import { CONSTANTS } from '../../assets/constants';
 export default class Options {
   constructor(isPinned, isInfo, isMyMessage) {
     this.isPinned = isPinned;
+    this.isMyMessage=isMyMessage
     this.isInfo = isInfo;
     this.isMyMessage = isMyMessage;
   }
@@ -103,7 +104,7 @@ export default class Options {
       {
         label: CONSTANTS.EDIT,
         key: this.generateKey(CONSTANTS.EDIT),
-        show: !this.isInfo,
+        show:this.isMyMessage && !this.isInfo,
       },
       {
         label: CONSTANTS.DELETE,

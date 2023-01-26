@@ -8,6 +8,7 @@ class BenchChannel < ApplicationRecord
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
 
   before_validation :set_profile_and_workspace
+  before_validation :set_lower_case_channel_name
 
   validates :name, uniqueness: true, presence: true, length: { minimum: 1, maximum: 80 }
   validates :description, length: { maximum: 500 }
@@ -45,6 +46,10 @@ class BenchChannel < ApplicationRecord
   def set_profile_and_workspace
     self.creator_id = Current.profile.id
     self.workspace_id = Current.workspace.id
+  end
+
+  def set_lower_case_channel_name
+    name.downcase!
   end
 
   def bench_channel_basic_content

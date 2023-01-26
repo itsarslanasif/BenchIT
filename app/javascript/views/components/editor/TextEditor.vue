@@ -44,21 +44,13 @@
               styles: {
                 background:
                   'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                'border-left':
-                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                'border-right':
-                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                'border-top':
-                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
-                'border-bottom':
-                  '1px solid rgba(var(--sk_foreground_low_solid, 221, 221, 221), 1)',
+                border: '1px solid gray',
                 'border-radius': '3px',
                 'font-size': '10px',
                 'font-variant-ligatures': 'none',
                 'line-height': '1.5',
                 'margin-bottom': '14px',
-                'padding-left': '8px',
-                'padding-right': '8px',
+                padding: '0px 8px 0px 8px',
                 position: 'relative',
                 'font-family': 'monospace',
               },
@@ -83,24 +75,48 @@
         </div>
       </div>
     </div>
-    <div class="flex w-full relative">
+    <div class="flex bg-transparent border border-black-300 w-full relative">
       <Attachments :getImages="getImages" />
-      <div
-        class="w-1/12 cursor-pointer flex justify-center items-center text-white"
-      >
-        <font-awesome-icon
-          icon="fa-paper-plane"
-          class="bg-success hover:bg-successHover px-3 py-2 border-r rounded-l"
-          @click="dispatchKeydownEnterEvent"
-        />
-        <font-awesome-icon
-          @click="toggleSchedule"
-          icon="fa-solid fa-chevron-down"
-          class="bg-success hover:bg-successHover p-2 rounded-r"
-        />
-      </div>
-      <div v-if="scheduleModalFlag" >
-        <ScheduleModal :setSchedule="setSchedule" :toggleSchedule="toggleSchedule" />
+      <div class="w-1/12 flex justify-end mr-12">
+        <div v-if="editMessage" class="flex">
+          <button
+            @click="handleCancelEdit"
+            class="px-2 my-4 rounded-md text-white"
+          >
+            <font-awesome-icon
+              icon="fa-xmark"
+              class="bg-danger mt-1 hover:bg-dangerHover px-3 py-2 rounded"
+            />
+          </button>
+          <button
+            @click="sendMessagePayload($event, true)"
+            class="px-2 my-4 rounded-md text-white"
+          >
+          <font-awesome-icon icon="fa-check" class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"/>
+          </button>
+        </div>
+        <div v-else>
+          <div
+            class="w-1/12 cursor-pointer ml-5 my-2 flex justify-center items-center text-white"
+          >
+            <font-awesome-icon
+              icon="fa-paper-plane"
+              class="bg-success hover:bg-successHover px-3 py-2 border-r rounded-l"
+              @click="dispatchKeydownEnterEvent"
+            />
+            <font-awesome-icon
+              @click="toggleSchedule"
+              icon="fa-solid fa-chevron-down"
+              class="bg-success hover:bg-successHover p-2 rounded-r"
+            />
+          </div>
+        </div>
+        <div v-if="scheduleModalFlag">
+          <ScheduleModal
+            :setSchedule="setSchedule"
+            :toggleSchedule="toggleSchedule"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -120,6 +136,11 @@ import moment from 'moment';
 import vClickOutside from 'click-outside-vue3';
 
 export default {
+  beforeMount() {
+    if (this.message) {
+      this.newMessage = this.message;
+    }
+  },
   components: {
     editor: Editor,
     Attachments,
@@ -129,22 +150,25 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
+  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
   methods: {
     dispatchKeydownEnterEvent() {
       const event = new KeyboardEvent('keydown', { keyCode: 13 });
       this.sendMessagePayload(event);
     },
+    handleCancelEdit() {
+      this.messageStore.removeMessageToEdit();
+    },
   },
-  props: ['sendMessage'],
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
-    const messageStore = useMessageStore();
     const { channels } = storeToRefs(channelStore);
-    const { profiles } = storeToRefs(profileStore);
+    const messageStore = useMessageStore();
     const { selectedChat } = storeToRefs(messageStore);
-    const newMessage = ref('');
     const scheduleModalFlag = ref(false);
+    const { profiles } = storeToRefs(profileStore);
+    const newMessage = ref('');
     const showMentions = ref(false);
     const showChannels = ref(false);
     const hasMentionCommand = ref(false);
@@ -185,14 +209,15 @@ export default {
     const getLastIndex = value => {
       return value[value.length - 1];
     };
-
     const setSchedule = value => {
       schedule.value = value;
       toggleSchedule();
     };
-
-    const sendMessagePayload = event => {
-      if (!event.shiftKey) {
+    const sendMessagePayload = (event, buttonClicked) => {
+      if (
+        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        !props.editMessage
+      ) {
         const startWithNonBreakSpace =
           newMessage.value.startsWith('<p>&nbsp;</p>');
         const messagetext = message(newMessage);
@@ -207,6 +232,12 @@ export default {
           files.value = [];
           schedule.value = null;
         }
+      } else if (
+        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        props.editMessage
+      ) {
+        props.editMessageCallBack(newMessage.value);
+        messageStore.removeMessageToEdit();
       }
     };
 
@@ -221,15 +252,12 @@ export default {
       );
       if (startWithBr || endWithBr || endWithBrAndP) {
         messageData = newMessage.value.split('<br />');
-        filterData = messageData.filter(function (el) {
-          return el !== '';
-        });
+        filterData = messageData.filter(el => el !== '');
         actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
-        return actuallData;
       } else {
         actuallData = newMessage?.value?.split('\n')[0];
-        return actuallData;
       }
+      return actuallData;
     };
 
     const getScheduleNotification = () => {
@@ -281,7 +309,6 @@ export default {
       files.value.splice(index, 1);
       readerFile.value.splice(index, 1);
     };
-
     const getImages = file => {
       files.value[files.value?.length] = file;
       const reader = new FileReader();
@@ -306,6 +333,7 @@ export default {
       profiles,
       schedule,
       scheduleModalFlag,
+      messageStore,
       removeFile,
       sendMessagePayload,
       getImages,
