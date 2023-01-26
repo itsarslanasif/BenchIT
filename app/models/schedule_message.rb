@@ -26,6 +26,6 @@ class ScheduleMessage < ApplicationRecord
   end
 
   def change_time
-    self.scheduled_at = Time.zone.parse(self.scheduled_at).in_time_zone(Current.profile.time_zone)
+    self.scheduled_at = Time.zone.parse(scheduled_at).in_time_zone(Current.profile.time_zone)
   end
 end
