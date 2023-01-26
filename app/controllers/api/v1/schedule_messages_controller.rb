@@ -1,7 +1,7 @@
 class Api::V1::ScheduleMessagesController < Api::ApiController
   include MemberShip
 
-  before_action :set_schedule_message, :authenticat_message, only: %i[destroy update send_now]
+  before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
 
   def index
     @messages = Current.profile.schedule_messages.includes(:bench_conversation, :profile)
@@ -45,7 +45,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
     @schedule_message = ScheduleMessage.find(params[:id])
   end
 
-  def authenticat_message
+  def authenticate_message
     if @schedule_message.profile_id.eql?(Current.profile.id)
       check_membership(@schedule_message.bench_conversation)
     else
