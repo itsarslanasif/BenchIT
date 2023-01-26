@@ -8,7 +8,7 @@ class ScheduleMessage < ApplicationRecord
   validates :content, presence: true, length: { minimum: 1 }
   validates :scheduled_at, presence: true
   validates :job_id, presence: true, on: :update
-  #validate :schedule_date_after_current_date
+  validate :schedule_date_after_current_date
 
   private
 
