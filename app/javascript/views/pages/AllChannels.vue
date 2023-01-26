@@ -26,13 +26,22 @@
           <div class="text-small text-gray-900 font-thin">
             {{ pageInfo.count }} {{ $t('channels.result') }}
           </div>
-          <div class="flex gap-2">
+          <div class="flex gap-4 items-center">
             <div> <n-popselect v-model:value="sortValue" :options="options">
                 <n-button>{{ $t('filters.sort_label') }} {{ selectedLabel }}</n-button>
               </n-popselect></div>
+            <div @click="toggleFilters">
+              Filter
+            </div>
+            <div v-if="filterState" @click="toggleFilters">
+              close
+            </div>
           </div>
         </div>
       </div>
+    </div>
+    <div class="flex flex-col items-end" v-if="filterState" >
+      <div class="flex"> <ChannelFilter /> </div>
     </div>
     <div class="px-5 body-style overflow-y-auto flex flex-col">
       <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
@@ -56,11 +65,13 @@ import { storeToRefs } from 'pinia';
 import ChannelList from '../containers/ChannelList.vue'
 import { SearchOutline } from "@vicons/ionicons5";
 import CreateChannel from '../components/channels/CreateChannel.vue';
+import ChannelFilter from '../containers/ChannelFilter.vue';
 import { CONSTANTS } from '../../assets/constants';
 
 export default {
   components: {
     ChannelList,
+    ChannelFilter,
     CreateChannel,
     NInput,
     NSpace,
@@ -74,8 +85,9 @@ export default {
     const modalOpen = ref(false)
     const channelStore = useChannelStore()
     const sortValue = ref('newest')
+    const filterState = ref(false)
     channelStore.index(term.value, sortValue.value)
-    const { channels, currentPage, pageInfo } = storeToRefs(channelStore)
+    const { channels, currentPage, pageInfo, filterChannelsValue } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
@@ -88,6 +100,10 @@ export default {
 
     const closeModal = () => {
       modalOpen.value = !modalOpen.value;
+    }
+
+    const toggleFilters = () => {
+      filterState.value = !filterState.value;
     }
 
     const selectedLabel = computed(() => {
@@ -111,6 +127,11 @@ export default {
       channelStore.index(term.value, newValue)
     })
 
+    watch(filterChannelsValue, async () => {
+      channelStore.index(term.value, sortValue.value)
+    })
+
+
     onBeforeUnmount(() => {
       searchedChannels.value = [];
       channels.value = [];
@@ -128,6 +149,8 @@ export default {
       currentPage,
       pageInfo,
       selectedLabel,
+      filterState,
+      toggleFilters,
       options: [
         {
           label: CONSTANTS.NEWEST_CHANNELS,

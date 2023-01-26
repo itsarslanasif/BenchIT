@@ -11,6 +11,7 @@ export const useChannelStore = () => {
   const channelStore = defineStore('channelStore', {
     state: () => ({
       channels: [],
+      filterChannelsValue: 'all',
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
@@ -29,6 +30,7 @@ export const useChannelStore = () => {
           let newChannels = await getChannels(query, sort, page);
           this.channels = [...newChannels.bench_channels]
           this.pageInfo = newChannels.page_information
+          this.filterChannels()
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
             channel => channel.favourite_id !== null
@@ -158,6 +160,25 @@ export const useChannelStore = () => {
           this.starChannels.push(channel);
         }
       },
+
+      filterChannels() {
+        switch (this.filterChannelsValue) {
+          case 'public':
+            this.channels.filter(channel=>
+              channel.is_private === false
+            )
+            break;
+          case 'private':
+            this.channels.filter(channel=>
+              channel.is_private === true
+            )
+            break;
+          case 'archived':
+            break;
+          default:
+            break;
+        }
+      }
     },
   });
   const store = channelStore();
