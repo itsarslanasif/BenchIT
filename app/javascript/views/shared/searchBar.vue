@@ -135,6 +135,17 @@ export default {
       channelsFlag: false,
     };
   },
+  mounted() {
+    this.intervalId = setInterval(() => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        clearInterval(this.intervalId);
+        sessionStorage.removeItem('currentWorkspace');
+        sessionStorage.removeItem('currentProfile');
+        this.$router.push('/sign_in');
+      }
+    }, 5000);
+  },
   methods: {
     searchPeopleOnly() {
       this.usersFlag = true;
@@ -157,7 +168,9 @@ export default {
       );
     },
     getPlaceholder() {
-      return `${this.$t('actions.search')} ${this.currentWorkspace.company_name}`
+      return `${this.$t('actions.search')} ${
+        this.currentWorkspace.company_name
+      }`;
     },
     goToChat(item) {
       const conversationType = item['workspace_id']

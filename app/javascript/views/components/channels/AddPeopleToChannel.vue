@@ -75,7 +75,10 @@
 import { NSelect } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { defineComponent } from 'vue';
-import { getMembers, addMemberstoChannel } from '../../../api/members/membersApi';
+import {
+  getMembers,
+  addMemberstoChannel
+} from '../../../api/members/membersApi';
 import { CONSTANTS } from '../../../assets/constants';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import benchitAlert from '../../widgets/benchitAlert.vue';
@@ -114,6 +117,9 @@ export default defineComponent({
   beforeUnmount() {
     this.response = this.options = null;
   },
+  mounted() {
+    this.getMembersList('');
+  },
   computed: {
     isSuccessfullResponse() {
       return this.response.data.status === 'ok';
@@ -147,16 +153,19 @@ export default defineComponent({
         return;
       }
       this.loading = true;
-      setTimeout(async () => {
-        let options = await getMembers(this.currentWorkspace?.id, query);
-        this.options = options.map(item => {
-          return {
-            label: item.username,
-            value: item.id,
-          };
-        });
+      setTimeout(() => {
+        this.getMembersList(query);
         this.loading = false;
       }, 1e3);
+    },
+    async getMembersList(query) {
+      let options = await getMembers(this.currentWorkspace?.id, query);
+      this.options = options.map(option => {
+        return {
+          label: option.username,
+          value: option.id,
+        };
+      });
     },
     closeModal() {
       this.selectedValues = [];

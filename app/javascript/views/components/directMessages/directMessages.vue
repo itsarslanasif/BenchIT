@@ -46,7 +46,7 @@
                       <div class="flex gap-2">
                         <p class="font-semibold">
                           {{ chat.username }}
-                          {{ ownProfile(item) ? '(you)' : '' }}
+                          {{ ownProfile(chat) ? '(you)' : '' }}
                         </p>
                         <span
                           style="font-size: 7px; float: left; margin-top: 6px"
