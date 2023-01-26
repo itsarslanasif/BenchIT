@@ -22,7 +22,7 @@
           <p v-if="isProfile" class="font-semibold">
             {{ selectedChat?.username }}
             {{ isOwnChat ? $t('chat.you') : '' }}
-            {{ selectedChat?.isActive ? $t('chat.active') : $t('chat.away') }}
+            {{ selectedChat?.is_active ? $t('chat.active') : $t('chat.away') }}
           </p>
           <p v-if="isChannel" class="font-semibold">
             {{ $t('chat.this_is_the_very_beginning') }}

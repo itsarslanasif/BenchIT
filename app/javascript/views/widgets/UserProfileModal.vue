@@ -132,7 +132,7 @@ export default {
                   { depth: 2 },
                   {
                     default: () =>
-                      this.modal_profile?.isActive ? ' 🟢' : ' ⚫',
+                      this.modal_profile?.is_active ? ' 🟢' : ' ⚫',
                   }
                 ),
               ]
