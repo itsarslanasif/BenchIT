@@ -15,7 +15,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def create
-    if params[:schedule].eql?('null')
+    if params[:scheduled_at].eql?('null')
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
       if @message.save!
         render json: { success: 'Message sent', message: @message }, status: :ok
@@ -124,7 +124,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def schedule_messages_params
-    params[:scheduled_at] = params[:schedule]
     params.permit(:content, :scheduled_at).tap do |param|
       param[:profile_id] = Current.profile.id
     end
