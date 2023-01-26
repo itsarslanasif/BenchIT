@@ -15,7 +15,7 @@ export const getLastDirectMessagesList = async dmIDs => {
   return axios
     .post(
       `v1/conversation_messages/last_messages`,
-      { dmIDs: dmIDs },
+      { dm_ids: dmIDs },
       {
         headers: getHeaders(),
       }

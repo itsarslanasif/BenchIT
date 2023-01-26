@@ -78,12 +78,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def last_messages
-    @last_messages = []
-    params[:dmIDs].each do |id|
+    @last_messages = params[:dm_ids].map do |id|
       conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, id)
-      @last_messages << conversation.conversation_messages.last if conversation.present?
+      conversation.conversation_messages.last if conversation.present?
     end
-    @last_messages = @last_messages.sort { |a, b| b.created_at <=> a.created_at }
+    @last_messages = @last_messages.sort_by(&:created_at).reverse
   end
 
   def profile_messages
