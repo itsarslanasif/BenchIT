@@ -23,7 +23,7 @@ Rails.application.routes.draw do
           end
         end
         resources :users, only: %i[index]
-        resources :schedule_messages, only: %i[index]
+        resources :schedule_messages, only: %i[index destroy]
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message

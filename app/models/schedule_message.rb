@@ -21,6 +21,6 @@ class ScheduleMessage < ApplicationRecord
   def set_job
     time = scheduled_at.in_time_zone(Current.profile.time_zone)
     job = ScheduleMessageJob.set(wait_until: time).perform_later(Current.profile.id, id)
-    update!(job_id: job.job_id)
+    update!(job_id: job.provider_job_id)
   end
 end
