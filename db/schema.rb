@@ -206,7 +206,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_24_075350) do
 
   create_table "schedule_messages", force: :cascade do |t|
     t.text "content", null: false
-    t.datetime "scheduled_at", null: false
+    t.string "scheduled_at", null: false
     t.string "job_id", default: "", null: false
     t.bigint "profile_id", null: false
     t.bigint "bench_conversation_id", null: false
