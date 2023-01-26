@@ -55,7 +55,6 @@
                             chat.isActive ? $t('chat.active') : $t('chat.away')
                           }}
                         </span>
-
                         <p>
                           {{ chat.display_name }}
                         </p>
@@ -84,7 +83,6 @@
               <p>{{ new Date(message.created_at).toDateString() }}</p>
             </div>
           </div>
-
           <div
             @click="handleClick(message)"
             class="bg-primary mb-1 rounded items-center cursor-pointer flex p-4 hover:bg-slate-800"
@@ -101,7 +99,7 @@
                     isOwnMessage ? 'You' : firstName(message.sender_name)
                   }}:</span
                 >
-                <span class="" v-html="message.content"></span>
+                <span v-html="message.content"></span>
               </div>
             </div>
             <div class="ml-auto text-black-200">
@@ -161,11 +159,6 @@ export default {
   },
   watch: {
     search() {
-      if (this.search === '') {
-        this.usersFlag = false;
-        this.channelsFlag = false;
-        this.filteredList = this.allProfiles;
-      }
       this.filteredList = this.allProfiles;
       this.filterData();
     },
@@ -177,7 +170,11 @@ export default {
   },
   async mounted() {
     const dmList = await getDirectMessagesList(this.currentWorkspace.id);
-    const dmIDs = dmList.map(dm => dm.id);
+    const dmIDs = dmList.map(dm => {
+      if (dm.id != null) {
+        return dm.id;
+      }
+    });
     this.last_messages = await getLastDirectMessagesList(dmIDs);
     this.filteredList = this.allProfiles;
   },
@@ -243,14 +240,20 @@ export default {
       );
     },
     getProfileAvatar() {
-      const user = this.allProfiles.find(
-        profile =>
-          profile.id ===
-          (this.currMessage.receiver_id === this.currentProfile.id
-            ? this.currMessage.sender_id
-            : this.currMessage.receiver_id)
-      );
+      let user = {};
+      if (this.currUserIsReceiver) {
+        user = this.allProfiles.find(
+          profile => profile.id === this.currMessage.sender_id
+        );
+      } else {
+        user = this.allProfiles.find(
+          profile => profile.id === this.currMessage.receiver_id
+        );
+      }
       return user.image_url;
+    },
+    currUserIsReceiver() {
+      return this.currMessage.receiver_id === this.currentProfile.id;
     },
   },
 };
