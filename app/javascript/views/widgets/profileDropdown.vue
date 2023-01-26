@@ -355,15 +355,10 @@ export default {
       return label.toLowerCase().replace(/ /g, '-');
     },
     setProfileActiveStatus() {
-      this.status = this.profile.is_active
-        ? CONSTANTS.ACTIVE
-        : CONSTANTS.AWAY;
-      this.prevStatus = this.profile.is_active
-        ? CONSTANTS.AWAY
-        : CONSTANTS.ACTIVE;
-      this.statusIcon = this.profile.is_active
-        ? CONSTANTS.ACTIVE_ICON
-        : CONSTANTS.AWAY_ICON;
+      const { ACTIVE, AWAY, ACTIVE_ICON, AWAY_ICON } = CONSTANTS;
+      this.status = this.profile.is_active ? ACTIVE : AWAY;
+      this.prevStatus = this.profile.is_active ? AWAY : ACTIVE;
+      this.statusIcon = this.profile.is_active ? ACTIVE_ICON : AWAY_ICON;
     },
     async toggleActiveStatus() {
       this.profileActiveStatus
