@@ -132,19 +132,22 @@
               currMessage.content !== $t('deleteMessageModal.success')
             "
           >
-          <div class="flex">
-            <span
-              :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
-              class="text-sm flex-wrap"
-              v-html="currMessage.content"
-            />
-            <EditedAtTime
-              v-if="
-                currMessage.is_edited && currMessage.content !== $t('deleteMessageModal.success')
-              "
-              :updated_at="currMessage.updated_at"
-            />
-          </div>
+            <div class="flex">
+              <span
+                :class="
+                  currMessage.is_info ? 'text-black-600' : 'text-black-800'
+                "
+                class="text-sm flex-wrap"
+                v-html="currMessage.content"
+              />
+              <EditedAtTime
+                v-if="
+                  currMessage.is_edited &&
+                  currMessage.content !== $t('deleteMessageModal.success')
+                "
+                :updated_at="currMessage.updated_at"
+              />
+            </div>
           </span>
           <span
             v-if="
@@ -600,18 +603,12 @@ export default {
         if (this.currMessage.isSaved) {
           save(this.currMessage.id, {
             data: this.currMessage,
-          }).then(() => {
-            this.savedItemsStore.addSavedItem({
-              message: this.currMessage,
-              profile: this.currentProfileStore.currentProfile,
-            });
+          }).then(res => {
+            this.savedItemsStore.addSavedItem(res.data);
           });
         } else {
           unsave(this.currMessage.id).then(() => {
-            this.savedItemsStore.removeSavedItem({
-              message: this.currMessage,
-              profile: this.currentProfile,
-            });
+            this.savedItemsStore.removeSavedItem(this.currMessage);
           });
         }
       } catch (e) {
