@@ -25,7 +25,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     else
       msg = @bench_conversation.schedule_messages.new(schedule_messages_params)
       msg.save!
-      render json: {  success: 'Message has been scheduled.', message: msg }, status: :ok
+      render json: { success: 'Message has been scheduled.', message: msg }, status: :ok
     end
   end
 
