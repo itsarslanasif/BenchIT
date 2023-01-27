@@ -1,11 +1,11 @@
-import { defineStore } from 'pinia'
-import { getSaveMessages } from '../api/save_messages/savemessages'
+import { defineStore } from 'pinia';
+import { getSaveMessages } from '../api/save_messages/savemessages';
 
 export const useSavedItemsStore = defineStore('savedItem', {
   state: () => {
     return {
       savedItems: [],
-    }
+    };
   },
   actions: {
     async index() {
@@ -19,7 +19,9 @@ export const useSavedItemsStore = defineStore('savedItem', {
       this.savedItems.push(item);
     },
     removeSavedItem(currMessage) {
-      this.savedItems = this.savedItems.filter((item) => (item.message.id !== currMessage.id))
-    }
-  }
-})
+      this.savedItems = this.savedItems.filter(
+        item => item.message.id !== currMessage.id
+      );
+    },
+  },
+});

@@ -29,7 +29,7 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="currMessage.content === $t('deleteMessageModal.success')">
+      <template v-if="isDeleted(currMessage.content)">
         <div
           class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
         >
@@ -70,7 +70,7 @@
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
-              v-if="currMessage.content !== $t('deleteMessageModal.success')"
+              v-if="isDeleted(currMessage.content)"
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
               }"
@@ -143,7 +143,7 @@
               <EditedAtTime
                 v-if="
                   currMessage.is_edited &&
-                  currMessage.content !== $t('deleteMessageModal.success')
+                  isDeleted(currMessage.content)
                 "
                 :updated_at="currMessage.updated_at"
               />
@@ -693,6 +693,10 @@ export default {
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
     },
+
+    isDeleted(content) {
+      return content === this.$t('deleteMessageModal.success') ? true : false
+    }
   },
 };
 </script>
