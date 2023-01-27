@@ -2,7 +2,7 @@
   <div
     class="py-1"
     :class="{
-      'bg-yellow-100': currMessage.isSaved,
+      'bg-yellow-50': currMessage.isSaved,
     }"
   >
     <div v-if="!currMessage.info && currMessage.pinned">
@@ -14,7 +14,10 @@
         {{ currMessage.pin.pinned_by }}
       </span>
     </div>
-    <div v-if="this.currMessage.isSaved" class="flex ml-4 items-center">
+    <div
+      v-if="isSavedMessage(currMessage)"
+      class="flex ml-4 items-center bg-yellow-50"
+    >
       <i class="far fa-bookmark text-red-500"></i>
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
@@ -26,9 +29,7 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template
-        v-if="currMessage.content === $t('deleteMessageModal.success')"
-      >
+      <template v-if="isDeleted(currMessage.content)">
         <div
           class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
         >
@@ -69,9 +70,7 @@
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
-              v-if="
-                currMessage.content !== $t('deleteMessageModal.success')
-              "
+              v-if="isDeleted(currMessage.content)"
               :class="{
                 'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
               }"
@@ -133,19 +132,22 @@
               currMessage.content !== $t('deleteMessageModal.success')
             "
           >
-          <div class="flex">
-            <span
-              :class="currMessage.is_info ? 'text-black-600' : 'text-black-800'"
-              class="text-sm flex-wrap"
-              v-html="currMessage.content"
-            />
-            <EditedAtTime
-              v-if="
-                currMessage.is_edited && currMessage.content !== $t('deleteMessageModal.success')
-              "
-              :updated_at="currMessage.updated_at"
-            />
-          </div>
+            <div class="flex">
+              <span
+                :class="
+                  currMessage.is_info ? 'text-black-600' : 'text-black-800'
+                "
+                class="text-sm flex-wrap"
+                v-html="currMessage.content"
+              />
+              <EditedAtTime
+                v-if="
+                  currMessage.is_edited &&
+                  isDeleted(currMessage.content)
+                "
+                :updated_at="currMessage.updated_at"
+              />
+            </div>
           </span>
           <span
             v-if="
@@ -366,6 +368,7 @@ import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 
 export default {
@@ -381,6 +384,8 @@ export default {
     const messagesStore = useMessageStore();
     const downloadsStore = useDownloadsStore();
     const currentProfileStore = useCurrentProfileStore();
+    const currentProfile = currentProfileStore.getCurrentProfile;
+    const { savedItems } = storeToRefs(savedItemsStore);
     return {
       threadStore,
       pinnedConversationStore,
@@ -392,6 +397,8 @@ export default {
       messagesStore,
       downloadsStore,
       currentProfileStore,
+      savedItems,
+      currentProfile,
     };
   },
 
@@ -517,6 +524,14 @@ export default {
     },
   },
   methods: {
+    isSavedMessage(currMessage) {
+      const savedMessage = this.savedItems.find(
+        item =>
+          item.message.id === currMessage.id &&
+          item.profile.id === this.currentProfile.id
+      );
+      return savedMessage ? true : false;
+    },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
       updatedMessage.content = text;
@@ -588,8 +603,8 @@ export default {
         if (this.currMessage.isSaved) {
           save(this.currMessage.id, {
             data: this.currMessage,
-          }).then(() => {
-            this.savedItemsStore.addSavedItem(this.currMessage);
+          }).then(res => {
+            this.savedItemsStore.addSavedItem(res.data);
           });
         } else {
           unsave(this.currMessage.id).then(() => {
@@ -678,6 +693,10 @@ export default {
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
     },
+
+    isDeleted(content) {
+      return content === this.$t('deleteMessageModal.success')
+    }
   },
 };
 </script>

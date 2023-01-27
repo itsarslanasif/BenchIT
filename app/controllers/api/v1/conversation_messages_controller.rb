@@ -48,11 +48,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def save_message
     @saved_item = Current.profile.saved_items.new(conversation_message_id: params[:id])
 
-    if @saved_item.save
-      render json: { message: 'Added to saved items' }, status: :ok
-    else
-      render json: { error: 'Added to saved items', errors: @saved_item.errors }, status: :unprocessable_entity
-    end
+    return if @saved_item.save
+
+    render json: { error: 'Added to saved items', errors: @saved_item.errors }, status: :unprocessable_entity
   end
 
   def unsave_message
