@@ -695,7 +695,7 @@ export default {
     },
 
     isDeleted(content) {
-      return content === this.$t('deleteMessageModal.success') ? true : false
+      return content === this.$t('deleteMessageModal.success')
     }
   },
 };
