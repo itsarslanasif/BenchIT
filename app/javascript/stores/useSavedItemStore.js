@@ -2,11 +2,9 @@ import { defineStore } from 'pinia';
 import { getSaveMessages } from '../api/save_messages/savemessages';
 
 export const useSavedItemsStore = defineStore('savedItem', {
-  state: () => {
-    return {
-      savedItems: [],
-    };
-  },
+  state: () => ({
+    savedItems: [],
+  }),
   actions: {
     async index() {
       try {
