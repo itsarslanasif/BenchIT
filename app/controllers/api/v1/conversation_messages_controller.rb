@@ -23,8 +23,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
         render json: { error: 'Message not sent', errors: @message.errors }, status: :unprocessable_entity
       end
     else
-      @bench_conversation.schedule_messages.create!(schedule_messages_params)
-      render json: { message: 'Message has been scheduled.' }, status: :ok
+      msg = @bench_conversation.schedule_messages.new(schedule_messages_params)
+      msg.save!
+      render json: {  success: 'Message has been scheduled.', message: msg }, status: :ok
     end
   end
 
