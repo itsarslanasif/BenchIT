@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAllProfiles } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from './useCurrentWorkspaceStore';
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
@@ -21,7 +20,7 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          console.error(e)
+          console.error(e);
         }
       },
     },
