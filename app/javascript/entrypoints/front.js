@@ -44,6 +44,8 @@ import {
   faBars,
   faUserGroup,
   faTrashCan,
+  faPen,
+  faFilePen,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -93,6 +95,8 @@ library.add(
   faBars,
   faUserGroup,
   faTrashCan,
+  faPen,
+  faFilePen
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

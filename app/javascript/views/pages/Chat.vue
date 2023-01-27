@@ -4,10 +4,7 @@
       <ChatHeader />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
-      <ChatBody
-        @load-more-messages="loadMoreMessages"
-        :oldestUnreadMessageId="oldestUnreadMessageId"
-      />
+      <ChatBody @load-more-messages="loadMoreMessages" :oldestUnreadMessageId="oldestUnreadMessageId" />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
       <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
@@ -145,6 +142,7 @@ export default {
             receiver: this.messageStore.getSelectedChat,
             content: message,
             scheduled_at: schedule.value,
+            conversation_type: this.getConversationType()
           });
         }
         this.newMessageSent = true;
@@ -155,6 +153,9 @@ export default {
     joinedTheChannel() {
       this.isMember = !this.isMember;
     },
+    getConversationType() {
+      return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile'
+    }
   },
 };
 </script>
@@ -171,6 +172,7 @@ export default {
 .chat-style {
   flex: 1;
 }
+
 .mce-i-codesample {
   color: transparent !important;
   background-image: url(../../assets/images/codeblock.png) !important;
