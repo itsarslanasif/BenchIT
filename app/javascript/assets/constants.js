@@ -155,4 +155,9 @@ export const CONSTANTS = {
   HOURS: ' hours',
   HOUR:' hour',
   MINUTES: ' minutes',
+  CLEAR_STATUS:'Clear status',
+  ACTIVE:'active',
+  AWAY:'away',
+  ACTIVE_ICON:'🟢',
+  AWAY_ICON:'⚫'
 };

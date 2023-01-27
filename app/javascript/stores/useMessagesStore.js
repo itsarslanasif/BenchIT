@@ -18,7 +18,7 @@ export const useMessageStore = () => {
       hasMoreMessages: true,
       selectedChat: {},
       newMessageSent: false,
-        messageToEdit: null,
+      messageToEdit: null,
     }),
 
     getters: {
@@ -58,8 +58,10 @@ export const useMessageStore = () => {
             currentWorkspace.id,
             id
           );
+          this.selectedChat.conversation_type = 'Profile';
         } else if (conversation_type === 'channels') {
           this.selectedChat = await getChannel(id);
+          this.selectedChat.conversation_type = 'Channel';
         }
       },
       async addMessage(msg) {

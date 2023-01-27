@@ -1,305 +1,58 @@
 <template>
-  <div class="bg-white border border-black-200 rounded-md drop-shadow-md">
-    <div class="flex">
-      <span
-        @click="jumpToConversation"
-        class="p-1 cursor-pointer w-11/12 items-center text-black-800 text-xs flex relative"
+  <n-tooltip trigger="hover" placement="bottom-end">
+    <template #trigger>
+      <div
+        class="text-black-800 justify-center flex items-center float-right cursor-pointer mr-4 mt-3 text-base z-10 relative"
+        @click="setUnpinModal"
       >
-        <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
-        {{ $t('pinconversation.pinned_by') }}
-        {{ currMessage.pin.pinned_by }}
-      </span>
-      <span
-        class="text-black-500 hover:text-black-800 flex-grow cursor-pointer text-right mr-2"
-        @click="unPinMessage"
-      >
-        X
-      </span>
-    </div>
-    <div
-      class="flex p-1 px-4 relative"
-      @mouseover="emojiModalStatus = true"
-      @mouseleave="emojiModalStatus = false"
-    >
-      <template v-if="!isSameUser || !isSameDayMessage">
-        <user-profile-modal
-          :profile_id="currMessage.sender_id"
-          :sender_avatar="currMessage.sender_avatar"
-        />
-      </template>
-      <span class="message">
-        <div class="ml-1">
-          <span class="items-center flex text-black-800 text-lg m-0">
-            <p
-              @click="showUserProfile"
-              v-if="!isSameUser || !isSameDayMessage"
-              class="mr-1 text-sm hover:underline cursor-pointer"
-            >
-              <b>{{ currMessage.sender_name }}</b>
-            </p>
-            <p
-              class="text-xs ml-2 mr-3 text-black-500 hover:underline cursor-pointer"
-            >
-              {{ isSameUser && isSameDayMessage ? timeWithoutAMPM : time }}
-            </p>
-            <span
-              v-if="isSameUser && isSameDayMessage"
-              class="text-black-800 text-sm flex-wrap"
-              v-html="currMessage.content"
-            />
-          </span>
-          <span
-            v-if="!isSameUser || !isSameDayMessage"
-            class="text-black-800 text-sm flex-wrap"
-            v-html="currMessage.content"
-          />
-          <div v-if="currMessage?.attachments" class="flex gap-2">
-            <div
-              v-for="attachment in currMessage?.attachments"
-              :key="attachment.id"
-              class="w-64"
-            >
-              <img
-                :src="attachment?.attachment_link"
-                class="rounded"
-                :class="{ 'ml-12': isSameUser && isSameDayMessage }"
-              />
-            </div>
-          </div>
-        </div>
-        <template v-for="emoji in allReactions" :key="emoji.id">
-          <span
-            @click="emojiClickListener(emoji)"
-            class="bg-black-300 p-1 mr-1 rounded"
-            >{{ emoji.emoji }}</span
-          >
-        </template>
-        <div
-          v-if="currMessage?.replies?.length > 0"
-          @click="toggleThread"
-          :class="{ 'ml-12': isSameUser && isSameDayMessage }"
-          class="text-info text-xs cursor-pointer hover:underline"
-        >
-          {{ repliesCount }}
-        </div>
-      </span>
-    </div>
-    <div v-if="openEmojiModal" class="absolute right-0 z-50">
-      <EmojiPicker :addReaction="addReaction" />
+        <font-awesome-icon icon="fa-solid fa-xmark" />
+      </div>
+    </template>
+    {{ $t('pinconversation.title') }}
+  </n-tooltip>
+  <div class="bg-white border border-black-400 rounded-lg drop-shadow-md p-1">
+    <div>
+      <PinnedMessageContent :currMessage="currMessage" />
     </div>
   </div>
+  <UnPinModal
+    v-model:show="showUnpinModal"
+    :currMessage="currMessage"
+    :setUnpinModal="setUnpinModal"
+  />
 </template>
 
 <script>
-import moment from 'moment';
-import { NAvatar, NCard, NDivider } from 'naive-ui';
-import EmojiPicker from '../../widgets/emojipicker.vue';
-import EmojiModalButton from '../../widgets/emojiModalButton.vue';
-import { useThreadStore } from '../../../stores/useThreadStore';
+import UnPinModal from './unpinModal.vue';
+import PinnedMessageContent from './pinnedMessage.vue';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import { save } from '../../../api/save_messages/savemessage.js';
-import { unsave } from '../../../api/save_messages/unsavemessage.js';
-import { CONSTANTS } from '../../../assets/constants';
-import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
-import { useRightPaneStore } from '../../../stores/useRightPaneStore';
-import UserProfileModal from '../../widgets/UserProfileModal.vue';
-import { add_reaction } from '../../../api/reactions/reaction.js';
-import { remove_reaction } from '../../../api/reactions/reaction.js';
-import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
-import { getUserProfile } from '../../../api/profiles/userProfile';
-import { useUserProfileStore } from '../../../stores/useUserProfileStore';
-import { useMessageStore } from '../../../stores/useMessagesStore';
-import { unPinMessage } from '../../../api/messages/pinnedMessages';
-
+import { NTooltip } from 'naive-ui';
 export default {
-  name: 'MessageWrapper',
+  name: 'PinMessageWrapper',
   setup() {
-    const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
-    const savedItemsStore = useSavedItemsStore();
-    const rightPaneStore = useRightPaneStore();
-    const currentUserStore = useCurrentUserStore();
-    const userProfileStore = useUserProfileStore();
-    const mesageStore = useMessageStore();
+    return { pinnedConversationStore };
+  },
+  data() {
     return {
-      threadStore,
-      pinnedConversationStore,
-      savedItemsStore,
-      currentUserStore,
-      rightPaneStore,
-      userProfileStore,
-      mesageStore,
+      showUnpinModal: false,
     };
   },
   components: {
-    NAvatar,
-    NCard,
-    NDivider,
-    EmojiPicker,
-    EmojiModalButton,
-    UserProfileModal,
+    UnPinModal,
+    PinnedMessageContent,
+    NTooltip,
   },
   props: {
     currMessage: {
       type: Object,
       default: undefined,
     },
-    prevMessage: {
-      type: Object,
-      default: undefined,
-    },
-  },
-  data() {
-    return {
-      topReactions: [
-        {
-          i: CONSTANTS.COMPLETED_EMOJI,
-          n: CONSTANTS.COMPLETED,
-        },
-        {
-          i: CONSTANTS.LIKED_IT_EMOJI,
-          n: CONSTANTS.LIKED_IT,
-        },
-        {
-          i: CONSTANTS.TAKING_A_LOOK_EMOJI,
-          n: CONSTANTS.TAKING_A_LOOK,
-        },
-      ],
-      emojiModalStatus: false,
-      openEmojiModal: false,
-      allReactions: this.currMessage.reactions,
-      showOptions: false,
-    };
-  },
-  beforeUnmount() {
-    this.topReactions = null;
-  },
-  computed: {
-    time() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
-        'h:mm A'
-      );
-    },
-    timeWithoutAMPM() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
-        'h:mm'
-      );
-    },
-    isSameUser() {
-      if (this.prevMessage === undefined) return false;
-      return this.currMessage?.sender_id === this.prevMessage?.sender_id;
-    },
-    isSameDayMessage() {
-      return (
-        new Date(this.currMessage?.created_at).toDateString() ===
-        new Date(this.prevMessage?.created_at).toDateString()
-      );
-    },
-    repliesCount() {
-      return `${this.currMessage.replies?.length} replies..`;
-    },
   },
   methods: {
-    async addReaction(emoji) {
-      try {
-        await add_reaction(this.currMessage.id, emoji.i);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    unPinMessage() {
-      try {
-        unPinMessage(this.currMessage.pin.id);
-      } catch (e) {
-        console.error(e);
-      }
-      if (
-        this.pinnedConversationStore.getCount == 0 &&
-        this.pinnedConversationStore.getPinToggle
-      ) {
-        this.pinnedConversationStore.togglePin();
-      }
-    },
-    getConversationId() {
-      return window.location.pathname.split('/')[2];
-    },
-    async emojiClickListener(emoji) {
-      try {
-        if (emoji.user_id == this.currentUserStore.currentUser.id) {
-          await remove_reaction(emoji.id).then(() => {
-            this.allReactions = this.allReactions.filter(function (reaction) {
-              return reaction.id != emoji.id;
-            });
-          });
-        }
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    setEmojiModal() {
-      this.openEmojiModal = !this.openEmojiModal;
-    },
-    setOptionsModal() {
-      this.showOptions = !this.showOptions;
-    },
-    toggleThread() {
-      this.threadStore.setMessage(this.currMessage);
-      this.rightPaneStore.toggleThreadShow(true);
-    },
-    showUserProfile() {
-      this.setUserProfileForPane();
-      this.rightPaneStore.toggleUserProfileShow(true);
-    },
-    jumpToConversation() {
-      if (this.currMessage.conversationable_type == 'BenchChannel') {
-        this.checkForThreadedMessage(this.currMessage);
-        this.$router.push(
-          `/channels/${this.getConversationId()}/${this.currMessage.id}`
-        );
-      } else if (this.currMessage.conversationable_type == 'Profile') {
-        this.checkForThreadedMessage(this.currMessage);
-        this.$router.push(
-          `/profiles/${this.getConversationId()}/${this.currMessage.id}`
-        );
-      } else if (message.conversationable_type == 'Group') {
-        this.$router.push(
-          `/groups/${this.getConversationId()}/${this.currMessage.id}`
-        );
-      }
-    },
-    checkForThreadedMessage(message) {
-      if (message.parent_message_id) {
-        if (this.rightPaneStore.showThread) {
-          this.rightPaneStore.toggleThreadShow(false);
-        }
-        this.threadStore.setMessage(
-          this.mesageStore.getMessage(message.parent_message_id)
-        );
-        this.rightPaneStore.toggleThreadShow(true);
-      }
-    },
-    async setUserProfileForPane() {
-      this.userProfileStore.setUserProfile(
-        await getUserProfile(1, this.currMessage.sender_id)
-      );
-    },
-    saveMessage() {
-      this.currMessage.isSaved = !this.currMessage.isSaved;
-      try {
-        if (this.currMessage.isSaved) {
-          save(this.currMessage.id, {
-            data: this.currMessage,
-          }).then(() => {
-            this.savedItemsStore.addSavedItem(this.currMessage);
-          });
-        } else {
-          unsave(this.currMessage.id).then(() => {
-            this.savedItemsStore.removeSavedItem(this.currMessage);
-          });
-        }
-      } catch (e) {
-        console.error(e);
-      }
+    setUnpinModal() {
+      this.pinnedConversationStore.showAlert = true;
+      this.showUnpinModal = !this.showUnpinModal;
     },
   },
 };
