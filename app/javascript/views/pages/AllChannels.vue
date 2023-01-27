@@ -33,26 +33,32 @@
             <div @click="toggleFilters">
               Filter
             </div>
-            <div v-if="filterState" @click="toggleFilters">
+            <div @click="resetFilters" v-if="isFiltered" >
+              Reset
+            </div>
+            <div v-show="filterState" @click="toggleFilters">
               close
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="flex flex-col items-end" v-if="filterState" >
-      <div class="flex"> <ChannelFilter /> </div>
-    </div>
-    <div class="px-5 body-style overflow-y-auto flex flex-col">
+    <div class="flex overflow-y-auto ">
+
+      <div class="flex flex-col items-end" v-show="filterState" >
+        <ChannelFilter /> 
+      </div>
+      <div class="px-5  flex flex-col">
       <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
       <div v-for="channel in searchedChannels" :key="channel.id">
         <ChannelList :channelName="channel.name" :channelDescription="channel.description"
-          :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
+        :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
       <div class="flex justify-center p-3">
         <n-pagination v-model:page="currentPage" :page-count="pageInfo.pages"
-          :on-update:page="changePage" />
+        :on-update:page="changePage" />
       </div>
+    </div>
     </div>
   </div>
 </template>
@@ -86,16 +92,17 @@ export default {
     const channelStore = useChannelStore()
     const sortValue = ref('newest')
     const filterState = ref(false)
-    channelStore.index(term.value, sortValue.value)
-    const { channels, currentPage, pageInfo, filterChannelsValue } = storeToRefs(channelStore)
+    const { filterChannelsValue, hideMyChannels, currentPage } = storeToRefs(channelStore)
+    channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
+    const { channels, pageInfo} = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
     const handleSubmit = async () => {
-      channelStore.index(term.value, sortValue.value)
+      channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
     };
 
     const changePage = (page) => {
-      channelStore.index(term.value, sortValue.value, page)
+      channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value, page)
     }
 
     const closeModal = () => {
@@ -123,12 +130,28 @@ export default {
       }
     })
 
+    const resetFilters = () => {
+      filterChannelsValue.value = ''
+      hideMyChannels.value= false
+    }
+
+    const isFiltered = () => {
+      if (filterChannelsValue != '' || hideMyChannels) {
+        return true
+      }
+      else return false
+    }
+
     watch(sortValue, async (newValue) => {
-      channelStore.index(term.value, newValue)
+      channelStore.index(term.value, newValue, filterChannelsValue.value, hideMyChannels.value)
     })
 
-    watch(filterChannelsValue, async () => {
-      channelStore.index(term.value, sortValue.value)
+    watch(filterChannelsValue, async (newValue) => {
+      channelStore.index(term.value, sortValue.value, newValue, hideMyChannels.value)
+    })
+
+    watch(hideMyChannels, async (newValue) => {
+      channelStore.index(term.value, sortValue.value, filterChannelsValue.value, newValue)
     })
 
 
@@ -151,6 +174,8 @@ export default {
       selectedLabel,
       filterState,
       toggleFilters,
+      resetFilters,
+      isFiltered,
       options: [
         {
           label: CONSTANTS.NEWEST_CHANNELS,
@@ -189,4 +214,5 @@ export default {
 .body-style {
   flex: 0.9;
 }
+
 </style>

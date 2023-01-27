@@ -2,11 +2,11 @@
   <div class="flex flex-col">
     <div class="text-md font-semibold">Channel Type</div>
     <n-space vertical>
-      <n-select :options="options" @update:value="handleUpdateValue" />
+      <n-select :options="options" v-model:value=filterChannelsValue @update:value="handleUpdateValue" />
     </n-space>
     <div class="text-md font-semibold">More Options:</div>
     <div>
-      <n-checkbox v-model:checked="hideMyChannels" label="Hide My Channels" @update:checked="handleCheckedChange" />
+      <n-checkbox label="Hide My Channels" @update:checked="handleCheckedChange" />
     </div>
   </div>
 </template>
@@ -25,12 +25,11 @@ export default {
   },
   setup() {
     const channelStore = useChannelStore()
-    const filterChannelsValue = storeToRefs(channelStore)
-    const hideMyChannels = ref(false)
+    const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore)
     const options = ref([
         {
           label: "All channels types",
-          value: "all"
+          value: ""
         },
         {
           label: "Public Channels",
@@ -45,11 +44,11 @@ export default {
           value: "archived"
         },
       ])
-    const handleCheckedChange = (checked) => {
-        console.log(checked)
+    const handleCheckedChange = (checked) => {  
+          hideMyChannels.value = checked;
       }
     const handleUpdateValue = (value) => {
-        channelStore.filterChannelsValue = value
+        filterChannelsValue.value = value
       }
 
     return {
