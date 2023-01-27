@@ -126,7 +126,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def hide_my_channels
-    if params[:hide_my_channels].present?
+    if params[:hide_my_channels].eql?('true')
       @bench_channels = @bench_channels.select { |channel| !channel.is_private && !channel.participant?(Current.profile) }
     end
     @bench_channels = @bench_channels.reject do |channel|
