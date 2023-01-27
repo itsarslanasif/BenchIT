@@ -9,12 +9,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channels = Current.workspace.bench_channels
 
     if params[:query].present?
-      search_results = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
-                                                           match: :word_start)
-      @bench_channels = BenchChannel.where(id: search_results.map(&:id))
+      @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
+                                                            match: :word_start)
     end
     filter_bench_channels
-    hide_my_channels
+    hide_profile_bench_channels
     sort_bench_channels if params[:sort_by].present?
     paginate_bench_channels
   end
@@ -125,7 +124,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     end
   end
 
-  def hide_my_channels
+  def hide_profile_bench_channels
     if params[:hide_my_channels].eql?('true')
       @bench_channels = @bench_channels.select { |channel| !channel.is_private && !channel.participant?(Current.profile) }
     end
