@@ -45,14 +45,12 @@ export const useChannelStore = () => {
       async createChannel(name, description, is_private) {
         try {
           const result = await createChannel(name, description, is_private);
-          console.log(result);
           apiResponseStatusStore().setApiResponseStatus(result.data);
           this.channels.push(result.data);
           this.joinedChannels.push(result.data);
           this.sortChannelsList();
           return result;
         } catch (e) {
-          console.log(e.response);
           return e.response;
         }
       },
