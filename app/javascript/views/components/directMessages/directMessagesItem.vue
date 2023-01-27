@@ -21,8 +21,10 @@
         {{ statusClearAfterTime(user?.status?.clear_after) }}
       </span>
     </n-tooltip>
-    <div v-if="unreadDetails.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
-      {{ unreadDetails.messages.length }}
+    <div v-if="unreadDetails">
+      <div v-if="unreadDetails.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
+        {{ unreadDetails.messages.length }}
+      </div>
     </div>
   </div>
 </template>
