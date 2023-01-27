@@ -53,6 +53,7 @@ export const useChannelStore = () => {
           this.sortChannelsList();
           return result;
         } catch (e) {
+          apiResponseStatusStore().setApiResponseStatus(e.response.data);
           return e.response;
         }
       },
