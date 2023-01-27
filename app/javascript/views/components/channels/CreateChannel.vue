@@ -100,7 +100,6 @@ export default {
           )
           .then(response => {
             this.status = response.status;
-            console.log(this.status);
             if (this.status === 200) {
               this.closeModal();
             }
