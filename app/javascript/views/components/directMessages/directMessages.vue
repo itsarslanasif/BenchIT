@@ -240,20 +240,12 @@ export default {
       );
     },
     getProfileAvatar() {
-      let user = {};
-      if (this.currUserIsReceiver) {
-        user = this.allProfiles.find(
-          profile => profile.id === this.currMessage.sender_id
-        );
-      } else {
-        user = this.allProfiles.find(
-          profile => profile.id === this.currMessage.receiver_id
-        );
-      }
+      const userId =
+        this.currMessage.receiver_id === this.currentProfile.id
+          ? this.currMessage.sender_id
+          : this.currMessage.receiver_id;
+      const user = this.allProfiles.find(profile => profile.id === userId);
       return user.image_url;
-    },
-    currUserIsReceiver() {
-      return this.currMessage.receiver_id === this.currentProfile.id;
     },
   },
 };
