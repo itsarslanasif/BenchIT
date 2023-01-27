@@ -19,11 +19,21 @@
       </span>
       <span :class="isProfile && 'self-center'">
         <span>
-          <p v-if="isProfile" class="font-semibold">
+          <div v-if="isProfile" class="flex font-semibold">
             {{ selectedChat?.username }}
             {{ isOwnChat ? $t('chat.you') : '' }}
-            {{ selectedChat?.is_active ? $t('chat.active') : $t('chat.away') }}
-          </p>
+
+            <span class="flex text-md mx-4 mt-1 break-words text-black-800">
+              <span
+                v-if="selectedChat?.is_active"
+                class="bg-green-700 rounded-full border-green-700 border-2 h-3 w-3 relative"
+              />
+              <span
+                v-else
+                class="bg-white rounded-full border-black border-2 h-3 w-3 relative"
+              />
+            </span>
+          </div>
           <p v-if="isChannel" class="font-semibold">
             {{ $t('chat.this_is_the_very_beginning') }}
             <font-awesome-icon

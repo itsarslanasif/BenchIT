@@ -62,7 +62,7 @@
             v-else
             class="bg-white rounded-full border-black mt-1 mr-1 border-2 h-3 w-3 relative"
           />
-          <p class="truncate">
+          <p class="ml-3 truncate">
             {{
               userProfileStore.userProfile.is_active
                 ? $t('rightpane.active')

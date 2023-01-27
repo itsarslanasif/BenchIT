@@ -82,7 +82,7 @@ export const useMessageStore = () => {
           return this.messageToEdit && (message.id == this.messageToEdit.id)
         return false
       },
-      updateSelectedprofile(data){
+      updateSelectedprofileStatus(data){
         if(this.selectedChat?.conversation_type==='Profile' && this.selectedChat?.id===data.id){
           this.selectedChat.is_active=data.is_active
           this.selectedChat.status=data.status

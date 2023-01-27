@@ -43,21 +43,19 @@ const ChannelParticipantDelete = async data => {
 };
 
 const updateProfileStatus = data => {
-  const currentProfileStore = useCurrentProfileStore();
-  let profile = currentProfileStore.currentProfile;
+  const { setProfileStatus, setProfileActiveStatus, currentProfile } = useCurrentProfileStore();
+  const { updateProfileStatus } = useProfileStore();
+  const { updateProfileStatus:updateDmProfileStatus } = useDirectMessagesStore();
+  const { updateSelectedprofileStatus } = useMessageStore();
 
-  if (profile.id === data.id) {
-    currentProfileStore.setProfileStatus(data.status);
-    currentProfileStore.setProfileActiveStatus(data.is_active)
+  if (currentProfile.id === data.id) {
+  setProfileStatus(data.status);
+  setProfileActiveStatus(data.is_active)
   }
-  const profileStore= useProfileStore();
-  const dmStore = useDirectMessagesStore();
-  const messageStore=useMessageStore();
-  profileStore.updateProfileStatus(data);
-  dmStore.updateProfileStatus(data);
-  messageStore.updateSelectedprofile(data)
-
-};
+  updateProfileStatus(data);
+  updateDmProfileStatus(data);
+  updateSelectedprofileStatus(data)
+  };
 
 const notificationActions = {
   MessageCreate: createMessage,
