@@ -22,43 +22,42 @@
             </n-input>
           </form>
         </n-space>
-        <div class="flex items-center py-1 justify-between">
-          <div class="text-small text-gray-900 font-thin">
+        <div class="flex items-center py-1 justify-between font-light text-small">
+          <div class="text-gray-700">
             {{ pageInfo.count }} {{ $t('channels.result') }}
           </div>
           <div class="flex gap-4 items-center">
-            <div> <n-popselect v-model:value="sortValue" :options="options">
-                <n-button>{{ $t('filters.sort_label') }} {{ selectedLabel }}</n-button>
+            <div class="hover:bg-transparent cursor-pointer"> <i class="fas fa-sort" /> <n-popselect v-model:value="sortValue" :options="options">
+             {{ $t('filters.sort_label') }} {{ selectedLabel }} 
               </n-popselect></div>
-            <div @click="toggleFilters">
+            <div @click="toggleFilters" class="hover:bg-transparent cursor-pointer">
+              <i class='fas fa-sliders-h' />
               Filter
             </div>
-            <div @click="resetFilters" v-if="isFiltered" >
+            <div @click="resetFilters" v-if="isFiltered()" class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline" >
               Reset
             </div>
-            <div v-show="filterState" @click="toggleFilters">
-              close
+            <div v-show="filterState" @click="toggleFilters" class="rounded hover:bg-transparent cursor-pointer">
+              <i class="fas fa-xmark self-center"></i>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="flex overflow-y-auto ">
-
-      <div class="flex flex-col items-end" v-show="filterState" >
-        <ChannelFilter /> 
+    <div class="flex body-style overflow-auto">
+      <div class="px-5 h-full w-full flex flex-col overflow-y-auto">
+        <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
+        <div v-for="channel in searchedChannels" :key="channel.id">
+          <ChannelList :channelName="channel.name" :channelDescription="channel.description"
+            :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
+        </div>
+        <div class="flex justify-center p-3">
+          <n-pagination :page-count="pageInfo.pages" :on-update:page="changePage" />
+        </div>
       </div>
-      <div class="px-5  flex flex-col">
-      <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
-      <div v-for="channel in searchedChannels" :key="channel.id">
-        <ChannelList :channelName="channel.name" :channelDescription="channel.description"
-        :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
+      <div class="flex flex-col p-5 w-1/4" v-show="filterState">
+        <ChannelFilter />
       </div>
-      <div class="flex justify-center p-3">
-        <n-pagination v-model:page="currentPage" :page-count="pageInfo.pages"
-        :on-update:page="changePage" />
-      </div>
-    </div>
     </div>
   </div>
 </template>
@@ -92,7 +91,7 @@ export default {
     const channelStore = useChannelStore()
     const sortValue = ref('newest')
     const filterState = ref(false)
-    const { filterChannelsValue, hideMyChannels, currentPage } = storeToRefs(channelStore)
+    const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore)
     channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
     const { channels, pageInfo} = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
@@ -136,10 +135,7 @@ export default {
     }
 
     const isFiltered = () => {
-      if (filterChannelsValue != '' || hideMyChannels) {
-        return true
-      }
-      else return false
+      return filterChannelsValue.value != '' || hideMyChannels.value
     }
 
     watch(sortValue, async (newValue) => {
@@ -169,7 +165,6 @@ export default {
       closeModal,
       changePage,
       sortValue,
-      currentPage,
       pageInfo,
       selectedLabel,
       filterState,
@@ -212,7 +207,6 @@ export default {
 }
 
 .body-style {
-  flex: 0.9;
+  flex: 1;
 }
-
 </style>

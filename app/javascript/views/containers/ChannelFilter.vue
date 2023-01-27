@@ -1,26 +1,21 @@
 <template>
   <div class="flex flex-col">
-    <div class="text-md font-semibold">Channel Type</div>
-    <n-space vertical>
-      <n-select :options="options" v-model:value=filterChannelsValue @update:value="handleUpdateValue" />
-    </n-space>
-    <div class="text-md font-semibold">More Options:</div>
-    <div>
-      <n-checkbox label="Hide My Channels" @update:checked="handleCheckedChange" />
-    </div>
+    <div class="text-md font-semibold py-2">Channel Type</div>
+      <div class=""><n-select :options="options" v-model:value=filterChannelsValue @update:value="handleUpdateValue" /></div>
+    <div class="text-md font-semibold py-3">More Options:</div>
+      <n-checkbox label="Hide My Channels" v-model:checked=hideMyChannels @update:checked="handleCheckedChange" />
   </div>
 </template>
 
 <script>
 import { useChannelStore } from "../../stores/useChannelStore";
-import { NSelect, NSpace, NCheckbox } from "naive-ui";
+import { NSelect, NCheckbox } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
 
 export default {
   components:{
     NSelect,
-    NSpace,
     NCheckbox
   },
   setup() {
