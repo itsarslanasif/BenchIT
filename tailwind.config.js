@@ -136,6 +136,8 @@ module.exports = {
         'flexible-sm': '30%',
         'flexible-md': '40%',
         'flexible-lg': '60%',
+        'flexible-xl': '80%',
+        'flexible-2xl': '90%',
       },
       height: {
         7: '1.5rem',
@@ -143,15 +145,20 @@ module.exports = {
         12: '3rem',
         15: '5rem',
         400: '28rem',
+        'flexible-xs': '20%',
+        'flexible-sm': '30%',
+        'flexible-md': '40%',
+        'flexible-lg': '60%',
+        'flexible-xl': '80%',
       },
       maxHeight: {
-        '500': '42rem',
+        500: '42rem',
       },
       minWidth: {
-        '10': '2.5rem',
+        10: '2.5rem',
         180: '37.5rem',
         95: '20rem',
-      }
+      },
     },
   },
   variants: {

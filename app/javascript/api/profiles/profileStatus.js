@@ -9,8 +9,9 @@ export const setProfileStatus = async (
   return await axios
     .post(
       `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/set_status`,
-      statusPayload, {
-        headers: getHeaders()
+      statusPayload,
+      {
+        headers: getHeaders(),
       }
     )
     .then(response => {
@@ -21,17 +22,17 @@ export const setProfileStatus = async (
 export const getRecentStatuses = async () => {
   return await axios
     .get(`/v1/statuses`, {
-      headers: getHeaders()
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;
     });
 };
 
-export const deleteRecentStatus = async (id) => {
+export const deleteRecentStatus = async id => {
   return await axios
     .delete(`/v1/statuses/${id}`, {
-      headers: getHeaders()
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;
@@ -41,9 +42,40 @@ export const deleteRecentStatus = async (id) => {
 export const clearStatus = async (currentWorkspaceID, currentProfileID) => {
   return await axios
     .post(
-      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/clear_status`, {
-        headers: getHeaders()
-      })
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/clear_status`,
+      {
+        headers: getHeaders(),
+      }
+    )
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const setActiveStatus = async (currentWorkspaceID, currentProfileID) => {
+  return await axios
+    .get(
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/set_is_active`,
+      {
+        headers: getHeaders(),
+      }
+    )
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const removeActiveStatus = async (
+  currentWorkspaceID,
+  currentProfileID
+) => {
+  return await axios
+    .get(
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/remove_is_active`,
+      {
+        headers: getHeaders(),
+      }
+    )
     .then(response => {
       return response.data;
     });

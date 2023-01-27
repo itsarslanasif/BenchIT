@@ -3,7 +3,7 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show update]
-  before_action :find_profile, only: %i[show update set_status clear_status]
+  before_action :find_profile, only: %i[show update set_status clear_status set_is_active remove_is_active]
 
   def index
     @profiles = if params[:query].presence
@@ -42,6 +42,22 @@ class Api::V1::ProfilesController < Api::ApiController
   def set_status
     if @profile.update(profile_params)
       set_job
+    else
+      render json: { errors: @profile.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def set_is_active
+    if @profile.update(is_active: true)
+      render json: { message: 'status set.' }, status: :ok
+    else
+      render json: { errors: @profile.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def remove_is_active
+    if @profile.update(is_active: false)
+      render json: { message: 'status removed.' }, status: :ok
     else
       render json: { errors: @profile.errors }, status: :unprocessable_entity
     end

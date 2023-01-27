@@ -46,20 +46,14 @@ export const useChannelStore = () => {
 
       async createChannel(name, description, is_private) {
         try {
-          await createChannel(name, description, is_private).then(response => {
-            if (response?.data?.errors) {
-              apiResponseStatusStore().setApiResponseStatus(response.data);
-              return response.data;
-            } else {
-              apiResponseStatusStore().setApiResponseStatus(response);
-              this.channels.push(response.data);
-              this.joinedChannels.push(response.data);
-              this.sortChannelsList();
-              return response.data;
-            }
-          });
+          const result = await createChannel(name, description, is_private);
+          apiResponseStatusStore().setApiResponseStatus(result.data);
+          this.channels.push(result.data);
+          this.joinedChannels.push(result.data);
+          this.sortChannelsList();
+          return result;
         } catch (e) {
-          console.error(e);
+          return e.response;
         }
       },
 
