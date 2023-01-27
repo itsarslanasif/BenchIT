@@ -30,7 +30,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
       if @bench_channel.save
         create_first_bench_channel_participant
       else
-        render json: { error: 'There was an error creating the channel.', errors: @bench_channel.errors }, status: :unprocessable_entity
+        render json: { error: 'There was an error creating the channel.', errors: @bench_channel.errors.full_messages }, status: :unprocessable_entity
       end
     end
   end

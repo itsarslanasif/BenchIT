@@ -83,6 +83,7 @@ export default {
       joinedChannels,
       leftPaneStore,
       messagesStore,
+      channelStore,
     };
   },
   methods: {
