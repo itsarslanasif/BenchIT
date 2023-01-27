@@ -193,7 +193,7 @@ en:
         result: 'result(s)'
         starred: 'Starred'
         channel_created_success: 'New channel created successfully'
-        channel_created_failure: 'Channel name already exist'
+        channel_created_failure: 'Channel already exist'
         dot: '·'
         starred: 'Starred'
       bookmark:
