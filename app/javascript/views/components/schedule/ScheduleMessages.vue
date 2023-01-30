@@ -31,6 +31,7 @@ export default {
   setup() {
     const messageStore = useMessageStore();
     const { scheduleMessage } = storeToRefs(messageStore);
+    messageStore.getAllScheduleMessages()
     return {
       scheduleMessage,
     };
