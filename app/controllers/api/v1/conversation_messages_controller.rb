@@ -200,17 +200,25 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     response = {
       id: msg.id,
       content: msg.content,
+      scheduled_at: msg.scheduled_at,
       conversation_type: @bench_conversation.conversationable_type,
       created_at: msg.created_at,
       updated_at: msg.updated_at
     }
+    obj = nil
     if @bench_conversation.conversationable_type.eql?('Profile')
-      response[:receiver] = if @bench_conversation.conversationable_id == Current.profile.id
-                              @bench_conversation.sender
-                            else
-                              @bench_conversation.conversationable
-                            end
+      if @bench_conversation.conversationable_id == Current.profile.id
+        obj = @bench_conversation.sender.as_json
+        obj["image_url"] = url_for(@bench_conversation.sender.profile_image) if @bench_conversation.sender.profile_image.attached?
+      else
+        obj = @bench_conversation.conversationable.as_json
+        obj["image_url"] = url_for(@bench_conversation.conversationable.profile_image) if @bench_conversation.conversationable.profile_image.attached?
+      end
+    else
+      obj = @bench_conversation.conversationable
     end
-    response
+    response[:receiver] = obj
   end
+
+
 end
