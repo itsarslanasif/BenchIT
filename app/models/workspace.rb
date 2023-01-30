@@ -1,4 +1,6 @@
 class Workspace < ApplicationRecord
+  include AvatarGeneration
+
   has_one_attached :workspace_avatar, dependent: :destroy
 
   has_many :profiles, dependent: :destroy
@@ -10,7 +12,7 @@ class Workspace < ApplicationRecord
   validates :bench_it_url, uniqueness: true, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 
-  after_commit :add_default_image, on: %i[create]
+  after_commit :attach_avatar, on: %i[create]
 
   enum workspace_type: {
     work: 0,
@@ -36,10 +38,7 @@ class Workspace < ApplicationRecord
     customer_support: 4
   }
 
-  def add_default_image
-    return if workspace_avatar.attached?
-
-    workspace_avatar.attach(io: Rails.root.join(*%w[app assets images default_image.png]).open,
-                            filename: 'default_image.png', content_type: 'image/png')
+  def attach_avatar
+    self.generate_avatar(self.company_name, workspace_avatar)
   end
 end

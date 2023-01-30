@@ -1,4 +1,6 @@
 class Profile < ApplicationRecord
+  include AvatarGeneration
+
   searchkick word_start: [:username, :description]
 
   def search_data
@@ -10,7 +12,7 @@ class Profile < ApplicationRecord
     }
   end
 
-  after_commit :add_default_image, on: %i[create]
+  after_commit :attach_avatar, on: %i[create]
   after_commit :broadcast_profile
 
   belongs_to :user
@@ -66,11 +68,8 @@ class Profile < ApplicationRecord
     end
   end
 
-  def add_default_image
-    return if profile_image.attached?
-
-    profile_image.attach(io: Rails.root.join(*%w[app assets images default_image.png]).open,
-                         filename: 'default_image.png', content_type: 'image/png')
+  def attach_avatar
+    self.generate_avatar(self.username, profile_image)
   end
 
   def groups

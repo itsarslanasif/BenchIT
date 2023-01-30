@@ -3,8 +3,6 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               bench_it_url: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
-Workspace.last.workspace_avatar.attach(io: Rails.root.join(*%w[app assets images benchit.png]).open,
-                                       filename: 'benchit.png', content_type: 'image/png')
 Current.workspace = workspace
 workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
 workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
