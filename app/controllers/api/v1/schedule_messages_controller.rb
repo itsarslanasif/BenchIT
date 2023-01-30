@@ -13,7 +13,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
       delete_job
       reschedule_job
     end
-    render json: { success: 'true', message: 'Message updated' }, status: :ok
+    render json: { success: true, message: 'Message updated' }, status: :ok
   end
 
   def destroy
