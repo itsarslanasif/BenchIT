@@ -4,7 +4,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
 
   def index
-    @messages = Current.profile.schedule_messages.includes(:bench_conversation, :profile)
+    @messages = Current.profile.schedule_messages.includes(:bench_conversation, :profile).order(created_at: :desc)
   end
 
   def update
@@ -29,7 +29,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
                                                     bench_conversation_id: @schedule_message.bench_conversation_id)
       @schedule_message.destroy!
     end
-    render json: { success: true, message: 'Message send'}, status: 200 
+    render json: { success: true, message: 'Message send' }, status: :ok
   end
 
   private

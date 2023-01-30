@@ -205,21 +205,33 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       created_at: msg.created_at,
       updated_at: msg.updated_at
     }
-    obj = nil
-    if @bench_conversation.conversationable_type.eql?('Profile')
-      if @bench_conversation.conversationable_id == Current.profile.id
-        obj = @bench_conversation.sender.as_json
-        obj["image_url"] = url_for(@bench_conversation.sender.profile_image) if @bench_conversation.sender.profile_image.attached?
-      else
-        obj = @bench_conversation.conversationable.as_json
-        obj["image_url"] = url_for(@bench_conversation.conversationable.profile_image) if @bench_conversation.conversationable.profile_image.attached?
-      end
-    else
-      obj = @bench_conversation.conversationable
-    end
-    response[:receiver] = obj
+
+    receiver = determine_receiver
+
+    response[:receiver] = receiver
     response
   end
 
+  def determine_receiver
+    if @bench_conversation.conversationable_type.eql?('Profile')
+      determine_profile_receiver
+    else
+      @bench_conversation.conversationable
+    end
+  end
 
+  def determine_profile_receiver
+    if @bench_conversation.conversationable_id == Current.profile.id
+      receiver = @bench_conversation.sender.as_json
+      receiver['image_url'] = url_for(@bench_conversation.sender.profile_image) if @bench_conversation.sender.profile_image.attached?
+    else
+      receiver = @bench_conversation.conversationable.as_json
+      if @bench_conversation.conversationable.profile_image.attached?
+        receiver['image_url'] =
+          url_for(@bench_conversation.conversationable.profile_image)
+      end
+    end
+
+    receiver
+  end
 end
