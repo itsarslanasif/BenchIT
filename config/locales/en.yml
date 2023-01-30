@@ -267,6 +267,7 @@ en:
         active: 'Active'
         away: 'Away'
       filters:
+        filter: 'Filter'
         all_types: 'All types'
         owners: 'Owners'
         admins: 'Admins'
@@ -284,6 +285,10 @@ en:
         sort: 'Sort'
         sort_label: 'Sort:'
         account_type: 'Account Type'
+        channel_type: 'Channel Type'
+        more_options: 'More Options:'
+        hide_my_channels: 'Hide My Channels'
+        reset: 'Reset'
       profilestatus:
         what_is_your_status: 'Whats your status?'
         set_a_status: 'Set a status'

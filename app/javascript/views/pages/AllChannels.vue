@@ -32,10 +32,10 @@
               </n-popselect></div>
             <div @click="toggleFilters" class="hover:bg-transparent cursor-pointer">
               <i class='fas fa-sliders-h' />
-              Filter
+              {{$t('filters.filter')}}
             </div>
             <div @click="resetFilters" v-if="isFiltered()" class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline" >
-              Reset
+              {{$t('filters.reset')}}
             </div>
             <div v-show="filterState" @click="toggleFilters" class="rounded hover:bg-transparent cursor-pointer">
               <i class="fas fa-xmark self-center"></i>

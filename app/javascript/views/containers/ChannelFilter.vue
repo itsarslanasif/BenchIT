@@ -1,9 +1,9 @@
 <template>
   <div class="flex flex-col">
-    <div class="text-md font-semibold py-2">Channel Type</div>
+    <div class="text-md font-semibold py-2">{{$t('filters.channel_type')}}</div>
       <div class=""><n-select :options="options" v-model:value=filterChannelsValue @update:value="handleUpdateValue" /></div>
-    <div class="text-md font-semibold py-3">More Options:</div>
-      <n-checkbox label="Hide My Channels" v-model:checked=hideMyChannels @update:checked="handleCheckedChange" />
+    <div class="text-md font-semibold py-3">{{$t('filters.more_options')}}</div>
+      <n-checkbox :label="$t('filters.hide_my_channels')" v-model:checked=hideMyChannels @update:checked="handleCheckedChange" />
   </div>
 </template>
 
