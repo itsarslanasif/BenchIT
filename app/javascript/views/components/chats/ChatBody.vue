@@ -13,22 +13,22 @@
           <div v-if="
             (!isSameDayMessage && !message.parent_message_id) || isFirstMessage
           ">
-            <n-divider v-if="isToday" class="text-xs relative" @click="toggleToday">
+            <n-divider v-if="isToday" class="text-xs relative cursor-pointer" @click="toggleToday">
               <div>
                 <p class="date hover:bg-slate-50">
                   {{ $t('chat.today') }}
                 </p>
               </div>
               <div v-if="jumpToDateTodayToggle" class="absolute top-0 mt-8 w-1/5 z-10">
-                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :today="true" />
+                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :today="true" :toggleShow='toggleToday' />
               </div>
             </n-divider>
-            <n-divider v-else class="text-xs relative">
+            <n-divider v-else class="text-xs relative cursor-pointer">
               <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
                 {{ new Date(message.created_at).toDateString() }}
               </p>
               <div v-if="jumpToDateToggle && message.id === selectedMessage.id" class="absolute top-0 mt-8 w-1/5 z-10">
-                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" />
+                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :toggleShow='toggleNotToday' />
               </div>
             </n-divider>
           </div>
@@ -144,6 +144,9 @@ export default {
       if (message) {
         message.scrollIntoView();
         message.classList.add('highlight');
+        setTimeout(() => {
+          message.classList.remove('highlight');
+        }, 1000);
       }
       this.jumpToDateTodayToggle = false;
       this.jumpToDateToggle = false;
