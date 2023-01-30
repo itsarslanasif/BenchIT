@@ -30,7 +30,7 @@ export const useChannelStore = () => {
     actions: {
       async index(query, sort, filter, hideMyChannels, page) {
         try {
-          let newChannels = await getChannels(query, sort, filter, hideMyChannels, page);
+          const newChannels = await getChannels(query, sort, filter, hideMyChannels, page);
           this.channels = [...newChannels.bench_channels]
           this.pageInfo = newChannels.page_information
           this.joinedChannels = await getJoinedChannels();

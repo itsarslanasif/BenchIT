@@ -177,6 +177,9 @@ en:
         save_message: 'Save items'
       channels:
         channels: 'Channels'
+        public_channels: 'Public Channels'
+        private_channels: 'Private Channels'
+        archived_channels: 'Archived Channels'
         add_new_channel: 'Add new channel'
         search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
@@ -288,6 +291,9 @@ en:
         channel_type: 'Channel Type'
         more_options: 'More Options:'
         hide_my_channels: 'Hide My Channels'
+        public: 'public'
+        private: 'private'
+        archived: 'archived'
         reset: 'Reset'
       profilestatus:
         what_is_your_status: 'Whats your status?'

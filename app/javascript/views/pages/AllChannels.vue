@@ -24,18 +24,18 @@
         </n-space>
         <div class="flex items-center py-1 justify-between font-light text-small">
           <div class="text-gray-700">
-            {{ pageInfo.count }} {{ $t('channels.result') }}
+            {{ pageInfo.count + ' ' + $t('channels.result') }}
           </div>
           <div class="flex gap-4 items-center">
             <div class="hover:bg-transparent cursor-pointer"> <i class="fas fa-sort" /> <n-popselect v-model:value="sortValue" :options="options">
-             {{ $t('filters.sort_label') }} {{ selectedLabel }} 
+             {{ $t('filters.sort_label') + selectedLabel }} 
               </n-popselect></div>
             <div @click="toggleFilters" class="hover:bg-transparent cursor-pointer">
               <i class='fas fa-sliders-h' />
-              {{$t('filters.filter')}}
+              {{ $t('filters.filter') }}
             </div>
             <div @click="resetFilters" v-if="isFiltered()" class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline" >
-              {{$t('filters.reset')}}
+              {{ $t('filters.reset') }}
             </div>
             <div v-show="filterState" @click="toggleFilters" class="rounded hover:bg-transparent cursor-pointer">
               <i class="fas fa-xmark self-center"></i>
