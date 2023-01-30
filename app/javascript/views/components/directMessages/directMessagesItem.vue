@@ -1,7 +1,6 @@
 <template>
   <div
     v-if="user"
-    @mouseleave="changeActive"
     @click="goToChat(`/profiles/${user.id}`, user)"
     class="flex items-center pl-2 py-1 hover:bg-primaryHover cursor-pointer"
     :class="isUnreadDM(user) ? 'font-bold' : ''"
@@ -35,11 +34,10 @@
         {{ statusClearAfterTime(user?.status?.clear_after) }}
       </span>
     </n-tooltip>
-    <div
-      v-if="unreadDetails.messages.length"
-      class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
-    >
-      {{ unreadDetails.messages.length }}
+    <div v-if="unreadDetails">
+      <div v-if="unreadDetails.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
+        {{ unreadDetails.messages.length }}
+      </div>
     </div>
   </div>
 </template>
@@ -82,9 +80,6 @@ export default {
     },
     statusClearAfterTime(time) {
       return time ? moment(time).calendar() : moment().endOf('month').fromNow();
-    },
-    changeActive() {
-      console.log('actice', this.user.is_active);
     },
   },
 };

@@ -48,11 +48,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def save_message
     @saved_item = Current.profile.saved_items.new(conversation_message_id: params[:id])
 
-    if @saved_item.save
-      render json: { message: 'Added to saved items' }, status: :ok
-    else
-      render json: { error: 'Added to saved items', errors: @saved_item.errors }, status: :unprocessable_entity
-    end
+    return if @saved_item.save
+
+    render json: { error: 'Added to saved items', errors: @saved_item.errors }, status: :unprocessable_entity
   end
 
   def unsave_message
@@ -75,6 +73,16 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def group_messages
     @conversation = @group.bench_conversation
     paginate_messages
+  end
+
+  def last_messages
+    @last_messages = fetch_last_messages
+  end
+
+  def fetch_last_messages
+    params[:dm_ids].filter_map do |id|
+      BenchConversation.profile_to_profile_conversation(Current.profile.id, id)&.conversation_messages&.last
+    end.sort_by(&:created_at).reverse
   end
 
   def profile_messages
