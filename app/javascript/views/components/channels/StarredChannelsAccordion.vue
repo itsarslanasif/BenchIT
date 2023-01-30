@@ -1,20 +1,6 @@
 <template>
   <div v-if="starChannels.length > 0" class="hover-trigger">
-    <n-dropdown
-      :show="dropdown"
-      :on-clickoutside="openDropdown"
-      class="rounded-md"
-      placement="bottom-end"
-      size="medium"
-      :options="options"
-      @select="handleSelect"
-    >
-      <font-awesome-icon
-        @click="openDropdown"
-        icon="fa-plus"
-        class="hover-target px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
-      />
-    </n-dropdown>
+    <ChannelsDropDown :handleSelect="handleSelect" :onlyIcon="true" />
     <AccordionList
       class="mt-5 ml-4 text-base text-slate-50"
       @click="toggleList"
@@ -66,36 +52,24 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import { NDropdown } from 'naive-ui';
 import CreateChannel from './CreateChannel.vue';
-import { CONSTANTS } from '../../../assets/constants';
+import ChannelsDropDown from '../../widgets/channelsDropDown.vue';
 
 export default {
   components: {
     CreateChannel,
-    NDropdown,
     AccordionList,
     AccordionItem,
     ChannelItem,
+    ChannelsDropDown,
   },
   data() {
     return {
       channels: [],
       showChannelOptions: false,
       listOpen: true,
-      dropdown: false,
       showCreateChannelModal: false,
       selectedChannel: {},
-      options: [
-        {
-          label: CONSTANTS.CREATE_CHANNEL,
-          key: this.generateKey(CONSTANTS.CREATE_CHANNEL),
-        },
-        {
-          label: CONSTANTS.BROWSE_CHANNELS,
-          key: this.generateKey(CONSTANTS.BROWSE_CHANNELS),
-        },
-      ],
     };
   },
   unmounted() {
@@ -116,9 +90,6 @@ export default {
   methods: {
     toggleModal() {
       this.showCreateChannelModal = !this.showCreateChannelModal;
-    },
-    openDropdown() {
-      this.dropdown = !this.dropdown;
     },
     goToChannelChat(chatURL, channel) {
       this.messagesStore.setSelectedChat(channel);
@@ -161,13 +132,9 @@ export default {
           this.toggleModal();
           break;
         case 'browse-channels':
-          this.openDropdown();
           this.$router.push('/browse-channels');
           break;
       }
-    },
-    generateKey(label) {
-      return label.toLowerCase().replace(/ /g, '-');
     },
   },
 };

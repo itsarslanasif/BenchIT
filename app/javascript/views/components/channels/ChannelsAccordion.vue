@@ -1,21 +1,6 @@
 <template>
   <div class="hover-trigger">
-    <n-dropdown
-      :show="dropdown"
-      :on-clickoutside="openDropdown"
-      class="rounded-md"
-      placement="bottom-end"
-      size="medium"
-      :options="options"
-      @select="handleSelect"
-    >
-      <font-awesome-icon
-        @click="openDropdown"
-        icon="fa-plus"
-        class="focus:outline-none relative px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
-      />
-    </n-dropdown>
-
+    <ChannelsDropDown :handleSelect="handleSelect" :onlyIcon="true" />
     <AccordionList
       class="mt-5 ml-4 text-base text-slate-50"
       @click="toggleList"
@@ -39,28 +24,7 @@
               :isShowOptions="showChannelOptions"
             />
           </h5>
-          <n-dropdown
-            :show="secondDropdown"
-            :on-clickoutside="openSecondDropdown"
-            class="rounded-md"
-            placement="bottom-end"
-            size="medium"
-            :options="options"
-            @select="handleSelect"
-          >
-            <div
-              @click="openSecondDropdown"
-              class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2"
-            >
-              <font-awesome-icon
-                icon="fa-plus"
-                class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
-              />
-              <p class="text-sm self-center text-white truncate">
-                {{ $t('channels.add_new_channel') }}
-              </p>
-            </div>
-          </n-dropdown>
+          <ChannelsDropDown :handleSelect="handleSelect" :onlyIcon="false" />
         </div>
         <div v-if="showCreateChannelModal">
           <CreateChannel :close-modal="toggleModal" />
@@ -90,36 +54,22 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import { NDropdown } from 'naive-ui';
-import { CONSTANTS } from '../../../assets/constants';
+import ChannelsDropDown from '../../widgets/channelsDropDown.vue';
 export default {
   components: {
     AccordionList,
     AccordionItem,
     CreateChannel,
     ChannelItem,
-    NDropdown,
+    ChannelsDropDown,
   },
   data() {
     return {
       channels: [],
-      modalOpen: false,
-      dropdown: false,
-      secondDropdown: false,
       showChannelOptions: false,
       listOpen: true,
       selectedChannel: {},
       showCreateChannelModal: false,
-      options: [
-        {
-          label: CONSTANTS.CREATE_CHANNEL,
-          key: this.generateKey(CONSTANTS.CREATE_CHANNEL),
-        },
-        {
-          label: CONSTANTS.BROWSE_CHANNELS,
-          key: this.generateKey(CONSTANTS.BROWSE_CHANNELS),
-        },
-      ],
     };
   },
   unmounted() {
@@ -140,12 +90,6 @@ export default {
   methods: {
     toggleModal() {
       this.showCreateChannelModal = !this.showCreateChannelModal;
-    },
-    openDropdown() {
-      this.dropdown = !this.dropdown;
-    },
-    openSecondDropdown() {
-      this.secondDropdown = !this.secondDropdown;
     },
     goToChannelChat(chatURL, channel) {
       this.messagesStore.setSelectedChat(channel);
@@ -174,14 +118,10 @@ export default {
         );
     },
     checkSetChannel() {
-      if (
+      return (
         this.selectedChannel.id === this.messagesStore.selectedChat.id &&
-        this.selectedChannel.favourite_id === null
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+        !this.selectedChannel.favourite_id
+      );
     },
     handleSelect(key) {
       switch (key) {
@@ -192,9 +132,6 @@ export default {
           this.$router.push('/browse-channels');
           break;
       }
-    },
-    generateKey(label) {
-      return label.toLowerCase().replace(/ /g, '-');
     },
   },
 };
