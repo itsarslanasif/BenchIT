@@ -5,8 +5,8 @@
       icon="fa-plus"
       class="hover-target px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
     />
-    <AccordionList class="mt-5 ml-4 text-base text-slate-50">
-      <AccordionItem :default-opened="true">
+    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
+      <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
             {{ $t('channels.title') }}
@@ -44,6 +44,12 @@
       </AccordionItem>
     </AccordionList>
   </div>
+  <div v-if="!listOpen && this.checkSetChannel()" class="-ml-4">
+    <h5 class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600">
+      <ChannelItem :channel="selectedChannel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
+        :isShowOptions="showChannelOptions" />
+    </h5>
+  </div>
 </template>
 
 <script>
@@ -61,6 +67,8 @@ export default {
       channels: [],
       modalOpen: false,
       showChannelOptions: false,
+      listOpen: true,
+      selectedChannel: {},
     };
   },
   unmounted() {
@@ -75,6 +83,7 @@ export default {
       joinedChannels,
       leftPaneStore,
       messagesStore,
+      channelStore,
     };
   },
   methods: {
@@ -87,6 +96,8 @@ export default {
       if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
+      this.listOpen = false;
+      this.setChannel(this.messagesStore.selectedChat);
     },
     isMobileView() {
       return window.innerWidth < 1400;
@@ -96,6 +107,21 @@ export default {
     },
     goToChannels() {
       this.$router.push('/browse-channels');
+    },
+    toggleList() {
+      this.listOpen = !this.listOpen;
+      this.setChannel(this.messagesStore.selectedChat);
+    },
+    setChannel(channel) {
+      this.selectedChannel = this.joinedChannels.find(obj => obj.id === Number(channel.id)) || this.channelStore.starChannels.find(obj => obj.id === Number(channel.id));
+    },
+    checkSetChannel() {
+      if (this.selectedChannel.id === this.messagesStore.selectedChat.id && this.selectedChannel.favourite_id === null) {
+        return true;
+      }
+      else {
+        return false;
+      }
     },
   },
 };

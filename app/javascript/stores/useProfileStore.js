@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAllProfiles } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from './useCurrentWorkspaceStore';
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {

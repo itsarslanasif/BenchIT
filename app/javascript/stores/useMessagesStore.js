@@ -17,10 +17,12 @@ export const useMessageStore = () => {
       selectedChat: {},
       newMessageSent: false,
       error: {},
+      messageToEdit: null,
     }),
 
     getters: {
       getMessages: state => state.messages,
+      getMessageToEdit: state => state.messageToEdit,
       repliesCount: state => {
         if (
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
@@ -55,12 +57,14 @@ export const useMessageStore = () => {
             currentWorkspace.id,
             id
           );
+          this.selectedChat.conversation_type = 'Profile';
           } catch (error) {
             this.handleError(error)
           }
         } else if (conversation_type === 'channels') {
           try {
           this.selectedChat = await getChannel(id);
+          this.selectedChat.conversation_type = 'Channel';
           } catch (error) {
             this.handleError(error)
           }
@@ -82,7 +86,18 @@ export const useMessageStore = () => {
       },
       handleError (error) {
         this.error = error
-      }
+      },
+      setMessageToEdit(message) {
+        this.messageToEdit = message;
+      },
+      removeMessageToEdit() {
+        this.messageToEdit = null;
+      },
+      isMessageToEdit(message) {
+        if (this.messageToEdit)
+          return this.messageToEdit && (message.id == this.messageToEdit.id)
+        return false
+      },
     },
   });
 

@@ -138,6 +138,10 @@ export const CONSTANTS = {
   SOMETHING_WENT_WRONG: 'Something went wrong',
   SWITCHING_WORKSPACE: 'Switching workspace... Please wait.',
   REMOVE_FROM_SAVED_ITEMS:'Remove from saved items',
+  NEWEST_CHANNELS: "Newest Channels",
+  OLDEST_CHANNELS: "Oldest Channels",
+  MOST_MEMBERS: "Most Members",
+  FEWEST_MEMBERS: "Fewest Members",
   SWITCH_WORKSPACE: 'Switch workspace',
   JOINED_WORKSPACES: 'Joined workspaces',
   DONT_CLEAR: "don't clear",
@@ -151,4 +155,9 @@ export const CONSTANTS = {
   HOURS: ' hours',
   HOUR:' hour',
   MINUTES: ' minutes',
+  CLEAR_STATUS:'Clear status',
+  ACTIVE:'active',
+  AWAY:'away',
+  ACTIVE_ICON:'🟢',
+  AWAY_ICON:'⚫'
 };

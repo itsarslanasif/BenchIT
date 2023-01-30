@@ -6,6 +6,7 @@ import {
   memberLeaveChannel,
   getJoinedChannels,
 } from '../api/channels/channels';
+import { useCurrentProfileStore } from './useCurrentProfileStore';
 import { useApiResponseStatusStore as apiResponseStatusStore } from './useApiResponseStatusStore';
 export const useChannelStore = () => {
   const channelStore = defineStore('channelStore', {
@@ -14,7 +15,9 @@ export const useChannelStore = () => {
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
-      error: {}
+      error: {},
+      pageInfo: [],
+      currentProfileStore : useCurrentProfileStore()
     }),
 
     getters: {
@@ -24,10 +27,11 @@ export const useChannelStore = () => {
     },
 
     actions: {
-      async index() {
+      async index(query, sort, page) {
         try {
-          let newChannels = await getChannels();
-          this.channels = [...newChannels]
+          let newChannels = await getChannels(query, sort, page);
+          this.channels = [...newChannels.bench_channels]
+          this.pageInfo = newChannels.page_information
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
             channel => channel.favourite_id !== null
@@ -43,28 +47,15 @@ export const useChannelStore = () => {
 
       async createChannel(name, description, is_private) {
         try {
-          await createChannel(name, description, is_private).then(response => {
-            if (response?.data?.errors) {
-              apiResponseStatusStore().setApiResponseStatus(response.data);
-              return response.data;
-            } else {
-              apiResponseStatusStore().setApiResponseStatus(response);
-              this.channels.push(response.data);
-              this.joinedChannels.push(response.data);
-              this.sortChannelsList();
-              return response.data;
-            }
-          });
+          const result = await createChannel(name, description, is_private);
+          apiResponseStatusStore().setApiResponseStatus(result.data);
+          this.channels.push(result.data);
+          this.joinedChannels.push(result.data);
+          this.sortChannelsList();
+          return result;
         } catch (e) {
-          this.handleError(e)
-        }
-      },
-
-      async searchChannels(query) {
-        try {
-          this.channels = await getChannels(query);
-        } catch (e) {
-          this.handleError(e)
+          apiResponseStatusStore().setApiResponseStatus(e.response.data);
+          return e.response;
         }
       },
 
@@ -85,6 +76,12 @@ export const useChannelStore = () => {
           this.joinedChannels = this.joinedChannels.filter(
             channel => channel.id != id
           );
+          let foundIndex = this.channels.findIndex(channel => channel.id == id);
+          this.channels[foundIndex].profiles = this.channels[
+            foundIndex
+          ].profiles.filter(profile => {
+            profile.id === this.currentProfileStore.currentProfile.id;
+          });
           this.starChannels = this.starChannels.filter(
             channel => channel.id != id
           );
