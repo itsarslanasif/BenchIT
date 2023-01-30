@@ -159,5 +159,7 @@ export const CONSTANTS = {
   ACTIVE:'active',
   AWAY:'away',
   ACTIVE_ICON:'🟢',
-  AWAY_ICON:'⚫'
+  AWAY_ICON:'⚫',
+  ASCENDING: 'asc',
+  DESCENDING: 'desc',
 };
