@@ -1,11 +1,10 @@
 <template>
   <div v-if="starChannels.length > 0" class="hover-trigger">
-    <font-awesome-icon
-      @click="goToChannels"
-      icon="fa-plus"
-      class="hover-target px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
-    />
-    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
+    <ChannelsDropDown :handleSelect="handleSelect" :onlyIcon="true" />
+    <AccordionList
+      class="mt-5 ml-4 text-base text-slate-50"
+      @click="toggleList"
+    >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="cursor-pointer ml-2">
@@ -17,22 +16,31 @@
           :key="channel.id"
           class="hover:bg-primaryHover"
         >
-        <div class="-ml-4">
-          <ChannelItem
-            :channel="channel"
-            :goTo="goToChannelChat"
-            :toggleShow="toggleChannelOptionShow"
-            :isShowOptions="showChannelOptions"
-          />
-        </div>
+          <div class="-ml-4">
+            <ChannelItem
+              :channel="channel"
+              :goTo="goToChannelChat"
+              :toggleShow="toggleChannelOptionShow"
+              :isShowOptions="showChannelOptions"
+            />
+          </div>
         </h5>
+        <div v-if="showCreateChannelModal">
+          <CreateChannel :close-modal="toggleModal" />
+        </div>
       </AccordionItem>
     </AccordionList>
   </div>
   <div v-if="!listOpen && this.checkSetChannel()" class="-ml-4">
-    <h5 class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600">
-      <ChannelItem :channel="selectedChannel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
-        :isShowOptions="showChannelOptions" />
+    <h5
+      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
+    >
+      <ChannelItem
+        :channel="selectedChannel"
+        :goTo="goToChannelChat"
+        :toggleShow="toggleChannelOptionShow"
+        :isShowOptions="showChannelOptions"
+      />
     </h5>
   </div>
 </template>
@@ -44,13 +52,23 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import CreateChannel from './CreateChannel.vue';
+import ChannelsDropDown from '../../widgets/channelsDropDown.vue';
+
 export default {
-  components: { AccordionList, AccordionItem, ChannelItem },
+  components: {
+    CreateChannel,
+    AccordionList,
+    AccordionItem,
+    ChannelItem,
+    ChannelsDropDown,
+  },
   data() {
     return {
       channels: [],
       showChannelOptions: false,
       listOpen: true,
+      showCreateChannelModal: false,
       selectedChannel: {},
     };
   },
@@ -70,6 +88,9 @@ export default {
     };
   },
   methods: {
+    toggleModal() {
+      this.showCreateChannelModal = !this.showCreateChannelModal;
+    },
     goToChannelChat(chatURL, channel) {
       this.messagesStore.setSelectedChat(channel);
       this.$router.push(chatURL);
@@ -85,22 +106,34 @@ export default {
     toggleChannelOptionShow() {
       this.showChannelOptions = !this.showChannelOptions;
     },
-    goToChannels() {
-      this.$router.push('/browse-channels');
-    },
     toggleList() {
-      this.listOpen = !this.listOpen
+      this.listOpen = !this.listOpen;
       this.setChannel(this.messagesStore.selectedChat);
     },
     setChannel(channel) {
-      this.selectedChannel = this.channelStore.joinedChannels.find(obj => obj.id === Number(channel.id)) || this.starChannels.find(obj => obj.id === Number(channel.id));
+      this.selectedChannel =
+        this.channelStore.joinedChannels.find(
+          obj => obj.id === Number(channel.id)
+        ) || this.starChannels.find(obj => obj.id === Number(channel.id));
     },
     checkSetChannel() {
-      if (this.selectedChannel.id === this.messagesStore.selectedChat.id && this.selectedChannel.favourite_id) {
+      if (
+        this.selectedChannel.id === this.messagesStore.selectedChat.id &&
+        this.selectedChannel.favourite_id
+      ) {
         return true;
-      }
-      else {
+      } else {
         return false;
+      }
+    },
+    handleSelect(key) {
+      switch (key) {
+        case 'create-a-channel':
+          this.toggleModal();
+          break;
+        case 'browse-channels':
+          this.$router.push('/browse-channels');
+          break;
       }
     },
   },

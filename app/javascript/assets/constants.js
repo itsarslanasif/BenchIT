@@ -107,6 +107,7 @@ export const CONSTANTS = {
   SUCCESS_MESSAGE: 'Invitation sent successfully!',
   INVITE_PEOPLE: 'Invite People',
   CREATE_CHANNEL: 'Create a channel',
+  BROWSE_CHANNELS: 'Browse channels',
   ADMINISTRATION: 'Administration',
   TOOLS: 'Tools',
   SIGN_OUT: 'Sign out of your account',

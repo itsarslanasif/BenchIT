@@ -30,7 +30,7 @@
             </h5>
           </div>
           <div class="hover:bg-primaryHover cursor-pointer" @click="closeModal">
-            <addTeammatesDropdown :items="options" />
+            <addTeammatesDropdown />
           </div>
         </div>
       </AccordionItem>
@@ -69,16 +69,6 @@ export default {
   data() {
     return {
       modalOpen: false,
-      options: [
-        {
-          title: CONSTANTS.INVITE_PEOPLE,
-          link: '#',
-        },
-        {
-          title: CONSTANTS.NEW_CONVERSATION,
-          link: '#',
-        },
-      ],
       listOpen: true,
       selectedChat: {},
     };
@@ -89,9 +79,7 @@ export default {
     );
     this.dmList = this.directMessageStore.getDirectMessages;
   },
-  beforeUnmount() {
-    this.options = null;
-  },
+
   setup() {
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
