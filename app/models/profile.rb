@@ -69,7 +69,7 @@ class Profile < ApplicationRecord
   end
 
   def attach_avatar
-    self.generate_avatar(self.username, profile_image)
+    generate_avatar(username, profile_image)
   end
 
   def groups

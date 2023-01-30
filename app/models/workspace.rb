@@ -39,6 +39,6 @@ class Workspace < ApplicationRecord
   }
 
   def attach_avatar
-    self.generate_avatar(self.company_name, workspace_avatar)
+    generate_avatar(company_name, workspace_avatar)
   end
 end
