@@ -31,10 +31,10 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       let index = this.directMessagesList.findIndex(
         element => element.id == profile.id
       );
-      if (index != -1){
-         this.directMessagesList[index].status = profile.status;
-         this.directMessagesList[index].is_active=profile.is_active
-        }
+      if (index != -1) {
+        this.directMessagesList[index].status = profile.status;
+        this.directMessagesList[index].is_active = profile.is_active;
+      }
     },
     getSortedDMList(currentProfileID) {
       const ownChat = this.getOwnChat(currentProfileID);

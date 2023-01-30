@@ -49,12 +49,12 @@ const updateProfileStatus = data => {
   const { updateSelectedprofileStatus } = useMessageStore();
 
   if (currentProfile.id === data.id) {
-  setProfileStatus(data.status);
-  setProfileActiveStatus(data.is_active)
+    setProfileStatus(data.status);
+    setProfileActiveStatus(data.is_active)
   }
-  updateProfileStatus(data);
-  updateDmProfileStatus(data);
-  updateSelectedprofileStatus(data)
+    updateProfileStatus(data);
+    updateDmProfileStatus(data);
+    updateSelectedprofileStatus(data)
   };
 
 const notificationActions = {
