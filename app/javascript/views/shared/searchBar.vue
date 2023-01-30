@@ -83,8 +83,25 @@
                       <font-awesome-icon icon="fa-hashtag" />
                     </div>
                   </div>
-                  <div>
-                    {{ item.creator_id ? item.name : item.username }}
+                  <div class="flex">
+                    <span>
+                      {{
+                        item.creator_id ? item.name : item.display_name
+                      }}</span
+                    >
+                    <div class="flex" v-if="!item.creator_id">
+                      <div class="flex h-3 w-3 mt-2 ml-2">
+                        <div
+                          v-if="item.is_active"
+                          class="bg-green-700 text-black-800 inactivePosition h-2 w-2 rounded-xl"
+                        />
+                        <div
+                          v-else
+                          class="bg-black-800 text-black-800 inactivePosition h-2 w-2 border-2 border-white rounded-xl"
+                        />
+                      </div>
+                      <span class="ml-2">{{ item.username }}</span>
+                    </div>
                   </div>
                 </div>
               </div>
