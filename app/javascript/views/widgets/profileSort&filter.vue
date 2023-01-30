@@ -4,8 +4,8 @@
       <n-input
         type="text"
         size="large"
-        v-model:value="searchMemberInput"
-        @keyup="handleSubmit(searchMemberInput, sortValue)"
+        v-model:value="searchInputField"
+        @keyup="handleSubmit(searchInputField, sortValue)"
         :placeholder="$t('members.search_by_name')"
       >
         <template #prefix>
@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      searchMemberInput: '',
+      searchInputField: '',
       sortOptions: [
         {
           label: CONSTANTS.MOST_RECOMMENDED,
@@ -106,30 +106,28 @@ export default {
       SearchOutline,
       sortValue: ref(CONSTANTS.MOST_RECOMMENDED),
       filterValue: ref(CONSTANTS.FULL_MEMBERS),
-      searchMemberInput: ref(''),
+      searchInputField: ref(''),
     };
   },
 
   methods: {
     handleSortSelect(key) {
-      console.log(key);
       switch (key) {
         case 'most-recommended':
           this.sortValue = CONSTANTS.MOST_RECOMMENDED;
-          this.handleSubmit(this.searchMemberInput, '');
+          this.handleSubmit(this.searchInputField, '');
           break;
         case 'a-to-z':
           this.sortValue = CONSTANTS.A_TO_Z;
-          this.handleSubmit(this.searchMemberInput, CONSTANTS.ASCENDING);
+          this.handleSubmit(this.searchInputField, CONSTANTS.ASCENDING);
           break;
         case 'z-to-a':
           this.sortValue = CONSTANTS.Z_TO_A;
-          this.handleSubmit(this.searchMemberInput, CONSTANTS.DESCENDING);
+          this.handleSubmit(this.searchInputField, CONSTANTS.DESCENDING);
           break;
       }
     },
     handleFilterSelect(key) {
-      console.log(key);
       switch (key) {
         case 'admins':
           this.filterValue = CONSTANTS.ADMINS;
@@ -154,5 +152,3 @@ export default {
   },
 };
 </script>
-
-<style scoped></style>
