@@ -25,7 +25,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     else
       msg = @bench_conversation.schedule_messages.new(schedule_messages_params)
       msg.save!
-      render json: { success: 'Message has been scheduled.', message: msg }, status: :ok
+      render json: { success: 'Message has been scheduled.', message: prepare_response(msg) }, status: :ok
     end
   end
 
@@ -194,5 +194,23 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: 'This message was deleted.')
     end
+  end
+
+  def prepare_response(msg)
+    response = {
+      id: msg.id,
+      content: msg.content,
+      conversation_type: @bench_conversation.conversationable_type,
+      created_at: msg.created_at,
+      updated_at: msg.updated_at
+    }
+    if @bench_conversation.conversationable_type.eql?('Profile')
+      response[:receiver] = if @bench_conversation.conversationable_id == Current.profile.id
+                              @bench_conversation.sender
+                            else
+                              @bench_conversation.conversationable
+                            end
+    end
+    response
   end
 end
