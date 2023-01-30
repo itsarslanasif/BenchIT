@@ -141,6 +141,11 @@ export default {
       this.newMessage = this.message;
     }
   },
+  mounted() {
+    if (this.isForScheduled()){
+      this.newMessage = this.messageToEdit.content
+    }
+  },
   components: {
     editor: Editor,
     Attachments,
@@ -154,18 +159,29 @@ export default {
   methods: {
     dispatchKeydownEnterEvent() {
       const event = new KeyboardEvent('keydown', { keyCode: 13 });
-      this.sendMessagePayload(event);
+      if (this.isForScheduled()) {
+        this.messageStore.reEditScheduledMessage({
+          content: this.newMessage,
+          id: this.messageToEdit.scheduledId
+        })
+        this.newMessage = ''
+      } else {
+        this.sendMessagePayload(event);
+      }
     },
     handleCancelEdit() {
       this.messageStore.removeMessageToEdit();
     },
+    isForScheduled() {
+      return this.messageToEdit.content && this.messageToEdit.isScheduled && this.messageToEdit.scheduledId
+    }
   },
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
-    const { selectedChat } = storeToRefs(messageStore);
+    const { selectedChat, messageToEdit } = storeToRefs(messageStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
@@ -334,6 +350,7 @@ export default {
       schedule,
       scheduleModalFlag,
       messageStore,
+      messageToEdit,
       removeFile,
       sendMessagePayload,
       getImages,

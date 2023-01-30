@@ -8,7 +8,8 @@ import { decryption } from '../modules/crypto/crypto';
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
-  deleteScheduledMessage
+  deleteScheduledMessage,
+  editScheduledContent,
 } from '../api/scheduleMessages';
 
 export const useMessageStore = () => {
@@ -22,7 +23,11 @@ export const useMessageStore = () => {
       hasMoreMessages: true,
       selectedChat: {},
       newMessageSent: false,
-      messageToEdit: null,
+      messageToEdit: {
+        content: null,
+        isScheduled: false,
+        scheduledId: null,
+      },
     }),
 
     getters: {
@@ -85,24 +90,27 @@ export const useMessageStore = () => {
         this.scheduleMessage = await getScheduleMessages();
       },
       setMessageToEdit(message) {
-        this.messageToEdit = message;
+        this.messageToEdit.content = message;
       },
       removeMessageToEdit() {
-        this.messageToEdit = null;
+        this.messageToEdit.content = null;
       },
       isMessageToEdit(message) {
-        if (this.messageToEdit)
-          return this.messageToEdit && message.id == this.messageToEdit.id;
+        if (this.messageToEdit.content)
+          return (
+            this.messageToEdit.content &&
+            message.id == this.messageToEdit.content.id
+          );
         return false;
       },
       sendMessageNow(scheduledMessage) {
         sendScheduledMessageNow(scheduledMessage.id).then(res => {
-          this.alterScheduledMessages(res, scheduledMessage.id)
+          this.alterScheduledMessages(res, scheduledMessage.id);
         });
       },
       deleteScheduledMessage(scheduledMessage) {
         deleteScheduledMessage(scheduledMessage.id).then(res => {
-          this.alterScheduledMessages(res, scheduledMessage.id)
+          this.alterScheduledMessages(res, scheduledMessage.id);
         });
       },
       alterScheduledMessages(res, id) {
@@ -111,7 +119,22 @@ export const useMessageStore = () => {
             message => message.id != id
           );
         }
-      }
+      },
+      setEditSchedule(message) {
+        this.messageToEdit = {
+          content: message.content,
+          scheduledId: message.id,
+          isScheduled: true,
+        };
+      },
+      reEditScheduledMessage(payload) {
+        editScheduledContent(payload);
+        this.messageToEdit = {
+          content: null,
+          scheduledId: null,
+          isScheduled: false,
+        };
+      },
     },
   });
 

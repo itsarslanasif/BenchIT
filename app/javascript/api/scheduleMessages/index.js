@@ -30,3 +30,13 @@ export const deleteScheduledMessage = async id => {
       return response.data;
     });
 };
+
+export const editScheduledContent = async payload => {
+  return axios
+    .patch(`v1/schedule_messages/${payload.id}`, { content: payload.content }, {
+      headers: getHeaders(),
+    })
+    .then(response => {
+      return response.data;
+    });
+};
