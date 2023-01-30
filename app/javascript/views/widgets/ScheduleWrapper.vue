@@ -48,7 +48,7 @@ export default {
       return message.replace(/<[^>]+>/g, '');
     },
     getChatName(payload) {
-      return payload.user_id ? payload.username : payload.name;
+      return payload.profile_id ? payload.username : payload.name;
     },
     getIcon(payload) {
       return `fa-${payload.is_private ? 'lock' : 'hashtag'}`

@@ -1,9 +1,20 @@
 <template>
   <div class="m-3">
-    <div v-for="payload in scheduleMessage" @mouseover="toggleOptionsFlag" @mouseleave="toggleOptionsFlag"
-      @click="navigateToChat(payload)"
-      class="w-full h-auto my-3 bg-slate-50 border border-black-400 p-3 rounded-lg hover:bg-black-200 duration-200">
-      <ScheduleWrapper :payload="payload" />
+    <div v-if="!scheduleMessage.length" class="flex flex-col justify-center text-center items-center mt-10">
+      <font-awesome-icon icon="fa-solid fa-clock-rotate-left" class="text-2xl mb-2"></font-awesome-icon>
+      <p class="font-bold text-base text-center">
+        {{ $t('schedule.title') }}
+      </p>
+      <p class="text-base text-center">
+        {{ $t('schedule.description') }}
+      </p>
+    </div>
+    <div v-else>
+      <div v-for="payload in scheduleMessage" @mouseover="toggleOptionsFlag" @mouseleave="toggleOptionsFlag"
+        @click="navigateToChat(payload)"
+        class="w-full h-auto my-3 bg-slate-50 border border-black-400 p-3 rounded-lg hover:bg-black-200 duration-200">
+        <ScheduleWrapper :payload="payload" />
+      </div>
     </div>
   </div>
 </template>
@@ -11,7 +22,6 @@
 import { storeToRefs } from 'pinia';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NAvatar } from 'naive-ui';
-import moment from 'moment';
 import ScheduleWrapper from '../../widgets/ScheduleWrapper.vue';
 export default {
   components: {

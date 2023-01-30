@@ -134,17 +134,12 @@ export default {
         formData.append('message_attachments[]', file);
       });
       try {
-        conversation(formData).then(() => {
+        conversation(formData).then((res) => {
+          if (res.scheduled_at) {
+            this.messageStore.addScheduleMessage(res);
+          }
           this.message = '';
         });
-        if (schedule.value) {
-          this.messageStore.addScheduleMessage({
-            receiver: this.messageStore.getSelectedChat,
-            content: message,
-            scheduled_at: schedule.value,
-            conversation_type: this.getConversationType()
-          });
-        }
         this.newMessageSent = true;
       } catch (e) {
         console.error(e);
