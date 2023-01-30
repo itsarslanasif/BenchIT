@@ -24,8 +24,8 @@ export const useProfileStore = () => {
         }
       },
       updateProfileStatus(data) {
-        let index = this.profiles.findIndex(profile => data.id == profile.id);
-        if (index != -1) {
+        let index = this.profiles.findIndex(profile => data.id === profile.id);
+        if (index !== -1) {
           this.profiles[index].status = data.status;
           this.profiles[index].is_active = data.is_active;
         }

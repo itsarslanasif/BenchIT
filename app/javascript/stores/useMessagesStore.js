@@ -79,7 +79,7 @@ export const useMessageStore = () => {
       },
       isMessageToEdit(message) {
         if (this.messageToEdit)
-          return this.messageToEdit && message.id == this.messageToEdit.id;
+          return this.messageToEdit && message.id === this.messageToEdit.id;
         return false;
       },
       updateSelectedprofileStatus(data) {
