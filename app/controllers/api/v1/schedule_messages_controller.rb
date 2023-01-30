@@ -19,7 +19,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   def destroy
     delete_job
     @schedule_message.destroy!
-    render json: { success: 'true', message: 'Message deleted' }, status: :ok
+    render json: { success: true, message: 'Message deleted' }, status: :ok
   end
 
   def send_now
@@ -29,7 +29,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
                                                     bench_conversation_id: @schedule_message.bench_conversation_id)
       @schedule_message.destroy!
     end
-    render json: { success: 'true', message: 'Message send' }, status: :ok
+    render json: { success: true, message: 'Message send'}, status: 200 
   end
 
   private

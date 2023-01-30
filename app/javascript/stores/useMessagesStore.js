@@ -5,7 +5,11 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
-import { getScheduleMessages } from '../api/scheduleMessages';
+import {
+  getScheduleMessages,
+  sendScheduledMessageNow,
+  deleteScheduledMessage
+} from '../api/scheduleMessages';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -32,7 +36,7 @@ export const useMessageStore = () => {
           state.messages.find(m => m.id == state.currMessage.id).replies.length;
         }
       },
-      getSelectedChat: state => state.selectedChat
+      getSelectedChat: state => state.selectedChat,
     },
     actions: {
       setSelectedChat(selectedChat) {
@@ -53,11 +57,11 @@ export const useMessageStore = () => {
           console.error(e);
         }
         if (conversation_type === 'profiles') {
-          const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
-          this.selectedChat = await getUserProfile(
-            currentWorkspace.id,
-            id
+          const currentWorkspace = decryption(
+            sessionStorage,
+            'currentWorkspace'
           );
+          this.selectedChat = await getUserProfile(currentWorkspace.id, id);
           this.selectedChat.conversation_type = 'Profile';
         } else if (conversation_type === 'channels') {
           this.selectedChat = await getChannel(id);
@@ -75,10 +79,10 @@ export const useMessageStore = () => {
         return this.messages.find(message => message.id === id);
       },
       addScheduleMessage(payload) {
-        this.scheduleMessage.push(payload)
+        this.scheduleMessage.push(payload);
       },
       async getAllScheduleMessages() {
-        this.scheduleMessage = await getScheduleMessages()
+        this.scheduleMessage = await getScheduleMessages();
       },
       setMessageToEdit(message) {
         this.messageToEdit = message;
@@ -88,9 +92,26 @@ export const useMessageStore = () => {
       },
       isMessageToEdit(message) {
         if (this.messageToEdit)
-          return this.messageToEdit && (message.id == this.messageToEdit.id)
-        return false
+          return this.messageToEdit && message.id == this.messageToEdit.id;
+        return false;
       },
+      sendMessageNow(scheduledMessage) {
+        sendScheduledMessageNow(scheduledMessage.id).then(res => {
+          this.alterScheduledMessages(res, scheduledMessage.id)
+        });
+      },
+      deleteScheduledMessage(scheduledMessage) {
+        deleteScheduledMessage(scheduledMessage.id).then(res => {
+          this.alterScheduledMessages(res, scheduledMessage.id)
+        });
+      },
+      alterScheduledMessages(res, id) {
+        if (res.success) {
+          this.scheduleMessage = this.scheduleMessage.filter(
+            message => message.id != id
+          );
+        }
+      }
     },
   });
 

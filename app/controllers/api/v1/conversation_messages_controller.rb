@@ -218,6 +218,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       obj = @bench_conversation.conversationable
     end
     response[:receiver] = obj
+    response
   end
 
 
