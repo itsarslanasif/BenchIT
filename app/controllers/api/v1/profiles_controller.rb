@@ -3,7 +3,8 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
   before_action :check_user_member_of_workspace, only: %i[show update]
-  before_action :find_profile, only: %i[show update set_status clear_status set_is_active remove_is_active]
+  before_action :find_profile, only: %i[show update set_status clear_status set_is_active remove_is_active mute_channel unmute_channel]
+  before_action :check_channel, only: %i[mute_channel unmute_channel]
 
   def index
     @profiles = if params[:query].presence
@@ -75,6 +76,24 @@ class Api::V1::ProfilesController < Api::ApiController
     @profiles = Profile.where(id: @dm_users_ids)
   end
 
+  def mute_channel
+    @profile.muted_channels << params[:channel_id] if @profile.muted_channels.exclude?(@channel.id)
+    if @profile.save
+      render json: { message: 'channel muted.' }, status: :ok
+    else
+      render json: { errors: @profile.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def unmute_channel
+    @profile.muted_channels.delete(params[:channel_id])
+    if @profile.save
+      render json: { message: 'channel un_muted.' }, status: :ok
+    else
+      render json: { errors: @profile.errors }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_job
@@ -96,22 +115,8 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def profile_params
-    params.require(:profile).permit(
-      :username,
-      :description,
-      :recording,
-      :profile_image,
-      :role,
-      :display_name,
-      :title,
-      :text_status,
-      :emoji_status,
-      :clear_status_after,
-      :time_zone,
-      :pronounce_name,
-      :phone,
-      :skype
-    ).tap do |param|
+    params.require(:profile).permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status, :emoji_status,
+                                    :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end
@@ -136,5 +141,12 @@ class Api::V1::ProfilesController < Api::ApiController
     return render json: [Current.profile] if @bench_conversations_ids.empty?
 
     @dm_users_ids = BenchConversation.where(id: @bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
+  end
+
+  def check_channel
+    @channel = BenchChannel.find(params[:channel_id])
+    return if @profile.bench_channel_ids.include?(@channel.id)
+
+    render json: { errors: "You don't have access to this channel." }, status: :not_found
   end
 end

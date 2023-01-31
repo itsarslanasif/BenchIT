@@ -100,6 +100,7 @@ class Profile < ApplicationRecord
       pronounce_name: pronounce_name,
       role: role,
       title: title,
+      muted_channels: muted_channels,
       status: text_status.present? ? { text: text_status, emoji: emoji_status, clear_after: clear_status_after } : nil,
       contact_info: { email: user.email, phone: phone },
       about_me: { skype: skype },
