@@ -168,4 +168,6 @@ export const CONSTANTS = {
   LAST_MONTH: 'Last month',
   THE_VERY_BEGINNING: 'The very beginning',
   JUMP_TO_SPECIFIC_DATE: 'Jump to a specific date',
+  ASCENDING: 'asc',
+  DESCENDING: 'desc',
 };

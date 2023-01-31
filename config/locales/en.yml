@@ -284,6 +284,7 @@ en:
         sort: 'Sort'
         sort_label: 'Sort:'
         account_type: 'Account Type'
+        filter_label: 'Filter:'
       profilestatus:
         what_is_your_status: 'Whats your status?'
         set_a_status: 'Set a status'
