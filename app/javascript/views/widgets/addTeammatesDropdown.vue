@@ -10,33 +10,37 @@
       </p>
     </div>
 
-    <transition v-click-outside="toggleModel" name="fade" appear>
+    <transition v-click-outside="toggleModal" name="fade" appear>
       <div
         class="bg-white rounded text-black-800 opacity-100 fixed text-sm z-10 ml-10"
         v-if="isOpen"
       >
         <div class="py-2">
           <div
-            v-for="item in items"
-            :key="item"
+            v-for="option in options"
+            :key="option.key"
             class="hover:bg-primaryHover hover:text-white"
-            @click="item.func"
+            @click="handleSelect(option.key)"
           >
             <div class="px-4">
-              {{ item.title }}
+              {{ option.label }}
             </div>
           </div>
         </div>
       </div>
     </transition>
   </div>
+  <UserInviteModal v-model:show="showInviteModal" />
 </template>
 
 <script>
 import vClickOutside from 'click-outside-vue3';
+import UserInviteModal from './userInviteModal.vue';
+import { CONSTANTS } from '../../assets/constants.js';
+
 export default {
+  components: { UserInviteModal },
   name: 'dropdown',
-  props: ['title', 'items'],
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -44,21 +48,35 @@ export default {
     return {
       isOpen: false,
       UserInviteFormFlag: false,
+      showInviteModal: false,
+      options: [
+        {
+          label: CONSTANTS.INVITE_PEOPLE,
+          key: this.generateKey(CONSTANTS.INVITE_PEOPLE),
+        },
+        {
+          label: CONSTANTS.NEW_CONVERSATION,
+          key: this.generateKey(CONSTANTS.NEW_CONVERSATION),
+        },
+      ],
     };
   },
   methods: {
-    toggleModel() {
-      this.isOpen = !this.isOpen;
-    },
-    displayItem(e) {
-      switch (e.target.outerText) {
-        case 'Invite People':
-          this.UserInviteFormFlag = true;
+    handleSelect(key) {
+      switch (key) {
+        case 'invite-people':
+          this.showInviteModal = true;
           break;
+        case 'new-conversation':
+          this.$router.push('/direct_messages');
+        break;
       }
     },
     toggleModal() {
       this.isOpen = !this.isOpen;
+    },
+    generateKey(label) {
+      return label.toLowerCase().replace(/ /g, '-');
     },
   },
 };
