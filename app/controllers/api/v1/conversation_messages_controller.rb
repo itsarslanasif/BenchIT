@@ -23,9 +23,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
         render json: { error: 'Message not sent', errors: @message.errors }, status: :unprocessable_entity
       end
     else
-      msg = @bench_conversation.schedule_messages.new(schedule_messages_params)
-      msg.save!
-      render json: { success: 'Message has been scheduled.', message: prepare_response(msg) }, status: :ok
+      schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
+      schedule_message.save!
     end
   end
 
@@ -202,44 +201,5 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: 'This message was deleted.')
     end
-  end
-
-  def prepare_response(msg)
-    response = {
-      id: msg.id,
-      content: msg.content,
-      scheduled_at: msg.scheduled_at,
-      conversation_type: @bench_conversation.conversationable_type,
-      created_at: msg.created_at,
-      updated_at: msg.updated_at
-    }
-
-    receiver = determine_receiver
-
-    response[:receiver] = receiver
-    response
-  end
-
-  def determine_receiver
-    if @bench_conversation.conversationable_type.eql?('Profile')
-      determine_profile_receiver
-    else
-      @bench_conversation.conversationable
-    end
-  end
-
-  def determine_profile_receiver
-    if @bench_conversation.conversationable_id == Current.profile.id
-      receiver = @bench_conversation.sender.as_json
-      receiver['image_url'] = url_for(@bench_conversation.sender.profile_image) if @bench_conversation.sender.profile_image.attached?
-    else
-      receiver = @bench_conversation.conversationable.as_json
-      if @bench_conversation.conversationable.profile_image.attached?
-        receiver['image_url'] =
-          url_for(@bench_conversation.conversationable.profile_image)
-      end
-    end
-
-    receiver
   end
 end
