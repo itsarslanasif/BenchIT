@@ -12,6 +12,7 @@ import { useChannelStore } from "../../stores/useChannelStore";
 import { NSelect, NCheckbox } from "naive-ui";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { CONSTANTS } from "../../assets/constants";
 
 export default {
   components:{
@@ -23,20 +24,20 @@ export default {
     const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore)
     const options = ref([
         {
-          label: "All channels types",
+          label: CONSTANTS.ALL_CHANNELS,
           value: ""
         },
         {
-          label: "Public Channels",
-          value: "public"
+          label: CONSTANTS.PUBLIC_CHANNELS,
+          value: CONSTANTS.PUBLIC
         },
         {
-          label: "Private Channels",
-          value: "private"
+          label: CONSTANTS.PRIVATE_CHANNELS,
+          value: CONSTANTS.PRIVATE
         },
         {
-          label: "Archived Channels",
-          value: "archived"
+          label: CONSTANTS.ARCHIVED_CHANNELS,
+          value: CONSTANTS.ARCHIVED
         },
       ])
     const handleCheckedChange = (checked) => {  

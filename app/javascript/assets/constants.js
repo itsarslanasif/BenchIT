@@ -159,5 +159,12 @@ export const CONSTANTS = {
   ACTIVE:'active',
   AWAY:'away',
   ACTIVE_ICON:'🟢',
-  AWAY_ICON:'⚫'
+  AWAY_ICON:'⚫',
+  ALL_CHANNELS: 'All channels',
+  PUBLIC_CHANNELS: 'Public channels',
+  PRIVATE_CHANNELS: 'Private channels',
+  ARCHIVED_CHANNELS: 'Archived channels',
+  PUBLIC: 'public',
+  PRIVATE: 'private',
+  ARCHIVED: 'archived',
 };
