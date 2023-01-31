@@ -170,4 +170,6 @@ export const CONSTANTS = {
   JUMP_TO_SPECIFIC_DATE: 'Jump to a specific date',
   ASCENDING: 'asc',
   DESCENDING: 'desc',
+  REPLY_PLACEHOLDER: 'Reply...'
+  
 };

@@ -26,9 +26,10 @@
         @keydown.enter="sendMessagePayload($event, false)"
         api-key="no-api-key"
         :init="{
+          placeholder: placeHolder,
           menubar: false,
           statusbar: false,
-          plugins: 'lists link code codesample',
+          plugins: 'placeHolder lists link code codesample ',
           toolbar:
             'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
           codesample_languages: [none],
@@ -99,6 +100,7 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { NMention } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   beforeMount() {
@@ -116,7 +118,22 @@ export default {
       this.messageStore.removeMessageToEdit();
     },
   },
-  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
+  computed: {
+    placeHolder() {
+      const recipientName =
+        this.selectedChat.username || this.selectedChat.name || '...';
+      return this.isThread
+        ? CONSTANTS.REPLY_PLACEHOLDER
+        : `${CONSTANTS.MESSAGE} ${recipientName}`;
+    },
+  },
+  props: [
+    'sendMessage',
+    'isThread',
+    'message',
+    'editMessage',
+    'editMessageCallBack',
+  ],
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
@@ -131,6 +148,7 @@ export default {
     const files = ref([]);
     const filteredList = ref([]);
     const messageStore = useMessageStore();
+    const { selectedChat } = useMessageStore();
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -271,6 +289,7 @@ export default {
       getImages,
       addMentionToText,
       messageStore,
+      selectedChat,
     };
   },
 };
