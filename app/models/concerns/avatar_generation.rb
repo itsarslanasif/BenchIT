@@ -12,8 +12,7 @@ module AvatarGeneration
       'font-size': 0.6
     }
     url = "#{ENV.fetch('UI_AVATAR_URL')}/?#{params.to_query}"
-    uri = URI(url)
-    avatar = Net::HTTP.get(uri)
+    avatar = Net::HTTP.get(URI(url))
     image.attach(io: StringIO.new(avatar), filename: "#{name}.png", content_type: 'image/png')
   end
 end
