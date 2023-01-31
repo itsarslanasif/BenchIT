@@ -23,7 +23,7 @@
     </template>
   </div>
   <div class="relative mx-1">
-    <TextEditorVue :sendMessage="sendMessage" />
+    <TextEditorVue :sendMessage="sendMessage" :isThread="true" />
   </div>
 </template>
 

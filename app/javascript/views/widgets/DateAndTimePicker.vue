@@ -4,7 +4,7 @@
       <n-date-picker v-model:value="dateTimestamp" class="w-1/2" />
       <n-time-picker v-model:value="timeTimestamp" class="w-1/2" />
     </div>
-    <div v-if="error.date && error.time" class="px-1 pt-3 text-danger">
+    <div v-if="isError()" class="px-1 pt-3 text-danger">
       {{ $t('schedule.error') }}
     </div>
     <div class="w-full">
@@ -51,7 +51,7 @@ export default {
       const now = moment().format('HH:mm:ss')
       const time = moment(this.timeTimestamp).format('HH:mm:ss')
       this.error.time = time < now
-    }
+    },
   },
   methods: {
     setCustom() {
@@ -68,6 +68,9 @@ export default {
       });
       this.setSchedule(dateTime.format('YYYY-MM-DD HH:mm:ss Z'));
     },
+    isError() {
+      return this.error.date || (this.error.date && this.error.time) 
+    }
   },
 };
 </script>

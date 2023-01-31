@@ -105,6 +105,7 @@
               @click="dispatchKeydownEnterEvent"
             />
             <font-awesome-icon
+              v-if="!isThread"
               @click="toggleSchedule"
               icon="fa-solid fa-chevron-down"
               class="bg-success hover:bg-successHover p-2 rounded-r"
@@ -155,7 +156,7 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
+  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack', 'isThread'],
   methods: {
     dispatchKeydownEnterEvent() {
       const event = new KeyboardEvent('keydown', { keyCode: 13 });
