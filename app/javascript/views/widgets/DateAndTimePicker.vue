@@ -4,11 +4,12 @@
       <n-date-picker v-model:value="dateTimestamp" class="w-1/2" />
       <n-time-picker v-model:value="timeTimestamp" class="w-1/2" />
     </div>
+    <div v-if="error.date && error.time" class="px-1 pt-3 text-danger">
+      {{ $t('schedule.error') }}
+    </div>
     <div class="w-full">
-      <button
-        @click="setCustom"
-        class="bg-success float-right text-white hover:bg-successHover px-4 py-1 my-3 rounded"
-      >
+      <button @click="setCustom" :disabled="isDisabled"
+        class="bg-success float-right text-white hover:bg-successHover px-4 py-1 my-3 rounded">
         {{ $t('actions.go') }}
       </button>
     </div>
@@ -29,7 +30,28 @@ export default {
     return {
       dateTimestamp: null,
       timeTimestamp: null,
+      error: {
+        date: false,
+        time: false
+      }
     };
+  },
+  computed: {
+    isDisabled() {
+      return this.error.date || this.error.time
+    }
+  },
+  watch: {
+    dateTimestamp() {
+      const now = moment().format('YYYY-MM-DD')
+      const date = moment(this.dateTimestamp).format('YYYY-MM-DD')
+      this.error.date = date < now
+    },
+    timeTimestamp() {
+      const now = moment().format('HH:mm:ss')
+      const time = moment(this.timeTimestamp).format('HH:mm:ss')
+      this.error.time = time < now
+    }
   },
   methods: {
     setCustom() {
