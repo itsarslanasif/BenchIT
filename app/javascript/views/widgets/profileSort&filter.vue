@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import { NInput, NButton, NPopselect, NDropdown } from 'naive-ui';
+import { NInput, NButton, NDropdown } from 'naive-ui';
 import { SearchOutline } from '@vicons/ionicons5';
 import { ref } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
@@ -52,7 +52,6 @@ export default {
     NInput,
     NDropdown,
     NButton,
-    NPopselect,
   },
   data() {
     return {
@@ -71,7 +70,6 @@ export default {
           key: this.generateKey(CONSTANTS.Z_TO_A),
         },
       ],
-
       filterOptions: [
         {
           label: CONSTANTS.ADMINS,

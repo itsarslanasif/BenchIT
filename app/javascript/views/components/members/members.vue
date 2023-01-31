@@ -1,6 +1,6 @@
 <template>
   <div>
-    <profileSortFilterVue :handleSubmit="searchQuery" :members="members" />
+    <ProfileSortFilter :handleSubmit="searchQuery" :members="members" />
     <div class="justify-center flex h-full w-full" v-if="showSpinner">
       <Spinner />
     </div>
@@ -28,7 +28,7 @@ import { mapActions } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
 import { getMembers } from '../../../api/members/membersApi';
 import { useProfileStore } from '../../../stores/useProfileStore';
-import profileSortFilterVue from '../../widgets/profileSort&filter.vue';
+import ProfileSortFilter from '../../widgets/profileSort&filter.vue';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 
 import { ref } from 'vue';
@@ -40,7 +40,7 @@ export default {
     Spinner,
     filters,
     profile,
-    profileSortFilterVue,
+    ProfileSortFilter,
   },
   setup() {
     const profilesStore = useProfileStore();
