@@ -9,14 +9,6 @@
     <font-awesome-icon icon="fa-solid fa-trash" class="text-danger hover:text-dangerHover"
       @click.stop="deleteScheduled" />
   </div>
-  <div v-if="customScheduleFlag" class="bg-danger">
-    <n-modal>
-      <n-card class="w-2/6" :title="$t('schedule.custom_time')" :bordered="false" size="huge" role="dialog"
-        aria-modal="true">
-        <DateAndTimePicker :setSchedule="setSchedule" :toggleCustomScheduleFlag="toggleCustomScheduleFlag" />
-      </n-card>
-    </n-modal>
-  </div>
 </template>
 
 <script>
@@ -24,16 +16,11 @@ import DateAndTimePicker from './DateAndTimePicker.vue';
 import { NModal, NCard } from 'naive-ui';
 import { useMessageStore } from '../../stores/useMessagesStore';
 export default {
-  props: ['payload'],
+  props: ['payload', 'toggleRecheduleFlag'],
   components: {
     DateAndTimePicker,
     NModal,
     NCard
-  },
-  data() {
-    return {
-      customScheduleFlag: false
-    }
   },
   setup() {
     const messageStore = useMessageStore()
@@ -49,10 +36,7 @@ export default {
       this.messageStore.deleteScheduledMessage(this.payload)
     },
     toggleCustomScheduleFlag() {
-      this.customScheduleFlag = !this.customScheduleFlag
-    },
-    setSchedule(value) {
-      console.log('Hello', value);
+      this.toggleRecheduleFlag(this.payload.id)
     },
     editSchedule() {
       this.messageStore.setEditSchedule(this.payload)

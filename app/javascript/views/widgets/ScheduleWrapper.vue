@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between relative" @mouseover="toggleOptionsOn" @mouseleave="toggleOptionsOff">
     <div v-if="optionsFlag" class="right-0 absolute">
-      <ScheduleOptions :payload="payload" />
+      <ScheduleOptions :payload="payload" :toggleRecheduleFlag="toggleRecheduleFlag" />
     </div>
     <div class="flex">
       <div>
@@ -31,18 +31,20 @@
 <script>
 import moment from 'moment';
 import ScheduleOptions from './ScheduleOptions.vue'
-import { NAvatar } from 'naive-ui';
+import { NAvatar, NModal, NCard } from 'naive-ui';
 export default {
   components: {
     NAvatar,
-    ScheduleOptions
+    ScheduleOptions,
+    NModal,
+    NCard
   },
   data() {
     return {
-      optionsFlag: false
+      optionsFlag: false,
     }
   },
-  props: ['payload'],
+  props: ['payload', 'toggleRecheduleFlag'],
   methods: {
     ignoreHTML(message) {
       return message.replace(/<[^>]+>/g, '');
@@ -64,7 +66,7 @@ export default {
     },
     toggleOptionsOff() {
       this.optionsFlag = false
-    }
+    },
   }
 }
 </script>

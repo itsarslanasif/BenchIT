@@ -10,6 +10,7 @@ import {
   sendScheduledMessageNow,
   deleteScheduledMessage,
   editScheduledContent,
+  reScheduleTime,
 } from '../api/scheduleMessages';
 
 export const useMessageStore = () => {
@@ -134,6 +135,14 @@ export const useMessageStore = () => {
           scheduledId: null,
           isScheduled: false,
         };
+      },
+      reScheduleMessage(payload) {
+        reScheduleTime(payload).then(() => {
+          const scheduledMessage = this.scheduleMessage.find(
+            message => message.id === payload.id
+          );
+          scheduledMessage.scheduled_at = payload.scheduled_at;
+        });
       },
     },
   });

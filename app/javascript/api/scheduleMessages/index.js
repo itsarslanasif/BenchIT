@@ -40,3 +40,13 @@ export const editScheduledContent = async payload => {
       return response.data;
     });
 };
+
+export const reScheduleTime = async payload => {
+  return axios
+    .patch(`v1/schedule_messages/${payload.id}`, { scheduled_at: payload.scheduled_at }, {
+      headers: getHeaders(),
+    })
+    .then(response => {
+      return response.data;
+    });
+};
