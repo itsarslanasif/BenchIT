@@ -173,7 +173,7 @@ router.beforeEach(async (to, from, next) => {
 
   let authStatus = await checkAuth();
 
-  if (to.path !== "/sign_in") {
+  if (to.path !== '/sign_in') {
     if (!authStatus) {
       localStorage.clear();
       sessionStorage.clear();

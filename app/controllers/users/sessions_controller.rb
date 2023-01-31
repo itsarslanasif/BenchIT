@@ -7,9 +7,9 @@ class Users::SessionsController < Devise::SessionsController
 
   def check_auth
     if user_signed_in?
-      render json: current_user
+      render json: { success: true }, status: :ok
     else
-      render json: { message: 'Something went wrong' }, status: :unprocessable_entity
+      render json: { success: false }, status: :unprocessable_entity
     end
   end
 
@@ -26,7 +26,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_success
-    redirect_to "#{request.base_url}/sign_in"
+    redirect_to helpers.sign_in_url
   end
 
   def log_out_failure
