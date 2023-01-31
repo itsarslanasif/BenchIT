@@ -30,7 +30,6 @@ import { getMembers } from '../../../api/members/membersApi';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import ProfileSortFilter from '../../widgets/profileSort&filter.vue';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
-
 import { ref } from 'vue';
 
 export default {
