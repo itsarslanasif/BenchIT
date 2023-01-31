@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAllProfiles } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
-import { useCurrentWorkspaceStore } from './useCurrentWorkspaceStore';
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
@@ -21,7 +20,14 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          console.error(e)
+          console.error(e);
+        }
+      },
+      updateProfileStatus(data) {
+        let index = this.profiles.findIndex(profile => data.id === profile.id);
+        if (index !== -1) {
+          this.profiles[index].status = data.status;
+          this.profiles[index].is_active = data.is_active;
         }
       },
     },

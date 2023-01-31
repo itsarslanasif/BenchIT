@@ -25,6 +25,7 @@ import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
 import { decryption } from '../../../modules/crypto/crypto';
 import CreateChannel from '../../components/channels/CreateChannel.vue';
+import { removeActiveStatus } from '../../../api/profiles/profileStatus';
 
 export default {
   components: { NButton, NDropdown, UserInviteModal, CreateChannel },
@@ -40,17 +41,14 @@ export default {
   },
   setup() {
     const currentWorkspace = decryption(sessionStorage, 'currentWorkspace');
-    return { currentWorkspace, options };
+    const currentProfile = decryption(sessionStorage, 'currentProfile');
+    return { currentWorkspace, options, currentProfile };
   },
   methods: {
     handleSelect(key) {
       switch (key) {
         case 'sign-out-of-your-account':
-          let token = decryption(localStorage, 'token');
-          userSignOut(token).then(res => {
-            this.response = res;
-            this.$router.push('/sign_in');
-          });
+          this.signOut();
           break;
         case 'invite-people':
           this.showModal = true;
@@ -58,6 +56,20 @@ export default {
         case 'create-a-channel':
           this.showChannelModal = true;
           break;
+      }
+    },
+    async signOut() {
+      try {
+        let token = decryption(localStorage, 'token');
+        await removeActiveStatus(
+          this.currentWorkspace.id,
+          this.currentProfile.id
+        );
+        const res = await userSignOut(token);
+        this.response = res;
+        this.$router.push('/sign_in');
+      } catch (error) {
+        console.error(error);
       }
     },
     toggleCreateChannelModal() {

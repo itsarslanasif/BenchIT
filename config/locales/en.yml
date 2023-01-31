@@ -193,7 +193,7 @@ en:
         result: 'result(s)'
         starred: 'Starred'
         channel_created_success: 'New channel created successfully'
-        channel_created_failure: 'Channel name already exist'
+        channel_created_failure: 'Channel already exists'
         dot: '·'
         starred: 'Starred'
       bookmark:
@@ -292,6 +292,7 @@ en:
         sort: 'Sort'
         sort_label: 'Sort:'
         account_type: 'Account Type'
+        filter_label: 'Filter:'
       profilestatus:
         what_is_your_status: 'Whats your status?'
         set_a_status: 'Set a status'
@@ -323,12 +324,7 @@ en:
         divider: '●'
       user_profile:
       messages_section:
-        today: 'Today'
-        yesterday: 'Yesterday'
         jump_to: 'Jump to...'
-        last_week: 'Last week'
-        last_month: 'Last month'
-        the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
       saved_items:
         title: 'Add messages and files to come back to later'

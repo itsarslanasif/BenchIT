@@ -1,15 +1,3 @@
 json.array! @saved_items do |saved_item|
-  json.id saved_item.id
-  json.message saved_item.conversation_message
-  json.profile saved_item.conversation_message.profile
-  json.isSaved true
-  if saved_item.conversation_message.message_attachments.present?
-    json.attachments saved_item.conversation_message.message_attachments do |attachment|
-      json.attachment do
-        json.extract! attachment.blob, :id, :created_at, :content_type, :filename
-      end
-      json.attachment_link rails_storage_proxy_url(attachment)
-      json.attachment_download_link rails_blob_url(attachment, disposition: 'attachment')
-    end
-  end
+  json.partial! 'api/v1/conversation_messages/saved_message', saved_item: saved_item
 end

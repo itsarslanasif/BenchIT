@@ -56,13 +56,6 @@ export default {
       return this.savedItemsStore.savedItems.length != 0;
     },
   },
-  async beforeMount() {
-    try {
-      this.savedItemsStore.savedItems = await getSaveMessages();
-    } catch (e) {
-      console.error(e);
-    }
-  },
 };
 </script>
 <style scoped>

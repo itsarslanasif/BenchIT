@@ -1,72 +1,87 @@
 <template>
-  <div
-    class="z-10 w-full border text-white drop-shadow-2xl bg-primary py-3 rounded-md text-sm font-normal"
-  >
-    <p class="text-xs toDays py-1">
-      {{ $t('messages_section.jump_to') }}
-    </p>
-    <div
-      v-if="!this.today"
-      class="toDays hover:bg-primaryHover"
-      @click="setOption(1)"
+  <div>
+    <n-dropdown
+      class="rounded-md border border-slate-100 w-100"
+      placement="bottom-start"
+      size="medium"
+      :show="toggleShow"
+      :options="options"
+      @select="handleSelect($event)"
+      :on-clickoutside="openCalenderModal ? null : toggleShow"
     >
-      {{ $t('messages_section.today') }}
-    </div>
-    <div class="toDays hover:bg-primaryHover" @click="setOption(2)">
-      {{ $t('messages_section.yesterday') }}
-    </div>
-    <div class="toDays hover:bg-primaryHover" @click="setOption(3)">
-      {{ $t('messages_section.last_week') }}
-    </div>
-    <div class="toDays hover:bg-primaryHover" @click="setOption(4)">
-      {{ $t('messages_section.last_month') }}
-    </div>
-    <div class="toDays hover:bg-primaryHover" @click="setOption(5)">
-      {{ $t('messages_section.the_very_beginning') }}
-    </div>
-    <hr class="border-primaryHover my-2" />
-    <div class="toDays hover:bg-primaryHover" @click="setOption(6)">
-      {{ $t('messages_section.jump_to_specific_date') }}
-    </div>
+      <p />
+    </n-dropdown>
+    <n-modal v-model:show="openCalenderModal">
+      <n-card
+        class="flex justify-center items-center w-100"
+        :title="$t('messages_section.jump_to_specific_date')"
+        role="dialog"
+        aria-modal="true"
+      >
+        <n-date-picker panel type="date" v-model:value="timestamp" />
+        <n-button class="mt-2 px-10 focus:outline-none" @click="goToDate">
+          {{ $t('actions.go') }}
+        </n-button>
+      </n-card>
+    </n-modal>
   </div>
-  <n-modal v-model:show="openCalenderModal">
-    <n-card
-      style="width: 600px"
-      :title="$t('messages_section.jump_to_specific_date')"
-      :bordered="false"
-      size="huge"
-      role="dialog"
-      aria-modal="true"
-    >
-      <n-date-picker v-model:value="timestamp" />
-      <n-button class="mt-2 float-right px-10" @click="goToDate">
-        {{ $t('actions.go') }}
-      </n-button>
-    </n-card>
-  </n-modal>
 </template>
 <script>
-import { NModal, NCard, NDatePicker, NButton } from 'naive-ui';
+import { NModal, NCard, NDatePicker, NButton, NDropdown } from 'naive-ui';
+import { CONSTANTS } from '../../assets/constants';
 export default {
-  components: { NModal, NCard, NDatePicker, NButton },
-  props: ['scrollToMessageByDate', 'today'],
+  components: { NModal, NCard, NDatePicker, NButton, NDropdown },
+  props: ['scrollToMessageByDate', 'today', 'toggleShow'],
   data() {
     return {
       openCalenderModal: false,
       timestamp: null,
+      options: [
+        {
+          label: CONSTANTS.JUMP_TO,
+          key: this.generateKey(CONSTANTS.JUMP_TO),
+          disabled: true,
+        },
+        {
+          label: CONSTANTS.TODAY,
+          key: this.generateKey(CONSTANTS.TODAY),
+          show: !this.today,
+        },
+        {
+          label: CONSTANTS.YESTERDAY,
+          key: this.generateKey(CONSTANTS.YESTERDAY),
+        },
+        {
+          label: CONSTANTS.LAST_WEEK,
+          key: this.generateKey(CONSTANTS.LAST_WEEK),
+        },
+        {
+          label: CONSTANTS.LAST_MONTH,
+          key: this.generateKey(CONSTANTS.LAST_MONTH),
+        },
+        {
+          label: CONSTANTS.THE_VERY_BEGINNING,
+          key: this.generateKey(CONSTANTS.THE_VERY_BEGINNING),
+        },
+        {
+          label: CONSTANTS.JUMP_TO_SPECIFIC_DATE,
+          key: this.generateKey(CONSTANTS.JUMP_TO_SPECIFIC_DATE),
+        },
+      ],
     };
   },
   beforeUnmount() {
     this.timestamp = null;
+    this.openCalenderModal = false;
   },
   methods: {
-    setOption(type) {
+    handleSelect(key) {
       const date = new Date();
-      switch (type) {
-        case 1:
+      switch (key) {
+        case this.generateKey(CONSTANTS.TODAY):
           this.scrollToMessageByDate(date);
           break;
-        case 2:
+        case this.generateKey(CONSTANTS.YESTERDAY):
           const yesterday = new Date(
             date.getFullYear(),
             date.getMonth(),
@@ -74,7 +89,7 @@ export default {
           );
           this.scrollToMessageByDate(yesterday);
           break;
-        case 3:
+        case this.generateKey(CONSTANTS.LAST_WEEK):
           const last_week = new Date(
             date.getFullYear(),
             date.getMonth(),
@@ -82,14 +97,15 @@ export default {
           );
           this.scrollToMessageByDate(last_week);
           break;
-        case 4:
+        case this.generateKey(CONSTANTS.LAST_MONTH):
           const last_month = new Date(date.getFullYear(), date.getMonth() - 1);
+          console.log(last_month)
           this.scrollToMessageByDate(last_month);
           break;
-        case 5:
+        case this.generateKey(CONSTANTS.THE_VERY_BEGINNING):
           this.scrollToMessageByDate('beginning_of_chat');
           break;
-        case 6:
+        case this.generateKey(CONSTANTS.JUMP_TO_SPECIFIC_DATE):
           this.openCalenderModal = !this.openCalenderModal;
           break;
         default:
@@ -100,11 +116,9 @@ export default {
       const date = new Date(this.timestamp);
       this.scrollToMessageByDate(date);
     },
+    generateKey(label) {
+      return label.toLowerCase().replace(/ /g, '-');
+    },
   },
 };
 </script>
-<style>
-.toDays {
-  @apply px-5;
-}
-</style>
