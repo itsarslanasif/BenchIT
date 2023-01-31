@@ -35,6 +35,9 @@ export const useMessageStore = () => {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
       },
+      setSelectedChatUserName(userName) {
+         this.selectedChat = {...this.selectedChat, username: userName};
+      },
       async index(conversation_type, id) {
         try {
           let newMessages = await getMessageHistory(

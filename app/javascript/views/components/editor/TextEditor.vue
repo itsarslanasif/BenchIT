@@ -121,7 +121,9 @@ export default {
   computed: {
     placeHolder() {
       const recipientName =
-        this.selectedChat.username || this.selectedChat.name || '...';
+        this.selectedChat.username ||
+        this.selectedChat.name ||
+        CONSTANTS.EMPTY_PLACEHOLDER;
       return this.isThread
         ? CONSTANTS.REPLY_PLACEHOLDER
         : `${CONSTANTS.MESSAGE} ${recipientName}`;
