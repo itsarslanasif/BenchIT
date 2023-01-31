@@ -79,7 +79,7 @@ class Api::V1::ProfilesController < Api::ApiController
   def mute_channel
     @profile.muted_channels << params[:channel_id] if @profile.muted_channels.exclude?(@channel.id)
     if @profile.save
-      render json: { message: 'channel muted.' }, status: :ok
+      render json: { message: t(:channel_muted) }, status: :ok
     else
       render json: { errors: @profile.errors }, status: :unprocessable_entity
     end
@@ -88,7 +88,7 @@ class Api::V1::ProfilesController < Api::ApiController
   def unmute_channel
     @profile.muted_channels.delete(params[:channel_id])
     if @profile.save
-      render json: { message: 'channel un_muted.' }, status: :ok
+      render json: { message: t(:channel_unmuted) }, status: :ok
     else
       render json: { errors: @profile.errors }, status: :unprocessable_entity
     end
@@ -147,6 +147,6 @@ class Api::V1::ProfilesController < Api::ApiController
     @channel = BenchChannel.find(params[:channel_id])
     return if @profile.bench_channel_ids.include?(@channel.id)
 
-    render json: { errors: "You don't have access to this channel." }, status: :not_found
+    render json: { message: t(:no_access) }, status: :not_found
   end
 end

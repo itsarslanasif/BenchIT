@@ -363,3 +363,9 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+  channel_muted: 'Channel has been muted.'
+  channel_unmuted: 'Channel has been un-muted.'
+  no_access: 'You don’t have access to this channel.'
+
+
+
