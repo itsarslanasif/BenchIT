@@ -3,7 +3,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   include Pagination
 
   before_action :fetch_conversation, :verify_membership, only: %i[create]
-  before_action :set_message, :authenticat_message, only: %i[destroy update]
+  before_action :set_message, :authenticate_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
@@ -155,7 +155,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     render json: { error: "You can't access this profile." }, status: :unprocessable_entity unless @receiver.workspace_id.eql?(Current.workspace.id)
   end
 
-  def authenticat_message
+  def authenticate_message
     if @message.sender_id.eql?(Current.profile.id)
       check_membership(@message.bench_conversation)
     else
