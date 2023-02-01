@@ -5,6 +5,14 @@ class Users::SessionsController < Devise::SessionsController
 
   skip_before_action :verify_authenticity_token
 
+  def check_auth
+    if user_signed_in?
+      render json: { success: true }, status: :ok
+    else
+      render json: { success: false }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def respond_with(_resource, _opts = {})
@@ -18,7 +26,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_success
-    render json: { message: 'You are logged out.' }, status: :ok
+    redirect_to helpers.sign_in_url
   end
 
   def log_out_failure

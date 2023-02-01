@@ -3,7 +3,6 @@ workspace = Workspace.create!(company_name: 'BenchIT',
                               bench_it_url: 'https://www.benchit.com',
                               capacity: 2000,
                               organization_type: :financial_services)
-
 Current.workspace = workspace
 workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
 workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
@@ -81,18 +80,16 @@ ConversationMessage.create(content: '1st reply', is_threaded: false, bench_conve
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
 ConversationMessage.create(content: 'Hi from developer', is_threaded: false, bench_conversation_id: 6, sender_id: 1)
-Workspace.create!(company_name: 'Devsinc',
+Workspace.create!(company_name: 'TechHub',
                   workspace_type: :work,
-                  bench_it_url: 'https://www.devsinc.com',
+                  bench_it_url: 'https://www.techhub.com',
                   capacity: 2000,
                   organization_type: :financial_services)
-Workspace.last.workspace_avatar.attach(io: Rails.root.join(*%w[app assets images user.png]).open,
-                                       filename: 'user.png', content_type: 'image/png')
 user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: 2, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
                        text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
 Current.profile = user1.profiles.second
 Current.workspace = Workspace.second
-BenchChannel.create(name: 'DevsincChannel1', description: 'fdsfsdf')
+BenchChannel.create(name: 'DevsChannel1', description: 'fdsfsdf')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 5)
 ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 5)
 ConversationMessage.create(content: 'Hi Group from Alvi', is_threaded: false, bench_conversation_id: 7, sender_id: 6)

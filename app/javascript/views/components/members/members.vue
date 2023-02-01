@@ -1,15 +1,6 @@
 <template>
   <div>
-    <div class="py-5 px-8">
-      <input
-        class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        type="text"
-        v-model="query"
-        :placeholder="$t('members.search_by_name')"
-        @keyup="searchQuery()"
-      />
-    </div>
-    <filters v-if="!showProfile" @sort_filter="getSortFilter"></filters>
+    <ProfileSortFilter :handleSubmit="searchQuery" :members="members" />
     <div class="justify-center flex h-full w-full" v-if="showSpinner">
       <Spinner />
     </div>
@@ -37,6 +28,9 @@ import { mapActions } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
 import { getMembers } from '../../../api/members/membersApi';
 import { useProfileStore } from '../../../stores/useProfileStore';
+import ProfileSortFilter from '../../widgets/profileSort&filter.vue';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { ref } from 'vue';
 
 export default {
   props: ['filterComponentData'],
@@ -45,11 +39,14 @@ export default {
     Spinner,
     filters,
     profile,
+    ProfileSortFilter,
   },
   setup() {
     const profilesStore = useProfileStore();
+    const { currentWorkspace } = useCurrentWorkspaceStore();
     return {
       profilesStore,
+      currentWorkspace,
     };
   },
   mounted() {
@@ -58,10 +55,8 @@ export default {
   data() {
     return {
       query: '',
-      members: [],
+      members: ref([]),
       sort: '',
-      CurrentWorkspaceId: 1,
-      users: [],
       showProfile: false,
       selectedMember: '',
       showSpinner: true,
@@ -69,21 +64,12 @@ export default {
     };
   },
   beforeUnmount() {
-    this.members =
-      this.query =
-      this.sort =
-      this.users =
-      this.selectedMember =
-        null;
+    this.members = this.query = this.sort = this.selectedMember = null;
   },
   methods: {
-    async searchQuery() {
+    async searchQuery(query, sort) {
       try {
-        this.members = await getMembers(
-          this.CurrentWorkspaceId,
-          this.query,
-          this.sort
-        );
+        this.members = await getMembers(this.currentWorkspace.id, query, sort);
         this.showSpinner = false;
       } catch (e) {
         console.error(e);
@@ -103,19 +89,9 @@ export default {
       this.toggleUserProfileShow(true);
     },
 
-    getSortFilter(value) {
-      this.sort = value;
-    },
     ...mapActions(useRightPaneStore, ['toggleUserProfileShow']),
 
     ...mapActions(useUserProfileStore, ['setUserProfile']),
-  },
-  watch: {
-    sort() {
-      if (this.sort) {
-        this.searchQuery();
-      }
-    },
   },
 };
 </script>
