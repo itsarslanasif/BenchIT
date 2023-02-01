@@ -39,6 +39,8 @@ Rails.application.routes.draw do
         end
         resources :favourites, only: %i[create destroy]
 
+        resources :searches, only: %i[index]
+
         resources :bench_channels, except: %i[new edit] do
           member do
             delete :leave_channel

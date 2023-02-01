@@ -15,6 +15,8 @@ class ConversationMessage < ApplicationRecord
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
+  searchkick word_start: [:content]
+
   scope :messages_by_ids_array, lambda { |ids|
     includes(:reactions, :replies, :parent_message, :saved_items)
       .with_attached_message_attachments
