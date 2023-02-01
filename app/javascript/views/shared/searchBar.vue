@@ -61,6 +61,7 @@
             </div>
             <div v-if="search" class="pb-2 border-b border-primaryHover">
               <div class="px-5 py-2 rounded hover:bg-primaryHover">
+                <font-awesome-icon icon="fa-magnifying-glass" class="pr-3" />
                 {{ search }}
               </div>
             </div>
