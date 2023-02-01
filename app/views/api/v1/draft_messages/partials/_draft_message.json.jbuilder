@@ -1,20 +1,13 @@
-json.id draft_message.id
-json.content draft_message.content
-json.conversationable_id draft_message.bench_conversation.conversationable_id
-json.conversationable_type draft_message.bench_conversation.conversationable_type
-if draft_message.bench_conversation.conversationable_type.eql?('BenchChannel')
-  json.channel_name draft_message.bench_conversation.conversationable.name
-end
-if draft_message.bench_conversation.conversationable_type.eql?('Group')
-  json.group_id draft_message.bench_conversation.conversationable_id
-  json.group_name draft_message.bench_conversation.conversationable.name
-end
-if draft_message.bench_conversation.conversationable_type.eql?('Profile')
-  if draft_message.bench_conversation.conversationable_id == draft_message.profile_id
-    json.receiver_id draft_message.bench_conversation.sender_id
-    json.receiver_name draft_message.bench_conversation.sender.username
-  else
-    json.receiver_id draft_message.bench_conversation.conversationable_id
-    json.receiver_name draft_message.bench_conversation.conversationable.username
+json.extract! message, :id, :content, :conversation_message_id
+json.conversation_type message.bench_conversation.conversationable_type
+if message.bench_conversation.conversationable_type.eql?('Profile')
+  json.receiver do
+    if message.bench_conversation.conversationable_id.eql?(message.profile_id)
+      json.partial! 'api/v1/shared/partials/profile', profile: message.bench_conversation.sender
+    else
+      json.partial! 'api/v1/shared/partials/profile', profile: message.bench_conversation.conversationable
+    end
   end
+else
+  json.receiver message.bench_conversation.conversationable
 end
