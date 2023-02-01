@@ -131,12 +131,11 @@ export default {
       );
     },
     getChannelName() {
-      if (!this.selectedChat.is_private && this.selectedChat.name) {
-        return this.$t('chat.hash') + this.selectedChat.name;
-      } else if (this.selectedChat.is_private && this.selectedChat.name) {
-        return this.$t('chat.lock') + this.selectedChat.name;
-      }
-      return false;
+      return this.selectedChat.name
+        ? (this.selectedChat.is_private
+            ? this.$t('chat.lock')
+            : this.$t('chat.hash')) + this.selectedChat.name
+        : false;
     },
   },
   props: [
