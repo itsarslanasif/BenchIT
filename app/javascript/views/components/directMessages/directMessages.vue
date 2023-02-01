@@ -218,11 +218,9 @@ export default {
       return window.innerWidth < 1400;
     },
     getProfileName(message) {
-      if (this.currMessage.sender_id === this.currentProfile.id) {
-        return message.receiver_name;
-      } else {
-        return message.sender_name;
-      }
+      return message.sender_id === this.currentProfile.id
+        ? message.receiver_name
+        : message.sender_name;
     },
   },
   computed: {
