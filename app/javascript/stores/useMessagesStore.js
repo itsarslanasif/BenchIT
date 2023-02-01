@@ -35,6 +35,12 @@ export const useMessageStore = () => {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
       },
+      deleteChannelName() {
+        delete this.selectedChat.name;
+      },
+      setSelectedChatUserName(userName) {
+        this.selectedChat = { ...this.selectedChat, username: userName };
+      },
       async index(conversation_type, id) {
         try {
           let newMessages = await getMessageHistory(
@@ -50,11 +56,11 @@ export const useMessageStore = () => {
           console.error(e);
         }
         if (conversation_type === 'profiles') {
-          const currentWorkspace = decryption(sessionStorage, 'currentWorkspace')
-          this.selectedChat = await getUserProfile(
-            currentWorkspace.id,
-            id
+          const currentWorkspace = decryption(
+            sessionStorage,
+            'currentWorkspace'
           );
+          this.selectedChat = await getUserProfile(currentWorkspace.id, id);
           this.selectedChat.conversation_type = 'Profile';
         } else if (conversation_type === 'channels') {
           this.selectedChat = await getChannel(id);
@@ -79,8 +85,17 @@ export const useMessageStore = () => {
       },
       isMessageToEdit(message) {
         if (this.messageToEdit)
-          return this.messageToEdit && (message.id == this.messageToEdit.id)
-        return false
+          return this.messageToEdit && message.id === this.messageToEdit.id;
+        return false;
+      },
+      updateSelectedprofileStatus(data) {
+        if (
+          this.selectedChat?.conversation_type === 'Profile' &&
+          this.selectedChat?.id === data.id
+        ) {
+          this.selectedChat.is_active = data.is_active;
+          this.selectedChat.status = data.status;
+        }
       },
     },
   });

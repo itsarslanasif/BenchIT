@@ -133,6 +133,10 @@ en:
         replies: 'replies'
         reacted: 'reacted'
         reply: 'reply'
+        reply_placeholder: 'Reply...'
+        empty_placeholder: '...'
+        hash: '#'
+        lock: '🔒'
         replies: 'replies'
         last_reply: 'Last reply'
         view_thread: 'View thread'
@@ -295,6 +299,7 @@ en:
         private: 'private'
         archived: 'archived'
         reset: 'Reset'
+        filter_label: 'Filter:'
       profilestatus:
         what_is_your_status: 'Whats your status?'
         set_a_status: 'Set a status'
@@ -326,12 +331,7 @@ en:
         divider: '●'
       user_profile:
       messages_section:
-        today: 'Today'
-        yesterday: 'Yesterday'
         jump_to: 'Jump to...'
-        last_week: 'Last week'
-        last_month: 'Last month'
-        the_very_beginning: 'The very beginning'
         jump_to_specific_date: 'Jump to a specific date'
       saved_items:
         title: 'Add messages and files to come back to later'

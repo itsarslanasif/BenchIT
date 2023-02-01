@@ -11,15 +11,16 @@
           :src="selectedChat.image_url"
         />
         <span
-          v-if="selectedChat.isActive"
-          class="bg-success rounded-full border-primary border-2 h-3 w-3 relative -ml-3 mt-5"
+          v-if="selectedChat.is_active"
+          class="bg-green-700 rounded-full border-white border-2 h-3 w-3 relative -ml-3 mt-5"
         />
         <span
           v-else
-          class="bg-black-700 rounded-full border-white border-2 h-3 w-3 relative -ml-3 mt-5"
+          class="bg-white away rounded-full border-black border-2 h-2 w-2 relative"
         />
+
         <span v-if="selectedChat">
-          <p class="text-xl self-center font-semibold pl-1">
+          <p class="text-xl self-center ml-2 font-semibold pl-1">
             {{ selectedChat.username }}
           </p>
         </span>
@@ -64,5 +65,10 @@ export default {
 <style scoped>
 .custom-border {
   border-bottom: 0.5px solid gray;
+}
+.away {
+  margin-left: -10px;
+  margin-top: 22px;
+  outline: 2px solid rgb(255, 255, 255);
 }
 </style>
