@@ -26,7 +26,7 @@
         @keydown.enter="sendMessagePayload($event, false)"
         api-key="no-api-key"
         :init="{
-          placeholder: placeHolder,
+          placeholder: getPlaceholder,
           menubar: false,
           statusbar: false,
           plugins: 'placeHolder lists link code codesample ',
@@ -100,7 +100,6 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { NMention } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   beforeMount() {
@@ -119,14 +118,25 @@ export default {
     },
   },
   computed: {
-    placeHolder() {
-      const recipientName =
-        this.selectedChat.username ||
-        this.selectedChat.name ||
-        CONSTANTS.EMPTY_PLACEHOLDER;
+    getPlaceholder() {
       return this.isThread
-        ? CONSTANTS.REPLY_PLACEHOLDER
-        : `${CONSTANTS.MESSAGE} ${recipientName}`;
+        ? this.$t('chat.reply_placeholder')
+        : `${this.$t('actions.message')} ${this.getRecipientName}`;
+    },
+    getRecipientName() {
+      return (
+        this.getChannelName ||
+        this.selectedChat.username ||
+        this.$t('chat.empty_placeholder')
+      );
+    },
+    getChannelName() {
+      if (!this.selectedChat.is_private && this.selectedChat.name) {
+        return this.$t('chat.hash') + this.selectedChat.name;
+      } else if (this.selectedChat.is_private && this.selectedChat.name) {
+        return this.$t('chat.lock') + this.selectedChat.name;
+      }
+      return false;
     },
   },
   props: [
