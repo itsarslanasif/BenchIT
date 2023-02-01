@@ -256,23 +256,23 @@ export default {
 
     const dispatchKeydownEnterEvent = () => {
       const event = new KeyboardEvent('keydown', { keyCode: 13 });
-      if (this.isEditScheduled()) {
-        this.messageStore.reEditScheduledMessage({
-          content: this.newMessage,
-          id: this.messageToEdit.scheduledId
+      if (isEditScheduled()) {
+        messageStore.reEditScheduledMessage({
+          content: newMessage,
+          id: messageToEdit.scheduledId
         })
-        this.newMessage = ''
+        newMessage = ''
       } else {
-        this.sendMessagePayload(event);
+        sendMessagePayload(event);
       }
     }
 
     const handleCancelEdit = () => {
-      this.messageStore.removeMessageToEdit();
+      messageStore.removeMessageToEdit();
     }
 
     const isEditScheduled = () => {
-      return this.messageToEdit.content && this.messageToEdit.isScheduled && this.messageToEdit.scheduledId
+      return messageToEdit.content && messageToEdit.isScheduled && messageToEdit.scheduledId
     }
 
     const message = newMessage => {
