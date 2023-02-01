@@ -23,7 +23,7 @@ class SearchService
       if result.instance_of?(ConversationMessage)
         !check_message(result.bench_conversation)
       elsif result.instance_of?(BenchChannel)
-        !check_bench_channel(result)
+        !check_bench_channel(result) || check_bench_channel_participant(result)
       elsif result.instance_of?(Profile)
         !check_profile(result)
       end
@@ -53,6 +53,10 @@ class SearchService
 
   def check_bench_channel(bench_channel)
     bench_channel.workspace.id.eql?(Current.workspace.id)
+  end
+
+  def check_bench_channel_participant(bench_channel)
+    bench_channel.is_private && !bench_channel.participant?(Current.profile)
   end
 
   def check_profile(profile)
