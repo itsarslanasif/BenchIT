@@ -103,6 +103,11 @@ en:
       search_bar:
         people: 'People'
         channels: 'Channels'
+        messages: 'Messages'
+        from: 'from'
+        profile_attr: 'Profile'
+        channel_attr: 'BenchChannel'
+        message_attr: 'ConversationMessage'
         tagline: "I'm looking for"
       conversation:
         channel: 'BenchChannel'
