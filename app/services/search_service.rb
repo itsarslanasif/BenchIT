@@ -16,7 +16,6 @@ class SearchService
     models = @filter ? [@filter.constantize] : [Profile, BenchChannel, ConversationMessage]
     @results = Searchkick.search(@query, models: models)
     filter_messages
-    @results
   end
 
   def filter_messages
