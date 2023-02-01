@@ -21,6 +21,8 @@ import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
 import { decryption } from './modules/crypto/crypto';
+import { checkAuth } from './api/user_auth/check_auth';
+
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
   routes: [
@@ -175,7 +177,7 @@ const router = createRouter({
     },
   ],
 });
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const currentUserStore = useCurrentUserStore();
   const currentProfileStore = useCurrentProfileStore();
   const currentWorkspaceStore = useCurrentWorkspaceStore();
@@ -190,23 +192,40 @@ router.beforeEach((to, from, next) => {
   currentUserStore.setUser(currentUser);
   currentWorkspaceStore.setWorkspace(currentWorkspace);
 
-  if (!localStorage.getItem('token') && !currentWorkspace && to.meta.auth) {
-    next('/sign_in');
-  } else if (
-    localStorage.getItem('token') &&
-    !currentWorkspace &&
-    to.meta.auth
-  ) {
-    next('/workspace_dashboard');
-  } else if (
-    localStorage.getItem('token') &&
-    currentWorkspace &&
-    !to.meta.auth
-  ) {
-    next('/');
-  } else {
-    next();
+  let authStatus = await checkAuth();
+
+  if (to.path !== '/sign_in') {
+    if (!authStatus) {
+      localStorage.clear();
+      sessionStorage.clear();
+      next({ path: '/sign_in', replace: true })
+    }
+    else if (
+      !localStorage.getItem('token') &&
+      !currentWorkspace &&
+      to.meta.auth ||
+      !authStatus
+    ) {
+      next('/sign_in');
+    } else if (
+      localStorage.getItem('token') &&
+      !currentWorkspace &&
+      to.meta.auth ||
+      !authStatus
+    ) {
+      next('/workspace_dashboard');
+    } else if (
+      localStorage.getItem('token') &&
+      currentWorkspace &&
+      !to.meta.auth &&
+      !authStatus
+    ) {
+      next('/');
+    } else {
+      next();
+    }
   }
+  next();
 });
 
 export default router;

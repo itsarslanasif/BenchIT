@@ -32,9 +32,10 @@
         @keydown.enter="sendMessagePayload"
         api-key="no-api-key"
         :init="{
+          placeholder: getPlaceholder,
           menubar: false,
           statusbar: false,
-          plugins: 'lists link code codesample',
+          plugins: 'placeHolder lists link code codesample ',
           toolbar:
             'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
           codesample_languages: [none],
@@ -172,6 +173,27 @@ export default {
     message: {
       type: Object
     }
+  },
+  computed: {
+    getPlaceholder() {
+      return this.isThread
+        ? this.$t('chat.reply_placeholder')
+        : `${this.$t('actions.message')} ${this.getRecipientName}`;
+    },
+    getRecipientName() {
+      return (
+        this.getChannelName ||
+        this.selectedChat.username ||
+        this.$t('chat.empty_placeholder')
+      );
+    },
+    getChannelName() {
+      return this.selectedChat.name
+        ? (this.selectedChat.is_private
+            ? this.$t('chat.lock')
+            : this.$t('chat.hash')) + this.selectedChat.name
+        : false;
+    },
   },
   setup(props) {
     const channelStore = useChannelStore();
@@ -379,6 +401,7 @@ export default {
       dispatchKeydownEnterEvent,
       handleCancelEdit,
       isEditScheduled
+      selectedChat,
     };
   },
 };
