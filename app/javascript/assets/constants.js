@@ -166,6 +166,7 @@ export const CONSTANTS = {
   PUBLIC_CHANNELS: 'Public channels',
   PRIVATE_CHANNELS: 'Private channels',
   ARCHIVED_CHANNELS: 'Archived channels',
+  RESULTS: 'Result(s)',
   PUBLIC: 'public',
   PRIVATE: 'private',
   ARCHIVED: 'archived',

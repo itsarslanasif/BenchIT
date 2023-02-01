@@ -24,7 +24,7 @@
         </n-space>
         <div class="flex items-center py-1 justify-between font-light text-small">
           <div class="text-gray-700">
-            {{ pageInfo.count + ' ' + $t('channels.result') }}
+            {{ totalResults }}
           </div>
           <div class="flex gap-4 items-center">
             <div class="hover:bg-transparent cursor-pointer"> <i class="fas fa-sort" /> <n-popselect v-model:value="sortValue" :options="options">
@@ -95,6 +95,9 @@ export default {
     channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
     const { channels, pageInfo} = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
+    const totalResults = computed(() =>{
+      return `${pageInfo.value.count}  ${CONSTANTS.RESULTS}`
+    })
 
     const handleSubmit = async () => {
       channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
@@ -160,6 +163,7 @@ export default {
       term,
       searchedChannels,
       modalOpen,
+      totalResults,
       SearchOutline,
       handleSubmit,
       closeModal,
