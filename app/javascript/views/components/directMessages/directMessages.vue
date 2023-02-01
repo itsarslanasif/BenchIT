@@ -187,7 +187,7 @@ export default {
       this.currMessage = message;
     },
     handleClick(message) {
-      this.messageStore.deleteChannelName()
+      this.messageStore.deleteChannelName();
       this.messageStore.setSelectedChatUserName(this.getProfileName(message));
       this.$router.push(`/profiles/${message.receiver_id}/${message.id}`);
     },
