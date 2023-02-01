@@ -1,14 +1,25 @@
 class SearchService
   include Searchkick
 
-  def self.search_records(query, filter)
-    models = filter ? [filter.constantize] : [Profile, BenchChannel, ConversationMessage]
-    @results = Searchkick.search(query, models: models)
+  def initialize(query, filter)
+    @query = query
+    @filter = filter.eql?('null') ? nil : filter
+  end
+
+  def call
+    search_records
+  end
+
+  private
+
+  def search_records
+    models = @filter ? [@filter.constantize] : [Profile, BenchChannel, ConversationMessage]
+    @results = Searchkick.search(@query, models: models)
     filter_messages
     @results
   end
 
-  def self.filter_messages
+  def filter_messages
     @results = @results.reject do |result|
       if result.instance_of?(ConversationMessage)
         !check_message(result.bench_conversation)
@@ -20,7 +31,7 @@ class SearchService
     end
   end
 
-  def self.check_message(bench_conversation)
+  def check_message(bench_conversation)
     profile_ids = case bench_conversation.conversationable_type
                   when 'Profile'
                     if bench_conversation.sender.workspace_id.eql?(Current.workspace.id)
@@ -37,21 +48,15 @@ class SearchService
     profile_ids.present? && profile_ids.include?(Current.profile.id)
   end
 
-  def self.check_bench_conversation_workspace(bench_conversation)
-    return true if !bench_conversation.conversationable.is_private && bench_conversation.conversationable.workspace.id.eql?(Current.workspace.id)
-
-    false
+  def check_bench_conversation_workspace(bench_conversation)
+    !bench_conversation.conversationable.is_private && bench_conversation.conversationable.workspace.id.eql?(Current.workspace.id)
   end
 
-  def self.check_bench_channel(bench_channel)
-    return true if bench_channel.workspace.id.eql?(Current.workspace.id)
-
-    false
+  def check_bench_channel(bench_channel)
+    bench_channel.workspace.id.eql?(Current.workspace.id)
   end
 
-  def self.check_profile(profile)
-    return true if profile.workspace.id.eql?(Current.workspace.id)
-
-    false
+  def check_profile(profile)
+    profile.workspace.id.eql?(Current.workspace.id)
   end
 end
