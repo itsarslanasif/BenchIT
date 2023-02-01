@@ -35,9 +35,11 @@ export const useMessageStore = () => {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
       },
+      deleteChannelName() {
+        delete this.selectedChat.name;
+      },
       setSelectedChatUserName(userName) {
-        delete this.selectedChat.name
-        this.selectedChat = {...this.selectedChat, username: userName};
+        this.selectedChat = { ...this.selectedChat, username: userName };
       },
       async index(conversation_type, id) {
         try {
