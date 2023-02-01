@@ -1,10 +1,7 @@
 <template>
   <div class="hover-trigger">
-    <ChannelsDropDown :handleSelect="handleSelect" :onlyIcon="true" />
-    <AccordionList
-      class="mt-5 ml-4 text-base text-slate-50"
-      @click="toggleList"
-    >
+    <ChannelsDropDown :onlyIcon="true" />
+    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
@@ -12,36 +9,30 @@
           </span>
         </template>
         <div class="-ml-4">
-          <h5
-            v-for="channel in joinedChannels"
-            :key="channel.id"
-            class="hover:bg-primaryHover"
-          >
-            <ChannelItem
-              :channel="channel"
-              :goTo="goToChannelChat"
-              :toggleShow="toggleChannelOptionShow"
-              :isShowOptions="showChannelOptions"
-            />
+          <h5 v-for="channel in joinedChannels" :key="channel.id" class="hover:bg-primaryHover"
+            @click.stop="stopPropagation">
+            <ChannelItem :channel="channel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
+              :isShowOptions="showChannelOptions" />
           </h5>
-          <ChannelsDropDown :handleSelect="handleSelect" :onlyIcon="false" />
+          <div @click="toggleModal" @click.stop="stopPropagation"
+            class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2">
+            <font-awesome-icon icon="fa-plus"
+              class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600" />
+            <p class="text-sm self-center text-white truncate">
+              {{ $t('channels.add_new_channel') }}
+            </p>
+          </div>
         </div>
         <div v-if="showCreateChannelModal">
-          <CreateChannel :close-modal="toggleModal" />
+          <CreateChannel :closeModal="toggleModal" @click.stop="stopPropagation" />
         </div>
       </AccordionItem>
     </AccordionList>
   </div>
-  <div v-if="!listOpen && this.checkSetChannel()" class="-ml-4">
-    <h5
-      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
-    >
-      <ChannelItem
-        :channel="selectedChannel"
-        :goTo="goToChannelChat"
-        :toggleShow="toggleChannelOptionShow"
-        :isShowOptions="showChannelOptions"
-      />
+  <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
+    <h5 class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600">
+      <ChannelItem :channel="selectedChannel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
+        :isShowOptions="showChannelOptions" />
     </h5>
   </div>
 </template>
@@ -68,8 +59,9 @@ export default {
       channels: [],
       showChannelOptions: false,
       listOpen: true,
-      selectedChannel: {},
       showCreateChannelModal: false,
+      selectedChannel: {},
+      chat_type: '',
     };
   },
   unmounted() {
@@ -80,11 +72,13 @@ export default {
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
     const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
       joinedChannels,
       leftPaneStore,
       messagesStore,
       channelStore,
+      selectedChat,
     };
   },
   methods: {
@@ -97,8 +91,6 @@ export default {
       if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
-      this.listOpen = false;
-      this.setChannel(this.messagesStore.selectedChat);
     },
     isMobileView() {
       return window.innerWidth < 1400;
@@ -108,30 +100,20 @@ export default {
     },
     toggleList() {
       this.listOpen = !this.listOpen;
-      this.setChannel(this.messagesStore.selectedChat);
+      this.setChannel();
     },
-    setChannel(channel) {
-      this.selectedChannel =
-        this.joinedChannels.find(obj => obj.id === Number(channel.id)) ||
-        this.channelStore.starChannels.find(
-          obj => obj.id === Number(channel.id)
-        );
+    setChannel() {
+      this.chat_type = this.selectedChat.conversation_type;
+      let chat_id = this.selectedChat.id;
+      if (this.chat_type === 'Channel') {
+        this.selectedChannel = this.joinedChannels.find(obj => obj.id === Number(chat_id)) || this.channelStore.starChannels.find(obj => obj.id === Number(chat_id));
+      }
     },
     checkSetChannel() {
-      return (
-        this.selectedChannel.id === this.messagesStore.selectedChat.id &&
-        !this.selectedChannel.favourite_id
-      );
+      return this.chat_type === 'Channel' && this.selectedChannel.id === this.selectedChat.id && this.selectedChannel.favourite_id === null;
     },
-    handleSelect(key) {
-      switch (key) {
-        case 'create-a-channel':
-          this.toggleModal();
-          break;
-        case 'browse-channels':
-          this.$router.push('/browse-channels');
-          break;
-      }
+    stopPropagation(event) {
+      event.stopPropagation();
     },
   },
 };

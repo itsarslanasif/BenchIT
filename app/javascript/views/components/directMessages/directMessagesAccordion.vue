@@ -1,14 +1,8 @@
 <template>
   <div class="hover-trigger">
-    <font-awesome-icon
-      @click="goToDirectMessages"
-      icon="fa-plus"
-      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
-    />
-    <AccordionList
-      class="mt-5 ml-4 text-base text-slate-50"
-      @click="toggleList"
-    >
+    <font-awesome-icon @click="goToDirectMessages" icon="fa-plus"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600" />
+    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer truncate">
@@ -17,33 +11,19 @@
         </template>
         <div class="-ml-4">
           <div v-if="sortedDMList">
-            <h5
-              v-for="user in sortedDMList"
-              :key="user"
-              class="hover:bg-primaryHover"
-            >
-              <directMessagesItemVue
-                :user="user"
-                :isOwnChat="isOwnChat"
-                :goToChat="goToChat"
-              />
+            <h5 v-for="user in sortedDMList" :key="user" class="hover:bg-primaryHover" @click.stop="stopPropagation">
+              <directMessagesItemVue :user="user" :isOwnChat="isOwnChat" :goToChat="goToChat" />
             </h5>
           </div>
-          <div class="hover:bg-primaryHover cursor-pointer" @click="closeModal">
+          <div class="hover:bg-primaryHover cursor-pointer" @click="closeModal" @click.stop="stopPropagation">
             <addTeammatesDropdown />
           </div>
         </div>
       </AccordionItem>
     </AccordionList>
-    <div v-if="!listOpen && this.checkSetChat()">
-      <h5
-        class="hover:bg-primaryHover text-base cursor-pointer text-white bg-slate-600"
-      >
-        <directMessagesItemVue
-          :user="this.selectedChat"
-          :isOwnChat="isOwnChat"
-          :goToChat="goToChat"
-        />
+    <div v-if="!listOpen && checkSetChat()">
+      <h5 class="hover:bg-primaryHover text-base cursor-pointer text-white bg-slate-600">
+        <directMessagesItemVue :user="this.selectedUser" :isOwnChat="isOwnChat" :goToChat="goToChat" />
       </h5>
     </div>
   </div>
@@ -58,6 +38,7 @@ import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   components: {
@@ -70,7 +51,8 @@ export default {
     return {
       modalOpen: false,
       listOpen: true,
-      selectedChat: {},
+      selectedUser: {},
+      chat_type: '',
     };
   },
   async mounted() {
@@ -85,11 +67,13 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
       directMessageStore,
       currentProfileStore,
       messagesStore,
       leftPaneStore,
+      selectedChat,
     };
   },
   computed: {
@@ -109,8 +93,7 @@ export default {
       if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
-      this.messagesStore.selectedChannel = {};
-      this.listOpen = this.listOpen ? false : true;
+      this.setType();
     },
     isMobileView() {
       return window.innerWidth < 1400;
@@ -123,11 +106,18 @@ export default {
     },
     toggleList() {
       this.listOpen = !this.listOpen;
-      this.selectedChat = this.messagesStore.selectedChat;
+        this.setType();
+      console.log(this.selectedUser);
     },
     checkSetChat() {
-      return this.selectedChat.id === this.messagesStore.selectedChat.id;
+      return this.chat_type === 'Profile' && this.selectedUser.id === this.selectedChat.id
     },
+    setType() {
+      this.chat_type = this.selectedChat.conversation_type;
+      if (this.chat_type === 'Profile') {
+        this.selectedUser = this.selectedChat;
+      }
+    }
   },
 };
 </script>
