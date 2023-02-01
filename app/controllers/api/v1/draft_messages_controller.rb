@@ -52,7 +52,10 @@ class Api::V1::DraftMessagesController < Api::ApiController
   def initialize_draft
     @draft_message = @bench_conversation.draft_messages.new(draft_messages_params)
     check_membership(@bench_conversation)
-    render json: { error: 'Sorry, this draft is not present in this conversation' }, status: :unauthorized unless @bench_conversation.eql?(@draft_message.conversation_message.bench_conversation)
+    return if @bench_conversation.eql?(@draft_message.conversation_message.bench_conversation)
+
+    render json: { error: 'Sorry, this draft is not present in this conversation' },
+           status: :unauthorized
   end
 
   def fetch_conversation
