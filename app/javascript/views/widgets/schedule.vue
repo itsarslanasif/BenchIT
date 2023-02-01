@@ -55,7 +55,14 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  props: ['setSchedule', 'toggleSchedule'],
+  props: {
+    setSchedule: {
+      type: Function,
+    },
+    toggleSchedule: {
+      type: Function,
+    }
+  },
   components: {
     DateAndTimePicker,
     NModal,

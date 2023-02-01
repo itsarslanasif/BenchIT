@@ -150,6 +150,9 @@ en:
           bear in mind you’ll have to supply both sides of the conversation.'
         this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
           messages and share files with"
+      conversation_type:
+        profile: 'Profile'
+        channel: 'BenchChannel'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'

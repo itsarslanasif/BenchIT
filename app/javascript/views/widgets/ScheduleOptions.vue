@@ -16,7 +16,14 @@ import DateAndTimePicker from './DateAndTimePicker.vue';
 import { NModal, NCard } from 'naive-ui';
 import { useMessageStore } from '../../stores/useMessagesStore';
 export default {
-  props: ['payload', 'toggleRecheduleFlag'],
+  props: {
+    payload: {
+      type: Object,
+    },
+    toggleRecheduleFlag: {
+      type: Function,
+    }
+  },
   components: {
     DateAndTimePicker,
     NModal,

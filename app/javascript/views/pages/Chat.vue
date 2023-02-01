@@ -133,17 +133,13 @@ export default {
       files.forEach(file => {
         formData.append('message_attachments[]', file);
       });
-      try {
-        conversation(formData).then((res) => {
-          if (res.scheduled_at) {
-            this.messageStore.addScheduleMessage(res);
-          }
-          this.message = '';
-        });
-        this.newMessageSent = true;
-      } catch (e) {
-        console.error(e);
-      }
+      conversation(formData).then((res) => {
+        if (res.scheduled_at) {
+          this.messageStore.addScheduleMessage(res);
+        }
+        this.message = '';
+      });
+      this.newMessageSent = true;
     },
     joinedTheChannel() {
       this.isMember = !this.isMember;

@@ -7,7 +7,7 @@
       </n-card>
     </n-modal>
     <div v-if="!scheduleMessage.length" class="flex flex-col justify-center text-center items-center mt-10">
-      <font-awesome-icon icon="fa-solid fa-clock-rotate-left" class="text-2xl mb-2"></font-awesome-icon>
+      <font-awesome-icon icon="fa-solid fa-clock-rotate-left" class="text-2xl mb-2" />
       <p class="font-bold text-base text-center">
         {{ $t('schedule.title') }}
       </p>
@@ -56,7 +56,7 @@ export default {
   methods: {
     navigateToChat(payload) {
       let type = ''
-      if (payload.conversation_type === 'BenchChannel') {
+      if (payload.conversation_type === this.$t('conversation_type.channel')) {
         type = 'channel'
       } else {
         type = payload.conversation_type

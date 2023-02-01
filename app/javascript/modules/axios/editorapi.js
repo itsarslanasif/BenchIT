@@ -2,7 +2,7 @@ import axios from '../../modules/axios';
 import { getHeaders } from '../auth';
 
 export const conversation = async payload => {
-  return await axios.post(`/v1/conversation_messages`, payload, {
+  return axios.post(`/v1/conversation_messages`, payload, {
     headers: getHeaders(),
   }).then((res) => {
     return res.data.message

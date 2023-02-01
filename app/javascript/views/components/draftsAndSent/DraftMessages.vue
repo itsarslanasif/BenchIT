@@ -3,7 +3,7 @@
     <font-awesome-icon
       icon="fa-solid fa-pencil"
       class="text-2xl mb-2"
-    ></font-awesome-icon>
+    />
     <p class="font-bold text-base text-center w-100">
       {{ $t('drafts.title') }}
     </p>

@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="flex gap-3">
-      <n-date-picker v-model:value="dateTimestamp" class="w-1/2" />
-      <n-time-picker v-model:value="timeTimestamp" class="w-1/2" />
+      <n-date-picker v-model:value="date" class="w-1/2" />
+      <n-time-picker v-model:value="time" class="w-1/2" />
     </div>
     <div v-if="isError()" class="px-1 pt-3 text-danger">
       {{ $t('schedule.error') }}
@@ -25,11 +25,18 @@ export default {
     NModal,
     NCard,
   },
-  props: ['setSchedule', 'toggleCustomScheduleFlag'],
+  props: {
+    setSchedule: {
+      type: Function
+    },
+    toggleCustomScheduleFlag: {
+      type: Function
+    }
+  },
   data() {
     return {
-      dateTimestamp: null,
-      timeTimestamp: null,
+      date: null,
+      time: null,
       error: {
         date: false,
         time: false
@@ -42,21 +49,21 @@ export default {
     }
   },
   watch: {
-    dateTimestamp() {
+    date() {
       const now = moment().format('YYYY-MM-DD')
-      const date = moment(this.dateTimestamp).format('YYYY-MM-DD')
+      const date = moment(this.date).format('YYYY-MM-DD')
       this.error.date = date < now
     },
-    timeTimestamp() {
+    time() {
       const now = moment().format('HH:mm:ss')
-      const time = moment(this.timeTimestamp).format('HH:mm:ss')
+      const time = moment(this.time).format('HH:mm:ss')
       this.error.time = time < now
     },
   },
   methods: {
     setCustom() {
-      const date = moment(this.dateTimestamp);
-      const time = moment(this.timeTimestamp);
+      const date = moment(this.date);
+      const time = moment(this.time);
       let dateTime = moment();
       dateTime.set({
         year: date.year(),
@@ -74,4 +81,3 @@ export default {
   },
 };
 </script>
-<style lang=""></style>

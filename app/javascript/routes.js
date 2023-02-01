@@ -125,16 +125,25 @@ const router = createRouter({
               path: '/drafts_sent_messages',
               component: DraftMessages,
               name: 'draft-messages',
+              meta: {
+                auth: true,
+              },
             },
             {
               path: '/recently_sent_messages',
               component: RecentlySentMessages,
               name: 'recently-sent-messages',
+              meta: {
+                auth: true,
+              },
             },
             {
               path: '/schedule_messages',
               component: ScheduleMessages,
               name: 'schedule-messages',
+              meta: {
+                auth: true,
+              },
             },
           ],
         },

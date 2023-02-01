@@ -143,7 +143,7 @@ export default {
     }
   },
   mounted() {
-    if (this.isForScheduled()){
+    if (this.isEditScheduled()){
       this.newMessage = this.messageToEdit.content
     }
   },
@@ -156,25 +156,21 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack', 'isThread'],
-  methods: {
-    dispatchKeydownEnterEvent() {
-      const event = new KeyboardEvent('keydown', { keyCode: 13 });
-      if (this.isForScheduled()) {
-        this.messageStore.reEditScheduledMessage({
-          content: this.newMessage,
-          id: this.messageToEdit.scheduledId
-        })
-        this.newMessage = ''
-      } else {
-        this.sendMessagePayload(event);
-      }
+  props: {
+    sendMessage: {
+      type: Object,
     },
-    handleCancelEdit() {
-      this.messageStore.removeMessageToEdit();
+    isThread: {
+      type: Boolean,
     },
-    isForScheduled() {
-      return this.messageToEdit.content && this.messageToEdit.isScheduled && this.messageToEdit.scheduledId
+    editMessageCallBack: {
+      type: Function
+    },
+    editMessage: {
+      type: Boolean
+    },
+    message: {
+      type: Object
     }
   },
   setup(props) {
@@ -257,6 +253,27 @@ export default {
         messageStore.removeMessageToEdit();
       }
     };
+
+    const dispatchKeydownEnterEvent = () => {
+      const event = new KeyboardEvent('keydown', { keyCode: 13 });
+      if (this.isEditScheduled()) {
+        this.messageStore.reEditScheduledMessage({
+          content: this.newMessage,
+          id: this.messageToEdit.scheduledId
+        })
+        this.newMessage = ''
+      } else {
+        this.sendMessagePayload(event);
+      }
+    }
+
+    const handleCancelEdit = () => {
+      this.messageStore.removeMessageToEdit();
+    }
+
+    const isEditScheduled = () => {
+      return this.messageToEdit.content && this.messageToEdit.isScheduled && this.messageToEdit.scheduledId
+    }
 
     const message = newMessage => {
       let messageData;
@@ -359,6 +376,9 @@ export default {
       toggleSchedule,
       setSchedule,
       getScheduleNotification,
+      dispatchKeydownEnterEvent,
+      handleCancelEdit,
+      isEditScheduled
     };
   },
 };

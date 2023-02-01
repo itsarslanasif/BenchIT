@@ -5,9 +5,9 @@
     </div>
     <div class="flex">
       <div>
-        <n-avatar v-if="payload.conversation_type === 'Profile'" class="rounded align-middle w-12 h-12"
+        <n-avatar v-if="payload.conversation_type === $t('conversation_type.profile')" class="rounded align-middle w-12 h-12"
           :src="payload.receiver.image_url" />
-        <div v-if="payload.conversation_type === 'BenchChannel'"
+        <div v-if="payload.conversation_type === $t('conversation_type.channel')"
           class="w-12 h-12 bg-slate-100 rounded flex justify-center items-center text-xl">
           <font-awesome-icon :icon="getIcon(payload.receiver)" />
         </div>
@@ -44,7 +44,14 @@ export default {
       optionsFlag: false,
     }
   },
-  props: ['payload', 'toggleRecheduleFlag'],
+  props: {
+    payload: {
+      type: Object,
+    },
+    toggleRecheduleFlag: {
+      type: Function,
+    }
+  },
   methods: {
     ignoreHTML(message) {
       return message.replace(/<[^>]+>/g, '');
