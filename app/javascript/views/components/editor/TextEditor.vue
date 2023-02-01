@@ -26,9 +26,10 @@
         @keydown.enter="sendMessagePayload($event, false)"
         api-key="no-api-key"
         :init="{
+          placeholder: getPlaceholder,
           menubar: false,
           statusbar: false,
-          plugins: 'lists link code codesample',
+          plugins: 'placeHolder lists link code codesample ',
           toolbar:
             'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
           codesample_languages: [none],
@@ -116,7 +117,34 @@ export default {
       this.messageStore.removeMessageToEdit();
     },
   },
-  props: ['sendMessage', 'message', 'editMessage', 'editMessageCallBack'],
+  computed: {
+    getPlaceholder() {
+      return this.isThread
+        ? this.$t('chat.reply_placeholder')
+        : `${this.$t('actions.message')} ${this.getRecipientName}`;
+    },
+    getRecipientName() {
+      return (
+        this.getChannelName ||
+        this.selectedChat.username ||
+        this.$t('chat.empty_placeholder')
+      );
+    },
+    getChannelName() {
+      return this.selectedChat.name
+        ? (this.selectedChat.is_private
+            ? this.$t('chat.lock')
+            : this.$t('chat.hash')) + this.selectedChat.name
+        : false;
+    },
+  },
+  props: [
+    'sendMessage',
+    'isThread',
+    'message',
+    'editMessage',
+    'editMessageCallBack',
+  ],
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
@@ -131,6 +159,7 @@ export default {
     const files = ref([]);
     const filteredList = ref([]);
     const messageStore = useMessageStore();
+    const { selectedChat } = useMessageStore();
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -271,6 +300,7 @@ export default {
       getImages,
       addMentionToText,
       messageStore,
+      selectedChat,
     };
   },
 };
