@@ -36,7 +36,8 @@ export const useMessageStore = () => {
         this.selectedChat = selectedChat;
       },
       setSelectedChatUserName(userName) {
-         this.selectedChat = {...this.selectedChat, username: userName};
+        delete this.selectedChat.name
+        this.selectedChat = {...this.selectedChat, username: userName};
       },
       async index(conversation_type, id) {
         try {
