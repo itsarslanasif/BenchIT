@@ -1,5 +1,6 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create join_public_channel]
+  before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel]
+  before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]
   before_action :check_profile_ids, only: %i[create]
   before_action :check_channel_participants, only: %i[create]
   before_action :check_workspace, only: %i[join_public_channel]
@@ -41,6 +42,22 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     end
   end
 
+  def mute_channel
+    if @channel_participant.update(muted: true)
+      render json: { message: t('controllers.channel_participants.channel_muted') }, status: :ok
+    else
+      render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
+    end
+  end
+
+  def unmute_channel
+    if @channel_participant.update(muted: false)
+      render json: { message: t('controllers.channel_participants.channel_unmuted') }, status: :ok
+    else
+      render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def set_bench_channel
@@ -48,6 +65,10 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { errors: 'User is not part of channel.' }, status: :not_found
+  end
+
+  def set_channel_paticipant
+    @channel_participant = ChannelParticipant.where(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
   end
 
   def check_workspace

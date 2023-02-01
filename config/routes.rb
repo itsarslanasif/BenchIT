@@ -62,8 +62,6 @@ Rails.application.routes.draw do
             member do
               post :set_status
               post :clear_status
-              post :mute_channel
-              post :unmute_channel
               get :set_is_active
               get :remove_is_active
             end
@@ -81,6 +79,8 @@ Rails.application.routes.draw do
         resources :channel_participants, only: %i[create index] do
           collection do
             post :join_public_channel
+            post :mute_channel
+            post :unmute_channel
           end
         end
         resources :draft_messages, only: %i[index create update destroy]
