@@ -19,6 +19,9 @@ if message.parent_message_id.blank?
   json.replies message.replies do |reply|
     json.partial! 'api/v1/shared/partials/message', message: reply
   end
+  json.draft_message do
+    json.partial! 'api/v1/draft_messages/partials/draft', message: get_draft(message.bench_conversation_id, message.id)
+  end
 end
 json.bench_conversation_id message.bench_conversation_id
 if message.message_attachments.present?
