@@ -34,6 +34,7 @@ import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import ChannelsDropDown from '../../widgets/channelsDropDown.vue';
+import { channel } from '../../../modules/setChannel/setchannel.js';
 
 export default {
   components: {
@@ -41,6 +42,7 @@ export default {
     AccordionItem,
     ChannelItem,
     ChannelsDropDown,
+    channel,
   },
   data() {
     return {
@@ -94,7 +96,7 @@ export default {
       this.chat_type = this.selectedChat.conversation_type;
       let chat_id = this.selectedChat.id;
       if (this.chat_type === 'Channel') {
-        this.selectedChannel = this.channelStore.joinedChannels.find(obj => obj.id === Number(chat_id)) || this.starChannels.find(obj => obj.id === Number(chat_id));
+        this.selectedChannel = channel(chat_id, this.channelStore);
       }
     },
     checkSetChannel() {

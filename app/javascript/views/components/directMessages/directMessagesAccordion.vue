@@ -106,7 +106,7 @@ export default {
     },
     toggleList() {
       this.listOpen = !this.listOpen;
-        this.setType();
+      this.setType();
     },
     checkSetChat() {
       return this.chat_type === 'Profile' && this.selectedUser.id === this.selectedChat.id
