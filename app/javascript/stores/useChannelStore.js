@@ -18,7 +18,7 @@ export const useChannelStore = () => {
       starChannels: [],
       currentChannel: {},
       pageInfo: [],
-      currentProfileStore : useCurrentProfileStore()
+      currentProfileStore: useCurrentProfileStore(),
     }),
 
     getters: {
@@ -30,9 +30,15 @@ export const useChannelStore = () => {
     actions: {
       async index(query, sort, filter, hideMyChannels, page) {
         try {
-          const newChannels = await getChannels(query, sort, filter, hideMyChannels, page);
-          this.channels = [...newChannels.bench_channels]
-          this.pageInfo = newChannels.page_information
+          const newChannels = await getChannels(
+            query,
+            sort,
+            filter,
+            hideMyChannels,
+            page
+          );
+          this.channels = [...newChannels.bench_channels];
+          this.pageInfo = newChannels.page_information;
           this.joinedChannels = await getJoinedChannels();
           this.starChannels = this.joinedChannels.filter(
             channel => channel.favourite_id !== null
@@ -63,7 +69,9 @@ export const useChannelStore = () => {
       async joinChannel(channel_id) {
         try {
           const res = await memberJoinChannel(channel_id);
-          const joinedChannel = this.channels.find((channel) => channel.id === channel_id)
+          const joinedChannel = this.channels.find(
+            channel => channel.id === channel_id
+          );
           this.joinedChannels.push(joinedChannel);
           this.sortChannelsList();
         } catch (e) {

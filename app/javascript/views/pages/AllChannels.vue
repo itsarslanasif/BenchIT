@@ -27,31 +27,33 @@
             {{ totalResults }}
           </div>
           <div class="flex gap-4 items-center">
-            <div class="hover:bg-transparent cursor-pointer"> <i class="fas fa-sort" /> <n-popselect v-model:value="sortValue" :options="options">
-             {{ $t('filters.sort_label') + selectedLabel }} 
+            <div class="hover:bg-transparent cursor-pointer"> <i class="fas fa-sort" /> <n-popselect v-model:value="sortValue"
+                :options="options">
+                {{ $t('filters.sort_label') + selectedLabel }}
               </n-popselect></div>
-            <div @click="toggleFilters" class="hover:bg-transparent cursor-pointer">
-              <i class='fas fa-sliders-h' />
-              {{ $t('filters.filter') }}
-            </div>
-            <div @click="resetFilters" v-if="isFiltered()" class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline" >
-              {{ $t('filters.reset') }}
-            </div>
-            <div v-show="filterState" @click="toggleFilters" class="rounded hover:bg-transparent cursor-pointer">
-              <i class="fas fa-xmark self-center"></i>
+              <div @click="toggleFilters" class="hover:bg-transparent cursor-pointer">
+                <i class='fas fa-sliders-h' />
+                {{ $t('filters.filter') }}
+              </div>
+              <div @click="resetFilters" v-if="isFiltered()"
+                class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline">
+                {{ $t('filters.reset') }}
+              </div>
+              <div v-show="filterState" @click="toggleFilters" class="rounded hover:bg-transparent cursor-pointer">
+                <i class="fas fa-xmark self-center" />
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="flex body-style overflow-auto">
-      <div class="px-5 h-full w-full flex flex-col overflow-y-auto">
-        <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
-        <div v-for="channel in searchedChannels" :key="channel.id">
-          <ChannelList :channelName="channel.name" :channelDescription="channel.description"
-            :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
-        </div>
-        <div class="flex justify-center p-3">
+      </div>
+      <div class="flex body-style overflow-auto">
+        <div class="px-5 h-full w-full flex flex-col overflow-y-auto">
+          <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
+          <div v-for="channel in searchedChannels" :key="channel.id">
+            <ChannelList :channelName="channel.name" :channelDescription="channel.description"
+              :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
+          </div>
+          <div class="flex justify-center p-3">
           <n-pagination :page-count="pageInfo.pages" :on-update:page="changePage" />
         </div>
       </div>
@@ -93,10 +95,10 @@ export default {
     const filterState = ref(false)
     const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore)
     channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
-    const { channels, pageInfo} = storeToRefs(channelStore)
+    const { channels, pageInfo } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
-    const totalResults = computed(() =>{
-      return `${pageInfo.value.count}  ${CONSTANTS.RESULTS}`
+    const totalResults = computed(() => {
+      return `${pageInfo.value.count? pageInfo.value.count : 0}  ${CONSTANTS.RESULTS}`
     })
 
     const handleSubmit = async () => {
@@ -134,7 +136,7 @@ export default {
 
     const resetFilters = () => {
       filterChannelsValue.value = ''
-      hideMyChannels.value= false
+      hideMyChannels.value = false
     }
 
     const isFiltered = () => {
