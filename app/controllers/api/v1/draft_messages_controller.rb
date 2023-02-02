@@ -45,12 +45,12 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def decide_draft_action
-    @message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
-    if params[:content].blank? && @message.present?
-      @draft_message = @message
+    message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
+    if params[:content].blank? && message.present?
+      @draft_message = message
       destroy
-    elsif params[:content].present? && @message.present?
-      @draft_message = @message
+    elsif params[:content].present? && message.present?
+      @draft_message = message
       update
     elsif params[:content].present?
       create
