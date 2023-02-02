@@ -97,8 +97,9 @@ export default {
     channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
     const { channels, pageInfo } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
+
     const totalResults = computed(() => {
-      return `${pageInfo.value.count? pageInfo.value.count : 0}  ${CONSTANTS.RESULTS}`
+      return `${pageInfo.value.count ? pageInfo.value.count : 0}  ${CONSTANTS.RESULTS}`
     })
 
     const handleSubmit = async () => {

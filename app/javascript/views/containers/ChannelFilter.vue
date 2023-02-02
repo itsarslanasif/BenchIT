@@ -5,7 +5,7 @@
     </div>
     <div class="text-md font-semibold py-3">{{ $t('filters.more_options') }}</div>
     <n-checkbox :label="$t('filters.hide_my_channels')" v-model:checked=hideMyChannels
-      @update:checked="handleCheckedChange" />
+      @update:checked="handleCheckBoxChange" />
   </div>
 </template>
 
@@ -42,8 +42,8 @@ export default {
         value: CONSTANTS.ARCHIVED
       },
     ])
-    const handleCheckedChange = (checked) => {
-      hideMyChannels.value = checked;
+    const handleCheckBoxChange = (checkedValue) => {
+      hideMyChannels.value = checkedValue;
     }
     const handleUpdateValue = (value) => {
       filterChannelsValue.value = value
@@ -53,7 +53,7 @@ export default {
       options,
       filterChannelsValue,
       hideMyChannels,
-      handleCheckedChange,
+      handleCheckBoxChange,
       handleUpdateValue
     };
   }
