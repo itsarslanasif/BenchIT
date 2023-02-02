@@ -1,6 +1,7 @@
 class Api::V1::WorkspacesController < Api::ApiController
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
+  before_action :check_profile, only: %i[invite]
   skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
 
@@ -54,5 +55,14 @@ class Api::V1::WorkspacesController < Api::ApiController
     @profile = Current.user.profiles.find_by(workspace_id: @workspace)
 
     render json: { error: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
+  end
+
+  def check_profile
+    user = User.find_by(email: params[:email])
+    if user.present?
+      if user.profiles.find_by(workspace_id: @workspace).present?
+        render json: { error: t('.error') }, status: :unprocessable_entity
+      end
+    end
   end
 end
