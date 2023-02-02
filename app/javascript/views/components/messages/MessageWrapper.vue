@@ -701,32 +701,39 @@ export default {
 .hover-trigger .hover-target {
   display: none;
 }
+
 .hover-trigger:hover .hover-target {
   display: inline;
   cursor: pointer;
 }
+
 .rich-content {
   ul {
     li {
       margin-left: 10px;
       list-style-type: disc;
+
       li {
         list-style-type: circle;
+
         li {
           list-style-type: square;
         }
       }
     }
   }
+
   ol {
     li {
       margin-left: 10px;
       list-style-type: decimal;
+
       li {
         list-style-type: lower-alpha;
       }
     }
   }
+
   a {
     color: rgba(39, 39, 238, 0.914);
     text-decoration: underline;
