@@ -19,7 +19,7 @@
                 {{ $t('channels.add_channel_dialog') }}
               </p>
             </div>
-            <n-form :label-width="80" :model="formValue" :rules="rules" :size="size">
+            <n-form :label-width="80" :model="formValue" :rules="rules">
               <n-form-item :label="$t('channels.new_channel_name')" path="channelName">
                 <n-input v-model:value="formValue.channelName" :maxlength="80" :count-graphemes="countGraphemes"
                   show-count :placeholder="$t('channels.new_channel_name_placeholder')" />
