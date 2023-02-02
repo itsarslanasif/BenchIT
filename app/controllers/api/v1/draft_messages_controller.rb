@@ -46,6 +46,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def decide_draft_action
     message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
+
     if params[:content].blank? && message.present?
       @draft_message = message
       destroy
