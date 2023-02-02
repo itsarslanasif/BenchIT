@@ -25,7 +25,6 @@
       {{ getScheduleTime(payload.scheduled_at) }}
     </div>
   </div>
-
 </template>
 
 <script>

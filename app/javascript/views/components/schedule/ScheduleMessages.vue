@@ -55,12 +55,7 @@ export default {
   },
   methods: {
     navigateToChat(payload) {
-      let type = ''
-      if (payload.conversation_type === this.$t('conversation_type.channel')) {
-        type = 'channel'
-      } else {
-        type = payload.conversation_type
-      }
+      const type = payload.conversation_type === this.$t('conversation_type.channel') ? 'channel' : payload.conversation_type
       this.$router.push(`/${type.toLowerCase()}s/${payload.receiver.id}`)
     },
     toggleRecheduleFlag(id) {
