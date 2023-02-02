@@ -400,7 +400,7 @@ export default {
       getScheduleNotification,
       dispatchKeydownEnterEvent,
       handleCancelEdit,
-      isEditScheduled
+      isEditScheduled,
       selectedChat,
     };
   },
