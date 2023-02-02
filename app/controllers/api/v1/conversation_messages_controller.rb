@@ -1,5 +1,6 @@
 class Api::V1::ConversationMessagesController < Api::ApiController
   include MemberShip
+  include Conversation
   include Pagination
 
   before_action :fetch_conversation, :verify_membership, only: %i[create]
@@ -125,17 +126,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def fetch_conversation
-    conversation_id = params[:conversation_id]
-
-    @bench_conversation = case params[:conversation_type]
-                          when 'channels'
-                            BenchChannel.find_by(id: conversation_id)&.bench_conversation
-                          when 'groups'
-                            Group.find_by(id: conversation_id)&.bench_conversation
-                          when 'profiles'
-                            BenchConversation.profile_to_profile_conversation(Current.profile.id, conversation_id)
-                          end
-    render json: { error: 'wrong type' }, status: :bad_request if @bench_conversation.blank?
+    @bench_conversation = get_conversation(params[:conversation_id], params[:conversation_type])
   end
 
   def set_bench_channel
