@@ -109,6 +109,8 @@ en:
         channel_attr: 'BenchChannel'
         message_attr: 'ConversationMessage'
         tagline: "I'm looking for"
+      search:
+        result_for: 'Search result for'
       conversation:
         channel: 'BenchChannel'
         profile: 'Profile'

@@ -4,11 +4,13 @@ import { getSearching } from '../api/searchBar';
 export const useSearchStore = () => {
   const searchStore = defineStore('useSearchStore', {
     state: () => ({
-      searches: {}
+      searches: {},
+      searched: ''
     }),
 
     getters: {
       getSearches: state => state.searches,
+      getSearch: state => state.searched
     },
 
     actions: {
@@ -20,7 +22,12 @@ export const useSearchStore = () => {
         }
       },
       clearSearches() {
-        this.searches = {}
+        if (!this.searched){
+          this.searches = {}
+        }
+      },
+      setSearch(search) {
+        this.searched = search
       }
     },
   });

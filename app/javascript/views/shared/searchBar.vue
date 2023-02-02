@@ -15,6 +15,7 @@
         <div class="w-full" @click="searchModalToggle = true">
           <input
             type="text"
+            @keydown.enter="goToSearches"
             :placeholder="getPlaceholder()"
             class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
             v-model="search"
@@ -31,7 +32,7 @@
         </div>
         <div
           v-if="searchModalToggle"
-          class="w-1/2 bg-primary text-center rounded-b absolute z-10 mt-8 shadow-2xl text-white"
+          class="w-1/2 bg-primary h-64 overflow-y-auto text-center rounded-b absolute z-10 mt-8 shadow-2xl text-white"
         >
           <div class="text-left p-6">
             <div v-if="!search">
@@ -165,6 +166,11 @@ export default {
         this.currentWorkspace.company_name
       }`;
     },
+    goToSearches() {
+      this.searchStore.setSearch(this.search)
+      this.closeSearchModal();
+      this.$router.push('/search')
+    }
   },
   watch: {
     search() {
@@ -182,7 +188,7 @@ export default {
     const searchStore = useSearchStore()
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const ApiResponseStatusStore = useApiResponseStatusStore();
-    const { searches } = storeToRefs(searchStore);
+    const { searches, searched } = storeToRefs(searchStore);
     const currentWorkspace = currentWorkspaceStore.getCurrentWorkspace;
     const leftPaneStore = useLeftpaneStore();
     profileStore.index();
@@ -192,7 +198,8 @@ export default {
       leftPaneStore,
       currentWorkspace,
       searchStore,
-      searches
+      searches,
+      searched
     };
   },
 };

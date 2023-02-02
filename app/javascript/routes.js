@@ -4,6 +4,7 @@ import AllChannels from './views/pages/AllChannels.vue';
 import NewWorkspace from '@/views/components/workspace/NewWorkspace.vue';
 import JoinWorkspace from '@/views/components/workspace/JoinWorkspace.vue';
 import Members from '@/views/components/members/members.vue';
+import AllSearches from '@/views/components/search/AllSearches.vue';
 import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
@@ -81,6 +82,14 @@ const router = createRouter({
           path: '/members',
           component: Members,
           name: 'members',
+          meta: {
+            auth: true,
+          },
+        },
+        {
+          path: '/search',
+          component: AllSearches,
+          name: 'search',
           meta: {
             auth: true,
           },
