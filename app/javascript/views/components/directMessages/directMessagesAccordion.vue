@@ -1,8 +1,14 @@
 <template>
   <div class="hover-trigger">
-    <font-awesome-icon @click="goToDirectMessages" icon="fa-plus"
-      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600" />
-    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
+    <font-awesome-icon
+      @click="goToDirectMessages"
+      icon="fa-plus"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+    />
+    <AccordionList
+      class="mt-5 ml-4 text-base text-slate-50"
+      @click="toggleList"
+    >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer truncate">
@@ -11,19 +17,38 @@
         </template>
         <div class="-ml-4">
           <div v-if="sortedDMList">
-            <h5 v-for="user in sortedDMList" :key="user" class="hover:bg-primaryHover" @click.stop="stopPropagation">
-              <directMessagesItemVue :user="user" :isOwnChat="isOwnChat" :goToChat="goToChat" />
+            <h5
+              v-for="user in sortedDMList"
+              :key="user"
+              class="hover:bg-primaryHover"
+              @click.stop="stopPropagation"
+            >
+              <directMessagesItemVue
+                :user="user"
+                :isOwnChat="isOwnChat"
+                :goToChat="goToChat"
+              />
             </h5>
           </div>
-          <div class="hover:bg-primaryHover cursor-pointer" @click="closeModal" @click.stop="stopPropagation">
+          <div
+            class="hover:bg-primaryHover cursor-pointer"
+            @click="closeModal"
+            @click.stop="stopPropagation"
+          >
             <addTeammatesDropdown />
           </div>
         </div>
       </AccordionItem>
     </AccordionList>
     <div v-if="!listOpen && checkSetChat()">
-      <h5 class="hover:bg-primaryHover text-base cursor-pointer text-white bg-slate-600">
-        <directMessagesItemVue :user="this.selectedUser" :isOwnChat="isOwnChat" :goToChat="goToChat" />
+      <h5
+        class="hover:bg-primaryHover text-base cursor-pointer text-white bg-slate-600"
+      >
+        <directMessagesItemVue
+          :user="this.selectedUser"
+          :isOwnChat="isOwnChat"
+          :goToChat="goToChat"
+        />
       </h5>
     </div>
   </div>
@@ -109,14 +134,17 @@ export default {
       this.setType();
     },
     checkSetChat() {
-      return this.chat_type === 'Profile' && this.selectedUser.id === this.selectedChat.id
+      return (
+        this.chat_type === 'Profile' &&
+        this.selectedUser.id === this.selectedChat.id
+      );
     },
     setType() {
       this.chat_type = this.selectedChat.conversation_type;
       if (this.chat_type === 'Profile') {
         this.selectedUser = this.selectedChat;
       }
-    }
+    },
   },
 };
 </script>

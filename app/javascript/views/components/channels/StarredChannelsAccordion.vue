@@ -1,27 +1,44 @@
 <template>
   <div v-if="starChannels.length > 0" class="hover-trigger">
     <ChannelsDropDown :onlyIcon="true" />
-    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
+    <AccordionList
+      class="mt-5 ml-4 text-base text-slate-50"
+      @click="toggleList"
+    >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="cursor-pointer ml-2">
             {{ $t('channels.starred') }}
           </span>
         </template>
-        <h5 v-for="channel in starChannels" :key="channel.id" class="hover:bg-primaryHover"
-          @click.stop="stopPropagation">
+        <h5
+          v-for="channel in starChannels"
+          :key="channel.id"
+          class="hover:bg-primaryHover"
+          @click.stop="stopPropagation"
+        >
           <div class="-ml-4">
-            <ChannelItem :channel="channel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
-              :isShowOptions="showChannelOptions" />
+            <ChannelItem
+              :channel="channel"
+              :goTo="goToChannelChat"
+              :toggleShow="toggleChannelOptionShow"
+              :isShowOptions="showChannelOptions"
+            />
           </div>
         </h5>
       </AccordionItem>
     </AccordionList>
   </div>
   <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
-    <h5 class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600">
-      <ChannelItem :channel="selectedChannel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
-        :isShowOptions="showChannelOptions" />
+    <h5
+      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
+    >
+      <ChannelItem
+        :channel="selectedChannel"
+        :goTo="goToChannelChat"
+        :toggleShow="toggleChannelOptionShow"
+        :isShowOptions="showChannelOptions"
+      />
     </h5>
   </div>
 </template>
@@ -100,7 +117,11 @@ export default {
       }
     },
     checkSetChannel() {
-      return this.chat_type === 'Channel' && this.selectedChat.id === this.selectedChannel.id && this.selectedChannel.favourite_id;
+      return (
+        this.chat_type === 'Channel' &&
+        this.selectedChat.id === this.selectedChannel.id &&
+        this.selectedChannel.favourite_id
+      );
     },
     stopPropagation(event) {
       event.stopPropagation();

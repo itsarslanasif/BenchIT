@@ -1,7 +1,10 @@
 <template>
   <div class="hover-trigger">
     <ChannelsDropDown :onlyIcon="true" />
-    <AccordionList class="mt-5 ml-4 text-base text-slate-50" @click="toggleList">
+    <AccordionList
+      class="mt-5 ml-4 text-base text-slate-50"
+      @click="toggleList"
+    >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer">
@@ -9,15 +12,28 @@
           </span>
         </template>
         <div class="-ml-4">
-          <h5 v-for="channel in joinedChannels" :key="channel.id" class="hover:bg-primaryHover"
-            @click.stop="stopPropagation">
-            <ChannelItem :channel="channel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
-              :isShowOptions="showChannelOptions" />
+          <h5
+            v-for="channel in joinedChannels"
+            :key="channel.id"
+            class="hover:bg-primaryHover"
+            @click.stop="stopPropagation"
+          >
+            <ChannelItem
+              :channel="channel"
+              :goTo="goToChannelChat"
+              :toggleShow="toggleChannelOptionShow"
+              :isShowOptions="showChannelOptions"
+            />
           </h5>
-          <div @click="toggleModal" @click.stop="stopPropagation"
-            class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2">
-            <font-awesome-icon icon="fa-plus"
-              class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600" />
+          <div
+            @click="toggleModal"
+            @click.stop="stopPropagation"
+            class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2"
+          >
+            <font-awesome-icon
+              icon="fa-plus"
+              class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+            />
             <p class="text-sm self-center text-white truncate">
               {{ $t('channels.add_new_channel') }}
             </p>
@@ -25,14 +41,23 @@
         </div>
       </AccordionItem>
       <div v-if="showCreateChannelModal">
-        <CreateChannel :closeModal="toggleModal" @click.stop="stopPropagation" />
+        <CreateChannel
+          :closeModal="toggleModal"
+          @click.stop="stopPropagation"
+        />
       </div>
     </AccordionList>
   </div>
   <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
-    <h5 class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600">
-      <ChannelItem :channel="selectedChannel" :goTo="goToChannelChat" :toggleShow="toggleChannelOptionShow"
-        :isShowOptions="showChannelOptions" />
+    <h5
+      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
+    >
+      <ChannelItem
+        :channel="selectedChannel"
+        :goTo="goToChannelChat"
+        :toggleShow="toggleChannelOptionShow"
+        :isShowOptions="showChannelOptions"
+      />
     </h5>
   </div>
 </template>
@@ -112,7 +137,10 @@ export default {
       }
     },
     checkSetChannel() {
-      return this.chat_type === 'Channel' && this.selectedChannel.id === this.selectedChat.id
+      return (
+        this.chat_type === 'Channel' &&
+        this.selectedChannel.id === this.selectedChat.id
+      );
     },
     stopPropagation(event) {
       event.stopPropagation();
