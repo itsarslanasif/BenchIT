@@ -155,7 +155,6 @@ export default {
       channelStore.index(term.value, sortValue.value, filterChannelsValue.value, newValue)
     })
 
-
     onBeforeUnmount(() => {
       searchedChannels.value = [];
       channels.value = [];
