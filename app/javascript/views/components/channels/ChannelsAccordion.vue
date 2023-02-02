@@ -23,10 +23,10 @@
             </p>
           </div>
         </div>
-        <div v-if="showCreateChannelModal">
-          <CreateChannel :closeModal="toggleModal" @click.stop="stopPropagation" />
-        </div>
       </AccordionItem>
+      <div v-if="showCreateChannelModal">
+        <CreateChannel :closeModal="toggleModal" @click.stop="stopPropagation" />
+      </div>
     </AccordionList>
   </div>
   <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
@@ -110,7 +110,7 @@ export default {
       }
     },
     checkSetChannel() {
-      return this.chat_type === 'Channel' && this.selectedChannel.id === this.selectedChat.id && this.selectedChannel.favourite_id === null;
+      return this.chat_type === 'Channel' && this.selectedChannel.id === this.selectedChat.id
     },
     stopPropagation(event) {
       event.stopPropagation();
