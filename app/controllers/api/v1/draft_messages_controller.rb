@@ -38,7 +38,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def authenticate_draft
     if @draft_message.profile_id.eql?(Current.profile.id)
-      check_membership(@bench_conversatdecide_draft_actionion)
+      check_membership(@bench_conversation)
     else
       render json: { error: 'Sorry, this draft is not yours' }, status: :unauthorized
     end
