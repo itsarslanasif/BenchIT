@@ -20,7 +20,9 @@ if message.parent_message_id.blank?
     json.partial! 'api/v1/shared/partials/message', message: reply
   end
   json.draft_message do
-    json.partial! 'api/v1/draft_messages/partials/draft', message: get_draft(message.bench_conversation_id, message.id)
+    unless get_draft(message.bench_conversation_id, message.id).nil?
+      json.partial! 'api/v1/draft_messages/partials/draft_message', message: get_draft(message.bench_conversation_id, message.id)
+    end
   end
 end
 json.bench_conversation_id message.bench_conversation_id
