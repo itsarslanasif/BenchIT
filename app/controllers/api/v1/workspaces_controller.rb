@@ -59,10 +59,9 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def check_profile
     user = User.find_by(email: params[:email])
-    if user.present?
-      if user.profiles.find_by(workspace_id: @workspace).present?
-        render json: { error: t('.error') }, status: :unprocessable_entity
-      end
-    end
+    return if user.blank?
+    return if user.profiles.find_by(workspace_id: @workspace).blank?
+
+    render json: { error: t('.error') }, status: :unprocessable_entity
   end
 end
