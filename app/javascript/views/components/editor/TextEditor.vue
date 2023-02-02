@@ -1,5 +1,6 @@
 <template>
   <div>
+    <AttachmentShortCutVue class="-mt-48 absolute z-10" />
     <div
       v-if="showMentions || showChannels"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -29,9 +30,24 @@
           placeholder: getPlaceholder,
           menubar: false,
           statusbar: false,
+          toolbar_location: 'bottom',
+          toolbar1:
+            'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
+          // toolbar2:
+          //   'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
+          setup: editor => {
+            editor.ui.registry.addButton('AddAttachments', {
+              text: '➕',
+              onAction: handleCustomButton,
+            });
+
+            // editor.ui.registry.addContextToolbar('toolbar2', {
+            //   predicate: true,
+            //   position: 'bottom',
+            // });
+          },
           plugins: 'placeHolder lists link code codesample ',
-          toolbar:
-            'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
+
           codesample_languages: [none],
           formats: {
             code: {
@@ -100,6 +116,8 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { NMention } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import AttachmentShortCutVue from './Attachment&shortCut.vue';
+import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
 
 export default {
   beforeMount() {
@@ -111,6 +129,7 @@ export default {
     editor: Editor,
     Attachments,
     NMention,
+    AttachmentShortCutVue,
   },
   methods: {
     handleCancelEdit() {
@@ -148,9 +167,11 @@ export default {
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
+    const FilesStore = useRecentFilesStore();
     const { channels } = storeToRefs(channelStore);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
+    let showAttachments = ref(false);
     const showMentions = ref(false);
     const showChannels = ref(false);
     const hasMentionCommand = ref(false);
@@ -215,6 +236,11 @@ export default {
         props.editMessageCallBack(newMessage.value);
         messageStore.removeMessageToEdit();
       }
+    };
+
+    const handleCustomButton = () => {
+      console.log('asad', showAttachments);
+      FilesStore.toggleModal();
     };
 
     const message = newMessage => {
@@ -301,6 +327,8 @@ export default {
       addMentionToText,
       messageStore,
       selectedChat,
+      handleCustomButton,
+      showAttachments,
     };
   },
 };
