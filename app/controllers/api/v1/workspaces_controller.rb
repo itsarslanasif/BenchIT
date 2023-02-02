@@ -1,7 +1,6 @@
 class Api::V1::WorkspacesController < Api::ApiController
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
-  before_action :find_user, only: %i[invite]
   skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
 
@@ -21,7 +20,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def invite
     @token = Token.new.generate
-    @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id,
+    @invitable = Invitable.create(workspace_id: @workspace.id,
                                   token: @token, token_type: 'workspace_invitation')
 
     if @invitable.errors.any?
@@ -29,10 +28,10 @@ class Api::V1::WorkspacesController < Api::ApiController
         error: 'There was an error in inviting the user to workspace',
         errors: @invitable.errors
       }, status: :unprocessable_entity
+    else
+      WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
+      render json: { message: "#{params[:email]} is sucessfully invited to #{@workspace.company_name}" }, status: :ok
     end
-    SendWorkspaceInvitationEmailJob.perform_later(@user.email, @workspace, @token)
-
-    render json: { message: "#{@user.email} is sucessfully invited to #{@workspace.company_name}" }, status: :ok
   end
 
   def switch_workspace
@@ -55,11 +54,5 @@ class Api::V1::WorkspacesController < Api::ApiController
     @profile = Current.user.profiles.find_by(workspace_id: @workspace)
 
     render json: { error: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
-  end
-
-  def find_user
-    @user = User.find_by(email: params[:email])
-
-    render json: { error: 'Email not found' }, status: :not_found if @user.nil?
   end
 end
