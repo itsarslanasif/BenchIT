@@ -44,7 +44,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def mute_channel
     if @channel_participant.update(muted: true)
-      render json: { message: t('channel_participants.channel_muted') }, status: :ok
+      render json: { message: t('.channel_muted') }, status: :ok
     else
       render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
     end
@@ -52,7 +52,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def unmute_channel
     if @channel_participant.update(muted: false)
-      render json: { message: t('channel_participants.channel_unmuted') }, status: :ok
+      render json: { message: t('.channel_unmuted') }, status: :ok
     else
       render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
     end
