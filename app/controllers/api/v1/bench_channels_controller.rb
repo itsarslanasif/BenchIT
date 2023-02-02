@@ -11,7 +11,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
     if params[:query].present?
       @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
                                                             match: :word_start)
+      @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
     end
+
     filter_bench_channels
     hide_profile_bench_channels
     sort_bench_channels if params[:sort_by].present?
@@ -116,21 +118,18 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def filter_bench_channels
     return if params[:filter].blank?
 
-    case params[:filter]
-    when 'private'
-      @bench_channels = @bench_channels.select { |channel| channel.is_private && channel.participant?(Current.profile) }
-    when 'public'
-      @bench_channels = @bench_channels.reject(&:is_private)
-    end
+    @bench_channels = case params[:filter]
+                      when 'private'
+                        @bench_channels.get_private_channels
+                      when 'public'
+                        @bench_channels.get_public_channels
+                      end
   end
 
   def hide_profile_bench_channels
-    if params[:hide_my_channels].eql?('true')
-      @bench_channels = @bench_channels.select { |channel| !channel.is_private && !channel.participant?(Current.profile) }
-    end
-    @bench_channels = @bench_channels.reject do |channel|
-      channel.is_private && !channel.participant?(Current.profile)
-    end
+    @bench_channels = @bench_channels.hide_participated_channels(Current.profile.bench_channel_ids) if params[:hide_my_channels].eql?('true')
+
+    @bench_channels = BenchChannel.reject_unjoined_privated_channels(@bench_channels)
     @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
   end
 
