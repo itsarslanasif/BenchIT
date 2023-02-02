@@ -1,7 +1,8 @@
 class Api::V1::DraftMessagesController < Api::ApiController
   include MemberShip
+  include Conversation
 
-  before_action :fetch_conversation, :initialize_draft, only: %i[create]
+  before_action :fetch_conversation, :initialize_draft, :check_draft, only: %i[create]
   before_action :set_draft_message, :authenticate_draft, only: %i[destroy update]
 
   def index
@@ -13,19 +14,13 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def update
-    if @draft_message.update(draft_messages_params)
-      render json: { message: 'Draft updated', draft_message: @draft_message }, status: :updated
-    else
-      render json: { error: 'Draft not updated', errors: @draft_message.errors }, status: :unprocessable_entity
-    end
+    @draft_message.update!(draft_messages_params)
+    render json: { success: true, message: 'Draft updated.' }, status: :ok
   end
 
   def destroy
-    if @draft_message.destroy
-      render json: { message: 'Draft deleted successfully.' }, status: :ok
-    else
-      render json: { error: 'Draft not deleted', errors: @draft_message.errors }, status: :unprocessable_entity
-    end
+    @draft_message.destroy!
+    render json: { success: true, message: 'Draft deleted.' }, status: :ok
   end
 
   private
@@ -49,26 +44,31 @@ class Api::V1::DraftMessagesController < Api::ApiController
     end
   end
 
+  def check_draft
+    @message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
+    if params[:content].blank? && @message.present?
+      @draft_message = @message
+      destroy
+    elsif params[:content].present? && @message.present?
+      @draft_message = @message
+      update
+    elsif params[:content].present?
+      create
+    else
+      render json: { error: 'Sorry, the content is empty.' }, status: :unauthorized
+    end
+  end
+
   def initialize_draft
     @draft_message = @bench_conversation.draft_messages.new(draft_messages_params)
     check_membership(@bench_conversation)
-    return if @bench_conversation.eql?(@draft_message.conversation_message.bench_conversation)
+    return if @draft_message.conversation_message_id.blank? || @bench_conversation.eql?(@draft_message.conversation_message.bench_conversation)
 
     render json: { error: 'Sorry, this draft is not present in this conversation' },
            status: :unauthorized
   end
 
   def fetch_conversation
-    conversation_id = params[:conversation_id]
-
-    @bench_conversation = case params[:conversation_type]
-                          when 'channels'
-                            BenchChannel.find_by(id: conversation_id)&.bench_conversation
-                          when 'groups'
-                            Group.find_by(id: conversation_id)&.bench_conversation
-                          when 'profiles'
-                            BenchConversation.profile_to_profile_conversation(Current.profile.id, conversation_id)
-                          end
-    render json: { error: 'wrong type' }, status: :bad_request if @bench_conversation.blank?
+    @bench_conversation = get_conversation(params[:conversation_id], params[:conversation_type])
   end
 end
