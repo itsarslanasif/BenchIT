@@ -14,7 +14,7 @@ class SearchService
 
   def search_records
     models = @filter ? [@filter.constantize] : [Profile, BenchChannel, ConversationMessage]
-    @results = Searchkick.search(@query, models: models)
+    @results = Searchkick.search(@query, models: models, match: :word_start)
     filter_messages
   end
 
