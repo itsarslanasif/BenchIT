@@ -104,6 +104,7 @@ en:
         people: 'People'
         channels: 'Channels'
         messages: 'Messages'
+        profiles: 'Profiles'
         from: 'from'
         profile_attr: 'Profile'
         channel_attr: 'BenchChannel'
@@ -111,6 +112,7 @@ en:
         tagline: "I'm looking for"
       search:
         result_for: 'Search result for'
+        no_result: 'Sorry! No result found.'
       conversation:
         channel: 'BenchChannel'
         profile: 'Profile'
