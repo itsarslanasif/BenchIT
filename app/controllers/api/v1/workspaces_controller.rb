@@ -21,7 +21,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def invite
     @token = Token.new.generate
-    @invitable = Invitable.create(workspace_id: @workspace.id,
+    @invitable = Invitable.create(user_id: @user&.id, workspace_id: @workspace.id,
                                   token: @token, token_type: 'workspace_invitation')
 
     if @invitable.errors.any?
@@ -58,9 +58,9 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def check_profile
-    user = User.find_by(email: params[:email])
-    return if user.blank?
-    return if user.profiles.find_by(workspace_id: @workspace).blank?
+    @user = User.find_by(email: params[:email])
+    return if @user.blank?
+    return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { error: t('.error') }, status: :unprocessable_entity
   end
