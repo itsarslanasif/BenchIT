@@ -44,6 +44,12 @@ import {
   faBars,
   faUserGroup,
   faTrashCan,
+  faHardDrive,
+  faFileLines,
+  faPenToSquare,
+  faEllipsis,
+  faBoltLightning
+
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -93,6 +99,11 @@ library.add(
   faBars,
   faUserGroup,
   faTrashCan,
+  faFileLines,
+  faHardDrive,
+  faPenToSquare,
+  faEllipsis,
+  faBoltLightning
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

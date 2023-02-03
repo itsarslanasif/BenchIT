@@ -5,7 +5,8 @@ export const useRecentFilesStore = () => {
   const recentFilesStore = defineStore('recentFilesStore', {
     state: () => ({
       recentFiles: [],
-      showModal:false,
+      showModalInChat:false,
+      showModalInThread:false,
     }),
 
     getters: {
@@ -20,8 +21,11 @@ export const useRecentFilesStore = () => {
           console.error(e)
         }
       },
-      toggleModal(){
-        this.showModal= !this.showModal
+      toggleModalInChat(){
+        this.showModalInChat= !this.showModalInChat
+      },
+      toggleModalInThread(){
+        this.showModalInThread= !this.showModalInThread
       }
     },
   });

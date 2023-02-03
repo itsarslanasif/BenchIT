@@ -10,7 +10,11 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <TextEditorVue :sendMessage="sendMessage" :editMessage="false" />
+      <TextEditorVue
+        :sendMessage="sendMessage"
+        :editMessage="false"
+        :isThread="false"
+      />
     </div>
     <div v-else>
       <JoinChannel :joinedTheChannel="joinedTheChannel" />
@@ -144,8 +148,8 @@ export default {
       }
     },
     joinedTheChannel() {
-      this.isMember = !this.isMember
-    }
+      this.isMember = !this.isMember;
+    },
   },
 };
 </script>

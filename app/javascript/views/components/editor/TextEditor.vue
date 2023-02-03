@@ -1,6 +1,9 @@
 <template>
   <div>
-    <AttachmentShortCutVue class="-mt-48 absolute z-10" />
+    <AttachmentShortCutVue
+      :isThread="isThread"
+      class="margintop absolute z-10"
+    />
     <div
       v-if="showMentions || showChannels"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -46,7 +49,7 @@
             //   position: 'bottom',
             // });
           },
-          plugins: 'placeHolder lists link code codesample ',
+          plugins: ' lists link code codesample ',
 
           codesample_languages: [none],
           formats: {
@@ -116,7 +119,7 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { NMention } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import AttachmentShortCutVue from './Attachment&shortCut.vue';
+import AttachmentShortCutVue from './Attachment&shortCutModal.vue';
 import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
 
 export default {
@@ -239,10 +242,12 @@ export default {
     };
 
     const handleCustomButton = () => {
-      console.log('asad', showAttachments);
-      FilesStore.toggleModal();
+      if (props.isThread) {
+        FilesStore.toggleModalInThread();
+      } else {
+        FilesStore.toggleModalInChat();
+      }
     };
-
     const message = newMessage => {
       let messageData;
       let filterData;
@@ -333,3 +338,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.margintop {
+  margin-top: -270px;
+}
+</style>

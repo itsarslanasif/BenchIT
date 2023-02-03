@@ -22,7 +22,7 @@
       </template>
     </template>
   </div>
-  <div class="relative mx-1">
+  <div class="relative mx-1 mt-10">
     <TextEditorVue :isThread="true" :sendMessage="sendMessage" />
   </div>
 </template>
@@ -97,6 +97,9 @@ export default {
 <style scoped>
 .threadBody {
   max-height: 67vh;
+}
+.mt-10 {
+  margin-top: 60px;
 }
 
 .highlight {
