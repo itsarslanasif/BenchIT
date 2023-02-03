@@ -6,7 +6,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
   before_action :set_draft_message, :authenticate_draft, only: %i[destroy update]
 
   def index
-    @draft_messages = Current.profile.draft_messages
+    @draft_messages = Current.profile.draft_messages.includes(:profile).order(created_at: :desc)
   end
 
   def create
