@@ -5,6 +5,7 @@ class BenchConversation < ApplicationRecord
   has_many :reactions, through: :conversation_messages
   has_many :draft_messages, dependent: :destroy
   has_many :pins, dependent: :destroy
+  has_many :schedule_messages, dependent: :destroy
 
   validates :sender, uniqueness: { scope: %i[conversationable_id conversationable_type] }
 

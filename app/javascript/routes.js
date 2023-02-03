@@ -12,8 +12,10 @@ import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
 import Homepage from './views/pages/Homepage.vue';
 import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue';
+import DraftMessages from './views/components/draftsAndSent/DraftMessages.vue'
 import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue';
 import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue';
+import ScheduleMessages from './views/components/schedule/ScheduleMessages.vue'
 import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
@@ -122,9 +124,28 @@ const router = createRouter({
           },
           children: [
             {
+              path: '/drafts_sent_messages',
+              component: DraftMessages,
+              name: 'draft-messages',
+              meta: {
+                auth: true,
+              },
+            },
+            {
               path: '/recently_sent_messages',
               component: RecentlySentMessages,
               name: 'recently-sent-messages',
+              meta: {
+                auth: true,
+              },
+            },
+            {
+              path: '/schedule_messages',
+              component: ScheduleMessages,
+              name: 'schedule-messages',
+              meta: {
+                auth: true,
+              },
             },
           ],
         },

@@ -6,6 +6,7 @@
 <script>
 import SplitPanesVue from './SplitPanes.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
+import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useSavedItemsStore } from '../../stores/useSavedItemStore';
 import { storeToRefs } from 'pinia';
@@ -41,8 +42,10 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     const savedItemStore = useSavedItemsStore();
     const unreadMessageStore = useUnreadStore();
+    const messageStore = useMessageStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
+    messageStore.getAllScheduleMessages();
     unreadMessageStore.index();
     savedItemStore.index();
     return {
