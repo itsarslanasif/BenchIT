@@ -105,6 +105,7 @@ en:
         channels: 'Channels'
         messages: 'Messages'
         profiles: 'Profiles'
+        groups: 'Groups'
         from: 'from'
         profile_attr: 'Profile'
         channel_attr: 'BenchChannel'

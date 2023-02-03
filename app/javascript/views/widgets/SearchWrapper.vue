@@ -1,7 +1,8 @@
 <template lang="">
   <div class="p-3">
     <div v-if="list.length" v-for="item in list" class="my-4">
-      <div class="flex gap-3 bg-slate-50 border border-black-300 rounded p-2" v-if="listType === $t('search_bar.messages')" >
+      <div class="flex gap-3 bg-slate-50 border border-black-300 rounded p-2" v-if="listType === $t('search_bar.messages')"
+      @click="goToMessage(item.conversationable_type, item.conversationable_id, item.id)">
         <div class="align-baseline">
           <n-avatar :src="item.sender_avatar" class="w-12 h-12 align-middle" />
         </div>
@@ -81,6 +82,14 @@ export default {
       if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
+    },
+    goToMessage(type, conversation_id, message_id) {
+      this.$router.push(`/${this.getConversationType(type)}/${conversation_id}/${message_id}`);
+    },
+    getConversationType(type) {
+      return this.$t('conversation.channel') === type ? this.$t('search_bar.channels').toLowerCase()
+        : this.$t('conversation.profile') === type ? this.$t('search_bar.profiles').toLowerCase()
+          : this.$t('search_bar.groups').toLowerCase()
     },
     isMobileView() {
       return window.innerWidth < 1400;
