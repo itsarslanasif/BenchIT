@@ -1,12 +1,12 @@
 class Api::V1::WorkspacesController < Api::ApiController
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
-  before_action :find_user, only: %i[invite]
+  before_action :check_profile, only: %i[invite]
   skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
 
   def index
-    render json: { workspaces: Current.user.workspaces }, status: :ok
+    @workspaces = Current.user.workspaces
   end
 
   def create
@@ -21,18 +21,21 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def invite
     @token = Token.new.generate
+    create_invitable if @user.present?
+    WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
+    render json: { message: "#{params[:email]} is sucessfully invited to #{@workspace.company_name}" }, status: :ok
+  end
+
+  def create_invitable
     @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id,
                                   token: @token, token_type: 'workspace_invitation')
 
-    if @invitable.errors.any?
-      render json: {
-        error: 'There was an error in inviting the user to workspace',
-        errors: @invitable.errors
-      }, status: :unprocessable_entity
-    end
-    SendWorkspaceInvitationEmailJob.perform_later(@user.email, @workspace, @token)
+    return unless @invitable.errors.any?
 
-    render json: { message: "#{@user.email} is sucessfully invited to #{@workspace.company_name}" }, status: :ok
+    render json: {
+      error: 'There was an error in inviting the user to workspace',
+      errors: @invitable.errors
+    }, status: :unprocessable_entity
   end
 
   def switch_workspace
@@ -57,9 +60,11 @@ class Api::V1::WorkspacesController < Api::ApiController
     render json: { error: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
   end
 
-  def find_user
+  def check_profile
     @user = User.find_by(email: params[:email])
+    return if @user.blank?
+    return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
-    render json: { error: 'Email not found' }, status: :not_found if @user.nil?
+    render json: { error: t('.error') }, status: :unprocessable_entity
   end
 end

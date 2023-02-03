@@ -44,7 +44,7 @@ const renderCustomHeader = () => {
       h(NAvatar, {
         size: 'large',
         class: 'mr-3',
-        src: '../../../assets/images/user.png',
+        src: currentWorkspace.value.image_url,
       }),
       h('div', null, [
         h('div', { class: 'text-md font-bold' }, [

@@ -7,6 +7,9 @@ Rails.application.routes.draw do
       invitations: 'users_invitations',
       sessions: 'users/sessions'
     }
+    devise_scope :user do
+      get 'check_auth', to: 'users/sessions#check_auth'
+    end
     root to: 'application#index'
     namespace :api, defaults: { format: 'json' } do
       namespace :v1 do
@@ -23,6 +26,11 @@ Rails.application.routes.draw do
           end
         end
         resources :users, only: %i[index]
+        resources :schedule_messages, only: %i[index update destroy] do
+          member do
+            get :send_now
+          end
+        end
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message
