@@ -129,7 +129,9 @@ export default {
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
-      formData.append('scheduled_at', schedule.value);
+      if (schedule.value){
+        formData.append('scheduled_at', schedule.value);
+      }
       files.forEach(file => {
         formData.append('message_attachments[]', file);
       });

@@ -81,7 +81,6 @@ export default {
       formData.append('is_threaded', false);
       formData.append('parent_message_id', this.threadStore.message.id);
       formData.append('conversation_type', this.conversation_type);
-      formData.append('scheduled_at', null);
       formData.append('conversation_id', this.id);
       files.forEach(file => {
         formData.append('message_attachments[]', file);

@@ -2,6 +2,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   include MemberShip
 
   before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
+  before_action :delete_job, only: %i[destroy]
 
   def index
     @messages = Current.profile.schedule_messages.includes(:bench_conversation, :profile).order(created_at: :desc)
@@ -9,33 +10,35 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
 
   def update
     @schedule_message.update!(schedule_message_params)
+
     if params[:scheduled_at].present?
       delete_job
       reschedule_job
     end
+
     render json: { success: true, message: 'Message updated' }, status: :ok
   end
 
   def destroy
-    delete_job
     @schedule_message.destroy!
     render json: { success: true, message: 'Message deleted' }, status: :ok
   end
 
   def send_now
+
     ActiveRecord::Base.transaction do
       delete_job
       Current.profile.conversation_messages.create!(content: @schedule_message.content,
                                                     bench_conversation_id: @schedule_message.bench_conversation_id)
       @schedule_message.destroy!
     end
+
     render json: { success: true, message: 'Message send' }, status: :ok
   end
 
   private
 
   def schedule_message_params
-    params[:scheduled_at] = params[:schedule] if params[:schedule].present?
     params.permit(:content, :scheduled_at).tap do |param|
       param[:profile_id] = Current.profile.id
     end
