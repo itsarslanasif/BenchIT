@@ -146,7 +146,7 @@ export default {
 
     async findParentMessage(id) {
       this.targetMessage = this.messageStore.getMessage(id)
-      if (this.targetMessage === undefined || this.targetMessage === null) {
+      if (!this.targetMessage) {
          await this.loadMoreMessages()
          await this.findParentMessage(id)
       }
