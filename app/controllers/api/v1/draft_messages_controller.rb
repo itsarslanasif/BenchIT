@@ -15,12 +15,12 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def update
     @draft_message.update!(draft_messages_params)
-    render json: { success: true, message: 'Draft update' }, status: :ok
+    render json: { success: true, message: 'Draft update', draft_message: @draft_message }, status: :ok
   end
 
   def destroy
     @draft_message.destroy!
-    render json: { success: true, message: 'Draft delete' }, status: :ok
+    render json: { success: true, message: 'Draft delete', draft_message: @draft_message }, status: :ok
   end
 
   private
