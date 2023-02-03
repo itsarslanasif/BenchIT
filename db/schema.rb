@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_01_093341) do
+ActiveRecord::Schema[7.0].define(version: 2023_01_24_075350) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -120,10 +120,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_093341) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
-    t.bigint "conversation_message_id"
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
-    t.index ["conversation_message_id"], name: "index_draft_messages_on_conversation_message_id"
-    t.index ["profile_id", "bench_conversation_id", "conversation_message_id"], name: "draft_message", unique: true
+    t.index ["profile_id", "bench_conversation_id"], name: "index_draft_messages_on_profile_id_and_bench_conversation_id", unique: true
     t.index ["profile_id"], name: "index_draft_messages_on_profile_id"
   end
 
@@ -283,7 +281,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_093341) do
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
   add_foreign_key "downloads", "profiles"
-  add_foreign_key "draft_messages", "conversation_messages"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
   add_foreign_key "pins", "bench_conversations"
