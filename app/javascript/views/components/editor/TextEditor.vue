@@ -311,7 +311,7 @@ export default {
         filterData = messageData.filter(el => el !== '');
         actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
       } else {
-        actuallData = newMessage?.value?.split('\n')[0];
+        actuallData = newMessage.value
       }
       return actuallData;
     };
