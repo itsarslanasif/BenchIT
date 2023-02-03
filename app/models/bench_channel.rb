@@ -48,6 +48,8 @@ class BenchChannel < ApplicationRecord
     @bench_channels = bench_channels.reject do |channel|
       channel.is_private && !channel.participant?(Current.profile)
     end
+
+    @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
   end
 
   def bench_channel_content

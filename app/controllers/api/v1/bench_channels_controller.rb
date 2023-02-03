@@ -11,7 +11,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     if params[:query].present?
       @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
                                                             match: :word_start)
-      @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
+      @bench_channels = BenchChannel.where(id: @bench_channels.ids)
     end
 
     filter_bench_channels
@@ -130,7 +130,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channels = @bench_channels.hide_participated_channels(Current.profile.bench_channel_ids) if params[:hide_my_channels].eql?('true')
 
     @bench_channels = BenchChannel.reject_unjoined_privated_channels(@bench_channels)
-    @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
   end
 
   def paginate_bench_channels
