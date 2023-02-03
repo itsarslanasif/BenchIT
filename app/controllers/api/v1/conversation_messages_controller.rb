@@ -17,13 +17,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      @message.save!
 
-      if @message.save
-        render json: { success: 'Message sent', message: @message }, status: :ok
-      else
-        render json: { error: 'Message not sent', errors: @message.errors }, status: :unprocessable_entity
-      end
-
+      render json: { success: 'Message sent', message: @message }, status: :ok
     else
       @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
       @schedule_message.save!
