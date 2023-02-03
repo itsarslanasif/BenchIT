@@ -103,7 +103,7 @@ export const CONSTANTS = {
   CHANNEL_DISCRIPTION_ERROR: 'Please enter channel description.',
   NULL_VALUES: [null, undefined, []],
   PROFILE_ADDED: 'Profile added',
-  ERROR_MESSAGE: 'User does not exist!',
+  ERROR_MESSAGE: 'User already has profile in this workspace!',
   SUCCESS_MESSAGE: 'Invitation sent successfully!',
   INVITE_PEOPLE: 'Invite People',
   CREATE_CHANNEL: 'Create a channel',

@@ -46,9 +46,6 @@ const router = createRouter({
       path: '/join_workspace/:workspace_id',
       component: JoinWorkspace,
       name: 'join_workspace',
-      meta: {
-        auth: true,
-      },
     },
     {
       path: '/invite_user',
@@ -198,19 +195,14 @@ router.beforeEach(async (to, from, next) => {
     if (!authStatus) {
       localStorage.clear();
       sessionStorage.clear();
-      next({ path: '/sign_in', replace: true })
-    }
-    else if (
-      !localStorage.getItem('token') &&
-      !currentWorkspace &&
-      to.meta.auth ||
+      next({ path: '/sign_in', replace: true });
+    } else if (
+      (!localStorage.getItem('token') && !currentWorkspace && to.meta.auth) ||
       !authStatus
     ) {
       next('/sign_in');
     } else if (
-      localStorage.getItem('token') &&
-      !currentWorkspace &&
-      to.meta.auth ||
+      (localStorage.getItem('token') && !currentWorkspace && to.meta.auth) ||
       !authStatus
     ) {
       next('/workspace_dashboard');

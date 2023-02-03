@@ -1,4 +1,5 @@
 class Api::V1::ProfilesController < Api::ApiController
+  skip_before_action :set_workspace_in_session, only: %i[create]
   before_action :set_workspace, only: %i[index create show update]
   before_action :check_profile_already_exists, only: %i[create]
   before_action :set_previous_direct_messages, only: %i[previous_direct_messages]
@@ -23,7 +24,6 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def create
     @profile = current_user.profiles.new(profile_params)
-
     if @profile.save
       render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
     else
