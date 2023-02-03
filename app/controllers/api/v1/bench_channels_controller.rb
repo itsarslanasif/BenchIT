@@ -11,7 +11,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     if params[:query].present?
       @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
                                                             match: :word_start)
-      @bench_channels = BenchChannel.where(id: @bench_channels.ids)
+      @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
     end
 
     filter_bench_channels
