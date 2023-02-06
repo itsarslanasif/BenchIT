@@ -1,29 +1,38 @@
 <template>
-  <right-pane-header
-    :paneTitle="
-      threadStore.message.receiver_name || threadStore.message.channel_name
-    "
-    :messageId="threadStore.message.id"
-  />
-  <div class="overflow-auto threadBody">
-    <div class="pt-8">
-      <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
-    </div>
-    <n-divider
-      v-if="threadStore.message.replies"
-      title-placement="left"
-      class="text-black-500 text-xs"
-    >
-      <p>{{ repliesCount }}</p>
-    </n-divider>
-    <template v-if="threadStore.message.replies">
-      <template v-for="reply in threadStore.message.replies" :key="reply.id">
-        <MessageWrapper :id="reply.id" :inThread="true" :curr-message="reply" />
+  <div>
+    <right-pane-header
+      :paneTitle="
+        threadStore.message.receiver_name || threadStore.message.channel_name
+      "
+      :messageId="threadStore.message.id"
+    />
+    <div class="overflow-auto threadBody">
+      <div class="pt-8">
+        <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
+      </div>
+      <n-divider
+        v-if="threadStore.message.replies"
+        title-placement="left"
+        class="text-black-500 text-xs"
+      >
+        <p>{{ repliesCount }}</p>
+      </n-divider>
+      <template v-if="threadStore.message.replies">
+        <template v-for="reply in threadStore.message.replies" :key="reply.id">
+          <MessageWrapper
+            :id="reply.id"
+            :inThread="true"
+            :curr-message="reply"
+          />
+        </template>
       </template>
-    </template>
-  </div>
-  <div class="relative mx-1 mt-10">
-    <TextEditorVue :isThread="true" :sendMessage="sendMessage" />
+    </div>
+    <div
+      class="relative mx-1"
+      :class="{ 'mt-10': !threadStore.message.replies.length }"
+    >
+      <TextEditorVue :isThread="true" :sendMessage="sendMessage" />
+    </div>
   </div>
 </template>
 
@@ -71,6 +80,10 @@ export default {
       return count > 1
         ? `${count} ${CONSTANTS.REPLIES}`
         : `${count} ${CONSTANTS.REPLY}`;
+    },
+    replyExist() {
+      let count = this.threadStore.message.replies.length;
+      return count > 1 ? true : false;
     },
   },
   methods: {

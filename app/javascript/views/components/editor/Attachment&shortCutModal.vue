@@ -11,7 +11,6 @@
       :bordered="false"
       size="huge"
       class="border border-black-300"
-      :class="{ 'bg-danger': isThread }"
       style="width: 400px"
     >
       <template #header>
