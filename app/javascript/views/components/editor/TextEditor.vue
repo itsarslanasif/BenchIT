@@ -6,6 +6,7 @@
     />
     <CreateTextSnippetModal
       :showModal="attachmentAndShortcutStore.showCreateTextSnippitModal"
+      :sendMessage="sendMessage"
     />
     <div
       v-if="showMentions || showChannels"

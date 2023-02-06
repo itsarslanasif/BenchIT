@@ -141,10 +141,7 @@
                 v-html="currMessage.content"
               />
               <EditedAtTime
-                v-if="
-                  currMessage.is_edited &&
-                  isDeleted(currMessage.content)
-                "
+                v-if="currMessage.is_edited && isDeleted(currMessage.content)"
                 :updated_at="currMessage.updated_at"
               />
             </div>
@@ -175,6 +172,7 @@
               >
                 <template #trigger>
                   <img
+                    v-if="isImage(attachment.attachment_link)"
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -182,6 +180,12 @@
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
                   />
+                  <div class="ml-12" v-else>
+                    <font-awesome-icon
+                      class="w-10 h-10"
+                      icon="fa-solid fa-file"
+                    />
+                  </div>
                 </template>
                 <a :href="attachment.attachment_download_link" download>
                   <span class="mr-3" @click="downloadFile(attachment)">
@@ -532,6 +536,10 @@ export default {
       );
       return savedMessage ? true : false;
     },
+    isImage(url) {
+      const fileExtension = url.split('/').pop().split('.').pop();
+      return fileExtension !== 'txt';
+    },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
       updatedMessage.content = text;
@@ -695,8 +703,8 @@ export default {
     },
 
     isDeleted(content) {
-      return content === this.$t('deleteMessageModal.success')
-    }
+      return content === this.$t('deleteMessageModal.success');
+    },
   },
 };
 </script>

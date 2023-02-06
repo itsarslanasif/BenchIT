@@ -15,12 +15,16 @@
           <n-space class="flex" vertical>
             <p class="">Titial optional</p>
             <n-input
-              v-model:value="value"
+              v-model:value="title"
               type="text"
               placeholder="sinippet.txt"
             />
             <p>Content</p>
-            <n-input v-model:value="value" type="textarea" placeholder="..." />
+            <n-input
+              v-model:value="content"
+              type="textarea"
+              placeholder="..."
+            />
             <n-checkbox size="small" label="Wrap" />
             <n-input
               v-model:value="value"
@@ -28,14 +32,26 @@
               placeholder="Add a message, if you'd like."
             />
             <n-checkbox size="small" label="Share this file" />
-            <n-mention
+            <n-select
+              vertical
+              v-model:value="selectedValues"
+              filterable
+              :placeholder="$t('placeholder.add_people_to_channel')"
               :options="options"
-              default-value="@"
               :loading="loading"
+              clearable
+              remote
+              :clear-filter-after-select="true"
+              :show-arrow="false"
               @search="handleSearch"
-              :render-label="renderLabel"
+              size="large"
+              @change="resetSelectedTag()"
             />
-            <n-button class="float-right" type="success">
+            <n-button
+              @click="createTextFile"
+              class="float-right"
+              type="success"
+            >
               Create snippet
             </n-button>
           </n-space>
@@ -57,10 +73,12 @@ import {
   NMention,
   NButton,
   NAvatar,
+  NSelect,
 } from 'naive-ui';
 import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
 import { ref, h } from 'vue';
 import { getMembers } from '../../../api/members/membersApi';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
   components: {
     NModal,
@@ -73,6 +91,7 @@ export default {
     NMention,
     NButton,
     NAvatar,
+    NSelect,
   },
   data() {
     return {
@@ -81,42 +100,59 @@ export default {
       wrap: 'true',
       message: '',
       share: '',
+
+      loading: false,
+      options: [],
+      selectedValues: null,
     };
+  },
+  mounted() {
+    this.selectedValues = this.selectedChat.username || this.selectedChat.name;
+    this.getMembersList('');
+  },
+  methods: {
+    handleSearch(query) {
+      if (!query.length) {
+        this.options.username = [];
+        return;
+      }
+      this.loading = true;
+      setTimeout(() => {
+        this.getMembersList(query);
+        this.loading = false;
+      }, 1e3);
+    },
+    async getMembersList(query) {
+      let options = await getMembers(1, query);
+      this.options = options.map(option => {
+        return {
+          label: option.username,
+          value: option.id,
+          image_url: option.image_url,
+        };
+      });
+    },
+    resetSelectedTag() {
+      this.value = '';
+    },
+    createTextFile() {
+      const textFile = new Blob([this.content], { type: 'text/plain' });
+      const files = [textFile];
+      if (this.title !== '') {
+        this.sendMessage('FILE', files, this.title);
+      } else {
+        this.sendMessage('FILE', files, 'textFile.txt');
+      }
+    },
   },
   setup() {
     const shortcutAttachmentStore = useShortcutAttachmentStore();
-    let optionsRef = ref([]);
-    let loadingRef = ref(false);
-    let searchTimerId = null;
-    let members = null;
+    const { selectedChat } = useMessageStore();
     return {
-      options: optionsRef,
-      loading: loadingRef,
       shortcutAttachmentStore,
-      handleSearch(pattern, prefix) {
-        if (searchTimerId !== null) clearTimeout(searchTimerId);
-        console.log(pattern);
-        loadingRef.value = true;
-        searchTimerId = window.setTimeout(() => {
-          getMembers(1, pattern, '').then(response => {
-            optionsRef.value = response;
-            console.log('rrrr', optionsRef.value);
-          });
-          loadingRef.value = false;
-        }, 1000);
-      },
-      renderLabel: option =>
-        h('div', { style: 'display: flex; align-items: center;' }, [
-          h(NAvatar, {
-            style: 'margin-right: 8px;',
-            size: 24,
-            round: true,
-            src: option.image_url,
-          }),
-          option.username,
-        ]),
+      selectedChat,
     };
   },
-  props: ['showModal'],
+  props: ['showModal', 'sendMessage'],
 };
 </script>

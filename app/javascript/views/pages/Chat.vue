@@ -129,14 +129,17 @@ export default {
     this.Cable = null;
   },
   methods: {
-    sendMessage(message, files) {
+    sendMessage(message, files, filename) {
       let formData = new FormData();
       formData.append('content', message);
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
       files.forEach(file => {
-        formData.append('message_attachments[]', file);
+        if (filename) {
+          formData.set('content', filename);
+        }
+        formData.append('message_attachments[]', file, filename || '');
       });
       try {
         conversation(formData).then(() => {
