@@ -26,6 +26,11 @@ Rails.application.routes.draw do
           end
         end
         resources :users, only: %i[index]
+        resources :schedule_messages, only: %i[index update destroy] do
+          member do
+            get :send_now
+          end
+        end
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message
@@ -84,6 +89,8 @@ Rails.application.routes.draw do
         resources :channel_participants, only: %i[create index] do
           collection do
             post :join_public_channel
+            post :mute_channel
+            post :unmute_channel
           end
         end
         resources :draft_messages, only: %i[index create update destroy]

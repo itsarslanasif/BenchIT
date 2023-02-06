@@ -7,35 +7,69 @@
         <div class="spinner"></div>
       </div>
       <div class="sentinel" ref="sentinel"></div>
-      <div v-for="message in messages" :key="message.id" :id="getDate(message.created_at)">
+      <div
+        v-for="message in messages"
+        :key="message.id"
+        :id="getDate(message.created_at)"
+      >
         <div :id="message.id">
           {{ setMessage(message) }}
-          <div v-if="
-            (!isSameDayMessage && !message.parent_message_id) || isFirstMessage
-          ">
-            <n-divider v-if="isToday" class="text-xs relative cursor-pointer" @click="toggleToday">
+          <div
+            v-if="
+              (!isSameDayMessage && !message.parent_message_id) ||
+              isFirstMessage
+            "
+          >
+            <n-divider
+              v-if="isToday"
+              class="text-xs relative cursor-pointer"
+              @click="toggleToday"
+            >
               <div>
                 <p class="date hover:bg-slate-50">
                   {{ $t('chat.today') }}
                 </p>
               </div>
-              <div v-if="jumpToDateTodayToggle" class="absolute top-0 mt-8 w-1/5 z-10">
-                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :today="true" :toggleShow='toggleToday' />
+              <div
+                v-if="jumpToDateTodayToggle"
+                class="absolute top-0 mt-8 w-1/5 z-10"
+              >
+                <JumpToDateVue
+                  :scrollToMessageByDate="scrollToMessageByDate"
+                  :today="true"
+                  :toggleShow="toggleToday"
+                />
               </div>
             </n-divider>
             <n-divider v-else class="text-xs relative cursor-pointer">
-              <p class="date hover:bg-slate-50" @click="toggleNotToday(message)">
+              <p
+                class="date hover:bg-slate-50"
+                @click="toggleNotToday(message)"
+              >
                 {{ new Date(message.created_at).toDateString() }}
               </p>
-              <div v-if="jumpToDateToggle && message.id === selectedMessage.id" class="absolute top-0 mt-8 w-1/5 z-10">
-                <JumpToDateVue :scrollToMessageByDate="scrollToMessageByDate" :toggleShow='toggleNotToday' />
+              <div
+                v-if="jumpToDateToggle && message.id === selectedMessage.id"
+                class="absolute top-0 mt-8 w-1/5 z-10"
+              >
+                <JumpToDateVue
+                  :scrollToMessageByDate="scrollToMessageByDate"
+                  :toggleShow="toggleNotToday"
+                />
               </div>
             </n-divider>
           </div>
-          <n-divider v-if="newMessageFlag && oldestUnreadMessageId === message.id" title-placement="right">
+          <n-divider
+            v-if="newMessageFlag && oldestUnreadMessageId === message.id"
+            title-placement="right"
+          >
             <div class="text-primary">{{ $t('chat.new') }}</div>
           </n-divider>
-          <MessageWrapper v-if="!message.parent_message_id" :currMessage="currMessage" :prevMessage="prevMessage" />
+          <MessageWrapper
+            v-if="!message.parent_message_id"
+            :currMessage="currMessage"
+            :prevMessage="prevMessage"
+          />
         </div>
       </div>
     </div>
@@ -71,7 +105,8 @@ export default {
       timeLimit: 0,
       showSpinner: false,
       newMessageFlag: true,
-      firstMount: true
+      firstMount: true,
+      messageScrolledIntoView: false,
     };
   },
   mounted() {
@@ -105,12 +140,13 @@ export default {
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages, currMessage, hasMoreMessages, newMessageSent } = storeToRefs(messageStore);
+    const { messages, currMessage, hasMoreMessages, newMessageSent } =
+      storeToRefs(messageStore);
     return {
       messages,
       currMessage,
       hasMoreMessages,
-      newMessageSent
+      newMessageSent,
     };
   },
   methods: {
@@ -157,29 +193,29 @@ export default {
     },
     setUpInterSectionObserver() {
       let options = {
-        root: this.$refs["chatBody"],
-        margin: "10px",
+        root: this.$refs['chatBody'],
+        margin: '10px',
       };
       this.listEndObserver = new IntersectionObserver(
         this.handleIntersection,
         options
       );
-      this.listEndObserver.observe(this.$refs["sentinel"]);
+      this.listEndObserver.observe(this.$refs['sentinel']);
     },
     handleIntersection([entry]) {
       if (entry.isIntersecting) {
-        this.recordScrollPosition()
-        this.$emit('load-more-messages')
+        this.recordScrollPosition();
+        this.$emit('load-more-messages');
       }
     },
     recordScrollPosition() {
-      let node = this.$refs["chatBody"];
+      let node = this.$refs['chatBody'];
       this.previousScrollHeightMinusScrollTop =
         node.scrollHeight - node.scrollTop;
     },
     restoreScrollPosition() {
       if (!this.firstMount) {
-        let node = this.$refs["chatBody"];
+        let node = this.$refs['chatBody'];
         node.scrollTop =
           node.scrollHeight - this.previousScrollHeightMinusScrollTop;
       }
@@ -191,24 +227,44 @@ export default {
           chatBody.scrollTop = chatBody.scrollHeight;
           this.newMessageSent = this.firstMount = false;
         }, 0);
-    }
+    },
+    loadAndCheckMessage(message_id) {
+      try {
+        const message = document.getElementById(message_id);
+        message.scrollIntoView();
+        const rect = message.getBoundingClientRect();
+        const viewportWidth = window.innerWidth + window.scrollX;
+        const viewportHeight = window.innerHeight + window.scrollY;
+        const isInViewport =
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= viewportHeight &&
+          rect.right <= viewportWidth;
+        if (isInViewport) {
+          message.scrollIntoView({ block: 'center' });
+          message.classList.add('highlight');
+          this.messageScrolledIntoView = true;
+          return;
+        } else {
+          this.$emit('load-more-messages');
+        }
+      } catch (error) {
+        this.$emit('load-more-messages');
+      }
+    },
   },
   updated() {
     const message_id = this.$route.params.message_id;
 
     if (message_id) {
-      const message = document.getElementById(message_id);
-
-      if (message) {
-        message.classList.add('highlight');
-        message.scrollIntoView();
-        return;
-      }
+      this.loadAndCheckMessage(message_id);
     }
 
-    this.newMessageFlag = false;
-    this.scrollToEnd();
-    this.restoreScrollPosition();
+    if (!this.messageScrolledIntoView) {
+      this.newMessageFlag = false;
+      this.scrollToEnd();
+      this.restoreScrollPosition();
+    }
   },
 };
 </script>
@@ -224,7 +280,7 @@ export default {
 
 @keyframes background-fade {
   0% {
-    background: rgba(253, 245, 221, 255);
+    background: rgba(236, 219, 145, 0.789);
   }
 }
 

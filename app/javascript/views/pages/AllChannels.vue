@@ -22,27 +22,43 @@
             </n-input>
           </form>
         </n-space>
-        <div class="flex items-center py-1 justify-between">
-          <div class="text-small text-gray-900 font-thin">
-            {{ pageInfo.count }} {{ $t('channels.result') }}
+        <div class="flex items-center py-1 justify-between font-light text-small">
+          <div class="text-gray-700">
+            {{ totalResults }}
           </div>
-          <div class="flex gap-2">
-            <div> <n-popselect v-model:value="sortValue" :options="options">
-                <n-button>{{ $t('filters.sort_label') }} {{ selectedLabel }}</n-button>
+          <div class="flex gap-4 items-center">
+            <div class="hover:bg-transparent cursor-pointer"> <i class="fas fa-sort" /> <n-popselect v-model:value="sortValue"
+                :options="options">
+                {{ $t('filters.sort_label') + selectedLabel }}
               </n-popselect></div>
+              <div @click="toggleFilters" class="hover:bg-transparent cursor-pointer">
+                <i class='fas fa-sliders-h' />
+                {{ $t('filters.filter') }}
+              </div>
+              <div @click="resetFilters" v-if="isFiltered()"
+                class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline">
+                {{ $t('filters.reset') }}
+              </div>
+              <div v-show="filterState" @click="toggleFilters" class="rounded hover:bg-transparent cursor-pointer">
+                <i class="fas fa-xmark self-center" />
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="px-5 body-style overflow-y-auto flex flex-col">
-      <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
-      <div v-for="channel in searchedChannels" :key="channel.id">
-        <ChannelList :channelName="channel.name" :channelDescription="channel.description"
-          :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
       </div>
-      <div class="flex justify-center p-3">
-        <n-pagination v-model:page="currentPage" :page-count="pageInfo.pages"
-          :on-update:page="changePage" />
+      <div class="flex body-style overflow-auto">
+        <div class="px-5 h-full w-full flex flex-col overflow-y-auto">
+          <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
+          <div v-for="channel in searchedChannels" :key="channel.id">
+            <ChannelList :channelName="channel.name" :channelDescription="channel.description"
+              :channelParticipants="channel.profiles" :isPrivate="channel.is_private" :channelId="channel.id" />
+          </div>
+          <div class="flex justify-center p-3">
+          <n-pagination :page-count="pageInfo.pages" :on-update:page="changePage" />
+        </div>
+      </div>
+      <div class="flex flex-col p-5 w-1/4" v-show="filterState">
+        <ChannelFilter />
       </div>
     </div>
   </div>
@@ -56,11 +72,13 @@ import { storeToRefs } from 'pinia';
 import ChannelList from '../containers/ChannelList.vue'
 import { SearchOutline } from "@vicons/ionicons5";
 import CreateChannel from '../components/channels/CreateChannel.vue';
+import ChannelFilter from '../containers/ChannelFilter.vue';
 import { CONSTANTS } from '../../assets/constants';
 
 export default {
   components: {
     ChannelList,
+    ChannelFilter,
     CreateChannel,
     NInput,
     NSpace,
@@ -74,20 +92,30 @@ export default {
     const modalOpen = ref(false)
     const channelStore = useChannelStore()
     const sortValue = ref('newest')
-    channelStore.index(term.value, sortValue.value)
-    const { channels, currentPage, pageInfo } = storeToRefs(channelStore)
+    const filterState = ref(false)
+    const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore)
+    channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
+    const { channels, pageInfo } = storeToRefs(channelStore)
     const searchedChannels = computed(() => channels.value)
 
+    const totalResults = computed(() => {
+      return `${pageInfo.value.count ? pageInfo.value.count : 0}  ${CONSTANTS.RESULTS}`
+    })
+
     const handleSubmit = async () => {
-      channelStore.index(term.value, sortValue.value)
+      channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value)
     };
 
     const changePage = (page) => {
-      channelStore.index(term.value, sortValue.value, page)
+      channelStore.index(term.value, sortValue.value, filterChannelsValue.value, hideMyChannels.value, page)
     }
 
     const closeModal = () => {
       modalOpen.value = !modalOpen.value;
+    }
+
+    const toggleFilters = () => {
+      filterState.value = !filterState.value;
     }
 
     const selectedLabel = computed(() => {
@@ -107,8 +135,25 @@ export default {
       }
     })
 
+    const resetFilters = () => {
+      filterChannelsValue.value = ''
+      hideMyChannels.value = false
+    }
+
+    const isFiltered = () => {
+      return filterChannelsValue.value != '' || hideMyChannels.value
+    }
+
     watch(sortValue, async (newValue) => {
-      channelStore.index(term.value, newValue)
+      channelStore.index(term.value, newValue, filterChannelsValue.value, hideMyChannels.value)
+    })
+
+    watch(filterChannelsValue, async (newValue) => {
+      channelStore.index(term.value, sortValue.value, newValue, hideMyChannels.value)
+    })
+
+    watch(hideMyChannels, async (newValue) => {
+      channelStore.index(term.value, sortValue.value, filterChannelsValue.value, newValue)
     })
 
     onBeforeUnmount(() => {
@@ -120,14 +165,18 @@ export default {
       term,
       searchedChannels,
       modalOpen,
+      totalResults,
       SearchOutline,
       handleSubmit,
       closeModal,
       changePage,
       sortValue,
-      currentPage,
       pageInfo,
       selectedLabel,
+      filterState,
+      toggleFilters,
+      resetFilters,
+      isFiltered,
       options: [
         {
           label: CONSTANTS.NEWEST_CHANNELS,
@@ -164,6 +213,6 @@ export default {
 }
 
 .body-style {
-  flex: 0.9;
+  flex: 1;
 }
 </style>

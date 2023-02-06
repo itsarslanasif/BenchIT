@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  require 'sidekiq/api'
   protect_from_forgery with: :exception
 
   around_action :set_locale_from_url

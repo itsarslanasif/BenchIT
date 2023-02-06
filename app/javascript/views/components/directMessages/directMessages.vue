@@ -34,7 +34,7 @@
                   <div
                     v-for="chat in filteredList"
                     :key="chat.id"
-                    @click="goToChat(`/profiles/${chat.id}`)"
+                    @click="goToChat(chat, `/profiles/${chat.id}`)"
                     class="hover:bg-slate-800 p-2 cursor-pointer"
                   >
                     <div class="flex items-center">
@@ -52,7 +52,7 @@
                           style="font-size: 7px; float: left; margin-top: 6px"
                         >
                           {{
-                            chat.isActive ? $t('chat.active') : $t('chat.away')
+                            chat.is_active ? $t('chat.active') : $t('chat.away')
                           }}
                         </span>
                         <p>
@@ -77,7 +77,7 @@
           {{ setMessage(message) }}
           <div v-if="!isSameDayMessage || isFirstMessage">
             <div v-if="isToday" class="text-xs text-white font-bold m-4">
-              <p>{{ $t('messages_section.today') }}</p>
+              <p>{{ $t('chat.today') }}</p>
             </div>
             <div v-else class="text-xs text-white font-bold m-4">
               <p>{{ new Date(message.created_at).toDateString() }}</p>
@@ -118,6 +118,7 @@ import { NAvatar } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import vClickOutside from 'click-outside-vue3';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
@@ -147,6 +148,7 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     const profileStore = useProfileStore();
     const leftPaneStore = useLeftpaneStore();
+    const messageStore = useMessageStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
     const { profiles } = storeToRefs(profileStore);
@@ -155,6 +157,7 @@ export default {
       currentProfile,
       allProfiles: profiles,
       leftPaneStore,
+      messageStore,
     };
   },
   watch: {
@@ -184,6 +187,8 @@ export default {
       this.currMessage = message;
     },
     handleClick(message) {
+      this.messageStore.deleteChannelName();
+      this.messageStore.setSelectedChatUserName(this.getProfileName(message));
       this.$router.push(`/profiles/${message.receiver_id}/${message.id}`);
     },
     firstName(fullname) {
@@ -199,7 +204,8 @@ export default {
     closeSearchModal() {
       this.searchModalToggle = false;
     },
-    goToChat(url) {
+    goToChat(chat, url) {
+      this.messageStore.setSelectedChat(chat);
       this.$router.push(url);
       if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
@@ -211,6 +217,11 @@ export default {
     },
     isMobileView() {
       return window.innerWidth < 1400;
+    },
+    getProfileName(message) {
+      return message.sender_id === this.currentProfile.id
+        ? message.receiver_name
+        : message.sender_name;
     },
   },
   computed: {
