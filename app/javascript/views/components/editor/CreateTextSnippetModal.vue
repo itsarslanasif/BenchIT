@@ -112,7 +112,7 @@ import {
   NForm,
   NFormItem,
 } from 'naive-ui';
-import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
+import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAttachmentStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { getMembers } from '../../../api/members/membersApi';
@@ -211,7 +211,7 @@ export default {
     },
   },
   setup() {
-    const shortcutAttachmentStore = useShortcutAttachmentStore();
+    const shortcutAttachmentStore = useShortcutAndAttachmentStore();
     const { currentWorkspace } = useCurrentWorkspaceStore();
     const { selectedChat } = useMessageStore();
     return {

@@ -40,18 +40,11 @@
           toolbar_location: 'bottom',
           toolbar1:
             'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
-          // toolbar2:
-          //   'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
           setup: editor => {
             editor.ui.registry.addButton('AddAttachments', {
               text: '➕',
               onAction: handleCustomButton,
             });
-
-            // editor.ui.registry.addContextToolbar('toolbar2', {
-            //   predicate: true,
-            //   position: 'bottom',
-            // });
           },
           plugins: ' lists link code codesample ',
 
@@ -125,7 +118,7 @@ import { NMention } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import AttachmentShortCutVue from './Attachment&shortCutModal.vue';
 import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
-import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
+import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAttachmentStore';
 import CreateTextSnippetModal from './createTextSnippetModal.vue';
 
 export default {
@@ -181,7 +174,6 @@ export default {
     const { channels } = storeToRefs(channelStore);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
-    let showAttachments = ref(false);
     const showMentions = ref(false);
     const showChannels = ref(false);
     const hasMentionCommand = ref(false);
@@ -191,7 +183,7 @@ export default {
     const filteredList = ref([]);
     const messageStore = useMessageStore();
     const { selectedChat } = useMessageStore();
-    const attachmentAndShortcutStore = useShortcutAttachmentStore();
+    const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -251,9 +243,9 @@ export default {
 
     const handleCustomButton = () => {
       if (props.isThread) {
-        FilesStore.toggleModalInThread();
+        attachmentAndShortcutStore.toggleModalInThread();
       } else {
-        FilesStore.toggleModalInChat();
+        attachmentAndShortcutStore.toggleModalInChat();
       }
     };
     const message = newMessage => {
@@ -341,7 +333,6 @@ export default {
       messageStore,
       selectedChat,
       handleCustomButton,
-      showAttachments,
       attachmentAndShortcutStore,
     };
   },

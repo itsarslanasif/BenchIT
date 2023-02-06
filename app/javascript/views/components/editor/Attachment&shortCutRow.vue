@@ -9,17 +9,14 @@
 </template>
 
 <script>
-import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
-import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
+import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAttachmentStore';
 import { ref } from 'vue';
 export default {
   props: ['object'],
   setup() {
-    const ShortcutAndAttachmentStore = useShortcutAttachmentStore();
-    const fileStore = useRecentFilesStore();
+    const ShortcutAndAttachmentStore = useShortcutAndAttachmentStore();
     return {
       ShortcutAndAttachmentStore,
-      fileStore,
     };
   },
   data() {
@@ -29,10 +26,10 @@ export default {
   },
   methods: {
     onSelect(object) {
-      if (object.label === 'Create a text snippet') {
+      if (object.label === this.$t('create_text_snippet.create_text_snippet')) {
         this.ShortcutAndAttachmentStore.toggleShowCreateTextSnippitModal();
-        this.fileStore.showModalInThread = false;
-        this.fileStore.showModalInChat = false;
+        this.ShortcutAndAttachmentStore.showModalInThread = false;
+        this.ShortcutAndAttachmentStore.showModalInChat = false;
       }
     },
   },
