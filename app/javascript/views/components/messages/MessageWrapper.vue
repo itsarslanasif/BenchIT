@@ -180,7 +180,13 @@
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
                   />
-                  <div class="ml-12" v-else>
+                  <div
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
+                    v-else
+                  >
                     <font-awesome-icon
                       class="w-10 h-10"
                       icon="fa-solid fa-file"

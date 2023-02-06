@@ -10,7 +10,13 @@
         role="dialog"
         aria-modal="true"
       >
-        <template #header-extra> X </template>
+        <template #header-extra>
+          <font-awesome-icon
+            @click="shortcutAttachmentStore.toggleShowCreateTextSnippitModal"
+            class="cursor-pointer h-5 w-5"
+            icon="fa-solid fa-xmark"
+          />
+        </template>
         <template #footer>
           <n-space class="flex" vertical>
             <p class="">Titial optional</p>
@@ -28,6 +34,7 @@
             <n-checkbox size="small" label="Wrap" />
             <n-input
               v-model:value="value"
+              
               type="textarea"
               placeholder="Add a message, if you'd like."
             />
@@ -143,6 +150,7 @@ export default {
       } else {
         this.sendMessage('FILE', files, 'textFile.txt');
       }
+      this.shortcutAttachmentStore.toggleShowCreateTextSnippitModal();
     },
   },
   setup() {
