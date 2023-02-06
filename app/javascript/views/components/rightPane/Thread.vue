@@ -74,7 +74,7 @@ export default {
     },
   },
   methods: {
-    sendMessage(message, files) {
+    sendMessage(message, files, filename) {
       let formData = new FormData();
       formData.append('sender_id', 1);
       formData.append('content', message);
@@ -83,7 +83,10 @@ export default {
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
       files.forEach(file => {
-        formData.append('message_attachments[]', file);
+        if (filename) {
+          formData.set('content', filename);
+        }
+        formData.append('message_attachments[]', file, filename || '');
       });
       try {
         conversation(formData);
