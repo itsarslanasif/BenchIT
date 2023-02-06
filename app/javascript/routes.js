@@ -18,6 +18,7 @@ import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
+import Threads from './views/pages/Threads.vue';
 import { decryption } from './modules/crypto/crypto';
 import { checkAuth } from './api/user_auth/check_auth';
 
@@ -89,6 +90,11 @@ const router = createRouter({
           path: '/profiles/:id/:message_id?',
           component: Chat,
           name: 'channel-chat',
+        },
+        {
+          path: '/threads',
+          component: Threads,
+          name: 'threads',
         },
         {
           path: '/channels/:id/:message_id?',
@@ -177,19 +183,14 @@ router.beforeEach(async (to, from, next) => {
     if (!authStatus) {
       localStorage.clear();
       sessionStorage.clear();
-      next({ path: '/sign_in', replace: true })
-    }
-    else if (
-      !localStorage.getItem('token') &&
-      !currentWorkspace &&
-      to.meta.auth ||
+      next({ path: '/sign_in', replace: true });
+    } else if (
+      (!localStorage.getItem('token') && !currentWorkspace && to.meta.auth) ||
       !authStatus
     ) {
       next('/sign_in');
     } else if (
-      localStorage.getItem('token') &&
-      !currentWorkspace &&
-      to.meta.auth ||
+      (localStorage.getItem('token') && !currentWorkspace && to.meta.auth) ||
       !authStatus
     ) {
       next('/workspace_dashboard');

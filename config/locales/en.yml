@@ -50,6 +50,7 @@ en:
         find_another_reaction: 'Find another reaction'
         reply_in_thread: 'Reply in thread'
         share_message: 'Share message...'
+        go_to_channel: 'Go to channel'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
       downloadsModal:

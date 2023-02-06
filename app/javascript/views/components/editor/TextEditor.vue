@@ -143,6 +143,9 @@ export default {
     'message',
     'editMessage',
     'editMessageCallBack',
+    'conversationType',
+    'conversationId',
+    'parentMessageId',
   ],
   setup(props) {
     const channelStore = useChannelStore();
@@ -202,7 +205,13 @@ export default {
           messagetext !== '<p> </p>' &&
           !startWithNonBreakSpace
         ) {
-          props.sendMessage(messagetext, files.value);
+          props.sendMessage(
+            messagetext,
+            files.value,
+            props.conversationType,
+            props.conversationId,
+            props.parentMessageId
+          );
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
@@ -230,7 +239,7 @@ export default {
         filterData = messageData.filter(el => el !== '');
         actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
       } else {
-        actuallData = newMessage.value
+        actuallData = newMessage.value;
       }
       return actuallData;
     };

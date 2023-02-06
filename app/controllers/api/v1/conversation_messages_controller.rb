@@ -85,6 +85,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     end.sort_by(&:created_at).reverse
   end
 
+  def threads
+    @threads = Current.profile.conversation_messages
+                      .where.not(parent_message_id: nil)
+                      .select('DISTINCT ON ("parent_message_id") *')
+                      .map(&:parent_message)
+                      .uniq
+  end
+
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
     create_conversation if @conversation.blank?

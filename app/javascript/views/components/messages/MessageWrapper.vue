@@ -88,7 +88,7 @@
                 {{
                   isDeleted
                     ? null
-                    : currMessage.is_info
+                    : currMessage.is_info || fromThreadPage
                     ? time
                     : isSameUser && isSameDayMessage && !isFirstMessage
                     ? timeWithoutAMPM
@@ -245,7 +245,10 @@
         </template>
         <reply-and-thread-button
           v-if="
-            !currMessage.info && currMessage?.replies?.length > 0 && !inThread
+            !currMessage.info &&
+            currMessage?.replies?.length > 0 &&
+            !inThread &&
+            !fromThreadPage
           "
           :currMessage="currMessage"
           :isSameDayMessage="isSameDayMessage"
@@ -282,6 +285,13 @@
             :action="toggleThread"
           />
           <EmojiModalButton
+            v-if="fromThreadPage && !inThread"
+            icon="fa-solid fa-hashtag"
+            :actionText="$t('emojiModalButton.go_to_channel')"
+            :action="goToChannel"
+          />
+          <EmojiModalButton
+            v-else-if="!inThread"
             icon="fa-solid fa-share"
             :actionText="$t('emojiModalButton.share_message')"
           />
@@ -296,6 +306,8 @@
             :action="setOptionsModal"
             :message="currMessage"
             :pinnedConversationStore="pinnedConversationStore"
+            :conversation_type="currMessage.conversationable_type"
+            :conversation_id="currMessage.conversationable_id"
             :setDeleteModal="setDeleteModal"
             :setUnpinModal="setUnpinModal"
           />
@@ -399,7 +411,6 @@ export default {
       currentProfile,
     };
   },
-
   components: {
     NCard,
     NDivider,
@@ -430,6 +441,18 @@ export default {
     inThread: {
       type: Boolean,
       default: false,
+    },
+    fromThreadPage: {
+      type: Boolean,
+      default: false,
+    },
+    conversationType: {
+      type: String,
+      default: undefined,
+    },
+    conversationId: {
+      type: String,
+      default: undefined,
     },
   },
   data() {
@@ -463,9 +486,7 @@ export default {
   },
   computed: {
     time() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
-        'h:mm A'
-      );
+      return moment(new Date(this.currMessage.created_at)).fromNow();
     },
     timeWithoutAMPM() {
       return moment(new Date(this.currMessage.created_at).getTime()).format(
@@ -693,6 +714,31 @@ export default {
 
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
+    },
+
+    isDeleted(content) {
+      return content === this.$t('deleteMessageModal.success');
+    },
+    getConversationType(type) {
+      switch (type) {
+        case 'BenchChannel':
+          return 'channels';
+        case 'Profile':
+          return 'profiles';
+        case 'Group':
+          return 'groups';
+        default:
+          return;
+      }
+    },
+    goToChannel() {
+      console.log(this.conversationType);
+      console.log(this.conversationId);
+      this.$router.push(
+        `${this.getConversationType(this.conversationType)}/${
+          this.conversationId
+        }/${this.currMessage.id}`
+      );
     },
   },
 };

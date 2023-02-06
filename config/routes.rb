@@ -33,6 +33,7 @@ Rails.application.routes.draw do
             get :recent_files
             get :unread_messages
             post :last_messages
+            get :threads
           end
           member do
             post :save_message
