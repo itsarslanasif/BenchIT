@@ -97,7 +97,7 @@ library.add(
   faBars,
   faUserGroup,
   faTrashCan,
-  faMagnifyingGlass
+  faMagnifyingGlass,
   faPen,
   faFilePen,
   faClockRotateLeft
