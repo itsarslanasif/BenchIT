@@ -4,7 +4,7 @@
       <n-card
         style="width: 600px"
         preset="dialog"
-        title="Create snippet "
+        :title="$t('create_text_snippet.create_snippet')"
         :bordered="false"
         size="huge"
         role="dialog"
@@ -25,21 +25,27 @@
               :rules="rules"
               :size="size"
             >
-              <n-form-item label="Titial (optional)" path="Titial">
+              <n-form-item
+                :label="$t('create_text_snippet.title')"
+                path="Titial"
+              >
                 <n-input
                   v-model:value="formValue.title"
                   :maxlength="80"
                   :count-graphemes="countGraphemes"
                   show-count
-                  placeholder="sinippet.txt"
+                  :placeholder="$t('create_text_snippet.title_placeholder')"
                 />
               </n-form-item>
 
-              <n-form-item label="Content" path="content">
+              <n-form-item
+                :label="$t('create_text_snippet.content')"
+                path="content"
+              >
                 <n-input
                   v-model:value="formValue.content"
                   type="textarea"
-                  placeholder="Add content here."
+                  :placeholder="$t('create_text_snippet.content_placeholder')"
                 />
               </n-form-item>
               <n-checkbox
@@ -52,20 +58,20 @@
                 <n-input
                   v-model:value="formValue.message"
                   type="textarea"
-                  placeholder="Add a message, if you'd like."
+                  :placeholder="$t('create_text_snippet.message_placeholder')"
                 />
               </n-form-item>
               <n-checkbox
                 v-model:checked="formValue.share"
                 size="small"
-                label="Share this file"
+                :label="$t('create_text_snippet.share_this_file')"
               />
               <n-form-item path="Titial">
                 <n-select
                   vertical
-                  v-model:value="selectedValues"
+                  v-model:value="selectedUser"
                   filterable
-                  :placeholder="$t('placeholder.add_people_to_channel')"
+                  :placeholder="$t('create_text_snippet.share_with')"
                   :options="options"
                   :loading="loading"
                   clearable
@@ -99,49 +105,38 @@ import {
   NModal,
   NInput,
   NCard,
-  NIcon,
   NSpace,
-  NDivider,
   NCheckbox,
-  NMention,
   NButton,
-  NAvatar,
   NSelect,
   NForm,
   NFormItem,
-  NSwitch,
 } from 'naive-ui';
 import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
-import { ref, h } from 'vue';
-import { getMembers } from '../../../api/members/membersApi';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { getMembers } from '../../../api/members/membersApi';
+import { ref } from 'vue';
+
 export default {
+  props: ['showModal', 'sendMessage'],
   components: {
     NModal,
     NInput,
     NCard,
-    NIcon,
     NSpace,
-    NDivider,
     NCheckbox,
-    NMention,
     NButton,
-    NAvatar,
     NSelect,
     NForm,
     NFormItem,
-    NSwitch,
   },
   data() {
     return {
-      rules: {
-        content: {
-          required: true,
-          message: "content can't be empty",
-          trigger: ['input'],
-        },
-      },
       disableButton: ref(true),
+      loading: false,
+      options: [],
+      selectedUser: null,
       formValue: {
         title: '',
         content: '',
@@ -149,29 +144,29 @@ export default {
         share: true,
         message: '',
       },
-      error: '',
-      share: 'true',
-      lable: 'lable',
-
-      loading: false,
-      options: [],
-      selectedValues: null,
+      rules: {
+        content: {
+          required: true,
+          message: this.$t('create_text_snippet.content_error_message'),
+          trigger: ['input'],
+        },
+      },
     };
   },
   watch: {
     formValue: {
       handler(newValue) {
-        if (newValue.content != '') {
-          this.disableButton = false;
-        } else {
-          this.disableButton = true;
-        }
+        this.disableButton =
+          newValue.content === '' ||
+          (newValue.title !== '' && !newValue.title.includes('.txt'))
+            ? true
+            : false;
       },
       deep: true,
     },
   },
   mounted() {
-    this.selectedValues = this.selectedChat.username || this.selectedChat.name;
+    this.selectedUser = this.selectedChat.username || this.selectedChat.name;
     this.getMembersList('');
   },
   methods: {
@@ -187,7 +182,7 @@ export default {
       }, 1e3);
     },
     async getMembersList(query) {
-      let options = await getMembers(1, query);
+      let options = await getMembers(this.currentWorkspace.id, query);
       this.options = options.map(option => {
         return {
           label: option.username,
@@ -200,28 +195,30 @@ export default {
       this.value = '';
     },
     createTextFile() {
+      const fileTitle =
+        this.formValue.title !== ''
+          ? this.formValue.title
+          : this.$t('create_text_snippet.text_file_txt');
       const textFile = new Blob([this.formValue.content], {
-        type: 'text/plain',
+        type: this.$t('create_text_snippet.text_plain'),
       });
       const files = [textFile];
+
       if (this.formValue.share) {
-        if (this.formValue.title !== '') {
-          this.sendMessage('FILE', files, this.formValue.title);
-        } else {
-          this.sendMessage('FILE', files, 'textFile.txt');
-        }
+        this.sendMessage('file', files, fileTitle);
       }
       this.shortcutAttachmentStore.toggleShowCreateTextSnippitModal();
     },
   },
   setup() {
     const shortcutAttachmentStore = useShortcutAttachmentStore();
+    const { currentWorkspace } = useCurrentWorkspaceStore();
     const { selectedChat } = useMessageStore();
     return {
       shortcutAttachmentStore,
       selectedChat,
+      currentWorkspace,
     };
   },
-  props: ['showModal', 'sendMessage'],
 };
 </script>
