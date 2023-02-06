@@ -31,7 +31,6 @@ export const useSearchStore = () => {
       }
     },
   });
-  const store = searchStore();
-
-  return store;
+  
+  return searchStore();
 };
