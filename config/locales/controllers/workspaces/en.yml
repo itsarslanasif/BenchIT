@@ -1,0 +1,6 @@
+en:
+  api:
+    v1:
+      workspaces:
+        invite:
+          error: User already has profile in this workspace.

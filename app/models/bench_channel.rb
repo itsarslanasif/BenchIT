@@ -21,6 +21,15 @@ class BenchChannel < ApplicationRecord
       { profile_id: Current.profile, workspace_id: Current.workspace, is_private: true }
     ).distinct
   }
+  scope :get_private_channels, lambda {
+    where(is_private: true).joins(:channel_participants).where(channel_participants: { profile: Current.profile })
+  }
+  scope :get_public_channels, lambda {
+    where(is_private: false)
+  }
+  scope :hide_participated_channels, lambda { |ids|
+    where(is_private: false).where.not(id: ids)
+  }
 
   searchkick word_start: [:name, :description]
   def search_data
@@ -33,6 +42,14 @@ class BenchChannel < ApplicationRecord
 
   def participant?(profile)
     channel_participants.exists?(profile: profile)
+  end
+
+  def self.reject_unjoined_privated_channels(bench_channels)
+    @bench_channels = bench_channels.reject do |channel|
+      channel.is_private && !channel.participant?(Current.profile)
+    end
+
+    @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
   end
 
   def bench_channel_content

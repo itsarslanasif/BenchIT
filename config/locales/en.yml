@@ -104,7 +104,17 @@ en:
       search_bar:
         people: 'People'
         channels: 'Channels'
+        messages: 'Messages'
+        profiles: 'Profiles'
+        groups: 'Groups'
+        from: 'from'
+        profile_attr: 'Profile'
+        channel_attr: 'BenchChannel'
+        message_attr: 'ConversationMessage'
         tagline: "I'm looking for"
+      search:
+        result_for: 'Search result for'
+        no_result: 'Sorry! No result found.'
       conversation:
         channel: 'BenchChannel'
         profile: 'Profile'
@@ -155,6 +165,9 @@ en:
           bear in mind you’ll have to supply both sides of the conversation.'
         this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
           messages and share files with"
+      conversation_type:
+        profile: 'Profile'
+        channel: 'BenchChannel'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
@@ -182,6 +195,9 @@ en:
         save_message: 'Save items'
       channels:
         channels: 'Channels'
+        public_channels: 'Public Channels'
+        private_channels: 'Private Channels'
+        archived_channels: 'Archived Channels'
         add_new_channel: 'Add new channel'
         search_by_name_or_desc: 'Search by channel name or description'
         all_channels: 'All channels'
@@ -251,6 +267,14 @@ en:
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
         save_changes: 'Save Changes'
+      schedule:
+        title: 'Schedule message'
+        tomorrow: 'Tomorrow at 9:00 AM'
+        next_monday: 'Next Monday at 9:00 AM'
+        custom_time: 'Custom time'
+        description: "Schedule messages to be sent at a later time, or another day altogether. They’ll wait here until they’re delivered"
+        title: 'Write now, send later'
+        error: 'Date cannot be set to past'
       members:
         search_by_name: 'Search By Name'
         add_members_modal_title: 'Add members to'
@@ -272,6 +296,7 @@ en:
         active: 'Active'
         away: 'Away'
       filters:
+        filter: 'Filter'
         all_types: 'All types'
         owners: 'Owners'
         admins: 'Admins'
@@ -289,6 +314,13 @@ en:
         sort: 'Sort'
         sort_label: 'Sort:'
         account_type: 'Account Type'
+        channel_type: 'Channel Type'
+        more_options: 'More Options:'
+        hide_my_channels: 'Hide My Channels'
+        public: 'public'
+        private: 'private'
+        archived: 'archived'
+        reset: 'Reset'
         filter_label: 'Filter:'
       profilestatus:
         what_is_your_status: 'Whats your status?'

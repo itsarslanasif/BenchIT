@@ -82,6 +82,9 @@ export default {
           this.description
         ).then(response => {
           this.response = response;
+          if (response.status == 200) {
+            this.$router.push('/workspace_dashboard');
+          }
         });
       } catch (e) {
         console.error(e);

@@ -63,7 +63,7 @@ export default {
       default: ''
     },
     channelId: {
-      type: String,
+      type: Number,
       default: ''
     },
     channelParticipants: {

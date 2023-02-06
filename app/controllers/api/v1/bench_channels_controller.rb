@@ -9,16 +9,15 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channels = Current.workspace.bench_channels
 
     if params[:query].present?
-      search_results = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
-                                                           match: :word_start)
-      @bench_channels = BenchChannel.where(id: search_results.map(&:id))
+      @bench_channels = BenchChannel.search(params[:query], where: { workspace_id: Current.workspace.id },
+                                                            match: :word_start)
+      @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
     end
+
+    filter_bench_channels
+    hide_profile_bench_channels
     sort_bench_channels if params[:sort_by].present?
     paginate_bench_channels
-
-    @bench_channels = @bench_channels.reject do |channel|
-      channel.is_private && !channel.participant?(Current.profile)
-    end
   end
 
   def show; end
@@ -114,6 +113,23 @@ class Api::V1::BenchChannelsController < Api::ApiController
     raise 'Invalid sort_by parameter' unless sort_methods.key?(params[:sort_by])
 
     sort_methods[params[:sort_by]].call
+  end
+
+  def filter_bench_channels
+    return if params[:filter].blank?
+
+    @bench_channels = case params[:filter]
+                      when 'private'
+                        @bench_channels.get_private_channels
+                      when 'public'
+                        @bench_channels.get_public_channels
+                      end
+  end
+
+  def hide_profile_bench_channels
+    @bench_channels = @bench_channels.hide_participated_channels(Current.profile.bench_channel_ids) if params[:hide_my_channels].eql?('true')
+
+    @bench_channels = BenchChannel.reject_unjoined_privated_channels(@bench_channels)
   end
 
   def paginate_bench_channels

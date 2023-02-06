@@ -4,6 +4,7 @@ import AllChannels from './views/pages/AllChannels.vue';
 import NewWorkspace from '@/views/components/workspace/NewWorkspace.vue';
 import JoinWorkspace from '@/views/components/workspace/JoinWorkspace.vue';
 import Members from '@/views/components/members/members.vue';
+import AllSearches from '@/views/components/search/AllSearches.vue';
 import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
@@ -12,8 +13,10 @@ import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
 import Homepage from './views/pages/Homepage.vue';
 import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue';
+import DraftMessages from './views/components/draftsAndSent/DraftMessages.vue'
 import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue';
 import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue';
+import ScheduleMessages from './views/components/schedule/ScheduleMessages.vue'
 import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
@@ -45,9 +48,6 @@ const router = createRouter({
       path: '/join_workspace/:workspace_id',
       component: JoinWorkspace,
       name: 'join_workspace',
-      meta: {
-        auth: true,
-      },
     },
     {
       path: '/invite_user',
@@ -82,6 +82,14 @@ const router = createRouter({
           path: '/members',
           component: Members,
           name: 'members',
+          meta: {
+            auth: true,
+          },
+        },
+        {
+          path: '/search',
+          component: AllSearches,
+          name: 'search',
           meta: {
             auth: true,
           },
@@ -128,9 +136,28 @@ const router = createRouter({
           },
           children: [
             {
+              path: '/drafts_sent_messages',
+              component: DraftMessages,
+              name: 'draft-messages',
+              meta: {
+                auth: true,
+              },
+            },
+            {
               path: '/recently_sent_messages',
               component: RecentlySentMessages,
               name: 'recently-sent-messages',
+              meta: {
+                auth: true,
+              },
+            },
+            {
+              path: '/schedule_messages',
+              component: ScheduleMessages,
+              name: 'schedule-messages',
+              meta: {
+                auth: true,
+              },
             },
           ],
         },

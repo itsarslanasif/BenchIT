@@ -73,6 +73,7 @@ export default {
     const threadStore = useThreadStore();
     const pinnedConversationStore = usePinnedConversation();
     const messageStore = useMessageStore();
+    const targetMessage = null;
     return {
       rightPaneStore,
       userProfileStore,
@@ -80,6 +81,7 @@ export default {
       pinnedConversationStore,
       threadStore,
       messageStore,
+      targetMessage
     };
   },
   props: ['currMessage'],
@@ -105,8 +107,8 @@ export default {
       this.userProfileStore.setUserProfile(profile);
     },
 
-    getConversationId() {
-      return window.location.pathname.split('/')[2];
+    getIndexByParams(param) {
+      return window.location.pathname.split('/')[param];
     },
 
     toggleThread() {
@@ -116,38 +118,50 @@ export default {
 
     jumpToConversation() {
       this.pinnedConversationStore.showAlert = false;
-
       switch (this.currMessage.conversationable_type) {
         case 'BenchChannel':
           this.checkForThreadedMessage(this.currMessage);
           this.$router.push(
-            `/channels/${this.getConversationId()}/${this.currMessage.id}`
+            `/channels/${this.getIndexByParams(2)}/${this.currMessage.id}`
           );
           break;
         case 'Profile':
           this.checkForThreadedMessage(this.currMessage);
           this.$router.push(
-            `/profiles/${this.getConversationId()}/${this.currMessage.id}`
+            `/profiles/${this.getIndexByParams(2)}/${this.currMessage.id}`
           );
           break;
         case 'Group':
           this.checkForThreadedMessage(this.currMessage);
           this.$router.push(
-            `/groups/${this.getConversationId()}/${this.currMessage.id}`
+            `/groups/${this.getIndexByParams(2)}/${this.currMessage.id}`
           );
           break;
       }
     },
 
-    checkForThreadedMessage(message) {
+    async loadMoreMessages() {
+      await this.messageStore.index(this.getIndexByParams(1), this.getIndexByParams(2));
+    },
+
+    async findParentMessage(id) {
+      this.targetMessage = this.messageStore.getMessage(id)
+      if (!this.targetMessage) {
+         await this.loadMoreMessages()
+         await this.findParentMessage(id)
+      }
+    },
+
+   async checkForThreadedMessage(message) {
       if (message.parent_message_id) {
         if (this.rightPaneStore.showThread) {
           this.rightPaneStore.toggleThreadShow(false);
         }
-        this.threadStore.setMessage(
-          this.messageStore.getMessage(message.parent_message_id)
-        );
-        this.rightPaneStore.toggleThreadShow(true);
+        await this.findParentMessage(message.parent_message_id)
+        if (this.targetMessage) {
+           this.threadStore.setMessage(this.targetMessage)
+           this.rightPaneStore.toggleThreadShow(true);
+        }
       }
     },
 
