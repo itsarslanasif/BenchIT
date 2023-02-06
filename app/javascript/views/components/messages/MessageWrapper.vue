@@ -732,8 +732,6 @@ export default {
       }
     },
     goToChannel() {
-      console.log(this.conversationType);
-      console.log(this.conversationId);
       this.$router.push(
         `${this.getConversationType(this.conversationType)}/${
           this.conversationId

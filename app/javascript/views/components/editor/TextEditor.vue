@@ -93,7 +93,10 @@
             @click="sendMessagePayload($event, true)"
             class="px-2 my-4 rounded-md text-white"
           >
-          <font-awesome-icon icon="fa-check" class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"/>
+            <font-awesome-icon
+              icon="fa-check"
+              class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"
+            />
           </button>
         </div>
         <div v-else>
@@ -144,8 +147,8 @@ export default {
     }
   },
   mounted() {
-    if (this.isEditScheduled()){
-      this.newMessage = this.messageToEdit.content
+    if (this.isEditScheduled()) {
+      this.newMessage = this.messageToEdit.content;
     }
   },
   components: {
@@ -165,14 +168,26 @@ export default {
       type: Boolean,
     },
     editMessageCallBack: {
-      type: Function
+      type: Function,
     },
     editMessage: {
-      type: Boolean
+      type: Boolean,
     },
     message: {
-      type: Object
-    }
+      type: Object,
+    },
+    fromThreads: {
+      type: Boolean,
+    },
+    conversationType: {
+      type: String,
+    },
+    conversationId: {
+      type: Number,
+    },
+    parentMessageId: {
+      type: Number,
+    },
   },
   computed: {
     getPlaceholder() {
@@ -195,16 +210,6 @@ export default {
         : false;
     },
   },
-  props: [
-    'sendMessage',
-    'isThread',
-    'message',
-    'editMessage',
-    'editMessageCallBack',
-    'conversationType',
-    'conversationId',
-    'parentMessageId',
-  ],
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
@@ -271,14 +276,15 @@ export default {
           messagetext !== '<p> </p>' &&
           !startWithNonBreakSpace
         ) {
-          props.sendMessage(
-            messagetext,
-            files.value,
-            schedule,
-            props.conversationType,
-            props.conversationId,
-            props.parentMessageId
-          );
+          props.fromThreads
+            ? props.sendMessage(
+                messagetext,
+                files.value,
+                props.conversationType,
+                props.conversationId,
+                props.parentMessageId
+              )
+            : props.sendMessage(messagetext, files.value, schedule);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
@@ -298,21 +304,25 @@ export default {
       if (isEditScheduled()) {
         messageStore.reEditScheduledMessage({
           content: newMessage,
-          id: messageToEdit.scheduledId
-        })
-        newMessage = ''
+          id: messageToEdit.scheduledId,
+        });
+        newMessage = '';
       } else {
         sendMessagePayload(event);
       }
-    }
+    };
 
     const handleCancelEdit = () => {
       messageStore.removeMessageToEdit();
-    }
+    };
 
     const isEditScheduled = () => {
-      return messageToEdit.content && messageToEdit.isScheduled && messageToEdit.scheduledId
-    }
+      return (
+        messageToEdit.content &&
+        messageToEdit.isScheduled &&
+        messageToEdit.scheduledId
+      );
+    };
 
     const message = newMessage => {
       let messageData;

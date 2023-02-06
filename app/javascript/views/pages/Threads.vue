@@ -51,6 +51,7 @@
             <TextEditor
               :isThread="true"
               :sendMessage="sendMessage"
+              :fromThreads="true"
               :conversationType="currMessage.conversationable_type"
               :conversationId="currMessage.conversationable_id"
               :parentMessageId="currMessage.id"
@@ -120,17 +121,6 @@ export default {
       this.prevMessage = this.currMessage;
       this.currMessage = message;
     },
-    goToChat(chat, url) {
-      this.messageStore.setSelectedChat(chat);
-      this.$router.push(url);
-      if (this.isMobileView()) {
-        this.leftPaneStore.closeLeftPane();
-      }
-      this.closeSearchModal();
-    },
-    isMobileView() {
-      return window.innerWidth < 1400;
-    },
     getConversationType(type) {
       switch (type) {
         case 'BenchChannel':
@@ -170,6 +160,11 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    removeDuplicates(list) {
+      return list.filter(
+        (item, index, newList) => newList.indexOf(item) === index
+      );
     },
   },
   computed: {
@@ -218,22 +213,23 @@ export default {
         let participants = [this.currMessage.sender_name];
         this.currMessage.replies?.forEach(reply => {
           if (!participants.includes(reply.sender_name)) {
-            if (reply.sender_name === this.currentProfile.username) {
+            if (reply.sender_id === this.currentProfile.id) {
               participants.push('You');
             } else {
               participants.push(reply.sender_name);
             }
           }
         });
+        participants = this.removeDuplicates(participants);
         switch (participants.length) {
           case 1:
             return CONSTANTS.JUST_YOU;
           case 2:
             return `${participants[0]} ${CONSTANTS.AND} ${participants[1]}`;
           default:
-            return `${participants[0]}${CONSTANTS.COMMA} ${participants[1]}${CONSTANTS.COMMA} ${CONSTANTS.AND} ${
-              participants.length - 3
-            } ${CONSTANTS.OTHERS}`;
+            return `${participants[0]}${CONSTANTS.COMMA} ${participants[1]}${
+              CONSTANTS.COMMA
+            } ${CONSTANTS.AND} ${participants.length - 2} ${CONSTANTS.OTHERS}`;
         }
       }
       return '';

@@ -95,7 +95,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                       .where.not(parent_message_id: nil)
                       .select('DISTINCT ON ("parent_message_id") *')
                       .map(&:parent_message)
-                      .uniq
+                      .uniq.sort_by(&:created_at).reverse
   end
 
   def profile_messages
