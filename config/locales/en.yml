@@ -103,7 +103,17 @@ en:
       search_bar:
         people: 'People'
         channels: 'Channels'
+        messages: 'Messages'
+        profiles: 'Profiles'
+        groups: 'Groups'
+        from: 'from'
+        profile_attr: 'Profile'
+        channel_attr: 'BenchChannel'
+        message_attr: 'ConversationMessage'
         tagline: "I'm looking for"
+      search:
+        result_for: 'Search result for'
+        no_result: 'Sorry! No result found.'
       conversation:
         channel: 'BenchChannel'
         profile: 'Profile'

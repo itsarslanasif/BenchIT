@@ -44,6 +44,7 @@ import {
   faBars,
   faUserGroup,
   faTrashCan,
+  faMagnifyingGlass,
   faPen,
   faFilePen,
   faClockRotateLeft,
@@ -96,6 +97,7 @@ library.add(
   faBars,
   faUserGroup,
   faTrashCan,
+  faMagnifyingGlass,
   faPen,
   faFilePen,
   faClockRotateLeft
