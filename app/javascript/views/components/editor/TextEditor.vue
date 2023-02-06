@@ -4,6 +4,9 @@
       :isThread="isThread"
       class="margintop absolute z-10"
     />
+    <CreateTextSnippetModal
+      :showModal="attachmentAndShortcutStore.showCreateTextSnippitModal"
+    />
     <div
       v-if="showMentions || showChannels"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -121,6 +124,8 @@ import { NMention } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import AttachmentShortCutVue from './Attachment&shortCutModal.vue';
 import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
+import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
+import CreateTextSnippetModal from './createTextSnippetModal.vue';
 
 export default {
   beforeMount() {
@@ -133,6 +138,7 @@ export default {
     Attachments,
     NMention,
     AttachmentShortCutVue,
+    CreateTextSnippetModal,
   },
   methods: {
     handleCancelEdit() {
@@ -184,6 +190,7 @@ export default {
     const filteredList = ref([]);
     const messageStore = useMessageStore();
     const { selectedChat } = useMessageStore();
+    const attachmentAndShortcutStore = useShortcutAttachmentStore();
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -334,6 +341,7 @@ export default {
       selectedChat,
       handleCustomButton,
       showAttachments,
+      attachmentAndShortcutStore,
     };
   },
 };

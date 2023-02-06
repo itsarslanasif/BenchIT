@@ -9,11 +9,25 @@
 </template>
 
 <script>
+import { useShortcutAttachmentStore } from '../../../stores/useShortcut&AttachmentStore';
+import { ref } from 'vue';
 export default {
   props: ['object'],
+  setup() {
+    const ShortcutAndAttachmentStore = useShortcutAttachmentStore();
+    return {
+      ShortcutAndAttachmentStore,
+    };
+  },
+  data() {
+    return {
+      showModal: ref(false),
+    };
+  },
   methods: {
     onSelect(object) {
       if (object.label === 'Create a text snippet') {
+        this.ShortcutAndAttachmentStore.toggleShowCreateTextSnippitModal();
       }
     },
   },
