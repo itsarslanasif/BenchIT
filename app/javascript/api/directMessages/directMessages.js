@@ -1,9 +1,9 @@
 import axios from '../../modules/axios/index';
 import { getHeaders } from '../../modules/auth';
 
-export const getDirectMessagesList = async id => {
+export const getDirectMessagesList = async () => {
   return axios
-    .get(`v1/workspaces/${id}/profiles/previous_direct_messages`, {
+    .get(`v1/dm_lists`, {
       headers: getHeaders(),
     })
     .then(response => {
@@ -11,11 +11,10 @@ export const getDirectMessagesList = async id => {
     });
 };
 
-export const getLastDirectMessagesList = async dmIDs => {
+export const getLastDirectMessagesList = async () => {
   return axios
     .post(
-      `v1/conversation_messages/last_messages`,
-      { dm_ids: dmIDs },
+      `v1/dm_lists/last_messages`,
       {
         headers: getHeaders(),
       }
