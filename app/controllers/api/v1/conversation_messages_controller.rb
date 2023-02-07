@@ -93,6 +93,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
     create_conversation if @conversation.blank?
+    @current_profile.dm_lists.create(receiver_id: @receiver.id)
     paginate_messages
   end
 

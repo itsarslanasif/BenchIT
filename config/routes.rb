@@ -86,6 +86,7 @@ Rails.application.routes.draw do
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
+        resources :dm_lists, only: %i[index destroy]
         resources :channel_participants, only: %i[create index] do
           collection do
             post :join_public_channel
