@@ -37,7 +37,6 @@
                   :placeholder="$t('create_text_snippet.title_placeholder')"
                 />
               </n-form-item>
-
               <n-form-item
                 :label="$t('create_text_snippet.content')"
                 path="content"
@@ -203,7 +202,6 @@ export default {
         type: this.$t('create_text_snippet.text_plain'),
       });
       const files = [textFile];
-
       if (this.formValue.share) {
         this.sendMessage(fileTitle, files);
       }

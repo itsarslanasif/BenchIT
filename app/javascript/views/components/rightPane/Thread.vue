@@ -84,8 +84,7 @@ export default {
         : `${count} ${CONSTANTS.REPLY}`;
     },
     replyExist() {
-      let count = this.threadStore.message.replies.length;
-      return count > 1 ? true : false;
+      return this.threadStore.message.replies.length > 1;
     },
   },
   methods: {

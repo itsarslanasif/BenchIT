@@ -33,10 +33,15 @@
             class="flex gap-2 mt-2 border rounded-xl border-black-300 p-3 cursor-zoomin"
             @click="openInNewTab(attachment.attachment_link)"
           >
-            <img
-              :src="attachment.attachment_link"
-              class="rounded-md border-black-400 border object-cover h-12 w-12"
-            />
+            <div v-if="isTxtFile(attachment.attachment_link)">
+              <font-awesome-icon class="w-10 h-10" icon="fa-solid fa-file" />
+            </div>
+            <div v-else>
+              <img
+                :src="attachment.attachment_link"
+                class="rounded-md border-black-400 border object-cover h-12 w-12"
+              />
+            </div>
             <div class="ml-2 flex flex-col">
               <span class="font-semibold text-sm text-black-800">
                 {{ attachment.attachment.filename }}
@@ -81,7 +86,7 @@ export default {
       pinnedConversationStore,
       threadStore,
       messageStore,
-      targetMessage
+      targetMessage,
     };
   },
   props: ['currMessage'],
@@ -109,6 +114,11 @@ export default {
 
     getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
+    },
+
+    isTxtFile(url) {
+      const fileExtension = url.split('/').pop().split('.').pop();
+      return fileExtension === 'txt';
     },
 
     toggleThread() {
@@ -141,26 +151,29 @@ export default {
     },
 
     async loadMoreMessages() {
-      await this.messageStore.index(this.getIndexByParams(1), this.getIndexByParams(2));
+      await this.messageStore.index(
+        this.getIndexByParams(1),
+        this.getIndexByParams(2)
+      );
     },
 
     async findParentMessage(id) {
-      this.targetMessage = this.messageStore.getMessage(id)
+      this.targetMessage = this.messageStore.getMessage(id);
       if (!this.targetMessage) {
-         await this.loadMoreMessages()
-         await this.findParentMessage(id)
+        await this.loadMoreMessages();
+        await this.findParentMessage(id);
       }
     },
 
-   async checkForThreadedMessage(message) {
+    async checkForThreadedMessage(message) {
       if (message.parent_message_id) {
         if (this.rightPaneStore.showThread) {
           this.rightPaneStore.toggleThreadShow(false);
         }
-        await this.findParentMessage(message.parent_message_id)
+        await this.findParentMessage(message.parent_message_id);
         if (this.targetMessage) {
-           this.threadStore.setMessage(this.targetMessage)
-           this.rightPaneStore.toggleThreadShow(true);
+          this.threadStore.setMessage(this.targetMessage);
+          this.rightPaneStore.toggleThreadShow(true);
         }
       }
     },

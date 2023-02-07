@@ -173,8 +173,20 @@
                 :show-arrow="false"
               >
                 <template #trigger>
+                  <div
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
+                    v-if="isTxtFile(attachment.attachment_link)"
+                  >
+                    <font-awesome-icon
+                      class="w-10 h-10"
+                      icon="fa-solid fa-file"
+                    />
+                  </div>
                   <img
-                    v-if="isImage(attachment.attachment_link)"
+                    v-else
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -182,18 +194,6 @@
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
                   />
-                  <div
-                    :class="{
-                      'ml-12':
-                        isSameUser && isSameDayMessage && !isFirstMessage,
-                    }"
-                    v-else
-                  >
-                    <font-awesome-icon
-                      class="w-10 h-10"
-                      icon="fa-solid fa-file"
-                    />
-                  </div>
                 </template>
                 <a :href="attachment.attachment_download_link" download>
                   <span class="mr-3" @click="downloadFile(attachment)">
@@ -546,9 +546,9 @@ export default {
     },
   },
   methods: {
-    isImage(url) {
+    isTxtFile(url) {
       const fileExtension = url.split('/').pop().split('.').pop();
-      return fileExtension !== 'txt';
+      return fileExtension === 'txt';
     },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));

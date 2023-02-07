@@ -10,7 +10,7 @@
     <n-card
       :bordered="false"
       size="huge"
-      class="border shadow border-black-300"
+      class="border shadow-xl border-black-300"
       style="width: 400px"
     >
       <template #header>
@@ -21,7 +21,7 @@
             focus="true"
             v-model:value="searchInputField"
             @keyup="handleSubmit(searchInputField, sortValue)"
-            :placeholder="$t('create_text_snippet.search_shortchuts')"
+            :placeholder="$t('create_text_snippet.search_shortcuts')"
           >
             <template #prefix>
               <n-icon :component="SearchOutline" />
@@ -29,20 +29,19 @@
           </n-input>
         </n-space>
       </template>
-
       <template #footer>
         <span class="text-black-500">{{
-          $t('create_text_snippet.Sortcuts')
+          $t('create_text_snippet.shortcuts')
         }}</span>
         <div v-for="option in shortcutOptions" :key="option.key">
-          <AttachmentShortCutRow :object="option" />
+          <AttachmentShortCutRow :shortcut="option" />
         </div>
         <hr class="my-2 text-black-500" />
         <span class="text-black-500">{{
           $t('create_text_snippet.attachments')
         }}</span>
         <div v-for="option in AttachmentOptions" :key="option.key">
-          <AttachmentShortCutRow :object="option" />
+          <AttachmentShortCutRow :shortcut="option" />
         </div>
       </template>
     </n-card>
@@ -122,9 +121,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.shadow {
-  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 3px 15px 0 rgba(0, 0, 0, 0.19);
-}
-</style>
