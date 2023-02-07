@@ -111,6 +111,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_115635) do
     t.integer "receiver_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["receiver_id", "profile_id"], name: "index_dm_lists_on_receiver_id_and_profile_id", unique: true
   end
 
   create_table "downloads", force: :cascade do |t|

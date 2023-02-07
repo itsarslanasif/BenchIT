@@ -5,5 +5,6 @@ class CreateDmLists < ActiveRecord::Migration[7.0]
       t.integer :receiver_id, null: false
       t.timestamps
     end
+    add_index :dm_lists, [:receiver_id, :profile_id], unique: true
   end
 end

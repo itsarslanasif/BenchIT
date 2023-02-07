@@ -29,7 +29,7 @@ class Api::V1::DmListsController < Api::ApiController
 
   def set_dm
     @dm = @current_profile.dm_lists.find_by(receiver_id: params[:id])
-    render json: {message: t('.not_found') }, status: :not_found if @dm.nil?
+    render json: { message: t('.not_found') }, status: :not_found if @dm.nil?
   end
 
   def set_dm_list
