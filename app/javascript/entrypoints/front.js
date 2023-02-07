@@ -44,12 +44,15 @@ import {
   faBars,
   faUserGroup,
   faTrashCan,
+  faMagnifyingGlass,
+  faPen,
+  faFilePen,
+  faClockRotateLeft,
   faHardDrive,
   faFileLines,
   faPenToSquare,
   faEllipsis,
-  faBoltLightning
-
+  faBoltLightning,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -99,6 +102,10 @@ library.add(
   faBars,
   faUserGroup,
   faTrashCan,
+  faMagnifyingGlass,
+  faPen,
+  faFilePen,
+  faClockRotateLeft,
   faFileLines,
   faHardDrive,
   faPenToSquare,

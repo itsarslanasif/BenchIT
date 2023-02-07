@@ -19,11 +19,13 @@
       </n-divider>
       <template v-if="threadStore.message.replies">
         <template v-for="reply in threadStore.message.replies" :key="reply.id">
-          <MessageWrapper
-            :id="reply.id"
-            :inThread="true"
-            :curr-message="reply"
-          />
+          <div :id="reply.id">
+            <MessageWrapper
+              :id="reply.id"
+              :inThread="true"
+              :curr-message="reply"
+            />
+          </div>
         </template>
       </template>
     </div>
@@ -87,7 +89,7 @@ export default {
     },
   },
   methods: {
-    sendMessage(message, files, filename) {
+    sendMessage(message, files) {
       let formData = new FormData();
       formData.append('sender_id', 1);
       formData.append('content', message);
@@ -96,10 +98,7 @@ export default {
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
       files.forEach(file => {
-        if (filename) {
-          formData.set('content', filename);
-        }
-        formData.append('message_attachments[]', file, filename || '');
+        formData.append('message_attachments[]', file, message);
       });
       try {
         conversation(formData);
@@ -107,6 +106,14 @@ export default {
         console.error(e);
       }
     },
+  },
+  mounted() {
+    const message_id = this.$route.params.message_id;
+    if (message_id) {
+      const message = document.getElementById(message_id);
+      message.scrollIntoView({ block: 'center' });
+      message.classList.add('highlight');
+    }
   },
 };
 </script>
@@ -124,7 +131,7 @@ export default {
 
 @keyframes background-fade {
   0% {
-    background: rgba(253, 245, 221, 255);
+    background: rgba(236, 219, 145, 0.789);
   }
 }
 </style>

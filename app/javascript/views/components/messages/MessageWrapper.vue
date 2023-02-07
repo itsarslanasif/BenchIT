@@ -2,7 +2,7 @@
   <div
     class="py-1"
     :class="{
-      'bg-yellow-50': currMessage.isSaved,
+      'bg-yellow-50': isSavedMessage,
     }"
   >
     <div v-if="!currMessage.info && currMessage.pinned">
@@ -14,10 +14,7 @@
         {{ currMessage.pin.pinned_by }}
       </span>
     </div>
-    <div
-      v-if="isSavedMessage(currMessage)"
-      class="flex ml-4 items-center bg-yellow-50"
-    >
+    <div v-if="isSavedMessage" class="flex ml-4 items-center bg-yellow-50">
       <i class="far fa-bookmark text-red-500"></i>
       <p class="ml-2">{{ $t('actions.save_items') }}</p>
     </div>
@@ -29,7 +26,7 @@
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
-      <template v-if="isDeleted(currMessage.content)">
+      <template v-if="isDeleted">
         <div
           class="h-10 w-10 min-w-10 mr-1 ml-1 bg-black-200 text-center rounded flex justify-center items-center"
         >
@@ -45,7 +42,7 @@
             !isSameDayMessage ||
             isFirstMessage ||
             currMessage.is_info) &&
-          currMessage.content !== $t('deleteMessageModal.success')
+          !isDeleted
         "
       >
         <user-profile-modal
@@ -63,27 +60,35 @@
                   !isSameDayMessage ||
                   isFirstMessage ||
                   currMessage.is_info) &&
-                currMessage.content !== $t('deleteMessageModal.success')
+                !isDeleted
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
               <b>{{ currMessage.sender_name }}</b>
             </p>
             <span
-              v-if="isDeleted(currMessage.content)"
               :class="{
-                'flex w-12': isSameUser && isSameDayMessage && !isFirstMessage,
+                'flex w-12':
+                  !isDeleted &&
+                  isSameUser &&
+                  isSameDayMessage &&
+                  !isFirstMessage,
               }"
             >
               <p
-                class="text-xs ml-1 mr-3 text-black-500 hover:underline cursor-pointer"
+                class="text-xs ml-1 text-black-500 hover:underline cursor-pointer"
                 :class="{
                   'hover-target':
-                    isSameUser && isSameDayMessage && !isFirstMessage,
+                    !isDeleted &&
+                    isSameUser &&
+                    isSameDayMessage &&
+                    !isFirstMessage,
                 }"
               >
                 {{
-                  currMessage.is_info
+                  isDeleted
+                    ? null
+                    : currMessage.is_info
                     ? time
                     : isSameUser && isSameDayMessage && !isFirstMessage
                     ? timeWithoutAMPM
@@ -97,17 +102,14 @@
                 isSameDayMessage &&
                 !isFirstMessage &&
                 !currMessage.is_info &&
-                currMessage.content !== $t('deleteMessageModal.success')
+                !isDeleted
               "
-              class="text-black-800 text-sm flex-wrap"
+              class="text-black-800 text-sm flex-wrap rich-content"
               v-html="currMessage.content"
             />
             <span
               v-if="
-                isSameUser &&
-                isSameDayMessage &&
-                !isFirstMessage &&
-                currMessage.content === $t('deleteMessageModal.success')
+                isSameUser && isSameDayMessage && !isFirstMessage && isDeleted
               "
               class="text-black-600 text-sm flex mt-2"
               >{{ $t('deleteMessageModal.success') }}</span
@@ -118,7 +120,7 @@
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
-                currMessage.content !== $t('deleteMessageModal.success')
+                !isDeleted
               "
               :updated_at="currMessage.updated_at"
             />
@@ -129,7 +131,7 @@
                 !isSameDayMessage ||
                 isFirstMessage ||
                 currMessage.is_info) &&
-              currMessage.content !== $t('deleteMessageModal.success')
+              !isDeleted
             "
           >
             <div class="flex">
@@ -137,11 +139,11 @@
                 :class="
                   currMessage.is_info ? 'text-black-600' : 'text-black-800'
                 "
-                class="text-sm flex-wrap"
+                class="text-sm flex-wrap rich-content"
                 v-html="currMessage.content"
               />
               <EditedAtTime
-                v-if="currMessage.is_edited && isDeleted(currMessage.content)"
+                v-if="currMessage.is_edited && isDeleted"
                 :updated_at="currMessage.updated_at"
               />
             </div>
@@ -406,7 +408,6 @@ export default {
       profilesStore,
       messagesStore,
       downloadsStore,
-      currentProfileStore,
       savedItems,
       currentProfile,
     };
@@ -532,16 +533,19 @@ export default {
         )
         ?.slice(-3);
     },
-  },
-  methods: {
-    isSavedMessage(currMessage) {
+    isSavedMessage() {
       const savedMessage = this.savedItems.find(
         item =>
-          item.message.id === currMessage.id &&
+          item.message.id === this.currMessage.id &&
           item.profile.id === this.currentProfile.id
       );
       return savedMessage ? true : false;
     },
+    isDeleted() {
+      return this.currMessage.content === this.$t('deleteMessageModal.success');
+    },
+  },
+  methods: {
     isImage(url) {
       const fileExtension = url.split('/').pop().split('.').pop();
       return fileExtension !== 'txt';
@@ -568,7 +572,7 @@ export default {
           return (
             (emoji_id = reaction.id),
             reaction.emoji === temp &&
-              reaction.profile_id === this.currentProfileStore.currentProfile.id
+              reaction.profile_id === this.currentProfile.id
           );
         })
       ) {
@@ -672,7 +676,7 @@ export default {
       return this.currMessage.reactions.some(reaction => {
         return (
           reaction.emoji === emoji &&
-          reaction.profile_id === this.currentProfileStore.currentProfile.id
+          reaction.profile_id === this.currentProfile.id
         );
       });
     },
@@ -707,19 +711,49 @@ export default {
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
     },
-
-    isDeleted(content) {
-      return content === this.$t('deleteMessageModal.success');
-    },
   },
 };
 </script>
-<style scoped>
+<style lang="scss">
 .hover-trigger .hover-target {
   display: none;
 }
+
 .hover-trigger:hover .hover-target {
   display: inline;
   cursor: pointer;
+}
+
+.rich-content {
+  ul {
+    li {
+      margin-left: 10px;
+      list-style-type: disc;
+
+      li {
+        list-style-type: circle;
+
+        li {
+          list-style-type: square;
+        }
+      }
+    }
+  }
+
+  ol {
+    li {
+      margin-left: 10px;
+      list-style-type: decimal;
+
+      li {
+        list-style-type: lower-alpha;
+      }
+    }
+  }
+
+  a {
+    color: rgba(39, 39, 238, 0.914);
+    text-decoration: underline;
+  }
 }
 </style>

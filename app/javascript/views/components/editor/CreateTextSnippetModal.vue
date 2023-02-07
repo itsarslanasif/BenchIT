@@ -205,7 +205,7 @@ export default {
       const files = [textFile];
 
       if (this.formValue.share) {
-        this.sendMessage('file', files, fileTitle);
+        this.sendMessage(fileTitle, files);
       }
       this.shortcutAttachmentStore.toggleShowCreateTextSnippitModal();
     },

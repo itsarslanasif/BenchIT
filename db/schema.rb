@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -85,6 +85,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
     t.datetime "updated_at", null: false
     t.bigint "bench_channel_id", null: false
     t.bigint "profile_id", null: false
+    t.boolean "muted", default: false, null: false
     t.index ["bench_channel_id", "profile_id"], name: "index_channel_participants_on_bench_channel_id_and_profile_id", unique: true
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
     t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
@@ -99,6 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
     t.bigint "bench_conversation_id"
     t.bigint "sender_id"
     t.boolean "is_info", default: false, null: false
+    t.boolean "is_sent_to_chat", default: false, null: false
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
@@ -205,6 +207,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
     t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true
   end
 
+  create_table "schedule_messages", force: :cascade do |t|
+    t.text "content", null: false
+    t.string "scheduled_at", null: false
+    t.string "job_id", default: "", null: false
+    t.bigint "profile_id", null: false
+    t.bigint "bench_conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bench_conversation_id"], name: "index_schedule_messages_on_bench_conversation_id"
+    t.index ["profile_id"], name: "index_schedule_messages_on_profile_id"
+  end
+
   create_table "statuses", force: :cascade do |t|
     t.string "text", null: false
     t.string "emoji", null: false
@@ -277,4 +291,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_01_23_202910) do
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "profiles"
+  add_foreign_key "schedule_messages", "bench_conversations"
+  add_foreign_key "schedule_messages", "profiles"
 end

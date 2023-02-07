@@ -163,4 +163,10 @@ export default {
   bottom: -30px;
   width: 100%;
 }
+.splitpanes__pane {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: auto;
+}
 </style>

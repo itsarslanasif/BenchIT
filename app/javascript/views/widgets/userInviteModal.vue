@@ -73,6 +73,7 @@ export default {
     const { currentWorkspace } = storeToRefs(workspaceStore);
     return {
       workspace: currentWorkspace,
+      response: null,
     };
   },
   computed: {
@@ -81,7 +82,7 @@ export default {
         this.alertMessage = CONSTANTS.ERROR_MESSAGE;
         this.errorAlert = true;
       } else {
-        this.alertMessage = CONSTANTS.SUCCESS_MESSAGE;
+        this.alertMessage = this.response;
         this.errorAlert = false;
       }
       return this.alertMessage;
@@ -101,6 +102,7 @@ export default {
       try {
         await invite_user(this.workspace.id, this.email).then(response => {
           this.error = false;
+          this.response = response.data.message;
         });
       } catch (e) {
         this.error = true;

@@ -4,10 +4,7 @@
       <ChatHeader />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
-      <ChatBody
-        @load-more-messages="loadMoreMessages"
-        :oldestUnreadMessageId="oldestUnreadMessageId"
-      />
+      <ChatBody @load-more-messages="loadMoreMessages" :oldestUnreadMessageId="oldestUnreadMessageId" />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
       <TextEditorVue
@@ -93,6 +90,7 @@ export default {
           messageStore.index(conversation_type, id);
         }
       },
+      messageStore,
       conversation_type,
       currentUser,
       oldestUnreadMessageId,
@@ -129,30 +127,34 @@ export default {
     this.Cable = null;
   },
   methods: {
-    sendMessage(message, files, filename) {
+    sendMessage(message, files, schedule) {
       let formData = new FormData();
       formData.append('content', message);
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
-      files.forEach(file => {
-        if (filename) {
-          formData.set('content', filename);
-        }
-        formData.append('message_attachments[]', file, filename || '');
-      });
-      try {
-        conversation(formData).then(() => {
-          this.message = '';
-        });
-        this.newMessageSent = true;
-      } catch (e) {
-        console.error(e);
+      if(schedule){
+      if (schedule.value){
+        formData.append('scheduled_at', schedule.value);
       }
+    }
+      files.forEach(file => {
+        formData.append('message_attachments[]', file, message);
+      });
+      conversation(formData).then((res) => {
+        if (res.scheduled_at) {
+          this.messageStore.addScheduleMessage(res);
+        }
+        this.message = '';
+      });
+      this.newMessageSent = true;
     },
     joinedTheChannel() {
       this.isMember = !this.isMember;
     },
+    getConversationType() {
+      return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile'
+    }
   },
 };
 </script>
@@ -169,6 +171,7 @@ export default {
 .chat-style {
   flex: 1;
 }
+
 .mce-i-codesample {
   color: transparent !important;
   background-image: url(../../assets/images/codeblock.png) !important;
