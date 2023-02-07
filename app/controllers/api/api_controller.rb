@@ -19,6 +19,7 @@ class Api::ApiController < ApplicationController
 
   def set_profile
     Current.profile = Current.user.profiles.find_by(workspace_id: Current.workspace)
+    @current_profile = Current.profile
   end
 
   def presence_of_api_token

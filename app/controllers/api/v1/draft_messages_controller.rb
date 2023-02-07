@@ -6,7 +6,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
   before_action :set_draft_message, :authenticate_draft, only: %i[destroy update]
 
   def index
-    @draft_messages = Current.profile.draft_messages.includes(:profile).order(created_at: :desc)
+    @draft_messages = @current_profile.draft_messages.includes(:profile).order(created_at: :desc)
   end
 
   def create
@@ -32,12 +32,12 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def draft_messages_params
     params.permit(:content, :bench_conversation_id, :conversation_message_id, message_attachments: []).tap do |param|
-      param[:profile] = Current.profile
+      param[:profile_id] = @current_profile.id
     end
   end
 
   def authenticate_draft
-    if @draft_message.profile_id.eql?(Current.profile.id)
+    if @draft_message.profile_id.eql?(@current_profile.id)
       check_membership(@bench_conversation)
     else
       render json: { error: 'Sorry, this draft is not yours' }, status: :unauthorized
