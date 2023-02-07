@@ -15,7 +15,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def update
     @draft_message.update!(draft_messages_params)
-    render json: { success: true, message: 'Draft update', draft_message: @draft_message }, status: :ok
+    render json: { success: true, message: 'Draft update', draft_message: draft_response }, status: :ok
   end
 
   def destroy
@@ -31,7 +31,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def draft_messages_params
-    params.require(:draft_message).permit(:content, :bench_conversation_id, :conversation_message_id).tap do |param|
+    params.permit(:content, :bench_conversation_id, :conversation_message_id, message_attachments: []).tap do |param|
       param[:profile] = Current.profile
     end
   end
@@ -41,22 +41,6 @@ class Api::V1::DraftMessagesController < Api::ApiController
       check_membership(@bench_conversation)
     else
       render json: { error: 'Sorry, this draft is not yours' }, status: :unauthorized
-    end
-  end
-
-  def decide_draft_action
-    message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
-
-    if params[:content].blank? && message.present?
-      @draft_message = message
-      destroy
-    elsif params[:content].present? && message.present?
-      @draft_message = message
-      update
-    elsif params[:content].present?
-      create
-    else
-      render json: { error: 'Sorry, the content is empty.' }, status: :bad_request
     end
   end
 
@@ -71,7 +55,39 @@ class Api::V1::DraftMessagesController < Api::ApiController
     render json: { error: 'Sorry, this draft is not present in this conversation' }, status: :unauthorized
   end
 
+  def decide_draft_action
+    message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
+
+    if params[:content].blank? && message.present?
+      @draft_message = message
+      destroy
+    elsif params[:content].present? && message.present?
+      @draft_message = message
+      update
+    elsif params[:content].blank?
+      render json: { error: 'Sorry, the content is empty.' }, status: :bad_request
+    end
+  end
+
   def fetch_conversation
     @bench_conversation = get_conversation(params[:conversation_id], params[:conversation_type])
+  end
+
+  def draft_receiver
+    get_receiver(@draft_message)
+  end
+
+  def draft_response
+    response = {
+      id: @draft_message.id,
+      content: @draft_message.content,
+      conversation_message_id: @draft_message.conversation_message_id,
+      bench_conversation_id: @draft_message.bench_conversation_id,
+      profile_id: @draft_message.profile.id,
+      conversation_type: @draft_message.bench_conversation.conversationable_type,
+      receiver: draft_receiver
+    }
+    response[:attachments] = get_attachments(@draft_message) if @draft_message.message_attachments.present?
+    response
   end
 end
