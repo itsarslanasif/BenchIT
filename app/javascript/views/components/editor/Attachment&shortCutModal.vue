@@ -10,7 +10,7 @@
     <n-card
       :bordered="false"
       size="huge"
-      class="border border-black-300"
+      class="border shadow border-black-300"
       style="width: 400px"
     >
       <template #header>
@@ -122,3 +122,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.shadow {
+  box-shadow: 0 2px 6px 0 rgba(0, 0, 0, 0.2), 0 3px 15px 0 rgba(0, 0, 0, 0.19);
+}
+</style>

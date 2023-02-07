@@ -300,7 +300,7 @@ en:
         until: 'until'
       create_text_snippet:
         create_snippet: 'Create snippet'
-        title: 'Titial (optional)'
+        title: 'Title (optional)'
         content: 'Content'
         content_placeholder: 'Add content here.'
         message_placeholder: 'Add message here.'
