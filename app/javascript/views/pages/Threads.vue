@@ -8,7 +8,7 @@
       </span>
     </div>
     <div class="overflow-auto h-screen">
-      <div class="m-4">
+      <div v-if="threadStore.threads" class="m-4">
         <div
           class="m-4 rounded-xl border-transparent border shadow-inner overflow-hidden"
           v-for="message in threadStore.threads"
@@ -58,6 +58,13 @@
             />
           </div>
         </div>
+      </div>
+      <div class="flex flex-col gap-2 justify-center items-center m-10" v-else>
+        <font-awesome-icon
+          icon="fa-regular fa-comment"
+          class="font-bold text-xl"
+        />
+        <p class="font-semibold text-lg">No threads to show</p>
       </div>
     </div>
   </div>
