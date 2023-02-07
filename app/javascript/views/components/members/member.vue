@@ -9,10 +9,21 @@
         :src="profile.image_url"
         alt="Avatar"
       />
-      <p class="ml-4 mt-4 font-medium">
+      <div class="ml-4 mt-4 flex font-medium">
         {{ profile.username }}
         {{ isOwnChat ? $t('chat.you') : '' }}
-      </p>
+        <span class="flex mt-1 ml-2 h-3 w-3">
+          <span
+            v-if="profile.is_active"
+            class="bg-green-700 text-black-800 h-3 w-3 rounded-xl"
+          />
+          <span
+            v-else
+            class="bg-white text-black-800 h-3 w-3 border-2 border-black-800 rounded-xl"
+          />
+        </span>
+      </div>
+
       <p class="ml-4 mb-4 text-sm text-primary">{{ profile.description }}</p>
     </div>
   </div>

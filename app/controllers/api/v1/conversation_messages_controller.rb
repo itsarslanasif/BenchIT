@@ -15,10 +15,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def create
-    @message = ConversationMessage.new(conversation_messages_params)
-    @message.bench_conversation_id = @bench_conversation.id
-    render json: @message.save ? { message: 'Message sent.' } : { error: 'Message not sent', errors: @message.errors },
-           status: @message.save ? :ok : :unprocessable_entity
+    if params[:scheduled_at].blank?
+      @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      @message.save!
+
+      render json: { success: 'Message sent', message: @message }, status: :ok
+    else
+      @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
+      @schedule_message.save!
+    end
   end
 
   def update
@@ -120,7 +125,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def conversation_messages_params
     params.permit(:content, :is_threaded, :parent_message_id, message_attachments: []).tap do |param|
-      param[:sender_id] = Current.profile.id
+      param[:sender_id] = @current_profile.id
+    end
+  end
+
+  def schedule_messages_params
+    params.permit(:content, :scheduled_at).tap do |param|
+      param[:profile_id] = @current_profile.id
     end
   end
 

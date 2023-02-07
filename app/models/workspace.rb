@@ -1,5 +1,7 @@
 class Workspace < ApplicationRecord
-  has_one_attached :workspace_avatar
+  include AvatarGeneration
+
+  has_one_attached :workspace_avatar, dependent: :destroy
 
   has_many :profiles, dependent: :destroy
   has_many :users, through: :profiles, dependent: :destroy
@@ -9,6 +11,8 @@ class Workspace < ApplicationRecord
   validates :company_name, presence: true
   validates :bench_it_url, uniqueness: true, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
+
+  after_commit :attach_avatar, on: %i[create]
 
   enum workspace_type: {
     work: 0,
@@ -33,4 +37,8 @@ class Workspace < ApplicationRecord
     business_owner: 3,
     customer_support: 4
   }
+
+  def attach_avatar
+    generate_avatar(company_name, workspace_avatar)
+  end
 end

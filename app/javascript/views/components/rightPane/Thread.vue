@@ -18,12 +18,14 @@
     </n-divider>
     <template v-if="threadStore.message.replies">
       <template v-for="reply in threadStore.message.replies" :key="reply.id">
+         <div :id="reply.id">
         <MessageWrapper :id="reply.id" :inThread="true" :curr-message="reply" />
+        </div>
       </template>
     </template>
   </div>
   <div class="relative mx-1">
-    <TextEditorVue :sendMessage="sendMessage" />
+    <TextEditorVue :sendMessage="sendMessage" :isThread="true" />
   </div>
 </template>
 
@@ -92,6 +94,14 @@ export default {
       }
     },
   },
+  mounted() {
+    const message_id = this.$route.params.message_id;
+    if (message_id) {
+      const message = document.getElementById(message_id);
+      message.scrollIntoView({ block: 'center' });
+      message.classList.add('highlight');
+    }
+  },
 };
 </script>
 <style scoped>
@@ -105,7 +115,7 @@ export default {
 
 @keyframes background-fade {
   0% {
-    background: rgba(253, 245, 221, 255);
+    background: rgba(236, 219, 145, 0.789);
   }
 }
 </style>

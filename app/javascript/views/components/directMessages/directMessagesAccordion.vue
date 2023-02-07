@@ -21,6 +21,7 @@
               v-for="user in sortedDMList"
               :key="user"
               class="hover:bg-primaryHover"
+              @click.stop="stopPropagation"
             >
               <directMessagesItemVue
                 :user="user"
@@ -29,18 +30,22 @@
               />
             </h5>
           </div>
-          <div class="hover:bg-primaryHover cursor-pointer" @click="closeModal">
-            <addTeammatesDropdown :items="options" />
+          <div
+            class="hover:bg-primaryHover cursor-pointer"
+            @click="closeModal"
+            @click.stop="stopPropagation"
+          >
+            <addTeammatesDropdown />
           </div>
         </div>
       </AccordionItem>
     </AccordionList>
-    <div v-if="!listOpen && this.checkSetChat()">
+    <div v-if="!listOpen && checkSetChat()">
       <h5
         class="hover:bg-primaryHover text-base cursor-pointer text-white bg-slate-600"
       >
         <directMessagesItemVue
-          :user="this.selectedChat"
+          :user="this.selectedUser"
           :isOwnChat="isOwnChat"
           :goToChat="goToChat"
         />
@@ -58,6 +63,7 @@ import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 
 export default {
   components: {
@@ -69,18 +75,9 @@ export default {
   data() {
     return {
       modalOpen: false,
-      options: [
-        {
-          title: CONSTANTS.INVITE_PEOPLE,
-          link: '#',
-        },
-        {
-          title: CONSTANTS.NEW_CONVERSATION,
-          link: '#',
-        },
-      ],
       listOpen: true,
-      selectedChat: {},
+      selectedUser: {},
+      chat_type: '',
     };
   },
   async mounted() {
@@ -89,19 +86,19 @@ export default {
     );
     this.dmList = this.directMessageStore.getDirectMessages;
   },
-  beforeUnmount() {
-    this.options = null;
-  },
+
   setup() {
     const directMessageStore = useDirectMessagesStore();
     const currentProfileStore = useCurrentProfileStore();
     const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
       directMessageStore,
       currentProfileStore,
       messagesStore,
       leftPaneStore,
+      selectedChat,
     };
   },
   computed: {
@@ -121,8 +118,7 @@ export default {
       if (this.isMobileView()) {
         this.leftPaneStore.closeLeftPane();
       }
-      this.messagesStore.selectedChannel = {};
-      this.listOpen = this.listOpen ? false : true;
+      this.setType();
     },
     isMobileView() {
       return window.innerWidth < 1400;
@@ -135,10 +131,19 @@ export default {
     },
     toggleList() {
       this.listOpen = !this.listOpen;
-      this.selectedChat = this.messagesStore.selectedChat;
+      this.setType();
     },
     checkSetChat() {
-      return this.selectedChat.id === this.messagesStore.selectedChat.id;
+      return (
+        this.chat_type === 'Profile' &&
+        this.selectedUser.id === this.selectedChat.id
+      );
+    },
+    setType() {
+      this.chat_type = this.selectedChat.conversation_type;
+      if (this.chat_type === 'Profile') {
+        this.selectedUser = this.selectedChat;
+      }
     },
   },
 };

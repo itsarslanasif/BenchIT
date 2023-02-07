@@ -75,6 +75,8 @@ import {
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
+import { setActiveStatus } from '../../../api/profiles/profileStatus';
+
 export default {
   data() {
     return {
@@ -102,11 +104,17 @@ export default {
       this.$router.push('/new_workspace');
     },
     async goToWorkspaceDashboard(workspace) {
-      let currentProfile = await switchWorkspace(workspace.id);
-      encryption(sessionStorage, 'currentProfile', currentProfile.profile);
+      const { id: workspaceId } = workspace;
+      let { profile } = await switchWorkspace(workspaceId);
+      profile.is_active = true;
+      await setActiveStatus(workspaceId, profile.id);
+
+      encryption(sessionStorage, 'currentProfile', profile);
       encryption(sessionStorage, 'currentWorkspace', workspace);
+
       this.currentWorkspace.setWorkspace(workspace);
-      this.currentProfile.setProfile(currentProfile);
+      this.currentProfile.setProfile({ profile });
+
       this.$router.push('/');
     },
   },
