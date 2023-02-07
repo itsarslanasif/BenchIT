@@ -21,9 +21,15 @@
       </div>
     </div>
     <div>
+      <div
+        v-if="schedule"
+        class="bg-slate-50 border-l border-t border-r border-slate-100 px-2 py-1 rounded-t"
+      >
+        {{ getScheduleNotification() }}
+      </div>
       <editor
         v-model="newMessage"
-        @keydown.enter="sendMessagePayload($event, false)"
+        @keydown.enter="sendMessagePayload"
         api-key="no-api-key"
         :init="{
           placeholder: getPlaceholder,
@@ -72,20 +78,47 @@
     </div>
     <div class="flex bg-transparent border border-black-300 w-full relative">
       <Attachments :getImages="getImages" />
-      <div class="w-1/12 flex justify-end">
-        <button
-          v-if="editMessage"
-          @click="handleCancelEdit"
-          class="px-2 mr-3 my-4 rounded-md text-black hover:bg-transparent border border-black focus:outline-none"
-        >
-          {{ $t('actions.cancel') }}
-        </button>
-        <button
-          @click="sendMessagePayload($event, true)"
-          class="px-4 mr-3 bg-success my-4 rounded-md text-white hover:bg-successHover"
-        >
-          {{ editMessage ? $t('actions.save') : $t('actions.send') }}
-        </button>
+      <div class="w-1/12 flex justify-end mr-12">
+        <div v-if="editMessage" class="flex">
+          <button
+            @click="handleCancelEdit"
+            class="px-2 my-4 rounded-md text-white"
+          >
+            <font-awesome-icon
+              icon="fa-xmark"
+              class="bg-danger mt-1 hover:bg-dangerHover px-3 py-2 rounded"
+            />
+          </button>
+          <button
+            @click="sendMessagePayload($event, true)"
+            class="px-2 my-4 rounded-md text-white"
+          >
+          <font-awesome-icon icon="fa-check" class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"/>
+          </button>
+        </div>
+        <div v-else>
+          <div
+            class="w-1/12 cursor-pointer ml-5 my-2 flex justify-center items-center text-white"
+          >
+            <font-awesome-icon
+              icon="fa-paper-plane"
+              class="bg-success hover:bg-successHover px-3 py-2 border-r rounded-l"
+              @click="dispatchKeydownEnterEvent"
+            />
+            <font-awesome-icon
+              v-if="!isThread"
+              @click="toggleSchedule"
+              icon="fa-solid fa-chevron-down"
+              class="bg-success hover:bg-successHover p-2 rounded-r"
+            />
+          </div>
+        </div>
+        <div v-if="scheduleModalFlag">
+          <ScheduleModal
+            :setSchedule="setSchedule"
+            :toggleSchedule="toggleSchedule"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -99,7 +132,10 @@ import { useProfileStore } from '../../../stores/useProfileStore';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { NMention } from 'naive-ui';
+import ScheduleModal from '../../widgets/schedule.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import moment from 'moment';
+import vClickOutside from 'click-outside-vue3';
 
 export default {
   beforeMount() {
@@ -107,15 +143,36 @@ export default {
       this.newMessage = this.message;
     }
   },
+  mounted() {
+    if (this.isEditScheduled()){
+      this.newMessage = this.messageToEdit.content
+    }
+  },
   components: {
     editor: Editor,
     Attachments,
     NMention,
+    ScheduleModal,
   },
-  methods: {
-    handleCancelEdit() {
-      this.messageStore.removeMessageToEdit();
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
+  props: {
+    sendMessage: {
+      type: Object,
     },
+    isThread: {
+      type: Boolean,
+    },
+    editMessageCallBack: {
+      type: Function
+    },
+    editMessage: {
+      type: Boolean
+    },
+    message: {
+      type: Object
+    }
   },
   computed: {
     getPlaceholder() {
@@ -138,17 +195,13 @@ export default {
         : false;
     },
   },
-  props: [
-    'sendMessage',
-    'isThread',
-    'message',
-    'editMessage',
-    'editMessageCallBack',
-  ],
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
     const { channels } = storeToRefs(channelStore);
+    const messageStore = useMessageStore();
+    const { selectedChat, messageToEdit } = storeToRefs(messageStore);
+    const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
     const showMentions = ref(false);
@@ -158,8 +211,7 @@ export default {
     const readerFile = ref([]);
     const files = ref([]);
     const filteredList = ref([]);
-    const messageStore = useMessageStore();
-    const { selectedChat } = useMessageStore();
+    const schedule = ref(null);
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -182,6 +234,8 @@ export default {
         enableMention();
       } else if (message.length === 1 && getLastIndex(currentMessage) == '#') {
         enableChannels();
+      } else if (!message) {
+        disableAll();
       } else {
         disableAll();
       }
@@ -189,6 +243,10 @@ export default {
 
     const getLastIndex = value => {
       return value[value.length - 1];
+    };
+    const setSchedule = value => {
+      schedule.value = value;
+      toggleSchedule();
     };
     const sendMessagePayload = (event, buttonClicked) => {
       if (
@@ -203,10 +261,11 @@ export default {
           messagetext !== '<p> </p>' &&
           !startWithNonBreakSpace
         ) {
-          props.sendMessage(messagetext, files.value);
+          props.sendMessage(messagetext, files.value, schedule);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
+          schedule.value = null;
         }
       } else if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
@@ -216,6 +275,27 @@ export default {
         messageStore.removeMessageToEdit();
       }
     };
+
+    const dispatchKeydownEnterEvent = () => {
+      const event = new KeyboardEvent('keydown', { keyCode: 13 });
+      if (isEditScheduled()) {
+        messageStore.reEditScheduledMessage({
+          content: newMessage,
+          id: messageToEdit.scheduledId
+        })
+        newMessage = ''
+      } else {
+        sendMessagePayload(event);
+      }
+    }
+
+    const handleCancelEdit = () => {
+      messageStore.removeMessageToEdit();
+    }
+
+    const isEditScheduled = () => {
+      return messageToEdit.content && messageToEdit.isScheduled && messageToEdit.scheduledId
+    }
 
     const message = newMessage => {
       let messageData;
@@ -231,9 +311,18 @@ export default {
         filterData = messageData.filter(el => el !== '');
         actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
       } else {
-        actuallData = newMessage?.value?.split('\n')[0];
+        actuallData = newMessage.value
       }
       return actuallData;
+    };
+
+    const getScheduleNotification = () => {
+      const date = moment(schedule.value);
+      return `Your message will be sent to ${
+        selectedChat.value['user_id']
+          ? selectedChat.value.username
+          : selectedChat.value.name
+      } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
 
     const enableMention = () => {
@@ -276,12 +365,15 @@ export default {
       files.value.splice(index, 1);
       readerFile.value.splice(index, 1);
     };
-
     const getImages = file => {
       files.value[files.value?.length] = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => readerFile.value.push(reader.result);
+    };
+
+    const toggleSchedule = () => {
+      scheduleModalFlag.value = !scheduleModalFlag.value;
     };
 
     return {
@@ -295,11 +387,20 @@ export default {
       filteredList,
       channels,
       profiles,
+      schedule,
+      scheduleModalFlag,
+      messageStore,
+      messageToEdit,
       removeFile,
       sendMessagePayload,
       getImages,
       addMentionToText,
-      messageStore,
+      toggleSchedule,
+      setSchedule,
+      getScheduleNotification,
+      dispatchKeydownEnterEvent,
+      handleCancelEdit,
+      isEditScheduled,
       selectedChat,
     };
   },

@@ -5,4 +5,5 @@ json.draft_message do
     @bench_channel.bench_conversation.id, nil
   ).present?
 end
+json.isScheduled? scheduled?(@bench_channel.bench_conversation.id)
 json.partial! 'api/v1/shared/partials/profiles', profiles: @bench_channel.profiles

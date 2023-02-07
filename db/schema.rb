@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_01_093341) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -100,6 +100,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_01_093341) do
     t.bigint "bench_conversation_id"
     t.bigint "sender_id"
     t.boolean "is_info", default: false, null: false
+    t.boolean "is_sent_to_chat", default: false, null: false
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"

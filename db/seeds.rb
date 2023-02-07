@@ -80,6 +80,12 @@ ConversationMessage.create(content: '1st reply', is_threaded: false, bench_conve
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
 ConversationMessage.create(content: 'Hi from developer', is_threaded: false, bench_conversation_id: 6, sender_id: 1)
+
+(1..6).each do |i|
+  ScheduleMessage.create!(content: i.to_s, profile_id: 1, scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: i)
+  DraftMessage.create!(content: i.to_s, profile_id: 1, bench_conversation_id: i)
+end
+
 Workspace.create!(company_name: 'TechHub',
                   workspace_type: :work,
                   bench_it_url: 'https://www.techhub.com',

@@ -16,6 +16,8 @@ class ConversationMessage < ApplicationRecord
 
   validates :content, presence: true, length: { minimum: 1, maximum: 100 }
 
+  searchkick word_start: [:content]
+
   scope :messages_by_ids_array, lambda { |ids|
     includes(:reactions, :replies, :parent_message, :saved_items)
       .with_attached_message_attachments
@@ -89,7 +91,7 @@ class ConversationMessage < ApplicationRecord
 
   def model_basic_content
     {
-      id: id, content: content,
+      id: id, content: content, is_sent_to_chat: is_sent_to_chat,
       is_threaded: is_threaded,
       is_edited: created_at != updated_at,
       parent_message_id: parent_message_id,

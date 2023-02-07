@@ -25,11 +25,15 @@
       </div>
     </div>
   </n-dropdown>
+  <div v-if="showCreateChannelModal">
+    <CreateChannel :close-modal="toggleModal" />
+  </div>
 </template>
 
 <script>
 import { NDropdown } from 'naive-ui';
 import { CONSTANTS } from '../../assets/constants';
+import CreateChannel from '../components/channels/CreateChannel.vue';
 export default {
   data() {
     return {
@@ -43,15 +47,30 @@ export default {
           key: this.generateKey(CONSTANTS.BROWSE_CHANNELS),
         },
       ],
+      showCreateChannelModal: false,
     };
   },
   components: {
     NDropdown,
+    CreateChannel,
   },
   props: ['handleSelect', 'onlyIcon'],
   methods: {
     generateKey(label) {
       return label.toLowerCase().replace(/ /g, '-');
+    },
+    toggleModal() {
+      this.showCreateChannelModal = !this.showCreateChannelModal;
+    },
+    handleSelect(key) {
+      switch (key) {
+        case 'create-a-channel':
+          this.toggleModal();
+          break;
+        case 'browse-channels':
+          this.$router.push('/browse-channels');
+          break;
+      }
     },
   },
 };
