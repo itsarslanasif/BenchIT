@@ -29,9 +29,7 @@ module Conversation
   def get_attachments(message)
     arr = []
     message.message_attachments.each do |attachment|
-      arr.push({
-                 attachment_link: rails_storage_proxy_url(attachment)
-               })
+      arr.push({ attachment_link: rails_storage_proxy_url(attachment) })
     end
     arr
   end
