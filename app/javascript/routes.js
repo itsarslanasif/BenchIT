@@ -21,6 +21,8 @@ import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
+import MessagingFramework from './views/pages/MessagingFramework/MessagingFramework.vue';
+import MessageToBlocks from './views/pages/MessagingFramework/MessageToBlocks.vue';
 import { decryption } from './modules/crypto/crypto';
 import { checkAuth } from './api/user_auth/check_auth';
 
@@ -42,6 +44,16 @@ const router = createRouter({
       meta: {
         auth: true,
       },
+    },
+    {
+      path: '/messaging_framework1',
+      component: MessagingFramework,
+      name: 'messaging_framework1',
+    },
+    {
+      path: '/messaging_framework2',
+      component: MessageToBlocks,
+      name: 'messaging_framework2',
     },
     {
       path: '/join_workspace/:workspace_id',
