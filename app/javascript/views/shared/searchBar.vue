@@ -191,18 +191,9 @@ export default {
     const leftPaneStore = useLeftpaneStore();
     profileStore.index();
     channelStore.index();
-
-    const getJoinedChannels = async () => {
-      await channelStore.fetchJoinedChannels();
-    }
-
-    // const getStarredChannels = async () => {
-    //   await channelStore.getStarredChannels();
-    // }
-
-    getJoinedChannels();
-    // getStarredChannels();
-
+    channelStore.fetchJoinedChannels();
+    channelStore.fetchStarredChannels();
+    
     return {
       ApiResponseStatusStore,
       leftPaneStore,
