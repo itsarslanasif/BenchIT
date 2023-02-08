@@ -13,7 +13,7 @@ export const getDirectMessagesList = async () => {
 
 export const getLastDirectMessagesList = async () => {
   return axios
-    .post(
+    .get(
       `v1/dm_lists/last_messages`,
       {
         headers: getHeaders(),

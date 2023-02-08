@@ -21,7 +21,8 @@ class Api::V1::DmListsController < Api::ApiController
 
   def fetch_last_messages
     @last_messages_users.filter_map do |id|
-      BenchConversation.profile_to_profile_conversation(@current_profile.id, id)&.conversation_messages&.last
+      conversation = BenchConversation.profile_to_profile_conversation(@current_profile.id, id)
+      conversation&.conversation_messages&.last if conversation.present?
     end.sort_by(&:created_at).reverse
   end
 

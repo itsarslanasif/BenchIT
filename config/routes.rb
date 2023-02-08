@@ -85,7 +85,7 @@ Rails.application.routes.draw do
         resources :dm_lists, only: %i[index destroy] do
           collection do
             get :previous_direct_messages
-            post :last_messages
+            get :last_messages
           end
         end
         resources :channel_participants, only: %i[create index] do
