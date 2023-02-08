@@ -3,7 +3,7 @@ import { getHeaders } from '../../modules/auth';
 
 export const getDirectMessagesList = async () => {
   return axios
-    .get(`v1/dm_lists`, {
+    .get(`v1/dm_users`, {
       headers: getHeaders(),
     })
     .then(response => {
@@ -14,7 +14,7 @@ export const getDirectMessagesList = async () => {
 export const getLastDirectMessagesList = async () => {
   return axios
     .get(
-      `v1/dm_lists/last_messages`,
+      `v1/dm_users/last_direct_messages`,
       {
         headers: getHeaders(),
       }

@@ -1,10 +1,10 @@
-class Api::V1::DmListsController < Api::ApiController
+class Api::V1::DmUsersController < Api::ApiController
   before_action :set_dm, only: %i[destroy]
   before_action :set_dm_list, only: %i[index]
-  before_action :last_messages_users, only: %i[last_messages]
+  before_action :find_last_messages_users, only: %i[last_direct_messages]
 
   def index
-    @profiles = Profile.where(id: @current_profile.dm_lists.pluck(:receiver_id) & @dm_users_ids)
+    @profiles = Profile.where(id: @current_profile.dm_users.pluck(:receiver_id) & @dm_users_ids)
   end
 
   def destroy
@@ -15,7 +15,7 @@ class Api::V1::DmListsController < Api::ApiController
     end
   end
 
-  def last_messages
+  def last_direct_messages
     @last_messages = fetch_last_messages
   end
 
@@ -29,7 +29,7 @@ class Api::V1::DmListsController < Api::ApiController
   private
 
   def set_dm
-    @dm = @current_profile.dm_lists.find_by(receiver_id: params[:id])
+    @dm = @current_profile.dm_users.find_by(receiver_id: params[:id])
     render json: { message: t('.not_found') }, status: :not_found if @dm.nil?
   end
 
@@ -37,13 +37,13 @@ class Api::V1::DmListsController < Api::ApiController
     conversation_ids = BenchConversation.recent_last_conversation
     return render json: [@current_profile] if conversation_ids.empty?
 
-    @bench_conversations_ids = ConversationMessage.recent_last_conversation(conversation_ids)
-    return render json: [@current_profile] if @bench_conversations_ids.empty?
+    bench_conversations_ids = ConversationMessage.recent_last_conversation(conversation_ids)
+    return render json: [@current_profile] if bench_conversations_ids.empty?
 
-    @dm_users_ids = BenchConversation.where(id: @bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
+    @dm_users_ids = BenchConversation.where(id: bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
 
-  def last_messages_users
+  def find_last_messages_users
     conversation_ids = BenchConversation.recent_last_conversation
     return render json: [@current_profile] if conversation_ids.empty?
 
