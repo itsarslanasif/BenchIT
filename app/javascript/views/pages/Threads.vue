@@ -234,9 +234,9 @@ export default {
           case 2:
             return `${participants[0]} ${CONSTANTS.AND} ${participants[1]}`;
           default:
-            return `${participants[0]}${CONSTANTS.COMMA} ${participants[1]}${
-              CONSTANTS.COMMA
-            } ${CONSTANTS.AND} ${participants.length - 2} ${CONSTANTS.OTHERS}`;
+            return `${participants[0]}, ${participants[1]}, ${CONSTANTS.AND} ${
+              participants.length - 2
+            } ${CONSTANTS.OTHERS}`;
         }
       }
       return '';

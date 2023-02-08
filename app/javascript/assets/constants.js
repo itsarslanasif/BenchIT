@@ -179,7 +179,6 @@ export const CONSTANTS = {
   ASCENDING: 'asc',
   DESCENDING: 'desc',
   JUST_YOU: 'Just you',
-  COMMA: ',',
   AND: 'and',
   OTHERS: 'others'
 };
