@@ -39,18 +39,32 @@ export const useChannelStore = () => {
           );
           this.channels = [...newChannels.bench_channels];
           this.pageInfo = newChannels.page_information;
-          this.joinedChannels = await getJoinedChannels();
-          this.starChannels = this.joinedChannels.filter(
-            channel => channel.favourite_id !== null
-          );
-          this.joinedChannels = this.joinedChannels.filter(
-            channel => channel.favourite_id === null
-          );
-          this.sortChannelsList();
         } catch (e) {
           console.error(e);
         }
       },
+
+      async fetchJoinedChannels() {
+        try {
+          this.joinedChannels = await getJoinedChannels();
+          sortChannelsList()
+        } catch (e) {
+          handleError(e);
+        }
+      },
+
+      // async getStarredChannels() { 
+      //   try {
+      //     this.starChannels = this.joinedChannels?.filter(
+      //       channel => channel.favourite_id !== null
+      //     );
+      //     this.joinedChannels = this.joinedChannels?.filter(
+      //       channel => channel.favourite_id === null
+      //     );
+      //   } catch (e) {
+      //     handleError(e);
+      //   }
+      // },
 
       async createChannel(name, description, is_private) {
         try {
@@ -120,7 +134,7 @@ export const useChannelStore = () => {
 
       addChannelJoined(channel) {
         const channel_item = this.channels.find(
-          element => element.id === channel.id
+          element => element.id === sortChannelsListchannel.id
         );
         const joinedChannel = this.joinedChannels.find(
           element => element.id === channel.id
