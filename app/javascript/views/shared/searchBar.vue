@@ -2,7 +2,7 @@
     <div
       v-if="!leftPaneStore.getLeftpaneFlag"
       @click="leftPaneStore.openLeftPane"
-      class=" text-xl items-center text-white hover:bg-slate-600 rounded cursor-pointer"
+      class="text-xl items-center text-white hover:bg-slate-600 rounded cursor-pointer"
     >
       <font-awesome-icon class="p-2" icon="fa-solid fa-bars" />
     </div>
