@@ -31,11 +31,11 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def join_public_channel
-    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id, permission: true)
+    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: @current_profile.id, permission: true)
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
-        render json: { message: "Joined ##{@bench_channel.name}." }, status: :ok
+        render json: { success: true, message: "Joined ##{@bench_channel.name}." }, status: :ok
       else
         render json: { error: "Unable to join ##{@bench_channel.name}.", errors: @channel_participant.errors }, status: :unprocessable_entity
       end
@@ -43,42 +43,36 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def mute_channel
-    if @channel_participant.update(muted: true)
-      render json: { message: t('.channel_muted') }, status: :ok
-    else
-      render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
-    end
+    @channel_participant.update!(muted: true)
+    render json: { success: true, message: t('.channel_muted') }, status: :ok
   end
 
   def unmute_channel
-    if @channel_participant.update(muted: false)
-      render json: { message: t('.channel_unmuted') }, status: :ok
-    else
-      render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
-    end
+    @channel_participant.update!(muted: false)
+    render json: { success: true, message: t('.channel_unmuted') }, status: :ok
   end
 
   private
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
-    return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
+    return if !@bench_channel.is_private || @current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { errors: 'User is not part of channel.' }, status: :not_found
   end
 
   def set_channel_paticipant
-    @channel_participant = ChannelParticipant.where(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
+    @channel_participant = ChannelParticipant.where(bench_channel_id: @bench_channel.id, profile_id: @current_profile.id)
   end
 
   def check_workspace
-    return if Current.profile.workspace.eql?(@bench_channel.workspace)
+    return if @current_profile.workspace.eql?(@bench_channel.workspace)
 
     render json: { error: 'This Channel is not part of your workspace.' }, status: :forbidden
   end
 
   def check_already_joined_channel
-    is_channel_participant = @bench_channel.profile_ids.include?(Current.profile.id)
+    is_channel_participant = @bench_channel.profile_ids.include?(@current_profile.id)
 
     render json: { error: 'User already part of this channel.' }, status: :unprocessable_entity if is_channel_participant
   end

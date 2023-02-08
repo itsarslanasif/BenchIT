@@ -24,51 +24,36 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def create
     @profile = current_user.profiles.new(profile_params)
-    if @profile.save
-      render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
-    else
-      render json: { errors: @profile.errors, error: 'There was an error creating the profile' }, status: :unprocessable_entity
-    end
+    @profile.save!
+    render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
   end
 
   def update
-    if (@profile = Current.profile.update(profile_params))
-      render json: { message: 'Profile Updated Successfully.' }, status: :ok
+    if (@profile = @current_profile.update!(profile_params))
+      render json: { success: true, message: 'Profile Updated Successfully.' }, status: :ok
     else
       render json: { errors: @profile.errors, error: 'There was an error updating the profile' }, status: :unprocessable_entity
     end
   end
 
   def set_status
-    if @profile.update(profile_params)
-      set_job
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(profile_params)
+    set_job
   end
 
   def set_is_active
-    if @profile.update(is_active: true)
-      render json: { message: 'status set.' }, status: :ok
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(is_active: true)
+    render json: { success: true, message: 'status set.' }, status: :ok
   end
 
   def remove_is_active
-    if @profile.update(is_active: false)
-      render json: { message: 'status removed.' }, status: :ok
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(is_active: false)
+    render json: { success: true, message: 'status removed.' }, status: :ok
   end
 
   def clear_status
-    if @profile.update(text_status: '', emoji_status: '', clear_status_after: '')
-      render json: { message: 'status cleared.' }, status: :ok
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(text_status: '', emoji_status: '', clear_status_after: '')
+    render json: { success: true, message: 'status cleared.' }, status: :ok
   end
 
   def previous_direct_messages
@@ -116,10 +101,10 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def set_previous_direct_messages
     conversation_ids = BenchConversation.recent_last_conversation
-    return render json: [Current.profile] if conversation_ids.empty?
+    return render json: [@current_profile] if conversation_ids.empty?
 
     @bench_conversations_ids = ConversationMessage.recent_last_conversation(conversation_ids)
-    return render json: [Current.profile] if @bench_conversations_ids.empty?
+    return render json: [@current_profile] if @bench_conversations_ids.empty?
 
     @dm_users_ids = BenchConversation.where(id: @bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end

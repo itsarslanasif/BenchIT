@@ -5,20 +5,14 @@ class Api::V1::DownloadsController < Api::ApiController
   def index; end
 
   def create
-    @download = Current.profile.downloads.new(download_params)
-    if @download.save
-      render json: @download, status: :created
-    else
-      render json: { error: 'Unable to download file', errors: @download.errors }, status: :unprocessable_entity
-    end
+    @download = @current_profile.downloads.new(download_params)
+    @download.save!
+    render json: @download, status: :created
   end
 
   def destroy
-    if @download.destroy
-      render json: { message: 'Download removed' }, status: :ok
-    else
-      render json: { error: 'Unable to remove download', errors: @download.errors }, status: :unprocessable_entity
-    end
+    @download.destroy!
+    render json: { success: true, message: 'Download removed' }, status: :ok
   end
 
   def clear_all
@@ -36,10 +30,10 @@ class Api::V1::DownloadsController < Api::ApiController
   end
 
   def set_download
-    @download = Current.profile.downloads.find(params[:id])
+    @download = @current_profile.downloads.find(params[:id])
   end
 
   def set_all_downloads
-    @downloads = Current.profile.downloads.order(created_at: :desc)
+    @downloads = @current_profile.downloads.order(created_at: :desc)
   end
 end

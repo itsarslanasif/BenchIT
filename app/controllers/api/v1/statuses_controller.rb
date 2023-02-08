@@ -7,11 +7,8 @@ class Api::V1::StatusesController < Api::ApiController
   end
 
   def destroy
-    if @status.destroy
-      render json: 'Status cleared', status: :ok
-    else
-      render json: @status.errors, status: :unprocessable_entity
-    end
+    @status.destroy!
+    render json: { success: true, message: 'Status cleared' }, status: :ok
   end
 
   private

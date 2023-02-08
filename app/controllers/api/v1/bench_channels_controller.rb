@@ -41,11 +41,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def destroy
-    if @bench_channel.destroy
-      render json: { message: 'Channel was successfully deleted.' }, status: :ok
-    else
-      render json: { error: 'Error while deleting', errors: @bench_channel.errors }, status: :unprocessable_entity
-    end
+    @bench_channel.destroy!
+    render json: { success: true, message: 'Channel was successfully deleted.' }, status: :ok
   end
 
   def leave_channel
@@ -60,7 +57,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def joined_channels
-    @bench_channels = Current.profile.bench_channels
+    @bench_channels = @current_profile.bench_channels
   end
 
   private
@@ -71,18 +68,18 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def create_first_bench_channel_participant
     BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: @bench_channel.id)
-    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
+    @bench_channel.channel_participants.create!(bench_channel_id: @bench_channel.id, profile_id: @current_profile.id)
   end
 
   def set_bench_channel
     @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
-    return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
+    return if !@bench_channel.is_private || @current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { error: 'User is not part of channel.' }, status: :not_found
   end
 
   def set_channel_participant
-    @channel_participant = Current.profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
+    @channel_participant = @current_profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
 
     render json: { error: "You are not a member of ##{@bench_channel.name}." }, status: :not_found if @channel_participant.nil?
   end
@@ -127,7 +124,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def hide_profile_bench_channels
-    @bench_channels = @bench_channels.hide_participated_channels(Current.profile.bench_channel_ids) if params[:hide_my_channels].eql?('true')
+    @bench_channels = @bench_channels.hide_participated_channels(@current_profile.bench_channel_ids) if params[:hide_my_channels].eql?('true')
 
     @bench_channels = BenchChannel.reject_unjoined_privated_channels(@bench_channels)
   end
