@@ -34,14 +34,14 @@
           $t('create_text_snippet.shortcuts')
         }}</span>
         <div v-for="option in shortcutOptions" :key="option.key">
-          <AttachmentShortCutRow :shortcut="option" />
+          <AttachmentShortCutRow :shortcut="option" :isThread="isThread" />
         </div>
         <hr class="my-2 text-black-500" />
         <span class="text-black-500">{{
           $t('create_text_snippet.attachments')
         }}</span>
         <div v-for="option in AttachmentOptions" :key="option.key">
-          <AttachmentShortCutRow :shortcut="option" />
+          <AttachmentShortCutRow :shortcut="option" :isThread="isThread" />
         </div>
       </template>
     </n-card>
@@ -54,6 +54,7 @@ import { NModal, NInput, NCard, NIcon, NSpace, NDivider } from 'naive-ui';
 import AttachmentShortCutRow from './Attachment&shortCutRow.vue';
 import { SearchOutline } from '@vicons/ionicons5';
 import vClickOutside from 'click-outside-vue3';
+
 export default {
   props: ['show', 'isThread'],
   components: {

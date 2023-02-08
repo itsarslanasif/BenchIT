@@ -4,7 +4,10 @@
       <ChatHeader />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
-      <ChatBody @load-more-messages="loadMoreMessages" :oldestUnreadMessageId="oldestUnreadMessageId" />
+      <ChatBody
+        @load-more-messages="loadMoreMessages"
+        :oldestUnreadMessageId="oldestUnreadMessageId"
+      />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
       <TextEditorVue
@@ -133,15 +136,13 @@ export default {
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
-      if(schedule){
-      if (schedule.value){
+      if (schedule && schedule.value) {
         formData.append('scheduled_at', schedule.value);
       }
-    }
       files.forEach(file => {
         formData.append('message_attachments[]', file, message);
       });
-      conversation(formData).then((res) => {
+      conversation(formData).then(res => {
         if (res.scheduled_at) {
           this.messageStore.addScheduleMessage(res);
         }
@@ -153,8 +154,8 @@ export default {
       this.isMember = !this.isMember;
     },
     getConversationType() {
-      return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile'
-    }
+      return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile';
+    },
   },
 };
 </script>

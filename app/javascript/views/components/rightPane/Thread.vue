@@ -33,7 +33,11 @@
       class="relative mx-1"
       :class="{ 'mt-10': !threadStore.message.replies.length }"
     >
-      <TextEditorVue :isThread="true" :sendMessage="sendMessage" />
+      <TextEditorVue
+        :isThread="true"
+        :sendMessage="sendMessage"
+        :recieverName="recieverName"
+      />
     </div>
   </div>
 </template>
@@ -85,6 +89,12 @@ export default {
     },
     replyExist() {
       return this.threadStore.message.replies.length > 1;
+    },
+    recieverName() {
+      return (
+        this.threadStore.message.receiver_name ||
+        this.threadStore.message.channel_name
+      );
     },
   },
   methods: {

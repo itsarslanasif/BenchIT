@@ -5,9 +5,14 @@
       class="margintop absolute z-10"
     />
     <CreateTextSnippetModal
-      v-if="attachmentAndShortcutStore.showCreateTextSnippitModal"
-      :showModal="attachmentAndShortcutStore.showCreateTextSnippitModal"
+      v-if="
+        isThread
+          ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
+          : attachmentAndShortcutStore.showCreateTextSnippitModal
+      "
       :sendMessage="sendMessage"
+      :isThread="isThread"
+      :recieverName="fileRecieverName"
     />
     <div
       v-if="showMentions || showChannels"
@@ -198,6 +203,9 @@ export default {
     message: {
       type: Object,
     },
+    recieverName: {
+      type: String,
+    },
   },
   computed: {
     getPlaceholder() {
@@ -218,6 +226,11 @@ export default {
             ? this.$t('chat.lock')
             : this.$t('chat.hash')) + this.selectedChat.name
         : false;
+    },
+    fileRecieverName() {
+      return (
+        this.recieverName || this.getChannelName || this.selectedChat.username
+      );
     },
   },
   setup(props) {
