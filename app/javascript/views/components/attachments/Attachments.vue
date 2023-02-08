@@ -17,7 +17,7 @@
     <div
       v-click-outside="closeModal"
       v-if="openAttach && !recentFiles"
-      class="bottom-0 ml-12 py-2 absolute w-auto bg-primary text-white rounded-md h-auto"
+      class="bottom-0 ml-12 py-2 absolute z-10 w-auto bg-primary text-white rounded-md h-auto"
     >
       <div class="px-4 py-1 w-11/12">{{ $t('send_attachments.title') }}</div>
       <div
