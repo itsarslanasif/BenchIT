@@ -157,9 +157,7 @@ export default {
       handler(newValue) {
         this.disableButton =
           newValue.content === '' ||
-          (newValue.title !== '' && !newValue.title.includes('.txt'))
-            ? true
-            : false;
+          (newValue.title !== '' && !newValue.title.includes('.txt'));
       },
       deep: true,
     },
@@ -182,13 +180,11 @@ export default {
     },
     async getMembersList(query) {
       let options = await getMembers(this.currentWorkspace.id, query);
-      this.options = options.map(option => {
-        return {
-          label: option.username,
-          value: option.id,
-          image_url: option.image_url,
-        };
-      });
+      this.options = options.map(option => ({
+        label: option.username,
+        value: option.id,
+        image_url: option.image_url,
+      }));
     },
     resetSelectedTag() {
       this.value = '';

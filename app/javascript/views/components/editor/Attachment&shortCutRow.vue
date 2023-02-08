@@ -26,11 +26,18 @@ export default {
   },
   methods: {
     onSelect(shortcut) {
-      if (shortcut.label === this.$t('create_text_snippet.create_text_snippet')) {
+      console.log(shortcut.key);
+      if (
+        shortcut.key ===
+        this.generateKey(this.$t('create_text_snippet.create_text_snippet'))
+      ) {
         this.ShortcutAndAttachmentStore.toggleShowCreateTextSnippitModal();
         this.ShortcutAndAttachmentStore.showModalInThread = false;
         this.ShortcutAndAttachmentStore.showModalInChat = false;
       }
+    },
+    generateKey(label) {
+      return label.toLowerCase().replace(/ /g, '-');
     },
   },
 };

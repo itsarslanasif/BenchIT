@@ -5,8 +5,8 @@ export const useRecentFilesStore = () => {
   const recentFilesStore = defineStore('recentFilesStore', {
     state: () => ({
       recentFiles: [],
-      showModalInChat:false,
-      showModalInThread:false,
+      showModalInChat: false,
+      showModalInThread: false,
     }),
 
     getters: {
@@ -16,17 +16,17 @@ export const useRecentFilesStore = () => {
     actions: {
       async index() {
         try {
-          this.recentFiles = await getAllRecentAttachments()
+          this.recentFiles = await getAllRecentAttachments();
         } catch (e) {
-          console.error(e)
+          console.error(e);
         }
       },
-      toggleModalInChat(){
-        this.showModalInChat= !this.showModalInChat
+      toggleModalInChat() {
+        this.showModalInChat = !this.showModalInChat;
       },
-      toggleModalInThread(){
-        this.showModalInThread= !this.showModalInThread
-      }
+      toggleModalInThread() {
+        this.showModalInThread = !this.showModalInThread;
+      },
     },
   });
   const store = recentFilesStore();

@@ -54,7 +54,6 @@
             });
           },
           plugins: ' lists link code codesample ',
-
           codesample_languages: [none],
           formats: {
             code: {
@@ -328,13 +327,10 @@ export default {
       messageStore.removeMessageToEdit();
     };
 
-    const isEditScheduled = () => {
-      return (
-        messageToEdit.content &&
-        messageToEdit.isScheduled &&
-        messageToEdit.scheduledId
-      );
-    };
+    const isEditScheduled = () =>
+      messageToEdit.content &&
+      messageToEdit.isScheduled &&
+      messageToEdit.scheduledId;
 
     const message = newMessage => {
       let messageData;
