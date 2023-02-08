@@ -11,6 +11,7 @@
 <script>
 import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAttachmentStore';
 import { ref } from 'vue';
+
 export default {
   props: ['shortcut'],
   setup() {
@@ -26,7 +27,6 @@ export default {
   },
   methods: {
     onSelect(shortcut) {
-      console.log(shortcut.key);
       if (
         shortcut.key ===
         this.generateKey(this.$t('create_text_snippet.create_text_snippet'))
