@@ -2,5 +2,13 @@ en:
   api:
     v1:
       workspaces:
+        create:
+          success: Workspace has been created successfully.
+        create_invitable:
+          failure: Sorry, There was an error in inviting the user to workspace.
+        find_profile:
+          failure: Sorry, You are not a part of this workspace.
         invite:
-          error: User already has profile in this workspace.
+          success: %{email} is sucessfully invited to the workspace %{company_name}
+        check_profile:
+          failure: Sorry, The user already has profile in this workspace.

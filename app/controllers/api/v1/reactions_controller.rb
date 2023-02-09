@@ -28,7 +28,7 @@ class Api::V1::ReactionsController < Api::ApiController
     if @reaction.profile_id.eql?(current_profile.id)
       check_membership(@reaction.bench_conversation)
     else
-      render json: { success: false, error: I18n.t('api.v1.reactions.authenticate_reaction.failure')}, status: :unauthorized
+      render json: { success: false, error: I18n.t('api.v1.reactions.authenticate_reaction.failure') }, status: :unauthorized
     end
   end
 
