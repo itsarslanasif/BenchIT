@@ -77,7 +77,6 @@ After installation and running instance of elasticsearch run following command t
 ```
 rake searchkick:reindex CLASS=Profile
 rake searchkick:reindex CLASS=BenchChannel
-rake searchkick:reindex CLASS=ConversationMessage
 ```
 You can check if instance of elasticsearch is running by using following command
 ```
