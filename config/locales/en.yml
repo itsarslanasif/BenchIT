@@ -400,3 +400,9 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+  controller:
+    bookmark:
+      success: 'Bookmark is created successfully.'
+    channel_participant:
+      success: ' is created successfully.'
+

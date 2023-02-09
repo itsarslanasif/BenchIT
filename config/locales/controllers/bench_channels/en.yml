@@ -1,0 +1,27 @@
+en:
+  api:
+    v1:
+      bench_channels:
+        create:
+          success: Channel is created successfully.
+          error: There was an error in creating the channel.
+        update:
+          success: Channel is updated successfully.
+          error: Error while updating the channel.
+        delete:
+          success: Channel is deleted successfully.
+          error: Error while deleting the channel.
+        leave_channel:
+          success: Channel left
+          error: There was an error in leaving the channel.
+        member:
+          error: User is not part of %{channel_name} channel.
+        change_channel:
+          error: You cannot change %{channel_name} to public again.
+        sort:
+          error: Invalid sort_by parameter
+        mute_channel:
+          channel_muted: Channel has been muted.
+        unmute_channel:
+          channel_unmuted: Channel has been un-muted.
+
