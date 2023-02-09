@@ -11,7 +11,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
   def send_message
-    @messages = @current_profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
+    @messages = current_profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
   end
 
   def create
@@ -47,11 +47,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def index_saved_messages
-    @saved_items = @current_profile.saved_items.order(created_at: :desc)
+    @saved_items = current_profile.saved_items.order(created_at: :desc)
   end
 
   def save_message
-    @saved_item = @current_profile.saved_items.new(conversation_message_id: params[:id])
+    @saved_item = current_profile.saved_items.new(conversation_message_id: params[:id])
 
     return if @saved_item.save
 
@@ -67,7 +67,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def recent_files
-    @messages = @current_profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
+    @messages = current_profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
 
   def bench_channel_messages
@@ -86,12 +86,12 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def fetch_last_messages
     params[:dm_ids].filter_map do |id|
-      BenchConversation.profile_to_profile_conversation(@current_profile.id, id)&.conversation_messages&.last
+      BenchConversation.profile_to_profile_conversation(current_profile.id, id)&.conversation_messages&.last
     end.sort_by(&:created_at).reverse
   end
 
   def profile_messages
-    @conversation = BenchConversation.profile_to_profile_conversation(@current_profile.id, @receiver.id)
+    @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
     paginate_messages
   end
@@ -101,7 +101,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def unread_messages
-    str = REDIS.get("unreadMessages#{Current.workspace.id}#{@current_profile.id}")
+    str = REDIS.get("unreadMessages#{Current.workspace.id}#{current_profile.id}")
     @previous_unread_messages_details = str.nil? ? {} : JSON.parse(str)
   end
 
@@ -114,7 +114,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def set_saved_item
-    @saved_item = @current_profile.saved_items.find_by(conversation_message_id: params[:id])
+    @saved_item = current_profile.saved_items.find_by(conversation_message_id: params[:id])
 
     return render json: { message: 'Message Not Found.' }, status: :not_found if @saved_item.nil?
   end
@@ -125,13 +125,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def conversation_messages_params
     params.permit(:content, :is_threaded, :parent_message_id, :is_sent_to_chat, message_attachments: []).tap do |param|
-      param[:sender_id] = @current_profile.id
+      param[:sender_id] = current_profile.id
     end
   end
 
   def schedule_messages_params
     params.permit(:content, :scheduled_at).tap do |param|
-      param[:profile_id] = @current_profile.id
+      param[:profile_id] = current_profile.id
     end
   end
 
@@ -144,21 +144,21 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           when 'groups'
                             Group.find_by(id: conversation_id)&.bench_conversation
                           when 'profiles'
-                            BenchConversation.profile_to_profile_conversation(@current_profile.id, conversation_id)
+                            BenchConversation.profile_to_profile_conversation(current_profile.id, conversation_id)
                           end
     render json: { error: 'wrong type' }, status: :bad_request if @bench_conversation.blank?
   end
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    return if !@bench_channel.is_private || @current_profile.bench_channel_ids.include?(@bench_channel.id)
+    return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { error: 'User is not part of this channel' }, status: :not_found
   end
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { error: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(@current_profile.id)
+    render json: { error: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(current_profile.id)
   end
 
   def set_receiver
@@ -167,7 +167,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def authenticat_message
-    if @message.sender_id.eql?(@current_profile.id)
+    if @message.sender_id.eql?(current_profile.id)
       check_membership(@message.bench_conversation)
     else
       render json: { error: 'Sorry, this message is not yours.' }, status: :unauthorized

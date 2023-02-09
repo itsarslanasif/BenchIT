@@ -19,7 +19,6 @@ class Api::ApiController < ApplicationController
 
   def set_profile
     Current.profile = Current.user.profiles.find_by(workspace_id: Current.workspace)
-    @current_profile = Current.profile
   end
 
   def presence_of_api_token
@@ -37,5 +36,13 @@ class Api::ApiController < ApplicationController
     Current.user = @current_user
   rescue StandardError
     render json: { error: 'You need to sign in before to access this.' }, status: :unauthorized
+  end
+
+  def current_profile
+    @current_profile ||= Current.profile
+  end
+
+  def current_workspace
+    @current_workspace ||= Current.workspace
   end
 end

@@ -29,7 +29,7 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def update
-    if (@profile = @current_profile.update!(profile_params))
+    if (@profile = current_profile.update!(profile_params))
       render json: { success: true, message: 'Profile Updated Successfully.' }, status: :ok
     else
       render json: { errors: @profile.errors, error: 'There was an error updating the profile' }, status: :unprocessable_entity
@@ -88,7 +88,7 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def check_user_member_of_workspace
-    return if Current.workspace.id.eql?(params[:workspace_id].to_i)
+    return if current_workspace.id.eql?(params[:workspace_id].to_i)
 
     render json: { error: 'You are not member of specified  workspace.' }, status: :unauthorized
   end
@@ -101,10 +101,10 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def set_previous_direct_messages
     conversation_ids = BenchConversation.recent_last_conversation
-    return render json: [@current_profile] if conversation_ids.empty?
+    return render json: [current_profile] if conversation_ids.empty?
 
     @bench_conversations_ids = ConversationMessage.recent_last_conversation(conversation_ids)
-    return render json: [@current_profile] if @bench_conversations_ids.empty?
+    return render json: [current_profile] if @bench_conversations_ids.empty?
 
     @dm_users_ids = BenchConversation.where(id: @bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end

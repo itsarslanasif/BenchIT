@@ -19,7 +19,7 @@ class Api::V1::FavouritesController < Api::ApiController
 
   def favourites_params
     params.require(:favourite).permit(:favourable_type, :favourable_id).tap do |param|
-      param[:profile] = @current_profile
+      param[:profile] = current_profile
     end
   end
 

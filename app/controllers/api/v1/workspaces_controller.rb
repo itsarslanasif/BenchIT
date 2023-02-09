@@ -6,7 +6,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   skip_before_action :set_profile, only: %i[index switch_workspace]
 
   def index
-    @workspaces = Current.user.workspaces
+    @workspaces = @current_user.workspaces
   end
 
   def create
@@ -55,7 +55,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def find_profile
-    @profile = Current.user.profiles.find_by(workspace_id: @workspace)
+    @profile = @current_user.profiles.find_by(workspace_id: @workspace)
 
     render json: { error: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
   end

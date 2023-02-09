@@ -5,7 +5,7 @@ class Api::V1::DownloadsController < Api::ApiController
   def index; end
 
   def create
-    @download = @current_profile.downloads.new(download_params)
+    @download = current_profile.downloads.new(download_params)
     @download.save!
     render json: @download, status: :created
   end
@@ -30,10 +30,10 @@ class Api::V1::DownloadsController < Api::ApiController
   end
 
   def set_download
-    @download = @current_profile.downloads.find(params[:id])
+    @download = current_profile.downloads.find(params[:id])
   end
 
   def set_all_downloads
-    @downloads = @current_profile.downloads.order(created_at: :desc)
+    @downloads = current_profile.downloads.order(created_at: :desc)
   end
 end

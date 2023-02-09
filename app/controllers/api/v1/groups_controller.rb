@@ -4,7 +4,7 @@ class Api::V1::GroupsController < Api::ApiController
   before_action :check_group_members, only: %i[add_member]
 
   def index
-    render json: @current_profile.groups
+    render json: current_profile.groups
   end
 
   def show
@@ -21,7 +21,7 @@ class Api::V1::GroupsController < Api::ApiController
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { error: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(@current_profile.id)
+    render json: { error: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(current_profile.id)
   end
 
   def group_size

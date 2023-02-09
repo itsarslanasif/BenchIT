@@ -32,7 +32,7 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def bookmark_params
     params.require(:bookmark).permit(:name, :bookmark_URL, :bookmarkable_type, :bookmarkable_id).tap do |param|
-      param[:profile_id] = @current_profile.id
+      param[:profile_id] = current_profile.id
     end
   end
 

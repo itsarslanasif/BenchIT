@@ -25,7 +25,7 @@ class Api::V1::ReactionsController < Api::ApiController
   end
 
   def authenticate_reaction
-    if @reaction.profile_id.eql?(@current_profile.id)
+    if @reaction.profile_id.eql?(current_profile.id)
       check_membership(@reaction.bench_conversation)
     else
       render json: { error: 'Sorry, this reaction is not yours' }, status: :unauthorized
@@ -33,7 +33,7 @@ class Api::V1::ReactionsController < Api::ApiController
   end
 
   def verify_membership
-    @reaction = @current_profile.reactions.find_or_create_by(reaction_params)
+    @reaction = current_profile.reactions.find_or_create_by(reaction_params)
     check_membership(@reaction.bench_conversation)
   end
 end

@@ -31,7 +31,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def join_public_channel
-    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: @current_profile.id, permission: true)
+    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: current_profile.id, permission: true)
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
@@ -56,23 +56,23 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
-    return if !@bench_channel.is_private || @current_profile.bench_channel_ids.include?(@bench_channel.id)
+    return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { errors: 'User is not part of channel.' }, status: :not_found
   end
 
   def set_channel_paticipant
-    @channel_participant = ChannelParticipant.where(bench_channel_id: @bench_channel.id, profile_id: @current_profile.id)
+    @channel_participant = ChannelParticipant.where(bench_channel_id: @bench_channel.id, profile_id: current_profile.id)
   end
 
   def check_workspace
-    return if @current_profile.workspace.eql?(@bench_channel.workspace)
+    return if current_profile.workspace.eql?(@bench_channel.workspace)
 
     render json: { error: 'This Channel is not part of your workspace.' }, status: :forbidden
   end
 
   def check_already_joined_channel
-    is_channel_participant = @bench_channel.profile_ids.include?(@current_profile.id)
+    is_channel_participant = @bench_channel.profile_ids.include?(current_profile.id)
 
     render json: { error: 'User already part of this channel.' }, status: :unprocessable_entity if is_channel_participant
   end
@@ -89,7 +89,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_profile_ids
-    return if (params[:profile_ids] - Current.workspace.profile_ids).blank?
+    return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
     render json: { error: 'Profiles cannot be found' }, status: :not_found
   end
