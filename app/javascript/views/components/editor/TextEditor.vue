@@ -152,6 +152,7 @@
 import { ref, watch } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
 import { Remarkable } from 'remarkable';
+import { markdownToBlocks } from '@tryfabric/mack'
 import TurndownService from 'turndown'
 import Attachments from '../attachments/Attachments.vue';
 import { useProfileStore } from '../../../stores/useProfileStore';
@@ -239,10 +240,10 @@ export default {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
     const FilesStore = useRecentFilesStore();
-    // const md = new Remarkable({ html: true });
+    const md = new Remarkable({ html: true });
     const turndownService = new TurndownService()
     // console.log(td.turndown('<strong>Hello World</strong>'))
-    // console.log(md.render('**Hello World**'))
+    console.log(md.render('**Hello World**'))
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
@@ -258,6 +259,7 @@ export default {
     const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
+    const blocks = ref([])
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -294,6 +296,12 @@ export default {
       schedule.value = value;
       toggleSchedule();
     };
+
+    const makeBlocks = async (line) => {
+      const block = await markdownToBlocks(line);
+      return block[0];
+    };
+
     const sendMessagePayload = (event, buttonClicked) => {
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
@@ -307,10 +315,19 @@ export default {
           messagetext !== '<p> </p>' &&
           !startWithNonBreakSpace
         ) {
-          // const mrkdwn = turndownService.turndown(messagetext)
-          // console.log(mrkdwn);
+          const mrkdwn = []
+          const htmlList = messagetext.split('<br />');
+          htmlList.forEach(async line => {
+            mrkdwn.push(turndownService.turndown(line))
+          });
+          mrkdwn.forEach(async line => {
+            blocks.value.push(await makeBlocks(line));
+          });
+          console.log(blocks);
+          // const flatBlocks = blocks.
+          // console.log(blocks.flat())
           // console.log(messagetext);
-          props.sendMessage(messagetext, files.value, schedule);
+          // props.sendMessage(messagetext, files.value, schedule);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
