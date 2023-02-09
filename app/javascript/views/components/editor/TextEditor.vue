@@ -163,7 +163,7 @@ import vClickOutside from 'click-outside-vue3';
 import AttachmentShortCutVue from './Attachment&shortCutModal.vue';
 import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
 import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAttachmentStore';
-import CreateTextSnippetModal from './createTextSnippetModal.vue';
+import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 
 export default {
   beforeMount() {
