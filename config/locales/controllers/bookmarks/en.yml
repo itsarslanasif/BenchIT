@@ -2,14 +2,13 @@ en:
   api:
     v1:
       controllers:
-        channel_participants:
-          mute_channel:
-            success: Channel has been muted.
-          unmute_channel:
-            success: Channel has been un-muted.
-          join_public_channel:
-            success: User has joined %{@bench_channel.name} channel successfully.
-            failure: Unable to join the %{@bench_channel.name} channel.
+        bookmarks:
+          create:
+            success: Bookmark is created successfully.
+          update:
+            success: Bookmark is updated successfully.
+          destroy:
+            success: Bookmark is deleted successfully.
           set_bench_channel:
             failure: User is not part of channel.
           check_workspace:

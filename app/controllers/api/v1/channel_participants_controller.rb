@@ -35,21 +35,23 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
-        render json: { success: true, message: "Joined ##{@bench_channel.name}." }, status: :ok
+        render json: { success: true, message: I18n.t('api.v1.controllers.channel_participants.join_public_channel.success', { channel_name: @bench_channel.name }) },
+               status: :ok
       else
-        render json: { error: "Unable to join ##{@bench_channel.name}.", errors: @channel_participant.errors }, status: :unprocessable_entity
+        render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.join_public_channel.failure', { channel_name: @bench_channel.name }) },
+               status: :unprocessable_entity
       end
     end
   end
 
   def mute_channel
     @channel_participant.update!(muted: true)
-    render json: { success: true, message: t('.channel_muted') }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.controllers.channel_participants.mute_channel.success') }, status: :ok
   end
 
   def unmute_channel
     @channel_participant.update!(muted: false)
-    render json: { success: true, message: t('.channel_unmuted') }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.controllers.channel_participants.unmute_channel.success') }, status: :ok
   end
 
   private
@@ -58,7 +60,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { errors: 'User is not part of channel.' }, status: :not_found
+    render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.set_bench_channel.failure') }, status: :not_found
   end
 
   def set_channel_paticipant
@@ -68,22 +70,31 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def check_workspace
     return if current_profile.workspace.eql?(@bench_channel.workspace)
 
-    render json: { error: 'This Channel is not part of your workspace.' }, status: :forbidden
+    render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.check_workspace.failure') }, status: :forbidden
   end
 
   def check_already_joined_channel
     is_channel_participant = @bench_channel.profile_ids.include?(current_profile.id)
 
-    render json: { error: 'User already part of this channel.' }, status: :unprocessable_entity if is_channel_participant
+    return unless is_channel_participant
+
+    render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.check_already_joined_channel.failure') },
+           status: :unprocessable_entity
   end
 
   def check_private_channel
-    return render json: { error: 'You cannot join Private Channel yourself.' }, status: :forbidden if @bench_channel.is_private?
+    return unless @bench_channel.is_private?
+
+    render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.check_private_channel.failure') },
+           status: :forbidden
   end
 
   def check_channel_participants
     @channel_members = ChannelParticipant.where(profile_id: params[:profile_ids], bench_channel_id: @bench_channel.id).ids
-    return render json: { error: 'One or Many Users already participant of this channel' }, status: :forbidden if @channel_members.present?
+    if @channel_members.present?
+      return render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.check_channel_participants.failure') },
+                    status: :forbidden
+    end
 
     @users_joined = Profile.where(id: params[:profile_ids]).pluck(:username)
   end
@@ -91,6 +102,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def check_profile_ids
     return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
-    render json: { error: 'Profiles cannot be found' }, status: :not_found
+    render json: { success: false, error: I18n.t('api.v1.controllers.channel_participants.check_profile_ids.failure') }, status: :not_found
   end
 end

@@ -1,27 +1,25 @@
 en:
   api:
     v1:
-      bench_channels:
-        create:
-          success: Channel is created successfully.
-          error: There was an error in creating the channel.
-        update:
-          success: Channel is updated successfully.
-          error: Error while updating the channel.
-        delete:
-          success: Channel is deleted successfully.
-          error: Error while deleting the channel.
-        leave_channel:
-          success: Channel left
-          error: There was an error in leaving the channel.
-        member:
-          error: User is not part of %{channel_name} channel.
-        change_channel:
-          error: You cannot change %{channel_name} to public again.
-        sort:
-          error: Invalid sort_by parameter
-        mute_channel:
-          channel_muted: Channel has been muted.
-        unmute_channel:
-          channel_unmuted: Channel has been un-muted.
+      controllers:
+        bench_channels:
+          create:
+            failure: There was an error in creating the channel.
+          update:
+            failure: Error while updating the channel.
+          destroy:
+            failure: Error while deleting the channel.
+          leave_channel:
+            success: User has left the channel
+            failure: There was an error in leaving the channel.
+          set_bench_channel:
+            failure: User is not part of %{channel_name} channel.
+          set_channel_participant:
+            failure: You are not part of this channel.
+          set_left_on:
+            failure: There was an error in leaving the channel.
+          bench_channel_cannot_be_public_again:
+            failure: You cannot change %{channel_name} to public again.
+          sort_bench_channels:
+            failure: Invalid sort_by parameter
 

@@ -28,7 +28,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
     ActiveRecord::Base.transaction do
       delete_job
       current_profile.conversation_messages.create!(content: @schedule_message.content,
-                                                     bench_conversation_id: @schedule_message.bench_conversation_id)
+                                                    bench_conversation_id: @schedule_message.bench_conversation_id)
       @schedule_message.destroy!
     end
 
