@@ -72,6 +72,8 @@ import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import ChannelsDropDown from '../../widgets/channelsDropDown.vue';
 import { channel } from '../../../modules/setChannel/setchannel.js';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import { useRightpaneMessageStore } from '../../../stores/useRightpaneMessageStore';
 export default {
   components: {
     AccordionList,
@@ -99,24 +101,33 @@ export default {
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
     const messagesStore = useMessageStore();
+    const rightPaneMessageStore = useRightpaneMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
+    const rightPaneStore = useRightPaneStore();
     return {
       joinedChannels,
       leftPaneStore,
       messagesStore,
       channelStore,
       selectedChat,
+      rightPaneStore,
+      rightPaneMessageStore,
     };
   },
   methods: {
     toggleModal() {
       this.showCreateChannelModal = !this.showCreateChannelModal;
     },
-    goToChannelChat(chatURL, channel) {
-      this.messagesStore.setSelectedChat(channel);
-      this.$router.push(chatURL);
-      if (this.isMobileView()) {
-        this.leftPaneStore.closeLeftPane();
+    goToChannelChat(chatURL, channel, event) {
+      if (event.ctrlKey || event.metaKey) {
+        this.rightPaneMessageStore.setSelectedChat(channel);
+        this.rightPaneStore.toggleChatShow(true);
+      } else {
+        this.messagesStore.setSelectedChat(channel);
+        this.$router.push(chatURL);
+        if (this.isMobileView()) {
+          this.leftPaneStore.closeLeftPane();
+        }
       }
     },
     isMobileView() {

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="user"
-    @click="goToChat(`/profiles/${user.id}`, user)"
+    @click="goToChat(`/profiles/${user.id}`, user, $event)"
     class="flex items-center pl-2 py-1 hover:bg-primaryHover cursor-pointer"
     :class="isUnreadDM(user) ? 'font-bold' : ''"
   >

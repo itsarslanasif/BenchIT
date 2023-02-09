@@ -1,8 +1,8 @@
 import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios';
 
-export const pinnedMessages = (conversation_type, conversation_id) => {
-  return axios
+export const pinnedMessages = async (conversation_type, conversation_id) => {
+  return await axios
     .get(
       `v1/pins?conversation_type=${conversation_type}&conversation_id=${conversation_id}`,
       {

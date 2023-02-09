@@ -257,7 +257,7 @@
                 }}</span>
                 <span class="text-md"
                   >{{
-                    getUsers(emoji, currentProfileStore.currentProfile.username)
+                    getUsers(emoji, currentProfile.username)
                   }}
                   {{ $t('chat.reacted') }}</span
                 >

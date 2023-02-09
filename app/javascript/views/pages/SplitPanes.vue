@@ -26,10 +26,20 @@
             leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
           "
         >
-          <router-view :key="$route.fullPath" />
+          <template v-if="rightPaneStore.pane1.useMe && rightPaneStore.pane1.showThread">
+            <Thread />
+          </template>
+          <template
+           v-else-if="rightPaneStore.pane1.useMe && rightPaneStore.pane1.showUserProfile"
+          >
+            <UserProfile />
+          </template>
+          <template v-else>
+            <router-view :key="$route.fullPath" />
+          </template>
         </pane>
         <pane
-          v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+          v-if="(rightPaneStore.pane1.showThread || rightPaneStore.pane1.showUserProfile) && !rightPaneStore.pane2.showMe"
           max-size="60"
           min-size="40"
           class="bg-white"
@@ -38,11 +48,37 @@
           "
         >
           <Thread
-            v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+            v-if="
+              rightPaneStore.pane1.showThread &&
+              !rightPaneStore.pane1.showUserProfile
+            "
           />
           <UserProfile
-            v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+            v-if="
+              !rightPaneStore.pane1.showThread &&
+              rightPaneStore.pane1.showUserProfile
+            "
           />
+        </pane>
+        <pane
+          v-if="rightPaneStore.pane2.showMe"
+          max-size="60"
+          min-size="40"
+          class="bg-white"
+          :class="
+            leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
+          "
+        >
+          <template v-if="rightPaneStore.pane2.showThread">
+            <Thread />
+          </template>
+          <template
+            v-else-if="rightPaneStore.pane2.showUserProfile">
+            <UserProfile />
+          </template>
+          <template v-else>
+            <Chat />
+          </template>
         </pane>
       </splitpanes>
     </div>
@@ -54,7 +90,6 @@ import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/workspaceDropdown/WorkspaceDropdown.vue';
 import SearchBar from '../shared/searchBar.vue';
-import Chat from './Chat.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
@@ -67,6 +102,7 @@ import { NMessageProvider } from 'naive-ui';
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import alert from '../widgets/alert.vue';
+import Chat from '../components/rightPane/RightpaneChat/Chat.vue';
 
 export default {
   components: {

@@ -15,20 +15,19 @@
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
-  setup() {
-    function getIndexByParams(param) {
-      return window.location.pathname.split('/')[param];
+  props: ['selectedChat'],
+  setup(props) {
+    function getConversationType() {
+      if (props.selectedChat.is_private !== undefined) {
+        return 'BenchChannel';
+      } else {
+        return 'Profile';
+      }
     }
-
     const pinnedConversationStore = usePinnedConversation();
-    const conversation_type = getIndexByParams(1);
-    const conversation_id = getIndexByParams(2);
-
-    pinnedConversationStore.index(
-      conversation_type,
-      conversation_id
-    );
-
+    const conversation_id = props.selectedChat.id;
+    const conversation_type = getConversationType();
+    pinnedConversationStore.index(conversation_type, conversation_id);
     return { pinnedConversationStore };
   },
 };

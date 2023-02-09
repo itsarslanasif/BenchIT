@@ -358,6 +358,9 @@ export default {
     recieverName: {
       type: String,
     },
+    selectedChat: {
+      type: Object
+    },
   },
   computed: {
     getPlaceholder() {
@@ -444,7 +447,7 @@ export default {
     const turndownService = new TurndownService();
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
-    const { selectedChat, messageToEdit } = storeToRefs(messageStore);
+    const { messageToEdit } = storeToRefs(messageStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
@@ -546,9 +549,9 @@ export default {
     const getScheduleNotification = () => {
       const date = moment(schedule.value);
       return `Your message will be sent to ${
-        selectedChat.value['user_id']
-          ? selectedChat.value.username
-          : selectedChat.value.name
+        props.selectedChat.value['user_id']
+          ? props.selectedChat.value.username
+          : props.selectedChat.value.name
       } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
 
@@ -627,7 +630,6 @@ export default {
       dispatchKeydownEnterEvent,
       handleCancelEdit,
       isEditScheduled,
-      selectedChat,
       handleCustomButton,
       attachmentAndShortcutStore,
       turndownService,

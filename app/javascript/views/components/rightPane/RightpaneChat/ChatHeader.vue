@@ -17,24 +17,24 @@
     <div
       class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer"
     >
-      <PinnedConversation :selectedChat="selectedChat"/>
+      <PinnedConversation :selectedChat="selectedChat" />
     </div>
   </div>
 </template>
 
 <script>
 import { NAvatar, NIcon, NSpace, NSpin } from 'naive-ui';
-import BookmarkPopUp from '../bookmark/popup.vue';
-import BookmarkShow from '../bookmark/bookmarkShow.vue';
-import Spinner from '../../shared/spinner.vue';
-import axios from '../../../modules/axios/index';
-import { useMessageStore } from '../../../stores/useMessagesStore';
+import BookmarkPopUp from '../../bookmark/popup.vue';
+import BookmarkShow from '../../bookmark/bookmarkShow.vue';
+import Spinner from '../../../shared/spinner.vue';
+import axios from '../../../../modules/axios/index';
+import { useRightpaneMessageStore } from '../../../../stores/useRightpaneMessageStore';
 import { storeToRefs } from 'pinia';
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
-import ChannelInfo from '../channels/ChannelInfo.vue';
+import { usePinnedConversation } from '../../../../stores/UsePinnedConversationStore';
+import PinnedConversation from '../../pinnedConversation/pinnedConversation.vue';
+import ChannelInfo from './ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
-import { getHeaders } from '../../../modules/auth';
+import { getHeaders } from '../../../../modules/auth';
 
 export default {
   name: 'ChatHeader',
@@ -55,7 +55,7 @@ export default {
       bookmarks: [],
       loading: true,
       user_id: 1,
-      conversation_type: window.location.pathname.split('/')[1],
+      conversation_type: null,
     };
   },
   mounted() {
@@ -71,18 +71,24 @@ export default {
         this.loading = false;
         return error;
       });
+    if (this.selectedChat.is_private !== undefined) {
+      this.conversation_type = 'channels';
+    } else {
+      this.conversation_type = 'profiles';
+    }
   },
   setup() {
-    const messageStore = useMessageStore();
+    const messageStore = useRightpaneMessageStore();
     const { messages, selectedChat } = storeToRefs(messageStore);
     const pinnedConversationStore = usePinnedConversation();
 
     return {
-      selectedChat,
       messages,
+      selectedChat,
       pinnedConversationStore,
     };
   },
+
   beforeUnmount() {
     this.pinnedConversationStore.closeModal();
   },

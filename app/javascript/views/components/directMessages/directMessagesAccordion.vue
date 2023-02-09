@@ -64,6 +64,8 @@ import { CONSTANTS } from '../../../assets/constants';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
+import { useRightpaneMessageStore } from '../../../stores/useRightpaneMessageStore'
+import { useRightPaneStore } from '../../../stores/useRightPaneStore'
 
 export default {
   components: {
@@ -93,12 +95,16 @@ export default {
     const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
+    const rightPaneMessageStore = useRightpaneMessageStore();
+    const rightPaneStore = useRightPaneStore();
     return {
       directMessageStore,
       currentProfileStore,
       messagesStore,
       leftPaneStore,
       selectedChat,
+      rightPaneMessageStore,
+      rightPaneStore
     };
   },
   computed: {
@@ -112,13 +118,18 @@ export default {
     closeModal() {
       this.modalOpen = !this.modalOpen;
     },
-    goToChat(chatURL, user) {
-      this.messagesStore.setSelectedChat(user);
-      this.$router.push(chatURL);
-      if (this.isMobileView()) {
-        this.leftPaneStore.closeLeftPane();
+    goToChat(chatURL, user, event) {
+      if (event.ctrlKey || event.metaKey) {
+        this.rightPaneMessageStore.setSelectedChat(user);
+        this.rightPaneStore.toggleChatShow(true);
+      } else {
+        this.messagesStore.setSelectedChat(user);
+        this.$router.push(chatURL);
+        if (this.isMobileView()) {
+          this.leftPaneStore.closeLeftPane();
+        }
+        this.setType();
       }
-      this.setType();
     },
     isMobileView() {
       return window.innerWidth < 1400;

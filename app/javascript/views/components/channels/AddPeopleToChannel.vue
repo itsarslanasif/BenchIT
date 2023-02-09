@@ -97,6 +97,10 @@ export default defineComponent({
       type: String,
       default: undefined,
     },
+    channelId: {
+      type: String,
+      default: undefined,
+    },
   },
   setup() {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
@@ -135,10 +139,10 @@ export default defineComponent({
   },
   methods: {
     async submit() {
-      let channel_id = window.location.pathname.split('/')[2];
+      console.log(this.channelID)
       try {
         let response = await addMemberstoChannel(
-          channel_id,
+          this.channelId,
           this.selectedValues
         );
         this.response = response;

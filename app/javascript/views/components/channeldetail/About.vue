@@ -37,21 +37,18 @@
 </template>
 
 <script>
-import { storeToRefs } from 'pinia';
 import { useChannelStore } from '../../../stores/useChannelStore';
-import { useMessageStore } from '../../../stores/useMessagesStore';
 import moment from 'moment';
 
 export default {
   setup() {
-    const messagesStore = useMessageStore();
-    const { selectedChat } = storeToRefs(messagesStore);
     const channelStore = useChannelStore();
     return {
       channelStore,
-      selectedChat,
     };
   },
+
+  props: ['selectedChat'],
 
   methods: {
     async leaveChannel() {

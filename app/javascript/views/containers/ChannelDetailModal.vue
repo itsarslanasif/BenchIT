@@ -47,7 +47,7 @@
         {{ $t('channeldetail.settings') }}
       </p>
     </div>
-    <About v-if="ChannelDetailStore.isAbout()" />
+    <About v-if="ChannelDetailStore.isAbout()" :selectedChat="selectedChat" />
     <members v-if="ChannelDetailStore.isMembers()" />
   </div>
 </template>
@@ -58,8 +58,6 @@ import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import vClickOutside from 'click-outside-vue3';
-import { useMessageStore } from '../../stores/useMessagesStore';
-import { storeToRefs } from 'pinia';
 export default {
   name: 'ChannelDetailModal',
   components: { About, StarUnstar, Members },
@@ -68,12 +66,11 @@ export default {
   },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
-    const messagesStore = useMessageStore();
-    const { selectedChat } = storeToRefs(messagesStore);
-    return { ChannelDetailStore, selectedChat };
+    return { ChannelDetailStore };
   },
   props: {
     detailsopen: Function,
+    selectedChat: Object,
   },
   methods: {
     closeModal() {

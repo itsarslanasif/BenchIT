@@ -19,7 +19,7 @@
     </div>
     <n-divider vertical class="self-center text-black" />
     <div class="ml-3">
-      <AddPeopleToChannel :channelName="channelName" />
+      <AddPeopleToChannel :channelName="channelName" :channelId="channelId" />
     </div>
   </div>
 </template>

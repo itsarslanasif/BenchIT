@@ -72,6 +72,7 @@
             v-if="isChannel"
             :channelName="selectedChat?.name"
             :buttonText="$t('chat.add_people')"
+            :channelId="selectedChat.id"
           />
         </p>
       </span>
@@ -93,7 +94,6 @@
 
 <script>
 import { storeToRefs } from 'pinia';
-import { useMessageStore } from '../../stores/useMessagesStore';
 import moment from 'moment';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
@@ -108,16 +108,14 @@ export default {
       conversation_type: window.location.pathname.split('/')[1],
     };
   },
+  props: ['selectedChat'],
   setup() {
-    const messagesStore = useMessageStore();
     const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
     const userProfileStore = useUserProfileStore();
     const profilesStore = useProfileStore();
     const { currentProfile } = storeToRefs(currentProfileStore);
-    const { selectedChat } = storeToRefs(messagesStore);
     return {
-      selectedChat,
       currentProfile,
       rightPaneStore,
       userProfileStore,
@@ -126,10 +124,10 @@ export default {
   },
   computed: {
     isChannel() {
-      return this.conversation_type === 'channels';
+      return this.selectedChat.is_private !== undefined;
     },
     isProfile() {
-      return this.conversation_type === 'profiles';
+      return this.selectedChat.is_private === undefined;
     },
     isOwnChat() {
       return this.currentProfile?.id === this.selectedChat?.id;

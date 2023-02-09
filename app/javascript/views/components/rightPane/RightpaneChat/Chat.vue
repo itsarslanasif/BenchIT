@@ -1,5 +1,5 @@
 <template>
-  <div v-if="conversation_type && id" class="flex flex-col h-full">
+  <div class="flex flex-col h-full">
     <div v-if="chat" class="chat-header-style">
       <ChatHeader />
     </div>
@@ -11,12 +11,7 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <TextEditorVue
-        :sendMessage="sendMessage"
-        :editMessage="false"
-        :isThread="false"
-        :selectedChat="messageStore.selectedChat"
-      />
+      <TextEditorVue :sendMessage="sendMessage" :editMessage="false" :selectedChat="selectedChat"/>
     </div>
     <div v-else>
       <JoinChannel :joinedTheChannel="joinedTheChannel" />
@@ -25,20 +20,20 @@
 </template>
 
 <script>
-import ChatHeader from '../components/chats/ChatHeader.vue';
-import JoinChannel from '../widgets/JoinChannel.vue';
+import ChatHeader from './ChatHeader.vue';
+import JoinChannel from '../../../widgets/JoinChannel.vue';
 import { NInput, NSpace } from 'naive-ui';
-import ChatBody from '../components/chats/ChatBody.vue';
-import TextEditorVue from '../components/editor/TextEditor.vue';
+import ChatBody from '../../chats/ChatBody.vue';
+import TextEditorVue from '../../editor/TextEditor.vue';
 import { createCable, unsubscribe } from '@/plugins/cable';
-import { conversation } from '../../modules/axios/editorapi';
-import { useMessageStore } from '../../stores/useMessagesStore';
-import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
-import { cableActions } from '../../modules/cable/index';
+import { conversation } from '../../../../modules/axios/editorapi';
+import { useRightpaneMessageStore } from '../../../../stores/useRightpaneMessageStore';
+import { useCurrentUserStore } from '../../../../stores/useCurrentUserStore';
+import { cableActions } from '../../../../modules/cable/rightPaneIndex';
 import { storeToRefs } from 'pinia';
-import { useUnreadStore } from '../../stores/useUnreadStore';
-import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
-import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useUnreadStore } from '../../../../stores/useUnreadStore';
+import { useChannelDetailStore } from '../../../../stores/useChannelDetailStore';
+import { useCurrentProfileStore } from '../../../../stores/useCurrentProfileStore';
 export default {
   name: 'Chat',
   components: {
@@ -57,52 +52,38 @@ export default {
       id: null,
       currentUser: {},
       isMember: true,
+      oldestUnreadMessageId: null,
     };
   },
   setup() {
-    function getIndexByParams(param) {
-      return window.location.pathname.split('/')[param];
-    }
-    const messageStore = useMessageStore();
+    const messageStore = useRightpaneMessageStore();
     const currentUserStore = useCurrentUserStore();
     const unreadStore = useUnreadStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
-    const conversation_type = getIndexByParams(1);
-    const id = getIndexByParams(2);
     const {
       messages,
       currMessage,
       currentPage,
       hasMoreMessages,
       newMessageSent,
+      selectedChat,
     } = storeToRefs(messageStore);
     const { currentUser } = storeToRefs(currentUserStore);
     const { channelMembers } = storeToRefs(channelDetailStore);
     const currentProfile = currentProfileStore.getCurrentProfile;
-    const oldestUnreadMessageId = unreadStore.getOldestMessageId(
-      conversation_type,
-      id
-    );
-    unreadStore.markedChatAsRead(conversation_type, id);
     return {
       messages,
       currMessage,
       currentPage,
       hasMoreMessages,
-      loadMoreMessages() {
-        if (hasMoreMessages) {
-          messageStore.index(conversation_type, id);
-        }
-      },
       messageStore,
-      conversation_type,
       currentUser,
-      oldestUnreadMessageId,
       newMessageSent,
-      id,
       channelMembers,
       currentProfile,
+      selectedChat,
+      unreadStore,
     };
   },
   watch: {
@@ -113,9 +94,19 @@ export default {
     },
   },
   mounted() {
+    if (this.selectedChat.is_private !== undefined) {
+      this.conversation_type = 'channels';
+    } else {
+      this.conversation_type = 'profiles';
+    }
+    this.oldestUnreadMessageId = this.unreadStore.getOldestMessageId(
+      this.conversation_type,
+      this.selectedChat.id
+    );
+    this.unreadStore.markedChatAsRead(this.conversation_type, this.selectedChat.id);
     this.Cable = createCable({
       channel: 'ChatChannel',
-      id: this.id,
+      id: this.selectedChat.id,
       type: this.conversation_type,
       current_user_id: this.currentUser.id,
     });
@@ -134,15 +125,15 @@ export default {
   methods: {
     sendMessage(message, files, schedule) {
       let formData = new FormData();
-      formData.append('content', JSON.stringify(message));
+      formData.append('content', message);
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
-      formData.append('conversation_id', this.id);
-      if (schedule && schedule.value) {
+      formData.append('conversation_id', this.selectedChat.id);
+      if (schedule.value) {
         formData.append('scheduled_at', schedule.value);
       }
       files.forEach(file => {
-        formData.append('message_attachments[]', file, message);
+        formData.append('message_attachments[]', file);
       });
       conversation(formData).then(res => {
         if (res.scheduled_at) {
@@ -157,6 +148,11 @@ export default {
     },
     getConversationType() {
       return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile';
+    },
+    loadMoreMessages() {
+      if (this.hasMoreMessages) {
+        this.messageStore.index(this.conversation_type, this.selectedChat.id);
+      }
     },
   },
 };
@@ -180,3 +176,4 @@ export default {
   background-image: url(../../assets/images/codeblock.png) !important;
 }
 </style>
+

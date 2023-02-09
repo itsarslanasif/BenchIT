@@ -2,7 +2,7 @@
   <div class="infi-scroll-comp-root">
     <div class="overflow-auto chatBody" ref="chatBody">
       <PinnedConversationModal />
-      <ChatDetail />
+      <ChatDetail :selectedChat="selectedChat"/>
       <div v-if="showSpinner" class="text-center">
         <div class="spinner"></div>
       </div>
@@ -77,7 +77,6 @@
 </template>
 <script>
 import MessageWrapper from '../messages/MessageWrapper.vue';
-import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import PinnedConversationModal from '../pinnedConversation/pinnedConversationModal.vue';
@@ -95,7 +94,7 @@ export default {
     JumpToDateVue,
     ChatDetail,
   },
-  props: ['oldestUnreadMessageId'],
+  props: ['oldestUnreadMessageId', 'messageStore'],
   data() {
     return {
       jumpToDateTodayToggle: false,
@@ -138,15 +137,15 @@ export default {
       return this.messages[0]?.id;
     },
   },
-  setup() {
-    const messageStore = useMessageStore();
-    const { messages, currMessage, hasMoreMessages, newMessageSent } =
-      storeToRefs(messageStore);
+  setup(props) {
+    const { messages, currMessage, hasMoreMessages, newMessageSent, selectedChat } =
+      storeToRefs(props.messageStore);
     return {
       messages,
       currMessage,
       hasMoreMessages,
       newMessageSent,
+      selectedChat,
     };
   },
   methods: {

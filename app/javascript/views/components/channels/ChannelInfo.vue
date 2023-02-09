@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div class="">
+      <div>
         <div class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer">
           <div v-if="selectedChat.is_private" class="self-center mr-1">
             <font-awesome-icon icon="fa-lock" />
@@ -30,7 +30,7 @@
   </div>
   <ChannelDetailModal
     v-if="modalOpen"
-    :currentChannel="this.currentChannel"
+    :selectedChat="this.currentChannel"
     :detailsopen="this.openChannelDetailModal"
     class="m-auto absolute inset-x-0"
   />
@@ -54,7 +54,7 @@ export default {
     const { joinedChannels } = storeToRefs(channelStore);
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
-    return { ChannelDetailStore, joinedChannels, channelStore, selectedChat };
+    return { ChannelDetailStore, joinedChannels, channelStore, selectedChat};
   },
   data() {
     return {
@@ -62,7 +62,6 @@ export default {
       currentChannel: {},
     };
   },
-
   methods: {
     openChannelDetailModal(open) {
       this.modalOpen = open;
