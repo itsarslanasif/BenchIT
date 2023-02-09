@@ -85,7 +85,7 @@ export default {
     isMyMessage(currentProfileStore, message) {
       return message.sender_id == currentProfileStore.id;
     },
-    handleSelect(key, message, messageStore) {
+    handleSelect(key, message) {
       switch (key) {
         case 'copy-link':
           this.copyLinkToMessage(message);
@@ -108,7 +108,7 @@ export default {
           this.setUnpinModal();
           break;
         case 'edit-message':
-          if (message) messageStore.setMessageToEdit(message);
+          if (message) this.messageStore.setMessageToEdit(message);
           break;
       }
     },
