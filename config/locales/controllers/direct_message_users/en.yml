@@ -1,8 +1,7 @@
 en:
   api:
     v1:
-      dm_users:
+      direct_message_users:
         destroy:
           not_found: Record not found.
           removed: Removed from Dm list.
-          unable_to_remove: Unable to remove from Dm list.

@@ -82,10 +82,10 @@ Rails.application.routes.draw do
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
-        resources :dm_users, only: %i[index destroy] do
+        resources :direct_message_users, only: %i[index destroy] do
           collection do
             get :previous_direct_messages
-            get :last_direct_messages
+            get :recent_direct_messages
           end
         end
         resources :channel_participants, only: %i[create index] do

@@ -106,12 +106,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_07_115635) do
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
   end
 
-  create_table "dm_users", force: :cascade do |t|
+  create_table "direct_message_users", force: :cascade do |t|
     t.integer "profile_id", null: false
     t.integer "receiver_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["receiver_id", "profile_id"], name: "index_dm_users_on_receiver_id_and_profile_id", unique: true
+    t.index ["receiver_id", "profile_id"], name: "index_direct_message_users_on_receiver_id_and_profile_id", unique: true
   end
 
   create_table "downloads", force: :cascade do |t|
