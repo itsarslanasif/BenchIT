@@ -11,17 +11,17 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def create
     @bookmark.save!
-    render json: { success: true, message: I18n.t('api.v1.bookmarks.create.success') }, status: :ok
+    render json: { success: true, message: t('.create.success') }, status: :ok
   end
 
   def update
     @bookmark.update!(bookmark_params)
-    render json: { success: true, message: I18n.t('api.v1.bookmarks.update.success') }, status: :ok
+    render json: { success: true, message: t('.update.success') }, status: :ok
   end
 
   def destroy
     @bookmark.destroy!
-    render json: { success: true, message: I18n.t('api.v1.bookmarks.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   private

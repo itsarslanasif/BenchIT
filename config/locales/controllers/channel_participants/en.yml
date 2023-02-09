@@ -2,13 +2,13 @@ en:
   api:
     v1:
       channel_participants:
+        join_public_channel:
+          success: User has joined the channel successfully.
+          failure: Sorry, Unable to join the channel.
         mute_channel:
           success: Channel has been muted successfully.
         unmute_channel:
           success: Channel has been un-muted successfully.
-        join_public_channel:
-          success: User has joined the channel successfully.
-          failure: Sorry, Unable to join the channel.
         set_bench_channel:
           failure: Sorry, User is not part of channel.
         check_workspace:

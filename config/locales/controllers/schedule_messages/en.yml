@@ -9,4 +9,6 @@ en:
         destroy:
           success: The message has been deleted successfully.
         send_now:
-          success: The schedule message has been sent successfully.
+          success: The schedule message has been sent now successfully.
+        authenticate_message:
+          failure: Sorry, This message is not your.

@@ -14,7 +14,7 @@ class Api::V1::GroupsController < Api::ApiController
   def add_member
     @group.profile_ids += params[:profile_ids]
     @group.save!
-    render json: { success: true, message: I18n.t('api.v1.groups.add_meber.success') }, status: :ok
+    render json: { success: true, message: t('.add_meber.success') }, status: :ok
   end
 
   private
@@ -23,20 +23,20 @@ class Api::V1::GroupsController < Api::ApiController
     @group = Group.find(params[:id])
     return if @group.profile_ids.include?(current_profile.id)
 
-    render json: { success: false, error: I18n.t('api.v1.groups.set_group.failure') },
+    render json: { success: false, error: t('.set_group.failure') },
            status: :not_found
   end
 
   def group_size
     return unless (@group.profile_ids.size + params[:profile_ids].size) > 9
 
-    render json: { success: false, error: I18n.t('api.v1.groups.group_size.failure') },
+    render json: { success: false, error: t('.group_size.failure') },
            status: :bad_request
   end
 
   def check_group_members
     return unless (@group.profile_ids & params[:profile_ids]).any?
 
-    render json: { success: false, error: I18n.t('api.v1.groups.check_group_members.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.check_group_members.failure') }, status: :unprocessable_entity
   end
 end

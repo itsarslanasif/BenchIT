@@ -13,16 +13,15 @@ class Api::V1::WorkspacesController < Api::ApiController
     @workspace = Workspace.new(workspace_params)
 
     @workspace.save!
-    render json: { success: true, message: I18n.t('api.v1.workspaces.create.success') }, status: :ok
+    render json: { success: true, message: t('.create.success') }, status: :ok
   end
 
   def invite
     @token = Token.new.generate
     create_invitable if @user.present?
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
-    render json: { message: "#{params[:email]} is sucessfully invited to #{@workspace.company_name}" }, status: :ok
-    render json: { success: true, message: I18n.t('api.v1.workspaces.invite.success',
-                                                  { email: params[:email], company_name: @workspace.company_name }) }, status: :ok
+    render json: { success: true, message: t('.invite.success',
+                                             { email: params[:email], company_name: @workspace.company_name }) }, status: :ok
   end
 
   def create_invitable
@@ -30,7 +29,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
     return unless @invitable.errors.any?
 
-    render json: { success: false, error: I18n.t('api.v1.workspaces.create_invitable.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.create_invitable.failure') }, status: :unprocessable_entity
   end
 
   def switch_workspace
@@ -50,7 +49,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   def find_profile
     @profile = current_user.profiles.find_by(workspace_id: @workspace)
 
-    render json: { success: false, error: I18n.t('api.v1.workspaces.find_profile.failure') }, status: :unprocessable_entity if @profile.nil?
+    render json: { success: false, error: t('.find_profile.failure') }, status: :unprocessable_entity if @profile.nil?
   end
 
   def check_profile
@@ -58,6 +57,6 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.blank?
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
-    render json: { success: false, error: I18n.t('api.v1.workspaces.check_profile.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.check_profile.failure') }, status: :unprocessable_entity
   end
 end

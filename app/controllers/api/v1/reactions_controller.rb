@@ -6,12 +6,12 @@ class Api::V1::ReactionsController < Api::ApiController
 
   def create
     @reaction.save!
-    render json: { success: true, message: I18n.t('api.v1.reactions.create.success') }, status: :ok
+    render json: { success: true, message: t('.create.success') }, status: :ok
   end
 
   def destroy
     @reaction.destroy!
-    render json: { success: true, message: I18n.t('api.v1.reactions.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   private
@@ -28,7 +28,7 @@ class Api::V1::ReactionsController < Api::ApiController
     if @reaction.profile_id.eql?(current_profile.id)
       check_membership(@reaction.bench_conversation)
     else
-      render json: { success: false, error: I18n.t('api.v1.reactions.authenticate_reaction.failure') }, status: :unauthorized
+      render json: { success: false, error: t('.authenticate_reaction.failure') }, status: :unauthorized
     end
   end
 

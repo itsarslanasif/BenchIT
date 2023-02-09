@@ -19,7 +19,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
       @message.save!
 
-      render json: { success: true, message: I18n.t('api.v1.conversation_messages.create.success') }, status: :ok
+      render json: { success: true, message: t('create.success') }, status: :ok
     else
       @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
       @schedule_message.save!
@@ -28,7 +28,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def update
     @message.update!(conversation_messages_params)
-    render json: { success: true, message: I18n.t('api.v1.conversation_messages.update.success') }, status: :ok
+    render json: { success: true, message: t('update.success') }, status: :ok
   end
 
   def destroy
@@ -40,7 +40,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.destroy!
     end
 
-    render json: { success: true, message: I18n.t('api.v1.conversation_messages.destroy.success') }, status: :ok
+    render json: { success: true, message: t('destroy.success') }, status: :ok
   end
 
   def index_saved_messages
@@ -54,7 +54,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def unsave_message
     @saved_item.destroy!
-    render json: { success: true, message: I18n.t('api.v1.conversation_messages.unsave_message.success') }, status: :ok
+    render json: { success: true, message: t('unsave_message.success') }, status: :ok
   end
 
   def recent_files
@@ -101,7 +101,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def paginate_messages
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
-    return render json: { success: false, error: I18n.t('controllers.application.error.page_error') }, status: :not_found if @pagy.nil?
+    return render json: { success: false, error: t('.paginate_messages.failure') }, status: :not_found if @pagy.nil?
   end
 
   def set_saved_item
@@ -135,37 +135,35 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           when 'profiles'
                             BenchConversation.profile_to_profile_conversation(current_profile.id, conversation_id)
                           end
-    render json: { success: false, error: I18n.t('controllers.application.error.type_error') }, status: :bad_request if @bench_conversation.blank?
+    render json: { success: false, error: t('.fetch_conversation.failure') }, status: :bad_request if @bench_conversation.blank?
   end
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { success: false, error: I18n.t('api.v1.conversation_messages.set_bench_channel.failure') }, status: :not_found
+    render json: { success: false, error: t('set_bench_channel.failure') }, status: :not_found
   end
 
   def set_group
     @group = Group.find(params[:id])
     return if @group.profile_ids.include?(current_profile.id)
 
-    render json: { success: false, error: I18n.t('api.v1.conversation_messages.set_group.failure') },
-           status: :not_found
+    render json: { success: false, error: t('set_group.failure') }, status: :not_found
   end
 
   def set_receiver
     @receiver = Profile.find(params[:id])
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
-    render json: { success: false, error: I18n.t('api.v1.conversation_messages.set_receiver.failure') },
-           status: :unprocessable_entity
+    render json: { success: false, error: t('set_receiver.failure') }, status: :unprocessable_entity
   end
 
   def authenticate_message
     if @message.sender_id.eql?(current_profile.id)
       check_membership(@message.bench_conversation)
     else
-      render json: { success: false, error: I18n.t('api.v1.conversation_messages.authenticate_message.failure') }, status: :unauthorized
+      render json: { success: false, error: t('authenticate_message.failure') }, status: :unauthorized
     end
   end
 
@@ -178,7 +176,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def delete_parent_message?
-    msg = I18n.t('api.v1.conversation_messages.delete_text')
+    msg = t('.delete_text')
     @message.parent_message_id.present? && @message.parent_message.content.eql?(msg) && @message.parent_message.replies.count.eql?(1)
   end
 
@@ -192,7 +190,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.reactions&.delete_all
       @message.saved_items&.delete_all
       @message.message_attachments&.delete_all
-      @message.update!(content: I18n.t('api.v1.conversation_messages.delete_text'))
+      @message.update!(content: t('.delete_text'))
     end
   end
 end

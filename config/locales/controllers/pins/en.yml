@@ -8,3 +8,5 @@ en:
           success: Pin has been updated successfully.
         destroy:
           success: Pin has been deleted successfully.
+        find_conversation:
+          failure: Sorry, The type of conversation is not supported.

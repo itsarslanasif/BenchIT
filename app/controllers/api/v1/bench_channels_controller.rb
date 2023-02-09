@@ -29,28 +29,28 @@ class Api::V1::BenchChannelsController < Api::ApiController
       if @bench_channel.save
         create_first_bench_channel_participant
       else
-        render json: { success: false, error: I18n.t('api.v1.bench_channels.create.failure') }, status: :unprocessable_entity
+        render json: { success: false, error: t('.create.failure'), errors: @bench_channel.errors.full_messages }, status: :unprocessable_entity
       end
     end
   end
 
   def update
     @bench_channel.update!(bench_channel_params)
-    render json: { success: true, message: I18n.t('api.v1.bench_channels.update.success') }, status: :ok
+    render json: { success: true, message: t('.update.success') }, status: :ok
   end
 
   def destroy
     @bench_channel.destroy!
-    render json: { success: true, message: I18n.t('api.v1.bench_channels.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   def leave_channel
     ActiveRecord::Base.transaction do
       if @channel_participant.destroy
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
-        render json: { success: true, message: I18n.t('api.v1.bench_channels.leave_channel.success') }, status: :ok
+        render json: { success: true, message: t('.leave_channel.success') }, status: :ok
       else
-        render json: { success: false, error: I18n.t('api.v1.bench_channels.leave_channel.failure') }, status: :unprocessable_entity
+        render json: { success: false, error: t('.leave_channel.failure') }, status: :unprocessable_entity
       end
     end
   end
@@ -74,7 +74,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { success: false, error: I18n.t('api.v1.bench_channels.set_bench_channel.failure', { bench_channel: @bench_channel.name }) },
+    render json: { success: false, error: t('.set_bench_channel.failure', { bench_channel: @bench_channel.name }) },
            status: :not_found
   end
 
@@ -83,7 +83,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
     return unless @channel_participant.nil?
 
-    render json: { success: false, error: I18n.t('api.v1.bench_channels.set_channel_participant.failure') }, status: :not_found
+    render json: { success: false, error: t('.set_channel_participant.failure') }, status: :not_found
   end
 
   def set_left_on
@@ -91,13 +91,13 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
     return if @channel_participant.save
 
-    render json: { success: false, error: I18n.t('api.v1.bench_channels.set_left_on.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.set_left_on.failure') }, status: :unprocessable_entity
   end
 
   def bench_channel_cannot_be_public_again
     return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
 
-    render json: { success: false, error: I18n.t('api.v1.bench_channels.bench_channel_cannot_be_public_again.failure') },
+    render json: { success: false, error: t('.bench_channel_cannot_be_public_again.failure') },
            status: :bad_request
   end
 
@@ -110,7 +110,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                                   'a_to_z' => -> { sort_by_bench_channels('name', false) },
                                                                   'z_to_a' => -> { sort_by_bench_channels('name', true) }
                                                                 })
-    raise I18n.t('api.v1.bench_channels.sort_bench_channels.failure') unless sort_methods.key?(params[:sort_by])
+    raise t('.sort_bench_channels.failure') unless sort_methods.key?(params[:sort_by])
 
     sort_methods[params[:sort_by]].call
   end

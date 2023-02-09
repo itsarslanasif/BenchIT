@@ -35,10 +35,10 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
-        render json: { success: true, message: I18n.t('api.v1.channel_participants.join_public_channel.success') },
+        render json: { success: true, message: t('.join_public_channel.success') },
                status: :ok
       else
-        render json: { success: false, error: I18n.t('api.v1.channel_participants.join_public_channel.failure') },
+        render json: { success: false, error: t('.join_public_channel.failure') },
                status: :unprocessable_entity
       end
     end
@@ -46,12 +46,12 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def mute_channel
     @channel_participant.update!(muted: true)
-    render json: { success: true, message: I18n.t('api.v1.channel_participants.mute_channel.success') }, status: :ok
+    render json: { success: true, message: t('.mute_channel.success') }, status: :ok
   end
 
   def unmute_channel
     @channel_participant.update!(muted: false)
-    render json: { success: true, message: I18n.t('api.v1.channel_participants.unmute_channel.success') }, status: :ok
+    render json: { success: true, message: t('.unmute_channel.success') }, status: :ok
   end
 
   private
@@ -60,7 +60,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { success: false, error: I18n.t('api.v1.channel_participants.set_bench_channel.failure') }, status: :not_found
+    render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
   end
 
   def set_channel_paticipant
@@ -70,7 +70,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def check_workspace
     return if current_profile.workspace.eql?(@bench_channel.workspace)
 
-    render json: { success: false, error: I18n.t('api.v1.channel_participants.check_workspace.failure') }, status: :forbidden
+    render json: { success: false, error: t('.check_workspace.failure') }, status: :forbidden
   end
 
   def check_already_joined_channel
@@ -78,21 +78,21 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
     return unless is_channel_participant
 
-    render json: { success: false, error: I18n.t('api.v1.channel_participants.check_already_joined_channel.failure') },
+    render json: { success: false, error: t('.check_already_joined_channel.failure') },
            status: :unprocessable_entity
   end
 
   def check_private_channel
     return unless @bench_channel.is_private?
 
-    render json: { success: false, error: I18n.t('api.v1.channel_participants.check_private_channel.failure') },
+    render json: { success: false, error: t('.check_private_channel.failure') },
            status: :forbidden
   end
 
   def check_channel_participants
     @channel_members = ChannelParticipant.where(profile_id: params[:profile_ids], bench_channel_id: @bench_channel.id).ids
     if @channel_members.present?
-      return render json: { success: false, error: I18n.t('api.v1.channel_participants.check_channel_participants.failure') },
+      return render json: { success: false, error: t('.check_channel_participants.failure') },
                     status: :forbidden
     end
 
@@ -102,6 +102,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def check_profile_ids
     return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
-    render json: { success: false, error: I18n.t('api.v1.channel_participants.check_profile_ids.failure') }, status: :not_found
+    render json: { success: false, error: t('.check_profile_ids.failure') }, status: :not_found
   end
 end

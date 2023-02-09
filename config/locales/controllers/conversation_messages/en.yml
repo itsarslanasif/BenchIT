@@ -10,7 +10,11 @@ en:
         destroy:
           success: Message has been deleted successfully.
         unsave_message:
-          success: Message has been removed from saved items successfully..
+          success: Message has been removed from saved items successfully.
+        paginate_messages:
+          failure: Sorry, The page not found.
+        fetch_conversation:
+          failure: Sorry, The type is not supported.
         set_bench_channel:
           failure: Sorry, User is not part of this channel.
         set_group:
@@ -18,5 +22,5 @@ en:
         set_receiver:
           failure: Sorry, You can't access this profile.
         authenticate_message:
-          failure: Sorry, User this message is not your.
+          failure: Sorry, This message is not your.
 
