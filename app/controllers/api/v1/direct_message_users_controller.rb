@@ -1,7 +1,7 @@
 class Api::V1::DirectMessageUsersController < Api::ApiController
   before_action :set_receiver, only: %i[destroy]
   before_action :set_direct_message_list, only: %i[index]
-  before_action :find_last_messages_users, only: %i[recent_direct_messages]
+  before_action :set_recent_message_users, only: %i[recent_direct_messages]
 
   def index
     @profiles = Profile.where(id: @current_profile.direct_message_users.pluck(:receiver_id) & @direct_message_users_ids)
@@ -16,11 +16,11 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
   end
 
   def recent_direct_messages
-    @last_messages = fetch_last_messages
+    @recent_messages = fetch_recent_messages
   end
 
-  def fetch_last_messages
-    @last_messages_users.filter_map do |id|
+  def fetch_recent_messages
+    @recent_messages_users.filter_map do |id|
       conversation = BenchConversation.profile_to_profile_conversation(@current_profile.id, id)
       conversation.conversation_messages&.last if conversation.present?
     end.sort_by(&:created_at).reverse
@@ -35,18 +35,18 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
 
   def set_direct_message_list
     conversation_ids = BenchConversation.recent_conversation_ids
-    return if conversation_ids.empty?
+    return render json: [@current_profile] if conversation_ids.empty?
 
     bench_conversations_ids = ConversationMessage.recent_conversation_ids(conversation_ids)
-    return if bench_conversations_ids.empty?
+    return render json: [@current_profile] if bench_conversations_ids.empty?
 
     @direct_message_users_ids = BenchConversation.where(id: bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
 
-  def find_last_messages_users
+  def set_recent_message_users
     conversation_ids = BenchConversation.recent_conversation_ids
     return if conversation_ids.empty?
 
-    @last_messages_users = BenchConversation.where(id: conversation_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
+    @recent_messages_users = BenchConversation.where(id: conversation_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
 end

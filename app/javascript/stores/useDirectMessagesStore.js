@@ -37,29 +37,29 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       }
     },
     getSortedDMList(currentProfileID) {
-      const myChat = this.getMyChat(currentProfileID);
-      if (myChat) {
-        const index = this.getIndexOfMyChat(myChat);
-        this.removeMyChatFromList(index);
+      const myProfile = this.getMyProfile(currentProfileID);
+      if (myProfile) {
+        const index = this.directMessageUsers.indexOf(myProfile);
+        this.removeMyProfileFromList(index);
       }
       if (this.hasElementsToSort()) {
         this.sort();
       }
-      if (myChat) {
-        this.addMyChatAtTop(myChat);
+      if (myProfile) {
+        this.addMyProfileAtTop(myProfile);
       }
       return this.directMessageUsers;
     },
-    getMyChat(currentProfileID) {
-      const myChat = this.directMessageUsers.find(
-        conversation => conversation.id === currentProfileID
+    getMyProfile(currentProfileID) {
+      const myProfile = this.directMessageUsers.find(
+        profile => profile.id === currentProfileID
       );
-      return myChat ? myChat : null;
+      return myProfile ? myProfile : null;
     },
-    getIndexOfMyChat(myChat) {
-      return this.directMessageUsers.indexOf(myChat);
+    getIndexOfMyProfile(myProfile) {
+      return this.directMessageUsers.indexOf(myProfile);
     },
-    removeMyChatFromList(index) {
+    removeMyProfileFromList(index) {
       this.directMessageUsers.splice(index, 1);
     },
     hasElementsToSort() {
@@ -82,8 +82,8 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
         }
       );
     },
-    addMyChatAtTop(myChat) {
-      this.directMessageUsers.unshift(myChat);
+    addMyProfileAtTop(myProfile) {
+      this.directMessageUsers.unshift(myProfile);
     },
   },
 });
