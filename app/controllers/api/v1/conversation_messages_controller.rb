@@ -93,9 +93,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def threads
     @threads = Current.profile.conversation_messages
                       .where.not(parent_message_id: nil)
-                      .select('DISTINCT ON ("parent_message_id") *')
+                      .select(:parent_message_id)
+                      .distinct
                       .map(&:parent_message)
-                      .uniq.sort_by(&:created_at).reverse
+                      .sort_by(&:created_at)
+                      .reverse
   end
 
   def profile_messages
