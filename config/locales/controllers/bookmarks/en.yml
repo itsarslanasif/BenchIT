@@ -1,24 +1,10 @@
 en:
   api:
     v1:
-      controllers:
-        bookmarks:
-          create:
-            success: Bookmark is created successfully.
-          update:
-            success: Bookmark is updated successfully.
-          destroy:
-            success: Bookmark is deleted successfully.
-          set_bench_channel:
-            failure: User is not part of channel.
-          check_workspace:
-            failure: This Channel is not part of your workspace.
-          check_already_joined_channel:
-            failure: User already part of this channel.
-          check_private_channel:
-            failure: You cannot join Private Channel yourself.
-          check_channel_participants:
-            failure: One or Many Users already participant of this channel
-          check_profile_ids:
-            failure: Profiles cannot be found
-
+      bookmarks:
+        create:
+          success: Bookmark has been created successfully.
+        update:
+          success: Bookmark has been updated successfully.
+        destroy:
+          success: Bookmark has been deleted successfully.

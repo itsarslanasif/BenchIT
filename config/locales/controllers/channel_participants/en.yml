@@ -1,25 +1,24 @@
 en:
   api:
     v1:
-      controllers:
-        channel_participants:
-          mute_channel:
-            success: Channel has been muted.
-          unmute_channel:
-            success: Channel has been un-muted.
-          join_public_channel:
-            success: User has joined %{@bench_channel.name} channel successfully.
-            failure: Unable to join the %{@bench_channel.name} channel.
-          set_bench_channel:
-            failure: User is not part of channel.
-          check_workspace:
-            failure: This Channel is not part of your workspace.
-          check_already_joined_channel:
-            failure: User already part of this channel.
-          check_private_channel:
-            failure: You cannot join Private Channel yourself.
-          check_channel_participants:
-            failure: One or Many Users already participant of this channel
-          check_profile_ids:
-            failure: Profiles cannot be found
+      channel_participants:
+        mute_channel:
+          success: Channel has been muted successfully.
+        unmute_channel:
+          success: Channel has been un-muted successfully.
+        join_public_channel:
+          success: User has joined the channel successfully.
+          failure: Sorry, Unable to join the channel.
+        set_bench_channel:
+          failure: Sorry, User is not part of channel.
+        check_workspace:
+          failure: Sorry, This Channel is not part of your workspace.
+        check_already_joined_channel:
+          failure: Sorry, User already part of this channel.
+        check_private_channel:
+          failure: Sorry, You cannot join Private Channel by yourself.
+        check_channel_participants:
+          failure: Sorry, One or Many Users already participant of this channel.
+        check_profile_ids:
+          failure: Sorry, The profiles not found.
 

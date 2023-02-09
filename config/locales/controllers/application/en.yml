@@ -1,0 +1,6 @@
+en:
+  controllers:
+    application:
+      error:
+        type_error: Sorry, Type not found.
+        page_error: Sorry, Page not found.

@@ -14,23 +14,29 @@ class Api::V1::GroupsController < Api::ApiController
   def add_member
     @group.profile_ids += params[:profile_ids]
     @group.save!
-    render json: { success: true, message: 'Members are added successfully.' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.groups.add_meber.success') }, status: :ok
   end
 
   private
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { error: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(current_profile.id)
+    return if @group.profile_ids.include?(current_profile.id)
+
+    render json: { success: false, error: I18n.t('api.v1.groups.set_group.failure') },
+           status: :not_found
   end
 
   def group_size
-    render json: { error: 'Max group size is 9' }, status: :bad_request if (@group.profile_ids.size + params[:profile_ids].size) > 9
+    return unless (@group.profile_ids.size + params[:profile_ids].size) > 9
+
+    render json: { success: false, error: I18n.t('api.v1.groups.group_size.failure') },
+           status: :bad_request
   end
 
   def check_group_members
     return unless (@group.profile_ids & params[:profile_ids]).any?
 
-    render json: { error: 'One or Many Users already member of this group' }, status: :unprocessable_entity
+    render json: { success: false, error: I18n.t('api.v1.groups.check_group_members.failure') }, status: :unprocessable_entity
   end
 end

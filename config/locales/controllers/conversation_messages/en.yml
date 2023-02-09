@@ -1,0 +1,22 @@
+en:
+  api:
+    v1:
+      conversation_messages:
+        delete_text: This message was deleted.
+        create:
+          success: Message has been created successfully.
+        update:
+          success: Message has been updated successfully.
+        destroy:
+          success: Message has been deleted successfully.
+        unsave_message:
+          success: Message has been removed from saved items successfully..
+        set_bench_channel:
+          failure: Sorry, User is not part of this channel.
+        set_group:
+          failure: Sorry, User is not part of this group.
+        set_receiver:
+          failure: Sorry, You can't access this profile.
+        authenticate_message:
+          failure: Sorry, User this message is not your.
+
