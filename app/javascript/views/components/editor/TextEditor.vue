@@ -240,10 +240,10 @@ export default {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
     const FilesStore = useRecentFilesStore();
-    const md = new Remarkable({ html: true });
+    // const md = new Remarkable({ html: true });
     const turndownService = new TurndownService()
     // console.log(td.turndown('<strong>Hello World</strong>'))
-    console.log(md.render('**Hello World**'))
+    // console.log(md.render('**Hello World**'))
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
@@ -259,7 +259,6 @@ export default {
     const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
-    const blocks = ref([])
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -302,7 +301,7 @@ export default {
       return block[0];
     };
 
-    const sendMessagePayload = (event, buttonClicked) => {
+    const sendMessagePayload = async (event, buttonClicked) => {
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
         !props.editMessage
@@ -320,14 +319,10 @@ export default {
           htmlList.forEach(async line => {
             mrkdwn.push(turndownService.turndown(line))
           });
-          mrkdwn.forEach(async line => {
-            blocks.value.push(await makeBlocks(line));
-          });
-          console.log(blocks);
-          // const flatBlocks = blocks.
-          // console.log(blocks.flat())
-          // console.log(messagetext);
-          // props.sendMessage(messagetext, files.value, schedule);
+          const result = await Promise.all(mrkdwn.map(async line => {
+            return await makeBlocks(line)
+          }));
+          props.sendMessage({ blocks: result }, files.value, schedule);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
