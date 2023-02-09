@@ -151,7 +151,6 @@
 <script>
 import { ref, watch } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
-import { Remarkable } from 'remarkable';
 import { markdownToBlocks } from '@tryfabric/mack'
 import TurndownService from 'turndown'
 import Attachments from '../attachments/Attachments.vue';
@@ -240,10 +239,7 @@ export default {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
     const FilesStore = useRecentFilesStore();
-    // const md = new Remarkable({ html: true });
     const turndownService = new TurndownService()
-    // console.log(td.turndown('<strong>Hello World</strong>'))
-    // console.log(md.render('**Hello World**'))
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
