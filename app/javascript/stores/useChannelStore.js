@@ -128,7 +128,7 @@ export const useChannelStore = () => {
 
       addChannelJoined(channel) {
         const channel_item = this.channels.find(
-          element => element.id === sortChannelsListchannel.id
+          element => element.id === channel.id
         );
         const joinedChannel = this.joinedChannels.find(
           element => element.id === channel.id
