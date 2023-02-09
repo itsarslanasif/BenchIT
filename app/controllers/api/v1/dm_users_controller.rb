@@ -35,17 +35,17 @@ class Api::V1::DmUsersController < Api::ApiController
 
   def set_direct_message_list
     conversation_ids = BenchConversation.recent_last_conversation
-    return render json: [@current_profile] if conversation_ids.empty?
+    return if conversation_ids.empty?
 
     bench_conversations_ids = ConversationMessage.recent_last_conversation(conversation_ids)
-    return render json: [@current_profile] if bench_conversations_ids.empty?
+    return if bench_conversations_ids.empty?
 
     @direct_message_users_ids = BenchConversation.where(id: bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
 
   def find_last_messages_users
     conversation_ids = BenchConversation.recent_last_conversation
-    return render json: [@current_profile] if conversation_ids.empty?
+    return if conversation_ids.empty?
 
     @last_messages_users = BenchConversation.where(id: conversation_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
