@@ -16,12 +16,12 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
       reschedule_job
     end
 
-    render json: { success: true, message: 'Message updated' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.schedule_messages.update.success') }, status: :ok
   end
 
   def destroy
     @schedule_message.destroy!
-    render json: { success: true, message: 'Message deleted' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.schedule_messages.destroy.success') }, status: :ok
   end
 
   def send_now
@@ -32,7 +32,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
       @schedule_message.destroy!
     end
 
-    render json: { success: true, message: 'Message send' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.schedule_messages.send_now.success') }, status: :ok
   end
 
   private
@@ -51,7 +51,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
     if @schedule_message.profile_id.eql?(current_profile.id)
       check_membership(@schedule_message.bench_conversation)
     else
-      render json: { error: 'Sorry, this message is not yours.' }, status: :unauthorized
+      render json: { success: false, error: I18n.t('controllers.application.error.message_error') }, status: :unauthorized
     end
   end
 

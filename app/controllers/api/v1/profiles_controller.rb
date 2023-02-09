@@ -25,14 +25,14 @@ class Api::V1::ProfilesController < Api::ApiController
   def create
     @profile = current_user.profiles.new(profile_params)
     @profile.save!
-    render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.profiles.create.success') }, status: :ok
   end
 
   def update
     if (@profile = current_profile.update!(profile_params))
-      render json: { success: true, message: 'Profile Updated Successfully.' }, status: :ok
+      render json: { success: true, message: I18n.t('api.v1.profiles.update.success') }, status: :ok
     else
-      render json: { errors: @profile.errors, error: 'There was an error updating the profile' }, status: :unprocessable_entity
+      render json: { success: false, error: I18n.t('api.v1.profiles.update.failure') }, status: :unprocessable_entity
     end
   end
 
@@ -43,17 +43,17 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def set_is_active
     @profile.update!(is_active: true)
-    render json: { success: true, message: 'status set.' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.profiles.set_is_active.success') }, status: :ok
   end
 
   def remove_is_active
     @profile.update!(is_active: false)
-    render json: { success: true, message: 'status removed.' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.profiles.remove_is_active.success') }, status: :ok
   end
 
   def clear_status
     @profile.update!(text_status: '', emoji_status: '', clear_status_after: '')
-    render json: { success: true, message: 'status cleared.' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.profiles.clear_status.success') }, status: :ok
   end
 
   def previous_direct_messages
@@ -90,13 +90,13 @@ class Api::V1::ProfilesController < Api::ApiController
   def check_user_member_of_workspace
     return if current_workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { error: 'You are not member of specified  workspace.' }, status: :unauthorized
+    render json: { success: false, error: I18n.t('api.v1.profiles.check_user_member_of_workspace.success') }, status: :unauthorized
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { error: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
+    render json: { success: false, error: I18n.t('api.v1.profiles.check_profile_already_exists.success') }, status: :unprocessable_entity
   end
 
   def set_previous_direct_messages

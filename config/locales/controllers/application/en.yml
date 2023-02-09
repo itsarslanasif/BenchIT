@@ -4,3 +4,4 @@ en:
       error:
         type_error: Sorry, Type not found.
         page_error: Sorry, Page not found.
+        message_error: Sorry, This message is not yours.

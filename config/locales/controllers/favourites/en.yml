@@ -1,0 +1,9 @@
+en:
+  api:
+    v1:
+      favourites:
+        create:
+          success: The conversation has been added to the favourite list successfully.
+          failure: Sorry, There was an error in adding the conversation to the favourite list.
+        destroy:
+          success: The conversation has been removed from the favourite list successfully.

@@ -1,0 +1,21 @@
+en:
+  api:
+    v1:
+      profiles:
+        create:
+          success: Profile has been added to the workspace successfully.
+        update:
+          success: Profile has been updated successfully.
+          failure: Sorry, The profile cannot updated.
+        set_is_active:
+          success: Status has been set successfully.
+        remove_is_active:
+          success: Status has been removed successfully.
+        clear_status:
+          success: Status has been cleared successfully.
+        check_user_member_of_workspace:
+          failure: Sorry, The user is not member of the workspace.
+        check_profile_already_exists:
+          failure: Sorry, You have already a profile in this workspace.
+
+

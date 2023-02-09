@@ -3,7 +3,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   include Pagination
 
   before_action :fetch_conversation, :verify_membership, only: %i[create]
-  before_action :set_message, :authenticat_message, only: %i[destroy update]
+  before_action :set_message, :authenticate_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
@@ -135,7 +135,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
                           when 'profiles'
                             BenchConversation.profile_to_profile_conversation(current_profile.id, conversation_id)
                           end
-    render json: { failure: false, error: I18n.t('controllers.application.error.type_error') }, status: :bad_request if @bench_conversation.blank?
+    render json: { success: false, error: I18n.t('controllers.application.error.type_error') }, status: :bad_request if @bench_conversation.blank?
   end
 
   def set_bench_channel
@@ -161,7 +161,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
            status: :unprocessable_entity
   end
 
-  def authenticat_message
+  def authenticate_message
     if @message.sender_id.eql?(current_profile.id)
       check_membership(@message.bench_conversation)
     else

@@ -8,7 +8,7 @@ class Api::V1::StatusesController < Api::ApiController
 
   def destroy
     @status.destroy!
-    render json: { success: true, message: 'Status cleared' }, status: :ok
+    render json: { success: true, message: I18n.t('api.v1.statuses.destroy.success') }, status: :ok
   end
 
   private
