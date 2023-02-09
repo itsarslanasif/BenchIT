@@ -10,6 +10,6 @@ module MemberShip
 
     return if profile_ids.include?(current_profile.id)
 
-    render json: { message: 'Sorry, you are not authorized.' }, status: :unauthorized
+    render json: { success: false, message: I18n.t('concerns.membership.error') }, status: :unauthorized
   end
 end

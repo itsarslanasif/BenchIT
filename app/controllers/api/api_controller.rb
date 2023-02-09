@@ -11,7 +11,7 @@ class Api::ApiController < ApplicationController
 
   def set_workspace_in_session
     if session[:current_workspace_id].nil?
-      render json: { success: false, error: t('.set_workspace_in_session.failure') }, status: :unprocessable_entity
+      render json: { success: false, error: I18n.t('api.set_workspace_in_session.failure') }, status: :unprocessable_entity
     else
       Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
     end
@@ -24,7 +24,7 @@ class Api::ApiController < ApplicationController
   def presence_of_api_token
     return unless request.headers['Authorization'].nil?
 
-    render json: { success: false, error: t('.sign_in') }, status: :unauthorized
+    render json: { success: false, error: I18n.t('api.sign_in') }, status: :unauthorized
   end
 
   def authenticate_api_with_token
@@ -32,10 +32,10 @@ class Api::ApiController < ApplicationController
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
     @current_user = User.find(jwt_payload[0]['sub'])
 
-    render json: { success: false, error: t('.sign_in') }, status: :unauthorized unless current_user
+    render json: { success: false, error: I18n.t('api.sign_in') }, status: :unauthorized unless current_user
     Current.user = @current_user
   rescue StandardError
-    render json: { success: false, error: t('.sign_in') }, status: :unauthorized
+    render json: { success: false, error: I18n.t('api.sign_in') }, status: :unauthorized
   end
 
   def current_profile
