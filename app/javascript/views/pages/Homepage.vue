@@ -1,10 +1,12 @@
 <template>
   <div>
+    <BenchITAlert :errorMessage = 'error' v-if="errorFlag" />
     <SplitPanesVue />
   </div>
 </template>
 <script>
 import SplitPanesVue from './SplitPanes.vue';
+import BenchITAlert  from '../widgets/benchitAlert.vue'
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
@@ -19,6 +21,7 @@ import {
 export default {
   components: {
     SplitPanesVue,
+    BenchITAlert,
   },
   data() {
     return {

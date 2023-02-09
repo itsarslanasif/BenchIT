@@ -7,6 +7,7 @@ import {
   getJoinedChannels,
 } from '../api/channels/channels';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
+import { useErrorStore } from './useErrorStore';
 import { useApiResponseStatusStore as apiResponseStatusStore } from './useApiResponseStatusStore';
 export const useChannelStore = () => {
   const channelStore = defineStore('channelStore', {
@@ -86,12 +87,12 @@ export const useChannelStore = () => {
           this.joinedChannels = this.joinedChannels.filter(
             channel => channel.id != id
           );
-          let foundIndex = this.channels.findIndex(channel => channel.id == id);
-          this.channels[foundIndex].profiles = this.channels[
-            foundIndex
-          ].profiles.filter(profile => {
-            profile.id === this.currentProfileStore.currentProfile.id;
-          });
+          // let foundIndex = this.channels.findIndex(channel => channel.id == id);
+          // this.channels[foundIndex].profiles = this.channels[
+          //   foundIndex
+          // ].profiles.filter(profile => {
+          //   profile.id === this.currentProfileStore.currentProfile.id;
+          // });
           this.starChannels = this.starChannels.filter(
             channel => channel.id != id
           );
@@ -174,7 +175,7 @@ export const useChannelStore = () => {
       },
 
       handleError(error) {
-        this.error = error;
+        useErrorStore().showError(error.error_message) 
       }
     },
   });

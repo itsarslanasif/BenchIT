@@ -16,7 +16,7 @@
       class="pr-20"
       title="Error"
       type="error"
-      :onClose="setApiResponseStatusNull"
+      :onClose="setApiResponseStatusNull && errorStore.toggleErrorFlag"
       closable
     >
       {{ errorMessage }}
@@ -26,9 +26,18 @@
 
 <script>
 import { NAlert } from 'naive-ui';
+import { useErrorStore } from '../../stores/useErrorStore'
 export default {
   name: 'BenchITAlert',
   components: { NAlert },
   props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
+  setup()
+  {
+    const errorStore = useErrorStore()
+    return {
+      errorStore
+    }
+  }
 };
 </script>
+
