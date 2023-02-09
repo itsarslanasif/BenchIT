@@ -173,7 +173,20 @@
                 :show-arrow="false"
               >
                 <template #trigger>
+                  <div
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
+                    v-if="isTxtFile(attachment.attachment_link)"
+                  >
+                    <font-awesome-icon
+                      class="w-10 h-10"
+                      icon="fa-solid fa-file"
+                    />
+                  </div>
                   <img
+                    v-else
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -554,6 +567,10 @@ export default {
     },
   },
   methods: {
+    isTxtFile(url) {
+      const fileExtension = url.split('/').pop().split('.').pop();
+      return fileExtension === 'txt';
+    },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
       updatedMessage.content = text;

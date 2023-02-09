@@ -1,15 +1,14 @@
 <template>
-  <div>
     <div
       v-if="!leftPaneStore.getLeftpaneFlag"
       @click="leftPaneStore.openLeftPane"
-      class="flex absolute text-xl ml-2 mt-1 items-center text-white hover:bg-slate-600 rounded cursor-pointer"
+      class="text-xl items-center text-white hover:bg-slate-600 rounded cursor-pointer"
     >
       <font-awesome-icon class="p-2" icon="fa-solid fa-bars" />
     </div>
 
     <div
-      class="flex items-center justify-center flex-col p-2 border-b border-slate-400 bg-secondary h-12"
+      class="flex items-center justify-center p-2 border-b border-slate-400 bg-secondary h-full"
     >
       <div v-click-outside="closeSearchModal" class="flex w-1/2">
         <div class="w-full" @click="searchModalToggle = true">
@@ -102,7 +101,6 @@
         "
       />
     </div>
-  </div>
 </template>
 <script>
 import { useProfileStore } from '../../stores/useProfileStore';
