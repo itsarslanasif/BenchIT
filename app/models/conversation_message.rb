@@ -90,7 +90,7 @@ class ConversationMessage < ApplicationRecord
 
   def model_basic_content
     {
-      id: id, content: content,
+      id: id, content: content, is_sent_to_chat: is_sent_to_chat,
       is_threaded: is_threaded,
       is_edited: created_at != updated_at,
       parent_message_id: parent_message_id,
