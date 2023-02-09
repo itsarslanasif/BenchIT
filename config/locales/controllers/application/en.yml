@@ -1,7 +1,12 @@
 en:
-  controllers:
-    application:
-      error:
-        type_error: Sorry, Type not found.
-        page_error: Sorry, Page not found.
-        message_error: Sorry, This message is not yours.
+  application:
+    render_error:
+      found_error: Sorry, The record not found.
+      invalid_error: Sorry, The record is invalid.
+      unique_error: Sorry, The record is not unique.
+      destroy_error: Sorry, The record cannot be destroyed.
+      method_error: Sorry, There is no such method.
+      pagination_error: Sorry, The page not found.
+      server_error: Internal server error
+
+

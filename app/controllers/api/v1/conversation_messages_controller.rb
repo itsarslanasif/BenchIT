@@ -28,7 +28,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def update
     @message.update!(conversation_messages_params)
-    render json: { success: true, message: t('update.success') }, status: :ok
+    render json: { success: true, message: t('.update.success') }, status: :ok
   end
 
   def destroy
@@ -40,7 +40,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.destroy!
     end
 
-    render json: { success: true, message: t('destroy.success') }, status: :ok
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   def index_saved_messages
@@ -54,7 +54,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def unsave_message
     @saved_item.destroy!
-    render json: { success: true, message: t('unsave_message.success') }, status: :ok
+    render json: { success: true, message: t('.unsave_message.success') }, status: :ok
   end
 
   def recent_files
@@ -105,7 +105,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def set_saved_item
-    @saved_item = current_profile.saved_items.find(conversation_message_id: params[:id])
+    @saved_item = current_profile.saved_items.find_by(conversation_message_id: params[:id])
+
+    return render json: { failure: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
   end
 
   def set_message
@@ -142,28 +144,28 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @bench_channel = BenchChannel.find(params[:id])
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
-    render json: { success: false, error: t('set_bench_channel.failure') }, status: :not_found
+    render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
   end
 
   def set_group
     @group = Group.find(params[:id])
     return if @group.profile_ids.include?(current_profile.id)
 
-    render json: { success: false, error: t('set_group.failure') }, status: :not_found
+    render json: { success: false, error: t('.set_group.failure') }, status: :not_found
   end
 
   def set_receiver
     @receiver = Profile.find(params[:id])
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
-    render json: { success: false, error: t('set_receiver.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.set_receiver.failure') }, status: :unprocessable_entity
   end
 
   def authenticate_message
     if @message.sender_id.eql?(current_profile.id)
       check_membership(@message.bench_conversation)
     else
-      render json: { success: false, error: t('authenticate_message.failure') }, status: :unauthorized
+      render json: { success: false, error: t('.authenticate_message.failure') }, status: :unauthorized
     end
   end
 

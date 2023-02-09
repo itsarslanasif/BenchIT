@@ -13,14 +13,14 @@ class ApplicationController < ActionController::Base
 
   def render_error(exception)
     error_map = {
-      ActiveRecord::RecordNotFound => { message: 'Record Not Found.', status: :not_found },
-      ActiveRecord::RecordInvalid => { message: 'Record Invalid.', status: :unprocessable_entity },
+      ActiveRecord::RecordNotFound => { message: t('.found_error'), status: :not_found },
+      ActiveRecord::RecordInvalid => { message: t('.invalid_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotSaved => { message: 'Record Not saved', status: :unprocessable_entity },
-      NoMethodError => { message: 'No Method Error.', status: :unprocessable_entity },
-      ActiveRecord::RecordNotUnique => { message: 'Record Not Unique.', status: :unprocessable_entity },
-      ActiveRecord::RecordNotDestroyed => { message: 'Record Not Destroyed', status: :unprocessable_entity },
-      PaginationError => { message: 'Page not found.', status: :unprocessable_entity },
-      :else => { message: 'Internal Server Error.', status: :internal_server_error }
+      NoMethodError => { message: t('.method_error'), status: :unprocessable_entity },
+      ActiveRecord::RecordNotUnique => { message: t('.unique_error'), status: :unprocessable_entity },
+      ActiveRecord::RecordNotDestroyed => { message: t('.destroy_error'), status: :unprocessable_entity },
+      PaginationError => { message: t('.pagination_error'), status: :unprocessable_entity },
+      :else => { message: t('.server_error'), status: :internal_server_error }
     }
     error_data = error_map[exception.class] || error_map[:else]
     render json: { success: false, error: error_data[:message], message: exception.message }, status: error_data[:status]

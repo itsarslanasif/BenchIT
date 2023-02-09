@@ -13,6 +13,8 @@ en:
           success: Message has been removed from saved items successfully.
         paginate_messages:
           failure: Sorry, The page not found.
+        set_saved_item:
+          failure: Sorry, The message not found.
         fetch_conversation:
           failure: Sorry, The type is not supported.
         set_bench_channel:
