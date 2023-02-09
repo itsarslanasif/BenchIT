@@ -38,16 +38,23 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     },
     getSortedDMList(currentProfileID) {
       const ownChat = this.getOwnChat(currentProfileID);
-      const index = this.getIndexOfOwnChat(ownChat);
-      this.removeOwnChatFromList(index);
+      if (ownChat) {
+        const index = this.getIndexOfOwnChat(ownChat);
+        this.removeOwnChatFromList(index);
+      }
       if (this.hasElementsToSort()) {
         this.sort();
       }
-      this.addOwnChatAtTop(ownChat);
+      if (ownChat) {
+        this.addOwnChatAtTop(ownChat);
+      }
       return this.directMessagesList;
     },
     getOwnChat(currentProfileID) {
-      return this.directMessagesList.find(chat => chat.id === currentProfileID);
+      const ownChat = this.directMessagesList.find(
+        chat => chat.id === currentProfileID
+      );
+      return ownChat ? ownChat : null;
     },
     getIndexOfOwnChat(ownChat) {
       return this.directMessagesList.indexOf(ownChat);
