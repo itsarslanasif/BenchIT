@@ -45,8 +45,6 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
 
   def set_recent_message_users
     conversation_ids = BenchConversation.recent_conversation_ids
-    return if conversation_ids.empty?
-
     @recent_messages_users = BenchConversation.where(id: conversation_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
 end
