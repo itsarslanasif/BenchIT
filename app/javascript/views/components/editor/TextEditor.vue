@@ -1,5 +1,5 @@
 <template>
-  <!-- <Dummy /> -->
+  <Dummy />
   <div>
     <AttachmentShortCutVue
       :isThread="isThread"
