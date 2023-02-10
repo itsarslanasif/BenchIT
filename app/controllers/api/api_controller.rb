@@ -24,7 +24,7 @@ class Api::ApiController < ApplicationController
   def presence_of_api_token
     return unless request.headers['Authorization'].nil?
 
-    render json: { success: false, error: I18n.t('api.sign_in') }, status: :unauthorized
+    raise UnAuthorized, 'unauthorized'
   end
 
   def authenticate_api_with_token
