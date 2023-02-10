@@ -50,10 +50,10 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       return this.directMessageUsers;
     },
     getMyProfileWithIndex(currentProfileID) {
-      const myProfile = this.directMessageUsers.find(
+      const index = this.directMessageUsers.findIndex(
         profile => profile.id === currentProfileID
       );
-      return [myProfile, this.directMessageUsers.indexOf(myProfile)];
+      return [this.directMessageUsers[index], index];
     },
     getIndexOfMyProfile(myProfile) {
       return this.directMessageUsers.indexOf(myProfile);
