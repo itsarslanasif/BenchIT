@@ -13,7 +13,7 @@ class ConversationMessage < ApplicationRecord
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :destroy
 
-  validates :content, presence: true, length: { minimum: 1, maximum: 100 }
+  validates :content, presence: true, length: { minimum: 1 }
 
   searchkick word_start: [:content]
 
@@ -90,7 +90,7 @@ class ConversationMessage < ApplicationRecord
 
   def model_basic_content
     {
-      id: id, content: content,
+      id: id, content: content, is_sent_to_chat: is_sent_to_chat,
       is_threaded: is_threaded,
       is_edited: created_at != updated_at,
       parent_message_id: parent_message_id,

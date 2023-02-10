@@ -96,17 +96,17 @@
                 }}
               </p>
             </span>
-            <span
-              v-if="
+            <div v-if="
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
                 !currMessage.is_info &&
                 !isDeleted
-              "
-              class="text-black-800 text-sm flex-wrap rich-content"
-              v-html="currMessage.content"
-            />
+              ">
+              <template v-for="block in messageBlock.blocks" :key="block">
+                <MessageSection v-if="block.type === 'section'" :section="block" />
+              </template>
+            </div>
             <span
               v-if="
                 isSameUser && isSameDayMessage && !isFirstMessage && isDeleted
@@ -173,7 +173,20 @@
                 :show-arrow="false"
               >
                 <template #trigger>
+                  <div
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
+                    v-if="isTxtFile(attachment.attachment_link)"
+                  >
+                    <font-awesome-icon
+                      class="w-10 h-10"
+                      icon="fa-solid fa-file"
+                    />
+                  </div>
                   <img
+                    v-else
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -344,6 +357,7 @@ import {
 } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
+import MessageSection from './MessageSection.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
@@ -417,6 +431,7 @@ export default {
     TextEditorVue,
     EditedAtTime,
     UnPinModal,
+    MessageSection,
   },
   props: {
     currMessage: {
@@ -462,6 +477,9 @@ export default {
     this.displayedReactions = [];
   },
   computed: {
+    messageBlock() {
+      return JSON.parse(this.currMessage.content)
+    },
     time() {
       return moment(new Date(this.currMessage.created_at).getTime()).format(
         'h:mm A'
@@ -533,6 +551,10 @@ export default {
     },
   },
   methods: {
+    isTxtFile(url) {
+      const fileExtension = url.split('/').pop().split('.').pop();
+      return fileExtension === 'txt';
+    },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
       updatedMessage.content = text;

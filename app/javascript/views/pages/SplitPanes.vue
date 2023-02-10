@@ -1,15 +1,14 @@
 <template>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <n-message-provider placement="top-right">
-    <div class="relative bg-primary text-sm h-screen flex flex-col">
+    <div class="relative bg-primary text-sm h-screen grid grid-rows-18">
       <alert v-if="downloadsStore.downloadAlert" />
       <switching-workspace-loader
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
-      <div>
+      <div class="row-span-1">
         <SearchBar />
       </div>
-      <splitpanes @resize="resizePane" class="relative">
+      <splitpanes @resize="resizePane">
         <pane
           max-size="30"
           :size="isMobileView() ? '300px' : 15"
@@ -168,5 +167,8 @@ export default {
   flex-direction: column;
   height: 100%;
   overflow: auto;
+}
+.splitpanes {
+  grid-row: span 17 / span 17;
 }
 </style>

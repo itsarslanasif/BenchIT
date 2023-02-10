@@ -1,5 +1,19 @@
 <template>
   <div>
+    <AttachmentShortCutVue
+      :isThread="isThread"
+      class="margintop absolute z-10"
+    />
+    <CreateTextSnippetModal
+      v-if="
+        isThread
+          ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
+          : attachmentAndShortcutStore.showCreateTextSnippitModal
+      "
+      :sendMessage="sendMessage"
+      :isThread="isThread"
+      :recieverName="fileRecieverName"
+    />
     <div
       v-if="showMentions || showChannels"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -35,9 +49,16 @@
           placeholder: getPlaceholder,
           menubar: false,
           statusbar: false,
-          plugins: 'placeHolder lists link code codesample ',
-          toolbar:
-            'bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample',
+          toolbar_location: 'bottom',
+          toolbar1:
+            'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
+          setup: editor => {
+            editor.ui.registry.addButton('AddAttachments', {
+              text: '➕',
+              onAction: handleCustomButton,
+            });
+          },
+          plugins: ' lists link code codesample emoticons',
           codesample_languages: [none],
           formats: {
             code: {
@@ -93,7 +114,10 @@
             @click="sendMessagePayload($event, true)"
             class="px-2 my-4 rounded-md text-white"
           >
-          <font-awesome-icon icon="fa-check" class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"/>
+            <font-awesome-icon
+              icon="fa-check"
+              class="bg-success mt-1 hover:bg-successHover px-3 py-2 rounded"
+            />
           </button>
         </div>
         <div v-else>
@@ -127,7 +151,7 @@
 <script>
 import { ref, watch } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
-import { Remarkable } from 'remarkable';
+import { markdownToBlocks } from '@tryfabric/mack'
 import TurndownService from 'turndown'
 import Attachments from '../attachments/Attachments.vue';
 import { useProfileStore } from '../../../stores/useProfileStore';
@@ -138,6 +162,10 @@ import ScheduleModal from '../../widgets/schedule.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import moment from 'moment';
 import vClickOutside from 'click-outside-vue3';
+import AttachmentShortCutVue from './Attachment&shortCutModal.vue';
+import { useRecentFilesStore } from '../../../stores/useRecentFilesStore';
+import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAttachmentStore';
+import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 
 export default {
   beforeMount() {
@@ -146,8 +174,8 @@ export default {
     }
   },
   mounted() {
-    if (this.isEditScheduled()){
-      this.newMessage = this.messageToEdit.content
+    if (this.isEditScheduled()) {
+      this.newMessage = this.messageToEdit.content;
     }
   },
   components: {
@@ -155,6 +183,8 @@ export default {
     Attachments,
     NMention,
     ScheduleModal,
+    AttachmentShortCutVue,
+    CreateTextSnippetModal,
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -167,14 +197,17 @@ export default {
       type: Boolean,
     },
     editMessageCallBack: {
-      type: Function
+      type: Function,
     },
     editMessage: {
-      type: Boolean
+      type: Boolean,
     },
     message: {
-      type: Object
-    }
+      type: Object,
+    },
+    recieverName: {
+      type: String,
+    },
   },
   computed: {
     getPlaceholder() {
@@ -196,14 +229,17 @@ export default {
             : this.$t('chat.hash')) + this.selectedChat.name
         : false;
     },
+    fileRecieverName() {
+      return (
+        this.recieverName || this.getChannelName || this.selectedChat.username
+      );
+    },
   },
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
-    // const md = new Remarkable({ html: true });
+    const FilesStore = useRecentFilesStore();
     const turndownService = new TurndownService()
-    // console.log(td.turndown('<strong>Hello World</strong>'))
-    // console.log(md.render('**Hello World**'))
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
@@ -218,6 +254,7 @@ export default {
     const files = ref([]);
     const filteredList = ref([]);
     const schedule = ref(null);
+    const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
 
     watch(newMessage, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -254,7 +291,13 @@ export default {
       schedule.value = value;
       toggleSchedule();
     };
-    const sendMessagePayload = (event, buttonClicked) => {
+
+    const makeBlocks = async (line) => {
+      const block = await markdownToBlocks(line);
+      return block[0];
+    };
+
+    const sendMessagePayload = async (event, buttonClicked) => {
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
         !props.editMessage
@@ -267,10 +310,15 @@ export default {
           messagetext !== '<p> </p>' &&
           !startWithNonBreakSpace
         ) {
-          // const mrkdwn = turndownService.turndown(messagetext)
-          // console.log(mrkdwn);
-          // console.log(messagetext);
-          props.sendMessage(messagetext, files.value, schedule);
+          const mrkdwn = []
+          const htmlList = messagetext.split('<br />');
+          htmlList.forEach(async line => {
+            mrkdwn.push(turndownService.turndown(line))
+          });
+          const result = await Promise.all(mrkdwn.map(async line => {
+            return await makeBlocks(line)
+          }));
+          props.sendMessage({ blocks: result }, files.value, schedule);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
@@ -290,21 +338,29 @@ export default {
       if (isEditScheduled()) {
         messageStore.reEditScheduledMessage({
           content: newMessage,
-          id: messageToEdit.scheduledId
-        })
-        newMessage = ''
+          id: messageToEdit.scheduledId,
+        });
+        newMessage = '';
       } else {
         sendMessagePayload(event);
       }
-    }
+    };
+    const handleCustomButton = () => {
+      if (props.isThread) {
+        attachmentAndShortcutStore.toggleModalInThread();
+      } else {
+        attachmentAndShortcutStore.toggleModalInChat();
+      }
+    };
 
     const handleCancelEdit = () => {
       messageStore.removeMessageToEdit();
-    }
+    };
 
-    const isEditScheduled = () => {
-      return messageToEdit.content && messageToEdit.isScheduled && messageToEdit.scheduledId
-    }
+    const isEditScheduled = () =>
+      messageToEdit.content &&
+      messageToEdit.isScheduled &&
+      messageToEdit.scheduledId;
 
     const message = newMessage => {
       let messageData;
@@ -320,7 +376,7 @@ export default {
         filterData = messageData.filter(el => el !== '');
         actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
       } else {
-        actuallData = newMessage.value
+        actuallData = newMessage.value;
       }
       return actuallData;
     };
@@ -411,7 +467,14 @@ export default {
       handleCancelEdit,
       isEditScheduled,
       selectedChat,
+      handleCustomButton,
+      attachmentAndShortcutStore,
     };
   },
 };
 </script>
+<style scoped>
+.margintop {
+  margin-top: -270px;
+}
+</style>
