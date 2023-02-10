@@ -3,7 +3,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
   include Conversation
 
   before_action :fetch_conversation, :initialize_draft, :verify_draft, :decide_draft_action, only: %i[create]
-  before_action :set_draft_message, :authenticate_draft, only: %i[destroy update]
+  before_action :set_draft_message, :set_conversation, :authenticate_draft, only: %i[destroy update]
 
   def index
     @draft_messages = @current_profile.draft_messages.includes(:profile).order(created_at: :desc)
@@ -27,6 +27,9 @@ class Api::V1::DraftMessagesController < Api::ApiController
 
   def set_draft_message
     @draft_message = DraftMessage.find(params[:id])
+  end
+
+  def set_conversation
     @bench_conversation = @draft_message.bench_conversation
   end
 
@@ -58,12 +61,9 @@ class Api::V1::DraftMessagesController < Api::ApiController
   def decide_draft_action
     message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
 
-    if params[:content].blank? && message.present?
+    if message.present?
       @draft_message = message
-      destroy
-    elsif params[:content].present? && message.present?
-      @draft_message = message
-      update
+      params[:content].blank? ? destroy : update
     elsif params[:content].blank?
       render json: { error: 'Sorry, the content is empty.' }, status: :bad_request
     end
@@ -74,7 +74,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def draft_receiver
-    get_receiver(@draft_message)
+    get_receiver(@draft_message.bench_conversation)
   end
 
   def draft_response
@@ -87,7 +87,6 @@ class Api::V1::DraftMessagesController < Api::ApiController
       conversation_type: @draft_message.bench_conversation.conversationable_type,
       receiver: draft_receiver
     }
-    response[:attachments] = get_attachments(@draft_message) if @draft_message.message_attachments.present?
-    response
+    @draft_message.message_attachments.present? ? response[:attachments] = get_attachments(@draft_message) : response
   end
 end
