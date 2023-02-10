@@ -1,5 +1,6 @@
 class Api::V1::PinsController < Api::ApiController
   include MemberShip
+  include Conversation
 
   before_action :find_conversation, only: %i[index create]
   before_action :set_pin, only: %i[destroy]
