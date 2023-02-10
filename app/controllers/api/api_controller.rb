@@ -11,7 +11,7 @@ class Api::ApiController < ApplicationController
 
   def set_workspace_in_session
     if session[:current_workspace_id].nil?
-      render json: { success: false, error: I18n.t('api.no_workspace') }, status: :unprocessable_entity
+      render json: { success: false, error: t('api.no_workspace') }, status: :unprocessable_entity
     else
       Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
     end

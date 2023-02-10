@@ -48,6 +48,11 @@ import {
   faPen,
   faFilePen,
   faClockRotateLeft,
+  faHardDrive,
+  faFileLines,
+  faPenToSquare,
+  faEllipsis,
+  faBoltLightning,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -100,7 +105,12 @@ library.add(
   faMagnifyingGlass,
   faPen,
   faFilePen,
-  faClockRotateLeft
+  faClockRotateLeft,
+  faFileLines,
+  faHardDrive,
+  faPenToSquare,
+  faEllipsis,
+  faBoltLightning
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

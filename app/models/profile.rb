@@ -33,6 +33,7 @@ class Profile < ApplicationRecord
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :downloads, dependent: :destroy
   has_many :schedule_messages, dependent: :destroy
+  has_many :direct_message_users, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
