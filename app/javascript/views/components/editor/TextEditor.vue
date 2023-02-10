@@ -1,5 +1,4 @@
 <template>
-  <Dummy />
   <div>
     <AttachmentShortCutVue
       :isThread="isThread"
@@ -152,7 +151,6 @@
 <script>
 import { ref, watch } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
-import Dummy from './Dummy.vue'
 import { markdownToBlocks } from '@tryfabric/mack'
 import TurndownService from 'turndown'
 import Attachments from '../attachments/Attachments.vue';
@@ -187,7 +185,6 @@ export default {
     ScheduleModal,
     AttachmentShortCutVue,
     CreateTextSnippetModal,
-    Dummy
   },
   directives: {
     clickOutside: vClickOutside.directive,
