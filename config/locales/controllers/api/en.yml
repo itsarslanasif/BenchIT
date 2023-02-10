@@ -1,5 +1,4 @@
 en:
   api:
+    no_workspace: No workspace selected.
     sign_in: You need to sign in before to access this.
-    set_workspace_in_session:
-      failure: Sorry, Please set the workspace.

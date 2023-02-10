@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
       ActiveRecord::RecordInvalid => { message: I18n.t('application.render_error.invalid_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotSaved => { message: I18n.t('application.render_error.not_saved_error'), status: :unprocessable_entity },
       NoMethodError => { message: I18n.t('application.render_error.no_method_error'), status: :unprocessable_entity },
+      UnAuthorized => { message: I18n.t('application.render_error.unauthorized_error'), status: :unauthorized },
       ActiveRecord::RecordNotUnique => { message: I18n.t('application.render_error.unique_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotDestroyed => { message: I18n.t('application.render_error.not_destroy_error'), status: :unprocessable_entity },
       PaginationError => { message: I18n.t('application.render_error.pagination_error'), status: :unprocessable_entity },
@@ -26,3 +27,7 @@ class ApplicationController < ActionController::Base
     render json: { success: false, error: error_data[:message], message: exception.message }, status: error_data[:status]
   end
 end
+
+class UnAuthorized < StandardError; end
+
+class PaginationError < StandardError; end
