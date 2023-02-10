@@ -37,9 +37,8 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       }
     },
     getSortedDMList(currentProfileID) {
-      const myProfile = this.getMyProfile(currentProfileID);
+      const [myProfile, index] = this.getMyProfileWithIndex(currentProfileID);
       if (myProfile) {
-        const index = this.directMessageUsers.indexOf(myProfile);
         this.removeMyProfileFromList(index);
       }
       if (this.hasElementsToSort()) {
@@ -50,11 +49,11 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       }
       return this.directMessageUsers;
     },
-    getMyProfile(currentProfileID) {
+    getMyProfileWithIndex(currentProfileID) {
       const myProfile = this.directMessageUsers.find(
         profile => profile.id === currentProfileID
       );
-      return myProfile ? myProfile : null;
+      return [myProfile, this.directMessageUsers.indexOf(myProfile)];
     },
     getIndexOfMyProfile(myProfile) {
       return this.directMessageUsers.indexOf(myProfile);
