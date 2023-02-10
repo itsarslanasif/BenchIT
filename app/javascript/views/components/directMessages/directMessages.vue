@@ -172,13 +172,7 @@ export default {
     },
   },
   async mounted() {
-    const dmList = await getDirectMessagesList(this.currentWorkspace.id);
-    const dmIDs = dmList.map(dm => {
-      if (dm.id != null) {
-        return dm.id;
-      }
-    });
-    this.last_messages = await getLastDirectMessagesList(dmIDs);
+    this.last_messages = await getLastDirectMessagesList();
     this.filteredList = this.allProfiles;
   },
   methods: {

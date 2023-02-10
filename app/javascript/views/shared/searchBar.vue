@@ -191,6 +191,9 @@ export default {
     const leftPaneStore = useLeftpaneStore();
     profileStore.index();
     channelStore.index();
+    channelStore.fetchJoinedChannels();
+    channelStore.fetchStarredChannels();
+    
     return {
       ApiResponseStatusStore,
       leftPaneStore,
