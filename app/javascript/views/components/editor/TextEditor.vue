@@ -1,4 +1,5 @@
 <template>
+  <!-- <Dummy /> -->
   <div>
     <AttachmentShortCutVue
       :isThread="isThread"
@@ -58,7 +59,7 @@
               onAction: handleCustomButton,
             });
           },
-          plugins: ' lists link code codesample ',
+          plugins: ' lists link code codesample emoticons',
           codesample_languages: [none],
           formats: {
             code: {
@@ -151,6 +152,7 @@
 <script>
 import { ref, watch } from 'vue';
 import Editor from '@tinymce/tinymce-vue';
+import Dummy from './Dummy.vue'
 import { markdownToBlocks } from '@tryfabric/mack'
 import TurndownService from 'turndown'
 import Attachments from '../attachments/Attachments.vue';
@@ -185,6 +187,7 @@ export default {
     ScheduleModal,
     AttachmentShortCutVue,
     CreateTextSnippetModal,
+    Dummy
   },
   directives: {
     clickOutside: vClickOutside.directive,
