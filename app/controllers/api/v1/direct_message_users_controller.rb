@@ -19,13 +19,6 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
     @recent_messages = fetch_recent_messages
   end
 
-  def fetch_recent_messages
-    @recent_messages_users.filter_map do |id|
-      conversation = BenchConversation.profile_to_profile_conversation(@current_profile.id, id)
-      conversation.conversation_messages&.last if conversation.present?
-    end.sort_by(&:created_at).reverse
-  end
-
   private
 
   def set_receiver
@@ -46,5 +39,12 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
   def set_recent_message_users
     conversation_ids = BenchConversation.recent_conversation_ids
     @recent_messages_users = BenchConversation.where(id: conversation_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
+  end
+
+  def fetch_recent_messages
+    @recent_messages_users.filter_map do |id|
+      conversation = BenchConversation.profile_to_profile_conversation(@current_profile.id, id)
+      conversation.conversation_messages&.last if conversation.present?
+    end.sort_by(&:created_at).reverse
   end
 end
