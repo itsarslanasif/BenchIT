@@ -10,8 +10,7 @@ module Conversation
                    when 'profiles'
                      BenchConversation.profile_to_profile_conversation(@current_profile.id, conversation_id)
                    end
-    render json: { error: 'wrong type' }, status: :bad_request if conversation.blank?
-    conversation
+    conversation.present? ? conversation : (render json: { error: 'wrong type' }, status: :bad_request)
   end
 
   def get_receiver(conversation)
