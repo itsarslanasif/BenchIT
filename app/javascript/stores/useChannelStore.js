@@ -19,6 +19,7 @@ export const useChannelStore = () => {
       currentChannel: {},
       pageInfo: [],
       currentProfileStore: useCurrentProfileStore(),
+      error: [],
     }),
 
     getters: {
@@ -39,17 +40,24 @@ export const useChannelStore = () => {
           );
           this.channels = [...newChannels.bench_channels];
           this.pageInfo = newChannels.page_information;
-          this.joinedChannels = await getJoinedChannels();
-          this.starChannels = this.joinedChannels.filter(
-            channel => channel.favourite_id !== null
-          );
-          this.joinedChannels = this.joinedChannels.filter(
-            channel => channel.favourite_id === null
-          );
-          this.sortChannelsList();
         } catch (e) {
           console.error(e);
         }
+      },
+
+      async fetchJoinedChannels() {
+        try {
+          this.joinedChannels = await getJoinedChannels();
+          sortChannelsList();
+        } catch (e) {
+          this.handleError(e);
+        }
+      },
+
+      async fetchStarredChannels() {
+        this.starChannels = this.joinedChannels.filter(
+          channel => channel.favourite_id != null
+        );
       },
 
       async createChannel(name, description, is_private) {
@@ -170,6 +178,10 @@ export const useChannelStore = () => {
         if (index === -1) {
           this.starChannels.push(channel);
         }
+      },
+
+      handleError(err) {
+        this.error = err;
       },
     },
   });
