@@ -10,11 +10,12 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <TextEditorVue
+      <Dummy/>
+      <!-- <TextEditorVue
         :sendMessage="sendMessage"
         :editMessage="false"
         :isThread="false"
-      />
+      /> -->
     </div>
     <div v-else>
       <JoinChannel :joinedTheChannel="joinedTheChannel" />
@@ -37,6 +38,7 @@ import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import Dummy from '../components/editor/Dummy.vue';
 export default {
   name: 'Chat',
   components: {
@@ -46,6 +48,7 @@ export default {
     NSpace,
     TextEditorVue,
     JoinChannel,
+    Dummy
   },
   data() {
     return {
