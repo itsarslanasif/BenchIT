@@ -78,7 +78,7 @@
       </button>
     </div>
 
-    <editor-content :editor="editor" class="mt-4" />
+    <EditorContent :editor="editor" class="mt-4" />
 
     <div class="flex justify-between mt-4">
       <div class="flex items-center gap-1">
@@ -133,7 +133,8 @@
       </div>
       <div class="bg-success flex rounded items-center">
         <button
-          class="px-2 py-1 hover:bg-successHover rounded text-white focus:outline-none"
+          class="px-2 py-1 bg-red-500 hover:bg-successHover rounded text-white focus:outline-none"
+          @click="sendMessagePayload"
         >
           <font-awesome-icon icon="fa-paper-plane" />
         </button>
@@ -153,6 +154,8 @@ import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import { NDivider } from 'naive-ui';
+import { markdownToBlocks } from '@tryfabric/mack';
+import TurndownService from 'turndown';
 
 export default {
   components: {
@@ -163,6 +166,7 @@ export default {
   data() {
     return {
       editor: null,
+      editorContent: '',
     };
   },
 
@@ -212,12 +216,23 @@ export default {
           — Mom
         </blockquote>
       `,
+      onUpdate: () => {
+        this.editorContent = this.editor.getHTML();
+      },
     });
   },
 
   beforeUnmount() {
     this.editor.destroy();
   },
+
+  setup() {
+    const turndownService = new TurndownService();
+    return {
+      turndownService,
+    };
+  },
+  props: ['sendMessage'],
   methods: {
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
@@ -242,6 +257,25 @@ export default {
         .extendMarkRange('link')
         .setLink({ href: url })
         .run();
+    },
+
+    async makeBlocks(line) {
+      const block = await markdownToBlocks(line);
+      return block[0];
+    },
+    async sendMessagePayload() {
+      const mrkdwn = [];
+      const htmlList = this.editorContent.split('<p></p>');
+      htmlList.forEach(async line => {
+        mrkdwn.push(this.turndownService.turndown(line));
+      });
+      const result = await Promise.all(
+        mrkdwn.map(async line => {
+          return await this.makeBlocks(line);
+        })
+      );
+      console.log(result, htmlList);
+      this.sendMessage({ blocks: result }, [], null);
     },
   },
 };
@@ -341,9 +375,9 @@ export default {
     margin: 2rem 0;
   }
 }
-  button{
-    color: #474849;
-  }
+button {
+  color: #474849;
+}
 .vl {
   border-left: 1px solid rgba(224, 226, 224, 0.752);
   height: 25px;

@@ -10,7 +10,7 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <Dummy/>
+      <Dummy :sendMessage="sendMessage" />
       <!-- <TextEditorVue
         :sendMessage="sendMessage"
         :editMessage="false"
@@ -48,7 +48,7 @@ export default {
     NSpace,
     TextEditorVue,
     JoinChannel,
-    Dummy
+    Dummy,
   },
   data() {
     return {
