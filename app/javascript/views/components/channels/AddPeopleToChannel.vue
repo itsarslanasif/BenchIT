@@ -139,7 +139,6 @@ export default defineComponent({
   },
   methods: {
     async submit() {
-      console.log(this.channelID)
       try {
         let response = await addMemberstoChannel(
           this.channelId,

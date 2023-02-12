@@ -1,8 +1,16 @@
 <template>
   <div class="infi-scroll-comp-root">
     <div class="overflow-auto chatBody" ref="chatBody">
-      <PinnedConversationModal />
-      <ChatDetail :selectedChat="selectedChat"/>
+      <PinnedConversationModal
+        :toggleUserProfileShow="toggleUserProfileShow"
+        :userProfileStore="userProfileStore"
+        :pinnedConversationStore="pinnedConversationStore"
+      />
+      <ChatDetail
+        :selectedChat="selectedChat"
+        :toggleUserProfileShow="toggleUserProfileShow"
+        :userProfileStore="userProfileStore"
+      />
       <div v-if="showSpinner" class="text-center">
         <div class="spinner"></div>
       </div>
@@ -69,6 +77,12 @@
             v-if="!message.parent_message_id"
             :currMessage="currMessage"
             :prevMessage="prevMessage"
+            :threadStore="threadStore"
+            :messageStore="messageStore"
+            :toggleThreadShow="toggleThreadShow"
+            :toggleUserProfileShow="toggleUserProfileShow"
+            :userProfileStore="userProfileStore"
+            :pinnedConversationStore="pinnedConversationStore"
           />
         </div>
       </div>
@@ -94,7 +108,15 @@ export default {
     JumpToDateVue,
     ChatDetail,
   },
-  props: ['oldestUnreadMessageId', 'messageStore'],
+  props: [
+    'oldestUnreadMessageId',
+    'messageStore',
+    'threadStore',
+    'toggleThreadShow',
+    'toggleUserProfileShow',
+    'userProfileStore',
+    'pinnedConversationStore'
+  ],
   data() {
     return {
       jumpToDateTodayToggle: false,
@@ -138,8 +160,13 @@ export default {
     },
   },
   setup(props) {
-    const { messages, currMessage, hasMoreMessages, newMessageSent, selectedChat } =
-      storeToRefs(props.messageStore);
+    const {
+      messages,
+      currMessage,
+      hasMoreMessages,
+      newMessageSent,
+      selectedChat,
+    } = storeToRefs(props.messageStore);
     return {
       messages,
       currMessage,

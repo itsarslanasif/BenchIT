@@ -96,8 +96,6 @@
 import { storeToRefs } from 'pinia';
 import moment from 'moment';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
-import { useRightPaneStore } from '../../stores/useRightPaneStore';
-import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import AddPeopleToChannel from '../components/channels/AddPeopleToChannel.vue';
 
@@ -108,17 +106,13 @@ export default {
       conversation_type: window.location.pathname.split('/')[1],
     };
   },
-  props: ['selectedChat'],
+  props: ['selectedChat', 'toggleUserProfileShow', 'userProfileStore'],
   setup() {
     const currentProfileStore = useCurrentProfileStore();
-    const rightPaneStore = useRightPaneStore();
-    const userProfileStore = useUserProfileStore();
     const profilesStore = useProfileStore();
     const { currentProfile } = storeToRefs(currentProfileStore);
     return {
       currentProfile,
-      rightPaneStore,
-      userProfileStore,
       profilesStore,
     };
   },
@@ -139,7 +133,7 @@ export default {
     },
     showUserProfile(profile_id) {
       this.setUserProfileForPane(profile_id);
-      this.rightPaneStore.toggleUserProfileShow(true);
+      this.toggleUserProfileShow(true);
     },
     setUserProfileForPane(profile_id) {
       const profile = this.profilesStore.profiles.find(

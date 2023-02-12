@@ -50,6 +50,7 @@
         <user-profile-modal
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
+          :showUserProfile="showUserProfile"
         />
       </template>
       <span class="message">
@@ -152,7 +153,7 @@
                 />
               </span>
               <EditedAtTime
-                v-if="currMessage.is_edited && isDeleted"
+                v-if="currMessage.is_edited"
                 :updated_at="currMessage.updated_at"
               />
             </div>
@@ -256,9 +257,7 @@
                   emoji
                 }}</span>
                 <span class="text-md"
-                  >{{
-                    getUsers(emoji, currentProfile.username)
-                  }}
+                  >{{ getUsers(emoji, currentProfile.username) }}
                   {{ $t('chat.reacted') }}</span
                 >
               </div>
@@ -320,6 +319,7 @@
             :pinnedConversationStore="pinnedConversationStore"
             :setDeleteModal="setDeleteModal"
             :setUnpinModal="setUnpinModal"
+            :messageStore="messageStore"
           />
         </div>
       </span>
@@ -331,17 +331,21 @@
       v-model:show="showUnpinModal"
       :currMessage="currMessage"
       :setUnpinModal="setUnpinModal"
+      :pinnedConversationStore="pinnedConversationStore"
+      :toggleUserProfileShow="toggleUserProfileShow"
+      :userProfileStore="userProfileStore"
     />
   </div>
   <DeleteMessageModal
     v-model:show="showDeleteModal"
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
+    :showUserProfile="showUserProfile"
   />
   <div
     class="bg-yellow-100 pl-16 p-2"
     v-if="
-      messagesStore.isMessageToEdit(currMessage) &&
+      messageStore.isMessageToEdit(currMessage) &&
       (!inThread || !currMessage.is_threaded)
     "
   >
@@ -349,6 +353,7 @@
       :message="currMessage.content"
       :editMessage="true"
       :editMessageCallBack="editMessage"
+      :selectedChat="messageStore.selectedChat"
     />
   </div>
 </template>
@@ -367,20 +372,15 @@ import {
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
 import MessageSection from './MessageSection.vue';
-import { useThreadStore } from '../../../stores/useThreadStore';
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
-import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import UserProfileModal from '../../widgets/UserProfileModal.vue';
 import { add_reaction } from '../../../api/reactions/reaction.js';
 import { remove_reaction } from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
-import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
-import { useMessageStore } from '../../../stores/useMessagesStore';
 import TextEditorVue from '../../components/editor/TextEditor.vue';
 import { updateMessage } from '../../../modules/axios/editorapi';
 import EditedAtTime from '../../widgets/editedAtTime.vue';
@@ -396,27 +396,17 @@ import UnPinModal from '../pinnedConversation/unpinModal.vue';
 export default {
   name: 'MessageWrapper',
   setup() {
-    const threadStore = useThreadStore();
-    const pinnedConversationStore = usePinnedConversation();
     const savedItemsStore = useSavedItemsStore();
-    const rightPaneStore = useRightPaneStore();
     const currentUserStore = useCurrentUserStore();
-    const userProfileStore = useUserProfileStore();
     const profilesStore = useProfileStore();
-    const messagesStore = useMessageStore();
     const downloadsStore = useDownloadsStore();
     const currentProfileStore = useCurrentProfileStore();
     const currentProfile = currentProfileStore.getCurrentProfile;
     const { savedItems } = storeToRefs(savedItemsStore);
     return {
-      threadStore,
-      pinnedConversationStore,
       savedItemsStore,
       currentUserStore,
-      rightPaneStore,
-      userProfileStore,
       profilesStore,
-      messagesStore,
       downloadsStore,
       savedItems,
       currentProfile,
@@ -454,6 +444,25 @@ export default {
     inThread: {
       type: Boolean,
       default: false,
+    },
+    threadStore: {
+      type: Object,
+      default: undefined,
+    },
+    messageStore: {
+      type: Object,
+    },
+    toggleThreadShow: {
+      type: Function,
+    },
+    toggleUserProfileShow: {
+      type: Function,
+    },
+    userProfileStore: {
+      type: Object,
+    },
+    pinnedConversationStore: {
+      type: Object,
     },
   },
   data() {
@@ -516,12 +525,12 @@ export default {
         : `${count} ${CONSTANTS.REPLY}`;
     },
     isFirstMessage() {
-      if (this.messagesStore.messages) {
+      if (this.messageStore.messages) {
         return this.firstMessageId === this.currMessage?.id;
       }
     },
     firstMessageId() {
-      return this.messagesStore.messages[0]?.id;
+      return this.messageStore.messages[0]?.id;
     },
     displayReaction() {
       this.currMessage.reactions?.filter(reaction => {
@@ -614,12 +623,12 @@ export default {
 
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
-      this.rightPaneStore.toggleThreadShow(true);
+      this.toggleThreadShow(true);
     },
 
     showUserProfile() {
       this.setUserProfileForPane();
-      this.rightPaneStore.toggleUserProfileShow(true);
+      this.toggleUserProfileShow(true);
     },
 
     setUserProfileForPane() {

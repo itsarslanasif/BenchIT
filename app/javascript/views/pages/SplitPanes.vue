@@ -26,11 +26,15 @@
             leftPaneStore.getLeftpaneFlag && isMobileView() ? 'hidden' : ''
           "
         >
-          <template v-if="rightPaneStore.pane1.useMe && rightPaneStore.pane1.showThread">
+          <template
+            v-if="rightPaneStore.pane1.useMe && rightPaneStore.pane1.showThread"
+          >
             <Thread />
           </template>
           <template
-           v-else-if="rightPaneStore.pane1.useMe && rightPaneStore.pane1.showUserProfile"
+            v-else-if="
+              rightPaneStore.pane1.useMe && rightPaneStore.pane1.showUserProfile
+            "
           >
             <UserProfile />
           </template>
@@ -39,7 +43,11 @@
           </template>
         </pane>
         <pane
-          v-if="(rightPaneStore.pane1.showThread || rightPaneStore.pane1.showUserProfile) && !rightPaneStore.pane2.showMe"
+          v-if="
+            (rightPaneStore.pane1.showThread ||
+              rightPaneStore.pane1.showUserProfile) &&
+            !rightPaneStore.pane2.showChat
+          "
           max-size="60"
           min-size="40"
           class="bg-white"
@@ -61,7 +69,7 @@
           />
         </pane>
         <pane
-          v-if="rightPaneStore.pane2.showMe"
+          v-if="rightPaneStore.pane2.showChat"
           max-size="60"
           min-size="40"
           class="bg-white"
@@ -70,11 +78,10 @@
           "
         >
           <template v-if="rightPaneStore.pane2.showThread">
-            <Thread />
+            <RightPaneThread />
           </template>
-          <template
-            v-else-if="rightPaneStore.pane2.showUserProfile">
-            <UserProfile />
+          <template v-else-if="rightPaneStore.pane2.showUserProfile">
+            <RightPaneUserProfile />
           </template>
           <template v-else>
             <Chat />
@@ -93,6 +100,7 @@ import SearchBar from '../shared/searchBar.vue';
 import 'splitpanes/dist/splitpanes.css';
 import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
+import RightPaneThread from '../components/rightPane/RightpaneChat/Thread.vue';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
@@ -103,6 +111,7 @@ import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import alert from '../widgets/alert.vue';
 import Chat from '../components/rightPane/RightpaneChat/Chat.vue';
+import RightPaneUserProfile from '../components/rightPane/RightpaneChat/UserProfile.vue';
 
 export default {
   components: {
@@ -118,6 +127,8 @@ export default {
     NMessageProvider,
     NMessageProvider,
     alert,
+    RightPaneThread,
+    RightPaneUserProfile,
   },
   data() {
     return {

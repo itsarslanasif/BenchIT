@@ -12,10 +12,8 @@
 </template>
 
 <script>
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-
 export default {
-  props: ['selectedChat'],
+  props: ['selectedChat', 'pinnedConversationStore'],
   setup(props) {
     function getConversationType() {
       if (props.selectedChat.is_private !== undefined) {
@@ -24,11 +22,9 @@ export default {
         return 'Profile';
       }
     }
-    const pinnedConversationStore = usePinnedConversation();
     const conversation_id = props.selectedChat.id;
     const conversation_type = getConversationType();
-    pinnedConversationStore.index(conversation_type, conversation_id);
-    return { pinnedConversationStore };
+    props.pinnedConversationStore.index(conversation_type, conversation_id);
   },
 };
 </script>

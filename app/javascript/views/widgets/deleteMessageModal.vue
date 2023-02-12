@@ -135,7 +135,7 @@ export default {
       downloadsStore,
     };
   },
-  props: ['message', 'setDeleteModal'],
+  props: ['message', 'setDeleteModal', 'showUserProfile'],
   components: {
     NModal,
     NAvatar,
@@ -157,18 +157,6 @@ export default {
     },
   },
   methods: {
-    showUserProfile() {
-      this.setUserProfileForPane();
-      this.rightPaneStore.toggleUserProfileShow(true);
-    },
-
-    setUserProfileForPane() {
-      const profile = this.profilesStore.profiles.find(
-        profile => profile.id === this.message.sender_id
-      );
-      this.userProfileStore.setUserProfile(profile);
-    },
-
     handleClick() {
       this.setDeleteModal();
       this.showUserProfile();

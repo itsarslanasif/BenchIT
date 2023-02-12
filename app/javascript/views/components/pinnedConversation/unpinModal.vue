@@ -10,15 +10,19 @@
     aria-modal="true"
   >
     <template #header>
-      <span class="text-2xl font-bold">{{
-        $t('pinconversation.title')
-      }}</span>
+      <span class="text-2xl font-bold">{{ $t('pinconversation.title') }}</span>
     </template>
     <span>{{ $t('pinconversation.confirmation') }}</span>
     <div
       class="bg-white border border-black-300 rounded-md drop-shadow-md p-1 mt-4"
     >
-      <PinnedMessageContent :currMessage="currMessage" />
+      <PinnedMessageContent
+        :currMessage="currMessage"
+        :setUnpinModal="setUnpinModal"
+        :pinnedConversationStore="pinnedConversationStore"
+        :toggleUserProfileShow="toggleUserProfileShow"
+        :userProfileStore="userProfileStore"
+      />
     </div>
     <div class="flex float-right mt-6">
       <button
@@ -41,14 +45,15 @@
 import { NModal, NAvatar, NPopover } from 'naive-ui';
 import PinnedMessageContent from './pinnedMessage.vue';
 import { unPinMessage } from '../../../api/messages/pinnedMessages';
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
-  setup() {
-    const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore };
-  },
-  props: ['currMessage', 'setUnpinModal'],
+  props: [
+    'currMessage',
+    'setUnpinModal',
+    'toggleUserProfileShow',
+    'pinnedConversationStore',
+    'userProfileStore',
+  ],
   components: {
     NModal,
     NAvatar,

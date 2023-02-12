@@ -13,28 +13,30 @@
         <PinnedMessageWrapperVue
           :curr-message="message"
           :prev-message="prevMessage"
+          :toggleUserProfileShow="toggleUserProfileShow"
+          :userProfileStore="userProfileStore"
+          :pinnedConversationStore="pinnedConversationStore"
         />
       </div>
     </div>
   </div>
 </template>
 <script>
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
-import MessageWrapper from '../messages/MessageWrapper.vue';
 import PinnedMessageWrapperVue from './pinnedMessageWrapper.vue';
 import vClickOutside from 'click-outside-vue3';
 
 export default {
-  setup() {
-    const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore };
-  },
   directives: {
     clickOutside: vClickOutside.directive,
   },
 
+  props: [
+    'toggleUserProfileShow',
+    'userProfileStore',
+    'pinnedConversationStore',
+  ],
+
   components: {
-    MessageWrapper,
     PinnedMessageWrapperVue,
   },
 };

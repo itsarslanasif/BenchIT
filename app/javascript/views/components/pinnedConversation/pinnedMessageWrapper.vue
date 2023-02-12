@@ -12,27 +12,31 @@
   </n-tooltip>
   <div class="bg-white border border-black-400 rounded-lg drop-shadow-md p-1">
     <div>
-      <PinnedMessageContent :currMessage="currMessage" />
+      <PinnedMessageContent
+        :currMessage="currMessage"
+        :toggleUserProfileShow="toggleUserProfileShow"
+        :userProfileStore="userProfileStore"
+        :pinnedConversationStore="pinnedConversationStore"
+        :setUnpinModal="setUnpinModal"
+      />
     </div>
   </div>
   <UnPinModal
     v-model:show="showUnpinModal"
     :currMessage="currMessage"
     :setUnpinModal="setUnpinModal"
+    :toggleUserProfileShow="toggleUserProfileShow"
+    :userProfileStore="userProfileStore"
+    :pinnedConversationStore="pinnedConversationStore"
   />
 </template>
 
 <script>
 import UnPinModal from './unpinModal.vue';
 import PinnedMessageContent from './pinnedMessage.vue';
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { NTooltip } from 'naive-ui';
 export default {
   name: 'PinMessageWrapper',
-  setup() {
-    const pinnedConversationStore = usePinnedConversation();
-    return { pinnedConversationStore };
-  },
   data() {
     return {
       showUnpinModal: false,
@@ -47,6 +51,15 @@ export default {
     currMessage: {
       type: Object,
       default: undefined,
+    },
+    toggleUserProfileShow: {
+      type: Function,
+    },
+    userProfileStore: {
+      type: Function,
+    },
+    pinnedConversationStore: {
+      type: Object,
     },
   },
   methods: {

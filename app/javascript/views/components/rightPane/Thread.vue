@@ -1,41 +1,51 @@
 <template>
-  <div>
-    <right-pane-header
-      :paneTitle="
-        threadStore.message.receiver_name || threadStore.message.channel_name
-      "
-      :messageId="threadStore.message.id"
-    />
-    <div class="overflow-auto threadBody">
-      <div class="pt-8">
-        <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
-      </div>
-      <n-divider
-        v-if="threadStore.message.replies.length"
-        title-placement="left"
-        class="text-black-500 text-xs"
-      >
-        <p>{{ repliesCount }}</p>
-      </n-divider>
-      <template v-if="threadStore.message.replies">
-        <template v-for="reply in threadStore.message.replies" :key="reply.id">
-          <div :id="reply.id">
-            <MessageWrapper
-              :id="reply.id"
-              :inThread="true"
-              :curr-message="reply"
-            />
-          </div>
-        </template>
-      </template>
-    </div>
-    <div class="relative mx-1">
-      <TextEditorVue
-        :isThread="true"
-        :sendMessage="sendMessage"
-        :recieverName="recieverName"
+  <right-pane-header
+    :paneTitle="
+      threadStore.message.receiver_name || threadStore.message.channel_name
+    "
+    :messageId="threadStore.message.id"
+  />
+  <div class="overflow-auto threadBody">
+    <div class="pt-8">
+      <MessageWrapper
+        :inThread="true"
+        :curr-message="threadStore.message"
+        :messageStore="messageStore"
+        :userProfileStore="userProfileStore"
+        :toggleUserProfileShow="rightPaneStore.toggleUserProfileShow"
+        :pinnedConversationStore="pinnedConversationStore"
       />
     </div>
+    <n-divider
+      v-if="threadStore.message.replies"
+      title-placement="left"
+      class="text-black-500 text-xs"
+    >
+      <p>{{ repliesCount }}</p>
+    </n-divider>
+    <template v-if="threadStore.message.replies">
+      <template v-for="reply in threadStore.message.replies" :key="reply.id">
+        <div :id="reply.id">
+          <MessageWrapper
+            :id="reply.id"
+            :inThread="true"
+            :curr-message="reply"
+            :messageStore="messageStore"
+            :userProfileStore="userProfileStore"
+            :toggleUserProfileShow="rightPaneStore.toggleUserProfileShow"
+            :pinnedConversationStore="pinnedConversationStore"
+          />
+        </div>
+      </template>
+    </template>
+  </div>
+  <div class="relative mx-1">
+    <TextEditorVue
+      :sendMessage="sendMessage"
+      :isThread="true"
+      :selectedChat="messageStore.selectedChat"
+      :recieverName="recieverName"
+    />
   </div>
 </template>
 
@@ -50,6 +60,10 @@ import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
 import { CONSTANTS } from '../../../assets/constants';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { useUserProfileStore } from '../../../stores/useUserProfileStore';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 
 export default {
   name: 'RightPane',
@@ -64,7 +78,18 @@ export default {
     const threadStore = useThreadStore();
     const currentUserStore = useUserInviteStore();
     const { currentUser } = storeToRefs(currentUserStore);
-    return { threadStore, currentUser };
+    const messageStore = useMessageStore();
+    const userProfileStore = useUserProfileStore();
+    const rightPaneStore = useRightPaneStore();
+    const pinnedConversationStore = usePinnedConversation();
+    return {
+      threadStore,
+      currentUser,
+      messageStore,
+      userProfileStore,
+      rightPaneStore,
+      pinnedConversationStore,
+    };
   },
 
   data() {

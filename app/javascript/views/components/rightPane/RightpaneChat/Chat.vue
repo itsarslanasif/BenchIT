@@ -1,17 +1,28 @@
 <template>
-  <div class="flex flex-col h-full">
+  <div
+    class="flex flex-col h-full m-3 border border-black-500 rounded shadow-inner"
+  >
     <div v-if="chat" class="chat-header-style">
-      <ChatHeader />
+      <ChatHeader :pinnedConversationStore="pinnedConversationStore" />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
       <ChatBody
         @load-more-messages="loadMoreMessages"
         :oldestUnreadMessageId="oldestUnreadMessageId"
         :messageStore="messageStore"
+        :threadStore="threadStore"
+        :toggleThreadShow="rightPaneStore.toggleRightPaneThreadShow"
+        :toggleUserProfileShow="rightPaneStore.toggleRightPaneUserProfileShow"
+        :userProfileStore="userProfileStore"
+        :pinnedConversationStore="pinnedConversationStore"
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <TextEditorVue :sendMessage="sendMessage" :editMessage="false" :selectedChat="selectedChat"/>
+      <TextEditorVue
+        :sendMessage="sendMessage"
+        :editMessage="false"
+        :selectedChat="selectedChat"
+      />
     </div>
     <div v-else>
       <JoinChannel :joinedTheChannel="joinedTheChannel" />
@@ -34,6 +45,11 @@ import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../../../stores/useCurrentProfileStore';
+import { useRightPaneThreadStore } from '../../../../stores/useRightPaneThreadStore';
+import { useRightPaneStore } from '../../../../stores/useRightPaneStore';
+import { useRightPaneUserProfileStore } from '../../../../stores/useRightPaneProfileStore';
+import { useRightPanePinnedConversation } from '../../../../stores/useRightPanePinnedConversationStore';
+
 export default {
   name: 'Chat',
   components: {
@@ -61,6 +77,10 @@ export default {
     const unreadStore = useUnreadStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
+    const threadStore = useRightPaneThreadStore();
+    const rightPaneStore = useRightPaneStore();
+    const userProfileStore = useRightPaneUserProfileStore();
+    const pinnedConversationStore = useRightPanePinnedConversation();
     const {
       messages,
       currMessage,
@@ -84,6 +104,10 @@ export default {
       currentProfile,
       selectedChat,
       unreadStore,
+      threadStore,
+      rightPaneStore,
+      userProfileStore,
+      pinnedConversationStore,
     };
   },
   watch: {
@@ -103,7 +127,10 @@ export default {
       this.conversation_type,
       this.selectedChat.id
     );
-    this.unreadStore.markedChatAsRead(this.conversation_type, this.selectedChat.id);
+    this.unreadStore.markedChatAsRead(
+      this.conversation_type,
+      this.selectedChat.id
+    );
     this.Cable = createCable({
       channel: 'ChatChannel',
       id: this.selectedChat.id,
@@ -176,4 +203,3 @@ export default {
   background-image: url(../../assets/images/codeblock.png) !important;
 }
 </style>
-

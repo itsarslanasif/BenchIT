@@ -17,7 +17,10 @@
     <div
       class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer"
     >
-      <PinnedConversation :selectedChat="selectedChat" />
+      <PinnedConversation
+        :selectedChat="selectedChat"
+        :pinnedConversationStore="pinnedConversationStore"
+      />
     </div>
   </div>
 </template>
@@ -30,7 +33,6 @@ import Spinner from '../../../shared/spinner.vue';
 import axios from '../../../../modules/axios/index';
 import { useRightpaneMessageStore } from '../../../../stores/useRightpaneMessageStore';
 import { storeToRefs } from 'pinia';
-import { usePinnedConversation } from '../../../../stores/UsePinnedConversationStore';
 import PinnedConversation from '../../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from './ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
@@ -58,6 +60,7 @@ export default {
       conversation_type: null,
     };
   },
+  props: ['pinnedConversationStore'],
   mounted() {
     axios
       .get(`v1/bench_channels/${1}/bookmarks`, {
@@ -80,12 +83,10 @@ export default {
   setup() {
     const messageStore = useRightpaneMessageStore();
     const { messages, selectedChat } = storeToRefs(messageStore);
-    const pinnedConversationStore = usePinnedConversation();
 
     return {
       messages,
       selectedChat,
-      pinnedConversationStore,
     };
   },
 

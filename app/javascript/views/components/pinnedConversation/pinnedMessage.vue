@@ -11,16 +11,13 @@
   <div class="p-px px-4 relative mt-2">
     <div class="flex">
       <n-avatar
-        @click="showUserProfile"
+        @click="showProfile"
         class="mr-2 mt-1 cursor-pointer"
         :size="20"
         :src="currMessage.sender_avatar"
       />
       <span class="text-black-800">
-        <p
-          @click="showUserProfile"
-          class="text-lg hover:underline cursor-pointer"
-        >
+        <p @click="showProfile" class="text-lg hover:underline cursor-pointer">
           <b>{{ currMessage.sender_name }}</b>
         </p>
       </span>
@@ -61,11 +58,9 @@
 </template>
 
 <script>
-import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useRightPaneStore } from '../../../stores/useRightPaneStore';
-import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { NAvatar } from 'naive-ui';
 import moment from 'moment';
@@ -73,23 +68,25 @@ import moment from 'moment';
 export default {
   setup() {
     const rightPaneStore = useRightPaneStore();
-    const userProfileStore = useUserProfileStore();
     const profilesStore = useProfileStore();
     const threadStore = useThreadStore();
-    const pinnedConversationStore = usePinnedConversation();
     const messageStore = useMessageStore();
     const targetMessage = null;
     return {
       rightPaneStore,
-      userProfileStore,
       profilesStore,
-      pinnedConversationStore,
       threadStore,
       messageStore,
       targetMessage,
     };
   },
-  props: ['currMessage'],
+  props: [
+    'currMessage',
+    'userProfileStore',
+    'setUnpinModal',
+    'pinnedConversationStore',
+    'toggleUserProfileShow',
+  ],
   components: {
     NAvatar,
   },
@@ -98,11 +95,11 @@ export default {
       return moment(date).calendar();
     },
 
-    showUserProfile() {
+    showProfile() {
       this.pinnedConversationStore.showAlert = false;
       this.pinnedConversationStore.closeModal();
       this.setUserProfileForPane();
-      this.rightPaneStore.toggleUserProfileShow(true);
+      this.toggleUserProfileShow(true);
     },
 
     setUserProfileForPane() {
@@ -181,6 +178,8 @@ export default {
     openInNewTab(url) {
       window.open(url, '_blank', 'noreferrer');
     },
+
+    showUserProfile() {},
   },
 };
 </script>

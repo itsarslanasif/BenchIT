@@ -1,13 +1,18 @@
 <template>
   <div v-if="conversation_type && id" class="flex flex-col h-full">
     <div v-if="chat" class="chat-header-style">
-      <ChatHeader />
+      <ChatHeader :pinnedConversationStore="pinnedConversationStore"/>
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
       <ChatBody
         @load-more-messages="loadMoreMessages"
         :oldestUnreadMessageId="oldestUnreadMessageId"
         :messageStore="messageStore"
+        :threadStore="threadStore"
+        :toggleThreadShow="rightPaneStore.toggleThreadShow"
+        :toggleUserProfileShow="rightPaneStore.toggleUserProfileShow"
+        :userProfileStore="userProfileStore"
+        :pinnedConversationStore="pinnedConversationStore"
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
@@ -39,6 +44,11 @@ import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useThreadStore } from '../../stores/useThreadStore';
+import { useRightPaneStore } from '../../stores/useRightPaneStore'
+import { useUserProfileStore } from '../../stores/useUserProfileStore'
+import { usePinnedConversation } from '../../stores/UsePinnedConversationStore'
+
 export default {
   name: 'Chat',
   components: {
@@ -69,6 +79,9 @@ export default {
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
     const conversation_type = getIndexByParams(1);
+    const threadStore = useThreadStore();
+    const rightPaneStore = useRightPaneStore();
+    const pinnedConversationStore = usePinnedConversation();
     const id = getIndexByParams(2);
     const {
       messages,
@@ -80,6 +93,7 @@ export default {
     const { currentUser } = storeToRefs(currentUserStore);
     const { channelMembers } = storeToRefs(channelDetailStore);
     const currentProfile = currentProfileStore.getCurrentProfile;
+    const userProfileStore = useUserProfileStore();
     const oldestUnreadMessageId = unreadStore.getOldestMessageId(
       conversation_type,
       id
@@ -103,6 +117,10 @@ export default {
       id,
       channelMembers,
       currentProfile,
+      threadStore,
+      userProfileStore,
+      rightPaneStore,
+      pinnedConversationStore,
     };
   },
   watch: {

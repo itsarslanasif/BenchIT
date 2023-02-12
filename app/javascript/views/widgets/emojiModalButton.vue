@@ -41,11 +41,8 @@
 <script>
 import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
-import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { pinMessage } from '../../api/messages/pinnedMessages';
-
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
-import { useMessageStore } from '../../stores/useMessagesStore';
 
 export default {
   name: 'EmojiModalButton',
@@ -59,18 +56,17 @@ export default {
     'pinnedConversationStore',
     'setDeleteModal',
     'setUnpinModal',
+    'messageStore',
   ],
   setup() {
-    const pinnedConversationStore = usePinnedConversation();
     const currentProfileStore = useCurrentProfileStore();
-    const messageStore = useMessageStore();
-    return { pinnedConversationStore, currentProfileStore, messageStore };
+    return { currentProfileStore };
   },
   beforeMount() {
-
     if (this.message) {
       this.Options = new Options(
-        this.message.pinned, this.message.is_info,
+        this.message.pinned,
+        this.message.is_info,
         this.isMyMessage(this.currentProfileStore.currentProfile, this.message)
       );
     }
@@ -84,20 +80,12 @@ export default {
     isMyMessage(currentProfileStore, message) {
       return message.sender_id == currentProfileStore.id;
     },
-    handleSelect(key, message, pinnedConversationStore, messageStore) {
-      const getIndexByParams = param => {
-        return window.location.pathname.split('/')[param];
-      };
-      const getConversationType = type => {
-        switch (type) {
-          case 'channels':
-            return 'BenchChannel';
-          case 'profiles':
-            return 'Profile';
-          case 'groups':
-            return 'Group';
-          default:
-            return;
+    handleSelect(key, message) {
+      const getConversationType = () => {
+        if (this.messageStore.selectedChat.is_private !== undefined) {
+          return 'BenchChannel';
+        } else {
+          return 'Profile';
         }
       };
       switch (key) {
@@ -108,8 +96,8 @@ export default {
           this.setDeleteModal();
           break;
         case 'pin-to-this-conversation':
-          const conversation_type = getIndexByParams(1);
-          const conversation_id = getIndexByParams(2);
+          const conversation_id = this.messageStore.selectedChat.id;
+          const conversation_type = getConversationType();
           try {
             pinMessage(
               message.bench_conversation_id,
@@ -123,8 +111,7 @@ export default {
           this.setUnpinModal();
           break;
         case 'edit-message':
-          if (message)
-            messageStore.setMessageToEdit(message);
+          if (message) this.messageStore.setMessageToEdit(message);
           break;
       }
     },

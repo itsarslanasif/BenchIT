@@ -40,6 +40,10 @@ export default {
       type: String,
       default: undefined,
     },
+    showUserProfile: {
+      type: Function,
+      required: true,
+    },
   },
   setup() {
     const userProfileStore = useUserProfileStore();
@@ -240,17 +244,6 @@ export default {
           ]
         );
       }
-    },
-    showUserProfile() {
-      this.setUserProfileForPane();
-      this.rightPaneStore.toggleUserProfileShow(true);
-    },
-
-    setUserProfileForPane() {
-      const profile = this.profilesStore.profiles.find(
-        profile => profile?.id === this.profile_id
-      );
-      this.userProfileStore.setUserProfile(profile);
     },
     setUserProfileForModal() {
       this.modal_profile = this.profilesStore.profiles.find(
