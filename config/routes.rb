@@ -37,7 +37,6 @@ Rails.application.routes.draw do
             get :index_saved_messages
             get :recent_files
             get :unread_messages
-            post :last_messages
           end
           member do
             post :save_message
@@ -66,9 +65,6 @@ Rails.application.routes.draw do
           end
 
           resources :profiles, only: %i[index create show update] do
-            collection do
-              get :previous_direct_messages
-            end
             member do
               post :set_status
               post :clear_status
@@ -86,6 +82,12 @@ Rails.application.routes.draw do
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
+        resources :direct_message_users, only: %i[index destroy] do
+          collection do
+            get :previous_direct_messages
+            get :recent_direct_messages
+          end
+        end
         resources :channel_participants, only: %i[create index] do
           collection do
             post :join_public_channel

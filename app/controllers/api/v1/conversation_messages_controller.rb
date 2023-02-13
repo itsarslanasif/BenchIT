@@ -80,19 +80,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     paginate_messages
   end
 
-  def last_messages
-    @last_messages = fetch_last_messages
-  end
-
-  def fetch_last_messages
-    params[:dm_ids].filter_map do |id|
-      BenchConversation.profile_to_profile_conversation(Current.profile.id, id)&.conversation_messages&.last
-    end.sort_by(&:created_at).reverse
-  end
-
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, @receiver.id)
     create_conversation if @conversation.blank?
+    @current_profile.direct_message_users.create(receiver_id: @receiver.id)
     paginate_messages
   end
 

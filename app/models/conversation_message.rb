@@ -28,7 +28,7 @@ class ConversationMessage < ApplicationRecord
                                                    bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
   }
 
-  def self.recent_last_conversation(conversation_ids)
+  def self.recent_conversation_ids(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
                                                                              two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
