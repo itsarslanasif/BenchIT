@@ -23,7 +23,6 @@ import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
 import { decryption } from './modules/crypto/crypto';
 import { checkAuth } from './api/user_auth/check_auth';
-import Dummy from './views/components/editor/Dummy.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -182,10 +181,6 @@ const router = createRouter({
         auth: false,
       },
     },
-    {
-      path: '/tiptap',
-      component: Dummy,
-    }
   ],
 });
 router.beforeEach(async (to, from, next) => {
