@@ -81,7 +81,6 @@ export default {
     };
   },
   components: {
-    DateAndTimePicker,
     NModal,
     NCard,
     NDropdown,
@@ -90,13 +89,13 @@ export default {
   methods: {
     handleSelect(key) {
       switch (key) {
-        case this.generateKey('Tommorow'):
+        case this.generateKey(CONSTANTS.TOMORROW):
           this.scheduleTomorrow();
           break;
-        case this.generateKey('Next Monday'):
+        case this.generateKey(CONSTANTS.NEXT_MONDAY):
           this.scheduleNextWeek();
           break;
-        case this.generateKey('Custom time'):
+        case this.generateKey(CONSTANTS.CUSTOM_TIME):
           this.toggleCustomScheduleFlag();
           break;
         default:

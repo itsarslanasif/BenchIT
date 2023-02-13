@@ -429,7 +429,7 @@ export default {
             return await this.makeBlocks(line);
           })
         );
-        if (result.length) {
+        if (result[0] != null) {
           this.sendMessage({ blocks: result }, this.files, this.schedule);
           this.newMessage = '';
           this.readerFile = [];
