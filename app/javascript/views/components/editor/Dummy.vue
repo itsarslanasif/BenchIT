@@ -166,7 +166,8 @@ export default {
   data() {
     return {
       editor: null,
-      message: '',
+      editorContent: '',
+      content: ''
     };
   },
 
@@ -186,10 +187,10 @@ export default {
           // },
         }),
       ],
+      content: this.content,
       onUpdate: () => {
         this.editorContent = this.editor.getHTML();
       },
-      content: this.message,
     });
   },
 
@@ -236,12 +237,17 @@ export default {
     },
     async sendMessagePayload() {
       const mrkdwn = [];
-      const htmlList = this.editorContent.split('<p></p>');
+      const htmlList = this.editorContent.split('<br>');
       htmlList.forEach(async line => {
+        line = line.replace(/<s>/g, '~~')
+        line = line.replace(/<\/s>/g, '~~')
+        console.log(line);
         mrkdwn.push(this.turndownService.turndown(line));
       });
       const result = await Promise.all(
         mrkdwn.map(async line => {
+          line = line.replace(/\*\*/g, '****')
+          console.log(line);
           return await this.makeBlocks(line);
         })
       );
