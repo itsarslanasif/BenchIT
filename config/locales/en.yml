@@ -183,6 +183,7 @@ en:
         launch_workspace: 'Launch Workspace'
         sign_in_to_your_workspace: 'Sign in to your workspace'
         new_workspace_tagline: 'Looking to create a workspace instead?'
+        workspace_not_found: 'We couldn’t find your workspace.'
       sidebar:
         threads: 'Threads'
         direct_messages: 'Direct Messages'
