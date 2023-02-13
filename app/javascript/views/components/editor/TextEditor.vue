@@ -158,7 +158,34 @@
           </button>
         </div>
 
-        <editor-content :editor="editor" class="mt-4" />
+        <editor-content
+          :editor="editor"
+          class="mt-4"
+          @keydown.enter="sendMessagePayload"
+        />
+
+        <div>
+          <div v-if="readerFile.length" class="flex mt-2">
+            <div
+              v-for="file in readerFile"
+              :key="file"
+              class="w-12 h-12 border-black-400 border mr-3 rounded-md"
+            >
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="float-right"
+                @click="removeFile(file)"
+              />
+              <img :src="file" class="self-baseline" />
+            </div>
+          </div>
+        </div>
+        <div v-if="scheduleModalFlag">
+          <ScheduleModal
+            :setSchedule="setSchedule"
+            :toggleSchedule="toggleSchedule"
+          />
+        </div>
 
         <div class="flex justify-between mt-4">
           <div class="flex items-center gap-1">
@@ -219,7 +246,7 @@
             :class="editorContent ? 'bg-success' : 'bg-white'"
           >
             <button
-              @click="sendMessagePayload"
+              @click="sendMessagePayload($event, true)"
               class="px-2 py-1 rounded focus:outline-none"
               :class="
                 editorContent
@@ -245,28 +272,6 @@
           </div>
         </div>
       </div>
-    </div>
-    <div>
-      <div v-if="readerFile.length" class="flex mt-2">
-        <div
-          v-for="file in readerFile"
-          :key="file"
-          class="w-12 h-12 border-primary border mr-3 rounded-md"
-        >
-          <font-awesome-icon
-            icon="fa-circle-xmark"
-            class="float-right"
-            @click="removeFile(file)"
-          />
-          <img :src="file" class="self-baseline" />
-        </div>
-      </div>
-    </div>
-    <div v-if="scheduleModalFlag">
-      <ScheduleModal
-        :setSchedule="setSchedule"
-        :toggleSchedule="toggleSchedule"
-      />
     </div>
   </div>
 </template>
@@ -385,20 +390,13 @@ export default {
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
       const url = window.prompt('URL', previousUrl);
-
-      // cancelled
       if (url === null) {
         return;
       }
-
-      // empty
       if (url === '') {
         this.editor.chain().focus().extendMarkRange('link').unsetLink().run();
-
         return;
       }
-
-      // update link
       this.editor
         .chain()
         .focus()
@@ -411,23 +409,32 @@ export default {
       const block = await markdownToBlocks(line);
       return block[0];
     },
-    async sendMessagePayload() {
-      const mrkdwn = [];
-      const htmlList = this.editorContent.split('<br>');
-      htmlList.forEach(async line => {
-        line = line.replace(/<s>/g, '~~');
-        line = line.replace(/<\/s>/g, '~~');
-        mrkdwn.push(this.turndownService.turndown(line));
-      });
-      const result = await Promise.all(
-        mrkdwn.map(async line => {
-          line = line.replace(/\*\*/g, '****');
-          return await this.makeBlocks(line);
-        })
-      );
 
-      if (result) {
-        this.sendMessage({ blocks: result }, [], null);
+    async sendMessagePayload(event, buttonClicked) {
+      if (
+        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        !this.editMessage
+      ) {
+        const mrkdwn = [];
+        const htmlList = this.editorContent.split('<br>');
+        htmlList.forEach(async line => {
+          line = line.replace(/<s>/g, '~~');
+          line = line.replace(/<\/s>/g, '~~');
+          mrkdwn.push(this.turndownService.turndown(line));
+        });
+        const result = await Promise.all(
+          mrkdwn.map(async line => {
+            line = line.replace(/\*\*/g, '****');
+            return await this.makeBlocks(line);
+          })
+        );
+        if (result.length) {
+          this.sendMessage({ blocks: result }, this.files, this.schedule);
+          this.newMessage = '';
+          this.readerFile = [];
+          this.files = [];
+          this.schedule = null;
+        }
       }
     },
   },
@@ -496,7 +503,7 @@ export default {
           content: newMessage,
           id: messageToEdit.scheduledId,
         });
-        newMessage = '';
+        newMessage.value = '';
       } else {
         sendMessagePayload(event);
       }
