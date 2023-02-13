@@ -47,7 +47,7 @@ BenchConversation.create(conversationable_type: 'BenchChannel', conversationable
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 1)
 ChannelParticipant.create(permission: true, profile_id: 4, bench_channel_id: 1)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Alva"}}]}',
+ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Dev Channel** from _Alva_"}}]}',
                            is_threaded: false, bench_conversation_id: 1, sender_id: 1)
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Arnold"}}]}',
                            is_threaded: false, bench_conversation_id: 1, sender_id: 2)
