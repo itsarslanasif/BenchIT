@@ -1,5 +1,7 @@
 <template>
   <div
+    v-for="block in messageBlock.blocks"
+    :key="block"
     class="py-1"
     :class="{
       'bg-yellow-50': isSavedMessage,
@@ -105,12 +107,10 @@
                 !isDeleted
               "
             >
-              <template v-for="block in messageBlock.blocks" :key="block">
-                <MessageSection
-                  v-if="block.type === 'section'"
-                  :section="block"
-                />
-              </template>
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
             </div>
             <span
               v-if="
@@ -145,8 +145,11 @@
                   currMessage.is_info ? 'text-black-600' : 'text-black-800'
                 "
                 class="text-sm flex-wrap rich-content"
-                v-html="currMessage.content"
-              />
+              >
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+              /></span>
               <EditedAtTime
                 v-if="currMessage.is_edited && isDeleted"
                 :updated_at="currMessage.updated_at"
