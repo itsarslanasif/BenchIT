@@ -1,0 +1,12 @@
+en:
+  application:
+    render_error:
+      not_found_error: Sorry, The record not found.
+      invalid_error: Sorry, The record is invalid.
+      not_saved_error: Sorry, The record cannot be saved.
+      no_method_error: Sorry, There is no such method.
+      unique_error: Sorry, The record is not unique.
+      not_destroy_error: Sorry, The record cannot be destroyed.
+      pagination_error: Sorry, The page not found.
+      server_error: Internal server error
+      unauthorized_error: You need to login to access this.
