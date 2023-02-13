@@ -165,18 +165,17 @@
         />
 
         <div>
-          <div v-if="readerFile.length" class="flex mt-2">
-            <div
-              v-for="file in readerFile"
-              :key="file"
-              class="w-12 h-12 border-black-400 border mr-3 rounded-md"
-            >
+          <div v-if="readerFile.length" class="flex gap-1 mt-2 relative">
+            <div v-for="file in readerFile" :key="file" class="relative">
               <font-awesome-icon
                 icon="fa-circle-xmark"
-                class="float-right"
+                class="absolute right-0 text-xs p-1 mb-6 text-white shadow-md"
                 @click="removeFile(file)"
               />
-              <img :src="file" class="self-baseline" />
+              <img
+                :src="file"
+                class="self-baseline w-12 h-12 rounded-md border-black-600 border"
+              />
             </div>
           </div>
         </div>

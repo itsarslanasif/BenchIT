@@ -63,7 +63,7 @@
           :key="file"
           @click="selectFromRecent(file)"
         >
-          <div class="flex p-2 hover:bg-primaryHover">
+          <div class="flex hover:bg-primaryHover">
             <div class="mr-2">
               <img :src="file.attachment_link" class="w-10 h-10" />
             </div>
