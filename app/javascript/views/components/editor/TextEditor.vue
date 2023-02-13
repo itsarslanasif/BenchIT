@@ -549,9 +549,9 @@ export default {
     const getScheduleNotification = () => {
       const date = moment(schedule.value);
       return `Your message will be sent to ${
-        props.selectedChat.value['user_id']
-          ? props.selectedChat.value.username
-          : props.selectedChat.value.name
+        props.selectedChat['user_id']
+          ? props.selectedChat.username
+          : props.selectedChat.name
       } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
 

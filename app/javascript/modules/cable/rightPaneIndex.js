@@ -1,7 +1,7 @@
 import { useRightpaneMessageStore } from '../../stores/useRightpaneMessageStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
-import { useThreadStore } from '../../stores/useThreadStore';
-import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
+import { useRightPaneThreadStore } from '../../stores/useRightPaneThreadStore';
+import { useRightPanePinnedConversation } from '../../stores/useRightPanePinnedConversationStore';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
 const createMessage = (data, messageStore, threadStore) => {
@@ -81,7 +81,7 @@ const deleteMessage = (data, messageStore, threadStore, pinStore, rightPaneStore
         if (threadMessage.id === data.id) {
           threadMessage.replies.splice(0, threadMessage.replies.length);
           threadStore.setMessage(null);
-          rightPaneStore.toggleThreadShow(false);
+          rightPaneStore.toggleRightPaneThreadShow(false);
         }
       }
     }
@@ -270,9 +270,9 @@ const actions = {
 
 export const cableActions = data => {
   const messageStore = useRightpaneMessageStore();
-  const threadStore = useThreadStore();
+  const threadStore = useRightPaneThreadStore();
   const rightPaneStore = useRightPaneStore();
-  const pinStore = usePinnedConversation();
+  const pinStore = useRightPanePinnedConversation();
 
   try {
     const key = data.type + data.action;
