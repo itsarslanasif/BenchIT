@@ -286,7 +286,7 @@ en:
         email: 'Email'
         phone: 'Phone'
         workspace: 'acme@benchit.com'
-        enter_workspace_url: 'your-workspace.slack.com'
+        enter_workspace_url: 'your-workspace.benchit.com'
         add_people_to_channel: 'ex. Nathalie, or james@acme.com'
       profile:
         contact_information: 'Contact Information'
