@@ -96,15 +96,20 @@
                 }}
               </p>
             </span>
-            <div v-if="
+            <div
+              v-if="
                 isSameUser &&
                 isSameDayMessage &&
                 !isFirstMessage &&
                 !currMessage.is_info &&
                 !isDeleted
-              ">
+              "
+            >
               <template v-for="block in messageBlock.blocks" :key="block">
-                <MessageSection v-if="block.type === 'section'" :section="block" />
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+                />
               </template>
             </div>
             <span
@@ -330,7 +335,7 @@
     :setDeleteModal="setDeleteModal"
   />
   <div
-    class="bg-yellow-50 pl-16 pr-4"
+    class="bg-yellow-100 pl-16 p-2"
     v-if="
       messagesStore.isMessageToEdit(currMessage) &&
       (!inThread || !currMessage.is_threaded)
@@ -478,7 +483,7 @@ export default {
   },
   computed: {
     messageBlock() {
-      return JSON.parse(this.currMessage.content)
+      return JSON.parse(this.currMessage.content);
     },
     time() {
       return moment(new Date(this.currMessage.created_at).getTime()).format(

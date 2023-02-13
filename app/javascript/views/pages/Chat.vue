@@ -10,12 +10,11 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <Dummy :sendMessage="sendMessage" />
-      <!-- <TextEditorVue
+      <TextEditorVue
         :sendMessage="sendMessage"
         :editMessage="false"
         :isThread="false"
-      /> -->
+      />
     </div>
     <div v-else>
       <JoinChannel :joinedTheChannel="joinedTheChannel" />
