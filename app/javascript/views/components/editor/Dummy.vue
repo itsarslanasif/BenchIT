@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div
     v-if="editor"
     class="flex justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
@@ -359,4 +359,4 @@ button {
   border-left: 1px solid rgba(224, 226, 224, 0.752);
   height: 25px;
 }
-</style>
+</style> -->
