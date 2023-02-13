@@ -1,29 +1,29 @@
 <template>
   <div>
     <AttachmentShortCutVue
-      :isThread="isThread"
-      class="margintop absolute z-10"
+    :isThread="isThread"
+    class="margintop absolute z-10"
     />
     <CreateTextSnippetModal
       v-if="
         isThread
-          ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
-          : attachmentAndShortcutStore.showCreateTextSnippitModal
-      "
+        ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
+        : attachmentAndShortcutStore.showCreateTextSnippitModal
+        "
       :sendMessage="sendMessage"
       :isThread="isThread"
       :recieverName="fileRecieverName"
-    />
+      />
     <div
-      v-if="showMentions || showChannels"
+      v-if="filteredList.length"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
     >
-      <div
+      <!-- <div
         v-if="
           (showMentions && hasMentionCommand) ||
           (showChannels && hasChannelCommand)
         "
-      >
+      > -->
         <div
           v-for="item in filteredList"
           :key="item.name"
@@ -32,7 +32,7 @@
         >
           {{ item.creator_id ? item.name : item.username }}
         </div>
-      </div>
+      <!-- </div> -->
     </div>
     <div>
       <div
@@ -282,6 +282,7 @@ import TurndownService from 'turndown';
 import Attachments from '../attachments/Attachments.vue';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useChannelStore } from '../../../stores/useChannelStore';
+import { useSearchStore } from '../../../stores/useSearchStore'
 import { storeToRefs } from 'pinia';
 import { NMention, NDivider } from 'naive-ui';
 import ScheduleModal from '../../widgets/schedule.vue';
@@ -440,11 +441,13 @@ export default {
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
+    const searchStore = useSearchStore();
     const FilesStore = useRecentFilesStore();
     const turndownService = new TurndownService();
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
+    const { searches } = storeToRefs(searchStore)
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
@@ -459,37 +462,35 @@ export default {
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
 
-    watch(newMessage, (curr, old) => {
+    watch(editorContent, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
       const oldMessage = ignoreHTML(old);
-      const message = ignoreHTML(newMessage.value);
+      const message = ignoreHTML(editorContent.value);
 
       if (
         message &&
-        getLastIndex(currentMessage) == '@' &&
-        getLastIndex(oldMessage) == ';'
+        getLastIndex(currentMessage)[0] == '@'
       ) {
-        enableMention();
+        enableMention(message);
       } else if (
         message &&
-        getLastIndex(currentMessage) == '#' &&
-        getLastIndex(oldMessage) == ';'
+        getLastIndex(currentMessage)[0] == '#'
       ) {
-        enableChannels();
-      } else if (message.length === 1 && getLastIndex(currentMessage) == '@') {
-        enableMention();
-      } else if (message.length === 1 && getLastIndex(currentMessage) == '#') {
-        enableChannels();
-      } else if (!message) {
-        disableAll();
+        enableChannels(message);
+      } else if (message.length === 1 && getLastIndex(currentMessage)[0] == '@') {
+        enableMention(message);
+      } else if (message.length === 1 && getLastIndex(currentMessage)[0] == '#') {
+        enableChannels(message);
       } else {
         disableAll();
+        searchStore.clearSearches()
       }
     });
 
     const getLastIndex = value => {
-      return value[value.length - 1];
+      return value.split(' ').pop();
     };
+
     const setSchedule = value => {
       schedule.value = value;
       toggleSchedule();
@@ -552,20 +553,16 @@ export default {
       } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
 
-    const enableMention = () => {
-      filteredList.value = profiles.value;
-      hasMentionCommand.value = true;
-      showMentions.value = true;
-      hasChannelCommand.value = false;
-      showChannels.value = false;
+    const enableMention = async word => {
+      const query = word.split(' ').pop().slice(1)
+      await searchStore.index(query, 'Profile')
+      filteredList.value = searches.value.profiles
     };
 
-    const enableChannels = () => {
-      filteredList.value = channels.value;
-      hasChannelCommand.value = true;
-      showChannels.value = true;
-      hasMentionCommand.value = false;
-      showMentions.value = false;
+    const enableChannels = async word => {
+      const query = word.split(' ').pop().slice(1)
+      await searchStore.index(query, 'BenchChannel')
+      filteredList.value = searches.value.channels
     };
 
     const disableAll = () => {
@@ -576,11 +573,11 @@ export default {
     };
 
     const addMentionToText = e => {
-      newMessage.value = `${newMessage.value.slice(0, -4)}<span>${
+      // console.log(e.target.outerText);
+      editorContent.value = `${editorContent.value.slice(0, -4)}${
         e.target.outerText
-      }</span> ${newMessage.value.slice(-4)}`;
-      showMentions.value = false;
-      hasMentionCommand.value = false;
+      } ${editorContent.value.slice(-4)}`;
+      filteredList.value = false;
     };
 
     const ignoreHTML = message => {
