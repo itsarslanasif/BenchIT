@@ -426,11 +426,9 @@ export default {
         })
       );
 
-      this.sendMessage({ blocks: result }, this.files.value, this.schedule);
-      newMessage.value = '';
-      readerFile.value = [];
-      files.value = [];
-      schedule.value = null;
+      if (result) {
+        this.sendMessage({ blocks: result }, [], null);
+      }
     },
   },
   setup(props) {
@@ -444,6 +442,7 @@ export default {
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
+    const editorContent = ref('');
     const showMentions = ref(false);
     const showChannels = ref(false);
     const hasMentionCommand = ref(false);
@@ -626,6 +625,7 @@ export default {
       handleCustomButton,
       attachmentAndShortcutStore,
       turndownService,
+      editorContent,
     };
   },
 };
