@@ -37,7 +37,6 @@ import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
-import Dummy from '../components/editor/Dummy.vue';
 export default {
   name: 'Chat',
   components: {
@@ -47,7 +46,6 @@ export default {
     NSpace,
     TextEditorVue,
     JoinChannel,
-    Dummy,
   },
   data() {
     return {
