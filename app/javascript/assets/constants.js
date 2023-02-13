@@ -178,4 +178,7 @@ export const CONSTANTS = {
   JUMP_TO_SPECIFIC_DATE: 'Jump to a specific date',
   ASCENDING: 'asc',
   DESCENDING: 'desc',
+  SCHEDULE_MESSAGE: 'Schedule message',
+  NEXT_MONDAY: 'Next monday',
+  CUSTOM_TIME: 'Custom time',
 };

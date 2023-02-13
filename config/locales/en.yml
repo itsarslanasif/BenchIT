@@ -267,7 +267,7 @@ en:
         saved_items: 'Saved Items'
         save_changes: 'Save Changes'
       schedule:
-        title: 'Schedule message'
+        schedule_message: 'Schedule message'
         tomorrow: 'Tomorrow at 9:00 AM'
         next_monday: 'Next Monday at 9:00 AM'
         custom_time: 'Custom time'
