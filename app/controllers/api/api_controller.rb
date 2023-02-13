@@ -32,7 +32,7 @@ class Api::ApiController < ApplicationController
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
     @current_user = User.find(jwt_payload[0]['sub'])
 
-    raise UnAuthorized, 'unauthorized' unless current_user
+    raise UnAuthorized, 'unauthorized' unless @current_user
 
     Current.user = @current_user
   end
