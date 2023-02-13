@@ -1,19 +1,19 @@
 <template>
   <div>
     <AttachmentShortCutVue
-    :isThread="isThread"
-    class="margintop absolute z-10"
+      :isThread="isThread"
+      class="margintop absolute z-10"
     />
     <CreateTextSnippetModal
       v-if="
         isThread
-        ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
-        : attachmentAndShortcutStore.showCreateTextSnippitModal
-        "
+          ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
+          : attachmentAndShortcutStore.showCreateTextSnippitModal
+      "
       :sendMessage="sendMessage"
       :isThread="isThread"
       :recieverName="fileRecieverName"
-      />
+    />
     <div
       v-if="filteredList.length"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -24,14 +24,14 @@
           (showChannels && hasChannelCommand)
         "
       > -->
-        <div
-          v-for="item in filteredList"
-          :key="item.name"
-          class="p-1 rounded-md hover:bg-secondaryHover"
-          @click="addMentionToText"
-        >
-          {{ item.creator_id ? item.name : item.username }}
-        </div>
+      <div
+        v-for="item in filteredList"
+        :key="item.name"
+        class="p-1 rounded-md hover:bg-secondaryHover"
+        @click="addMentionToText"
+      >
+        {{ item.creator_id ? item.name : item.username }}
+      </div>
       <!-- </div> -->
     </div>
     <div>
@@ -179,10 +179,11 @@
             </div>
           </div>
         </div>
+
         <div v-if="scheduleModalFlag">
           <ScheduleModal
             :setSchedule="setSchedule"
-            :toggleSchedule="toggleSchedule"
+            :toggleShow="toggleSchedule"
           />
         </div>
 
@@ -282,7 +283,7 @@ import TurndownService from 'turndown';
 import Attachments from '../attachments/Attachments.vue';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useChannelStore } from '../../../stores/useChannelStore';
-import { useSearchStore } from '../../../stores/useSearchStore'
+import { useSearchStore } from '../../../stores/useSearchStore';
 import { storeToRefs } from 'pinia';
 import { NMention, NDivider } from 'naive-ui';
 import ScheduleModal from '../../widgets/schedule.vue';
@@ -447,7 +448,7 @@ export default {
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
-    const { searches } = storeToRefs(searchStore)
+    const { searches } = storeToRefs(searchStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
@@ -467,23 +468,23 @@ export default {
       const oldMessage = ignoreHTML(old);
       const message = ignoreHTML(editorContent.value);
 
-      if (
-        message &&
+      if (message && getLastIndex(currentMessage)[0] == '@') {
+        enableMention(message);
+      } else if (message && getLastIndex(currentMessage)[0] == '#') {
+        enableChannels(message);
+      } else if (
+        message.length === 1 &&
         getLastIndex(currentMessage)[0] == '@'
       ) {
         enableMention(message);
       } else if (
-        message &&
+        message.length === 1 &&
         getLastIndex(currentMessage)[0] == '#'
       ) {
         enableChannels(message);
-      } else if (message.length === 1 && getLastIndex(currentMessage)[0] == '@') {
-        enableMention(message);
-      } else if (message.length === 1 && getLastIndex(currentMessage)[0] == '#') {
-        enableChannels(message);
       } else {
         disableAll();
-        searchStore.clearSearches()
+        searchStore.clearSearches();
       }
     });
 
@@ -554,15 +555,15 @@ export default {
     };
 
     const enableMention = async word => {
-      const query = word.split(' ').pop().slice(1)
-      await searchStore.index(query, 'Profile')
-      filteredList.value = searches.value.profiles
+      const query = word.split(' ').pop().slice(1);
+      await searchStore.index(query, 'Profile');
+      filteredList.value = searches.value.profiles;
     };
 
     const enableChannels = async word => {
-      const query = word.split(' ').pop().slice(1)
-      await searchStore.index(query, 'BenchChannel')
-      filteredList.value = searches.value.channels
+      const query = word.split(' ').pop().slice(1);
+      await searchStore.index(query, 'BenchChannel');
+      filteredList.value = searches.value.channels;
     };
 
     const disableAll = () => {
