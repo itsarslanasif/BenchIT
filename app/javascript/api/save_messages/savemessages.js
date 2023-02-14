@@ -7,6 +7,6 @@ export const getSaveMessages = async () => {
       headers: getHeaders(),
     })
     .then(response => {
-      return response.data;
+      return response.data.saved_items;
     });
 };

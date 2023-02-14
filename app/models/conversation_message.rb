@@ -28,6 +28,8 @@ class ConversationMessage < ApplicationRecord
                                                    bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
   }
 
+  scope :send_messages, -> { where(sender_id: Current.profile.id).order(created_at: :desc) }
+
   def self.recent_conversation_ids(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',

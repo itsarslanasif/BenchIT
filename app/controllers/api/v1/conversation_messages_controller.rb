@@ -11,7 +11,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
   def send_message
-    @messages = current_profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
+    @pagy, @messages = pagination_for_send_messages(params[:page])
   end
 
   def create
@@ -44,7 +44,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def index_saved_messages
-    @saved_items = current_profile.saved_items.order(created_at: :desc)
+    @pagy, @saved_items = pagination_for_save_messages(params[:page])
   end
 
   def save_message
