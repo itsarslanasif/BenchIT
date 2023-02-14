@@ -63,6 +63,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def bench_channel_messages
     @conversation = @bench_channel.bench_conversation
+    authorize @conversation
     paginate_messages
   end
 
@@ -74,6 +75,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
+    authorize @receiver
     @current_profile.direct_message_users.create(receiver_id: @receiver.id)
     paginate_messages
   end

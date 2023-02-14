@@ -32,6 +32,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def join_public_channel
     @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: current_profile.id, permission: true)
+    authorize @bench_channel
     ActiveRecord::Base.transaction do
       if @channel_participant.save
         InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
@@ -100,6 +101,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def check_profile_ids
+    authorize @bench_channel
     return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
     render json: { success: false, error: t('.check_profile_ids.failure') }, status: :not_found

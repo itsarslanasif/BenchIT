@@ -13,17 +13,20 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                             match: :word_start)
       @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
     end
-
+    authorize @bench_channels
     filter_bench_channels
     hide_profile_bench_channels
     sort_bench_channels if params[:sort_by].present?
     paginate_bench_channels
   end
 
-  def show; end
+  def show
+    authorize @bench_channel
+  end
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
+    authorize @bench_channel
 
     ActiveRecord::Base.transaction do
       if @bench_channel.save
@@ -35,11 +38,13 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def update
+    authorize @bench_channel
     @bench_channel.update!(bench_channel_params)
     render json: { success: true, message: t('.update.success') }, status: :ok
   end
 
   def destroy
+    authorize @bench_channel
     @bench_channel.destroy!
     render json: { success: true, message: t('.destroy.success') }, status: :ok
   end

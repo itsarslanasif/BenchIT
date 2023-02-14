@@ -11,6 +11,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def create
     @workspace = Workspace.new(workspace_params)
+    authorize @workspace
 
     @workspace.save!
     render json: { success: true, message: t('.create.success') }, status: :ok
@@ -19,6 +20,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   def invite
     @token = Token.new.generate
     create_invitable if @user.present?
+    authorize @workspace
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
     render json: { success: true, message: t('.invite.success',
                                              { email: params[:email], company_name: @workspace.company_name }) }, status: :ok
