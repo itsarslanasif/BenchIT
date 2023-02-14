@@ -129,20 +129,15 @@ export default {
       this.$router.push('/');
     },
     findWorkspace() {
-      for (const workspace of this.joinedWorkspaces) {
-        if (workspace.bench_it_url === this.workspaceURL) {
-          return workspace;
-        }
-      }
-      return null;
+      return (
+        this.joinedWorkspaces.find(
+          workspace => workspace.bench_it_url === this.workspaceURL
+        ) || null
+      );
     },
     goToWorkspace() {
       const workspace = this.findWorkspace();
-      if (workspace) {
-        this.goToWorkspaceDashboard(workspace);
-      } else {
-        this.alert = true;
-      }
+      workspace ? this.goToWorkspaceDashboard(workspace) : (this.alert = true);
     },
   },
 };
