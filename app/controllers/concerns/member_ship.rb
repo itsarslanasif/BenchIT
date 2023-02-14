@@ -8,8 +8,8 @@ module MemberShip
                     bench_conversation.conversationable.profile_ids
                   end
 
-    return if profile_ids.include?(Current.profile.id)
+    return if profile_ids.include?(current_profile.id)
 
-    render json: { message: 'Sorry, you are not authorized.' }, status: :unauthorized
+    render json: { success: false, message: I18n.t('concerns.membership.error') }, status: :unauthorized
   end
 end

@@ -4,30 +4,26 @@ class Api::V1::FavouritesController < Api::ApiController
   def create
     @favourite = Favourite.find_or_create_by(favourites_params)
     if @favourite.id
-      render json: { message: t('.success'), favourite: @favourite }, status: :ok
+      render json: { success: true, message: t('.create.success'), favourite: @favourite }, status: :ok
     else
-      render json: { errors: @favourite.errors }, status: :unprocessable_entity
+      render json: { success: false, message: t('.create.failure'), errors: @favourite.errors }, status: :unprocessable_entity
     end
   end
 
   def destroy
-    if @favourite.destroy
-      render json: { message: t('.success') }, status: :ok
-    else
-      render json: { errors: @favourite.errors }, status: :unprocessable_entity
-    end
+    @favourite.destroy!
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   private
 
   def favourites_params
     params.require(:favourite).permit(:favourable_type, :favourable_id).tap do |param|
-      param[:profile] = Current.profile
+      param[:profile] = current_profile
     end
   end
 
   def set_favourite
-    @favourite = Favourite.find_by(id: params[:id])
-    render json: { error: t('.not_found') }, status: :not_found if @favourite.nil?
+    @favourite = Favourite.find(params[:id])
   end
 end

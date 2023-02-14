@@ -1,0 +1,5 @@
+en:
+  users:
+    sessions:
+      log_out_failure:
+        failure: Sorry, There is something went wrong.

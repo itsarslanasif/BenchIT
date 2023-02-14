@@ -1,33 +1,26 @@
 class Api::V1::DraftMessagesController < Api::ApiController
-  before_action :set_draft_message, only: %i[update destroy]
+  include MemberShip
+  include Conversation
+
+  before_action :fetch_conversation, :initialize_draft, :verify_draft, :decide_draft_action, only: %i[create]
+  before_action :set_draft_message, :set_conversation, :authenticate_draft, only: %i[destroy update]
+
   def index
-    @draft_messages = Current.profile.draft_messages
+    @draft_messages = current_profile.draft_messages
   end
 
   def create
-    @draft_message = DraftMessage.new(draft_messages_params)
-
-    if @draft_message.save
-      render json: { message: 'Draft Message successfully created', draft_message: @draft_message }, status: :ok
-    else
-      render json: { error: 'Unable to create draft message', errors: @draft_message.errors }, status: :unprocessable_entity
-    end
+    @draft_message.save!
   end
 
   def update
-    if @draft_message.update(draft_messages_params)
-      render json: { message: 'Draft updated', draft_message: @draft_message }, status: :updated
-    else
-      render json: { error: 'Draft not updated', errors: @draft_message.errors }, status: :unprocessable_entity
-    end
+    @draft_message.update!(draft_messages_params)
+    render json: { success: true, message: t('.update.success'), draft_message: draft_response }, status: :ok
   end
 
   def destroy
-    if @draft_message.destroy
-      render json: { message: 'Draft deleted successfully.' }, status: :ok
-    else
-      render json: { error: 'Draft not deleted', errors: @draft_message.errors }, status: :unprocessable_entity
-    end
+    @draft_message.destroy!
+    render json: { success: true, message: t('.destroy.success'), draft_message: @draft_message }, status: :ok
   end
 
   private
@@ -36,9 +29,57 @@ class Api::V1::DraftMessagesController < Api::ApiController
     @draft_message = DraftMessage.find(params[:id])
   end
 
+  def set_conversation
+    @bench_conversation = @draft_message.bench_conversation
+  end
+
   def draft_messages_params
-    params.require(:draft_message).permit(:content, :bench_conversation_id).tap do |param|
-      param[:profile] = Current.profile
+    params.permit(:content, :bench_conversation_id, :conversation_message_id, message_attachments: []).tap do |param|
+      param[:profile] = current_profile
     end
+  end
+
+  def initialize_draft
+    @draft_message = @bench_conversation.draft_messages.new(draft_messages_params)
+  end
+
+  def verify_draft
+    check_membership(@bench_conversation)
+    return if @draft_message.conversation_message_id.blank? || @bench_conversation.eql?(@draft_message.conversation_message.bench_conversation)
+
+    render json: { success: false, message: t('.verify_draft.failure') }, status: :unauthorized
+  end
+
+  def decide_draft_action
+    message = DraftMessage.get_draft_message(@bench_conversation, params[:conversation_message_id])
+
+    if message.present?
+      @draft_message = message
+      params[:content].blank? ? destroy : update
+    elsif params[:content].blank?
+      render json: { success: false, message: t('.decide_draft_action.failure') }, status: :bad_request
+    end
+  end
+
+  def fetch_conversation
+    @bench_conversation = get_conversation(params[:conversation_id], params[:conversation_type])
+  end
+
+  def draft_receiver
+    get_receiver(@draft_message.bench_conversation)
+  end
+
+  def draft_response
+    response = {
+      id: @draft_message.id,
+      content: @draft_message.content,
+      conversation_message_id: @draft_message.conversation_message_id,
+      bench_conversation_id: @draft_message.bench_conversation_id,
+      profile_id: @draft_message.profile.id,
+      conversation_type: @draft_message.bench_conversation.conversationable_type,
+      receiver: draft_receiver
+    }
+    response[:attachments] = get_attachments(@draft_message) if @draft_message.message_attachments.present?
+    response
   end
 end
