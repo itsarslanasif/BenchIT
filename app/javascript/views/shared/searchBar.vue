@@ -192,8 +192,7 @@ export default {
     profileStore.index();
     channelStore.index();
     channelStore.fetchJoinedChannels();
-    channelStore.fetchStarredChannels();
-    
+        
     return {
       ApiResponseStatusStore,
       leftPaneStore,
