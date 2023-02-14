@@ -11,7 +11,7 @@
         <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
       </div>
       <n-divider
-        v-if="threadStore.message.replies"
+        v-if="threadStore.message.replies.length"
         title-placement="left"
         class="text-black-500 text-xs"
       >
@@ -29,10 +29,7 @@
         </template>
       </template>
     </div>
-    <div
-      class="relative mx-1"
-      :class="{ 'mt-10': !threadStore.message.replies.length }"
-    >
+    <div class="relative mx-1">
       <TextEditorVue
         :isThread="true"
         :sendMessage="sendMessage"
