@@ -52,7 +52,7 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Arnold"}}]}',
                            is_threaded: false, bench_conversation_id: 1, sender_id: 2)
 Group.create(id: 1, profile_ids: [1, 2])
-Group.create(id: 2, profile_ids: [3, 2])
+Group.create(id: 2, profile_ids: [1, 2, 3])
 BenchConversation.create(conversationable_type: 'Group', conversationable_id: 1)
 
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alva"}}]}',
@@ -77,6 +77,7 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
 BenchChannel.create(name: 'general', description: 'general')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
 ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 4)
+ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 4)
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from general"}}]}',
                            is_threaded: false, bench_conversation_id: 5, sender_id: 2)
 Favourite.create(profile_id: 1, favourable_type: 'Profile', favourable_id: 4)
@@ -91,6 +92,12 @@ BenchConversation.create(conversationable_type: 'BenchChannel', conversationable
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from developer"}}]}',
                            is_threaded: false, bench_conversation_id: 6, sender_id: 1)
+
+(1..6).each do |i|
+  ScheduleMessage.create!(content: i.to_s, profile_id: 1, scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: i)
+  DraftMessage.create!(content: i.to_s, profile_id: 1, bench_conversation_id: i)
+end
+
 Workspace.create!(company_name: 'TechHub',
                   workspace_type: :work,
                   bench_it_url: 'https://www.techhub.com',

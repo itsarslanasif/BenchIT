@@ -29,4 +29,10 @@ class BenchConversation < ApplicationRecord
       { conversationable_type: 'Profile', sender_id: Current.profile, conversationable_id: Current.profile }
     ).pluck(:id)
   end
+
+  %w[profile bench_channel group].each do |type|
+    define_method("#{type}?") do
+      conversationable_type.eql?(type.camelcase)
+    end
+  end
 end
