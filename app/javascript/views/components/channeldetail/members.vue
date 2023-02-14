@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg-white flex flex-col p-5 gap-3">
     <div class="py-5">
@@ -39,19 +38,18 @@ export default {
   mounted() {
     this.searchQuery();
   },
+  props: ['selectedChat'],
   setup() {
     const channelDetailStore = useChannelDetailStore();
     return { channelDetailStore };
   },
   methods: {
     async searchQuery() {
-      let channel_id = window.location.pathname.split('/')[2];
       try {
-        await this.channelDetailStore.getChannelMembers(this.query, channel_id);
+        await this.channelDetailStore.getChannelMembers(this.query, this.selectedChat.id);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
-
     },
   },
 };

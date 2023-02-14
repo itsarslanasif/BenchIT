@@ -48,7 +48,7 @@
       </p>
     </div>
     <About v-if="ChannelDetailStore.isAbout()" :selectedChat="selectedChat" />
-    <members v-if="ChannelDetailStore.isMembers()" />
+    <members v-if="ChannelDetailStore.isMembers()" :selectedChat="selectedChat" />
   </div>
 </template>
 
