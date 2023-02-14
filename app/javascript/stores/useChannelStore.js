@@ -48,7 +48,8 @@ export const useChannelStore = () => {
       async fetchJoinedChannels() {
         try {
           this.joinedChannels = await getJoinedChannels();
-          sortChannelsList();
+          this.sortChannelsList();
+          this.fetchStarredChannels();
         } catch (e) {
           this.handleError(e);
         }
