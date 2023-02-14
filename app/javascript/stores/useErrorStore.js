@@ -11,7 +11,6 @@ export const useErrorStore = () => {
   actions: {
     async showError(err) {
      this.errorFlag = true
-     debugger
      this.error = err
     },
     async toggleErrorFlag() {

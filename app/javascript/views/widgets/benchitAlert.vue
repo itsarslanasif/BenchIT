@@ -16,7 +16,7 @@
       class="pr-20"
       title="Error"
       type="error"
-      :onClose="setApiResponseStatusNull && errorStore.toggleErrorFlag"
+      :onClose="closeAlert"
       closable
     >
       {{ errorMessage }}
@@ -31,11 +31,15 @@ export default {
   name: 'BenchITAlert',
   components: { NAlert },
   props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
-  setup()
+  setup(props)
   {
     const errorStore = useErrorStore()
+    const closeAlert = () => {
+      props.setApiResponseStatusNull() || errorStore.toggleErrorFlag();
+    }
     return {
-      errorStore
+      errorStore,
+      closeAlert,
     }
   }
 };

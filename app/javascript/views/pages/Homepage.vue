@@ -11,6 +11,7 @@ import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore'
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useSavedItemsStore } from '../../stores/useSavedItemStore';
+import { useErrorStore } from '../../stores/useErrorStore';
 import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
 import { notifyActions } from '../../modules/cable/notification';
@@ -46,6 +47,8 @@ export default {
     const savedItemStore = useSavedItemsStore();
     const unreadMessageStore = useUnreadStore();
     const messageStore = useMessageStore();
+    const errorStore = useErrorStore();
+    const { errorFlag, error } = storeToRefs(errorStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
     messageStore.getAllScheduleMessages();
@@ -55,6 +58,8 @@ export default {
       unreadMessageStore,
       currentWorkspace,
       currentProfile,
+      errorFlag,
+      error
     };
   },
   beforeUnmount() {

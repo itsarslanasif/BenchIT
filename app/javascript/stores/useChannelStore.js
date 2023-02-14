@@ -98,7 +98,7 @@ export const useChannelStore = () => {
           );
           return response;
         } catch (e) {
-          this.handleError(e)
+          this.handleError(e.response.data.error)
         }
       },
 
@@ -175,7 +175,8 @@ export const useChannelStore = () => {
       },
 
       handleError(error) {
-        useErrorStore().showError(error.error_message) 
+        debugger
+        useErrorStore().showError(error.response.data.error) 
       }
     },
   });

@@ -5,6 +5,7 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
+import { useErrorStore } from './useErrorStore';
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -29,7 +30,6 @@ export const useMessageStore = () => {
         isScheduled: false,
         scheduledId: null,
       },
-      error: {},
     }),
 
     getters: {
@@ -164,7 +164,7 @@ export const useMessageStore = () => {
         });
       },
       handleError (error) {
-        this.error = error
+        useErrorStore().showError(error) 
       }
     },
   });
