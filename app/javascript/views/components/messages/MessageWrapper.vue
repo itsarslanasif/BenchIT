@@ -149,7 +149,8 @@
                 <MessageSection
                   v-if="block.type === 'section'"
                   :section="block"
-              /></span>
+                />
+              </span>
               <EditedAtTime
                 v-if="currMessage.is_edited && isDeleted"
                 :updated_at="currMessage.updated_at"
