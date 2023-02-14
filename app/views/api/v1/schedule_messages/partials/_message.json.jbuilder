@@ -1,5 +1,5 @@
 json.extract! message, :id, :content
-json.scheduled_at message.scheduled_at.in_time_zone(Current.profile.time_zone).to_time
+json.scheduled_at message.scheduled_at.in_time_zone(@current_profile.time_zone).to_time
 json.conversation_type message.bench_conversation.conversationable_type
 if message.bench_conversation.conversationable_type.eql?('Profile')
   json.receiver do

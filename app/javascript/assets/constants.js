@@ -181,4 +181,8 @@ export const CONSTANTS = {
   SCHEDULE_MESSAGE: 'Schedule message',
   NEXT_MONDAY: 'Next monday',
   CUSTOM_TIME: 'Custom time',
+  REPLY_PLACEHOLDER: 'Reply...',
+  EMPTY_PLACEHOLDER: '...',
+  HASH: '#',
+  LOCK: '🔒',
 };

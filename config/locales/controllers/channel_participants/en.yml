@@ -1,9 +1,0 @@
-en:
-  api:
-    v1:
-      channel_participants:
-        mute_channel:
-          channel_muted: Channel has been muted.
-        unmute_channel:
-          channel_unmuted: Channel has been un-muted.
-          

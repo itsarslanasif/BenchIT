@@ -23,51 +23,36 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def create
     @profile = current_user.profiles.new(profile_params)
-    if @profile.save
-      render json: { message: "Profile Added to #{@workspace.company_name}" }, status: :ok
-    else
-      render json: { errors: @profile.errors, error: 'There was an error creating the profile' }, status: :unprocessable_entity
-    end
+    @profile.save!
+    render json: { success: true, message: t('.create.success') }, status: :ok
   end
 
   def update
-    if (@profile = Current.profile.update(profile_params))
-      render json: { message: 'Profile Updated Successfully.' }, status: :ok
+    if (@profile = current_profile.update!(profile_params))
+      render json: { success: true, message: t('.update.success') }, status: :ok
     else
-      render json: { errors: @profile.errors, error: 'There was an error updating the profile' }, status: :unprocessable_entity
+      render json: { success: false, error: t('.update.failure') }, status: :unprocessable_entity
     end
   end
 
   def set_status
-    if @profile.update(profile_params)
-      set_job
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(profile_params)
+    set_job
   end
 
   def set_is_active
-    if @profile.update(is_active: true)
-      render json: { message: 'status set.' }, status: :ok
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(is_active: true)
+    render json: { success: true, message: t('.set_is_active.success') }, status: :ok
   end
 
   def remove_is_active
-    if @profile.update(is_active: false)
-      render json: { message: 'status removed.' }, status: :ok
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(is_active: false)
+    render json: { success: true, message: t('.remove_is_active.success') }, status: :ok
   end
 
   def clear_status
-    if @profile.update(text_status: '', emoji_status: '', clear_status_after: '')
-      render json: { message: 'status cleared.' }, status: :ok
-    else
-      render json: { errors: @profile.errors }, status: :unprocessable_entity
-    end
+    @profile.update!(text_status: '', emoji_status: '', clear_status_after: '')
+    render json: { success: true, message: t('.clear_status.success') }, status: :ok
   end
 
   private
@@ -98,14 +83,14 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def check_user_member_of_workspace
-    return if Current.workspace.id.eql?(params[:workspace_id].to_i)
+    return if current_workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { error: 'You are not member of specified  workspace.' }, status: :unauthorized
+    render json: { success: false, error: t('.check_user_member_of_workspace.success') }, status: :unauthorized
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { error: 'You already have a profile in this workspace.' }, status: :unprocessable_entity
+    render json: { success: false, error: t('.check_profile_already_exists.success') }, status: :unprocessable_entity
   end
 end
