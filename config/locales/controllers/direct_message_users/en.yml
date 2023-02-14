@@ -1,7 +1,0 @@
-en:
-  api:
-    v1:
-      direct_message_users:
-        destroy:
-          not_found: Record not found.
-          removed: Removed from Dm list.

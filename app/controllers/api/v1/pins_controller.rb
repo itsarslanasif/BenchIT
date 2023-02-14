@@ -1,5 +1,6 @@
 class Api::V1::PinsController < Api::ApiController
   include MemberShip
+  include Conversation
 
   before_action :find_conversation, only: %i[index create]
   before_action :set_pin, only: %i[destroy]
@@ -23,13 +24,7 @@ class Api::V1::PinsController < Api::ApiController
   private
 
   def find_conversation
-    @conversation = if params[:conversation_type].eql?('Profile')
-                      BenchConversation.profile_to_profile_conversation(params[:conversation_id], current_profile.id)
-                    else
-                      BenchConversation.find_by!(conversationable_type: params[:conversation_type],
-                                                 conversationable_id: params[:conversation_id])
-                    end
-    render json: { success: false, error: t('find_conversation.failure') }, status: :bad_request if @conversation.blank?
+    @conversation = get_conversation(params[:conversation_id], params[:conversation_type])
   end
 
   def set_pin

@@ -1,0 +1,8 @@
+en:
+  api:
+    v1:
+      direct_message_users:
+        destroy:
+          success: DM has been deleted successfully.
+        set_receiver:
+          failure: Sorry, The record not found.
