@@ -39,7 +39,7 @@ export const useRightpaneMessageStore = () => {
           !CONSTANTS.NULL_VALUES.includes(state.messages) &&
           state.currMessage !== null
         ) {
-          state.messages.find(m => m.id == state.currMessage.id).replies.length;
+          state.messages.find(msg => msg.id == state.currMessage.id).replies.length;
         }
       },
       getSelectedChat: state => state.selectedChat,

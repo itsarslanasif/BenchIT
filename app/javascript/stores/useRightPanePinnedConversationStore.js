@@ -31,7 +31,7 @@ export const useRightPanePinnedConversation = defineStore('rightPanePinnedConver
       return this.pinnedConversation.includes(message);
     },
     unPinMessage(message) {
-      const index = this.pinnedConversation.findIndex(m => m.id === message.id);
+      const index = this.pinnedConversation.findIndex(msg => msg.id === message.id);
 
       if (index != -1) {
         this.pinnedConversation.splice(index, 1);

@@ -4,34 +4,36 @@ import { useRightPaneThreadStore } from '../../stores/useRightPaneThreadStore';
 import { useRightPanePinnedConversation } from '../../stores/useRightPanePinnedConversationStore';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
+const findMessageIndex = (messages, data) =>
+  messages.findIndex(message => message.id === data.id);
+
+const findParentMessage = (messages, data) =>
+  messages.find(message => message.id === data.parent_message_id);
+
+const searchForMessage = (messages, data) => messages.find(message => message.id === data.id);
+
 const createMessage = (data, messageStore, threadStore) => {
   try {
     const messages = messageStore.getMessages;
 
     if (data.parent_message_id) {
-      const message = messages.find(
-        element => element.id === data.parent_message_id
-      );
+      const message = findParentMessage(messages, data);
       const threadMessage = threadStore.getMessage;
-      const findMessage = message.replies.find(
-        element => element.id === data.id
-      );
+      const findMessage = searchForMessage(message.replies, data)
 
-      if (findMessage === undefined) {
+      if (!findMessage) {
         message.replies.push(data);
       }
 
-      const findThreadMessage = threadMessage.replies.find(
-        element => element.id === data.id
-      );
+      const findThreadMessage = searchForMessage(threadMessage.replies, data)
 
-      if (findThreadMessage === undefined && threadMessage.id === data.parent_message_id) {
+      if (!findThreadMessage && threadMessage.id === data.parent_message_id) {
         threadMessage.replies.push(data);
       }
     } else {
-      const findMessage = messages.find(element => element.id === data.id);
+      const findMessage = searchForMessage(messages, data)
 
-      if (findMessage == undefined) {
+      if (!findMessage) {
         messageStore.addMessage(data);
       }
     }
@@ -40,42 +42,29 @@ const createMessage = (data, messageStore, threadStore) => {
   }
 };
 
-const findMessageIndex = (messages, data) =>
-  messages.findIndex(message => message.id === data.id);
-
-const findParentMessage = (messages, data) =>
-  messages.find(message => message.id === data.parent_message_id);
-
-const deleteMessage = (data, messageStore, threadStore, pinStore, rightPaneStore) => {
+const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
   try {
     const messages = messageStore.getMessages;
+
     if (data.parent_message_id) {
-      const message = messages.find(
-        element => element.id === data.parent_message_id
-      );
-      let findThreadMessageIndex = message.replies.findIndex(
-        element => element.id === data.id
-      );
+      const message = findParentMessage(messages, data)
+      let findThreadMessageIndex = findMessageIndex(message.replies, data)
 
       if (findThreadMessageIndex != -1) {
         message.replies.splice(findThreadMessageIndex, 1);
       }
 
       const threadMessage = threadStore.getMessage;
-      findThreadMessageIndex = threadMessage.replies.findIndex(
-        element => element.id === data.id
-      );
+      findThreadMessageIndex = findMessageIndex(threadMessage.replies, data)
 
       if (findThreadMessageIndex != -1) {
         threadMessage.replies.splice(findThreadMessageIndex, 1);
       }
     } else {
-      const findMessageIndex = messages.findIndex(
-        element => element.id === data.id
-      );
+      const messageIndex = findMessageIndex(messages, data)
 
-      if (findMessageIndex != -1) {
-        messages.splice(findMessageIndex, 1);
+      if (messageIndex != -1) {
+        messages.splice(messageIndex, 1);
         const threadMessage = threadStore.getMessage;
 
         if (threadMessage.id === data.id) {
@@ -209,7 +198,7 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
 const unPinMessage = (data, messageStore, threadStore, pinStore) => {
   try {
     const pinnedMessages = pinStore.getPinnedConversation;
-    const pin = pinnedMessages.find(messge => messge.id === data.id);
+    const pin = searchForMessage(pinnedMessages, data)
 
     if (data.parent_message_id) {
       const message = findParentMessage(messageStore.messages, data);
