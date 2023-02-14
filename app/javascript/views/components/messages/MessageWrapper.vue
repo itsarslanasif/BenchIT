@@ -1,5 +1,7 @@
 <template>
   <div
+    v-for="block in messageBlock.blocks"
+    :key="block"
     class="py-1"
     :class="{
       'bg-yellow-50': isSavedMessage,
@@ -96,7 +98,7 @@
                 }}
               </p>
             </span>
-            <span
+            <div
               v-if="
                 isSameUser &&
                 isSameDayMessage &&
@@ -104,9 +106,12 @@
                 !currMessage.is_info &&
                 !isDeleted
               "
-              class="text-black-800 text-sm flex-wrap rich-content"
-              v-html="currMessage.content"
-            />
+            >
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
+            </div>
             <span
               v-if="
                 isSameUser && isSameDayMessage && !isFirstMessage && isDeleted
@@ -140,8 +145,12 @@
                   currMessage.is_info ? 'text-black-600' : 'text-black-800'
                 "
                 class="text-sm flex-wrap rich-content"
-                v-html="currMessage.content"
-              />
+              >
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+                />
+              </span>
               <EditedAtTime
                 v-if="currMessage.is_edited && isDeleted"
                 :updated_at="currMessage.updated_at"
@@ -330,7 +339,7 @@
     :setDeleteModal="setDeleteModal"
   />
   <div
-    class="bg-yellow-50 pl-16 pr-4"
+    class="bg-yellow-100 pl-16 p-2"
     v-if="
       messagesStore.isMessageToEdit(currMessage) &&
       (!inThread || !currMessage.is_threaded)
@@ -357,6 +366,7 @@ import {
 } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
+import MessageSection from './MessageSection.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
@@ -430,6 +440,7 @@ export default {
     TextEditorVue,
     EditedAtTime,
     UnPinModal,
+    MessageSection,
   },
   props: {
     currMessage: {
@@ -475,6 +486,9 @@ export default {
     this.displayedReactions = [];
   },
   computed: {
+    messageBlock() {
+      return JSON.parse(this.currMessage.content);
+    },
     time() {
       return moment(new Date(this.currMessage.created_at).getTime()).format(
         'h:mm A'

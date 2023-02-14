@@ -8,3 +8,7 @@ en:
           success: Draft has been updated successfully.
         destroy:
           success: Draft has been deleted successfully.
+        verify_draft:
+          failure: Sorry, This draft is not present in this conversation.
+        decide_draft_action:
+          failure: Sorry, The content is empty.

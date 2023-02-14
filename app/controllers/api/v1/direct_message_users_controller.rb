@@ -8,11 +8,8 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
   end
 
   def destroy
-    if @direct_message_user.destroy
-      render json: { message: t('.removed') }, status: :ok
-    else
-      render json: { errors: @direct_message_user.errors }, status: :unprocessable_entity
-    end
+    @direct_message_user.destroy!
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   def recent_direct_messages
@@ -23,7 +20,7 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
 
   def set_receiver
     @direct_message_user = current_profile.direct_message_users.find_by(receiver_id: params[:id])
-    render json: { message: t('.not_found') }, status: :not_found if @direct_message_user.nil?
+    render json: { success: false, message: t('.set_receiver.failure') }, status: :not_found if @direct_message_user.nil?
   end
 
   def set_direct_message_list

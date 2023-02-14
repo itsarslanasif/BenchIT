@@ -132,7 +132,7 @@ export default {
   methods: {
     sendMessage(message, files, schedule) {
       let formData = new FormData();
-      formData.append('content', message);
+      formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
