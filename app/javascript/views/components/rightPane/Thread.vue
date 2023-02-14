@@ -11,7 +11,7 @@
         <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
       </div>
       <n-divider
-        v-if="threadStore.message.replies.length > 0"
+        v-if="threadStore.message.replies.length"
         title-placement="left"
         class="text-black-500 text-xs"
       >

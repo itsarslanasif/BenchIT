@@ -71,13 +71,13 @@ BenchChannel.create(name: 'watercooler', description: 'memes')
 BenchChannel.create(name: 'Benchit-devs', description: 'developers', is_private: true)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 2)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 2)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi from watercooler"}}]}',
+ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from watercooler"}}]}',
                            is_threaded: false, bench_conversation_id: 4, sender_id: 1)
 
 BenchChannel.create(name: 'general', description: 'general')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
 ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 4)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi from general"}}]}',
+ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from general"}}]}',
                            is_threaded: false, bench_conversation_id: 5, sender_id: 2)
 Favourite.create(profile_id: 1, favourable_type: 'Profile', favourable_id: 4)
 Favourite.create(profile_id: 1, favourable_type: 'Group', favourable_id: 1)
@@ -89,7 +89,7 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
                            is_threaded: false, bench_conversation_id: 1, sender_id: 1, parent_message_id: 1)
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
 ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi from developer"}}]}',
+ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from developer"}}]}',
                            is_threaded: false, bench_conversation_id: 6, sender_id: 1)
 Workspace.create!(company_name: 'TechHub',
                   workspace_type: :work,
@@ -103,7 +103,7 @@ Current.workspace = Workspace.second
 BenchChannel.create(name: 'DevsChannel1', description: 'fdsfsdf')
 BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 5)
 ChannelParticipant.create(permission: true, profile_id: 6, bench_channel_id: 5)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi gropup from Alvi"}}]}',
+ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alvi"}}]}',
                            is_threaded: false, bench_conversation_id: 7, sender_id: 6)
 
 Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')
