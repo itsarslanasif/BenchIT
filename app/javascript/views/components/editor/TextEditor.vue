@@ -41,45 +41,6 @@
       >
         {{ getScheduleNotification() }}
       </div>
-      <!-- <editor
-        v-model="newMessage"
-        @keydown.enter="sendMessagePayload"
-        api-key="no-api-key"
-        :init="{
-          placeholder: getPlaceholder,
-          menubar: false,
-          statusbar: false,
-          toolbar_location: 'bottom',
-          toolbar1:
-            'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
-          setup: editor => {
-            editor.ui.registry.addButton('AddAttachments', {
-              text: '➕',
-              onAction: handleCustomButton,
-            });
-          },
-          plugins: ' lists link code codesample emoticons',
-          codesample_languages: [none],
-          formats: {
-            code: {
-              selector: 'p',
-              styles: {
-                background:
-                  'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                border: '1px solid gray',
-                'border-radius': '3px',
-                'font-size': '10px',
-                'font-variant-ligatures': 'none',
-                'line-height': '1.5',
-                'margin-bottom': '14px',
-                padding: '0px 8px 0px 8px',
-                position: 'relative',
-                'font-family': 'monospace',
-              },
-            },
-          },
-        }"
-      /> -->
       <div
         v-if="editor"
         class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
@@ -277,7 +238,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { markdownToBlocks } from '@tryfabric/mack';
 import TurndownService from 'turndown';
 import Attachments from '../attachments/Attachments.vue';
@@ -297,6 +258,7 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
+import { CONSTANTS } from '../../../assets/constants';
 
 export default {
   data() {
@@ -313,21 +275,21 @@ export default {
     this.editor.destroy();
   },
   mounted() {
-    this.editor = new Editor({
-      extensions: [
-        StarterKit,
-        Placeholder.configure({
-          placeholder: this.getPlaceholder,
-        }),
-      ],
-      onUpdate: () => {
-        this.editorContent = this.editor.getHTML();
-      },
-      content: this.newMessage,
-    });
-    if (this.isEditScheduled()) {
-      this.newMessage = this.messageToEdit.content;
-    }
+    // this.editor = new Editor({
+    //   extensions: [
+    //     StarterKit,
+    //     Placeholder.configure({
+    //       placeholder: this.getPlaceholder,
+    //     }),
+    //   ],
+    //   onUpdate: () => {
+    //     this.editorContent = this.editor.getHTML();
+    //   },
+    //   content: this.newMessage,
+    // });
+    // if (this.isEditScheduled()) {
+    //   this.newMessage = this.messageToEdit.content;
+    // }
   },
   components: {
     Attachments,
@@ -361,32 +323,6 @@ export default {
       type: String,
     },
   },
-  computed: {
-    getPlaceholder() {
-      return this.isThread
-        ? this.$t('chat.reply_placeholder')
-        : `${this.$t('actions.message')} ${this.getRecipientName}`;
-    },
-    getRecipientName() {
-      return (
-        this.getChannelName ||
-        this.selectedChat.username ||
-        this.$t('chat.empty_placeholder')
-      );
-    },
-    getChannelName() {
-      return this.selectedChat.name
-        ? (this.selectedChat.is_private
-            ? this.$t('chat.lock')
-            : this.$t('chat.hash')) + this.selectedChat.name
-        : false;
-    },
-    fileRecieverName() {
-      return (
-        this.recieverName || this.getChannelName || this.selectedChat.username
-      );
-    },
-  },
   methods: {
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
@@ -404,39 +340,6 @@ export default {
         .extendMarkRange('link')
         .setLink({ href: url })
         .run();
-    },
-
-    async makeBlocks(line) {
-      const block = await markdownToBlocks(line);
-      return block[0];
-    },
-
-    async sendMessagePayload(event, buttonClicked) {
-      if (
-        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
-        !this.editMessage
-      ) {
-        const mrkdwn = [];
-        const htmlList = this.editorContent.split('<br>');
-        htmlList.forEach(async line => {
-          line = line.replace(/<s>/g, '~~');
-          line = line.replace(/<\/s>/g, '~~');
-          mrkdwn.push(this.turndownService.turndown(line));
-        });
-        const result = await Promise.all(
-          mrkdwn.map(async line => {
-            line = line.replace(/\*\*/g, '****');
-            return await this.makeBlocks(line);
-          })
-        );
-        if (result[0] != null) {
-          this.sendMessage({ blocks: result }, this.files, this.schedule);
-          this.newMessage = '';
-          this.readerFile = [];
-          this.files = [];
-          this.schedule = null;
-        }
-      }
     },
   },
   setup(props) {
@@ -462,6 +365,25 @@ export default {
     const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
+    const editor = ref(null);
+
+    onMounted(() => {
+      editor.value = new Editor({
+        extensions: [
+          StarterKit,
+          Placeholder.configure({
+            placeholder: getPlaceholder,
+          }),
+        ],
+        onUpdate: () => {
+          editorContent.value = editor.value.getHTML();
+        },
+        content: newMessage.value,
+      });
+      if (isEditScheduled()) {
+        newMessage.value = props.messageToEdit.content;
+      }
+    })
 
     watch(editorContent, (curr, old) => {
       const currentMessage = ignoreHTML(curr);
@@ -487,6 +409,40 @@ export default {
         searchStore.clearSearches();
       }
     });
+
+    const makeBlocks = async line => {
+      const block = await markdownToBlocks(line);
+      return block[0];
+    }
+
+    const sendMessagePayload = async (event, buttonClicked) => {
+      if (
+        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        !props.editMessage
+      ) {
+        const mrkdwn = [];
+        const htmlList = editorContent.value.split('<br>');
+        htmlList.forEach(async line => {
+          line = line.replace(/<s>/g, '~~');
+          line = line.replace(/<\/s>/g, '~~');
+          mrkdwn.push(turndownService.turndown(line));
+        });
+        const result = await Promise.all(
+          mrkdwn.map(async line => {
+            line = line.replace(/\*\*/g, '****');
+            return await makeBlocks(line);
+          })
+        );
+        if (result[0] != null) {
+          props.sendMessage({ blocks: result }, files.value, schedule.value);
+          newMessage.value = '';
+          readerFile.value = [];
+          files.value = [];
+          schedule.value = null;
+          editor.value.commands.setContent([])
+        }
+      }
+    }
 
     const getLastIndex = value => {
       return value.split(' ').pop();
@@ -574,10 +530,12 @@ export default {
     };
 
     const addMentionToText = e => {
-      // console.log(e.target.outerText);
-      editorContent.value = `${editorContent.value.slice(0, -4)}${
-        e.target.outerText
-      } ${editorContent.value.slice(-4)}`;
+      const contentMessage = editorContent.value.split(' ');
+      const lastWord = contentMessage.pop();
+      const indexOfTag = lastWord.indexOf('<');
+      const mention = `@${e.target.outerText}${lastWord.slice(indexOfTag)}`;
+      contentMessage.push(mention);
+      editor.value.commands.setContent(contentMessage.join(' '));
       filteredList.value = false;
     };
 
@@ -596,6 +554,52 @@ export default {
       reader.readAsDataURL(file);
       reader.onload = () => readerFile.value.push(reader.result);
     };
+
+    const getPlaceholder = () => {
+      return props.isThread
+        ? CONSTANTS.REPLY_PLACEHOLDER
+        : `${CONSTANTS.MESSAGE} ${getRecipientName()}`;
+    }
+
+    const getRecipientName = () => {
+      return (
+        getChannelName() ||
+        selectedChat.username ||
+        CONSTANTS.EMPTY_PLACEHOLDER
+      );
+    }
+
+    const getChannelName = () => {
+      return selectedChat.value.name
+        ? (selectedChat.value.is_private
+          ? CONSTANTS.LOCK
+          : CONSTANTS.HASH) + selectedChat.value.name
+        : false;
+    }
+
+    const fileRecieverName = () => {
+      return (
+        recieverName || getChannelName || selectedChat.value.username
+      );
+    }
+
+    const setLink = () => {
+      const previousUrl = editor.value.getAttributes('link').href;
+      const url = window.prompt('URL', previousUrl);
+      if (url === null) {
+        return;
+      }
+      if (url === '') {
+        editor.value.chain().focus().extendMarkRange('link').unsetLink().run();
+        return;
+      }
+      editor.value
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .setLink({ href: url })
+        .run();
+    }
 
     const toggleSchedule = () => {
       scheduleModalFlag.value = !scheduleModalFlag.value;
@@ -630,6 +634,10 @@ export default {
       attachmentAndShortcutStore,
       turndownService,
       editorContent,
+      sendMessagePayload,
+      editor,
+      fileRecieverName,
+      setLink
     };
   },
 };
