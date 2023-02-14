@@ -4,20 +4,20 @@
       <font-awesome-icon
         icon="fa-circle-xmark"
         @click="closeModal"
-        class="text-xl p-2 m-3 float-left hover:bg-slate-100 rounded-md"
+        class="p-2 float-left"
       />
     </div>
     <div v-else>
       <font-awesome-icon
-        icon="fa-plus-circle"
+        icon="fa-plus"
         @click="openAttach = true"
-        class="text-xl p-2 m-3 float-left hover:bg-slate-100 rounded-md"
+        class="p-2 float-left"
       />
     </div>
     <div
       v-click-outside="closeModal"
       v-if="openAttach && !recentFiles"
-      class="bottom-0 ml-12 py-2 absolute w-auto bg-primary text-white rounded-md h-auto"
+      class="bottom-0 ml-12 py-2 absolute z-10 w-auto bg-primary text-white"
     >
       <div class="px-4 py-1 w-11/12">{{ $t('send_attachments.title') }}</div>
       <div
@@ -63,7 +63,7 @@
           :key="file"
           @click="selectFromRecent(file)"
         >
-          <div class="flex p-2 hover:bg-primaryHover">
+          <div class="flex hover:bg-primaryHover">
             <div class="mr-2">
               <img :src="file.attachment_link" class="w-10 h-10" />
             </div>

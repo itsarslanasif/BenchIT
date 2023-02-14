@@ -1,31 +1,41 @@
 <template>
-  <right-pane-header
-    :paneTitle="
-      threadStore.message.receiver_name || threadStore.message.channel_name
-    "
-    :messageId="threadStore.message.id"
-  />
-  <div class="overflow-auto threadBody">
-    <div class="pt-8">
-      <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
-    </div>
-    <n-divider
-      v-if="threadStore.message.replies"
-      title-placement="left"
-      class="text-black-500 text-xs"
-    >
-      <p>{{ repliesCount }}</p>
-    </n-divider>
-    <template v-if="threadStore.message.replies">
-      <template v-for="reply in threadStore.message.replies" :key="reply.id">
-         <div :id="reply.id">
-        <MessageWrapper :id="reply.id" :inThread="true" :curr-message="reply" />
-        </div>
+  <div>
+    <right-pane-header
+      :paneTitle="
+        threadStore.message.receiver_name || threadStore.message.channel_name
+      "
+      :messageId="threadStore.message.id"
+    />
+    <div class="overflow-auto threadBody">
+      <div class="pt-8">
+        <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
+      </div>
+      <n-divider
+        v-if="threadStore.message.replies.length"
+        title-placement="left"
+        class="text-black-500 text-xs"
+      >
+        <p>{{ repliesCount }}</p>
+      </n-divider>
+      <template v-if="threadStore.message.replies">
+        <template v-for="reply in threadStore.message.replies" :key="reply.id">
+          <div :id="reply.id">
+            <MessageWrapper
+              :id="reply.id"
+              :inThread="true"
+              :curr-message="reply"
+            />
+          </div>
+        </template>
       </template>
-    </template>
-  </div>
-  <div class="relative mx-1">
-    <TextEditorVue :sendMessage="sendMessage" :isThread="true" />
+    </div>
+    <div class="relative mx-1">
+      <TextEditorVue
+        :isThread="true"
+        :sendMessage="sendMessage"
+        :recieverName="recieverName"
+      />
+    </div>
   </div>
 </template>
 
@@ -74,6 +84,15 @@ export default {
         ? `${count} ${CONSTANTS.REPLIES}`
         : `${count} ${CONSTANTS.REPLY}`;
     },
+    replyExist() {
+      return this.threadStore.message.replies.length > 1;
+    },
+    recieverName() {
+      return (
+        this.threadStore.message.receiver_name ||
+        this.threadStore.message.channel_name
+      );
+    },
   },
   methods: {
     sendMessage(message, files) {
@@ -85,7 +104,7 @@ export default {
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.id);
       files.forEach(file => {
-        formData.append('message_attachments[]', file);
+        formData.append('message_attachments[]', file, message);
       });
       try {
         conversation(formData);
@@ -107,6 +126,9 @@ export default {
 <style scoped>
 .threadBody {
   max-height: 67vh;
+}
+.mt-10 {
+  margin-top: 60px;
 }
 
 .highlight {

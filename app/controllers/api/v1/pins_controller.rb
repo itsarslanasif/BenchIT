@@ -11,21 +11,14 @@ class Api::V1::PinsController < Api::ApiController
   end
 
   def create
-    @pin = @conversation.pins.new(profile_id: Current.profile.id, conversation_message_id: params[:conversation_message_id])
-
-    if @pin.save
-      render json: { message: 'Pin was successfully created' }, status: :ok
-    else
-      render json: { error: 'Error while creating pin', errors: @pin.errors }, status: :unprocessable_entity
-    end
+    @pin = @conversation.pins.new(profile_id: current_profile.id, conversation_message_id: params[:conversation_message_id])
+    @pin.save!
+    render json: { success: true, message: t('.create.success') }, status: :ok
   end
 
   def destroy
-    if @pin.destroy
-      render json: { message: 'Pin was successfully deleted' }, status: :ok
-    else
-      render json: { error: 'Error while deleting pin', errors: @pin.errors }, status: :unprocessable_entity
-    end
+    @pin.destroy!
+    render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
   private

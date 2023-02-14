@@ -23,7 +23,7 @@ class BenchConversation < ApplicationRecord
     BenchConversation.create(conversationable_type: 'Profile', conversationable_id: receiver_id, sender_id: Current.profile.id)
   end
 
-  def self.recent_last_conversation
+  def self.recent_conversation_ids
     BenchConversation.where(
       'conversationable_type = :conversationable_type AND (sender_id = :sender_id OR conversationable_id = :conversationable_id)',
       { conversationable_type: 'Profile', sender_id: Current.profile, conversationable_id: Current.profile }
