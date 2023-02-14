@@ -8,7 +8,7 @@ module Conversation
                    when 'groups'
                      Group.find_by(id: conversation_id)&.bench_conversation
                    when 'profiles'
-                     BenchConversation.profile_to_profile_conversation(@current_profile.id, conversation_id)
+                     BenchConversation.profile_to_profile_conversation(current_profile.id, conversation_id)
                    end
     conversation.present? ? conversation : (render json: { success: false, message: I18n.t('concerns.conversation.error') }, status: :bad_request)
   end
