@@ -130,7 +130,7 @@ export default {
     this.Cable = null;
   },
   methods: {
-    sendMessage(message, files, schedule) {
+    sendMessage(message, files, schedule,fileName) {
       let formData = new FormData();
       formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
@@ -140,7 +140,7 @@ export default {
         formData.append('scheduled_at', schedule.value);
       }
       files.forEach(file => {
-        formData.append('message_attachments[]', file, message);
+        formData.append('message_attachments[]', file, fileName);
       });
       conversation(formData).then(res => {
         if (res.scheduled_at) {

@@ -216,7 +216,9 @@ export default {
               { type: 'section', text: { type: 'mrkdwn', text: fileTitle } },
             ],
           },
-          files
+          files,
+          null,
+          fileTitle
         );
       }
       this.closeModal();
