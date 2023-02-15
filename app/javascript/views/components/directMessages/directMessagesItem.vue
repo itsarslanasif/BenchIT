@@ -36,7 +36,7 @@
     </n-tooltip>
     <div v-if="unreadDetails">
       <div v-if="unreadDetails.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
-        {{ unreadDetails.messages.length }}
+        {{ totalUnreadMessages(unreadDetails) }}
       </div>
     </div>
   </div>
@@ -44,7 +44,7 @@
 <script>
 import { useUnreadStore } from '../../../stores/useUnreadStore';
 import { storeToRefs } from 'pinia';
-import { unreadMessagesCount } from '../../../modules/unreadMessages';
+import { unreadMessagesCount, unreadMessagesLength } from '../../../modules/unreadMessages';
 import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
 
@@ -80,6 +80,9 @@ export default {
     },
     statusClearAfterTime(time) {
       return time ? moment(time).calendar() : moment().endOf('month').fromNow();
+    },
+    totalUnreadMessages(unreadDetails) {
+      return unreadMessagesLength(unreadDetails);
     },
   },
 };
