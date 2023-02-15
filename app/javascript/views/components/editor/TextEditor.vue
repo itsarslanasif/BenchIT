@@ -106,9 +106,9 @@
         </div>
 
         <editor-content
+          @keydown.enter="sendMessagePayload"
           :editor="editor"
           class="mt-4"
-          @keydown.enter="sendMessagePayload"
         />
 
         <div>
@@ -406,6 +406,19 @@ export default {
       return block[0];
     };
 
+    const strikeThroughConversion = array => {
+      return array.map(item => {
+        if (
+          item.text &&
+          item.text.type === 'mrkdwn' &&
+          typeof item.text.text === 'string'
+        ) {
+          item.text.text = item.text.text.replace(/~/g, '~~');
+        }
+        return item;
+      });
+    };
+
     const sendMessagePayload = async (event, buttonClicked) => {
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
@@ -414,8 +427,12 @@ export default {
         const mrkdwn = [];
         const htmlList = editorContent.value.split('<br>');
         htmlList.forEach(async line => {
-          line = line.replace(/<s>/g, '~~');
-          line = line.replace(/<\/s>/g, '~~');
+          turndownService.addRule('s', {
+            filter: ['s'],
+            replacement: function (content) {
+              return '~~' + content + '~~';
+            },
+          });
           mrkdwn.push(turndownService.turndown(line));
         });
         const result = await Promise.all(
@@ -425,8 +442,8 @@ export default {
           })
         );
         if (result[0] != null) {
-          console.log(result[0]);
-          props.sendMessage({ blocks: result }, files.value, schedule.value);
+          const temp = strikeThroughConversion(result);
+          props.sendMessage({ blocks: temp }, files.value, schedule.value);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
