@@ -96,7 +96,6 @@ export default {
   },
   methods: {
     sendMessage(message, files, schedule, filename) {
-      console.log(message);
       let formData = new FormData();
       formData.append('sender_id', 1);
       formData.append('content', JSON.stringify(message));
