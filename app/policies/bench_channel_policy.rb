@@ -29,4 +29,8 @@ class BenchChannelPolicy < ApplicationPolicy
   def join_public_channel?
     !user.outsider?
   end
+
+  def bench_channel_messages?
+    !user.outsider? || record.profile_ids.include?(user.id)
+  end
 end

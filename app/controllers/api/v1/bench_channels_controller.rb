@@ -4,6 +4,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_bench_channel, only: %i[show update destroy leave_channel]
   before_action :set_channel_participant, :set_left_on, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
+  before_action :authorization, only: %i[index create update destroy]
 
   def index
     @bench_channels = current_workspace.bench_channels
@@ -13,7 +14,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                             match: :word_start)
       @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
     end
-    authorize @bench_channels
     filter_bench_channels
     hide_profile_bench_channels
     sort_bench_channels if params[:sort_by].present?
@@ -26,7 +26,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
-    authorize @bench_channel
 
     ActiveRecord::Base.transaction do
       if @bench_channel.save
@@ -38,13 +37,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def update
-    authorize @bench_channel
     @bench_channel.update!(bench_channel_params)
     render json: { success: true, message: t('.update.success') }, status: :ok
   end
 
   def destroy
-    authorize @bench_channel
     @bench_channel.destroy!
     render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
@@ -148,5 +145,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def sort_by_participants(desc)
     order_keyword = desc ? 'DESC' : 'ASC'
     @bench_channels = @bench_channels.left_joins(:channel_participants).group(:id).order("count(channel_participants) #{order_keyword}")
+  end
+
+  def authorization
+    authorize BenchChannel
   end
 end

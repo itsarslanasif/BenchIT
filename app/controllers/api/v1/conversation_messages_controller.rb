@@ -64,7 +64,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def bench_channel_messages
     @conversation = @bench_channel.bench_conversation
-    authorize @conversation
     paginate_messages
   end
 
@@ -76,7 +75,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
-    authorize @receiver
     @current_profile.direct_message_users.create(receiver_id: @receiver.id)
     paginate_messages
   end
@@ -126,6 +124,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
+    authorize @bench_channel
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
@@ -140,6 +139,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_receiver
     @receiver = Profile.find(params[:id])
+    authorize @receiver
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
     render json: { success: false, error: t('.set_receiver.failure') }, status: :unprocessable_entity
