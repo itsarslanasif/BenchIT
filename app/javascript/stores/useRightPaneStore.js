@@ -16,50 +16,26 @@ export const useRightPaneStore = defineStore('useRightPaneStore', {
 
   actions: {
     toggleUserProfileShow(val) {
-      if (val) {
-        this.pane1.showThread = false;
-        this.pane1.showUserProfile = val;
-      } else {
-        this.pane1.showThread = val;
-        this.pane1.showUserProfile = val;
-      }
+      this.pane1.showUserProfile = val;
+      this.pane1.showThread = val ? false : val;
     },
     toggleThreadShow(val) {
-      if (val) {
-        this.pane1.showThread = val;
-        this.pane1.showUserProfile = false;
-      } else {
-        this.pane1.showThread = val;
-        this.pane1.showUserProfile = val;
-      }
+      this.pane1.showThread = val;
+      this.pane1.showUserProfile = val ? false : val;
     },
     toggleRightPaneThreadShow(val) {
-      if (val) {
-        this.pane2.showThread = val;
-        this.pane2.showUserProfile = false;
-      } else {
-        this.pane2.showThread = val;
-        this.pane2.showUserProfile = val;
-      }
+      this.pane2.showThread = val;
+      this.pane2.showUserProfile = val ? false : val;
     },
     toggleRightPaneUserProfileShow(val) {
-      if (val) {
-        this.pane2.showThread = false;
-        this.pane2.showUserProfile = val;
-      } else {
-        this.pane2.showThread = val;
-        this.pane2.showUserProfile = val;
-      }
+      this.pane2.showUserProfile = val;
+      this.pane2.showThread = val ? false : val;
     },
     toggleChatShow(val) {
-      if (val) {
-        this.pane2.showUserProfile = false;
-        this.pane2.showThread = false;
-        this.pane1.useMe = val;
-        this.pane2.showChat = val;
-      }
-      this.pane2.showChat = val;
       this.pane1.useMe = val;
+      this.pane2.showChat = val;
+      this.pane2.showUserProfile = false;
+      this.pane2.showThread = false;
     },
   },
 });

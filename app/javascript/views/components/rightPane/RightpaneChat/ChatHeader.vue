@@ -74,11 +74,8 @@ export default {
         this.loading = false;
         return error;
       });
-    if (this.selectedChat.is_private !== undefined) {
-      this.conversation_type = 'channels';
-    } else {
-      this.conversation_type = 'profiles';
-    }
+    this.conversation_type =
+      this.selectedChat.is_private !== undefined ? 'channels' : 'profiles';
   },
   setup() {
     const messageStore = useRightpaneMessageStore();

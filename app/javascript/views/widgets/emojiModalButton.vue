@@ -82,11 +82,9 @@ export default {
     },
     handleSelect(key, message) {
       const getConversationType = () => {
-        if (this.messageStore.selectedChat.is_private !== undefined) {
-          return 'BenchChannel';
-        } else {
-          return 'Profile';
-        }
+        return this.messageStore.selectedChat.is_private !== undefined
+          ? 'BenchChannel'
+          : 'Profile';
       };
       switch (key) {
         case 'copy-link':

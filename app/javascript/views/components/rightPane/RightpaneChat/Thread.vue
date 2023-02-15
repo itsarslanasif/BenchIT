@@ -132,11 +132,10 @@ export default {
     },
   },
   mounted() {
-    if (this.messageStore.selectedChat.is_private !== undefined) {
-      this.conversation_type = 'channels';
-    } else {
-      this.converastion_type = 'profiles';
-    }
+    this.conversation_type =
+      this.messageStore.selectedChat.is_private !== undefined
+        ? 'channels'
+        : 'profiles';
     const message_id = this.$route.params.message_id;
     if (message_id) {
       const message = document.getElementById(message_id);

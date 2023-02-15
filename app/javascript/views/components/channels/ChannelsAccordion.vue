@@ -125,6 +125,7 @@ export default {
       } else {
         this.messagesStore.setSelectedChat(channel);
         this.$router.push(chatURL);
+
         if (this.isMobileView()) {
           this.leftPaneStore.closeLeftPane();
         }
@@ -143,6 +144,7 @@ export default {
     setChannel() {
       this.chat_type = this.selectedChat.conversation_type;
       let chat_id = this.selectedChat.id;
+      
       if (this.chat_type === 'Channel') {
         this.selectedChannel = channel(chat_id, this.channelStore);
       }

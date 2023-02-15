@@ -118,11 +118,8 @@ export default {
     },
   },
   mounted() {
-    if (this.selectedChat.is_private !== undefined) {
-      this.conversation_type = 'channels';
-    } else {
-      this.conversation_type = 'profiles';
-    }
+    this.conversation_type =
+      this.selectedChat.is_private !== undefined ? 'channels' : 'profiles';
     this.oldestUnreadMessageId = this.unreadStore.getOldestMessageId(
       this.conversation_type,
       this.selectedChat.id

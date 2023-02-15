@@ -15,13 +15,11 @@
 export default {
   props: ['selectedChat', 'pinnedConversationStore'],
   setup(props) {
-    function getConversationType() {
-      if (props.selectedChat.is_private !== undefined) {
-        return 'BenchChannel';
-      } else {
-        return 'Profile';
-      }
-    }
+    const getConversationType = () => {
+      return props.selectedChat.is_private !== undefined
+        ? 'BenchChannel'
+        : 'Profile';
+    };
     const conversation_id = props.selectedChat.id;
     const conversation_type = getConversationType();
     props.pinnedConversationStore.index(conversation_type, conversation_id);

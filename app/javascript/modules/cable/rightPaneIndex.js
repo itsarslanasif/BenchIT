@@ -4,38 +4,28 @@ import { useRightPaneThreadStore } from '../../stores/useRightPaneThreadStore';
 import { useRightPanePinnedConversation } from '../../stores/useRightPanePinnedConversationStore';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
-const findMessageIndex = (messages, data) =>
-  messages.findIndex(message => message.id === data.id);
+const findMessageIndex = (messages, dataID) =>
+  messages.findIndex(message => message.id === dataID);
 
-const findParentMessage = (messages, data) =>
-  messages.find(message => message.id === data.parent_message_id);
-
-const searchForMessage = (messages, data) => messages.find(message => message.id === data.id);
+const findMessage = (messages, dataID) => messages.find(message => message.id === dataID);
 
 const createMessage = (data, messageStore, threadStore) => {
   try {
     const messages = messageStore.getMessages;
 
     if (data.parent_message_id) {
-      const message = findParentMessage(messages, data);
+      const parentMessage = findMessage(messages, data.parent_message_id);
       const threadMessage = threadStore.getMessage;
-      const findMessage = searchForMessage(message.replies, data)
-
-      if (!findMessage) {
-        message.replies.push(data);
-      }
-
-      const findThreadMessage = searchForMessage(threadMessage.replies, data)
+      const message = findMessage(parentMessage.replies, data.id)
+      !message ? parentMessage.replies.push(data) : null;
+      const findThreadMessage = findMessage(threadMessage.replies, data.id)
 
       if (!findThreadMessage && threadMessage.id === data.parent_message_id) {
         threadMessage.replies.push(data);
       }
     } else {
-      const findMessage = searchForMessage(messages, data)
-
-      if (!findMessage) {
-        messageStore.addMessage(data);
-      }
+      const message = findMessage(messages, data.id)
+      !message ? messageStore.addMessage(data) : null;
     }
   } catch (err) {
     console.error(err);
@@ -47,21 +37,21 @@ const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
     const messages = messageStore.getMessages;
 
     if (data.parent_message_id) {
-      const message = findParentMessage(messages, data)
-      let findThreadMessageIndex = findMessageIndex(message.replies, data)
+      const parentMessage = findMessage(messages, data.parent_message_id)
+      let findThreadMessageIndex = findMessageIndex(parentMessage.replies, data.id)
 
       if (findThreadMessageIndex != -1) {
-        message.replies.splice(findThreadMessageIndex, 1);
+        parentMessage.replies.splice(findThreadMessageIndex, 1);
       }
 
       const threadMessage = threadStore.getMessage;
-      findThreadMessageIndex = findMessageIndex(threadMessage.replies, data)
+      findThreadMessageIndex = findMessageIndex(threadMessage.replies, data.id)
 
       if (findThreadMessageIndex != -1) {
         threadMessage.replies.splice(findThreadMessageIndex, 1);
       }
     } else {
-      const messageIndex = findMessageIndex(messages, data)
+      const messageIndex = findMessageIndex(messages, data.id)
 
       if (messageIndex != -1) {
         messages.splice(messageIndex, 1);
@@ -81,30 +71,27 @@ const deleteMessage = (data, messageStore, threadStore, rightPaneStore) => {
 
 const updateMessage = (data, messageStore, threadStore) => {
   try {
-    let MessageIndex = -1;
+    let messageIndex = -1;
     if (data.parent_message_id) {
-      const message = findParentMessage(messageStore.messages, data);
-      MessageIndex = findMessageIndex(message.replies, data);
-
-      if (MessageIndex != -1) {
-        message.replies[MessageIndex] = data;
-      }
+      const parentMessage = findMessage(messageStore.messages, data.parent_message_id);
+      messageIndex = findMessageIndex(parentMessage.replies, data.id);
+      parentMessage.replies[messageIndex] = messageIndex != -1 ? data : null
     } else {
-      MessageIndex = findMessageIndex(messageStore.messages, data);
+      messageIndex = findMessageIndex(messageStore.messages, data.id);
 
-      if (MessageIndex != -1) {
+      if (messageIndex != -1) {
         let messsageToUpdate = {
           ...data,
         };
-        messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
-        messageStore.messages[MessageIndex] = messsageToUpdate;
+        messsageToUpdate.replies = messageStore.messages[messageIndex].replies;
+        messageStore.messages[messageIndex] = messsageToUpdate;
 
         if (threadStore?.message && threadStore.message.id === data.id) {
           threadStore.message = messsageToUpdate;
         }
       }
     }
-    if (MessageIndex === -1 && data.attachments) {
+    if (messageIndex === -1 && data.attachments) {
       createMessage(data, messageStore, threadStore);
     }
   } catch (err) {
@@ -117,18 +104,13 @@ const createReaction = (data, messageStore) => {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
       .flat();
-    const message = messages.find(
-      element => element.id === data.conversation_message_id
-    );
+    const message = findMessage(messages, data.conversation_message_id)
 
     if (message) {
       const findMessageReactionIndex = message.reactions.findIndex(
         reaction => reaction.id === data.id
       );
-
-      if (findMessageReactionIndex == -1) {
-        message.reactions.push(data);
-      }
+      findMessageReactionIndex == -1 ? message.reactions.push(data) : null
     }
   } catch (err) {
     console.error(err);
@@ -140,9 +122,7 @@ const deleteReaction = (data, messageStore) => {
     let messages = messageStore.getMessages
       .flatMap(message => [message, message.replies])
       .flat();
-    const message = messages.find(
-      element => element.id === data.conversation_message_id
-    );
+    const message = findMessage(messages, data.conversation_message_id)
     const findMessageReactionIndex = message.reactions.findIndex(
       reaction => reaction.id === data.id
     );
@@ -161,29 +141,20 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
     const pin = pinnedMessages.find(msg => msg.pin.id === data.pin.id);
 
     if (data.parent_message_id) {
-      const message = findParentMessage(messageStore.messages, data);
-      const replyIndex = findMessageIndex(message.replies, data);
-
-      if (replyIndex != -1) {
-        message.replies[replyIndex] = data;
-
-        if (!pin) {
-          pinStore.pinMessage(message.replies[replyIndex]);
-        }
-      }
+      const parentMessage = findMessage(messageStore.messages, data.parent_message_id);
+      const replyIndex = findMessageIndex(parentMessage.replies, data.id);
+      parentMessage.replies[replyIndex] = replyIndex != -1 ? data : null
+      !pin ? pinStore.pinMessage(parentMessage.replies[replyIndex]) : null
     } else {
-      const MessageIndex = findMessageIndex(messageStore.messages, data);
+      const messageIndex = findMessageIndex(messageStore.messages, data.id);
 
-      if (MessageIndex != -1) {
+      if (messageIndex != -1) {
         let messsageToUpdate = {
           ...data,
         };
-        messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
-        messageStore.messages[MessageIndex] = messsageToUpdate;
-
-        if (!pin) {
-          pinStore.pinMessage(messsageToUpdate);
-        }
+        messsageToUpdate.replies = messageStore.messages[messageIndex].replies;
+        messageStore.messages[messageIndex] = messsageToUpdate;
+        !pin ? pinStore.pinMessage(messsageToUpdate) : null
 
         if (threadStore?.message && threadStore.message.id == data.id) {
           threadStore.message = messsageToUpdate;
@@ -198,32 +169,24 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
 const unPinMessage = (data, messageStore, threadStore, pinStore) => {
   try {
     const pinnedMessages = pinStore.getPinnedConversation;
-    const pin = searchForMessage(pinnedMessages, data)
+    const pin = findMessage(pinnedMessages, data.id)
 
     if (data.parent_message_id) {
-      const message = findParentMessage(messageStore.messages, data);
-      const replyIndex = findMessageIndex(message.replies, data);
+      const parentMessage = findMessage(messageStore.messages, data.parent_message_id);
+      const replyIndex = findMessageIndex(parentMessage.replies, data.id);
+      parentMessage.replies[replyIndex] = replyIndex != -1 ? data : null
+      pin ? pinStore.unPinMessage(parentMessage.replies[replyIndex]) : null
+    }
+    else {
+      const messageIndex = findMessageIndex(messageStore.messages, data.id);
 
-      if (replyIndex != -1) {
-        message.replies[replyIndex] = data;
-
-        if (pin) {
-          pinStore.unPinMessage(message.replies[replyIndex]);
-        }
-      }
-    } else {
-      const MessageIndex = findMessageIndex(messageStore.messages, data);
-
-      if (MessageIndex != -1) {
+      if (messageIndex != -1) {
         let messsageToUpdate = {
           ...data,
         };
-        messsageToUpdate.replies = messageStore.messages[MessageIndex].replies;
-        messageStore.messages[MessageIndex] = messsageToUpdate;
-
-        if (pin) {
-          pinStore.unPinMessage(messsageToUpdate);
-        }
+        messsageToUpdate.replies = messageStore.messages[messageIndex].replies;
+        messageStore.messages[messageIndex] = messsageToUpdate;
+        pin ? pinStore.unPinMessage(messsageToUpdate) : null
 
         if (threadStore?.message && threadStore.message.id == data.id) {
           threadStore.message = messsageToUpdate;

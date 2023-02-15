@@ -18,7 +18,6 @@
           v-else
           class="bg-white away rounded-full border-black border-2 h-2 w-2 relative"
         />
-
         <span v-if="selectedChat">
           <p class="text-xl self-center ml-2 font-semibold pl-1">
             {{ selectedChat.username }}
