@@ -1,0 +1,9 @@
+en:
+  api:
+    v1:
+      favourites:
+        create:
+          success: Added to favourites
+        destroy:
+          success: Removed from favourites
+          not_found: Not found in favourites
