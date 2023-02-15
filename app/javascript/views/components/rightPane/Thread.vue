@@ -29,7 +29,7 @@
         </template>
       </template>
     </div>
-    <div class="relative mx-1 mt-10">
+    <div class="relative mx-1">
       <TextEditorVue
         :isThread="true"
         :sendMessage="sendMessage"
