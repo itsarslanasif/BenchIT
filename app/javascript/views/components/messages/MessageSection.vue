@@ -65,7 +65,7 @@ export default {
     background: #cdc4ab1c;
     font-family: 'JetBrainsMono', monospace;
     color: #9f8807eb;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem;
     border-radius: 0.3rem;
     border-width: 0.01rem;
 

@@ -99,7 +99,7 @@ export default {
       console.log(message);
       let formData = new FormData();
       formData.append('sender_id', 1);
-      formData.append('content', message);
+      formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
       formData.append('parent_message_id', this.threadStore.message.id);
       formData.append('conversation_type', this.conversation_type);

@@ -265,23 +265,6 @@ export default {
   beforeUnmount() {
     this.editor.destroy();
   },
-  mounted() {
-    // this.editor = new Editor({
-    //   extensions: [
-    //     StarterKit,
-    //     Placeholder.configure({
-    //       placeholder: this.getPlaceholder,
-    //     }),
-    //   ],
-    //   onUpdate: () => {
-    //     this.editorContent = this.editor.getHTML();
-    //   },
-    //   content: this.newMessage,
-    // });
-    // if (this.isEditScheduled()) {
-    //   this.newMessage = this.messageToEdit.content;
-    // }
-  },
   components: {
     Attachments,
     NMention,
@@ -406,19 +389,6 @@ export default {
       return block[0];
     };
 
-    const strikeThroughConversion = array => {
-      return array.map(item => {
-        if (
-          item.text &&
-          item.text.type === 'mrkdwn' &&
-          typeof item.text.text === 'string'
-        ) {
-          item.text.text = item.text.text.replace(/~/g, '~~');
-        }
-        return item;
-      });
-    };
-
     const formatBlockContent = array => {
       return array.map(item => {
         if (
@@ -428,6 +398,7 @@ export default {
         ) {
           item.text.text = item.text.text.replace(/&quot;/g, `"`);
           item.text.text = item.text.text.replace(/&#39;/g, `'`);
+          item.text.text = item.text.text.replace(/~/g, '~~');
         }
         return item;
       });
@@ -463,8 +434,7 @@ export default {
         );
         if (result[0] != null) {
           const output = formatBlockContent(result);
-          const temp = strikeThroughConversion(output);
-          props.sendMessage({ blocks: temp }, files.value, schedule.value);
+          props.sendMessage({ blocks: output }, files.value, schedule.value);
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
@@ -732,7 +702,7 @@ export default {
     background: #5a4d041c;
     font-family: 'JetBrainsMono', monospace;
     color: #726933;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.3rem;
     border-width: 0.01rem;
 
