@@ -22,7 +22,7 @@ class Api::V1::WorkspacesController < Api::ApiController
     create_invitable if @user.present?
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
     render json: { success: true, message: t('.invite.success',
-                                              email: params[:email], company_name: @workspace.company_name ) }, status: :ok
+                                             email: params[:email], company_name: @workspace.company_name) }, status: :ok
   end
 
   def create_invitable
