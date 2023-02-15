@@ -16,7 +16,7 @@
         {{ channel.name }}
       </div>
       <div v-if="unreadDetails?.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
-        {{ unreadDetails.messages.length }}
+        {{ totalUnreadMessages(unreadDetails) }}
       </div>
     </div>
   </n-dropdown>
@@ -28,7 +28,7 @@ import Option from './channel_options.js';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
-import { unreadMessagesCount } from '../../../modules/unreadMessages';
+import { unreadMessagesCount, unreadMessagesLength } from '../../../modules/unreadMessages';
 import { useUnreadStore } from '../../../stores/useUnreadStore';
 export default {
   components: { NDropdown, markStar },
@@ -83,6 +83,9 @@ export default {
         `BenchChannel${channel?.id}`
       );
       return this.unreadDetails?.messages.length;
+    },
+    totalUnreadMessages(unreadDetails) {
+      return unreadMessagesLength(unreadDetails);
     },
   },
 };

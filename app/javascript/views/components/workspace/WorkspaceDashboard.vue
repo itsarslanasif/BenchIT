@@ -12,6 +12,11 @@
       <div class="text-center text-5xl mb-4 font-semibold">
         {{ $t('workspace.sign_in_to_your_workspace') }}
       </div>
+      <div v-if="alert" class="mb-8">
+        <n-alert type="error">
+          {{ $t('workspace.workspace_not_found') }}
+        </n-alert>
+      </div>
       <div class="flex gap-2">
         <input
           type="text"
@@ -21,6 +26,7 @@
         />
         <button
           class="w-1/4 bg-primary text-white rounded duration-200 hover:bg-primaryHover"
+          @click="goToWorkspace"
         >
           {{ $t('actions.continue') }}
         </button>
@@ -76,13 +82,18 @@ import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceSto
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
 import { setActiveStatus } from '../../../api/profiles/profileStatus';
+import { NAlert } from 'naive-ui';
 
 export default {
   data() {
     return {
       joinedWorkspaces: [],
       workspaceURL: '',
+      alert: false,
     };
+  },
+  components: {
+    NAlert,
   },
   async mounted() {
     try {
@@ -116,6 +127,17 @@ export default {
       this.currentProfile.setProfile({ profile });
 
       this.$router.push('/');
+    },
+    findWorkspace() {
+      return (
+        this.joinedWorkspaces.find(
+          workspace => workspace.bench_it_url === this.workspaceURL
+        ) || null
+      );
+    },
+    goToWorkspace() {
+      const workspace = this.findWorkspace();
+      workspace ? this.goToWorkspaceDashboard(workspace) : (this.alert = true);
     },
   },
 };
