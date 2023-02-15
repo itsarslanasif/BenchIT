@@ -58,7 +58,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def invite_outsider
     @token = Token.new.generate
     ChannelMailer.send_email(params[:email], @bench_channel, @token).deliver!
-    render json: { success: true, message: t('.invite_outsider.success'), company_name:@bench_channel.workspace.company_name }, status: :ok
+    render json: { success: true, message: t('.invite_outsider.success'), company_name: @bench_channel.workspace.company_name }, status: :ok
   end
 
   private

@@ -3,7 +3,7 @@
 class ApplicationPolicy
   attr_reader :user, :record
 
-  def initialize(user, record)
+  def initialize(_user, record)
     @user = Current.profile
     @record = record
   end
