@@ -419,6 +419,20 @@ export default {
       });
     };
 
+    const formatBlockContent = array => {
+      return array.map(item => {
+        if (
+          item.text &&
+          item.text.type === 'mrkdwn' &&
+          typeof item.text.text === 'string'
+        ) {
+          item.text.text = item.text.text.replace(/&quot;/g, `"`);
+          item.text.text = item.text.text.replace(/&#39;/g, `'`);
+        }
+        return item;
+      });
+    };
+
     const sendMessagePayload = async (event, buttonClicked) => {
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
@@ -433,6 +447,12 @@ export default {
               return '~~' + content + '~~';
             },
           });
+          turndownService.addRule('', {
+            filter: [`"`],
+            replacement: function (content) {
+              return `"` + content + `"`;
+            },
+          });
           mrkdwn.push(turndownService.turndown(line));
         });
         const result = await Promise.all(
@@ -442,7 +462,8 @@ export default {
           })
         );
         if (result[0] != null) {
-          const temp = strikeThroughConversion(result);
+          const output = formatBlockContent(result);
+          const temp = strikeThroughConversion(output);
           props.sendMessage({ blocks: temp }, files.value, schedule.value);
           newMessage.value = '';
           readerFile.value = [];
