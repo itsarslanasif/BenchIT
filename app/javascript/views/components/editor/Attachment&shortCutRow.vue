@@ -31,13 +31,6 @@ export default {
         shortcut.key ===
         this.generateKey(this.$t('create_text_snippet.create_text_snippet'))
       ) {
-        // this.ShortcutAndAttachmentStore.showCreateTextSnippitModal =
-        //   !this.isThread;
-        // this.ShortcutAndAttachmentStore.showCreateTextSnippitModalThread =
-        //   this.isThread;
-
-        // this.ShortcutAndAttachmentStore.showModalInThread = false;
-        // this.ShortcutAndAttachmentStore.showModalInChat = false;
         this.toggleCreateTextSnippetModal();
       }
     },
