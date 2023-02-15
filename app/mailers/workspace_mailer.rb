@@ -3,6 +3,6 @@ class WorkspaceMailer < ApplicationMailer
     @email = email
     @workspace = workspace
     @token = token
-    mail(to: @email, subject: t('.subject', company_name: @workspace.company_name))
+    mail(to: @email, subject: t('.workspace_invitation_subject', company_name: @workspace.company_name))
   end
 end

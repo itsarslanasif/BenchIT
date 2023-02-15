@@ -1,5 +1,5 @@
 en:
   channel_mailer:
     send_email:
-      subject: 'Invitation to join %{company_name}'
+      workspace_invitation_subject: 'Invitation to join %{company_name}'
 
