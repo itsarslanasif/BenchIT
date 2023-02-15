@@ -1,5 +1,5 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel]
+  before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]
   before_action :check_profile_ids, only: %i[create]
   before_action :check_channel_participants, only: %i[create]
@@ -53,6 +53,12 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def unmute_channel
     @channel_participant.update!(muted: false)
     render json: { success: true, message: t('.unmute_channel.success') }, status: :ok
+  end
+
+  def invite_outsider
+    @token = Token.new.generate
+    ChannelMailer.send_email(params[:email], @bench_channel, @token).deliver!
+    render json: { success: true, message: t('.invite_outsider.success'), company_name:@bench_channel.workspace.company_name }, status: :ok
   end
 
   private
