@@ -1,19 +1,5 @@
 <template>
   <div>
-    <AttachmentShortCutVue
-      :isThread="isThread"
-      class="margintop absolute z-10"
-    />
-    <CreateTextSnippetModal
-      v-if="
-        isThread
-          ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
-          : attachmentAndShortcutStore.showCreateTextSnippitModal
-      "
-      :sendMessage="sendMessage"
-      :isThread="isThread"
-      :recieverName="fileRecieverName"
-    />
     <div
       v-if="filteredList.length"
       class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
@@ -154,7 +140,12 @@
               v-if="!editMessage"
               class="bg-transparent rounded-full focus:outline-none focus:bg-black-300"
             >
-              <Attachments :getImages="getImages" />
+              <Attachments
+                :getImages="getImages"
+                :sendMessage="sendMessage"
+                :isThread="isThread"
+                :recieverName="fileRecieverName"
+              />
             </button>
             <div v-if="!editMessage" class="vl" />
             <button
@@ -434,6 +425,7 @@ export default {
           })
         );
         if (result[0] != null) {
+          console.log(result[0]);
           props.sendMessage({ blocks: result }, files.value, schedule.value);
           newMessage.value = '';
           readerFile.value = [];

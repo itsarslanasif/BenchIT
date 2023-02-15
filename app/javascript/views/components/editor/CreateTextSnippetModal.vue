@@ -11,7 +11,7 @@
     >
       <template #header-extra>
         <font-awesome-icon
-          @click="closeModal"
+          @click="toggleCreateTextSnippetModal"
           class="cursor-pointer h-5 w-5"
           icon="fa-solid fa-xmark"
         />
@@ -113,7 +113,12 @@ import { getMembers } from '../../../api/members/membersApi';
 import { ref } from 'vue';
 
 export default {
-  props: ['sendMessage', 'isThread', 'recieverName'],
+  props: [
+    'sendMessage',
+    'isThread',
+    'recieverName',
+    'toggleCreateTextSnippetModal',
+  ],
   components: {
     NModal,
     NInput,
@@ -127,9 +132,10 @@ export default {
   },
   computed: {
     showModal() {
-      return this.isThread
-        ? this.shortcutAttachmentStore.showCreateTextSnippitModalThread
-        : this.shortcutAttachmentStore.showCreateTextSnippitModal;
+      return true;
+      // return this.isThread
+      //   ? this.shortcutAttachmentStore.showCreateTextSnippitModalThread
+      //   : this.shortcutAttachmentStore.showCreateTextSnippitModal;
     },
   },
   data() {
@@ -181,8 +187,7 @@ export default {
       }, 1e3);
     },
     closeModal() {
-      this.shortcutAttachmentStore.showCreateTextSnippitModal = false;
-      this.shortcutAttachmentStore.showCreateTextSnippitModalThread = false;
+      this.toggleCreateTextSnippetModal();
     },
     async getMembersList(query) {
       let options = await getMembers(this.currentWorkspace.id, query);
@@ -205,7 +210,14 @@ export default {
       });
       const files = [textFile];
       if (this.formValue.share) {
-        this.sendMessage(fileTitle, files);
+        this.sendMessage(
+          {
+            blocks: [
+              { type: 'section', text: { type: 'mrkdwn', text: fileTitle } },
+            ],
+          },
+          files
+        );
       }
       this.closeModal();
     },
