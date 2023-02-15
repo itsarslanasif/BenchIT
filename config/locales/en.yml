@@ -390,6 +390,10 @@ en:
         channels: 'channels'
         groups: 'groups'
         profiles: 'profiles'
+      mentions_and_reactions:
+        title: 'Mentions & reactions'
+        reacted: 'reacted in'
+        reacted_by: 'reacted to your message'
     admin:
       title: 'Admin'
       save: 'Save'

@@ -15,6 +15,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @messages = current_profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
   end
 
+  def reactions
+    @reactions = current_profile.conversation_messages
+                                .joins(:reactions)
+                                .where.not(reactions: { profile_id: current_profile.id })
+                                .uniq
+  end
+
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)

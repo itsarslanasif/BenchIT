@@ -24,6 +24,9 @@ export default {
         case 'Drafts & Sent':
           this.$router.replace({ path: '/drafts_sent_messages' });
           break;
+        case 'Mentions & Reactions':
+          this.$router.replace({ path: '/mentions_and_reactions' });
+          break;
       }
     },
   },
