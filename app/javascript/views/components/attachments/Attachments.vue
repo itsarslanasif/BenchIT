@@ -121,7 +121,7 @@
           </n-space>
         </template>
         <template #footer>
-          <span class="text-black-500">{{
+          <span class="text-black-500 float-left">{{
             $t('create_text_snippet.shortcuts')
           }}</span>
           <div v-for="option in shortcutOptions" :key="option.key">
@@ -132,7 +132,7 @@
             />
           </div>
           <hr class="my-2 text-black-500" />
-          <span class="text-black-500">{{
+          <span class="text-black-500 float-left">{{
             $t('create_text_snippet.attachments')
           }}</span>
           <label for="getFile">
@@ -268,6 +268,7 @@ export default {
       this.getDate('2022-12-13T13:55:56.292Z');
     },
     toggleCreateTextSnippetModal() {
+      this.openAttach = false;
       this.openCreateTextSnippet = !this.openCreateTextSnippet;
     },
     getDate(currentTimestamp) {
