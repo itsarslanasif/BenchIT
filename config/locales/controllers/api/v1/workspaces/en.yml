@@ -5,7 +5,7 @@ en:
         create:
           success: Workspace has been created successfully.
         invite:
-          success: The %{email} is sucessfully invited to the workspace %{company_name}.
+          success: '%{email} is sucessfully invited to the %{company_name}.'
         create_invitable:
           failure: Sorry, There was an error in inviting the user to workspace.
         find_profile:
