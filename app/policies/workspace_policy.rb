@@ -1,5 +1,4 @@
 class WorkspacePolicy < ApplicationPolicy
-
   def create?
     !user.outsider?
   end

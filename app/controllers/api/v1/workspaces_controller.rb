@@ -1,5 +1,4 @@
 class Api::V1::WorkspacesController < Api::ApiController
-
   before_action :authorization, only: %i[create invite]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]

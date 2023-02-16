@@ -1,5 +1,4 @@
 class Api::V1::ProfilesController < Api::ApiController
-
   before_action :authorization, only: %i[index show]
   skip_before_action :set_workspace_in_session, only: %i[create]
   before_action :set_workspace, only: %i[index create show update]

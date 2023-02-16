@@ -6,7 +6,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   before_action :set_channel_participant, :set_left_on, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
 
-
   def index
     @bench_channels = current_workspace.bench_channels
 

@@ -1,5 +1,4 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-
   before_action :authorization, only: %i[create join_public_channel]
   before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]

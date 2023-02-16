@@ -1,5 +1,4 @@
 class BenchChannelPolicy < ApplicationPolicy
-
   def index?
     !user.outsider?
   end
