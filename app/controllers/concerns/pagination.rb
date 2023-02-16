@@ -25,7 +25,7 @@ module Pagination
       [@pagy, @messages]
     end
 
-    def pagination_for_save_messages(page_no = P1)
+    def pagination_for_save_messages(page_no = 1)
       @pagy, @messages = pagy(current_profile.saved_items.includes(:profile, :conversation_message).order(:created_at), page: page_no, items: 10)
       [@pagy, @messages]
     end
