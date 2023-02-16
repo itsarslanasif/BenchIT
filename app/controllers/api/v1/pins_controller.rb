@@ -25,7 +25,7 @@ class Api::V1::PinsController < Api::ApiController
 
   def find_conversation
     @conversation = if params[:conversation_type].present? && params[:conversation_id].present?
-                      get_conversation(params[:conversation_type], params[:conversation_id])
+                      get_conversation(params[:conversation_id], params[:conversation_type])
                     else
                       BenchConversation.find(params[:bench_conversation_id])
                     end

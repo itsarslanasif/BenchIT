@@ -1,10 +1,10 @@
 import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios';
 
-export const pinnedMessages = (benchConversationId) => {
+export const pinnedMessages = (conversation_type, conversation_id) => {
   return axios
     .get(
-      `v1/pins?bench_conversation_id=${benchConversationId}`,
+      `v1/pins?conversation_type=${conversation_type}&conversation_id=${conversation_id}`,
       {
         headers: getHeaders(),
       }
