@@ -1,36 +1,30 @@
 class BenchChannelPolicy < ApplicationPolicy
-  class Scope < Scope
-    # NOTE: Be explicit about which records you allow access to!
-    # def resolve
-    #   scope.all
-    # end
-  end
 
   def index?
     !user.outsider?
   end
 
   def show?
-    record.profile_ids.include?(user.id) || !user.outsider?
+    record.profile_ids.include?(user.id) || index?
   end
 
   def create?
-    !user.outsider?
+    index?
   end
 
   def update?
-    !user.outsider?
+    index?
   end
 
   def destroy?
-    !user.outsider?
+    index?
   end
 
   def join_public_channel?
-    !user.outsider?
+    index?
   end
 
   def bench_channel_messages?
-    !user.outsider? || record.profile_ids.include?(user.id)
+    show?
   end
 end

@@ -124,7 +124,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    authorize @bench_channel
+    authorization(@bench_channel)
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
@@ -139,7 +139,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_receiver
     @receiver = Profile.find(params[:id])
-    authorize @receiver
+    authorization(@receiver)
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
     render json: { success: false, error: t('.set_receiver.failure') }, status: :unprocessable_entity
@@ -178,5 +178,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: t('.delete_text'))
     end
+  end
+
+  def authorization(record)
+    authorize record
   end
 end

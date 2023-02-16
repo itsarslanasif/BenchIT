@@ -1,10 +1,11 @@
 class Api::V1::WorkspacesController < Api::ApiController
+
+  before_action :authorization, only: %i[create invite]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
   skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
-  before_action :authorization, only: %i[create invite]
 
   def index
     @workspaces = current_user.workspaces

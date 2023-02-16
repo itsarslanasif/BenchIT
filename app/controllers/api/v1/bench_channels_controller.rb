@@ -1,10 +1,11 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   include Pagination
 
-  before_action :set_bench_channel, only: %i[show update destroy leave_channel]
+  before_action :authorization, only: %i[index show create update destroy]
+  before_action :set_bench_channel, only: %i[update destroy leave_channel]
   before_action :set_channel_participant, :set_left_on, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
-  before_action :authorization, only: %i[index create update destroy]
+
 
   def index
     @bench_channels = current_workspace.bench_channels
@@ -20,9 +21,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
     paginate_bench_channels
   end
 
-  def show
-    authorize @bench_channel
-  end
+  def show; end
 
   def create
     @bench_channel = BenchChannel.new(bench_channel_params)
@@ -148,6 +147,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def authorization
-    authorize BenchChannel
+    if action_name.eql?('show')
+      @bench_channel = BenchChannel.find(params[:id])
+      authorize @bench_channel
+    else
+      authorize BenchChannel
+    end
   end
 end

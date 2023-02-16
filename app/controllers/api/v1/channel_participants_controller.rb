@@ -1,4 +1,6 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
+
+  before_action :authorization, only: %i[create join_public_channel]
   before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]
   before_action :check_profile_ids, only: %i[create]
@@ -6,7 +8,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :check_workspace, only: %i[join_public_channel]
   before_action :check_already_joined_channel, only: %i[join_public_channel]
   before_action :check_private_channel, only: %i[join_public_channel]
-  before_action :authorization, only: %i[create join_public_channel]
 
   def index
     @profiles = if params[:query].present?
