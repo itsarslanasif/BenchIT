@@ -14,6 +14,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                             match: :word_start)
       @bench_channels = BenchChannel.where(id: @bench_channels.map(&:id))
     end
+
     filter_bench_channels
     hide_profile_bench_channels
     sort_bench_channels if params[:sort_by].present?
