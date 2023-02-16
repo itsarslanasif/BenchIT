@@ -195,12 +195,7 @@
               <Attachments :getImages="getImages" />
             </button>
             <div v-if="!editMessage" class="vl" />
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-video" />
-            </button>
+            <VideoRecord :editMessage="editMessage"/>
             <button
               v-if="!editMessage"
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -295,6 +290,7 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
+import VideoRecord from '../../widgets/videoRecord.vue';
 
 export default {
   data() {
@@ -335,6 +331,7 @@ export default {
     CreateTextSnippetModal,
     EditorContent,
     NDivider,
+    VideoRecord,
   },
   directives: {
     clickOutside: vClickOutside.directive,

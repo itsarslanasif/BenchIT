@@ -62,6 +62,7 @@ import {
   faLink,
   faQuoteRight,
   faToggleOff,
+  faCloudArrowUp
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -128,7 +129,8 @@ library.add(
   faLaptopCode,
   faLink,
   faQuoteRight,
-  faToggleOff
+  faToggleOff,
+  faCloudArrowUp
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
