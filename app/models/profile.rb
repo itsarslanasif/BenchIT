@@ -47,7 +47,8 @@ class Profile < ApplicationRecord
     primary_owner: 0,
     workspace_owner: 1,
     workspace_admin: 2,
-    member: 3
+    member: 3,
+    outsider: 4
   }
 
   scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }

@@ -1,11 +1,11 @@
 <h1>Welcome to your new workspace!</h1>
 <p>
-Here are the details for your new workspace, <%= @workspace.company_name %>.
+  Here are the details for your new workspace, <%= @workspace.company_name %>.
 <p>
 <strong>Workspace Name: </strong>
-<%= @workspace.company_name %><br/>
+<%= @workspace.company_name %> <br/>
 <strong>Workspace URL: </strong>
 <%= @workspace.bench_it_url %>
 <div>
-<%= link_to button_tag('Open Workspace', class: 'btn btn-dark mt-3'), "http://127.0.0.1:5100/join_workspace/#{@workspace.id}?invitation_token=#{@token}" %>
+  <%= link_to button_tag('Open Workspace', class: 'btn btn-dark mt-3'), "#{root_url}join_workspace/#{@workspace.id}?invitation_token=#{@token}" %>
 </div>

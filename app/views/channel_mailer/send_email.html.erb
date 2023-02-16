@@ -1,0 +1,11 @@
+<h1>Join <%= @bench_channel.name %> </h1>
+<p>
+  Here are the details for the workspace, <%= @workspace.company_name %>.
+<p>
+<strong>Workspace Name: </strong>
+<%= @workspace.company_name %> <br/>
+<strong>Channel Name: </strong>
+<%= @bench_channel.name %>
+<div>
+  <%= link_to button_tag('Join Channel', class: 'btn btn-dark mt-3'), "#{root_url}join_workspace_as_outsider/#{@workspace.id}/#{@bench_channel.id}?invitation_token=#{@token}" %>
+</div>
