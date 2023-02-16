@@ -34,7 +34,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def destroy
     if delete_parent_message?
-      delete_parent_message
+      delete_reply_and_parent_message
     elsif soft_delete_message?
       soft_delete_message
     else
@@ -163,7 +163,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @message.parent_message_id.present? && @message.parent_message.content.eql?(t('.delete_text')) && @message.parent_message.replies.count.eql?(1)
   end
 
-  def delete_parent_message
+  def delete_reply_and_parent_message
     ActiveRecord::Base.transaction do
       @message.destroy!
       @message.parent_message.destroy!
