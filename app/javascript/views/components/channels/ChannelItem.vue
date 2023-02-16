@@ -26,6 +26,7 @@
 import { NDropdown } from 'naive-ui';
 import Option from './channel_options.js';
 import { useChannelStore } from '../../../stores/useChannelStore';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
 import { unreadMessagesCount, unreadMessagesLength } from '../../../modules/unreadMessages';
@@ -36,8 +37,9 @@ export default {
   setup() {
     const channelStore = useChannelStore();
     const unreadStore = useUnreadStore();
+    const rightPaneStore = useRightPaneStore();
     const { unreadMessages } = storeToRefs(unreadStore);
-    return { channelStore, unreadMessages, };
+    return { channelStore, unreadMessages, rightPaneStore };
   },
   data() {
     return {
@@ -53,6 +55,10 @@ export default {
       switch (key) {
         case 'star-channel':
           markStar(this.currentChannel, this.channelStore);
+          break;
+        case 'open-in-split-view':
+          this.rightPaneStore.toggleViewSplitShow(true);
+          this.rightPaneStore.setRightPaneSelectedChat(this.channel, 'channels')
           break;
         case 'unstar-channel':
           markStar(this.currentChannel, this.channelStore);

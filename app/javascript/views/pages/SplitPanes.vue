@@ -29,7 +29,7 @@
           <router-view :key="$route.fullPath" />
         </pane>
         <pane
-          v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile"
+          v-if="rightPaneStore.showThread || rightPaneStore.showUserProfile || rightPaneStore.showSplitView"
           max-size="60"
           min-size="40"
           class="bg-white"
@@ -38,10 +38,13 @@
           "
         >
           <Thread
-            v-if="rightPaneStore.showThread && !rightPaneStore.showUserProfile"
+            v-if="rightPaneStore.showThread"
           />
           <UserProfile
-            v-if="!rightPaneStore.showThread && rightPaneStore.showUserProfile"
+            v-if="rightPaneStore.showUserProfile"
+          />
+          <ChatSplit
+            v-if="rightPaneStore.showSplitView"
           />
         </pane>
       </splitpanes>
@@ -60,6 +63,7 @@ import LeftPane from '../components/leftPane/LeftPane.vue';
 import Thread from '../components/rightPane/Thread.vue';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import UserProfile from '../components/rightPane/UserProfile.vue';
+import ChatSplit from '../components/rightPane/ChatSplitPane.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
@@ -82,6 +86,7 @@ export default {
     NMessageProvider,
     NMessageProvider,
     alert,
+    ChatSplit,
   },
   data() {
     return {

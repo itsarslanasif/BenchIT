@@ -23,21 +23,21 @@
 </template>
 
 <script>
-import ChatHeader from '../components/chats/ChatHeader.vue';
-import JoinChannel from '../widgets/JoinChannel.vue';
+import ChatHeader from '../chats/ChatHeader.vue';
+import JoinChannel from '../../widgets/JoinChannel.vue';
 import { NInput, NSpace } from 'naive-ui';
-import ChatBody from '../components/chats/ChatBody.vue';
-import TextEditorVue from '../components/editor/TextEditor.vue';
+import ChatBody from '../chats/ChatBody.vue';
+import TextEditorVue from '../editor/TextEditor.vue';
 import { createCable, unsubscribe } from '@/plugins/cable';
-import { conversation } from '../../modules/axios/editorapi';
-import { useMessageStore } from '../../stores/useMessagesStore';
-import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
-import { cableActions } from '../../modules/cable';
+import { conversation } from '../../../modules/axios/editorapi';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
+import { cableActions } from '../../../modules/cable';
 import { storeToRefs } from 'pinia';
-import { useUnreadStore } from '../../stores/useUnreadStore';
-import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
-import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
-import { useRightPaneStore } from '../../stores/useRightPaneStore';
+import { useUnreadStore } from '../../../stores/useUnreadStore';
+import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 export default {
   name: 'Chat',
   components: {
@@ -70,11 +70,11 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore()
     const rightPaneSelectedChat = rightPaneStore.getRightSelectedChat
-    let conversation_type = getIndexByParams(1);
-    let id = getIndexByParams(2);
+
+      const id = rightPaneSelectedChat.id
+      const conversation_type = rightPaneSelectedChat.conversation_type
+
     // if (rightPaneStore.showSplitView && props.isRightPane){
-    //   id = rightPaneSelectedChat.id
-    //   conversation_type = rightPaneSelectedChat.conversation_type
     // }
     const {
       messages,

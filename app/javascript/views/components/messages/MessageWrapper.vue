@@ -108,7 +108,7 @@
               "
             >
               <MessageSection
-                v-if="block.type === 'section'"
+                v-if="block?.type === 'section'"
                 :section="block"
               />
             </div>
