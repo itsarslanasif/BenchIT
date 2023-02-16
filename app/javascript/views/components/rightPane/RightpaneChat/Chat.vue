@@ -149,15 +149,15 @@ export default {
   methods: {
     sendMessage(message, files, schedule) {
       let formData = new FormData();
-      formData.append('content', message);
+      formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.selectedChat.id);
-      if (schedule.value) {
+      if (schedule && schedule.value) {
         formData.append('scheduled_at', schedule.value);
       }
       files.forEach(file => {
-        formData.append('message_attachments[]', file);
+        formData.append('message_attachments[]', file, message);
       });
       conversation(formData).then(res => {
         if (res.scheduled_at) {

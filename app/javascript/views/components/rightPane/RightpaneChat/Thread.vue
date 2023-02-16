@@ -116,13 +116,13 @@ export default {
     sendMessage(message, files) {
       let formData = new FormData();
       formData.append('sender_id', 1);
-      formData.append('content', message);
+      formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
       formData.append('parent_message_id', this.threadStore.message.id);
       formData.append('conversation_type', this.conversation_type);
       formData.append('conversation_id', this.messageStore.selectedChat.id);
       files.forEach(file => {
-        formData.append('message_attachments[]', file);
+        formData.append('message_attachments[]', file, message);
       });
       try {
         conversation(formData);
