@@ -1,11 +1,12 @@
 class Api::V1::ScheduleMessagesController < Api::ApiController
   include MemberShip
+  include Pagination
 
   before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
   before_action :delete_job, only: %i[destroy]
 
   def index
-    @messages = current_profile.schedule_messages.includes(:bench_conversation, :profile).order(created_at: :desc)
+    @pagy, @messages = pagination_for_schedule_messages(params[:page])
   end
 
   def update

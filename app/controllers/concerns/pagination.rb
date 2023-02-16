@@ -19,5 +19,26 @@ module Pagination
     rescue Pagy::OverflowError, Pagy::VariableError => e
       raise PaginationError, e.message
     end
+
+    def pagination_for_send_messages(page_no = 1)
+      @pagy, @messages = pagy(ConversationMessage.send_messages, page: page_no, items: 10)
+      [@pagy, @messages]
+    end
+
+    def pagination_for_save_messages(page_no = P1)
+      @pagy, @messages = pagy(current_profile.saved_items.includes(:profile, :conversation_message).order(:created_at), page: page_no, items: 10)
+      [@pagy, @messages]
+    end
+
+    def pagination_for_schedule_messages(page_no = 1)
+      @pagy, @messages = pagy(current_profile.schedule_messages.includes(:profile, :bench_conversation).order(:scheduled_at), page: page_no,
+                                                                                                                              items: 10)
+      [@pagy, @messages]
+    end
+
+    def pagination_for_draft_messages(page_no = 1)
+      @pagy, @messages = pagy(current_profile.draft_messages.includes(:profile, :bench_conversation).order(:created_at), page: page_no, items: 10)
+      [@pagy, @messages]
+    end
   end
 end
