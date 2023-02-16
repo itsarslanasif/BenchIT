@@ -12,8 +12,11 @@ class Api::V1::WorkspacesController < Api::ApiController
   def create
     @workspace = Workspace.new(workspace_params)
 
-    @workspace.save!
-    render json: { success: true, message: t('.create.success') }, status: :ok
+    if @workspace.save
+      render json: @workspace, status: :ok
+    else
+      render json: { message: t('.create.failure') }, status: :unprocessable_entity
+    end
   end
 
   def invite

@@ -40,6 +40,9 @@ en:
           error_message: 'Invalid email or password'
       workspaces:
         title: 'Details About Your Workspace'
+        new_workspace_title: 'Add Title Of Your Workspace'
+        new_name_placeholder: 'e.g BenchIT'
+        new_url_placeholder: 'e.g www.benchit.com'
         usage: 'What will your team use it for?'
         company_type_info: 'What kind of company is it?'
         company_size_info: 'How big is your company?'
@@ -184,6 +187,7 @@ en:
         sign_in_to_your_workspace: 'Sign in to your workspace'
         new_workspace_tagline: 'Looking to create a workspace instead?'
         workspace_not_found: 'We couldn’t find your workspace.'
+        workspace_type: "Please select workspace type"
       sidebar:
         threads: 'Threads'
         direct_messages: 'Direct Messages'

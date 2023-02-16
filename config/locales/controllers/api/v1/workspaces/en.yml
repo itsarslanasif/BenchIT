@@ -4,6 +4,7 @@ en:
       workspaces:
         create:
           success: Workspace has been created successfully.
+          failure: Error while creating workspace.
         invite:
           success: The %{email} is sucessfully invited to the workspace %{company_name}.
         create_invitable:

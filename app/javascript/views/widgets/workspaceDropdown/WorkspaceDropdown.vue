@@ -16,6 +16,10 @@
   <div v-if="showChannelModal">
     <CreateChannel :close-modal="toggleCreateChannelModal" />
   </div>
+  <div v-if="showWorkspaceModal">
+    <CreateWorkspace :close-modal="toggleWorkspaceModal" />
+  </div>
+
 </template>
 
 <script>
@@ -25,15 +29,17 @@ import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
 import { decryption } from '../../../modules/crypto/crypto';
 import CreateChannel from '../../components/channels/CreateChannel.vue';
+import CreateWorkspace from '../../components/workspace/CreateWorkspace.vue'
 import { removeActiveStatus } from '../../../api/profiles/profileStatus';
 
 export default {
-  components: { NButton, NDropdown, UserInviteModal, CreateChannel },
+  components: { NButton, NDropdown, UserInviteModal, CreateChannel, CreateWorkspace },
   data() {
     return {
       options: [],
       showModal: false,
       showChannelModal: false,
+      showWorkspaceModal: false,
     };
   },
   beforeUnmount() {
@@ -56,6 +62,9 @@ export default {
         case 'create-a-channel':
           this.showChannelModal = true;
           break;
+        case 'add-workspaces':
+          this.showWorkspaceModal = true;
+          break;
       }
     },
     async signOut() {
@@ -75,6 +84,9 @@ export default {
     toggleCreateChannelModal() {
       this.showChannelModal = !this.showChannelModal;
     },
+    toggleWorkspaceModal() {
+      this.showWorkspaceModal = !this.showWorkspaceModal
+    }
   },
 };
 </script>
