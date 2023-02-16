@@ -20,8 +20,8 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
   },
 
   actions: {
-    async index(conversation_type, id) {
-      this.pinnedConversation = await pinnedMessages(conversation_type, id);
+    async index(benchConversationId) {
+      this.pinnedConversation = await pinnedMessages(benchConversationId);
       this.pinToggle = false;
     },
     pinMessage(message) {

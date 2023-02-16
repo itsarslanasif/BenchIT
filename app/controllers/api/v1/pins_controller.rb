@@ -24,7 +24,11 @@ class Api::V1::PinsController < Api::ApiController
   private
 
   def find_conversation
-    @conversation = get_conversation(params[:conversation_id], params[:conversation_type])
+    @conversation = if params[:conversation_type].present? && params[:conversation_id].present?
+                      get_conversation(params[:conversation_type], params[:conversation_id])
+                    else
+                      BenchConversation.find(params[:bench_conversation_id])
+                    end
   end
 
   def set_pin

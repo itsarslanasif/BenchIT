@@ -13,32 +13,22 @@
 
 <script>
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
+import { onMounted } from 'vue';
 
 export default {
   setup() {
-    function getIndexByParams(param) {
-      return window.location.pathname.split('/')[param];
-    }
-
-    function getConversationType(type) {
-      switch (type) {
-        case 'channels':
-          return 'BenchChannel';
-        case 'profiles':
-          return 'Profile';
-        case 'groups':
-          return 'Group';
-        default:
-          return;
-      }
-    }
+    const messagesStore = useMessageStore();
     const pinnedConversationStore = usePinnedConversation();
-    const conversation_type = getIndexByParams(1);
-    const conversation_id = getIndexByParams(2);
-    pinnedConversationStore.index(
-      getConversationType(conversation_type),
-      conversation_id
+    const { selectedChat } = storeToRefs(messagesStore)
+
+    onMounted(()=>{
+      pinnedConversationStore.index(
+      selectedChat.value.bench_conversation_id
     );
+    })
+
     return { pinnedConversationStore };
   },
 };
