@@ -16,8 +16,11 @@ class Api::V1::DownloadsController < Api::ApiController
   end
 
   def clear_all
-    @downloads.destroy_all
-    render json: { success: true, message: t('.clear_all.success') }, status: :ok
+    if @downloads.destroy_all
+      render json: { message: t('.clear_all.success') }, status: :ok
+    else
+      render json: { errors: @downloads.errors }, status: :unprocessable_entity
+    end
   end
 
   private
