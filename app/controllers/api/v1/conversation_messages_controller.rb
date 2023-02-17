@@ -99,7 +99,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def set_saved_item
     @saved_item = current_profile.saved_items.find_by(conversation_message_id: params[:id])
 
-    return render json: { failure: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
+    return render json: { success: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
   end
 
   def set_message
@@ -160,7 +160,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def delete_parent_message?
-    @message.parent_message_id.present? && @message.parent_message.content.eql?(t('.delete_text')) && @message.parent_message.replies.count.eql?(1)
+    @message.parent_message&.content.eql?(t('.delete_text')) && @message.parent_message.replies.count.eql?(1)
   end
 
   def delete_reply_and_parent_message
