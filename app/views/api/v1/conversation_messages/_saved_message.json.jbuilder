@@ -1,6 +1,8 @@
 json.id saved_item.id
 json.message saved_item.conversation_message
-json.profile saved_item.profile
+json.profile do
+  json.partial! 'api/v1/shared/partials/profile', profile: saved_item.conversation_message.profile
+end
 json.isSaved true
 if saved_item.conversation_message.message_attachments.present?
   json.attachments saved_item.conversation_message.message_attachments do |attachment|
