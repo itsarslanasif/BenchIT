@@ -22,6 +22,7 @@ class ApplicationController < ActionController::Base
       Pundit::NotAuthorizedError => { message: I18n.t('application.render_error.unauthorized_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotUnique => { message: I18n.t('application.render_error.unique_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotDestroyed => { message: I18n.t('application.render_error.not_destroy_error'), status: :unprocessable_entity },
+      ActiveRecord::NotNullViolation => { message: t('application.render_error.not_null_violation_error'), status: :bad_request },
       PaginationError => { message: I18n.t('application.render_error.pagination_error'), status: :unprocessable_entity },
       :else => { message: I18n.t('application.render_error.server_error'), status: :internal_server_error }
     }

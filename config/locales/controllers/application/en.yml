@@ -10,3 +10,4 @@ en:
       pagination_error: Sorry, The page not found.
       server_error: Internal server error
       unauthorized_error: You are not authorized.
+      not_null_violation_error : A required parameter was missing.
