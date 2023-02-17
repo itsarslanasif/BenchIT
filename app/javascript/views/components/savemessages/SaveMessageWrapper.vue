@@ -20,9 +20,10 @@
       <div
         class="flex m-1 text-xs text-black-600 font-semibold hover:underline cursor-pointer"
       >
-        <div v-if="message.conversation_type == 'User'">Direct Message</div>
+        <div v-if="message.conversation_type == 'Profile'">Direct Message</div>
         <div v-else-if="message.conversation_type == 'BenchChannel'">
-          {{ message.channel_name }}
+          <font-awesome-icon :icon="getChannelIcon(message.receiver)" />
+          {{ message.receiver.name }}
         </div>
         <div v-else-if="message.conversation_type == 'Group'">
           Group Message
@@ -33,7 +34,7 @@
           <n-avatar
             v-if="!isSameUser || !isSameDayMessage"
             size="large"
-            src="../../../assets/images/user.png"
+            :src="message.profile.image_url"
           />
         </div>
         <div>
@@ -219,6 +220,9 @@ export default {
     messageBlock(message) {
       return JSON.parse(message);
     },
+    getChannelIcon(channel){
+      return `fa-${channel.is_private ? 'lock' : 'hashtag'}`
+    }
   },
 };
 </script>
