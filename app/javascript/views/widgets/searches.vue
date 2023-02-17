@@ -1,9 +1,9 @@
 <template>
   <div
-    v-for="item in searches"
-    :key="item.id"
-    @click="goToChat(item)"
-    class="hover:bg-slate-600 p-2 rounded"
+  v-for="item in searches"
+  :key="item.id"
+  @click="goToChat(item)"
+  class="hover:bg-slate-600 p-2 rounded"
   >
     <div class="flex items-center">
       <div v-if="item.sender_avatar" class="ml-3">
@@ -46,7 +46,12 @@
             {{ `${$t('search_bar.from')} ${item.sender_name}` }}
           </div>
           <div>
-            {{ item.content }}
+            <div v-for="block in messageBlock(item.content).blocks">
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -55,8 +60,12 @@
 </template>
 <script>
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
+import MessageSection from '../components/messages/MessageSection.vue';
 
 export default {
+  components: {
+    MessageSection
+  },
   props: ['searches', 'closeSearchModal'],
   setup() {
     const leftPaneStore = useLeftpaneStore();
@@ -65,6 +74,9 @@ export default {
     };
   },
   methods: {
+    messageBlock(message) {
+      return JSON.parse(message)
+    },
     goToChat(item) {
       let conversationType
 
