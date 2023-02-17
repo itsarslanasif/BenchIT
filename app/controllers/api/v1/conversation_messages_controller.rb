@@ -169,6 +169,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def delete_reply_and_parent_message
     ActiveRecord::Base.transaction do
+      @message.pin&.destroy!
       @message.destroy!
       @message.parent_message.destroy!
     end
