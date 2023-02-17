@@ -10,7 +10,7 @@ en:
       pagination_error: Sorry, The page not found.
       server_error: Internal server error
       unauthorized_error: You are not authorized.
-      not_null_violation_error : A required parameter was missing.
+      not_null_violation_error: A required parameter was missing.
       argument_error: Sorry, You have entered the wrong number of parameters.
       syntax_error: Sorry, There is a syntax error in the code.
       type_error: Sorry, The type is not supported, no implicit conversion of type.
