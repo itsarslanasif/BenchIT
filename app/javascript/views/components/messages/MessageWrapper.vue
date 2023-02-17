@@ -698,7 +698,7 @@ export default {
     downloadFile(attachment) {
       try {
         fileDownload(attachment).then(response => {
-          this.downloadsStore.downloads.unshift(response.data);
+          this.downloadsStore.downloads.unshift(response.data.download);
           this.downloadsStore.response = response;
           this.downloadsStore.downloadAlert = true;
         });
