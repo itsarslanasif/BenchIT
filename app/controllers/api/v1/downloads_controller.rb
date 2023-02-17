@@ -7,7 +7,7 @@ class Api::V1::DownloadsController < Api::ApiController
   def create
     @download = current_profile.downloads.new(download_params)
     @download.save!
-    render json: { success: true, message: t('.create.success') }, status: :ok
+    render json: @download, status: :ok
   end
 
   def destroy
@@ -16,7 +16,7 @@ class Api::V1::DownloadsController < Api::ApiController
   end
 
   def clear_all
-    @downloads.destroy_all!
+    @downloads.destroy_all
     render json: { success: true, message: t('.clear_all.success') }, status: :ok
   end
 
