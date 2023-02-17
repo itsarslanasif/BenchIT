@@ -52,10 +52,15 @@
                 {{ time }}
               </p>
             </span>
-            <span
+            <div
               class="text-black-800 text-sm flex-wrap"
-              v-html="currMessage.message.content"
-            />
+              v-for="block in messageBlock(currMessage.message.content).blocks"
+            >
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
+            </div>
           </div>
           <div v-if="currMessage?.attachments" class="flex gap-2 mb-3">
             <div
@@ -131,6 +136,7 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
 import { CONSTANTS } from '../../../assets/constants';
+import MessageSection from '../messages/MessageSection.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -143,6 +149,7 @@ export default {
     NAvatar,
     EmojiPicker,
     EmojiModalButton,
+    MessageSection
   },
   props: {
     currMessage: {
@@ -208,6 +215,9 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    messageBlock(message) {
+      return JSON.parse(message);
     },
   },
 };

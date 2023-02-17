@@ -99,7 +99,15 @@
                     isOwnMessage ? 'You' : firstName(message.sender_name)
                   }}:</span
                 >
-                <span v-html="message.content"></span>
+                <div
+                  class="text-black-200"
+                  v-for="block in messageBlock(message.content).blocks"
+                >
+                  <MessageSection
+                    v-if="block.type === 'section'"
+                    :section="block"
+                  />
+                </div>
               </div>
             </div>
             <div class="ml-auto text-black-200">
@@ -126,9 +134,10 @@ import {
   getDirectMessagesList,
   getLastDirectMessagesList,
 } from '../../../api/directMessages/directMessages';
+import MessageSection from '../messages/MessageSection.vue';
 
 export default {
-  components: { NAvatar },
+  components: { NAvatar, MessageSection },
   data() {
     return {
       last_messages: [],
@@ -216,6 +225,9 @@ export default {
       return message.sender_id === this.currentProfile.id
         ? message.receiver_name
         : message.sender_name;
+    },
+    messageBlock(message) {
+      return JSON.parse(message);
     },
   },
   computed: {
