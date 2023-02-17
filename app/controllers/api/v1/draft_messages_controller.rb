@@ -80,7 +80,6 @@ class Api::V1::DraftMessagesController < Api::ApiController
       conversation_type: @draft_message.bench_conversation.conversationable_type,
       receiver: draft_receiver
     }
-    response[:attachments] = get_attachments(@draft_message) if @draft_message.message_attachments.present?
-    response
+    response.merge!(attachments: get_attachments(@draft_message)) if @draft_message.message_attachments.present?
   end
 end

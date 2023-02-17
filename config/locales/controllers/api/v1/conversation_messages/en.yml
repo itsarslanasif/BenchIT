@@ -2,7 +2,7 @@ en:
   api:
     v1:
       conversation_messages:
-        delete_text: This message was deleted.
+        delete_text: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"This message was deleted."}}]}'
         create:
           success: Message has been created successfully.
         update:
