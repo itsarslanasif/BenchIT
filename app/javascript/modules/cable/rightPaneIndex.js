@@ -18,7 +18,7 @@ const createMessage = (data, messageStore, threadStore) => {
       const threadMessage = threadStore.getMessage;
       const message = findMessage(parentMessage.replies, data.id)
 
-      if (!message) { message.replies.push(data) }
+      if (!message) message.replies.push(data)
 
       const findThreadMessage = findMessage(threadMessage.replies, data.id)
 
@@ -28,7 +28,7 @@ const createMessage = (data, messageStore, threadStore) => {
     } else {
       const message = findMessage(messages, data.id)
 
-      if (!message) { messageStore.addMessage(data) }
+      if (!message) messageStore.addMessage(data)
     }
   } catch (err) {
     console.error(err);
@@ -156,7 +156,7 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
       if (replyIndex != -1) {
         parentMessage.replies[replyIndex] = data;
 
-        if (!pin) { pinStore.pinMessage(parentMessage.replies[replyIndex]) }
+        if (!pin) pinStore.pinMessage(parentMessage.replies[replyIndex])
       }
     } else {
       const messageIndex = findMessageIndex(messageStore.messages, data.id);
@@ -168,7 +168,7 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
         messsageToUpdate.replies = messageStore.messages[messageIndex].replies;
         messageStore.messages[messageIndex] = messsageToUpdate;
 
-        if (!pin) { pinStore.pinMessage(messsageToUpdate) }
+        if (!pin) pinStore.pinMessage(messsageToUpdate)
 
         if (threadStore?.message && threadStore.message.id == data.id) {
           threadStore.message = messsageToUpdate;
@@ -192,9 +192,7 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
       if (replyIndex != -1) {
         parentMessage.replies[replyIndex] = data;
 
-        if (pin) {
-          pinStore.unPinMessage(parentMessage.replies[replyIndex]);
-        }
+        if (pin) pinStore.unPinMessage(parentMessage.replies[replyIndex])
       }
     }
     else {
@@ -207,7 +205,7 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
         messsageToUpdate.replies = messageStore.messages[messageIndex].replies;
         messageStore.messages[messageIndex] = messsageToUpdate;
 
-        if (pin) { pinStore.unPinMessage(messsageToUpdate) }
+        if (pin) pinStore.unPinMessage(messsageToUpdate)
 
         if (threadStore?.message && threadStore.message.id == data.id) {
           threadStore.message = messsageToUpdate;
