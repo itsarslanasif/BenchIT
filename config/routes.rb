@@ -94,6 +94,7 @@ Rails.application.routes.draw do
             post :join_public_channel
             post :mute_channel
             post :unmute_channel
+            post :invite_outsider
           end
         end
         resources :draft_messages, only: %i[index create update destroy]

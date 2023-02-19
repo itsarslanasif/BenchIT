@@ -9,4 +9,9 @@ en:
       not_destroy_error: Sorry, The record cannot be destroyed.
       pagination_error: Sorry, The page not found.
       server_error: Internal server error
-      unauthorized_error: You need to login to access this.
+      unauthorized_error: You are not authorized.
+      argument_error: Sorry, You have entered the wrong number of parameters.
+      syntax_error: Sorry, There is a syntax error in the code.
+      type_error: Sorry, The type is not supported, no implicit conversion of type.
+      index_error: Sorry, The index is invalid.
+      name_error: Sorry, The name is invalid or undefined.

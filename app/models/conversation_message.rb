@@ -35,6 +35,8 @@ class ConversationMessage < ApplicationRecord
       .uniq
   }
 
+  scope :send_messages, -> { includes(:profile, :bench_conversation).where(sender_id: Current.profile.id).order(created_at: :desc) }
+
   def self.recent_conversation_ids(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',

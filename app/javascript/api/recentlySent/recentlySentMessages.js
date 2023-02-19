@@ -7,7 +7,7 @@ export const getMessages = async () => {
       headers: getHeaders(),
     })
     .then(response => {
-      return response.data;
+      return response.data.messages;
     });
 };
 

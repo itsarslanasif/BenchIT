@@ -1,12 +1,13 @@
 class Api::V1::DraftMessagesController < Api::ApiController
   include MemberShip
   include Conversation
+  include Pagination
 
   before_action :fetch_conversation, :initialize_draft, :verify_draft, :decide_draft_action, only: %i[create]
   before_action :set_draft_message, :set_conversation, :authenticate_draft, only: %i[destroy update]
 
   def index
-    @draft_messages = current_profile.draft_messages
+    @pagy, @draft_messages = pagination_for_draft_messages(params[:page])
   end
 
   def create
@@ -79,7 +80,6 @@ class Api::V1::DraftMessagesController < Api::ApiController
       conversation_type: @draft_message.bench_conversation.conversationable_type,
       receiver: draft_receiver
     }
-    response[:attachments] = get_attachments(@draft_message) if @draft_message.message_attachments.present?
-    response
+    response.merge!(attachments: get_attachments(@draft_message)) if @draft_message.message_attachments.present?
   end
 end

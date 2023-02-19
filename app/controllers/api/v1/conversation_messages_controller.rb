@@ -12,7 +12,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
   def send_message
-    @messages = current_profile.conversation_messages.includes(:profile, :reactions).order(created_at: :desc)
+    @pagy, @messages = pagination_for_send_messages(params[:page])
   end
 
   def reactions
@@ -38,7 +38,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def destroy
     if delete_parent_message?
-      @message.parent_message.destroy!
+      delete_reply_and_parent_message
     elsif soft_delete_message?
       soft_delete_message
     else
@@ -49,7 +49,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def index_saved_messages
-    @saved_items = current_profile.saved_items.order(created_at: :desc)
+    @pagy, @saved_items = pagination_for_save_messages(params[:page])
   end
 
   def save_message
@@ -103,7 +103,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def set_saved_item
     @saved_item = current_profile.saved_items.find_by(conversation_message_id: params[:id])
 
-    return render json: { failure: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
+    return render json: { success: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
   end
 
   def set_message
@@ -128,6 +128,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
+    authorization(@bench_channel)
+
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
     render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
@@ -142,6 +144,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_receiver
     @receiver = Profile.find(params[:id])
+    authorization(@receiver)
+
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
     render json: { success: false, error: t('.set_receiver.failure') }, status: :unprocessable_entity
@@ -164,8 +168,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def delete_parent_message?
-    msg = t('.delete_text')
-    @message.parent_message_id.present? && @message.parent_message.content.eql?(msg) && @message.parent_message.replies.count.eql?(1)
+    @message.parent_message&.content.eql?(t('.delete_text')) && @message.parent_message.replies.count.eql?(1)
+  end
+
+  def delete_reply_and_parent_message
+    ActiveRecord::Base.transaction do
+      @message.pin&.destroy!
+      @message.destroy!
+      @message.parent_message.destroy!
+    end
   end
 
   def soft_delete_message?
@@ -180,5 +191,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: t('.delete_text'))
     end
+  end
+
+  def authorization(record)
+    authorize record
   end
 end

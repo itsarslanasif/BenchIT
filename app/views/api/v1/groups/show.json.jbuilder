@@ -6,3 +6,4 @@ json.draft_message do
 end
 json.isScheduled? scheduled?(@group.bench_conversation.id)
 json.partial! 'api/v1/shared/partials/profiles', profiles: @profiles
+json.bench_conversation_id @group.bench_conversation.id
