@@ -17,8 +17,8 @@ export default {
   setup(props) {
     const getConversationType = () => {
       return props.selectedChat.is_private !== undefined
-        ? 'BenchChannel'
-        : 'Profile';
+        ? 'channels'
+        : 'profiles';
     };
     const conversation_id = props.selectedChat.id;
     const conversation_type = getConversationType();
