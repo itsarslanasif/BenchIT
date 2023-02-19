@@ -1,7 +1,7 @@
 <template>
   <div v-for="block in messageBlock.blocks" :key="block">
     <div
-      class="hover-trigger p-2 px-4 bg-white relative border border-black-300 shadow-sm rounded-xl m-6"
+      class="hover-trigger py-2 px-4 bg-white relative border border-black-300 shadow-sm rounded-xl m-4"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
@@ -23,7 +23,7 @@
       </div>
       <div class="flex">
         <div
-          class="h-10 w-10 min-w-10 mr-1 ml-1 text-center rounded flex justify-center items-center"
+          class="h-10 w-10 mr-1 ml-1 rounded flex justify-center items-center"
         >
           <span class="text-4xl">{{ getReaction() }}</span>
         </div>
@@ -109,11 +109,7 @@
               }"
               class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
             >
-              <n-tooltip
-                placement="top"
-                :style="{ width: '170px' }"
-                trigger="hover"
-              >
+              <n-tooltip placement="top" class="w-40" trigger="hover">
                 <template #trigger>
                   <n-text class="ml-1"
                     >{{ emoji }}
@@ -214,8 +210,10 @@ import { CONSTANTS } from '../../../assets/constants';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore';
 import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import UserProfileModal from '../../widgets/UserProfileModal.vue';
-import { add_reaction } from '../../../api/reactions/reaction.js';
-import { remove_reaction } from '../../../api/reactions/reaction.js';
+import {
+  add_reaction,
+  remove_reaction,
+} from '../../../api/reactions/reaction.js';
 import { useCurrentUserStore } from '../../../stores/useCurrentUserStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
@@ -310,11 +308,9 @@ export default {
     displayReaction() {
       this.currMessage.reactions?.filter(reaction => {
         const isDuplicate = this.displayedReactions.includes(reaction.emoji);
-        if (!isDuplicate) {
-          this.displayedReactions.push(reaction.emoji);
-          return true;
-        }
-        return false;
+        if (!isDuplicate) this.displayedReactions.push(reaction.emoji);
+
+        return !isDuplicate;
       });
     },
     getIcon() {
@@ -339,33 +335,24 @@ export default {
       }
     },
     async addReaction(emoji) {
-      let temp = null;
-      if (typeof emoji === 'object') {
-        temp = emoji.i;
-      } else {
-        temp = emoji;
-      }
+      let temp = typeof emoji === 'object' ? emoji.i : emoji;
       let emoji_id = null;
-      if (
-        this.currMessage.reactions.some(reaction => {
-          return (
-            (emoji_id = reaction.id),
-            reaction.emoji === temp &&
-              reaction.profile_id === this.currentProfile.id
-          );
-        })
-      ) {
-        try {
+      try {
+        if (
+          this.currMessage.reactions.some(reaction => {
+            return (
+              (emoji_id = reaction.id),
+              reaction.emoji === temp &&
+                reaction.profile_id === this.currentProfile.id
+            );
+          })
+        ) {
           await remove_reaction(emoji_id);
-        } catch (e) {
-          console.error(e);
-        }
-      } else {
-        try {
+        } else {
           await add_reaction(this.currMessage.id, temp);
-        } catch (e) {
-          console.error(e);
         }
+      } catch (e) {
+        console.error(e);
       }
     },
     setEmojiModal() {
@@ -407,15 +394,11 @@ export default {
       }
     },
     countReaction(emoji) {
-      const filteredReactions = this.currMessage.reactions.filter(function (
-        reaction
-      ) {
+      const filteredReactions = this.currMessage.reactions.filter(reaction => {
         return reaction.emoji === emoji;
       });
       if (filteredReactions.length === 0) {
-        this.displayedReactions = this.displayedReactions.filter(function (
-          reaction
-        ) {
+        this.displayedReactions = this.displayedReactions.filter(reaction => {
           return reaction != emoji;
         });
       }
@@ -423,23 +406,15 @@ export default {
     },
     getUsers(emoji, name) {
       let users = this.currMessage.reactions
-        .filter(function (reaction) {
-          return reaction.emoji === emoji;
-        })
-        .map(function (reaction) {
-          if (reaction.reacted_by === name) {
-            return CONSTANTS.YOU;
-          } else {
-            return reaction.reacted_by;
-          }
-        });
+        .filter(reaction => reaction.emoji === emoji)
+        .map(reaction =>
+          reaction.reacted_by === name ? CONSTANTS.YOU : reaction.reacted_by
+        );
       const formatter = new Intl.ListFormat('en', {
         style: 'long',
         type: 'conjunction',
       });
-      users = users.filter(function (user) {
-        return user !== undefined;
-      });
+      users = users.filter(user => user !== undefined);
       return formatter.format(users);
     },
     isCurrentUserReaction(emoji) {

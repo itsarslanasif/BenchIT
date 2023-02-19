@@ -16,10 +16,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def reactions
-    @reactions = current_profile.conversation_messages
-                                .joins(:reactions)
-                                .where.not(reactions: { profile_id: current_profile.id })
-                                .uniq
+    @reactions = current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create

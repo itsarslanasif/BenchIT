@@ -1,5 +1,5 @@
 <template>
-  <div class="flex p-1 px-3 border-x-0 border-t-0 border-b border-black-300">
+  <div class="flex py-1 px-4 border-b border-black-300">
     <div class="flex overflow-y-hidden text-ellipsis p-1">
       <p class="text-slate-800 text-xl font-semibold">
         {{ $t('mentions_and_reactions.title') }}
@@ -33,5 +33,3 @@ export default {
   },
 };
 </script>
-
-<style></style>
