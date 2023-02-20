@@ -26,51 +26,83 @@
         <n-divider />
 
         <div class="flex justify-center relative">
-          <!-- <div v-show="!isCameraAvailable" class="video w-full bg-black-500"></div> -->
           <video
-            v-show="isCameraAvailable"
-            class="video2 border border-transparent rounded-lg"
+            v-show="!isCameraAvailable && !recordedVideoUrl"
+            class="w-flexible-xl h-flexible-xl bg-black-900 border border-transparent rounded-lg"
+          ></video>
+          <video
+            v-show="isCameraAvailable && !recordedVideoUrl"
+            class="w-flexible-xl h-flexible-xl border border-transparent rounded-lg"
             ref="previewVideoElement"
           ></video>
           <div
-            class="absolute flex gap-4 p-3 border border-transparent rounded-lg bg-transparent mb-3 bottom-0"
+            ref="recordVideoElement"
+            class="flex items-center w-flexible-xl h-flexible-xl justify-center"
+            v-if="recordedVideoUrl"
           >
-            <span @click="toggleAudio()"
-              ><font-awesome-icon :icon="micIcon()"
+            <video
+              class="border border-transparent rounded-lg bg-transparent"
+              :src="recordedVideoUrl"
+              controls
+            ></video>
+          </div>
+          <div
+            class="absolute flex gap-4 p-3 border border-transparent rounded-lg bg-transparent mb-3 bottom-0"
+            v-if="!recordedVideoUrl"
+          >
+            <span
+              @click="toggleAudio()"
+              class="flex items-center justify-center w-4 h-4"
+              ><font-awesome-icon class="" :icon="micIcon()"
             /></span>
-            <span @click="toggleCamera()"
+            <span
+              class="flex items-center justify-center w-4 h-4"
+              @click="toggleCamera()"
               ><font-awesome-icon :icon="videoIcon()"
             /></span>
-            <span><font-awesome-icon icon="fa-solid fa-gear" /></span>
-          </div>
-          <div ref="recordVideoElement" v-if="recordedVideoUrl">
-            <video :src="recordedVideoUrl" controls></video>
+            <span class="flex items-center justify-center w-4 h-4"
+              ><font-awesome-icon icon="fa-solid fa-gear"
+            /></span>
+            <span
+              v-show="recording || recordingPaused"
+              class="flex items-center justify-center w-4 h-4"
+            >
+              <font-awesome-icon
+                @click="togglePauseRecording()"
+                :class="recording ? 'text-red-500' : 'text-black-800'"
+                :icon="recordingIcon()"
+            /></span>
+            <!-- <span class="flex items-center justify-center w-4 h-4"
+              ><font-awesome-icon icon="fa-solid fa-trash"
+            /></span> -->
           </div>
         </div>
 
         <n-divider />
         <template #footer>
           <button
-            class="px-2 space-x-1 py-1 float-left flex hover:bg-transparent rounded italic focus:outline-none"
+            class="px-2 space-x-1 py-1 float-left flex hover:bg-transparent rounded focus:outline-none"
             @click="stopRecording"
           >
             <font-awesome-icon class="mt-1" icon="fa-solid fa-cloud-arrow-up" />
             <span class=""> Upload Video </span>
           </button>
-          <button @click="toggleCamera">Toggle Camera</button>
-          <button
-            class="px-2 py-1 float-right rounded italic focus:outline-none"
-            :class="buttonDisabled ? 'bg-transparent' : 'bg-red-500'"
-            @click="startRecording"
-          >
-            Record
-          </button>
-          <button
-            class="px-2 py-1 float-right rounded italic focus:outline-none"
-            @click="toggleAudio"
-          >
-            Toggle Audio
-          </button>
+
+          <div class="float-right flex gap-2 px-2 py-1">
+            <button
+              v-show="recordedVideoUrl"
+              class="px-2 py-1 rounded hover:bg-red-400 bg-red-300 text-white focus:outline-none"
+              @click="cancelRecording"
+            >
+              start over
+            </button>
+            <button
+              class="px-2 py-1 float-right hover:bg-secondaryHover bg-secondary text-white rounded focus:outline-none"
+              @click="handleActionButton"
+            >
+              {{ recordButton }}
+            </button>
+          </div>
         </template>
       </n-card>
     </n-modal>
@@ -115,8 +147,11 @@ export default {
       videoPlayer: null,
       stream: null,
       recordStream: null,
-      isCameraAvailable: ref(false),
-      isAudioAvailable: ref(false),
+      isCameraAvailable: ref(true),
+      isAudioAvailable: ref(true),
+      recording: ref(false),
+      recordingPaused: ref(false),
+      status: ref('inactive'),
     };
   },
   beforeUnmount() {
@@ -124,9 +159,44 @@ export default {
     this.recordRTC = null;
     this.recordedVideoUrl = null;
     this.videoPlayer = null;
+    this.recordStream = null;
     this.stream = null;
   },
-  mounted() {},
+  mounted() {
+    this.recordRTC = null;
+    this.recordedVideoUrl = null;
+    this.videoPlayer = null;
+    this.recordStream = null;
+    this.stream = null;
+  },
+  computed: {
+    recordButton() {
+      if (this.recording && !this.recordingPaused) {
+        this.status = 'recording';
+        return 'Stop';
+      }
+      if (!this.recording && !this.recordingPaused && !this.recordedVideoUrl) {
+        console.log('asdasdasdasd', this.recordedVideoUrl);
+        this.status = 'inactive';
+        return 'Record';
+      }
+      if (this.recordedVideoUrl) {
+        this.status = 'recorded';
+        console.log('asdasdasdasd', this.recordedVideoUrl, this.status);
+        return 'Done';
+      }
+      if (this.recordingPaused) {
+        return 'Stop';
+      }
+    },
+    buttonDisabled() {
+      if (!this.recordedVideoUrl) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+  },
   methods: {
     micIcon() {
       if (!this.isAudioAvailable) {
@@ -140,18 +210,63 @@ export default {
       }
       return 'fa-solid fa-video';
     },
+    recordingIcon() {
+      if (this.recording) {
+        return 'fa-solid fa-record-vinyl';
+      } else if (this.recordingPaused) {
+        return 'fa-solid fa-pause';
+      }
+    },
     toggleModal() {
       this.showModal = !this.showModal;
       this.recordedVideoUrl = null;
+      this.recordRTC = null;
+      this.recordedVideoUrl = null;
+      this.videoPlayer = null;
+      this.stream = null;
+      this.recordStream = null;
+      this.isAudioAvailable = true;
+      this.isCameraAvailable = false;
+      this.recordingPaused = false;
+      this.recording = false;
     },
     startRecording() {
       if (!this.recordRTC) {
         this.startCamera();
       }
+      this.recording = true;
       this.recordRTC.startRecording();
+    },
+    cancelRecording() {
+      this.recordedVideoUrl = null;
+    },
+    handleActionButton() {
+      if (this.isCameraAvailable) {
+        if (this.status == 'inactive') {
+          this.startRecording();
+        } else if (this.status == 'recorded') {
+          console.log('send..........');
+        } else if (this.status == 'recording') {
+          this.stopRecording();
+        }
+      }
+    },
+    togglePauseRecording() {
+      console.log('running ');
+      if (this.recording) {
+        this.recordRTC.pauseRecording();
+        this.recordingPaused = true;
+        this.recording = false;
+      } else {
+        this.recordRTC.resumeRecording();
+        this.recordingPaused = false;
+        this.recording = true;
+      }
     },
     stopRecording() {
       this.stopCamera();
+      this.recording = false;
+      this.pauseRecording = false;
       this.recordRTC.stopRecording(() => {
         const videoBlob = this.recordRTC.getBlob();
         const videoUrl = URL.createObjectURL(videoBlob);
@@ -214,6 +329,8 @@ export default {
     toggleCamera() {
       if (this.stream) {
         this.stopCamera();
+        this.stream = null;
+        this.recordStream = null;
       } else {
         this.startCamera();
       }

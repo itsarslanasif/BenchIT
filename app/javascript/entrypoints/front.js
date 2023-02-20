@@ -68,6 +68,8 @@ import {
  faMicrophone,
  faVideo,
  faGear,
+ faRecordVinyl,
+ faPause,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -141,6 +143,9 @@ library.add(
   faGear,
   faMicrophone,
   faVideo,
+ faRecordVinyl,
+ faPause,
+
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
