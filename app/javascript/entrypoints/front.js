@@ -62,7 +62,12 @@ import {
   faLink,
   faQuoteRight,
   faToggleOff,
-  faCloudArrowUp
+  faCloudArrowUp,
+  faVideoSlash,
+ faMicrophoneSlash,
+ faMicrophone,
+ faVideo,
+ faGear,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -130,7 +135,12 @@ library.add(
   faLink,
   faQuoteRight,
   faToggleOff,
-  faCloudArrowUp
+  faCloudArrowUp,
+  faVideoSlash,
+  faMicrophoneSlash,
+  faGear,
+  faMicrophone,
+  faVideo,
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
