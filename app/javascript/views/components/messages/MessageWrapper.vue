@@ -168,14 +168,27 @@
           >
           <div
             v-if="!currMessage.info && currMessage.attachments"
-            class="flex gap-2"
+            class="flex gap-10"
           >
             <div
               v-for="attachment in currMessage.attachments"
-              :key="attachment.id"
+              :key="attachment.attachment.id"
               class="w-64"
             >
+              {{ setAttachment(attachment) }}
+              <div
+                v-if="isAudioFile"
+                :class="{
+                  'ml-12': isSameUser && isSameDayMessage && !isFirstMessage,
+                }"
+              >
+                <visualize-voice
+                  :fileID="currAttachment.attachment.id"
+                  :audioURL="currAttachment.attachment_link"
+                />
+              </div>
               <n-popover
+                v-if="!isAudioFile"
                 class="rounded-md border-black-300 border text-black-600"
                 placement="top-end"
                 trigger="hover"
@@ -187,7 +200,7 @@
                       'ml-12':
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
-                    v-if="isTxtFile(attachment.attachment_link)"
+                    v-if="isTxtFile"
                   >
                     <font-awesome-icon
                       class="w-10 h-10"
@@ -392,6 +405,7 @@ import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
+import VisualizeVoice from '../editor/VisualizeVoice.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -441,6 +455,7 @@ export default {
     EditedAtTime,
     UnPinModal,
     MessageSection,
+    VisualizeVoice,
   },
   props: {
     currMessage: {
@@ -479,6 +494,7 @@ export default {
       showFileOptions: false,
       showDeleteModal: false,
       showUnpinModal: false,
+      currAttachment: null,
     };
   },
   beforeUnmount() {
@@ -558,11 +574,20 @@ export default {
     isDeleted() {
       return this.currMessage.content === this.$t('deleteMessageModal.success');
     },
+    isTxtFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'txt';
+    },
+    isAudioFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'wav';
+    },
   },
   methods: {
-    isTxtFile(url) {
-      const fileExtension = url.split('/').pop().split('.').pop();
-      return fileExtension === 'txt';
+    setAttachment(attachment) {
+      this.currAttachment = attachment;
     },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
