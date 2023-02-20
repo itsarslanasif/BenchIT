@@ -160,7 +160,7 @@
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
-              currMessage.content === $t('deleteMessageModal.success')
+              (JSON.parse(this.currMessage.content).blocks[0].text.text === $t('deleteMessageModal.success'))
             "
             class="text-black-600 text-sm flex mt-2"
           >
@@ -295,7 +295,7 @@
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
             (emojiModalStatus || openEmojiModal || showOptions) &&
-            currMessage.content !== $t('deleteMessageModal.success')
+            (JSON.parse(this.currMessage.content).blocks[0].text.text !== $t('deleteMessageModal.success'))
           "
         >
           <template v-for="emoji in topReactions" :key="emoji">
@@ -572,7 +572,7 @@ export default {
       return savedMessage ? true : false;
     },
     isDeleted() {
-      return this.currMessage.content === this.$t('deleteMessageModal.success');
+      return JSON.parse(this.currMessage.content).blocks[0].text.text  === this.$t('deleteMessageModal.success');
     },
     isTxtFile() {
       const fileExtension =
@@ -723,7 +723,7 @@ export default {
     downloadFile(attachment) {
       try {
         fileDownload(attachment).then(response => {
-          this.downloadsStore.downloads.unshift(response.data);
+          this.downloadsStore.downloads.unshift(response.data.download);
           this.downloadsStore.response = response;
           this.downloadsStore.downloadAlert = true;
         });

@@ -1,4 +1,5 @@
 class Api::V1::WorkspacesController < Api::ApiController
+  before_action :authorization, only: %i[create invite]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
@@ -21,7 +22,7 @@ class Api::V1::WorkspacesController < Api::ApiController
     create_invitable if @user.present?
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
     render json: { success: true, message: t('.invite.success',
-                                             { email: params[:email], company_name: @workspace.company_name }) }, status: :ok
+                                             email: params[:email], company_name: @workspace.company_name) }, status: :ok
   end
 
   def create_invitable
@@ -58,5 +59,9 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { success: false, error: t('.check_profile.failure') }, status: :unprocessable_entity
+  end
+
+  def authorization
+    authorize Workspace
   end
 end

@@ -115,7 +115,6 @@ export default {
           if (fileExtension == 'webm;codecs=opus') {
             filename += '.wav';
             file = this.getFileFromBlob(file, filename);
-            console.log('audio', message, file);
           } else {
             filename += `.${fileExtension}`;
           }
