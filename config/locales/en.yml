@@ -390,6 +390,8 @@ en:
         channels: 'channels'
         groups: 'groups'
         profiles: 'profiles'
+      preferences:
+        title: 'Preferences'
     admin:
       title: 'Admin'
       save: 'Save'

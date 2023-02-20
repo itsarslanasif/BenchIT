@@ -41,11 +41,14 @@
     </n-dropdown>
     <DownloadModal v-model:show="showModal" />
     <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp" />
+    <n-modal v-model:show="preferencesModal" >
+      <Preferences/>
+    </n-modal>
   </div>
 </template>
 
 <script>
-import { NDropdown, NAvatar, NText, NTooltip } from 'naive-ui';
+import { NDropdown, NAvatar, NText, NTooltip, NModal } from 'naive-ui';
 import { h } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
@@ -58,6 +61,7 @@ import moment from 'moment';
 import { clearStatus } from '../../api/profiles/profileStatus';
 import { setActiveStatus } from '../../api/profiles/profileStatus';
 import { removeActiveStatus } from '../../api/profiles/profileStatus';
+import Preferences from '../components/preferences/Preferences.vue';
 
 export default {
   components: {
@@ -66,6 +70,8 @@ export default {
     DownloadModal,
     SetProfileStatusModal,
     NTooltip,
+    NModal,
+    Preferences
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
@@ -99,6 +105,7 @@ export default {
       status: '',
       prevStatus: '',
       statusIcon: '',
+      preferencesModal: false,
       showModal: false,
       options: [
         {
@@ -247,6 +254,9 @@ export default {
           sessionStorage.removeItem('currentWorkspace');
           sessionStorage.removeItem('currentProfile');
           this.$router.push('/workspace_dashboard');
+          break;
+        case 'preferences':
+          this.preferencesModal = !this.preferencesModal
           break;
         case 'downloads':
           this.showModal = true;
