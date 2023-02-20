@@ -1,5 +1,7 @@
 json.id saved_item.id
-json.message saved_item.conversation_message
+json.message do
+  json.partial! 'api/v1/shared/partials/message', message: saved_item.conversation_message
+end
 json.profile do
   json.partial! 'api/v1/shared/partials/profile', profile: saved_item.conversation_message.profile
 end
