@@ -35,12 +35,14 @@ class Profile < ApplicationRecord
   has_many :schedule_messages, dependent: :destroy
   has_many :direct_message_users, dependent: :destroy
 
+  before_validation :split_time_zone
+
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
   validates :display_name, length: { maximum: 80 }
   validates :text_status, length: { maximum: 100 }
   validates :pronounce_name, length: { maximum: 20 }
-  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  #validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
   validates :workspace, uniqueness: { scope: %i[user_id] }
 
   enum role: {
@@ -105,7 +107,7 @@ class Profile < ApplicationRecord
       status: text_status.present? ? { text: text_status, emoji: emoji_status, clear_after: clear_status_after } : nil,
       contact_info: { email: user.email, phone: phone },
       about_me: { skype: skype },
-      local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p'),
+      local_time: Time.current.in_time_zone(time_zone.split.second).strftime('%I:%M %p'),
       is_active: is_active
     }
   end
@@ -117,4 +119,18 @@ class Profile < ApplicationRecord
   def get_favourite_id(favourable_id, favourable_type)
     Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
   end
+
+  def split_time_zone
+    # debugger
+    # time_zone = time_zone.split.second
+  end
+
+  # def formatted_time_zone
+  #   ActiveSupport::TimeZone.all.map do |zone|
+  #     # use strftime to format the time zone
+  #     zone_formatted = zone.now.strftime('%:z')
+  #     # use zone name and formatted zone to create a hash
+  #     { name: zone.name, formatted: zone_formatted }
+  #   end
+  # end
 end

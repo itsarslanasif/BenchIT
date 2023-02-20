@@ -1,6 +1,9 @@
 <template>
   <div>
     <right-pane-header :paneTitle="$t('rightpane.profile')" />
+    <n-modal v-model:show="editProfileFlag">
+      <EditProfile :toggleEditProfile="toggleEditProfile" />
+    </n-modal>
     <div
       v-if="userProfileStore.userProfile"
       class="flex flex-col overflow-auto paneBody"
@@ -19,6 +22,7 @@
           </p>
           <p
             v-if="ownProfile"
+            @click="toggleEditProfile"
             class="col-span-1 self-center text-info cursor-pointer hover:underline"
           >
             {{ $t('actions.edit') }}
@@ -304,13 +308,14 @@
 </template>
 
 <script>
-import { NDivider, NTooltip } from 'naive-ui';
+import { NDivider, NTooltip, NModal } from 'naive-ui';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
 import EditAboutMeModal from '../../widgets/EditAboutMeModal.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import EditProfile from '../editprofile/editProfile.vue'
 
 export default {
   components: {
@@ -319,11 +324,14 @@ export default {
     NTooltip,
     EditContactInfoModal,
     EditAboutMeModal,
+    NModal,
+    EditProfile,
   },
   data() {
     return {
       showContactInfoModal: false,
       showAboutMeModal: false,
+      editProfileFlag: false
     };
   },
   setup() {
@@ -365,6 +373,9 @@ export default {
       this.messagesStore.setSelectedChat(user);
       this.$router.push(chatURL);
     },
+    toggleEditProfile() {
+      this.editProfileFlag = !this.editProfileFlag;
+    }
   },
 };
 </script>
