@@ -28,6 +28,7 @@ class ApplicationController < ActionController::Base
       TypeError => { message: I18n.t('application.render_error.type_error'), status: :unprocessable_entity },
       IndexError => { message: I18n.t('application.render_error.index_error'), status: :unprocessable_entity },
       NameError => { message: I18n.t('application.render_error.name_error'), status: :unprocessable_entity },
+      CanCan::AccessDenied => { message: I18n.t('application.render_error.unauthorized_error'), status: :unauthorized },
       :else => { message: I18n.t('application.render_error.server_error'), status: :internal_server_error }
     }
     error_data = error_map[exception.class] || error_map[:else]
