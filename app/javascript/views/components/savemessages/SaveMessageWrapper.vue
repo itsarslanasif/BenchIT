@@ -20,13 +20,17 @@
       <div
         class="flex m-1 text-xs text-black-600 font-semibold hover:underline cursor-pointer"
       >
-        <div v-if="message.conversation_type == 'Profile'">Direct Message</div>
-        <div v-else-if="message.conversation_type == 'BenchChannel'">
+        <div v-if="message.conversation_type == $t('conversation.profile')">
+          {{ $t('conversation.direct_message') }}
+        </div>
+        <div
+          v-else-if="message.conversation_type == $t('conversation.channel')"
+        >
           <font-awesome-icon :icon="getChannelIcon(message.receiver)" />
           {{ message.receiver.name }}
         </div>
-        <div v-else-if="message.conversation_type == 'Group'">
-          Group Message
+        <div v-else-if="message.conversation_type == $t('conversation.group')">
+          {{ $t('conversation.group_message') }}
         </div>
       </div>
       <div class="flex">
@@ -150,7 +154,7 @@ export default {
     NAvatar,
     EmojiPicker,
     EmojiModalButton,
-    MessageSection
+    MessageSection,
   },
   props: {
     currMessage: {
@@ -220,9 +224,9 @@ export default {
     messageBlock(message) {
       return JSON.parse(message);
     },
-    getChannelIcon(channel){
-      return `fa-${channel.is_private ? 'lock' : 'hashtag'}`
-    }
+    getChannelIcon(channel) {
+      return `fa-${channel.is_private ? 'lock' : 'hashtag'}`;
+    },
   },
 };
 </script>

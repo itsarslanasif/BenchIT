@@ -118,6 +118,7 @@ en:
         channel: 'BenchChannel'
         profile: 'Profile'
         group: 'Group'
+        direct_message: 'Direct Message'
       rightpane:
         send: 'Send'
         replies: 'replies'
@@ -390,6 +391,8 @@ en:
         channels: 'channels'
         groups: 'groups'
         profiles: 'profiles'
+        group_type: 'Group'
+        group_message: 'Group Messages'
     admin:
       title: 'Admin'
       save: 'Save'
