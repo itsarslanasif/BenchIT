@@ -1,9 +1,9 @@
 <template>
   <div
-  v-for="item in searches"
-  :key="item.id"
-  @click="goToChat(item)"
-  class="hover:bg-slate-600 p-2 rounded"
+    v-for="item in searches"
+    :key="item.id"
+    @click="goToChat(item)"
+    class="hover:bg-slate-600 p-2 rounded"
   >
     <div class="flex items-center">
       <div v-if="item.sender_avatar" class="ml-3">
@@ -64,7 +64,7 @@ import MessageSection from '../components/messages/MessageSection.vue';
 
 export default {
   components: {
-    MessageSection
+    MessageSection,
   },
   props: ['searches', 'closeSearchModal'],
   setup() {
@@ -75,17 +75,17 @@ export default {
   },
   methods: {
     messageBlock(message) {
-      return JSON.parse(message)
+      return JSON.parse(message);
     },
     goToChat(item) {
-      let conversationType
+      let conversationType;
 
       if (item['workspace_id']) {
-        conversationType = 'profiles'
+        conversationType = 'profiles';
       } else if (item['creator_id']) {
-        conversationType = 'channels'
+        conversationType = 'channels';
       } else {
-        conversationType = 'groups'
+        conversationType = 'groups';
       }
 
       this.$router.push(`/${conversationType}/${item.id}`);
@@ -96,7 +96,7 @@ export default {
 
       this.closeSearchModal();
     },
-    
+
     isMobileView() {
       return window.innerWidth < 1400;
     },
