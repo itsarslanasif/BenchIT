@@ -98,19 +98,26 @@
                 }}
               </p>
             </span>
-            <div
-              v-if="
-                isSameUser &&
-                isSameDayMessage &&
-                !isFirstMessage &&
-                !currMessage.is_info &&
-                !isDeleted
-              "
-            >
-              <MessageSection
-                v-if="block.type === 'section'"
-                :section="block"
-              />
+            <div>
+              <div
+                v-if="
+                  isSameUser &&
+                  isSameDayMessage &&
+                  !isFirstMessage &&
+                  !currMessage.is_info &&
+                  !isDeleted
+                "
+              >
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+                />
+              <div v-if="isSharedMessage" class="flex ml-4 flex-center">
+                  <ShareMessageVue
+                      :currMessage="currMessage.shared_message"
+                  />
+              </div>
+              </div>
             </div>
             <span
               v-if="
@@ -156,6 +163,11 @@
                 :updated_at="currMessage.updated_at"
               />
             </div>
+              <div v-if="isSharedMessage" class="flex ml-4 flex-center">
+                  <ShareMessageVue
+                      :currMessage="currMessage.shared_message"
+                  />
+              </div>
           </span>
           <span
             v-if="
@@ -333,6 +345,7 @@
           <EmojiModalButton
             icon="fa-solid fa-share"
             :actionText="$t('emojiModalButton.share_message')"
+            :action="setShareModalVisibility"
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
@@ -361,9 +374,15 @@
     />
   </div>
   <DeleteMessageModal
-    v-model:show="showDeleteModal"
+    v-model:show="showDeleteModal2"
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
+  />
+  <ShareMessageModal
+    v-model:show="sharedModalVisibility"
+    :message="currMessage"
+    :setDeleteModal="setShareModalVisibility"
+    :isModalVisible="setShareModalVisibility"
   />
   <div
     class="bg-yellow-100 pl-16 p-2"
@@ -415,7 +434,9 @@ import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
+import ShareMessageVue from '../../widgets/sharedMessage.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
+import ShareMessageModal from '../../widgets/shareMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
@@ -463,7 +484,9 @@ export default {
     NPopover,
     downloadsModal,
     ReplyAndThreadButton,
+    ShareMessageVue,
     DeleteMessageModal,
+    ShareMessageModal,
     NAvatar,
     TextEditorVue,
     EditedAtTime,
@@ -509,6 +532,8 @@ export default {
       showDeleteModal: false,
       showUnpinModal: false,
       currAttachment: null,
+      sharedMessage: '',
+      sharedModalVisibility: false,
     };
   },
   beforeUnmount() {
@@ -597,6 +622,9 @@ export default {
       const fileExtension =
         this.currAttachment.attachment.filename.split('.')[1];
       return fileExtension === 'wav';
+    },
+    isSharedMessage() {
+      return this.currMessage.shared_message != null;
     },
   },
   methods: {
@@ -767,6 +795,16 @@ export default {
 
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
+    },
+
+    getSharedMessage() {
+      debugger;
+
+      this.sharedMessage = this.messagesStore.getSharedMessage(this.currMessage.shared_message_id)
+    },
+
+    setShareModalVisibility() {
+      this.sharedModalVisibility = !this.sharedModalVisibility;
     },
   },
 };

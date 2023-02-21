@@ -3,6 +3,7 @@ json.sender_name message.profile.username
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
 json.is_edited message.created_at != message.updated_at
+json.shared_messaged message.shared_message_id
 json.sender_avatar url_for(message.profile.profile_image) if message.profile.profile_image.attached?
 json.partial! 'api/v1/reactions/partials/reactions', reactions: message.reactions
 json.isSaved saved?(message)
@@ -23,6 +24,11 @@ if message.parent_message_id.blank?
     if get_draft(message.bench_conversation_id, message.id).present?
       json.partial! 'api/v1/draft_messages/partials/draft_message', message: get_draft(message.bench_conversation_id, message.id)
     end
+  end
+end
+if message.shared_message_id.present?
+  json.shared_message do
+    json.partial! 'api/v1/shared/partials/message', message: ConversationMessage.find_by(id: message.shared_message_id)
   end
 end
 json.bench_conversation_id message.bench_conversation_id
