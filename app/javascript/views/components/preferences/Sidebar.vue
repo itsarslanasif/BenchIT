@@ -1,63 +1,53 @@
 <template lang="">
   <div>
     <div class="my-3">
-      <strong>Notify me about...</strong>
+      <strong>{{ sidebarSettings.alwaysShowOnSidebar.title }}</strong>
       <div class="mt-2">
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Unreads</label
-        ><br />
-        
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Direct messages</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Mentions & reactions</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Draft & sent</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Saved items</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Connect</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >All channels</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Files</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >People & user group</label
-        ><br />
-
-        <input type="checkbox" id="notify-me-when-huddle-starts" />
-        <label for="notify-me-when-huddle-starts" class="pl-3"
-          >Apps</label
+        <div v-for="item in sidebarSettings.alwaysShowOnSidebar.settings">
+          <input type="checkbox" :id="item.field" />
+          <label :for="item.field" class="pl-3">{{ item.label }}</label
+          ><br />
+        </div>
+      </div>
+    </div>
+    <hr class="my-3" />
+    <div>
+      <strong>{{ sidebarSettings.show.title }}</strong>
+      <div v-for="item in sidebarSettings.show.settings">
+        <input type="radio" :id="item.field" />
+        <label :for="item.field" class="pl-3">{{ item.label }}</label
         ><br />
       </div>
     </div>
-    <hr class="py-3" />
+    <hr class="my-3" />
+    <div>
+      <strong>{{ sidebarSettings.sort.title }}</strong>
+      <div>
+        <div v-for="item in sidebarSettings.sort.settings">
+          <input type="radio" :id="item.field" />
+          <label :for="item.field" class="pl-3">{{ item.label }}</label
+          ><br />
+        </div>
+      </div>
+    </div>
+    <hr class="my-3" />
+    <div class="my-3">
+      <div v-for="item in sidebarSettings.other.settings">
+        <input type="checkbox" :id="item.field" />
+        <label :for="item.field" class="pl-3">{{ item.label }}</label
+        ><br />
+      </div>
+    </div>
   </div>
 </template>
 <script>
-export default {};
+import { sidebarSettings } from '../../../assets/settings/sidebar';
+export default {
+  data() {
+    return {
+      sidebarSettings,
+    };
+  },
+};
 </script>
 <style lang=""></style>

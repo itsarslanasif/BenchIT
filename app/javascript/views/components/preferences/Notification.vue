@@ -145,7 +145,6 @@
 import { notificationSettings } from '../../../assets/settings/notification';
 export default {
   data() {
-    console.log(notificationSettings);
     return {
       notifyMeAbout: '',
       differentSettingForMobile: '',
