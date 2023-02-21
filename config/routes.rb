@@ -37,6 +37,7 @@ Rails.application.routes.draw do
             get :index_saved_messages
             get :recent_files
             get :unread_messages
+            get :reactions
           end
           member do
             post :save_message
