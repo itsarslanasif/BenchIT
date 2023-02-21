@@ -25,6 +25,12 @@ class Ability
     can %i[create], ConversationMessage do |message|
       check_ability_for_create(message, profile)
     end
+
+    can %i[create], ScheduleMessage do |message|
+      check_ability_for_create(message, profile)
+    end
+
+    can %i[destroy send_now update], ScheduleMessage, profile_id: profile.id
   end
 
   private

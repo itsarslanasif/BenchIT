@@ -2,14 +2,15 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   include MemberShip
   include Pagination
 
-  before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
-  before_action :delete_job, only: %i[destroy]
+  before_action :set_schedule_message, only: %i[destroy update send_now]
+  before_action :authenticate_message, :delete_job, only: %i[destroy]
 
   def index
     @pagy, @messages = pagination_for_schedule_messages(params[:page])
   end
 
   def update
+    authorize! :update, @schedule_message
     @schedule_message.update!(schedule_message_params)
 
     if params[:scheduled_at].present?
@@ -26,6 +27,8 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def send_now
+    authorize! :send_now, @schedule_message
+
     ActiveRecord::Base.transaction do
       delete_job
       current_profile.conversation_messages.create!(content: @schedule_message.content,
@@ -49,11 +52,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def authenticate_message
-    if @schedule_message.profile_id.eql?(current_profile.id)
-      check_membership(@schedule_message.bench_conversation)
-    else
-      render json: { success: false, error: t('authenticate_message.failure') }, status: :unauthorized
-    end
+    authorize! :destroy, @schedule_message
   end
 
   def delete_job
