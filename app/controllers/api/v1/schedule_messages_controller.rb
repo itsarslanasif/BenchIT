@@ -1,5 +1,4 @@
 class Api::V1::ScheduleMessagesController < Api::ApiController
-  include MemberShip
   include Pagination
 
   before_action :set_schedule_message, only: %i[destroy update send_now]
