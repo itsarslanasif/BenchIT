@@ -3,7 +3,7 @@ en:
     v1:
       downloads:
         create:
-          success: Downloa has been created successfully.
+          success: Download has been created successfully.
         destroy:
           success: Download has been deleted successfully.
         clear_all:

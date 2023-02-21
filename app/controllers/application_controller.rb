@@ -19,10 +19,15 @@ class ApplicationController < ActionController::Base
       ActiveRecord::RecordNotSaved => { message: I18n.t('application.render_error.not_saved_error'), status: :unprocessable_entity },
       NoMethodError => { message: I18n.t('application.render_error.no_method_error'), status: :unprocessable_entity },
       UnAuthorized => { message: I18n.t('application.render_error.unauthorized_error'), status: :unauthorized },
-      Pundit::NotAuthorizedError => { message: I18n.t('application.render_error.unauthorized_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotUnique => { message: I18n.t('application.render_error.unique_error'), status: :unprocessable_entity },
       ActiveRecord::RecordNotDestroyed => { message: I18n.t('application.render_error.not_destroy_error'), status: :unprocessable_entity },
+      ActiveRecord::NotNullViolation => { message: t('application.render_error.not_null_violation_error'), status: :bad_request },
       PaginationError => { message: I18n.t('application.render_error.pagination_error'), status: :unprocessable_entity },
+      ArgumentError => { message: I18n.t('application.render_error.argument_error'), status: :unprocessable_entity },
+      SyntaxError => { message: I18n.t('application.render_error.syntax_error'), status: :unprocessable_entity },
+      TypeError => { message: I18n.t('application.render_error.type_error'), status: :unprocessable_entity },
+      IndexError => { message: I18n.t('application.render_error.index_error'), status: :unprocessable_entity },
+      NameError => { message: I18n.t('application.render_error.name_error'), status: :unprocessable_entity },
       :else => { message: I18n.t('application.render_error.server_error'), status: :internal_server_error }
     }
     error_data = error_map[exception.class] || error_map[:else]
