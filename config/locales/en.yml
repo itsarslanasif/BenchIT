@@ -376,6 +376,7 @@ en:
         record: 'Record'
         inactive: 'inactive'
         recording: 'recording'
+        record_video_clip: 'Record video clip'
       welcome:
         no_chat_selected: 'No Chat Selected'
         tagline: 'Select any chat from sidebar to see messages'

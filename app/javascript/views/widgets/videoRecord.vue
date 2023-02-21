@@ -10,7 +10,7 @@
     <n-modal v-model:show="showModal">
       <n-card
         class="w-6/12"
-        title="Record video clip"
+        :title="$t('video_recording.record_video_clip')"
         :bordered="false"
         size="huge"
         role="dialog"
