@@ -135,7 +135,6 @@ export default {
       return file;
     },
     sendMessage(message, files, schedule) {
-      console.log(message);
       let formData = new FormData();
       formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
@@ -153,15 +152,11 @@ export default {
           fileExtension == 'x-matroska;codecs=avc1,opus' ||
           fileExtension == 'x-matroska;codecs=avc1'
         ) {
-          console.log('asdasdasdasdasdasdsd:', fileExtension);
           filename += '.mp4';
           file = this.getFileFromBlob(file, filename);
-          console.log('if:', file, filename);
         } else {
           filename += `.${fileExtension}`;
-          console.log('else:', filename, message);
         }
-        console.log('File:', file, filename);
         formData.append('message_attachments[]', file, filename);
       });
       conversation(formData).then(res => {

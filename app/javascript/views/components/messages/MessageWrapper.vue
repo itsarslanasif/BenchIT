@@ -576,12 +576,10 @@ export default {
   methods: {
     isTxtFile(url) {
       const fileExtension = url.split('/').pop().split('.').pop();
-      console.log(fileExtension);
       return fileExtension === 'txt';
     },
     ismp4File(url) {
       const fileExtension = url.split('/').pop().split('.').pop();
-      console.log(fileExtension);
       return fileExtension === 'mp4';
     },
     editMessage(text) {

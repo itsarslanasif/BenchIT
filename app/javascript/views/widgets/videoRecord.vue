@@ -23,8 +23,6 @@
             icon="fa-solid fa-xmark"
           />
         </template>
-        <!-- <n-divider /> -->
-
         <div class="flex justify-center relative">
           <video
             v-show="!isCameraAvailable && !recordedVideoUrl"
@@ -53,13 +51,13 @@
             <span
               @click="toggleAudio()"
               class="flex items-center justify-center w-4 h-4"
-              ><font-awesome-icon class="" :icon="micIcon()"
+              ><font-awesome-icon class="" :icon="micIcon"
             /></span>
             <span
               v-show="toggleCameraButton"
               class="flex items-center justify-center w-4 h-4"
               @click="toggleCamera()"
-              ><font-awesome-icon :icon="videoIcon()"
+              ><font-awesome-icon :icon="videoIcon"
             /></span>
             <span class="flex items-center justify-center w-4 h-4"
               ><font-awesome-icon icon="fa-solid fa-gear"
@@ -71,7 +69,7 @@
               <font-awesome-icon
                 @click="togglePauseRecording()"
                 :class="recording ? 'text-red-800' : 'text-black-500'"
-                :icon="recordingIcon()"
+                :icon="recordingIcon"
             /></span>
           </div>
         </div>
@@ -156,7 +154,6 @@ export default {
   data() {
     return {
       showModal: ref(false),
-      buttonDisabled: ref(true),
       recordRTC: null,
       recordedVideoUrl: null,
       videoFile: null,
@@ -172,7 +169,6 @@ export default {
     };
   },
   beforeUnmount() {
-    console.log('unmounted');
     this.recordRTC = null;
     this.recordedVideoUrl = null;
     this.videoPlayer = null;
@@ -189,53 +185,43 @@ export default {
   },
   computed: {
     recordButton() {
-      if (this.recording && !this.recordingPaused) {
+      if (this.recordedVideoUrl) {
+        this.status = 'recorded';
+        return 'Done';
+      }
+      if (this.recordingPaused || (this.recording && !this.recordingPaused)) {
         this.status = 'recording';
         return 'Stop';
       }
-      if (!this.recording && !this.recordingPaused && !this.recordedVideoUrl) {
-        console.log('asdasdasdasd', this.recordedVideoUrl);
-        this.status = 'inactive';
-        return 'Record';
-      }
-      if (this.recordedVideoUrl) {
-        this.status = 'recorded';
-        console.log('asdasdasdasd', this.recordedVideoUrl, this.status);
-        return 'Done';
-      }
-      if (this.recordingPaused) {
-        return 'Stop';
-      }
+      this.status = 'inactive';
+      return 'Record';
     },
-    buttonDisabled() {
-      if (!this.recordedVideoUrl) {
-        return true;
-      } else {
-        return false;
-      }
-    },
+
     toggleCameraButton() {
-      if (this.screenRecord) {
-        return false;
-      } else if (this.status == 'recording') {
-        return false;
-      } else {
-        return true;
-      }
+      return this.screenRecord || this.status === 'recording' ? false : true;
+    },
+
+    recordingIcon() {
+      return this.recording
+        ? 'fa-solid fa-record-vinyl'
+        : this.recordingPaused
+        ? 'fa-solid fa-pause'
+        : '';
+    },
+
+    micIcon() {
+      return this.isAudioAvailable
+        ? 'fa-solid fa-microphone'
+        : 'fa-solid fa-microphone-slash';
+    },
+    videoIcon() {
+      return this.isCameraAvailable
+        ? 'fa-solid fa-video'
+        : 'fa-solid fa-video-slash';
     },
   },
   methods: {
-    selectFile() {
-      this.$refs.fileInput.click();
-    },
-    micIcon() {
-      if (!this.isAudioAvailable) {
-        return 'fa-solid fa-microphone-slash';
-      }
-      return 'fa-solid fa-microphone';
-    },
     handleFileUpload() {
-      console.log('file uploaded');
       const file = this.$refs.fileInput.files[0];
       if (file) {
         this.videoFile = file;
@@ -243,37 +229,11 @@ export default {
         this.status = 'recorded';
       }
     },
-    videoIcon() {
-      if (!this.isCameraAvailable) {
-        return 'fa-solid fa-video-slash';
-      }
-      return 'fa-solid fa-video';
+
+    selectFile() {
+      this.$refs.fileInput.click();
     },
-    recordingIcon() {
-      if (this.recording) {
-        return 'fa-solid fa-record-vinyl';
-      } else if (this.recordingPaused) {
-        return 'fa-solid fa-pause';
-      }
-    },
-    toggleModal() {
-      this.showModal = !this.showModal;
-      this.recordedVideoUrl = null;
-      this.recordRTC = null;
-      this.videoFile = null;
-      this.videoPlayer = null;
-      this.stream = null;
-      this.recordStream = null;
-      this.isAudioAvailable = true;
-      this.isCameraAvailable = false;
-      this.recordingPaused = false;
-      this.recording = false;
-    },
-    toggleScreenRecording() {
-      console.log('toggleScreenRecording');
-      this.screenRecord = !this.screenRecord;
-      this.startCamera();
-    },
+
     startRecording() {
       if (!this.recordRTC) {
         this.startCamera();
@@ -281,6 +241,7 @@ export default {
       this.recording = true;
       this.recordRTC.startRecording();
     },
+
     cancelRecording() {
       this.recordedVideoUrl = null;
       this.videoFile = null;
@@ -288,27 +249,20 @@ export default {
     },
 
     handleActionButton() {
-      if (this.status == 'inactive') {
-        this.startRecording();
-      } else if (this.status == 'recorded') {
-        this.getVideoFiles(this.videoFile);
-        this.toggleModal();
-      } else if (this.status == 'recording') {
-        this.stopRecording();
+      switch (this.status) {
+        case 'inactive':
+          this.startRecording();
+          break;
+        case 'recorded':
+          this.getVideoFiles(this.videoFile);
+          this.toggleModal();
+          break;
+        case 'recording':
+          this.stopRecording();
+          break;
       }
     },
-    togglePauseRecording() {
-      console.log('running ');
-      if (this.recording) {
-        this.recordRTC.pauseRecording();
-        this.recordingPaused = true;
-        this.recording = false;
-      } else {
-        this.recordRTC.resumeRecording();
-        this.recordingPaused = false;
-        this.recording = true;
-      }
-    },
+
     stopRecording() {
       this.stopCamera();
       this.recording = false;
@@ -319,9 +273,9 @@ export default {
         this.videoFile = videoBlob;
         const videoUrl = URL.createObjectURL(videoBlob);
         this.recordedVideoUrl = videoUrl;
-        console.log('bloooooob', this.videoFile);
       });
     },
+
     async startCamera() {
       const constraints = {
         video: true,
@@ -372,15 +326,18 @@ export default {
       }
     },
 
-    toggleAudio() {
-      this.isAudioAvailable = !this.isAudioAvailable;
-      console.log(!this.isAudioAvailable);
-      var audioTrack = this.recordStream.getAudioTracks()[0];
-      if (this.isAudioAvailable) {
-        audioTrack.enabled = true;
-      } else {
-        audioTrack.enabled = false;
-      }
+    toggleModal() {
+      this.showModal = !this.showModal;
+      this.recordedVideoUrl = null;
+      this.recordRTC = null;
+      this.videoFile = null;
+      this.videoPlayer = null;
+      this.stream = null;
+      this.recordStream = null;
+      this.isAudioAvailable = true;
+      this.isCameraAvailable = false;
+      this.recordingPaused = false;
+      this.recording = false;
     },
 
     stopCamera() {
@@ -388,6 +345,26 @@ export default {
       this.stream = null;
       this.isCameraAvailable = false;
     },
+
+    toggleScreenRecording() {
+      this.screenRecord = !this.screenRecord;
+      this.startCamera();
+    },
+
+    togglePauseRecording() {
+      this.recordingPaused = !this.recordingPaused;
+      this.recording
+        ? this.recordRTC.pauseRecording()
+        : this.recordRTC.resumeRecording();
+      this.recording = !this.recordingPaused;
+    },
+
+    toggleAudio() {
+      this.isAudioAvailable = !this.isAudioAvailable;
+      const audioTrack = this.recordStream.getAudioTracks()[0];
+      audioTrack.enabled = this.isAudioAvailable;
+    },
+
     toggleCamera() {
       if (this.stream) {
         this.stopCamera();
@@ -400,13 +377,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.video {
-  height: 580px;
-}
-.video2 {
-  width: 100%;
-  height: auto;
-}
-</style>

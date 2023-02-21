@@ -118,12 +118,9 @@ export default {
         ) {
           filename += '.mp4';
           file = this.getFileFromBlob(file, filename);
-          console.log('if:', file, filename);
         } else {
           filename += `.${fileExtension}`;
-          console.log('else:', filename, message);
         }
-        console.log('File:', file, filename);
         formData.append('message_attachments[]', file, filename);
       });
       try {
