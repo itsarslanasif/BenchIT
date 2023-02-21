@@ -1,6 +1,8 @@
 <template>
   <WorkspaceDropdown />
-  <div class="bg-primary flex flex-col h-full overflow-y-auto overflow-x-hidden">
+  <div
+    class="bg-primary flex flex-col h-full overflow-y-auto overflow-x-hidden"
+  >
     <hr class="text-slate-400" />
     <div class="mt-4 mb-4 text-white">
       <IconElement icon="fa-regular fa-comment" :name="$t('sidebar.threads')" />
@@ -25,7 +27,23 @@
         :name="$t('sidebar.all_channels')"
         @click="goTo(`/browse-channels`)"
       />
-      <IconElement icon="fa-ellipsis-vertical" :name="$t('sidebar.more')" />
+      <IconElement
+        icon="fa-ellipsis-vertical"
+        :name="$t('sidebar.more')"
+        @click="toggleShow()"
+      />
+      <n-dropdown
+        class="rounded-md border ml-4 border-slate-100"
+        placement="bottom-end"
+        size="small"
+        :show="showMore"
+        :options="moreOptions"
+        :render-icon="renderDropdownIcon"
+        @select="handleSelect($event)"
+        :on-clickoutside="toggleShow"
+      >
+        <p />
+      </n-dropdown>
     </div>
     <hr class="text-slate-400" />
     <div>
@@ -42,6 +60,28 @@ import IconElement from '../../widgets/IconElement.vue';
 import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vue';
 import WorkspaceDropdown from '../../widgets/workspaceDropdown/WorkspaceDropdown.vue';
 import StarredChannelsAccordion from '../channels/StarredChannelsAccordion.vue';
+import { CONSTANTS } from '../../../assets/constants';
+import { h, ref } from 'vue';
+import { NDropdown } from 'naive-ui';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import {
+  faStream,
+  faComments,
+  faAt,
+  faPaperPlane,
+  faAddressBook,
+  faBookmark,
+  faHashtag,
+  faFile,
+  faNetworkWired,
+  faShapes,
+} from '@fortawesome/free-solid-svg-icons';
+
+const renderDropdownIcon = icon => {
+  return () => {
+    return h(FontAwesomeIcon, { icon });
+  };
+};
 export default {
   components: {
     ChannelsAccordion,
@@ -49,12 +89,119 @@ export default {
     DirectMessageAccordian,
     WorkspaceDropdown,
     StarredChannelsAccordion,
+    NDropdown,
   },
-
-  methods: {
-    goTo(url) {
+  setup() {
+    let showMore = ref(false);
+    const generateKey = label => {
+      return label.toLowerCase().replace(/ /g, '-');
+    };
+    const moreOptions = [
+      {
+        label: CONSTANTS.UNREADS,
+        key: generateKey(CONSTANTS.UNREADS),
+        icon: renderDropdownIcon(faStream),
+      },
+      {
+        label: CONSTANTS.DIRECT_MESSAGES,
+        key: generateKey(CONSTANTS.DIRECT_MESSAGES),
+        icon: renderDropdownIcon(faComments),
+      },
+      {
+        label: CONSTANTS.MENTIONS_AND_REACTIONS,
+        key: generateKey(CONSTANTS.MENTIONS_AND_REACTIONS),
+        icon: renderDropdownIcon(faAt),
+      },
+      {
+        label: CONSTANTS.DRAFT_AND_SEND,
+        key: generateKey(CONSTANTS.DRAFT_AND_SEND),
+        icon: renderDropdownIcon(faPaperPlane),
+      },
+      {
+        label: CONSTANTS.SAVED_ITEMS,
+        key: generateKey(CONSTANTS.SAVED_ITEMS),
+        icon: renderDropdownIcon(faBookmark),
+      },
+      {
+        type: 'divider',
+        key: 'd1',
+      },
+      {
+        label: CONSTANTS.BENCHIT_CONNECT,
+        key: generateKey(CONSTANTS.BENCHIT_CONNECT),
+        icon: renderDropdownIcon(faNetworkWired),
+      },
+      {
+        label: CONSTANTS.ALL_CHANNELS,
+        key: generateKey(CONSTANTS.ALL_CHANNELS),
+        icon: renderDropdownIcon(faHashtag),
+      },
+      {
+        label: CONSTANTS.FILES,
+        key: generateKey(CONSTANTS.FILES),
+        icon: renderDropdownIcon(faFile),
+      },
+      {
+        label: CONSTANTS.PEOPLE_AND_USER_GROUPS,
+        key: generateKey(CONSTANTS.PEOPLE_AND_USER_GROUPS),
+        icon: renderDropdownIcon(faAddressBook),
+      },
+      {
+        label: CONSTANTS.APPS,
+        key: generateKey(CONSTANTS.APPS),
+        icon: renderDropdownIcon(faShapes),
+      },
+      {
+        type: 'divider',
+        key: 'd2',
+      },
+      {
+        label: CONSTANTS.CUSTOMIZE_MORE,
+        key: generateKey(CONSTANTS.CUSTOMIZE_MORE),
+      },
+    ];
+    const goTo = url => {
       this.$router.push(url);
-    },
+    };
+    const toggleShow = () => {
+      showMore.value = !showMore.value;
+    };
+    const handleSelect = key => {
+      switch (key) {
+        case generateKey(CONSTANTS.UNREADS):
+          break;
+        case generateKey(CONSTANTS.DIRECT_MESSAGES):
+          break;
+        case generateKey(CONSTANTS.MENTIONS_AND_REACTIONS):
+          break;
+        case generateKey(CONSTANTS.DRAFT_AND_SEND):
+          break;
+        case generateKey(CONSTANTS.SAVED_ITEMS):
+          break;
+        case generateKey(CONSTANTS.BENCHIT_CONNECT):
+          break;
+        case generateKey(CONSTANTS.ALL_CHANNELS):
+          break;
+        case generateKey(CONSTANTS.FILES):
+          break;
+        case generateKey(CONSTANTS.PEOPLE_AND_USER_GROUPS):
+          break;
+        case generateKey(CONSTANTS.APPS):
+          break;
+        case generateKey(CONSTANTS.CUSTOMIZE_MORE):
+          break;
+        default:
+          break;
+      }
+    };
+    return {
+      moreOptions,
+      toggleShow,
+      goTo,
+      showMore,
+
+      handleSelect,
+    };
   },
 };
 </script>
