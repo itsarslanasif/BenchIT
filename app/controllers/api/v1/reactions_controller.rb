@@ -1,7 +1,5 @@
 class Api::V1::ReactionsController < Api::ApiController
-  include MemberShip
-
-  before_action :verify_membership, only: %i[create]
+  before_action :verify_reaction, only: %i[create]
   before_action :set_reaction, only: %i[destroy]
 
   def create
@@ -25,7 +23,7 @@ class Api::V1::ReactionsController < Api::ApiController
     params.require(:reaction).permit(:conversation_message_id, :emoji)
   end
 
-  def verify_membership
+  def verify_reaction
     @reaction = current_profile.reactions.new(reaction_params)
     authorize! :create, @reaction
   end
