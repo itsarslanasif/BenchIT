@@ -94,7 +94,7 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
                            is_threaded: false, bench_conversation_id: 6, sender_id: 1)
 
 (1..6).each do |i|
-  ScheduleMessage.create!(content: "{\"blocks\":[{\"type\":\"section\",\"text\":{\"type\":\"mrkdwn\",\"text\":\"```\\#{i}\\n```\"}}]}",
+  ScheduleMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am scheduled message."}}]}',
                           profile_id: 1, scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: i)
   DraftMessage.create!(content: i.to_s, profile_id: 1, bench_conversation_id: i)
 end
