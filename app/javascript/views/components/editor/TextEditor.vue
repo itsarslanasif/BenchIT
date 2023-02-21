@@ -409,6 +409,7 @@ export default {
           this.sendMessage({ blocks: result }, this.files, this.schedule);
           this.newMessage = '';
           this.readerFile = [];
+          this.videoFiles = [];
           this.files = [];
           this.schedule = null;
         }

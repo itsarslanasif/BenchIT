@@ -23,7 +23,7 @@
             icon="fa-solid fa-xmark"
           />
         </template>
-        <n-divider />
+        <!-- <n-divider /> -->
 
         <div class="flex justify-center relative">
           <video
@@ -70,7 +70,7 @@
             >
               <font-awesome-icon
                 @click="togglePauseRecording()"
-                :class="recording ? 'text-red-500' : 'text-black-800'"
+                :class="recording ? 'text-red-800' : 'text-black-500'"
                 :icon="recordingIcon()"
             /></span>
           </div>
@@ -78,14 +78,25 @@
 
         <template #footer>
           <button
-            class="px-2 space-x-1 py-1 float-left flex hover:bg-transparent rounded focus:outline-none"
+            class="px-2 space-x-1 py-2 float-left flex hover:bg-transparent rounded focus:outline-none"
+            @click="selectFile"
           >
             <font-awesome-icon class="mt-1" icon="fa-solid fa-cloud-arrow-up" />
-            <span class=""> Upload Video </span>
+            <span>
+              Upload Video
+              <input
+                class="ml-2"
+                type="file"
+                ref="fileInput"
+                style="display: none"
+                @change="handleFileUpload"
+                accept="video/*"
+              />
+            </span>
           </button>
 
           <button
-            class="px-2 space-x-1 py-1 ml-5 float-left flex hover:bg-transparent rounded focus:outline-none"
+            class="px-2 space-x-1 py-2 ml-5 float-left flex hover:bg-transparent rounded focus:outline-none"
             @click="toggleScreenRecording"
           >
             <font-awesome-icon class="mt-1" icon="fa-solid fa-display" />
@@ -101,7 +112,7 @@
               start over
             </button>
             <button
-              class="px-2 py-1 float-right hover:bg-secondaryHover bg-secondary text-white rounded focus:outline-none"
+              class="px-2 py-1 float-right hover:bg-secondary bg-secondaryHover text-white rounded focus:outline-none"
               @click="handleActionButton"
             >
               {{ recordButton }}
@@ -214,11 +225,23 @@ export default {
     },
   },
   methods: {
+    selectFile() {
+      this.$refs.fileInput.click();
+    },
     micIcon() {
       if (!this.isAudioAvailable) {
         return 'fa-solid fa-microphone-slash';
       }
       return 'fa-solid fa-microphone';
+    },
+    handleFileUpload() {
+      console.log('file uploaded');
+      const file = this.$refs.fileInput.files[0];
+      if (file) {
+        this.videoFile = file;
+        this.recordedVideoUrl = URL.createObjectURL(file);
+        this.status = 'recorded';
+      }
     },
     videoIcon() {
       if (!this.isCameraAvailable) {
@@ -261,6 +284,7 @@ export default {
     cancelRecording() {
       this.recordedVideoUrl = null;
       this.videoFile = null;
+      this.$refs.fileInput.value = '';
     },
 
     handleActionButton() {
@@ -269,21 +293,6 @@ export default {
       } else if (this.status == 'recorded') {
         this.getVideoFiles(this.videoFile);
         this.toggleModal();
-        // this.sendMessage(
-        //   {
-        //     blocks: [
-        //       {
-        //         type: 'section',
-        //         text: {
-        //           type: 'mrkdwn',
-        //           text: 'Here is the attached video 👇 ',
-        //         },
-        //       },
-        //     ],
-        //   },
-        //   [this.videoFile],
-        //   null
-        // );
       } else if (this.status == 'recording') {
         this.stopRecording();
       }
