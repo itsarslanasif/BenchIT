@@ -4,7 +4,7 @@ class Api::V1::PinsController < Api::ApiController
 
   before_action :find_conversation, only: %i[index create]
   before_action :set_pin, only: %i[destroy]
-  before_action :authenticate_pin, only: %i[index create destroy]
+  before_action :authenticate_pin, only: %i[index]
 
   def index
     @pins = @conversation.pins
@@ -12,6 +12,7 @@ class Api::V1::PinsController < Api::ApiController
 
   def create
     @pin = @conversation.pins.new(profile_id: current_profile.id, conversation_message_id: pin_params[:conversation_message_id])
+    authorize! :create, @pin
     @pin.save!
     render json: { success: true, message: t('.create.success') }, status: :ok
   end
@@ -38,6 +39,7 @@ class Api::V1::PinsController < Api::ApiController
   def set_pin
     @pin = Pin.find(params[:id])
     @conversation = @pin.bench_conversation
+    authorize! :destroy, @pin
   end
 
   def authenticate_pin

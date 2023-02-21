@@ -2,7 +2,7 @@ class Api::V1::ReactionsController < Api::ApiController
   include MemberShip
 
   before_action :verify_membership, only: %i[create]
-  before_action :set_reaction, :authenticate_reaction, only: %i[destroy]
+  before_action :set_reaction, only: %i[destroy]
 
   def create
     @reaction.save!
@@ -18,22 +18,15 @@ class Api::V1::ReactionsController < Api::ApiController
 
   def set_reaction
     @reaction = Reaction.find(params[:id])
+    authorize! :destroy, @reaction
   end
 
   def reaction_params
     params.require(:reaction).permit(:conversation_message_id, :emoji)
   end
 
-  def authenticate_reaction
-    if @reaction.profile_id.eql?(current_profile.id)
-      check_membership(@reaction.bench_conversation)
-    else
-      render json: { success: false, error: t('.authenticate_reaction.failure') }, status: :unauthorized
-    end
-  end
-
   def verify_membership
-    @reaction = current_profile.reactions.find_or_create_by(reaction_params)
-    check_membership(@reaction.bench_conversation)
+    @reaction = current_profile.reactions.new(reaction_params)
+    authorize! :create, @reaction
   end
 end

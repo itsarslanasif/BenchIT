@@ -1,32 +1,51 @@
-# frozen_string_literal: true
-
 class Ability
   include CanCan::Ability
 
-  def initialize(profile)
-    # Define abilities for the user here. For example:
-    #
-    #   return unless user.present?
-    #   can :read, :all
-    #   return unless user.admin?
-    #   can :manage, :all
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, published: true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/blob/develop/docs/define_check_abilities.md
+  def initialize(user)
+    return if user.blank?
+
+    can %i[create destroy], Reaction do |reaction|
+      check_ability(reaction, user.user_profile) && reaction.profile_id.eql?(user.user_profile.id)
+    end
+
+    can %i[destroy], Pin do |pin|
+      check_ability(pin, user.user_profile)
+    end
+
+    can %i[create], Pin do |pin|
+      check_ability_for_create(pin, user.user_profile)
+    end
+
+    can %i[update destroy], ConversationMessage do |message|
+      check_ability(message, user.user_profile) && message.profile_id.eql?(user.user_profile.id)
+    end
+
+    can %i[create], ConversationMessage do |message|
+      check_ability_for_create(message, user.user_profile)
+    end
+  end
+
+  private
+
+  def check_membership(bench_conversation, profile)
+    profile_ids = if bench_conversation.conversationable_type.eql?('Profile')
+                    [bench_conversation.conversationable_id, bench_conversation.sender_id]
+                  else
+                    bench_conversation.conversationable.profile_ids
+                  end
+
+    profile_ids.include?(profile.id)
+  end
+
+  def check_ability_for_create(object, profile)
+    object.profile_id.eql?(profile.id) ? check_membership(object.bench_conversation, profile) : false
+  end
+
+  def check_ability(object, profile)
+      if object.bench_conversation.conversationable_type.eql?('BenchChannel')
+        object.bench_conversation.conversationable.is_private ? check_membership(object.bench_conversation, profile) : true
+      else
+        check_membership(object.bench_conversation, profile)
+      end
   end
 end

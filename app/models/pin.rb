@@ -1,6 +1,4 @@
 class Pin < ApplicationRecord
-  load_and_authorize_resource
-
   after_commit :broadcast_pin
 
   belongs_to :conversation_message

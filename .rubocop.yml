@@ -118,6 +118,7 @@ Metrics/AbcSize:
     - 'db/migrate/20161123131628_devise_token_auth_create_users.rb'
     - 'app/controllers/api/v1/accounts/inboxes_controller.rb'
     - 'db/migrate/20211219031453_update_foreign_keys_on_delete.rb'
+    - 'app/models/ability.rb'
 Metrics/CyclomaticComplexity:
   Max: 7
   Exclude:
