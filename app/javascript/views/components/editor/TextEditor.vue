@@ -10,14 +10,14 @@
           (showChannels && hasChannelCommand)
         "
       > -->
-      <div
+      <!-- <div
         v-for="item in filteredList"
         :key="item.name"
         class="p-1 rounded-md hover:bg-secondaryHover"
         @click="addMentionToText"
       >
         {{ item.creator_id ? item.name : item.username }}
-      </div>
+      </div> -->
       <!-- </div> -->
     </div>
     <div>
@@ -249,6 +249,8 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
+import Mention from '@tiptap/extension-mention'
+import suggestion from './suggestion'
 import { CONSTANTS } from '../../../assets/constants';
 
 export default {
@@ -345,6 +347,12 @@ export default {
       editor.value = new Editor({
         extensions: [
           StarterKit,
+          Mention.configure({
+            HTMLAttributes: {
+              class: 'mention',
+            },
+            suggestion,
+          }),
           Placeholder.configure({
             placeholder: getPlaceholder,
           }),
@@ -359,30 +367,30 @@ export default {
       }
     });
 
-    watch(editorContent, (curr, old) => {
-      const currentMessage = ignoreHTML(curr);
-      const oldMessage = ignoreHTML(old);
-      const message = ignoreHTML(editorContent.value);
+    // watch(editorContent, (curr, old) => {
+    //   const currentMessage = ignoreHTML(curr);
+    //   const oldMessage = ignoreHTML(old);
+    //   const message = ignoreHTML(editorContent.value);
 
-      if (message && getLastIndex(currentMessage)[0] == '@') {
-        enableMention(message);
-      } else if (message && getLastIndex(currentMessage)[0] == '#') {
-        enableChannels(message);
-      } else if (
-        message.length === 1 &&
-        getLastIndex(currentMessage)[0] == '@'
-      ) {
-        enableMention(message);
-      } else if (
-        message.length === 1 &&
-        getLastIndex(currentMessage)[0] == '#'
-      ) {
-        enableChannels(message);
-      } else {
-        disableAll();
-        searchStore.clearSearches();
-      }
-    });
+    //   if (message && getLastIndex(currentMessage)[0] == '@') {
+    //     enableMention(message);
+    //   } else if (message && getLastIndex(currentMessage)[0] == '#') {
+    //     enableChannels(message);
+    //   } else if (
+    //     message.length === 1 &&
+    //     getLastIndex(currentMessage)[0] == '@'
+    //   ) {
+    //     enableMention(message);
+    //   } else if (
+    //     message.length === 1 &&
+    //     getLastIndex(currentMessage)[0] == '#'
+    //   ) {
+    //     enableChannels(message);
+    //   } else {
+    //     disableAll();
+    //     searchStore.clearSearches();
+    //   }
+    // });
 
     const makeBlocks = async line => {
       const block = await markdownToBlocks(line);
@@ -740,5 +748,11 @@ button {
 }
 .margintop {
   margin-top: -270px;
+}
+.mention {
+  border: 1px solid #000;
+  border-radius: 0.4rem;
+  padding: 0.1rem 0.3rem;
+  box-decoration-break: clone;
 }
 </style>
