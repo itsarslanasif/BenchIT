@@ -64,7 +64,7 @@ export default {
         notification: {
           title: 'Notification',
           key: 'notification',
-          flag: true,
+          flag: false,
         },
         sidebar: {
           title: 'Sidebar',
@@ -99,7 +99,7 @@ export default {
         audioVideo: {
           title: 'Audio & Video',
           key: 'audioVideo',
-          flag: false,
+          flag: true,
         },
         connectedAccounts: {
           title: 'Connected Accounts',
