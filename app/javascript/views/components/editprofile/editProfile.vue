@@ -173,7 +173,7 @@ export default {
       constraints,
       chunks,
       currentProfile,
-      profileStore
+      profileStore,
     };
   },
   methods: {
@@ -184,54 +184,39 @@ export default {
         reader.readAsDataURL(this.file);
         reader.onload = () => this.readerFile.push(reader.result);
       }
+      this.image = this.file;
     },
     removeFile() {
       this.readerFile = [];
       this.image = '../../../assets/images/user.png';
     },
     saveChanges() {
-      // let formData = new FormData();
-      const payload = {
-        username: null,
-        display_name: null,
-        title: null,
-        pronounce_name: null,
-        time_zone: null,
-        profile_image: null,
-        audio_clip: null
-      }
+      let formData = new FormData();
       if (this.fullName.length && this.fullName.length < 50) {
-        // formData.append('full_name', this.fullName);
-        payload.username = this.fullName;
+        formData.append('username', this.fullName);
       }
       if (this.displayName.length && this.displayName.length < 50) {
-        // formData.append('display_name', this.displayName);
-        payload.display_name = this.displayName;
+        formData.append('display_name', this.displayName);
       }
       if (this.title.length && this.title.length < 50) {
-        payload.title = this.title;
+        formData.append('title', this.title);
       }
       if (
         this.namePronounciation.length &&
         this.namePronounciation.length < 20
       ) {
-        // formData.append('name_pronounciation', this.namePronounciation);
-        payload.pronounce_name = this.namePronounciation;
+        formData.append('pronounce_name', this.namePronounciation);
       }
-      // formData.append('time_zone', this.timezone);
-      // formData.append('profile_photo', this.file);
-      // formData.append('audio_clip', this.audioBlob);
-      payload.time_zone = this.timezone;
-      payload.profile_image = this.image;
-      payload.audio_clip = this.audioBlob;
-
-      this.profileStore.updateProfile(payload)
+      formData.append('time_zone', this.timezone);
+      formData.append('profile_image', this.image);
+      // formData.append('profile_image', null);
+      formData.append('recording', this.audioBlob);
+      this.profileStore.updateProfile(formData)
     },
     submit(audioChunks, audioBlob, audioRecorder) {
       this.audioChunks = audioChunks;
       this.audioBlob = audioBlob;
       this.audioRecorder = audioRecorder;
-      console.log(this.audioChunks, this.audioBlob, this.audioRecorder)
     },
   },
 };

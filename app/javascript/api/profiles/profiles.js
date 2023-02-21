@@ -12,15 +12,11 @@ export const getAllProfiles = async workspace_id => {
 };
 
 export const updateCurrentProfile = async (workspace_id, profile_id, payload) => {
-  console.log(payload)
   return await axios
-    .patch(`/v1/workspaces/${workspace_id}/profiles/${profile_id}`, {
-      profile: payload,
-    }, {
+    .patch(`/v1/workspaces/${workspace_id}/profiles/${profile_id}`, payload, {
       headers: getHeaders(),
     })
     .then(response => {
-      // console.log(response)
       return response.data.profile;
     });
 };
