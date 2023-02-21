@@ -173,7 +173,6 @@
             <VideoRecord
               :getVideoFiles="getVideoFiles"
               :editMessage="editMessage"
-              :sendMessage="sendMessage"
             />
             <button
               v-if="!editMessage"

@@ -68,7 +68,7 @@
             >
               <font-awesome-icon
                 @click="togglePauseRecording()"
-                :class="recording ? 'text-red-800' : 'text-black-500'"
+                :class="recording ? 'text-red-500' : 'text-black-800'"
                 :icon="recordingIcon"
             /></span>
           </div>
@@ -81,7 +81,7 @@
           >
             <font-awesome-icon class="mt-1" icon="fa-solid fa-cloud-arrow-up" />
             <span>
-              Upload Video
+              {{ $t('video_recording.upload_video') }}
               <input
                 class="ml-2"
                 type="file"
@@ -98,7 +98,7 @@
             @click="toggleScreenRecording"
           >
             <font-awesome-icon class="mt-1" icon="fa-solid fa-display" />
-            <span> screen record</span>
+            <span> {{ $t('video_recording.screen_record') }}</span>
           </button>
 
           <div class="float-right flex gap-2 px-2 py-1">
@@ -107,7 +107,7 @@
               class="px-2 py-1 rounded hover:bg-red-400 bg-red-300 text-white focus:outline-none"
               @click="cancelRecording"
             >
-              start over
+              {{ $t('video_recording.start_over') }}
             </button>
             <button
               class="px-2 py-1 float-right hover:bg-secondary bg-secondaryHover text-white rounded focus:outline-none"
@@ -138,7 +138,7 @@ import {
 import { ref } from 'vue';
 import RecordRTC from 'recordrtc';
 export default {
-  props: ['editMessage', 'sendMessage', 'getVideoFiles'],
+  props: ['editMessage', 'getVideoFiles'],
   components: {
     NModal,
     NInput,
@@ -164,7 +164,7 @@ export default {
       isAudioAvailable: ref(true),
       recording: ref(false),
       recordingPaused: ref(false),
-      status: ref('inactive'),
+      status: ref(this.$t('video_recording.inactive')),
       screenRecord: ref(false),
     };
   },
@@ -186,19 +186,22 @@ export default {
   computed: {
     recordButton() {
       if (this.recordedVideoUrl) {
-        this.status = 'recorded';
-        return 'Done';
+        this.status = this.$t('video_recording.recorded');
+        return this.$t('video_recording.done');
       }
       if (this.recordingPaused || (this.recording && !this.recordingPaused)) {
-        this.status = 'recording';
-        return 'Stop';
+        this.status = this.$t('video_recording.recording');
+        return this.$t('video_recording.stop');
       }
-      this.status = 'inactive';
-      return 'Record';
+      this.status = this.$t('video_recording.inactive');
+      return this.$t('video_recording.record');
     },
 
     toggleCameraButton() {
-      return this.screenRecord || this.status === 'recording' ? false : true;
+      return this.screenRecord ||
+        this.status === this.$t('video_recording.recording')
+        ? false
+        : true;
     },
 
     recordingIcon() {
@@ -226,7 +229,7 @@ export default {
       if (file) {
         this.videoFile = file;
         this.recordedVideoUrl = URL.createObjectURL(file);
-        this.status = 'recorded';
+        this.status = this.$t('video_recording.recorded');
       }
     },
 
@@ -250,14 +253,14 @@ export default {
 
     handleActionButton() {
       switch (this.status) {
-        case 'inactive':
+        case this.$t('video_recording.inactive'):
           this.startRecording();
           break;
-        case 'recorded':
+        case this.$t('video_recording.recorded'):
           this.getVideoFiles(this.videoFile);
           this.toggleModal();
           break;
-        case 'recording':
+        case this.$t('video_recording.recording'):
           this.stopRecording();
           break;
       }
