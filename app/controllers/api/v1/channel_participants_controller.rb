@@ -113,6 +113,10 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   end
 
   def authorization
-    authorize BenchChannel
+    if action_name.eql?('create')
+      authorize! :create, ChannelParticipant
+    else
+      authorize! :join_public_channel, ChannelParticipant
+    end
   end
 end

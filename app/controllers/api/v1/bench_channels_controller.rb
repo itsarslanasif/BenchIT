@@ -1,10 +1,10 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   include Pagination
 
-  before_action :authorization, only: %i[index show create update destroy]
-  before_action :set_bench_channel, only: %i[update destroy leave_channel]
+  before_action :set_bench_channel, only: %i[show update destroy leave_channel]
   before_action :set_channel_participant, :set_left_on, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
+  load_and_authorize_resource
 
   def index
     @bench_channels = current_workspace.bench_channels

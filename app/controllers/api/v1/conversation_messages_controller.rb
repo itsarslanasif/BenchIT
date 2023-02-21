@@ -128,7 +128,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    authorization(@bench_channel)
+    authorize! :bench_channel_messages, @bench_channel
 
     return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
 
@@ -144,7 +144,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_receiver
     @receiver = Profile.find(params[:id])
-    authorization(@receiver)
+    authorize! :profile_messages, @receiver
 
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
@@ -191,9 +191,5 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: t('.delete_text'))
     end
-  end
-
-  def authorization(record)
-    authorize record
   end
 end

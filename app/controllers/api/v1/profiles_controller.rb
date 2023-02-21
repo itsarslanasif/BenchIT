@@ -98,9 +98,9 @@ class Api::V1::ProfilesController < Api::ApiController
   def authorization
     if action_name.eql?('show')
       @profile = Profile.find(params[:id])
-      authorize @profile
+      authorize! :show, @profile
     else
-      authorize Profile
+      authorize! :read, Profile
     end
   end
 end

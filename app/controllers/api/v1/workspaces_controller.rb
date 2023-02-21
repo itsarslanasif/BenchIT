@@ -1,5 +1,5 @@
 class Api::V1::WorkspacesController < Api::ApiController
-  before_action :authorization, only: %i[create invite]
+  before_action :authorization, only: %i[invite]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
@@ -62,6 +62,6 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def authorization
-    authorize Workspace
+    authorize! :invite, Workspace
   end
 end

@@ -31,6 +31,23 @@ class Ability
     end
 
     can %i[destroy send_now update], ScheduleMessage, profile_id: profile.id
+
+    can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
+      channel.profile_ids.include?(profile.id) || !profile.outsider?
+    end
+
+    can %i[create update destroy], BenchChannel if !profile.outsider?
+    can :leave_channel, :all
+
+    can %i[create join_public_channel], ChannelParticipant if !profile.outsider?
+
+    can %i[profile_messages show], Profile do |user|
+      profile.eql?(user) || !profile.outsider?
+    end
+
+    can :invite, Workspace if !profile.outsider?
+
+    can :read, :all if !profile.outsider?
   end
 
   private
