@@ -76,6 +76,7 @@ import {
   faNetworkWired,
   faShapes,
 } from '@fortawesome/free-solid-svg-icons';
+import { useRouter } from 'vue-router';
 
 const renderDropdownIcon = icon => {
   return () => {
@@ -92,6 +93,7 @@ export default {
     NDropdown,
   },
   setup() {
+    const router = useRouter();
     let showMore = ref(false);
     const generateKey = label => {
       return label.toLowerCase().replace(/ /g, '-');
@@ -161,7 +163,7 @@ export default {
       },
     ];
     const goTo = url => {
-      this.$router.push(url);
+      router.push(url);
     };
     const toggleShow = () => {
       showMore.value = !showMore.value;
@@ -171,20 +173,25 @@ export default {
         case generateKey(CONSTANTS.UNREADS):
           break;
         case generateKey(CONSTANTS.DIRECT_MESSAGES):
+          goTo('/direct_messages');
           break;
         case generateKey(CONSTANTS.MENTIONS_AND_REACTIONS):
           break;
         case generateKey(CONSTANTS.DRAFT_AND_SEND):
+          goTo('/drafts_sent_messages');
           break;
         case generateKey(CONSTANTS.SAVED_ITEMS):
+          goTo('/savemessages');
           break;
         case generateKey(CONSTANTS.BENCHIT_CONNECT):
           break;
         case generateKey(CONSTANTS.ALL_CHANNELS):
+          goTo('browse-channels');
           break;
         case generateKey(CONSTANTS.FILES):
           break;
         case generateKey(CONSTANTS.PEOPLE_AND_USER_GROUPS):
+          goTo('members');
           break;
         case generateKey(CONSTANTS.APPS):
           break;
@@ -199,7 +206,6 @@ export default {
       toggleShow,
       goTo,
       showMore,
-
       handleSelect,
     };
   },
