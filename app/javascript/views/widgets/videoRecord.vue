@@ -56,6 +56,7 @@
               ><font-awesome-icon class="" :icon="micIcon()"
             /></span>
             <span
+              v-show="toggleCameraButton"
               class="flex items-center justify-center w-4 h-4"
               @click="toggleCamera()"
               ><font-awesome-icon :icon="videoIcon()"
@@ -72,20 +73,23 @@
                 :class="recording ? 'text-red-500' : 'text-black-800'"
                 :icon="recordingIcon()"
             /></span>
-            <!-- <span class="flex items-center justify-center w-4 h-4"
-              ><font-awesome-icon icon="fa-solid fa-trash"
-            /></span> -->
           </div>
         </div>
 
-        <n-divider />
         <template #footer>
           <button
             class="px-2 space-x-1 py-1 float-left flex hover:bg-transparent rounded focus:outline-none"
-            @click="stopRecording"
           >
             <font-awesome-icon class="mt-1" icon="fa-solid fa-cloud-arrow-up" />
             <span class=""> Upload Video </span>
+          </button>
+
+          <button
+            class="px-2 space-x-1 py-1 ml-5 float-left flex hover:bg-transparent rounded focus:outline-none"
+            @click="toggleScreenRecording"
+          >
+            <font-awesome-icon class="mt-1" icon="fa-solid fa-display" />
+            <span> screen record</span>
           </button>
 
           <div class="float-right flex gap-2 px-2 py-1">
@@ -152,6 +156,7 @@ export default {
       recording: ref(false),
       recordingPaused: ref(false),
       status: ref('inactive'),
+      screenRecord: ref(false),
     };
   },
   beforeUnmount() {
@@ -196,6 +201,15 @@ export default {
         return false;
       }
     },
+    toggleCameraButton() {
+      if (this.screenRecord) {
+        return false;
+      } else if (this.status == 'recording') {
+        return false;
+      } else {
+        return true;
+      }
+    },
   },
   methods: {
     micIcon() {
@@ -229,6 +243,11 @@ export default {
       this.isCameraAvailable = false;
       this.recordingPaused = false;
       this.recording = false;
+    },
+    toggleScreenRecording() {
+      console.log('toggleScreenRecording');
+      this.screenRecord = !this.screenRecord;
+      this.startCamera();
     },
     startRecording() {
       if (!this.recordRTC) {
@@ -267,6 +286,7 @@ export default {
       this.stopCamera();
       this.recording = false;
       this.pauseRecording = false;
+      this.screenRecord = false;
       this.recordRTC.stopRecording(() => {
         const videoBlob = this.recordRTC.getBlob();
         const videoUrl = URL.createObjectURL(videoBlob);
@@ -274,40 +294,54 @@ export default {
         console.log(this.recordedVideoUrl);
       });
     },
-    startCamera() {
+    async startCamera() {
       const constraints = {
         video: true,
-        audio: this.isAudioAvailable, // use isAudioAvailable to set the audio option
+        audio: this.isAudioAvailable,
       };
-
-      // We call getUserMedia twice to create two video elements
-      // One for streaming with audio off, and one for recording with toggleable audio
-      navigator.mediaDevices
-        .getUserMedia({ video: true, audio: false })
-        .then(stream => {
-          // Create the video element to stream with audio off
-          this.stream = stream;
-          this.$refs.previewVideoElement.srcObject = stream;
-          this.$refs.previewVideoElement.play();
-        })
-        .catch(error => {
-          console.error(error);
-        });
-
-      // Create the RecordRTC instance for recording with toggleable audio
-      navigator.mediaDevices
-        .getUserMedia(constraints)
-        .then(stream => {
-          this.recordRTC = new RecordRTC(stream, {
-            type: 'video',
-            mimeType: 'video/webm',
+      if (!this.screenRecord) {
+        await navigator.mediaDevices
+          .getUserMedia({ video: true, audio: false })
+          .then(stream => {
+            this.stream = stream;
+            this.$refs.previewVideoElement.srcObject = stream;
+            this.$refs.previewVideoElement.play();
+          })
+          .catch(error => {
+            console.error(error);
           });
-          this.recordStream = stream;
-          this.isCameraAvailable = true;
-        })
-        .catch(error => {
-          console.error(error);
-        });
+        await navigator.mediaDevices
+          .getUserMedia(constraints)
+          .then(stream => {
+            this.recordRTC = new RecordRTC(stream, {
+              type: 'video',
+              mimeType: 'video/webm',
+            });
+            this.recordStream = stream;
+            this.isCameraAvailable = true;
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      } else {
+        await navigator.mediaDevices
+          .getDisplayMedia({ video: true, audio: true })
+          .then(stream => {
+            this.recordRTC = new RecordRTC(stream, {
+              type: 'video',
+              mimeType: 'video/webm',
+            });
+            this.recordStream = stream;
+            this.stream = stream;
+            this.$refs.previewVideoElement.srcObject = stream;
+            this.$refs.previewVideoElement.play();
+            this.isCameraAvailable = true;
+            this.screenRecord = true;
+          })
+          .catch(error => {
+            console.error(error);
+          });
+      }
     },
 
     toggleAudio() {
