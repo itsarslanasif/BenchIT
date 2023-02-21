@@ -41,8 +41,8 @@
     </n-dropdown>
     <DownloadModal v-model:show="showModal" />
     <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp" />
-    <n-modal v-model:show="preferencesModal" >
-      <Preferences/>
+    <n-modal v-model:show="preferencesModal">
+      <Preferences />
     </n-modal>
   </div>
 </template>
@@ -71,7 +71,7 @@ export default {
     SetProfileStatusModal,
     NTooltip,
     NModal,
-    Preferences
+    Preferences,
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
@@ -105,7 +105,7 @@ export default {
       status: '',
       prevStatus: '',
       statusIcon: '',
-      preferencesModal: false,
+      preferencesModal: true,
       showModal: false,
       options: [
         {
@@ -256,7 +256,7 @@ export default {
           this.$router.push('/workspace_dashboard');
           break;
         case 'preferences':
-          this.preferencesModal = !this.preferencesModal
+          this.preferencesModal = !this.preferencesModal;
           break;
         case 'downloads':
           this.showModal = true;
