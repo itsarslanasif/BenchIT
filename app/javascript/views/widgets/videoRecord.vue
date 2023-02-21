@@ -129,7 +129,7 @@ import {
 import { ref } from 'vue';
 import RecordRTC from 'recordrtc';
 export default {
-  props: ['editMessage'],
+  props: ['editMessage', 'sendMessage', 'getVideoFiles'],
   components: {
     NModal,
     NInput,
@@ -148,6 +148,7 @@ export default {
       buttonDisabled: ref(true),
       recordRTC: null,
       recordedVideoUrl: null,
+      videoFile: null,
       videoPlayer: null,
       stream: null,
       recordStream: null,
@@ -170,6 +171,7 @@ export default {
   mounted() {
     this.recordRTC = null;
     this.recordedVideoUrl = null;
+    this.videoFile = null;
     this.videoPlayer = null;
     this.recordStream = null;
     this.stream = null;
@@ -235,7 +237,7 @@ export default {
       this.showModal = !this.showModal;
       this.recordedVideoUrl = null;
       this.recordRTC = null;
-      this.recordedVideoUrl = null;
+      this.videoFile = null;
       this.videoPlayer = null;
       this.stream = null;
       this.recordStream = null;
@@ -258,16 +260,32 @@ export default {
     },
     cancelRecording() {
       this.recordedVideoUrl = null;
+      this.videoFile = null;
     },
+
     handleActionButton() {
-      if (this.isCameraAvailable) {
-        if (this.status == 'inactive') {
-          this.startRecording();
-        } else if (this.status == 'recorded') {
-          console.log('send..........');
-        } else if (this.status == 'recording') {
-          this.stopRecording();
-        }
+      if (this.status == 'inactive') {
+        this.startRecording();
+      } else if (this.status == 'recorded') {
+        this.getVideoFiles(this.videoFile);
+        this.toggleModal();
+        // this.sendMessage(
+        //   {
+        //     blocks: [
+        //       {
+        //         type: 'section',
+        //         text: {
+        //           type: 'mrkdwn',
+        //           text: 'Here is the attached video 👇 ',
+        //         },
+        //       },
+        //     ],
+        //   },
+        //   [this.videoFile],
+        //   null
+        // );
+      } else if (this.status == 'recording') {
+        this.stopRecording();
       }
     },
     togglePauseRecording() {
@@ -289,9 +307,10 @@ export default {
       this.screenRecord = false;
       this.recordRTC.stopRecording(() => {
         const videoBlob = this.recordRTC.getBlob();
+        this.videoFile = videoBlob;
         const videoUrl = URL.createObjectURL(videoBlob);
         this.recordedVideoUrl = videoUrl;
-        console.log(this.recordedVideoUrl);
+        console.log('bloooooob', this.videoFile);
       });
     },
     async startCamera() {
