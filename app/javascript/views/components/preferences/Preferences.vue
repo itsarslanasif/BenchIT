@@ -133,6 +133,6 @@ export default {
 
 <style>
 .custom-height {
-  max-height: 650px;
+  height: 650px;
 }
 </style>
