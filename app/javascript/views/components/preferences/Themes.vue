@@ -1,8 +1,8 @@
 <template lang="">
   <div>
     {{ themeSetting.title }}
-    <div class="bg-gray-50 border rounded my-3">
-      <div class="flex items-center px-5 py-3 border-b">
+    <div class="bg-gray-50 border-black-400 border rounded my-3">
+      <div class="flex items-center px-5 py-3 border-b border-black-400">
         <div class="w-12">
           <img src="../../../assets/images/user.png" />
         </div>
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div class="bg-black-800 text-white border rounded">
+    <div class="bg-black-900 text-white border rounded">
       <div class="flex items-center px-5 py-3 border-b">
         <div class="w-12">
           <img src="../../../assets/images/user.png" />
@@ -46,8 +46,8 @@
     <div>
       <p class="font-semibold pt-3 text-black-700">Tried and true</p>
       <div class="flex justify-between px-3">
-        <div class="bg-gray-50 border rounded my-3">
-          <div class="flex items-center px-5 py-3 border-b">
+        <div class="bg-gray-50 border rounded my-3 border-black-400">
+          <div class="flex items-center px-5 py-3 border-b border-black-400">
             <div class="w-12">
               <img src="../../../assets/images/user.png" />
             </div>
@@ -61,8 +61,8 @@
             <label class="px-3 font-semibold">Aubergine</label>
           </div>
         </div>
-        <div class="bg-gray-50 border rounded my-3">
-          <div class="flex items-center px-5 py-3 border-b">
+        <div class="bg-gray-50 border rounded my-3 border-black-400">
+          <div class="flex items-center px-5 py-3 border-b border-black-400">
             <div class="w-12">
               <img src="../../../assets/images/user.png" />
             </div>
@@ -82,8 +82,8 @@
     <div>
       <p class="font-semibold pt-3 text-black-700">Clean and minimal</p>
       <div class="flex justify-between px-3">
-        <div class="bg-gray-50 border rounded my-3">
-          <div class="flex items-center px-5 py-3 border-b">
+        <div class="bg-gray-50 border rounded my-3 border-black-400">
+          <div class="flex items-center px-5 py-3 border-b border-black-400">
             <div class="w-12">
               <img src="../../../assets/images/user.png" />
             </div>
@@ -97,8 +97,8 @@
             <label class="px-3 font-semibold">Aubergine</label>
           </div>
         </div>
-        <div class="bg-gray-50 border rounded my-3">
-          <div class="flex items-center px-5 py-3 border-b">
+        <div class="bg-gray-50 border rounded my-3 border-black-400">
+          <div class="flex items-center px-5 py-3 border-b border-black-400">
             <div class="w-12">
               <img src="../../../assets/images/user.png" />
             </div>
