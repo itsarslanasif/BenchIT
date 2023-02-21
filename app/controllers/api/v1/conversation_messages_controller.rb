@@ -15,6 +15,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @messages = pagination_for_send_messages(params[:page])
   end
 
+  def reactions
+    @reactions = current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+  end
+
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
