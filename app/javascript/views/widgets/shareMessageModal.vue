@@ -7,31 +7,29 @@
     size="huge"
     content-style="overflow-y: auto; overflow-x: hidden; max-height: 440px"
   >
-    <template #header
-    v-if="checkConversationType"
-    >
-      <span class="text-2xl font-bold">
-
-      </span>
-        <n-select
-            v-model:value="selectedChannelID"
-            filterable
-            placeholder="Please select a song"
-            :options="allChannels"
-    />
+    <template #header v-if="checkConversationType">
+      <span class="text-2xl font-bold"> </span>
+      <n-select
+        v-model:value="selectedChannelID"
+        filterable
+        placeholder="Please select a song"
+        :options="allChannels"
+      />
     </template>
     <template #header v-else>
       <div class="border rounded p-2 bg-yellow-50 border-yellow-500">
-      <p class="text-sm">This message is from a private conversation, so it can only be shared in this thread</p>
+        <p class="text-sm">
+          This message is from a private conversation, so it can only be shared
+          in this thread
+        </p>
       </div>
     </template>
 
-
     <TextEditorVue
-     :sendMessage="sendMessage"
-        :editMessage="false"
-        :isThread="false"
-        :repliedParentMessage="this.message"
+      :sendMessage="sendMessage"
+      :editMessage="false"
+      :isThread="false"
+      :repliedParentMessage="this.message"
     />
   </n-modal>
 </template>
@@ -101,12 +99,20 @@ export default {
       );
     },
     checkConversationType() {
-      debugger;
       return this.message.conversationable_type === 'BenchChannel';
     },
   },
-  mounted(){
-    this.allChannels = this.setValue(useProfileStore().profiles.map(record => ({ value: `profiles ${record.id}`, label: record.username })),useChannelStore().channels.map(record => ({ value: `channels ${record.id}`, label: record.name })) );
+  mounted() {
+    this.allChannels = this.setValue(
+      useProfileStore().profiles.map(record => ({
+        value: `profiles ${record.id}`,
+        label: record.username,
+      })),
+      useChannelStore().channels.map(record => ({
+        value: `channels ${record.id}`,
+        label: record.name,
+      }))
+    );
   },
   methods: {
     showUserProfile() {
@@ -115,18 +121,16 @@ export default {
     },
 
     separateString(str) {
-    let numbers = str.match(/\d+/g).map(Number);
-    let letters = str.match(/[a-zA-Z]+/g).join('');
+      let numbers = str.match(/\d+/g).map(Number);
+      let letters = str.match(/[a-zA-Z]+/g).join('');
 
-    return { numbers, letters };
-  },
-
-    onClick(){
-        debugger;
+      return { numbers, letters };
     },
 
-    setValue(id, type){
-        return [...id, ...type]
+    onClick() {},
+
+    setValue(id, type) {
+      return [...id, ...type];
     },
 
     setUserProfileForPane() {
@@ -172,37 +176,38 @@ export default {
     },
 
     getChannelNames() {
-        debugger;
-    //     this.allChannels = useChannelStore().channels.map(record => ({ value: record.id, name: record.name }));
-    //    return this.allChannels
+      //     this.allChannels = useChannelStore().channels.map(record => ({ value: record.id, name: record.name }));
+      //    return this.allChannels
     },
 
     handleSelect() {
-        this.selectedChannelId = event;
+      this.selectedChannelId = event;
     },
 
-    parentMessage(){
-        debugger;
-        return this.message.content;
+    parentMessage() {
+      return this.message.content;
     },
 
     sendMessage(message, files, schedule) {
-      let conversation_type_and_id = {}
+      let conversation_type_and_id = {};
 
       if (this.selectedChannelID === '') {
         conversation_type_and_id = {
           numbers: [window.location.pathname.split('/')[2]],
-          letters: 'profiles'
-        }
+          letters: 'profiles',
+        };
       } else {
-         conversation_type_and_id = this.separateString(this.selectedChannelID);
+        conversation_type_and_id = this.separateString(this.selectedChannelID);
       }
       let formData = new FormData();
       formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', false);
       formData.append('shared_message_id', this.message.id);
       formData.append('conversation_type', conversation_type_and_id.letters);
-      formData.append('conversation_id', parseInt(conversation_type_and_id.numbers[0]));
+      formData.append(
+        'conversation_id',
+        parseInt(conversation_type_and_id.numbers[0])
+      );
       if (schedule && schedule.value) {
         formData.append('scheduled_at', schedule.value);
       }
@@ -213,13 +218,13 @@ export default {
         if (res.scheduled_at) {
           this.messageStore.addScheduleMessage(res);
         }
-        this.message = '';
       });
       this.newMessageSent = true;
-              debugger;
       this.setDeleteModal();
-      this.$router.push(`/${conversation_type_and_id.letters}/${conversation_type_and_id.numbers[0]}`);
-    }
+      this.$router.push(
+        `/${conversation_type_and_id.letters}/${conversation_type_and_id.numbers[0]}`
+      );
+    },
   },
 };
 </script>

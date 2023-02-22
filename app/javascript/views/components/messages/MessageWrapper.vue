@@ -112,11 +112,12 @@
                   v-if="block.type === 'section'"
                   :section="block"
                 />
-              <div v-if="isSharedMessage" class="flex ml-4 flex-center">
+                <div v-if="isSharedMessage" class="flex ml-4 flex-center">
                   <ShareMessageVue
-                      :currMessage="currMessage.shared_message"
+                    :inThread="inThread"
+                    :currMessage="currMessage.shared_message"
                   />
-              </div>
+                </div>
               </div>
             </div>
             <span
@@ -163,11 +164,12 @@
                 :updated_at="currMessage.updated_at"
               />
             </div>
-              <div v-if="isSharedMessage" class="flex ml-4 flex-center">
-                  <ShareMessageVue
-                      :currMessage="currMessage.shared_message"
-                  />
-              </div>
+            <div v-if="isSharedMessage" class="flex -ml-12 flex-center">
+              <ShareMessageVue
+                :inThread="inThread"
+                :currMessage="currMessage.shared_message"
+              />
+            </div>
           </span>
           <span
             v-if="
@@ -798,9 +800,9 @@ export default {
     },
 
     getSharedMessage() {
-      debugger;
-
-      this.sharedMessage = this.messagesStore.getSharedMessage(this.currMessage.shared_message_id)
+      this.sharedMessage = this.messagesStore.getSharedMessage(
+        this.currMessage.shared_message_id
+      );
     },
 
     setShareModalVisibility() {
