@@ -1,10 +1,10 @@
 import { VueRenderer } from '@tiptap/vue-3'
-import { createPopper } from '@popperjs/core';
-import MentionList from './MentionList.vue'
+import tippy from 'tippy.js'
 import { useProfileStore } from '../../../stores/useProfileStore'
 
-export default {
+import MentionList from './MentionList.vue'
 
+export default {
   items: ({ query }) => {
     return useProfileStore().profiles.filter(item => item.username.toLowerCase().startsWith(query.toLowerCase())).slice(0, 5)
   },
@@ -18,59 +18,49 @@ export default {
         component = new VueRenderer(MentionList, {
           props,
           editor: props.editor,
-        });
+          
+        })
 
         if (!props.clientRect) {
-          return;
+          return
         }
 
-        const reference = (props.clientRect ? { getBoundingClientRect: props.clientRect } : null)
-        const popper = component.element;
-
-        const options = {
+        popup = tippy('body', {
+          getReferenceClientRect: props.clientRect,
+          appendTo: () => document.body,
+          content: component.element,
+          showOnCreate: true,
+          interactive: true,
+          trigger: 'manual',
           placement: 'bottom-start',
-          modifiers: [
-            {
-              name: 'offset',
-              options: {
-                offset: [0, 10],
-              },
-            },
-            {
-              name: 'preventOverflow',
-              options: {
-                rootBoundary: 'viewport',
-              },
-            },
-          ],
-        };
-        popup = createPopper(reference, popper, options)
+        })
       },
 
       onUpdate(props) {
-        component.updateProps(props);
+        component.updateProps(props)
 
         if (!props.clientRect) {
-          return;
+          return 
         }
 
-        popup.update()
+        popup[0].setProps({
+          getReferenceClientRect: props.clientRect,
+        })
       },
 
       onKeyDown(props) {
         if (props.event.key === 'Escape') {
-          popup[0].hide();
-
-          return true;
+          popup[0].hide()
+          return true
         }
 
-        return component.ref?.onKeyDown(props);
+        return component.ref?.onKeyDown(props)
       },
 
       onExit() {
-        popup.destroy()
+        popup[0].destroy()
         component.destroy()
       },
-    };
+    }
   },
 }

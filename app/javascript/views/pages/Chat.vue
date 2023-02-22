@@ -148,6 +148,7 @@ export default {
         }
         this.message = '';
       });
+      console.log(message)
       this.newMessageSent = true;
     },
     joinedTheChannel() {
