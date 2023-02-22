@@ -1,5 +1,5 @@
 class Api::V1::DownloadsController < Api::ApiController
-  before_action :set_download, only: :destroy
+  before_action :set_download, :authenticate_download, only: :destroy
   before_action :set_all_downloads, only: %i[index clear_all]
 
   def index; end
@@ -35,5 +35,9 @@ class Api::V1::DownloadsController < Api::ApiController
 
   def set_all_downloads
     @downloads = current_profile.downloads.order(created_at: :desc)
+  end
+
+  def authenticate_download
+    authorize! :destroy, @download
   end
 end

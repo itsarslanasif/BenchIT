@@ -37,6 +37,7 @@ class Ability
     end
 
     can :destroy, Status, profile_id: profile.id
+    can %i[create destroy], Download, profile_id: profile.id
 
     can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id) || !profile.outsider?
