@@ -214,7 +214,7 @@ export default {
         formData.append('profile_image', this.image);
       }
       formData.append('time_zone', this.timezone);
-      this.profileStore.updateProfile(formData)
+      this.profileStore.updateProfile(formData).then(() => this.toggleEditProfile())
     },
     submit(audioChunks, audioBlob, audioRecorder) {
       this.audioChunks = audioChunks;

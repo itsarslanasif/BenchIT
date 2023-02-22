@@ -5,6 +5,7 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :check_user_member_of_workspace, only: %i[show update]
   before_action :find_profile, only: %i[update set_status clear_status set_is_active remove_is_active]
+  before_action :fetch_country_name, only: %i[update]
 
   def index
     @profiles = if params[:query].presence
@@ -74,9 +75,15 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def profile_params
-    params.permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status, :emoji_status,
-                                    :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
+    params.permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status,
+      :emoji_status, :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
       param[:workspace_id] = params[:workspace_id]
+    end
+  end
+
+  def fetch_country_name
+    if params[:time_zone] != nil
+      params[:time_zone] = params[:time_zone].split(' ')[1..-1].join(' ')
     end
   end
 

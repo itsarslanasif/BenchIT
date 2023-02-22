@@ -40,7 +40,7 @@ class Profile < ApplicationRecord
   validates :display_name, length: { maximum: 80 }
   validates :text_status, length: { maximum: 100 }
   validates :pronounce_name, length: { maximum: 20 }
-  #validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
+  validates :time_zone, inclusion: { in: ActiveSupport::TimeZone.all.map(&:name) }
   validates :workspace, uniqueness: { scope: %i[user_id] }
 
   enum role: {
@@ -105,7 +105,7 @@ class Profile < ApplicationRecord
       status: text_status.present? ? { text: text_status, emoji: emoji_status, clear_after: clear_status_after } : nil,
       contact_info: { email: user.email, phone: phone },
       about_me: { skype: skype },
-      # local_time: Time.current.in_time_zone(time_zone.split.second).strftime('%I:%M %p'),
+      local_time: Time.current.in_time_zone(time_zone).strftime('%I:%M %p'),
       is_active: is_active
     }
   end
