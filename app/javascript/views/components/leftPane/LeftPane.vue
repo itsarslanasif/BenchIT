@@ -170,12 +170,8 @@ export default {
     };
     const handleSelect = key => {
       switch (key) {
-        case generateKey(CONSTANTS.UNREADS):
-          break;
         case generateKey(CONSTANTS.DIRECT_MESSAGES):
           goTo('/direct_messages');
-          break;
-        case generateKey(CONSTANTS.MENTIONS_AND_REACTIONS):
           break;
         case generateKey(CONSTANTS.DRAFT_AND_SEND):
           goTo('/drafts_sent_messages');
@@ -183,19 +179,11 @@ export default {
         case generateKey(CONSTANTS.SAVED_ITEMS):
           goTo('/savemessages');
           break;
-        case generateKey(CONSTANTS.BENCHIT_CONNECT):
-          break;
         case generateKey(CONSTANTS.ALL_CHANNELS):
           goTo('browse-channels');
           break;
-        case generateKey(CONSTANTS.FILES):
-          break;
         case generateKey(CONSTANTS.PEOPLE_AND_USER_GROUPS):
           goTo('members');
-          break;
-        case generateKey(CONSTANTS.APPS):
-          break;
-        case generateKey(CONSTANTS.CUSTOMIZE_MORE):
           break;
         default:
           break;
