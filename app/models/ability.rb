@@ -42,13 +42,12 @@ class Ability
       can %i[create update destroy], BenchChannel
       can %i[create join_public_channel], ChannelParticipant
       can :invite, Workspace
+      can :read, :all
     end
 
     can %i[profile_messages show], Profile do |account|
       profile.eql?(account) || !profile.outsider?
     end
-
-    can :read, :all unless profile.outsider?
   end
 
   private

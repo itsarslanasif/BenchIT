@@ -25,7 +25,6 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def send_now
-
     ActiveRecord::Base.transaction do
       delete_job
       current_profile.conversation_messages.create!(content: @schedule_message.content,
