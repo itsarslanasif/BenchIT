@@ -1,15 +1,14 @@
 class Api::V1::ScheduleMessagesController < Api::ApiController
   include Pagination
 
-  before_action :set_schedule_message, only: %i[destroy update send_now]
-  before_action :authenticate_message, :delete_job, only: %i[destroy]
+  before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
+  before_action :delete_job, only: %i[destroy]
 
   def index
     @pagy, @messages = pagination_for_schedule_messages(params[:page])
   end
 
   def update
-    authorize! :update, @schedule_message
     @schedule_message.update!(schedule_message_params)
 
     if params[:scheduled_at].present?
@@ -26,7 +25,6 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def send_now
-    authorize! :send_now, @schedule_message
 
     ActiveRecord::Base.transaction do
       delete_job
@@ -51,7 +49,14 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def authenticate_message
-    authorize! :destroy, @schedule_message
+    case action_name
+    when 'update'
+      authorize! :update, @schedule_message
+    when 'destroy'
+      authorize! :destroy, @schedule_message
+    else
+      authorize! :send_now, @schedule_message
+    end
   end
 
   def delete_job
