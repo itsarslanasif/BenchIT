@@ -36,18 +36,18 @@ class Ability
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end
 
-    can %i[create update destroy], BenchChannel if !profile.outsider?
+    can %i[create update destroy], BenchChannel unless profile.outsider?
     can :leave_channel, :all
 
-    can %i[create join_public_channel], ChannelParticipant if !profile.outsider?
+    can %i[create join_public_channel], ChannelParticipant unless profile.outsider?
 
-    can %i[profile_messages show], Profile do |user|
-      profile.eql?(user) || !profile.outsider?
+    can %i[profile_messages show], Profile do |account|
+      profile.eql?(account) || !profile.outsider?
     end
 
-    can :invite, Workspace if !profile.outsider?
+    can :invite, Workspace unless profile.outsider?
 
-    can :read, :all if !profile.outsider?
+    can :read, :all unless profile.outsider?
   end
 
   private
