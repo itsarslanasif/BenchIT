@@ -32,6 +32,10 @@ class Ability
 
     can %i[destroy send_now update], ScheduleMessage, profile_id: profile.id
 
+    can %i[create update destroy], DraftMessage do |draft_message|
+      check_ability_for_create(draft_message, profile)
+    end
+
     can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end

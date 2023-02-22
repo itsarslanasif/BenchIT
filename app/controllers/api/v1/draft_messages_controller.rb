@@ -1,5 +1,4 @@
 class Api::V1::DraftMessagesController < Api::ApiController
-  include MemberShip
   include Conversation
   include Pagination
 
@@ -45,7 +44,7 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def verify_draft
-    check_membership(@bench_conversation)
+    authorize! :create, @draft_message
     return if @draft_message.conversation_message_id.blank? || @bench_conversation.eql?(@draft_message.conversation_message.bench_conversation)
 
     render json: { success: false, message: t('.verify_draft.failure') }, status: :unauthorized
@@ -80,6 +79,15 @@ class Api::V1::DraftMessagesController < Api::ApiController
       conversation_type: @draft_message.bench_conversation.conversationable_type,
       receiver: draft_receiver
     }
-    response.merge!(attachments: get_attachments(@draft_message)) if @draft_message.message_attachments.present?
+    response[:attachments] = get_attachments(@draft_message) if @draft_message.message_attachments.present?
+    response
+  end
+
+  def authenticate_draft
+    if action_name.eql?('update')
+      authorize! :update, @draft_message
+    else
+      authorize! :destroy, @draft_message
+    end
   end
 end
