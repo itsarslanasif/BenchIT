@@ -1,6 +1,7 @@
 class Api::V1::ReactionsController < Api::ApiController
-  before_action :verify_reaction, only: %i[create]
+  before_action :initialize_reaction, only: %i[create]
   before_action :set_reaction, only: %i[destroy]
+  before_action :authenticate_reaction, only: %i[create destroy]
 
   def create
     @reaction.save!
@@ -16,15 +17,22 @@ class Api::V1::ReactionsController < Api::ApiController
 
   def set_reaction
     @reaction = Reaction.find(params[:id])
-    authorize! :destroy, @reaction
   end
 
   def reaction_params
     params.require(:reaction).permit(:conversation_message_id, :emoji)
   end
 
-  def verify_reaction
+  def initialize_reaction
     @reaction = current_profile.reactions.new(reaction_params)
-    authorize! :create, @reaction
+  end
+
+  def authenticate_reaction
+    case action_name
+    when 'create'
+      authorize! :create, @reaction
+    when 'destroy'
+      authorize! :destroy, @reaction
+    end
   end
 end
