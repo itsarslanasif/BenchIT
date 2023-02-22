@@ -29,6 +29,10 @@
       :isThread="false"
       :repliedParentMessage="this.message"
     />
+
+    <div class="flex mt-3 flex-center">
+      <SharedMessage :currMessage="message" :inThread="false" />
+    </div>
   </n-modal>
 </template>
 
@@ -39,6 +43,7 @@ import TextEditorVue from '.././components/editor/TextEditor.vue';
 import { NSelect, NModal } from 'naive-ui';
 import { conversation } from '../../../javascript/modules/axios/editorapi';
 import { useChannelStore } from '../../stores/useChannelStore';
+import SharedMessage from './sharedMessage.vue';
 
 export default {
   setup() {
@@ -56,6 +61,7 @@ export default {
     NModal,
     NSelect,
     TextEditorVue,
+    SharedMessage,
   },
 
   data() {
