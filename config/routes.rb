@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
         resources :groups, only: %i[index show] do
           member do
-            post :add_member
+            put :add_member
           end
         end
         resources :users, only: %i[index]

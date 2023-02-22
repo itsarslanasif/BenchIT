@@ -39,6 +39,14 @@ class Ability
     can :destroy, Status, profile_id: profile.id
     can %i[create destroy], Download, profile_id: profile.id
 
+    can %i[read add_member], Group do |group|
+      group.profile_ids.include?(profile.id)
+    end
+
+    can %i[create destroy], Favourite do |favourite|
+      favourite.profile_id.eql?(profile.id) && check_ability_for_favourite(get_conversation(favourite.favourable_type, favourite.favourable_id, profile.id), profile)
+    end
+
     can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end
@@ -81,5 +89,20 @@ class Ability
     else
       check_membership(object.bench_conversation, profile)
     end
+  end
+
+  def get_conversation(favourable_type, favourable_id, profile_id)
+    case favourable_type
+    when 'BenchChannel'
+      BenchConversation.where(conversationable_type: 'BenchChannel', conversationable_id: favourable_id)
+    when 'Group'
+      BenchConversation.where(conversationable_type: 'Group', conversationable_id: favourable_id)
+    when 'Profile'
+      BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
+    end
+  end
+
+  def check_ability_for_favourite(conversation, profile)
+    check_membership(conversation.first, profile)
   end
 end

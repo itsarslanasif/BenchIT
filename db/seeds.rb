@@ -120,3 +120,4 @@ Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bo
 Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 1)
 Pin.create!(profile_id: 1, bench_conversation_id: 1, conversation_message_id: 2)
 User.create(name: 'Michael', email: 'michael@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
+BenchConversation.create(conversationable_type: 'Group', conversationable_id: 2)

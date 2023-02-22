@@ -1,8 +1,8 @@
 class Api::V1::FavouritesController < Api::ApiController
   before_action :set_favourite, only: %i[destroy]
+  before_action :initialize_favourite, only: %i[create]
 
   def create
-    @favourite = Favourite.find_or_create_by(favourites_params)
     if @favourite.id
       render json: { success: true, message: t('.create.success'), favourite: @favourite }, status: :ok
     else
@@ -25,5 +25,11 @@ class Api::V1::FavouritesController < Api::ApiController
 
   def set_favourite
     @favourite = Favourite.find(params[:id])
+    authorize! :destroy, @favourite
+  end
+
+  def initialize_favourite
+    @favourite = Favourite.find_or_create_by(favourites_params)
+    authorize! :create, @favourite
   end
 end
