@@ -347,7 +347,7 @@
           <EmojiModalButton
             icon="fa-solid fa-share"
             :actionText="$t('emojiModalButton.share_message')"
-            :action="setShareModalVisibility"
+            :action="setShareMessageModal"
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
@@ -376,15 +376,14 @@
     />
   </div>
   <DeleteMessageModal
-    v-model:show="showDeleteModal2"
+    v-model:show="showDeleteModal"
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
   />
   <ShareMessageModal
-    v-model:show="sharedModalVisibility"
+    v-model:show="showShareMessageModal"
     :message="currMessage"
-    :setDeleteModal="setShareModalVisibility"
-    :isModalVisible="setShareModalVisibility"
+    :toggleModal="setShareMessageModal"
   />
   <div
     class="bg-yellow-100 pl-16 p-2"
@@ -535,7 +534,7 @@ export default {
       showUnpinModal: false,
       currAttachment: null,
       sharedMessage: '',
-      sharedModalVisibility: false,
+      showShareMessageModal: false,
     };
   },
   beforeUnmount() {
@@ -805,8 +804,8 @@ export default {
       );
     },
 
-    setShareModalVisibility() {
-      this.sharedModalVisibility = !this.sharedModalVisibility;
+    setShareMessageModal() {
+      this.showShareMessageModal = !this.showShareMessageModal;
     },
   },
 };

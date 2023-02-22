@@ -10,10 +10,10 @@
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
         />
-        <div class="flex flex-col ml-1">
+        <div class="flex flex-col ml-1 w-flexible-xl">
           <span class="text-sm font-bold text-black-800">{{ senderName }}</span>
           <MessageSection
-            class="w-flexible-2xl"
+            class="w-flexible-xl"
             v-if="block.type === 'section'"
             :section="block"
           />
@@ -25,7 +25,7 @@
         <span>{{ postedAt }}</span>
         <n-divider class="bg-red-500" vertical />
         <span @click="jumpToConversation" class="text-info">
-          view conversation</span
+          {{ $t('chat.view_conversation') }}</span
         >
       </div>
     </div>
@@ -49,10 +49,12 @@ export default {
       return this.currMessage.sender_name;
     },
     postedIn() {
-      if (this.currMessage.channel_name) {
-        return 'Posted in # ' + this.currMessage.channel_name;
-      }
-      return 'Direct Message';
+      return this.currMessage.channel_name
+        ? `${this.$t('chat.posted_in')} ${this.currMessage.channel_name}`
+        : this.currMessage.conversationable_type ===
+          this.$t('conversation_type.profile')
+        ? this.$t('sidebar.direct_messages')
+        : '';
     },
     postedAt() {
       return moment(this.currMessage.created_at).calendar();
@@ -67,17 +69,17 @@ export default {
     },
     jumpToConversation() {
       switch (this.currMessage.conversationable_type) {
-        case 'BenchChannel':
+        case this.$t('conversation_type.channel'):
           this.$router.push(
             `/channels/${this.currMessage.conversationable_id}/${this.currMessage.id}`
           );
           break;
-        case 'Profile':
+        case this.$t('conversation_type.profile'):
           this.$router.push(
             `/profiles/${this.currMessage.conversationable_id}/${this.currMessage.id}`
           );
           break;
-        case 'Group':
+        case this.$t('conversation_type.group'):
           this.$router.push(
             `/groups/${this.currMessage.conversationable_id}/${this.currMessage.id}`
           );
