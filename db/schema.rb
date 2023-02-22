@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_14_094442) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_22_134724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -176,6 +176,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_14_094442) do
     t.index ["profile_id"], name: "index_pins_on_profile_id"
   end
 
+  create_table "preferences", force: :cascade do |t|
+    t.bigint "profile_id", null: false
+    t.json "messages_and_media", default: "{\"theme\": 1, \"names\": 1, \"additional_options\": [1, 3], \"emoji\": { \"default_skin_tone\": 1, \"additional_options\": [2, 4],\"one_click_emoji\": 2 },\"inline_media_and_links\": [1, 2]}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["profile_id"], name: "index_preferences_on_profile_id"
+  end
+
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "workspace_id", null: false
@@ -299,6 +307,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_14_094442) do
   add_foreign_key "pins", "bench_conversations"
   add_foreign_key "pins", "conversation_messages"
   add_foreign_key "pins", "profiles"
+  add_foreign_key "preferences", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "profiles"
