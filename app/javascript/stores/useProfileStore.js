@@ -41,14 +41,12 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.id,
             data
           );
-          // console.log(profile)
           currentProfileStore.currentProfile = profile;
           userProfileStore.setUserProfile(profile);
           let index = this.profiles.findIndex(profile => profile.id === currentProfileStore.currentProfile.id);
           this.profiles[index] = profile;
           encryption(sessionStorage, 'currentProfile', profile);
         } catch (e) {
-          debugger
           console.error(e);
         }
       },

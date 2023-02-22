@@ -35,8 +35,6 @@ class Profile < ApplicationRecord
   has_many :schedule_messages, dependent: :destroy
   has_many :direct_message_users, dependent: :destroy
 
-  before_validation :split_time_zone
-
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
   validates :display_name, length: { maximum: 80 }
@@ -119,18 +117,4 @@ class Profile < ApplicationRecord
   def get_favourite_id(favourable_id, favourable_type)
     Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
   end
-
-  def split_time_zone
-    # debugger
-    # time_zone = time_zone.split.second
-  end
-
-  # def formatted_time_zone
-  #   ActiveSupport::TimeZone.all.map do |zone|
-  #     # use strftime to format the time zone
-  #     zone_formatted = zone.now.strftime('%:z')
-  #     # use zone name and formatted zone to create a hash
-  #     { name: zone.name, formatted: zone_formatted }
-  #   end
-  # end
 end

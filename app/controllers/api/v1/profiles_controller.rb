@@ -5,7 +5,6 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :check_user_member_of_workspace, only: %i[show update]
   before_action :find_profile, only: %i[update set_status clear_status set_is_active remove_is_active]
-  # before_action :check_profile_image, %i[update]
 
   def index
     @profiles = if params[:query].presence
@@ -30,13 +29,8 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def update
-    @profile = current_profile.update!(profile_params)
-    #debugger
-    # if (@profile = current_profile.update!(profile_params))
-    #   render json: { success: true, profile: current_profile, message: t('.update.success') }, status: :ok
-    # else
-    #   render json: { success: false, error: t('.update.failure') }, status: :unprocessable_entity
-    # end
+    current_profile.update!(profile_params)
+    @profile = current_profile
   end
 
   def set_status
@@ -70,13 +64,6 @@ class Api::V1::ProfilesController < Api::ApiController
       ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
     end
   end
-
-  # def check_profile_image
-  #   debugger
-  #   if params[:profile_image].eql?('null')
-  #     params[:profile_image] = current_profile.profile_image
-  #   end
-  # end
 
   def find_profile
     @profile = Profile.find(params[:id])

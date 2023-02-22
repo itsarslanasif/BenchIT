@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
   private
 
   def render_error(exception)
-    puts exception
     error_map = {
       ActiveRecord::RecordNotFound => { message: I18n.t('application.render_error.not_found_error'), status: :not_found },
       ActiveRecord::RecordInvalid => { message: I18n.t('application.render_error.invalid_error'), status: :unprocessable_entity },
