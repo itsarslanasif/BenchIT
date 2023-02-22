@@ -1,5 +1,5 @@
 class Api::V1::StatusesController < Api::ApiController
-  before_action :set_status, only: :destroy
+  before_action :set_status, :authenticate_status, only: :destroy
 
   def index
     @recent_statuses = current_profile.statuses.last(4)
@@ -15,6 +15,10 @@ class Api::V1::StatusesController < Api::ApiController
 
   def set_status
     @status = Status.find(params[:id])
+  end
+
+  def authenticate_status
+    authorize! :destroy, @status
   end
 
   def status_params

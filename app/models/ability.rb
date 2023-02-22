@@ -36,6 +36,11 @@ class Ability
       check_ability_for_create(draft_message, profile)
     end
 
+    can :destroy, Status do |status|
+      debugger
+      status.profile_id.eql?(profile.id)
+    end
+
     can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end
