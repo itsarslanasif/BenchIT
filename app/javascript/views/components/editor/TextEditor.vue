@@ -41,45 +41,6 @@
       >
         {{ getScheduleNotification() }}
       </div>
-      <!-- <editor
-        v-model="newMessage"
-        @keydown.enter="sendMessagePayload"
-        api-key="no-api-key"
-        :init="{
-          placeholder: getPlaceholder,
-          menubar: false,
-          statusbar: false,
-          toolbar_location: 'bottom',
-          toolbar1:
-            'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
-          setup: editor => {
-            editor.ui.registry.addButton('AddAttachments', {
-              text: '➕',
-              onAction: handleCustomButton,
-            });
-          },
-          plugins: ' lists link code codesample emoticons',
-          codesample_languages: [none],
-          formats: {
-            code: {
-              selector: 'p',
-              styles: {
-                background:
-                  'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                border: '1px solid gray',
-                'border-radius': '3px',
-                'font-size': '10px',
-                'font-variant-ligatures': 'none',
-                'line-height': '1.5',
-                'margin-bottom': '14px',
-                padding: '0px 8px 0px 8px',
-                position: 'relative',
-                'font-family': 'monospace',
-              },
-            },
-          },
-        }"
-      /> -->
       <div
         v-if="editor"
         class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
@@ -179,6 +140,21 @@
             </div>
           </div>
         </div>
+        <div>
+          <div v-if="audioFiles.length" class="flex w-20 gap-1 mt-2 relative">
+            <div v-for="file in audioFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0"
+                @click="removeAudioFile(file)"
+              />
+              <visualize-voice
+                :fileID="new Date().getTime()"
+                :audioURL="createURL(file)"
+              />
+            </div>
+          </div>
+        </div>
         <div v-if="scheduleModalFlag">
           <ScheduleModal
             :setSchedule="setSchedule"
@@ -201,12 +177,7 @@
             >
               <font-awesome-icon icon="fa-video" />
             </button>
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-microphone" />
-            </button>
+            <VoiceRecorder :getAudio="getAudio" v-if="!editMessage" />
             <div v-if="!editMessage" class="vl" />
             <button
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -295,6 +266,8 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
+import VoiceRecorder from './VoiceRecorder.vue';
+import VisualizeVoice from './VisualizeVoice.vue';
 
 export default {
   data() {
@@ -335,6 +308,8 @@ export default {
     CreateTextSnippetModal,
     EditorContent,
     NDivider,
+    VoiceRecorder,
+    VisualizeVoice,
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -386,6 +361,9 @@ export default {
     },
   },
   methods: {
+    createURL(file) {
+      return URL.createObjectURL(file);
+    },
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
       const url = window.prompt('URL', previousUrl);
@@ -431,6 +409,7 @@ export default {
           this.sendMessage({ blocks: result }, this.files, this.schedule);
           this.newMessage = '';
           this.readerFile = [];
+          this.audioFiles = [];
           this.files = [];
           this.schedule = null;
         }
@@ -454,6 +433,7 @@ export default {
     const hasMentionCommand = ref(false);
     const hasChannelCommand = ref(false);
     const readerFile = ref([]);
+    const audioFiles = ref([]);
     const files = ref([]);
     const filteredList = ref([]);
     const schedule = ref(null);
@@ -592,11 +572,20 @@ export default {
       files.value.splice(index, 1);
       readerFile.value.splice(index, 1);
     };
+    const removeAudioFile = file => {
+      const index = audioFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      audioFiles.value.splice(index, 1);
+    };
     const getImages = file => {
       files.value[files.value?.length] = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => readerFile.value.push(reader.result);
+    };
+    const getAudio = file => {
+      files.value[files.value?.length] = file;
+      audioFiles.value.push(file);
     };
 
     const toggleSchedule = () => {
@@ -606,6 +595,7 @@ export default {
     return {
       newMessage,
       readerFile,
+      audioFiles,
       files,
       showMentions,
       showChannels,
@@ -619,7 +609,9 @@ export default {
       messageStore,
       messageToEdit,
       removeFile,
+      removeAudioFile,
       getImages,
+      getAudio,
       addMentionToText,
       toggleSchedule,
       setSchedule,
