@@ -1,6 +1,5 @@
 class ApplicationController < ActionController::Base
   require 'sidekiq/api'
-  include Pundit::Authorization
   protect_from_forgery with: :exception
 
   around_action :set_locale_from_url
