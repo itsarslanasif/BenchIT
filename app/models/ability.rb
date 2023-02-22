@@ -45,7 +45,9 @@ class Ability
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end
 
-    can :leave_channel, :all
+    can :leave_channel, BenchChannel do |channel|
+      channel.profile_ids.include?(profile.id)
+    end
 
     unless profile.outsider?
       can %i[create update destroy], BenchChannel
