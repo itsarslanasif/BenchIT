@@ -44,7 +44,9 @@ class Ability
     end
 
     can %i[create destroy], Favourite do |favourite|
-      favourite.profile_id.eql?(profile.id) && check_ability_for_favourite(get_conversation(favourite.favourable_type, favourite.favourable_id, profile.id), profile)
+      favourite.profile_id.eql?(profile.id) && check_ability_for_favourite(
+        get_conversation(favourite.favourable_type, favourite.favourable_id, profile.id), profile
+      )
     end
 
     can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
