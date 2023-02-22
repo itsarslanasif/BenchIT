@@ -102,6 +102,7 @@ Metrics/MethodLength:
   Exclude:
     - 'db/migrate/20161123131628_devise_token_auth_create_users.rb'
     - 'db/migrate/20211219031453_update_foreign_keys_on_delete.rb'
+    - 'app/models/ability.rb'
 Rails/CreateTableWithTimestamps:
   Exclude:
     - 'db/migrate/20170207092002_acts_as_taggable_on_migration.acts_as_taggable_on_engine.rb'
@@ -123,6 +124,10 @@ Metrics/CyclomaticComplexity:
   Max: 7
   Exclude:
     - 'db/migrate/20190819005836_add_missing_indexes_on_taggings.acts_as_taggable_on_engine.rb'
+    - 'app/models/ability.rb'
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/models/ability.rb'
 Rails/ReversibleMigration:
   Exclude:
     - 'db/migrate/20161025070152_removechannelsfrommodels.rb'
