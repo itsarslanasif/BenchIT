@@ -17,6 +17,8 @@ export const updateCurrentProfile = async (workspace_id, profile_id, payload) =>
       headers: getHeaders(),
     })
     .then(response => {
-      return response.data.profile;
+      // console.log(response.data);
+      debugger
+      return response.data;
     });
 };

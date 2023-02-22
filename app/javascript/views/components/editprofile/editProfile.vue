@@ -207,10 +207,14 @@ export default {
       ) {
         formData.append('pronounce_name', this.namePronounciation);
       }
+      if (this.audioBlob) {
+        formData.append('recording', this.audioBlob);
+      }
+      if (this.image !== this.currentProfile.image_url){
+        formData.append('profile_image', this.image);
+      }
       formData.append('time_zone', this.timezone);
-      formData.append('profile_image', this.image);
       // formData.append('profile_image', null);
-      formData.append('recording', this.audioBlob);
       this.profileStore.updateProfile(formData)
     },
     submit(audioChunks, audioBlob, audioRecorder) {
