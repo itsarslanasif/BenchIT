@@ -75,16 +75,14 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def profile_params
-    params.permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status,
-      :emoji_status, :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
+    params.permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status, :emoji_status,
+                  :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end
 
   def fetch_country_name
-    if params[:time_zone] != nil
-      params[:time_zone] = params[:time_zone].split(' ')[1..-1].join(' ')
-    end
+    params[:time_zone] = params[:time_zone].split[1..].join(' ') if params[:time_zone].present?
   end
 
   def check_user_member_of_workspace

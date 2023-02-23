@@ -124,11 +124,11 @@ export const timezones = [
     {"text": "(UTC+11:00) Srednekolymsk"},
     {"text": "(UTC+13:00) Auckland"},
     {"text": "(UTC+12:00) Fiji"},
-    {"text": "(UTC+12:00)Kamchatka"},
+    {"text": "(UTC+12:00) Kamchatka"},
     {"text": "(UTC+12:00) Marshall Is."},
     {"text": "(UTC+13:00) Wellington"},
     {"text": "(UTC+13:45) Chatham Is."},
     {"text": "(UTC+13:00) Nuku'alofa"},
     {"text": "(UTC+13:00) Samoa"},
-    {"text": "(UTC+13:00)Tokelau Is."}
+    {"text": "(UTC+13:00) Tokelau Is."}
 ]
