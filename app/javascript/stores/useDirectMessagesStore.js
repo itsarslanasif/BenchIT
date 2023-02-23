@@ -1,5 +1,8 @@
 import { defineStore } from 'pinia';
-import { getDirectMessagesList } from '../api/directMessages/directMessages';
+import {
+  getDirectMessagesList,
+  removeChatFromList,
+} from '../api/directMessages/directMessages';
 
 export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
   state: () => ({
@@ -35,6 +38,13 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
         this.directMessageUsers[index].status = profile.status;
         this.directMessageUsers[index].is_active = profile.is_active;
       }
+    },
+    async removeChatFromList(chat_id) {
+      const index = this.directMessageUsers.findIndex(
+        chat => chat.id === chat_id
+      );
+      this.directMessageUsers.splice(index, 1);
+      await removeChatFromList(chat_id);
     },
     getSortedDMList(currentProfileID) {
       const [myProfile, index] = this.getMyProfileWithIndex(currentProfileID);

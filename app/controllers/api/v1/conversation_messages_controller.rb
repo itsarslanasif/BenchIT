@@ -113,7 +113,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, :is_sent_to_chat, message_attachments: []).tap do |param|
+    params.permit(:content, :is_threaded, :parent_message_id, :is_sent_to_chat, :shared_message_id, message_attachments: []).tap do |param|
       param[:sender_id] = current_profile.id
     end
   end
