@@ -166,7 +166,9 @@ export default {
           .then(response => {
             this.status = response.status;
             if (this.status === 200) {
-              this.$router.push(`/join_workspace/${response.data.id}`);
+              this.$router.push(
+                `/join_workspace/${response.data.workspace.id}`
+              );
             } else {
               this.error = response.data.message;
             }
