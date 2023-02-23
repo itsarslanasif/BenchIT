@@ -3,6 +3,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
 
   before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
   before_action :delete_job, only: %i[destroy]
+  before_action :check_user_membership, only: %i[send_now]
 
   def index
     @pagy, @messages = pagination_for_schedule_messages(params[:page])
@@ -72,5 +73,12 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
     time = @schedule_message.scheduled_at.in_time_zone(current_profile.time_zone)
     job = ScheduleMessageJob.set(wait_until: time).perform_later(current_profile.id, @schedule_message.id)
     @schedule_message.update!(job_id: job.provider_job_id)
+  end
+
+  def check_user_membership
+    return unless @message.bench_conversation.conversationable_type.eql?('BenchChannel')
+    return if bench_conversation.conversationable.profile_ids.include?(current_profile.id)
+
+    ChannelParticipant.create!(bench_channel_id: 1, profile_id: current_profile.id, permission: true)
   end
 end
