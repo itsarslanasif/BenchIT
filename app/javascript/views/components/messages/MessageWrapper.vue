@@ -152,7 +152,7 @@
                 :class="
                   currMessage.is_info ? 'text-black-600' : 'text-black-800'
                 "
-                class="text-sm flex-wrap rich-content"
+                class="text-sm flex-wrap"
               >
                 <MessageSection
                   v-if="block.type === 'section'"
@@ -222,22 +222,17 @@
                       icon="fa-solid fa-file"
                     />
                   </div>
-
                   <div
                     :class="{
                       'ml-12':
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
-                    v-if="ismp4File(attachment.attachment_link)"
+                    v-if="isVideoFile"
                   >
                     <video controls :src="attachment.attachment_link"></video>
                   </div>
-
                   <img
-                    v-if="
-                      !ismp4File(attachment.attachment_link) &&
-                      !isTxtFile(attachment.attachment_link)
-                    "
+                    v-if="!isVideoFile && !isTxtFile"
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -627,6 +622,11 @@ export default {
         this.currAttachment.attachment.filename.split('.')[1];
       return fileExtension === 'wav';
     },
+    isVideoFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'webm-codecs=vp8,opus';
+    },
     isSharedMessage() {
       return this.currMessage.shared_message != null;
     },
@@ -634,10 +634,6 @@ export default {
   methods: {
     setAttachment(attachment) {
       this.currAttachment = attachment;
-    },
-    ismp4File(url) {
-      const fileExtension = url.split('/').pop().split('.').pop();
-      return fileExtension === 'mp4';
     },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
@@ -821,38 +817,5 @@ export default {
 .hover-trigger:hover .hover-target {
   display: inline;
   cursor: pointer;
-}
-
-.rich-content {
-  ul {
-    li {
-      margin-left: 10px;
-      list-style-type: disc;
-
-      li {
-        list-style-type: circle;
-
-        li {
-          list-style-type: square;
-        }
-      }
-    }
-  }
-
-  ol {
-    li {
-      margin-left: 10px;
-      list-style-type: decimal;
-
-      li {
-        list-style-type: lower-alpha;
-      }
-    }
-  }
-
-  a {
-    color: rgba(39, 39, 238, 0.914);
-    text-decoration: underline;
-  }
 }
 </style>
