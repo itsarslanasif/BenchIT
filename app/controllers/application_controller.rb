@@ -45,4 +45,3 @@ end
 class UnAuthorized < StandardError; end
 
 class PaginationError < StandardError; end
-# CanCan::BlockAndConditionsError

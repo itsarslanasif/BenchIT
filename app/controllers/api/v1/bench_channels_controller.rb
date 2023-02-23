@@ -1,10 +1,9 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   include Pagination
 
-  before_action :set_bench_channel, only: %i[show update destroy leave_channel]
-  before_action :set_channel_participant, :set_left_on, only: :leave_channel
+  before_action :set_bench_channel, :authenticate_channel, only: %i[show update destroy leave_channel]
+  before_action :set_channel_participant, only: :leave_channel
   before_action :bench_channel_cannot_be_public_again, only: :update
-  load_and_authorize_resource
 
   def index
     @bench_channels = current_workspace.bench_channels
@@ -27,11 +26,8 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channel = BenchChannel.new(bench_channel_params)
 
     ActiveRecord::Base.transaction do
-      if @bench_channel.save
-        create_first_bench_channel_participant
-      else
-        render json: { success: false, error: t('.create.failure'), errors: @bench_channel.errors.full_messages }, status: :unprocessable_entity
-      end
+      @bench_channel.save!
+      create_first_bench_channel_participant
     end
   end
 
@@ -47,13 +43,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def leave_channel
     ActiveRecord::Base.transaction do
-      if @channel_participant.destroy
-        InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
-        render json: { success: true, message: t('.leave_channel.success') }, status: :ok
-      else
-        render json: { success: false, error: t('.leave_channel.failure') }, status: :unprocessable_entity
-      end
+      @channel_participant.update!(left_on: DateTime.current)
+      @channel_participant.destroy!
+      InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
     end
+    render json: { success: true, message: t('.leave_channel.success') }, status: :ok
   end
 
   def joined_channels
@@ -73,26 +67,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.includes(:profiles).find(params[:id])
-    return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
-
-    render json: { success: false, error: t('.set_bench_channel.failure', { bench_channel: @bench_channel.name }) },
-           status: :not_found
   end
 
   def set_channel_participant
-    @channel_participant = current_profile.channel_participants.find_by(bench_channel_id: @bench_channel.id)
-
-    return unless @channel_participant.nil?
-
-    render json: { success: false, error: t('.set_channel_participant.failure') }, status: :not_found
-  end
-
-  def set_left_on
-    @channel_participant.left_on = DateTime.current
-
-    return if @channel_participant.save
-
-    render json: { success: false, error: t('.set_left_on.failure') }, status: :unprocessable_entity
+    @channel_participant = current_profile.channel_participants.find_by!(bench_channel_id: @bench_channel.id)
+    authorize! :leave_channel, @channel_participant
   end
 
   def bench_channel_cannot_be_public_again
@@ -146,12 +125,14 @@ class Api::V1::BenchChannelsController < Api::ApiController
     @bench_channels = @bench_channels.left_joins(:channel_participants).group(:id).order("count(channel_participants) #{order_keyword}")
   end
 
-  def authorization
-    if action_name.eql?('show')
-      @bench_channel = BenchChannel.find(params[:id])
-      authorize @bench_channel
-    else
-      authorize BenchChannel
+  def authenticate_channel
+    case action_name
+    when 'show'
+      authorize! :read, @bench_channel
+    when 'update'
+      authorize! :update, @bench_channel
+    when 'destroy'
+      authorize! :destroy, @bench_channel
     end
   end
 end

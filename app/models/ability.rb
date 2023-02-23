@@ -49,16 +49,23 @@ class Ability
       )
     end
 
-    can %i[show joined_channels bench_channel_messages], BenchChannel do |channel|
-      channel.profile_ids.include?(profile.id) || !profile.outsider?
-    end
+    can %i[destroy], BenchChannel, creator_id: profile.id
 
-    can :leave_channel, BenchChannel do |channel|
+    can %i[update], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id)
     end
 
+    can %i[read], BenchChannel do |channel|
+      channel.is_private? ? channel.profile_ids.include?(profile.id) : true
+    end
+
+    can %i[leave_channel], ChannelParticipant, profile_id: profile.id
+
+    can %i[joined_channels bench_channel_messages], BenchChannel do |channel|
+      channel.profile_ids.include?(profile.id) || !profile.outsider?
+    end
+
     unless profile.outsider?
-      can %i[create update destroy], BenchChannel
       can %i[create join_public_channel], ChannelParticipant
       can :invite, Workspace
       can :read, :all
