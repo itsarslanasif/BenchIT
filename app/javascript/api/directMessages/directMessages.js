@@ -11,14 +11,21 @@ export const getDirectMessagesList = async () => {
     });
 };
 
+export const removeChatFromList = async chat_id => {
+  return axios
+    .delete(`v1/direct_message_users/${chat_id}`, {
+      headers: getHeaders(),
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
 export const getLastDirectMessagesList = async () => {
   return axios
-    .get(
-      `v1/direct_message_users/recent_direct_messages`,
-      {
-        headers: getHeaders(),
-      }
-    )
+    .get(`v1/direct_message_users/recent_direct_messages`, {
+      headers: getHeaders(),
+    })
     .then(response => {
       return response.data;
     });

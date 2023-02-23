@@ -25,7 +25,7 @@
               {{ statusClearAfterTime(profileStatus.clear_after) }}
             </span>
           </n-tooltip>
-          <n-avatar class="self-baseline" size="medium" :src="profileAvatar" />
+          <n-avatar class="self-baseline" size="medium"  />
         </div>
         <div
           class="flex absolute icon"
@@ -58,6 +58,8 @@ import moment from 'moment';
 import { clearStatus } from '../../api/profiles/profileStatus';
 import { setActiveStatus } from '../../api/profiles/profileStatus';
 import { removeActiveStatus } from '../../api/profiles/profileStatus';
+import { useUserProfileStore } from '../../stores/useUserProfileStore';
+import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
 export default {
   components: {
@@ -71,6 +73,8 @@ export default {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
     const currentWorkspaceStore = useCurrentWorkspaceStore();
+    const userProfileStore = useUserProfileStore();
+    const rightPaneStore = useRightPaneStore();
     const { currentProfile } = storeToRefs(profileStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { status } = storeToRefs(profileStore);
@@ -81,6 +85,8 @@ export default {
       profileCurrentStatus: status,
       profileStore,
       currentWorkspace,
+      userProfileStore,
+      rightPaneStore,
     };
   },
 
@@ -247,6 +253,10 @@ export default {
           sessionStorage.removeItem('currentWorkspace');
           sessionStorage.removeItem('currentProfile');
           this.$router.push('/workspace_dashboard');
+          break;
+        case 'profile':
+          this.userProfileStore.setUserProfile(this.profile)
+          this.rightPaneStore.toggleUserProfileShow(true)
           break;
         case 'downloads':
           this.showModal = true;

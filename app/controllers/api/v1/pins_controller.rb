@@ -11,7 +11,7 @@ class Api::V1::PinsController < Api::ApiController
   end
 
   def create
-    @pin = @conversation.pins.new(profile_id: current_profile.id, conversation_message_id: params[:conversation_message_id])
+    @pin = @conversation.pins.new(profile_id: current_profile.id, conversation_message_id: pin_params[:conversation_message_id])
     @pin.save!
     render json: { success: true, message: t('.create.success') }, status: :ok
   end
@@ -24,7 +24,15 @@ class Api::V1::PinsController < Api::ApiController
   private
 
   def find_conversation
-    @conversation = get_conversation(params[:conversation_id], params[:conversation_type])
+    @conversation = if pin_params[:conversation_id].present? && pin_params[:conversation_type].present?
+                      get_conversation(params[:conversation_id], params[:conversation_type])
+                    else
+                      BenchConversation.find(pin_params[:bench_conversation_id])
+                    end
+  end
+
+  def pin_params
+    params.permit(:conversation_id, :conversation_type, :bench_conversation_id, :conversation_message_id)
   end
 
   def set_pin

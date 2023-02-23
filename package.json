@@ -39,6 +39,7 @@
     "naive-ui": "^2.33.5",
     "pinia": "^2.0.13",
     "popper.js": "^1.16.1",
+    "recordrtc": "^5.6.2",
     "remarkable": "^2.0.1",
     "splitpanes": "^3.1.5",
     "tailwindcss": "^1.9.6",
@@ -52,7 +53,8 @@
     "vue-i18n": "^9.1.10",
     "vue-router": "^4.0.14",
     "vue3-emoji-picker": "^1.1.7",
-    "vue3-rich-accordion": "^0.0.7"
+    "vue3-rich-accordion": "^0.0.7",
+    "wavesurfer.js": "^6.4.0"
   },
   "engines": {
     "node": ">=16.x",

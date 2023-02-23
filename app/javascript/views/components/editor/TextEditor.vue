@@ -92,6 +92,19 @@
         />
 
         <div>
+          <div v-if="videoFiles.length" class="flex gap-1 mt-2 relative">
+            <div v-for="file in videoFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0 z-10 cursor-pointer"
+                @click="removeVideoFiles(file)"
+              />
+              <VisualizeVideo :blob="file" />
+            </div>
+          </div>
+        </div>
+
+        <div>
           <div v-if="readerFile.length" class="flex gap-1 mt-2 relative">
             <div v-for="file in readerFile" :key="file" class="relative">
               <font-awesome-icon
@@ -106,14 +119,27 @@
             </div>
           </div>
         </div>
-
+        <div>
+          <div v-if="audioFiles.length" class="flex w-20 gap-1 mt-2 relative">
+            <div v-for="file in audioFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0"
+                @click="removeAudioFile(file)"
+              />
+              <visualize-voice
+                :fileID="new Date().getTime()"
+                :audioURL="createURL(file)"
+              />
+            </div>
+          </div>
+        </div>
         <div v-if="scheduleModalFlag">
           <ScheduleModal
             :setSchedule="setSchedule"
             :toggleShow="toggleSchedule"
           />
         </div>
-
         <div class="flex justify-between mt-4">
           <div class="flex items-center gap-1">
             <button
@@ -128,18 +154,11 @@
               />
             </button>
             <div v-if="!editMessage" class="vl" />
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-video" />
-            </button>
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-microphone" />
-            </button>
+            <VideoRecord
+              :getVideoFiles="getVideoFiles"
+              :editMessage="editMessage"
+            />
+            <VoiceRecorder :getAudio="getAudio" v-if="!editMessage" />
             <div v-if="!editMessage" class="vl" />
             <button
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -229,9 +248,13 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
-import Mention from '@tiptap/extension-mention'
-import suggestion from './suggestion'
+import Mention from '@tiptap/extension-mention';
+import suggestion from './suggestion';
 import { CONSTANTS } from '../../../assets/constants';
+import VoiceRecorder from './VoiceRecorder.vue';
+import VisualizeVoice from './VisualizeVoice.vue';
+import VideoRecord from '../../widgets/videoRecord.vue';
+import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 
 export default {
   data() {
@@ -255,6 +278,10 @@ export default {
     CreateTextSnippetModal,
     EditorContent,
     NDivider,
+    VoiceRecorder,
+    VisualizeVoice,
+    VideoRecord,
+    VisualizeVideo,
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -278,8 +305,14 @@ export default {
     recieverName: {
       type: String,
     },
+    repliedParentMessage: {
+      type: String,
+    },
   },
   methods: {
+    createURL(file) {
+      return URL.createObjectURL(file);
+    },
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
       const url = window.prompt('URL', previousUrl);
@@ -297,7 +330,85 @@ export default {
         .setLink({ href: url })
         .run();
     },
+
+    async makeBlocks(line) {
+      const block = await markdownToBlocks(line);
+      return block[0];
+    }
+
+//     async sendMessagePayload(event, buttonClicked) {
+
+// if (
+//         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+//         !this.editMessage
+//       ) {
+//         const mrkdwn = [];
+//         const htmlList = this.editorContent.split('<br>');
+//         htmlList.forEach(async line => {
+//           this.turndownService.addRule('s', {
+//             filter: ['s'],
+//             replacement: function (content) {
+//               return '~~' + content + '~~';
+//             },
+//           });
+//           this.turndownService.addRule('', {
+//             filter: [`"`],
+//             replacement: function (content) {
+//               return `"` + content + `"`;
+//             },
+//           });
+//           mrkdwn.push(this.turndownService.turndown(line));
+//         });
+//         const result = await Promise.all(
+//           mrkdwn.map(async line => {
+//             line = line.replace(/\*\*/g, '****');
+//             return await this.makeBlocks(line);
+//           })
+//         );
+//         if (result[0] != null) {
+//           const output = this.formatBlockContent(result);
+//           this.sendMessage({ blocks: output }, this.files.value, this.schedule);
+//           this.newMessage.value = '';
+//           this.readerFile.value = [];
+//           this.files.value = [];
+//           this.audioFiles = [];
+//           this.videoFiles = [];
+//           this.schedule.value = null;
+//           this.editor.value.commands.setContent([]);
+//         }
+//       }
+
+    //   if (
+    //     ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+    //     !this.editMessage
+    //   ) {
+    //     const mrkdwn = [];
+    //     const htmlList = this.editorContent.split('<br>');
+    //     htmlList.forEach(async line => {
+    //       line = line.replace(/<s>/g, '~~');
+    //       line = line.replace(/<\/s>/g, '~~');
+    //       mrkdwn.push(this.turndownService.turndown(line));
+    //     });
+    //     const result = await Promise.all(
+    //       mrkdwn.map(async line => {
+    //         line = line.replace(/\*\*/g, '****');
+    //         return await this.makeBlocks(line);
+    //       })
+    //     );
+    //     if (result.length) {
+    //       this.sendMessage({ blocks: result }, this.files, this.schedule);
+    //       this.newMessage = '';
+    //       this.readerFile = [];
+    //       this.audioFiles = [];
+    //       this.videoFiles = [];
+    //       this.files = [];
+    //       this.schedule = null;
+    //     }
+    //   }
+    // },
+  // },
   },
+
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
@@ -313,7 +424,10 @@ export default {
     const newMessage = ref('');
     const editorContent = ref('');
     const readerFile = ref([]);
+    const audioFiles = ref([]);
     const files = ref([]);
+    const videoFiles = ref([]);
+    const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
@@ -396,6 +510,8 @@ export default {
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
+          audioFiles.value = [];
+          videoFiles.value = [];
           schedule.value = null;
           editor.value.commands.setContent([]);
         }
@@ -469,11 +585,29 @@ export default {
       files.value.splice(index, 1);
       readerFile.value.splice(index, 1);
     };
+    const removeAudioFile = file => {
+      const index = audioFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      audioFiles.value.splice(index, 1);
+    };
     const getImages = file => {
       files.value[files.value?.length] = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => readerFile.value.push(reader.result);
+    };
+    const getAudio = file => {
+      files.value[files.value?.length] = file;
+      audioFiles.value.push(file);
+    };
+    const getVideoFiles = file => {
+      files.value[files.value?.length] = file;
+      videoFiles.value.push(file);
+    };
+    const removeVideoFiles = file => {
+      const index = videoFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      videoFiles.value.splice(index, 1);
     };
 
     const getPlaceholder = () => {
@@ -524,6 +658,7 @@ export default {
     return {
       newMessage,
       readerFile,
+      audioFiles,
       files,
       channels,
       profiles,
@@ -532,7 +667,9 @@ export default {
       messageStore,
       messageToEdit,
       removeFile,
+      removeAudioFile,
       getImages,
+      getAudio,
       toggleSchedule,
       setSchedule,
       getScheduleNotification,
@@ -544,10 +681,14 @@ export default {
       attachmentAndShortcutStore,
       turndownService,
       editorContent,
-      sendMessagePayload,
       editor,
       fileRecieverName,
       setLink,
+      videoFiles,
+      getVideoFiles,
+      removeVideoFiles,
+      formatBlockContent,
+      sendMessagePayload
     };
   },
 };
