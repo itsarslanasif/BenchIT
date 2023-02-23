@@ -164,9 +164,14 @@ en:
           bear in mind you’ll have to supply both sides of the conversation.'
         this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
           messages and share files with"
+        share_private_chat_note: 'This message is from a private conversation, so it can only be shared
+          in this thread'
+        view_conversation : 'View Conversation'
+        posted_in: 'Posted in # '
       conversation_type:
         profile: 'Profile'
         channel: 'BenchChannel'
+        group: 'Group'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'

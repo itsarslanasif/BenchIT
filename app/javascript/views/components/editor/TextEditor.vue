@@ -348,6 +348,9 @@ export default {
     recieverName: {
       type: String,
     },
+    repliedParentMessage: {
+      type: String,
+    },
   },
   computed: {
     getPlaceholder() {
@@ -409,6 +412,7 @@ export default {
       ) {
         const mrkdwn = [];
         const htmlList = this.editorContent.split('<br>');
+        // const repliedParent = JSON.parse(this.repliedParentMessage.content.split('<br>')).blocks[0].text;
         htmlList.forEach(async line => {
           line = line.replace(/<s>/g, '~~');
           line = line.replace(/<\/s>/g, '~~');

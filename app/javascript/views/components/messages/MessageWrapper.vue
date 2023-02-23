@@ -98,19 +98,27 @@
                 }}
               </p>
             </span>
-            <div
-              v-if="
-                isSameUser &&
-                isSameDayMessage &&
-                !isFirstMessage &&
-                !currMessage.is_info &&
-                !isDeleted
-              "
-            >
-              <MessageSection
-                v-if="block.type === 'section'"
-                :section="block"
-              />
+            <div>
+              <div
+                v-if="
+                  isSameUser &&
+                  isSameDayMessage &&
+                  !isFirstMessage &&
+                  !currMessage.is_info &&
+                  !isDeleted
+                "
+              >
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+                />
+                <div v-if="isSharedMessage" class="flex ml-4 flex-center">
+                  <ShareMessageVue
+                    :inThread="inThread"
+                    :currMessage="currMessage.shared_message"
+                  />
+                </div>
+              </div>
             </div>
             <span
               v-if="
@@ -156,11 +164,18 @@
                 :updated_at="currMessage.updated_at"
               />
             </div>
+            <div v-if="isSharedMessage" class="flex -ml-12 flex-center">
+              <ShareMessageVue
+                :inThread="inThread"
+                :currMessage="currMessage.shared_message"
+              />
+            </div>
           </span>
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
-              (JSON.parse(this.currMessage.content).blocks[0].text.text === $t('deleteMessageModal.success'))
+              JSON.parse(this.currMessage.content).blocks[0].text.text ===
+                $t('deleteMessageModal.success')
             "
             class="text-black-600 text-sm flex mt-2"
           >
@@ -283,9 +298,7 @@
                   emoji
                 }}</span>
                 <span class="text-md"
-                  >{{
-                    getUsers(emoji, currentProfile.username)
-                  }}
+                  >{{ getUsers(emoji, currentProfile.username) }}
                   {{ $t('chat.reacted') }}</span
                 >
               </div>
@@ -309,7 +322,8 @@
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
             (emojiModalStatus || openEmojiModal || showOptions) &&
-            (JSON.parse(this.currMessage.content).blocks[0].text.text !== $t('deleteMessageModal.success'))
+            JSON.parse(this.currMessage.content).blocks[0].text.text !==
+              $t('deleteMessageModal.success')
           "
         >
           <template v-for="emoji in topReactions" :key="emoji">
@@ -333,6 +347,7 @@
           <EmojiModalButton
             icon="fa-solid fa-share"
             :actionText="$t('emojiModalButton.share_message')"
+            :action="setShareMessageModal"
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
@@ -364,6 +379,11 @@
     v-model:show="showDeleteModal"
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
+  />
+  <ShareMessageModal
+    v-model:show="showShareMessageModal"
+    :message="currMessage"
+    :toggleModal="setShareMessageModal"
   />
   <div
     class="bg-yellow-100 pl-16 p-2"
@@ -415,7 +435,9 @@ import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
+import ShareMessageVue from '../../widgets/sharedMessage.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
+import ShareMessageModal from '../../widgets/shareMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
@@ -463,7 +485,9 @@ export default {
     NPopover,
     downloadsModal,
     ReplyAndThreadButton,
+    ShareMessageVue,
     DeleteMessageModal,
+    ShareMessageModal,
     NAvatar,
     TextEditorVue,
     EditedAtTime,
@@ -509,6 +533,8 @@ export default {
       showDeleteModal: false,
       showUnpinModal: false,
       currAttachment: null,
+      sharedMessage: '',
+      showShareMessageModal: false,
     };
   },
   beforeUnmount() {
@@ -586,7 +612,10 @@ export default {
       return savedMessage ? true : false;
     },
     isDeleted() {
-      return JSON.parse(this.currMessage.content).blocks[0].text.text  === this.$t('deleteMessageModal.success');
+      return (
+        JSON.parse(this.currMessage.content).blocks[0].text.text ===
+        this.$t('deleteMessageModal.success')
+      );
     },
     isTxtFile() {
       const fileExtension =
@@ -597,6 +626,9 @@ export default {
       const fileExtension =
         this.currAttachment.attachment.filename.split('.')[1];
       return fileExtension === 'wav';
+    },
+    isSharedMessage() {
+      return this.currMessage.shared_message != null;
     },
   },
   methods: {
@@ -767,6 +799,16 @@ export default {
 
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
+    },
+
+    getSharedMessage() {
+      this.sharedMessage = this.messagesStore.getSharedMessage(
+        this.currMessage.shared_message_id
+      );
+    },
+
+    setShareMessageModal() {
+      this.showShareMessageModal = !this.showShareMessageModal;
     },
   },
 };
