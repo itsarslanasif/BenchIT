@@ -128,7 +128,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def authenticate_channel
     case action_name
     when 'show'
-      authorize! :read, @bench_channel
+      authorize! :get, @bench_channel
     when 'update'
       authorize! :update, @bench_channel
     when 'destroy'

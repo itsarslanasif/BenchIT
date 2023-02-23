@@ -3,12 +3,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   include Conversation
   include Pagination
 
-  before_action :fetch_conversation, :verify_membership, only: %i[create]
+  before_action :fetch_conversation, only: %i[create]
   before_action :set_message, :authenticate_message, only: %i[destroy update]
   before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
+  before_action :authenticate, only: %i[bench_channel_messages group_messages]
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
   def send_message
@@ -22,11 +23,13 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      authorize! :create, @message
       @message.save!
 
       render json: { success: true, message: t('.create.success') }, status: :ok
     else
       @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
+      authorize! :create, @schedule_message
       @schedule_message.save!
     end
   end
@@ -101,9 +104,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def set_saved_item
-    @saved_item = current_profile.saved_items.find_by(conversation_message_id: params[:id])
-
-    return render json: { success: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
+    @saved_item = current_profile.saved_items.find_by!(conversation_message_id: params[:id])
+    authorize! :destroy, @saved_item
   end
 
   def set_message
@@ -128,23 +130,22 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    authorize! :bench_channel_messages, @bench_channel
-
-    return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
-
-    render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
   end
 
   def set_group
     @group = Group.find(params[:id])
-    return if @group.profile_ids.include?(current_profile.id)
+  end
 
-    render json: { success: false, error: t('.set_group.failure') }, status: :not_found
+  def authenticate
+    if action_name.eql?('group_messages')
+      authorize! :get, @group
+    else
+      authorize! :get, @bench_channel
+    end
   end
 
   def set_receiver
     @receiver = Profile.find(params[:id])
-    authorize! :profile_messages, @receiver
 
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
@@ -152,15 +153,11 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def authenticate_message
-    if @message.sender_id.eql?(current_profile.id)
-      check_membership(@message.bench_conversation)
+    if action_name.eql?('update')
+      authorize! :update, @message
     else
-      render json: { success: false, error: t('.authenticate_message.failure') }, status: :unauthorized
+      authorize! :destroy, @message
     end
-  end
-
-  def verify_membership
-    check_membership(@bench_conversation)
   end
 
   def marked_chat_read

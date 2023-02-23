@@ -19,11 +19,11 @@ class Ability
     end
 
     can %i[update destroy], ConversationMessage do |message|
-      check_ability(message, profile) && message.profile_id.eql?(profile.id)
+      check_ability(message, profile) && message.sender_id.eql?(profile.id)
     end
 
     can %i[create], ConversationMessage do |message|
-      check_ability_for_create(message, profile)
+      check_ability_for_message_create(message, profile)
     end
 
     can %i[create], ScheduleMessage do |message|
@@ -39,7 +39,7 @@ class Ability
     can :destroy, Status, profile_id: profile.id
     can %i[create destroy], Download, profile_id: profile.id
 
-    can %i[read add_member], Group do |group|
+    can %i[get add_member], Group do |group|
       group.profile_ids.include?(profile.id)
     end
 
@@ -55,16 +55,15 @@ class Ability
       channel.profile_ids.include?(profile.id)
     end
 
-    can %i[read], BenchChannel do |channel|
+    can %i[get], BenchChannel do |channel|
       channel.is_private? ? channel.profile_ids.include?(profile.id) : true
     end
 
     can %i[leave_channel], ChannelParticipant, profile_id: profile.id
 
+    can %i[destroy], SavedItem, profile_id: profile.id
 
-
-
-    can %i[joined_channels bench_channel_messages], BenchChannel do |channel|
+    can %i[joined_channels], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end
 
@@ -73,7 +72,7 @@ class Ability
       can :read, :all
     end
 
-    can %i[profile_messages show], Profile do |account|
+    can %i[show], Profile do |account|
       profile.eql?(account) || !profile.outsider?
     end
   end
@@ -92,6 +91,10 @@ class Ability
 
   def check_ability_for_create(object, profile)
     object.profile_id.eql?(profile.id) ? check_membership(object.bench_conversation, profile) : false
+  end
+
+  def check_ability_for_message_create(object, profile)
+    object.sender_id.eql?(profile.id) ? check_membership(object.bench_conversation, profile) : false
   end
 
   def check_ability(object, profile)

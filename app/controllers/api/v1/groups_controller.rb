@@ -24,7 +24,7 @@ class Api::V1::GroupsController < Api::ApiController
 
   def authenticate_group
     if action_name.eql?('show')
-      authorize! :read, @group
+      authorize! :get, @group
     else
       authorize! :add_member, @group
     end
