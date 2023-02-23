@@ -32,6 +32,11 @@ export const useProfileStore = () => {
           this.profiles[index].is_active = data.is_active;
         }
       },
+      getProfileById(id) {
+        return this.profiles.find((profile)=>{
+          return profile.id = id
+        })
+      },
       async updateProfile(data) {
         const currentProfileStore = useCurrentProfileStore();
         const userProfileStore = useUserProfileStore();
