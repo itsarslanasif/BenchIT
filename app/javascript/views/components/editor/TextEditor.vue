@@ -126,6 +126,19 @@
         />
 
         <div>
+          <div v-if="videoFiles.length" class="flex gap-1 mt-2 relative">
+            <div v-for="file in videoFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0 z-10 cursor-pointer"
+                @click="removeVideoFiles(file)"
+              />
+              <VisualizeVideo :blob="file" />
+            </div>
+          </div>
+        </div>
+
+        <div>
           <div v-if="readerFile.length" class="flex gap-1 mt-2 relative">
             <div v-for="file in readerFile" :key="file" class="relative">
               <font-awesome-icon
@@ -171,12 +184,10 @@
               <Attachments :getImages="getImages" />
             </button>
             <div v-if="!editMessage" class="vl" />
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-video" />
-            </button>
+            <VideoRecord
+              :getVideoFiles="getVideoFiles"
+              :editMessage="editMessage"
+            />
             <VoiceRecorder :getAudio="getAudio" v-if="!editMessage" />
             <div v-if="!editMessage" class="vl" />
             <button
@@ -268,6 +279,8 @@ import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import VoiceRecorder from './VoiceRecorder.vue';
 import VisualizeVoice from './VisualizeVoice.vue';
+import VideoRecord from '../../widgets/videoRecord.vue';
+import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 
 export default {
   data() {
@@ -310,6 +323,8 @@ export default {
     NDivider,
     VoiceRecorder,
     VisualizeVoice,
+    VideoRecord,
+    VisualizeVideo,
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -331,6 +346,9 @@ export default {
       type: Object,
     },
     recieverName: {
+      type: String,
+    },
+    repliedParentMessage: {
       type: String,
     },
   },
@@ -394,6 +412,7 @@ export default {
       ) {
         const mrkdwn = [];
         const htmlList = this.editorContent.split('<br>');
+        // const repliedParent = JSON.parse(this.repliedParentMessage.content.split('<br>')).blocks[0].text;
         htmlList.forEach(async line => {
           line = line.replace(/<s>/g, '~~');
           line = line.replace(/<\/s>/g, '~~');
@@ -410,6 +429,7 @@ export default {
           this.newMessage = '';
           this.readerFile = [];
           this.audioFiles = [];
+          this.videoFiles = [];
           this.files = [];
           this.schedule = null;
         }
@@ -435,6 +455,7 @@ export default {
     const readerFile = ref([]);
     const audioFiles = ref([]);
     const files = ref([]);
+    const videoFiles = ref([]);
     const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
@@ -587,6 +608,15 @@ export default {
       files.value[files.value?.length] = file;
       audioFiles.value.push(file);
     };
+    const getVideoFiles = file => {
+      files.value[files.value?.length] = file;
+      videoFiles.value.push(file);
+    };
+    const removeVideoFiles = file => {
+      const index = videoFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      videoFiles.value.splice(index, 1);
+    };
 
     const toggleSchedule = () => {
       scheduleModalFlag.value = !scheduleModalFlag.value;
@@ -624,6 +654,9 @@ export default {
       attachmentAndShortcutStore,
       turndownService,
       editorContent,
+      videoFiles,
+      getVideoFiles,
+      removeVideoFiles,
     };
   },
 };

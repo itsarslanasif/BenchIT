@@ -115,6 +115,12 @@ export default {
           if (fileExtension == 'webm;codecs=opus') {
             filename += '.wav';
             file = this.getFileFromBlob(file, filename);
+          } else if (
+            fileExtension == 'x-matroska;codecs=avc1,opus' ||
+            fileExtension == 'x-matroska;codecs=avc1'
+          ) {
+            filename += '.mp4';
+            file = this.getFileFromBlob(file, filename);
           } else {
             filename += `.${fileExtension}`;
           }
@@ -126,7 +132,7 @@ export default {
           console.error(e);
         }
       } else {
-        return false
+        return false;
       }
     },
   },

@@ -101,6 +101,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_22_134724) do
     t.bigint "sender_id"
     t.boolean "is_info", default: false, null: false
     t.boolean "is_sent_to_chat", default: false, null: false
+    t.integer "shared_message_id"
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
