@@ -131,7 +131,6 @@ export default {
     },
 
     setUserProfileForPane(profile_id) {
-      console.log(this.profilesStore.profiles);
       const profile = this.profilesStore.profiles.find(
         profile => profile.id === profile_id
       );
