@@ -26,11 +26,11 @@
         <div class="flex justify-center relative">
           <video
             v-show="!isCameraAvailable && !recordedVideoUrl"
-            class="w-flexible-xl h-flexible-xl bg-black-900 border border-transparent rounded-lg"
+            class="w-flexible-xl video h-flexible-xl bg-black-900 border border-transparent rounded-lg"
           ></video>
           <video
             v-show="isCameraAvailable && !recordedVideoUrl"
-            class="w-flexible-xl h-flexible-xl border border-transparent rounded-lg"
+            class="w-flexible-xl video h-flexible-xl border border-transparent rounded-lg"
             ref="previewVideoElement"
           ></video>
           <div
@@ -380,3 +380,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.video {
+  transform: scaleX(-1);
+}
+</style>
