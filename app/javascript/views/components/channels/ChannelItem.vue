@@ -1,9 +1,20 @@
 <template>
-  <n-dropdown class="rounded-md" placement="bottom-end" size="medium" :show="showChannelOptions"
-    :options="channel_options" @mouseleave="toggleChannelOptionShow" @select="handleSelect($event)"
-    :on-clickoutside="toggleChannelOptionShow">
-    <div oncontextmenu="return false;" class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer" @click="goTo(`/channels/${channel.id}`, this.channel)"
-      @click.right="toggleChannelOptionShow">
+  <n-dropdown
+    class="rounded-md"
+    placement="bottom-end"
+    size="medium"
+    :show="showChannelOptions"
+    :options="channel_options"
+    @mouseleave="toggleChannelOptionShow"
+    @select="handleSelect($event)"
+    :on-clickoutside="toggleChannelOptionShow"
+  >
+    <div
+      @contextmenu.prevent
+      class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer"
+      @click="goTo(`/channels/${channel.id}`, this.channel)"
+      @click.right="toggleChannelOptionShow"
+    >
       <div class="w-5">
         <div v-if="channel.is_private">
           <font-awesome-icon icon="fa-lock" />
@@ -12,10 +23,16 @@
           <font-awesome-icon icon="fa-hashtag" />
         </div>
       </div>
-      <div class="px-2 truncate" :class="isUnreadChannel(channel) ? 'font-bold' : ''">
+      <div
+        class="px-2 truncate"
+        :class="isUnreadChannel(channel) ? 'font-bold' : ''"
+      >
         {{ channel.name }}
       </div>
-      <div v-if="unreadDetails?.messages.length" class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2">
+      <div
+        v-if="unreadDetails?.messages.length"
+        class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
+      >
         {{ totalUnreadMessages(unreadDetails) }}
       </div>
     </div>
@@ -28,7 +45,10 @@ import Option from './channel_options.js';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
-import { unreadMessagesCount, unreadMessagesLength } from '../../../modules/unreadMessages';
+import {
+  unreadMessagesCount,
+  unreadMessagesLength,
+} from '../../../modules/unreadMessages';
 import { useUnreadStore } from '../../../stores/useUnreadStore';
 export default {
   components: { NDropdown, markStar },
@@ -37,7 +57,7 @@ export default {
     const channelStore = useChannelStore();
     const unreadStore = useUnreadStore();
     const { unreadMessages } = storeToRefs(unreadStore);
-    return { channelStore, unreadMessages, };
+    return { channelStore, unreadMessages, unreadStore };
   },
   data() {
     return {
@@ -48,6 +68,11 @@ export default {
       unreadDetails: null,
     };
   },
+  computed: {
+    unReadMessageExist() {
+      return this.unreadDetails?.messages.length > 0;
+    },
+  },
   methods: {
     handleSelect(key) {
       switch (key) {
@@ -56,6 +81,9 @@ export default {
           break;
         case 'unstar-channel':
           markStar(this.currentChannel, this.channelStore);
+          break;
+        case 'mark-as-read':
+          this.unreadStore.markedChatAsRead('channels', this.channel.id);
           break;
       }
     },
@@ -67,12 +95,22 @@ export default {
       }
     },
     setCurrentChannel() {
-      this.currentChannel = this.channelStore.joinedChannels.find(obj => obj.id === Number(this.channel.id)) || this.channelStore.starChannels.find(obj => obj.id === Number(this.channel.id));
+      this.currentChannel =
+        this.channelStore.joinedChannels.find(
+          obj => obj.id === Number(this.channel.id)
+        ) ||
+        this.channelStore.starChannels.find(
+          obj => obj.id === Number(this.channel.id)
+        );
       this.channelStore.setCurrentChannel(this.currentChannel);
-      this.channel_options = new Option(this.checkCurrentChannel(this.currentChannel)).getOptions();
+      this.channel_options = new Option(
+        this.checkCurrentChannel(this.currentChannel),
+        this.unReadMessageExist,
+        true
+      ).getOptions();
     },
     toggleChannelOptionShow() {
-      this.showChannelOptions = !this.showChannelOptions
+      this.showChannelOptions = !this.showChannelOptions;
       if (this.showChannelOptions) {
         this.setCurrentChannel();
       }

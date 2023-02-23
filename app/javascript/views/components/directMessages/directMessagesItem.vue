@@ -1,60 +1,73 @@
 <template>
-  <div
-    v-if="user"
-    class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
-    :class="isUnreadDM(user) ? 'font-bold' : ''"
+  <n-dropdown
+    class="rounded-md"
+    placement="bottom-end"
+    size="medium"
+    :show="showConversationOptions"
+    :options="options"
+    @mouseleave="toggleChannelOptionShow"
+    @select="handleSelect($event)"
+    :on-clickoutside="toggleChannelOptionShow"
   >
-    <span
-      @click="goToChat(`/profiles/${user.id}`, user)"
-      class="flex item-center w-full"
+    <div
+      v-if="user"
+      class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
+      :class="isUnreadDM(user) ? 'font-bold' : ''"
+      @click.right="toggleChannelOptionShow"
+      @contextmenu.prevent
     >
-      <n-avatar :size="25" :src="user.image_url" />
-      <div class="flex z-10">
-        <div
-          v-if="user.is_active"
-          class="bg-green-700 absolute bottom-0 awayStatus text-black-800 inactivePosition h-2 w-2 rounded-xl"
-        />
-        <div
-          v-else
-          class="bg-black-800 absolute bottom-0 awayStatus text-black-800 inactivePosition h-2 w-2 border-2 border-white rounded-xl"
-        />
-      </div>
-      <p class="ml-2 text-sm text-white truncate">{{ user.username }}</p>
-      <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
-        {{ $t('pinconversation.you') }}
-      </p>
-      <n-tooltip trigger="hover">
-        <template #trigger>
-          <p class="ml-2 text-sm self-center text-white">
-            {{ user?.status?.emoji }}
-          </p>
-        </template>
-        <span>
-          {{ user?.status?.text }}
-          <span class="text-black-500">
-            {{ $t('profilestatus.until') }}
-          </span>
-          {{ statusClearAfterTime(user?.status?.clear_after) }}
-        </span>
-      </n-tooltip>
-    </span>
-    <span>
-      <div v-if="unreadDetails">
-        <div
-          v-if="unreadDetails.messages.length"
-          class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
-        >
-          {{ totalUnreadMessages(unreadDetails) }}
-        </div>
-      </div>
-      <div
-        @click="removeChatFromList"
-        class="hover-target-x w-fit mr-4 py-auto text-black-400 hover:text-white"
+      <span
+        @click="goToChat(`/profiles/${user.id}`, user)"
+        class="flex item-center w-full"
       >
-        <i class="fas fa-xmark" />
-      </div>
-    </span>
-  </div>
+        <n-avatar :size="25" :src="user.image_url" />
+        <div class="flex z-10">
+          <div
+            v-if="user.is_active"
+            class="bg-green-700 absolute bottom-0 awayStatus text-black-800 inactivePosition h-2 w-2 rounded-xl"
+          />
+          <div
+            v-else
+            class="bg-black-800 absolute bottom-0 awayStatus text-black-800 inactivePosition h-2 w-2 border-2 border-white rounded-xl"
+          />
+        </div>
+        <p class="ml-2 text-sm text-white truncate">{{ user.username }}</p>
+        <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
+          {{ $t('pinconversation.you') }}
+        </p>
+        <n-tooltip trigger="hover">
+          <template #trigger>
+            <p class="ml-2 text-sm self-center text-white">
+              {{ user?.status?.emoji }}
+            </p>
+          </template>
+          <span>
+            {{ user?.status?.text }}
+            <span class="text-black-500">
+              {{ $t('profilestatus.until') }}
+            </span>
+            {{ statusClearAfterTime(user?.status?.clear_after) }}
+          </span>
+        </n-tooltip>
+      </span>
+      <span class="flex">
+        <div v-if="unreadDetails">
+          <div
+            v-if="unreadDetails.messages.length"
+            class="px-2 py-auto mt-1 rounded-full text-xs bg-successHover ml-auto mr-2"
+          >
+            {{ totalUnreadMessages(unreadDetails) }}
+          </div>
+        </div>
+        <div
+          @click="removeChatFromList"
+          class="hover-target-x ml-2 w-fit mr-4 py-auto text-black-400 hover:text-white"
+        >
+          <i class="fas fa-xmark" />
+        </div>
+      </span>
+    </div>
+  </n-dropdown>
 </template>
 <script>
 import { useUnreadStore } from '../../../stores/useUnreadStore';
@@ -66,15 +79,18 @@ import {
 } from '../../../modules/unreadMessages';
 import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
+import { NDropdown } from 'naive-ui';
+import Options from '../channels/channel_options';
 
 export default {
-  components: { NAvatar },
   props: ['user', 'isOwnChat', 'goToChat'],
-  components: { NAvatar, NTooltip },
+  components: { NAvatar, NTooltip, NDropdown },
   data() {
     return {
       unreadMessagesCount: 0,
       unreadDetails: null,
+      showConversationOptions: false,
+      options: [],
     };
   },
   setup() {
@@ -84,7 +100,13 @@ export default {
     return {
       unreadMessages,
       directMessagesStore,
+      unreadStore,
     };
+  },
+  computed: {
+    unReadMessageExist() {
+      return this.unreadDetails?.messages.length > 0;
+    },
   },
   methods: {
     isUnreadDM(user) {
@@ -102,6 +124,27 @@ export default {
     },
     async removeChatFromList() {
       await this.directMessagesStore.removeChatFromList(this.user.id);
+    },
+    handleSelect(key) {
+      this.toggleChannelOptionShow();
+      switch (key) {
+        case 'mark-as-read':
+          this.unreadStore.markedChatAsRead('profiles', this.user.id);
+          break;
+      }
+    },
+    setCurrentChannel() {
+      this.options = new Options(
+        false,
+        this.unReadMessageExist,
+        false
+      ).getOptions();
+    },
+    toggleChannelOptionShow() {
+      this.showConversationOptions = !this.showConversationOptions;
+      if (this.showConversationOptions) {
+        this.setCurrentChannel();
+      }
     },
   },
 };
