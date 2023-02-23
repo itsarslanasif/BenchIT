@@ -15,6 +15,10 @@ class BenchConversation < ApplicationRecord
       none
   }
 
+  scope :get_bench_conversation, lambda { |type, id|
+    where(conversationable_type: type, conversationable_id: id)
+  }
+
   def self.previous_or_create_new_profile_conversation(receiver_id)
     conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, receiver_id)
 

@@ -62,10 +62,6 @@ class Ability
     can %i[leave_channel], ChannelParticipant, profile_id: profile.id
 
     can %i[destroy], SavedItem, profile_id: profile.id
-
-    can %i[show], Profile do |account|
-      profile.eql?(account) || !profile.outsider?
-    end
   end
 
   private
@@ -99,9 +95,9 @@ class Ability
   def get_conversation(favourable_type, favourable_id, profile_id)
     case favourable_type
     when 'BenchChannel'
-      BenchConversation.where(conversationable_type: 'BenchChannel', conversationable_id: favourable_id)
+      BenchConversation.get_bench_conversationable('BenchChannel', favourable_id)
     when 'Group'
-      BenchConversation.where(conversationable_type: 'Group', conversationable_id: favourable_id)
+      BenchConversation.get_bench_conversationable('Group', favourable_id)
     when 'Profile'
       BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
     end
