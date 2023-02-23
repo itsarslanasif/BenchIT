@@ -133,9 +133,6 @@ export default {
   computed: {
     showModal() {
       return true;
-      // return this.isThread
-      //   ? this.shortcutAttachmentStore.showCreateTextSnippitModalThread
-      //   : this.shortcutAttachmentStore.showCreateTextSnippitModal;
     },
   },
   data() {

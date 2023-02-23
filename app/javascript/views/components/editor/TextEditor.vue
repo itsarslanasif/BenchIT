@@ -313,6 +313,7 @@ export default {
     createURL(file) {
       return URL.createObjectURL(file);
     },
+
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
       const url = window.prompt('URL', previousUrl);
@@ -335,78 +336,6 @@ export default {
       const block = await markdownToBlocks(line);
       return block[0];
     }
-
-//     async sendMessagePayload(event, buttonClicked) {
-
-// if (
-//         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
-//         !this.editMessage
-//       ) {
-//         const mrkdwn = [];
-//         const htmlList = this.editorContent.split('<br>');
-//         htmlList.forEach(async line => {
-//           this.turndownService.addRule('s', {
-//             filter: ['s'],
-//             replacement: function (content) {
-//               return '~~' + content + '~~';
-//             },
-//           });
-//           this.turndownService.addRule('', {
-//             filter: [`"`],
-//             replacement: function (content) {
-//               return `"` + content + `"`;
-//             },
-//           });
-//           mrkdwn.push(this.turndownService.turndown(line));
-//         });
-//         const result = await Promise.all(
-//           mrkdwn.map(async line => {
-//             line = line.replace(/\*\*/g, '****');
-//             return await this.makeBlocks(line);
-//           })
-//         );
-//         if (result[0] != null) {
-//           const output = this.formatBlockContent(result);
-//           this.sendMessage({ blocks: output }, this.files.value, this.schedule);
-//           this.newMessage.value = '';
-//           this.readerFile.value = [];
-//           this.files.value = [];
-//           this.audioFiles = [];
-//           this.videoFiles = [];
-//           this.schedule.value = null;
-//           this.editor.value.commands.setContent([]);
-//         }
-//       }
-
-    //   if (
-    //     ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
-    //     !this.editMessage
-    //   ) {
-    //     const mrkdwn = [];
-    //     const htmlList = this.editorContent.split('<br>');
-    //     htmlList.forEach(async line => {
-    //       line = line.replace(/<s>/g, '~~');
-    //       line = line.replace(/<\/s>/g, '~~');
-    //       mrkdwn.push(this.turndownService.turndown(line));
-    //     });
-    //     const result = await Promise.all(
-    //       mrkdwn.map(async line => {
-    //         line = line.replace(/\*\*/g, '****');
-    //         return await this.makeBlocks(line);
-    //       })
-    //     );
-    //     if (result.length) {
-    //       this.sendMessage({ blocks: result }, this.files, this.schedule);
-    //       this.newMessage = '';
-    //       this.readerFile = [];
-    //       this.audioFiles = [];
-    //       this.videoFiles = [];
-    //       this.files = [];
-    //       this.schedule = null;
-    //     }
-    //   }
-    // },
-  // },
   },
 
   setup(props) {
@@ -490,12 +419,14 @@ export default {
               return '~~' + content + '~~';
             },
           });
+
           turndownService.addRule('', {
             filter: [`"`],
             replacement: function (content) {
               return `"` + content + `"`;
             },
           });
+
           mrkdwn.push(turndownService.turndown(line));
         });
         const result = await Promise.all(
@@ -504,6 +435,7 @@ export default {
             return await makeBlocks(line);
           })
         );
+
         if (result[0] != null) {
           const output = formatBlockContent(result);
           props.sendMessage({ blocks: output }, files.value, schedule.value);
