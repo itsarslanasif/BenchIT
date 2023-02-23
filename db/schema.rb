@@ -178,7 +178,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_22_134724) do
 
   create_table "preferences", force: :cascade do |t|
     t.bigint "profile_id", null: false
+    t.json "notifications", default: "{\"notify_me_about\": 1, [], \"my_keywords\": [], \"allow_notifications\": \"\", \"default_time_for_remider_notifications\": \"\", \"sound_and_appearance: [1],}", null: false
+    t.json "sidebar", default: "{\"alway_show_in_sidebar\":[1,2,5,6], \"show\": 1, \"sort\":{1,[1,4,5,6]} }", null: false
+    t.json "themes", default: "{\"sync_with_os_settings\": true, \"colors\":4,}", null: false
     t.json "messages_and_media", default: "{\"theme\": 1, \"names\": 1, \"additional_options\": [1, 3], \"emoji\": { \"default_skin_tone\": 1, \"additional_options\": [2, 4],\"one_click_emoji\": 2 },\"inline_media_and_links\": [1, 2]}", null: false
+    t.json "language_and_region", default: "{\"language\": \"English(US)\", \"timezone\":\"Islamabad,Karachi\", \"spell_check\":true}", null: false
+    t.json "accessibility", default: "{\"zoom\": 4, \"links\": true, \"animation\": true, \"message_format\": 1, \"direct_message_announcements\":true, \"huddles_announcements\":[1, 2], \"keyboard\": 1}", null: false
+    t.json "mark_as_read", default: "{\"when_i_view_a_channel\": 1, \"when_i_mark_everything_as_read\": true}", null: false
+    t.json "audio_and_video", default: "{\"microphone\": {1, [1, 2]}, \"speaker\": 1, \"when_joining_a_slackcall\": [1], \"when_joining_a_huddle\": [1,4,5], \"when_slack_is_in_the_background\": true, \"when_your_screen_saver_starts_or_computer_locks\": [1, 2]}", null: false
+    t.json "connected_accounts", default: "{\"links_and_content_from_other_apps\": true}", null: false
+    t.json "privacy_and_visibility", default: "{\"slack_connect_discoverability\": 1, \"contact_sharing\": 1 }", null: false
+    t.json "advanced", default: "{\"input_options\": [], \"when_writing_a_message\": 1, \"search_options\": \"\", \"download_action\": {true,\"\"}, \"confirmations_and_warnings\": [1, 2, 3, 4], \"other_options\": [1]}", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["profile_id"], name: "index_preferences_on_profile_id"
