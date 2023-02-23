@@ -126,7 +126,6 @@ export default {
       await this.directMessagesStore.removeChatFromList(this.user.id);
     },
     handleSelect(key) {
-      this.toggleRightClickMenu();
       switch (key) {
         case 'mark-as-read':
           this.unreadStore.markedChatAsRead(
