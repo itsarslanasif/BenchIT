@@ -3,17 +3,17 @@
     class="rounded-md"
     placement="bottom-end"
     size="medium"
-    :show="showConversationOptions"
-    :options="options"
-    @mouseleave="toggleChannelOptionShow"
+    :show="showRightClickMenu"
+    :options="rightClickMenuOptions"
+    @mouseleave="toggleRightClickMenu"
     @select="handleSelect($event)"
-    :on-clickoutside="toggleChannelOptionShow"
+    :on-clickoutside="toggleRightClickMenu"
   >
     <div
       v-if="user"
       class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
       :class="isUnreadDM(user) ? 'font-bold' : ''"
-      @click.right="toggleChannelOptionShow"
+      @click.right="toggleRightClickMenu"
       @contextmenu.prevent
     >
       <span
@@ -80,7 +80,7 @@ import {
 import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
 import { NDropdown } from 'naive-ui';
-import Options from '../channels/channel_options';
+import Options from '../channels/rightClickMenuOptions';
 
 export default {
   props: ['user', 'isOwnChat', 'goToChat'],
@@ -89,8 +89,8 @@ export default {
     return {
       unreadMessagesCount: 0,
       unreadDetails: null,
-      showConversationOptions: false,
-      options: [],
+      showRightClickMenu: false,
+      rightClickMenuOptions: [],
     };
   },
   setup() {
@@ -126,24 +126,27 @@ export default {
       await this.directMessagesStore.removeChatFromList(this.user.id);
     },
     handleSelect(key) {
-      this.toggleChannelOptionShow();
+      this.toggleRightClickMenu();
       switch (key) {
         case 'mark-as-read':
-          this.unreadStore.markedChatAsRead('profiles', this.user.id);
+          this.unreadStore.markedChatAsRead(
+            this.$t('conversations.profiles'),
+            this.user.id
+          );
           break;
       }
     },
-    setCurrentChannel() {
-      this.options = new Options(
+    setRightClickMenuOptions() {
+      this.rightClickMenuOptions = new Options(
         false,
         this.unReadMessageExist,
         false
       ).getOptions();
     },
-    toggleChannelOptionShow() {
-      this.showConversationOptions = !this.showConversationOptions;
-      if (this.showConversationOptions) {
-        this.setCurrentChannel();
+    toggleRightClickMenu() {
+      this.showRightClickMenu = !this.showRightClickMenu;
+      if (this.showRightClickMenu) {
+        this.setRightClickMenuOptions();
       }
     },
   },

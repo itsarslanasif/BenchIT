@@ -3,17 +3,17 @@
     class="rounded-md"
     placement="bottom-end"
     size="medium"
-    :show="showChannelOptions"
-    :options="channel_options"
-    @mouseleave="toggleChannelOptionShow"
+    :show="showRightClickMenu"
+    :options="rightClickMenuOptions"
+    @mouseleave="toggleRightClickMenu"
     @select="handleSelect($event)"
-    :on-clickoutside="toggleChannelOptionShow"
+    :on-clickoutside="toggleRightClickMenu"
   >
     <div
       @contextmenu.prevent
       class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer"
       @click="goTo(`/channels/${channel.id}`, this.channel)"
-      @click.right="toggleChannelOptionShow"
+      @click.right="toggleRightClickMenu"
     >
       <div class="w-5">
         <div v-if="channel.is_private">
@@ -41,7 +41,7 @@
 
 <script>
 import { NDropdown } from 'naive-ui';
-import Option from './channel_options.js';
+import Option from './rightClickMenuOptions.js';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
@@ -61,9 +61,9 @@ export default {
   },
   data() {
     return {
-      channel_options: [],
+      rightClickMenuOptions: [],
       currentChannel: {},
-      showChannelOptions: false,
+      showRightClickMenu: false,
       unread: [],
       unreadDetails: null,
     };
@@ -87,6 +87,7 @@ export default {
           break;
       }
     },
+
     checkCurrentChannel(channel) {
       if (channel.favourite_id) {
         return true;
@@ -94,6 +95,15 @@ export default {
         return false;
       }
     },
+
+    setRightClickMenuOptions() {
+      this.rightClickMenuOptions = new Option(
+        this.checkCurrentChannel(this.currentChannel),
+        this.unReadMessageExist,
+        true
+      ).getOptions();
+    },
+
     setCurrentChannel() {
       this.currentChannel =
         this.channelStore.joinedChannels.find(
@@ -103,18 +113,16 @@ export default {
           obj => obj.id === Number(this.channel.id)
         );
       this.channelStore.setCurrentChannel(this.currentChannel);
-      this.channel_options = new Option(
-        this.checkCurrentChannel(this.currentChannel),
-        this.unReadMessageExist,
-        true
-      ).getOptions();
+      this.setRightClickMenuOptions();
     },
-    toggleChannelOptionShow() {
-      this.showChannelOptions = !this.showChannelOptions;
-      if (this.showChannelOptions) {
+
+    toggleRightClickMenu() {
+      this.showRightClickMenu = !this.showRightClickMenu;
+      if (this.showRightClickMenu) {
         this.setCurrentChannel();
       }
     },
+
     isUnreadChannel(channel) {
       this.unreadDetails = unreadMessagesCount(
         this.unreadMessages,
@@ -122,6 +130,7 @@ export default {
       );
       return this.unreadDetails?.messages.length;
     },
+
     totalUnreadMessages(unreadDetails) {
       return unreadMessagesLength(unreadDetails);
     },
