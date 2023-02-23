@@ -38,6 +38,7 @@ class Ability
     end
 
     can :destroy, Status, profile_id: profile.id
+
     can %i[create destroy], Download, profile_id: profile.id
 
     can %i[get add_member], Group do |group|
