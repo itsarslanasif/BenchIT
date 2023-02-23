@@ -63,15 +63,6 @@ class Ability
 
     can %i[destroy], SavedItem, profile_id: profile.id
 
-    can %i[joined_channels], BenchChannel do |channel|
-      channel.profile_ids.include?(profile.id) || !profile.outsider?
-    end
-
-    unless profile.outsider?
-      can :invite, Workspace
-      can :read, :all
-    end
-
     can %i[show], Profile do |account|
       profile.eql?(account) || !profile.outsider?
     end

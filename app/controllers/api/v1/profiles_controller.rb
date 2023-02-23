@@ -1,5 +1,5 @@
 class Api::V1::ProfilesController < Api::ApiController
-  before_action :authorization, only: %i[index show]
+  before_action :set_profile, only: %i[show]
   skip_before_action :set_workspace_in_session, only: %i[create]
   before_action :set_workspace, only: %i[index create show update]
   before_action :check_profile_already_exists, only: %i[create]
@@ -14,7 +14,7 @@ class Api::V1::ProfilesController < Api::ApiController
                     match: :word_start, misspellings: false
                   )
                 else
-                  @workspace.profiles.all
+                  @workspace.profiles
                 end
     @profiles = @profiles.reorder(username: :asc) if params[:sort] == 'asc'
     @profiles = @profiles.reorder(username: :desc) if params[:sort] == 'desc'
@@ -95,12 +95,7 @@ class Api::V1::ProfilesController < Api::ApiController
     render json: { success: false, error: t('.check_profile_already_exists.success') }, status: :unprocessable_entity
   end
 
-  def authorization
-    if action_name.eql?('show')
-      @profile = Profile.find(params[:id])
-      authorize! :show, @profile
-    else
-      authorize! :read, Profile
-    end
+  def set_profile
+    @profile = Profile.find(params[:id])
   end
 end

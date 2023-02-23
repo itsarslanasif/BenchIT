@@ -1,5 +1,4 @@
 class Api::V1::WorkspacesController < Api::ApiController
-  before_action :authorization, only: %i[invite]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
@@ -59,9 +58,5 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { success: false, error: t('.check_profile.failure') }, status: :unprocessable_entity
-  end
-
-  def authorization
-    authorize! :invite, Workspace
   end
 end
