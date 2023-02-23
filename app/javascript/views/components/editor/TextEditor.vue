@@ -1,25 +1,5 @@
 <template>
   <div>
-    <div
-      v-if="filteredList.length"
-      class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
-    >
-      <!-- <div
-        v-if="
-          (showMentions && hasMentionCommand) ||
-          (showChannels && hasChannelCommand)
-        "
-      > -->
-      <!-- <div
-        v-for="item in filteredList"
-        :key="item.name"
-        class="p-1 rounded-md hover:bg-secondaryHover"
-        @click="addMentionToText"
-      >
-        {{ item.creator_id ? item.name : item.username }}
-      </div> -->
-      <!-- </div> -->
-    </div>
     <div>
       <div
         v-if="schedule"
@@ -332,13 +312,8 @@ export default {
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
     const editorContent = ref('');
-    const showMentions = ref(false);
-    const showChannels = ref(false);
-    const hasMentionCommand = ref(false);
-    const hasChannelCommand = ref(false);
     const readerFile = ref([]);
     const files = ref([]);
-    const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
@@ -366,31 +341,6 @@ export default {
         newMessage.value = props.messageToEdit.content;
       }
     });
-
-    // watch(editorContent, (curr, old) => {
-    //   const currentMessage = ignoreHTML(curr);
-    //   const oldMessage = ignoreHTML(old);
-    //   const message = ignoreHTML(editorContent.value);
-
-    //   if (message && getLastIndex(currentMessage)[0] == '@') {
-    //     enableMention(message);
-    //   } else if (message && getLastIndex(currentMessage)[0] == '#') {
-    //     enableChannels(message);
-    //   } else if (
-    //     message.length === 1 &&
-    //     getLastIndex(currentMessage)[0] == '@'
-    //   ) {
-    //     enableMention(message);
-    //   } else if (
-    //     message.length === 1 &&
-    //     getLastIndex(currentMessage)[0] == '#'
-    //   ) {
-    //     enableChannels(message);
-    //   } else {
-    //     disableAll();
-    //     searchStore.clearSearches();
-    //   }
-    // });
 
     const makeBlocks = async line => {
       const block = await markdownToBlocks(line);
@@ -450,10 +400,6 @@ export default {
           editor.value.commands.setContent([]);
         }
       }
-    };
-
-    const getLastIndex = value => {
-      return value.split(' ').pop();
     };
 
     const setSchedule = value => {
@@ -518,39 +464,6 @@ export default {
       } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
 
-    const enableMention = async word => {
-      const query = word.split(' ').pop().slice(1);
-      await searchStore.index(query, 'Profile');
-      filteredList.value = searches.value.profiles;
-    };
-
-    const enableChannels = async word => {
-      const query = word.split(' ').pop().slice(1);
-      await searchStore.index(query, 'BenchChannel');
-      filteredList.value = searches.value.channels;
-    };
-
-    const disableAll = () => {
-      hasMentionCommand.value = false;
-      showMentions.value = false;
-      hasChannelCommand.value = false;
-      showChannels.value = false;
-    };
-
-    const addMentionToText = e => {
-      const contentMessage = editorContent.value.split(' ');
-      const lastWord = contentMessage.pop();
-      const indexOfTag = lastWord.indexOf('<');
-      const mention = `@${e.target.outerText}${lastWord.slice(indexOfTag)}`;
-      contentMessage.push(mention);
-      editor.value.commands.setContent(contentMessage.join(' '));
-      filteredList.value = false;
-    };
-
-    const ignoreHTML = message => {
-      return message.replace(/<[^>]+>/g, '');
-    };
-
     const removeFile = file => {
       const index = readerFile.value.indexOf(file);
       files.value.splice(index, 1);
@@ -612,11 +525,6 @@ export default {
       newMessage,
       readerFile,
       files,
-      showMentions,
-      showChannels,
-      hasChannelCommand,
-      hasMentionCommand,
-      filteredList,
       channels,
       profiles,
       schedule,
@@ -625,7 +533,6 @@ export default {
       messageToEdit,
       removeFile,
       getImages,
-      addMentionToText,
       toggleSchedule,
       setSchedule,
       getScheduleNotification,

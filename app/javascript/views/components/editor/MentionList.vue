@@ -45,24 +45,22 @@ export default {
 
   methods: {
     onKeyDown({ event }) {
-      if (event.key === 'ArrowUp') {
-        this.upHandler()
-        return true
+      switch (event.key) {
+        case 'ArrowUp':
+          this.upHandler()
+          return true
+        case 'ArrowDown':
+          this.downHandler()
+          return true
+        case 'Enter':
+          this.enterHandler()
+          event.stopPropagation()
+          return true
+        default:
+          return false
       }
-
-      if (event.key === 'ArrowDown') {
-        this.downHandler()
-        return true
-      }
-
-      if (event.key === 'Enter') {
-        this.enterHandler()
-        return true
-      }
-
-      return false
     },
-
+    
     upHandler() {
       this.selectedIndex = ((this.selectedIndex + this.items.length) - 1) % this.items.length
     },

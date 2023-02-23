@@ -30,6 +30,11 @@ export const useProfileStore = () => {
           this.profiles[index].is_active = data.is_active;
         }
       },
+      getProfileById(id) {
+        return this.profiles.find((profile)=>{
+          return profile.id = id
+        })
+      }
     },
   });
   const store = profileStore();
