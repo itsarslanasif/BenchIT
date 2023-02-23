@@ -11,9 +11,7 @@
         {{ item.username }}
       </button>
     </template>
-    <div class="item" v-else>
-      No result
-    </div>
+    <div class="item" v-else>No result</div>
   </div>
 </template>
 
@@ -24,7 +22,6 @@ export default {
       type: Array,
       required: true,
     },
-
     command: {
       type: Function,
       required: true,
@@ -34,12 +31,12 @@ export default {
   data() {
     return {
       selectedIndex: 0,
-    }
+    };
   },
 
   watch: {
     items() {
-      this.selectedIndex = 0
+      this.selectedIndex = 0;
     },
   },
 
@@ -47,42 +44,41 @@ export default {
     onKeyDown({ event }) {
       switch (event.key) {
         case 'ArrowUp':
-          this.upHandler()
-          return true
+          this.upHandler();
+          return true;
         case 'ArrowDown':
-          this.downHandler()
-          return true
+          this.downHandler();
+          return true;
         case 'Enter':
-          this.enterHandler()
-          event.stopPropagation()
-          return true
+          this.enterHandler();
+          event.stopPropagation();
+          return true;
         default:
-          return false
+          return false;
       }
     },
-    
+
     upHandler() {
-      this.selectedIndex = ((this.selectedIndex + this.items.length) - 1) % this.items.length
+      this.selectedIndex =
+        (this.selectedIndex + this.items.length - 1) % this.items.length;
     },
 
     downHandler() {
-      this.selectedIndex = (this.selectedIndex + 1) % this.items.length
+      this.selectedIndex = (this.selectedIndex + 1) % this.items.length;
     },
 
     enterHandler() {
-      this.selectItem(this.selectedIndex)
+      this.selectItem(this.selectedIndex);
     },
 
     selectItem(index) {
-      const item = this.items[index]
-
-     
+      const item = this.items[index];
       if (item) {
-        this.command({ id: item.username})
+        this.command({ id: item.username });
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss">
@@ -90,14 +86,11 @@ export default {
   padding: 0.2rem;
   position: relative;
   border-radius: 0.5rem;
-  background: #FFF;
+  background: #fff;
   color: rgba(0, 0, 0, 0.8);
   overflow: hidden;
   font-size: 0.9rem;
-  box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.05),
-    0px 10px 20px rgba(0, 0, 0, 0.1),
-  ;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05), 0px 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .item {
@@ -115,4 +108,3 @@ export default {
   }
 }
 </style>
-

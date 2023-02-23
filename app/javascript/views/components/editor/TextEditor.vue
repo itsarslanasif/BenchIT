@@ -429,6 +429,7 @@ export default {
 
           mrkdwn.push(turndownService.turndown(line));
         });
+
         const result = await Promise.all(
           mrkdwn.map(async line => {
             line = line.replace(/\*\*/g, '****');
