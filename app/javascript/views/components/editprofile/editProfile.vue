@@ -177,18 +177,31 @@ export default {
     };
   },
   methods: {
+    readFile(file) {
+      this.readerFile = []
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => this.readerFile.push(reader.result);
+    },
     uploadFile() {
       this.file = this.$refs.file.files[0];
       if (this.file.type.slice(0, 6) === 'image/') {
-        const reader = new FileReader();
-        reader.readAsDataURL(this.file);
-        reader.onload = () => this.readerFile.push(reader.result);
+        this.readFile(this.file)
       }
       this.image = this.file;
     },
-    removeFile() {
+    async fetchImage() {
+      return fetch('../../../assets/images/user.png')
+        .then(res => res.arrayBuffer())
+        .then(buffer => {
+          return new File([buffer], 'user.png', { type: 'image/png' })
+        })
+    },
+    async removeFile() {
       this.readerFile = [];
-      this.image = '../../../assets/images/user.png';
+      this.file = await this.fetchImage()
+      this.readFile(this.file)
+      this.image = this.file
     },
     saveChanges() {
       let formData = new FormData();
@@ -213,7 +226,9 @@ export default {
       if (this.image !== this.currentProfile.image_url){
         formData.append('profile_image', this.image);
       }
-      formData.append('time_zone', this.timezone);
+      if (this.timezone){
+        formData.append('time_zone', this.timezone);
+      }
       this.profileStore.updateProfile(formData).then(() => this.toggleEditProfile())
     },
     submit(audioChunks, audioBlob, audioRecorder) {
