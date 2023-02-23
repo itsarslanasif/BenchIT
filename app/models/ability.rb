@@ -5,6 +5,7 @@ class Ability
     return if user.blank?
 
     profile ||= user.user_profile
+    workspace = profile.workspace
 
     can %i[create destroy], Reaction do |reaction|
       check_ability(reaction, profile) && reaction.profile_id.eql?(profile.id)
@@ -30,7 +31,7 @@ class Ability
       check_ability_for_create(message, profile)
     end
 
-    can %i[destroy send_now update], ScheduleMessage, profile_id: profile.id
+    can %i[destroy update send_now], ScheduleMessage, profile_id: profile.id
 
     can %i[create update destroy], DraftMessage do |draft_message|
       check_ability_for_create(draft_message, profile)
@@ -62,6 +63,10 @@ class Ability
     can %i[leave_channel], ChannelParticipant, profile_id: profile.id
 
     can %i[destroy], SavedItem, profile_id: profile.id
+
+    can %i[join_public_channel], BenchChannel do |channel|
+      !channel.is_private? && channel.workspace_id.eql?(workspace.id)
+    end
   end
 
   private
@@ -95,15 +100,15 @@ class Ability
   def get_conversation(favourable_type, favourable_id, profile_id)
     case favourable_type
     when 'BenchChannel'
-      BenchConversation.get_bench_conversationable('BenchChannel', favourable_id)
+      BenchConversation.get_bench_conversationable('BenchChannel', favourable_id).first
     when 'Group'
-      BenchConversation.get_bench_conversationable('Group', favourable_id)
+      BenchConversation.get_bench_conversationable('Group', favourable_id).first
     when 'Profile'
       BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
     end
   end
 
   def check_ability_for_favourite(conversation, profile)
-    check_membership(conversation.first, profile)
+    check_membership(conversation, profile)
   end
 end
