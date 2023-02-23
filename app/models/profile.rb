@@ -12,7 +12,7 @@ class Profile < ApplicationRecord
     }
   end
 
-  after_commit :attach_avatar, :set_preferences, on: %i[create]
+  after_commit :attach_avatar, :create_preference, on: %i[create]
   after_commit :broadcast_profile
 
   belongs_to :user
@@ -74,10 +74,6 @@ class Profile < ApplicationRecord
 
   def attach_avatar
     generate_avatar(username, profile_image)
-  end
-
-  def set_preferences
-    create_preference
   end
 
   def groups
