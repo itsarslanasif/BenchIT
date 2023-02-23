@@ -11,7 +11,7 @@
             <input
               type="text"
               :class="
-                fullName.length < 50 && fullName.length ? 'success' : 'error'
+                fullName.length && fullName.length < 50 ? 'success' : 'error'
               "
               :placeholder="$t('edit_profile.full_name')"
               class="input"
@@ -23,7 +23,7 @@
             <input
               type="text"
               :class="
-                displayName.length < 50 && displayName.length
+                displayName.length && displayName.length < 50 
                   ? 'success'
                   : 'error'
               "
@@ -39,7 +39,7 @@
             <label>{{ $t('edit_profile.title') }}</label>
             <input
               type="text"
-              :class="title.length < 50 && title.length ? 'success' : 'error'"
+              :class="title.length && title.length < 50 ? 'success' : 'error'"
               :placeholder="$t('edit_profile.title')"
               class="input"
               v-model="title"
@@ -54,7 +54,7 @@
             <input
               type="text"
               :class="
-                namePronounciation.length < 20 && namePronounciation.length
+                namePronounciation.length && namePronounciation.length < 20
                   ? 'success'
                   : 'error'
               "
