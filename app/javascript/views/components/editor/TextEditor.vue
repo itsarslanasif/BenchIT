@@ -41,7 +41,6 @@
       >
         {{ getScheduleNotification() }}
       </div>
-
       <div
         v-if="editor"
         class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
@@ -154,6 +153,21 @@
             </div>
           </div>
         </div>
+        <div>
+          <div v-if="audioFiles.length" class="flex w-20 gap-1 mt-2 relative">
+            <div v-for="file in audioFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0"
+                @click="removeAudioFile(file)"
+              />
+              <visualize-voice
+                :fileID="new Date().getTime()"
+                :audioURL="createURL(file)"
+              />
+            </div>
+          </div>
+        </div>
         <div v-if="scheduleModalFlag">
           <ScheduleModal
             :setSchedule="setSchedule"
@@ -174,12 +188,7 @@
               :getVideoFiles="getVideoFiles"
               :editMessage="editMessage"
             />
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-microphone" />
-            </button>
+            <VoiceRecorder :getAudio="getAudio" v-if="!editMessage" />
             <div v-if="!editMessage" class="vl" />
             <button
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -268,6 +277,8 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
+import VoiceRecorder from './VoiceRecorder.vue';
+import VisualizeVoice from './VisualizeVoice.vue';
 import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 
@@ -310,6 +321,8 @@ export default {
     CreateTextSnippetModal,
     EditorContent,
     NDivider,
+    VoiceRecorder,
+    VisualizeVoice,
     VideoRecord,
     VisualizeVideo,
   },
@@ -363,6 +376,9 @@ export default {
     },
   },
   methods: {
+    createURL(file) {
+      return URL.createObjectURL(file);
+    },
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
       const url = window.prompt('URL', previousUrl);
@@ -408,6 +424,7 @@ export default {
           this.sendMessage({ blocks: result }, this.files, this.schedule);
           this.newMessage = '';
           this.readerFile = [];
+          this.audioFiles = [];
           this.videoFiles = [];
           this.files = [];
           this.schedule = null;
@@ -432,6 +449,7 @@ export default {
     const hasMentionCommand = ref(false);
     const hasChannelCommand = ref(false);
     const readerFile = ref([]);
+    const audioFiles = ref([]);
     const files = ref([]);
     const videoFiles = ref([]);
     const filteredList = ref([]);
@@ -571,11 +589,20 @@ export default {
       files.value.splice(index, 1);
       readerFile.value.splice(index, 1);
     };
+    const removeAudioFile = file => {
+      const index = audioFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      audioFiles.value.splice(index, 1);
+    };
     const getImages = file => {
       files.value[files.value?.length] = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => readerFile.value.push(reader.result);
+    };
+    const getAudio = file => {
+      files.value[files.value?.length] = file;
+      audioFiles.value.push(file);
     };
     const getVideoFiles = file => {
       files.value[files.value?.length] = file;
@@ -594,6 +621,7 @@ export default {
     return {
       newMessage,
       readerFile,
+      audioFiles,
       files,
       showMentions,
       showChannels,
@@ -607,7 +635,9 @@ export default {
       messageStore,
       messageToEdit,
       removeFile,
+      removeAudioFile,
       getImages,
+      getAudio,
       addMentionToText,
       toggleSchedule,
       setSchedule,

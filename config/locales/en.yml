@@ -234,6 +234,8 @@ en:
         request_reason_placeholder: 'Add a note for your admin'
         error_message: 'User does not exist!'
         success_message: 'Invitation sent successfully!'
+      voice_mail:
+        recording: 'recording...'
       actions:
         add: 'Add'
         save: 'Save'
@@ -401,6 +403,10 @@ en:
         channels: 'channels'
         groups: 'groups'
         profiles: 'profiles'
+      mentions_and_reactions:
+        title: 'Mentions & reactions'
+        reacted: 'reacted in'
+        reacted_by: 'reacted to your message'
     admin:
       title: 'Admin'
       save: 'Save'

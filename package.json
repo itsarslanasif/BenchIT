@@ -48,7 +48,8 @@
     "vue-i18n": "^9.1.10",
     "vue-router": "^4.0.14",
     "vue3-emoji-picker": "^1.1.7",
-    "vue3-rich-accordion": "^0.0.7"
+    "vue3-rich-accordion": "^0.0.7",
+    "wavesurfer.js": "^6.4.0"
   },
   "engines": {
     "node": ">=16.x",

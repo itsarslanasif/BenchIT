@@ -112,8 +112,7 @@ export default {
           const conversation_id = getIndexByParams(2);
           try {
             pinMessage(
-              getConversationType(conversation_type),
-              conversation_id,
+              message.bench_conversation_id,
               message.id
             );
           } catch (e) {

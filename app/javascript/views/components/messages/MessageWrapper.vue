@@ -160,7 +160,7 @@
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
-              currMessage.content === $t('deleteMessageModal.success')
+              (JSON.parse(this.currMessage.content).blocks[0].text.text === $t('deleteMessageModal.success'))
             "
             class="text-black-600 text-sm flex mt-2"
           >
@@ -168,14 +168,27 @@
           >
           <div
             v-if="!currMessage.info && currMessage.attachments"
-            class="flex gap-2"
+            class="flex gap-10"
           >
             <div
               v-for="attachment in currMessage.attachments"
-              :key="attachment.id"
+              :key="attachment.attachment.id"
               class="w-64"
             >
+              {{ setAttachment(attachment) }}
+              <div
+                v-if="isAudioFile"
+                :class="{
+                  'ml-12': isSameUser && isSameDayMessage && !isFirstMessage,
+                }"
+              >
+                <visualize-voice
+                  :fileID="currAttachment.attachment.id"
+                  :audioURL="currAttachment.attachment_link"
+                />
+              </div>
               <n-popover
+                v-if="!isAudioFile"
                 class="rounded-md border-black-300 border text-black-600"
                 placement="top-end"
                 trigger="hover"
@@ -187,7 +200,7 @@
                       'ml-12':
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
-                    v-if="isTxtFile(attachment.attachment_link)"
+                    v-if="isTxtFile"
                   >
                     <font-awesome-icon
                       class="w-10 h-10"
@@ -271,7 +284,7 @@
                 }}</span>
                 <span class="text-md"
                   >{{
-                    getUsers(emoji, currentProfileStore.currentProfile.username)
+                    getUsers(emoji, currentProfile.username)
                   }}
                   {{ $t('chat.reacted') }}</span
                 >
@@ -296,7 +309,7 @@
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
             (emojiModalStatus || openEmojiModal || showOptions) &&
-            currMessage.content !== $t('deleteMessageModal.success')
+            (JSON.parse(this.currMessage.content).blocks[0].text.text !== $t('deleteMessageModal.success'))
           "
         >
           <template v-for="emoji in topReactions" :key="emoji">
@@ -406,6 +419,7 @@ import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
+import VisualizeVoice from '../editor/VisualizeVoice.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -455,6 +469,7 @@ export default {
     EditedAtTime,
     UnPinModal,
     MessageSection,
+    VisualizeVoice,
   },
   props: {
     currMessage: {
@@ -493,6 +508,7 @@ export default {
       showFileOptions: false,
       showDeleteModal: false,
       showUnpinModal: false,
+      currAttachment: null,
     };
   },
   beforeUnmount() {
@@ -570,13 +586,22 @@ export default {
       return savedMessage ? true : false;
     },
     isDeleted() {
-      return this.currMessage.content === this.$t('deleteMessageModal.success');
+      return JSON.parse(this.currMessage.content).blocks[0].text.text  === this.$t('deleteMessageModal.success');
+    },
+    isTxtFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'txt';
+    },
+    isAudioFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'wav';
     },
   },
   methods: {
-    isTxtFile(url) {
-      const fileExtension = url.split('/').pop().split('.').pop();
-      return fileExtension === 'txt';
+    setAttachment(attachment) {
+      this.currAttachment = attachment;
     },
     ismp4File(url) {
       const fileExtension = url.split('/').pop().split('.').pop();
@@ -716,7 +741,7 @@ export default {
     downloadFile(attachment) {
       try {
         fileDownload(attachment).then(response => {
-          this.downloadsStore.downloads.unshift(response.data);
+          this.downloadsStore.downloads.unshift(response.data.download);
           this.downloadsStore.response = response;
           this.downloadsStore.downloadAlert = true;
         });

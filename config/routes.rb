@@ -37,6 +37,7 @@ Rails.application.routes.draw do
             get :index_saved_messages
             get :recent_files
             get :unread_messages
+            get :reactions
           end
           member do
             post :save_message
@@ -93,6 +94,7 @@ Rails.application.routes.draw do
             post :join_public_channel
             post :mute_channel
             post :unmute_channel
+            post :invite_outsider
           end
         end
         resources :draft_messages, only: %i[index create update destroy]

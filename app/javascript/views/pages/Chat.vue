@@ -37,6 +37,7 @@ import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+
 export default {
   name: 'Chat',
   components: {
@@ -135,37 +136,43 @@ export default {
       return file;
     },
     sendMessage(message, files, schedule) {
-      let formData = new FormData();
-      formData.append('content', JSON.stringify(message));
-      formData.append('is_threaded', false);
-      formData.append('conversation_type', this.conversation_type);
-      formData.append('conversation_id', this.id);
-      if (schedule && schedule.value) {
-        formData.append('scheduled_at', schedule.value);
+      if (message.blocks[0] != undefined) {
+        let formData = new FormData();
+        formData.append('content', JSON.stringify(message));
+        formData.append('is_threaded', false);
+        formData.append('conversation_type', this.conversation_type);
+        formData.append('conversation_id', this.id);
+        if (schedule && schedule.value) {
+          formData.append('scheduled_at', schedule.value);
+        }
+        files.forEach(file => {
+          const fileExtension = file.type.split('/')[1];
+          const ts = new Date().getTime();
+          let filename = ts;
+          if (fileExtension == 'webm;codecs=opus') {
+            filename += '.wav';
+            file = this.getFileFromBlob(file, filename);
+          } else if (
+            fileExtension == 'x-matroska;codecs=avc1,opus' ||
+            fileExtension == 'x-matroska;codecs=avc1'
+          ) {
+            filename += '.mp4';
+            file = this.getFileFromBlob(file, filename);
+          } else {
+            filename += `.${fileExtension}`;
+          }
+          formData.append('message_attachments[]', file, filename);
+        });
+        conversation(formData).then(res => {
+          if (res.scheduled_at) {
+            this.messageStore.addScheduleMessage(res);
+          }
+          this.message = '';
+        });
+        this.newMessageSent = true;
+      } else {
+        return false;
       }
-      files.forEach(file => {
-        const fileExtension = file.type.split('/')[1];
-
-        const ts = new Date().getTime();
-        let filename = ts;
-        if (
-          fileExtension == 'x-matroska;codecs=avc1,opus' ||
-          fileExtension == 'x-matroska;codecs=avc1'
-        ) {
-          filename += '.mp4';
-          file = this.getFileFromBlob(file, filename);
-        } else {
-          filename += `.${fileExtension}`;
-        }
-        formData.append('message_attachments[]', file, filename);
-      });
-      conversation(formData).then(res => {
-        if (res.scheduled_at) {
-          this.messageStore.addScheduleMessage(res);
-        }
-        this.message = '';
-      });
-      this.newMessageSent = true;
     },
     joinedTheChannel() {
       this.isMember = !this.isMember;
