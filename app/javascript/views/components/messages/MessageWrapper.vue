@@ -207,8 +207,22 @@
                       icon="fa-solid fa-file"
                     />
                   </div>
+
+                  <div
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
+                    v-if="ismp4File(attachment.attachment_link)"
+                  >
+                    <video controls :src="attachment.attachment_link"></video>
+                  </div>
+
                   <img
-                    v-else
+                    v-if="
+                      !ismp4File(attachment.attachment_link) &&
+                      !isTxtFile(attachment.attachment_link)
+                    "
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -588,6 +602,10 @@ export default {
   methods: {
     setAttachment(attachment) {
       this.currAttachment = attachment;
+    },
+    ismp4File(url) {
+      const fileExtension = url.split('/').pop().split('.').pop();
+      return fileExtension === 'mp4';
     },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));

@@ -368,6 +368,17 @@ en:
         leave: 'Leave Channel'
         files: 'Files'
         filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
+      video_recording:
+        upload_video: 'Upload Video'
+        screen_record: 'Screen Record'
+        start_over: 'Start Over'
+        recorded: 'recorded'
+        done: 'Done'
+        stop: 'Stop'
+        record: 'Record'
+        inactive: 'inactive'
+        recording: 'recording'
+        record_video_clip: 'Record video clip'
       welcome:
         no_chat_selected: 'No Chat Selected'
         tagline: 'Select any chat from sidebar to see messages'
