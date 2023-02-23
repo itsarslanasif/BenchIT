@@ -100,6 +100,13 @@ export const CONSTANTS = {
     "Channel names can't contain spaces, periods, or most punctuation. Try again?",
   FIELDS_REQUIRED_ERROR: "Fields are required and can't be blank !",
   CHANNEL_NAME_ERROR: 'Please enter channel name.',
+  EMPTY_VALUE_ERROR: 'Values cannot be empty',
+  WORKSPACE_NAME_ERROR: 'Please enter workspace name',
+  WORKSPACE_CAPACITY_NEGATIVE_ERROR: 'Please enter positive capacity value',
+  WORKSPACE_WRONG_URL_ERROR: 'Please write correct URL',
+  WORKSPACE_NAME_INVALID_ERROR:
+    "Workspace name can't contain spaces, periods, or most punctuation. Try again?",
+  WORKSPACE_URL_ERROR: 'Please enter workspace URL',
   CHANNEL_DISCRIPTION_ERROR: 'Please enter channel description.',
   NULL_VALUES: [null, undefined, []],
   PROFILE_ADDED: 'Profile added',
