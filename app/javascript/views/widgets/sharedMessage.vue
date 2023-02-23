@@ -75,9 +75,6 @@ export default {
           );
           break;
         case this.$t('conversation_type.profile'):
-          this.$router.push(
-            `/profiles/${this.currMessage.conversationable_id}/${this.currMessage.id}`
-          );
           break;
         case this.$t('conversation_type.group'):
           this.$router.push(

@@ -405,10 +405,6 @@ export default {
       return block[0];
     },
 
-    setParentMessage(message) {
-
-    },
-
     async sendMessagePayload(event, buttonClicked) {
       if (
         ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
