@@ -65,9 +65,7 @@ class Ability
 
     can %i[destroy], SavedItem, profile_id: profile.id
 
-    can %i[join_public_channel], BenchChannel do |channel|
-      !channel.is_private? && channel.workspace_id.eql?(workspace.id)
-    end
+    can %i[join_public_channel], BenchChannel, { is_private: false, workspace: { id: workspace.id } }
   end
 
   private
@@ -91,19 +89,21 @@ class Ability
   end
 
   def check_ability(object, profile)
-    if object.bench_conversation.conversationable_type.eql?('BenchChannel')
-      object.bench_conversation.conversationable.is_private ? check_membership(object.bench_conversation, profile) : true
+    conversation = object.bench_conversation
+    conversationable = conversation.conversationable
+    if conversation.conversationable_type.eql?('BenchChannel')
+      conversationable.is_private ? check_membership(conversation, profile) : true
     else
-      check_membership(object.bench_conversation, profile)
+      check_membership(conversation, profile)
     end
   end
 
   def get_conversation(favourable_type, favourable_id, profile_id)
     case favourable_type
     when 'BenchChannel'
-      BenchConversation.get_bench_conversationable('BenchChannel', favourable_id).first
+      BenchConversation.get_bench_conversation('BenchChannel', favourable_id).first
     when 'Group'
-      BenchConversation.get_bench_conversationable('Group', favourable_id).first
+      BenchConversation.get_bench_conversation('Group', favourable_id).first
     when 'Profile'
       BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
     end
