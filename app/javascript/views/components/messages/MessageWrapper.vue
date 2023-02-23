@@ -222,7 +222,6 @@
                       icon="fa-solid fa-file"
                     />
                   </div>
-
                   <div
                     :class="{
                       'ml-12':
@@ -232,7 +231,6 @@
                   >
                     <video controls :src="attachment.attachment_link"></video>
                   </div>
-
                   <img
                     v-if="!isVideoFile && !isTxtFile"
                     :src="attachment.attachment_link"
