@@ -90,6 +90,9 @@ export const useMessageStore = () => {
       getMessage(id) {
         return this.messages.find(message => message.id === id);
       },
+      getSharedMessage(id) {
+        return this.messages.find(message => message.shared_message_id === id);
+      },
       addScheduleMessage(payload) {
         this.scheduleMessage.push(payload);
       },

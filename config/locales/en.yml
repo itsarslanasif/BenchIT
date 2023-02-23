@@ -164,9 +164,14 @@ en:
           bear in mind you’ll have to supply both sides of the conversation.'
         this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
           messages and share files with"
+        share_private_chat_note: 'This message is from a private conversation, so it can only be shared
+          in this thread'
+        view_conversation : 'View Conversation'
+        posted_in: 'Posted in # '
       conversation_type:
         profile: 'Profile'
         channel: 'BenchChannel'
+        group: 'Group'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
@@ -234,6 +239,8 @@ en:
         request_reason_placeholder: 'Add a note for your admin'
         error_message: 'User does not exist!'
         success_message: 'Invitation sent successfully!'
+      voice_mail:
+        recording: 'recording...'
       actions:
         add: 'Add'
         save: 'Save'
@@ -372,6 +379,17 @@ en:
         view_full_profile: 'View full profile'
         add_people_to_this_conversation: 'Add people to this conversation'
         local_time: 'local time'
+      video_recording:
+        upload_video: 'Upload Video'
+        screen_record: 'Screen Record'
+        start_over: 'Start Over'
+        recorded: 'recorded'
+        done: 'Done'
+        stop: 'Stop'
+        record: 'Record'
+        inactive: 'inactive'
+        recording: 'recording'
+        record_video_clip: 'Record video clip'
       welcome:
         no_chat_selected: 'No Chat Selected'
         tagline: 'Select any chat from sidebar to see messages'

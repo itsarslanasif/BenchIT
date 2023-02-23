@@ -125,7 +125,6 @@ export default {
       return moment(date).format('MMMM Do, YYYY');
     },
     showUserProfile(profile_id) {
-      console.log(profile_id);
       this.setUserProfileForPane(profile_id);
       this.rightPaneStore.toggleUserProfileShow(true);
     },
