@@ -1,5 +1,4 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :authorization, only: %i[create join_public_channel]
   before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]
   before_action :check_profile_ids, only: %i[create]
@@ -23,26 +22,20 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def create
     ActiveRecord::Base.transaction do
       params[:profile_ids].each do |profile_id|
-        ChannelParticipant.create(bench_channel_id: @bench_channel.id, profile_id: profile_id, permission: true)
+        ChannelParticipant.create!(bench_channel_id: @bench_channel.id, profile_id: profile_id, permission: true)
       end
-
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
-      render json: { member_count: @users_joined.count }, status: :ok
     end
+    render json: { success: true, member_count: @users_joined.count }, status: :ok
   end
 
   def join_public_channel
     @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: current_profile.id, permission: true)
     ActiveRecord::Base.transaction do
-      if @channel_participant.save
-        InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
-        render json: { success: true, message: t('.join_public_channel.success') },
-               status: :ok
-      else
-        render json: { success: false, error: t('.join_public_channel.failure') },
-               status: :unprocessable_entity
-      end
+      @channel_participant.save!
+      InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
     end
+    render json: { success: true, message: t('.join_public_channel.success') }, status: :ok
   end
 
   def mute_channel
@@ -85,15 +78,13 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
     return unless is_channel_participant
 
-    render json: { success: false, error: t('.check_already_joined_channel.failure') },
-           status: :unprocessable_entity
+    render json: { success: false, error: t('.check_already_joined_channel.failure') }, status: :unprocessable_entity
   end
 
   def check_private_channel
     return unless @bench_channel.is_private?
 
-    render json: { success: false, error: t('.check_private_channel.failure') },
-           status: :forbidden
+    render json: { success: false, error: t('.check_private_channel.failure') }, status: :forbidden
   end
 
   def check_channel_participants
@@ -110,13 +101,5 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
     render json: { success: false, error: t('.check_profile_ids.failure') }, status: :not_found
-  end
-
-  def authorization
-    if action_name.eql?('create')
-      authorize! :create, ChannelParticipant
-    else
-      authorize! :join_public_channel, ChannelParticipant
-    end
   end
 end

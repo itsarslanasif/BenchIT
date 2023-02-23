@@ -61,12 +61,14 @@ class Ability
 
     can %i[leave_channel], ChannelParticipant, profile_id: profile.id
 
+
+
+
     can %i[joined_channels bench_channel_messages], BenchChannel do |channel|
       channel.profile_ids.include?(profile.id) || !profile.outsider?
     end
 
     unless profile.outsider?
-      can %i[create join_public_channel], ChannelParticipant
       can :invite, Workspace
       can :read, :all
     end
