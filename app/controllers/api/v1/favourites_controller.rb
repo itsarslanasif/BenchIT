@@ -4,15 +4,15 @@ class Api::V1::FavouritesController < Api::ApiController
 
   def create
     if @favourite.id
-      render json: { success: true, message: t('.create.success'), favourite: @favourite }, status: :ok
+      render json: { success: true, message: t('.success'), favourite: @favourite }, status: :ok
     else
-      render json: { success: false, message: t('.create.failure'), errors: @favourite.errors }, status: :unprocessable_entity
+      render json: { success: false, message: t('.failure'), errors: @favourite.errors }, status: :unprocessable_entity
     end
   end
 
   def destroy
     @favourite.destroy!
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private

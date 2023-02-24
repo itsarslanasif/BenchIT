@@ -26,7 +26,7 @@ class Api::V1::ProfilesController < Api::ApiController
   def create
     @profile = current_user.profiles.new(profile_params)
     @profile.save!
-    render json: { success: true, message: t('.create.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def update
@@ -41,17 +41,17 @@ class Api::V1::ProfilesController < Api::ApiController
 
   def set_is_active
     @profile.update!(is_active: true)
-    render json: { success: true, message: t('.set_is_active.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def remove_is_active
     @profile.update!(is_active: false)
-    render json: { success: true, message: t('.remove_is_active.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def clear_status
     @profile.update!(text_status: '', emoji_status: '', clear_status_after: '')
-    render json: { success: true, message: t('.clear_status.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private
@@ -88,13 +88,13 @@ class Api::V1::ProfilesController < Api::ApiController
   def check_user_member_of_workspace
     return if current_workspace.id.eql?(params[:workspace_id].to_i)
 
-    render json: { success: false, error: t('.check_user_member_of_workspace.success') }, status: :unauthorized
+    render json: { success: false, error: t('.success') }, status: :unauthorized
   end
 
   def check_profile_already_exists
     return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
 
-    render json: { success: false, error: t('.check_profile_already_exists.success') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.success') }, status: :unprocessable_entity
   end
 
   def set_profile

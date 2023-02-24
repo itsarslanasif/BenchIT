@@ -33,12 +33,12 @@ class Api::V1::GroupsController < Api::ApiController
   def group_size
     return unless (@group.profile_ids.size + params[:profile_ids].size) > 9
 
-    render json: { success: false, error: t('.group_size.failure') }, status: :bad_request
+    render json: { success: false, error: t('.failure') }, status: :bad_request
   end
 
   def check_group_members
     return unless (@group.profile_ids & params[:profile_ids]).any?
 
-    render json: { success: false, error: t('.check_group_members.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 end

@@ -33,12 +33,12 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def update
     @bench_channel.update!(bench_channel_params)
-    render json: { success: true, message: t('.update.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
     @bench_channel.destroy!
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def leave_channel
@@ -47,7 +47,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
       @channel_participant.destroy!
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).left_channel(@bench_channel.name)
     end
-    render json: { success: true, message: t('.leave_channel.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def joined_channels
@@ -77,8 +77,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   def bench_channel_cannot_be_public_again
     return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
 
-    render json: { success: false, error: t('.bench_channel_cannot_be_public_again.failure') },
-           status: :bad_request
+    render json: { success: false, error: t('.failure') }, status: :bad_request
   end
 
   def sort_bench_channels
@@ -90,7 +89,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
                                                                   'a_to_z' => -> { sort_by_bench_channels('name', false) },
                                                                   'z_to_a' => -> { sort_by_bench_channels('name', true) }
                                                                 })
-    raise t('.sort_bench_channels.failure') unless sort_methods.key?(params[:sort_by])
+    raise t('.failure') unless sort_methods.key?(params[:sort_by])
 
     sort_methods[params[:sort_by]].call
   end

@@ -33,23 +33,23 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
       @channel_participant.save!
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
     end
-    render json: { success: true, message: t('.join_public_channel.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def mute_channel
     @channel_participant.update!(muted: true)
-    render json: { success: true, message: t('.mute_channel.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def unmute_channel
     @channel_participant.update!(muted: false)
-    render json: { success: true, message: t('.unmute_channel.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def invite_outsider
     @token = Token.new.generate
     ChannelMailer.send_email(params[:email], @bench_channel, @token).deliver!
-    render json: { success: true, message: t('.invite_outsider.success'), company_name: @bench_channel.workspace.company_name }, status: :ok
+    render json: { success: true, message: t('.success'), company_name: @bench_channel.workspace.company_name }, status: :ok
   end
 
   private
@@ -69,7 +69,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def check_profile_ids
     return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
-    render json: { success: false, error: t('.check_profile_ids.failure') }, status: :not_found
+    render json: { success: false, error: t('.failure') }, status: :not_found
   end
 
   def set_and_authenticate_channel

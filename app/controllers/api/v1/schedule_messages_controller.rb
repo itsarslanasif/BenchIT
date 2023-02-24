@@ -17,12 +17,12 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
       reschedule_job
     end
 
-    render json: { success: true, message: t('.update.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
     @schedule_message.destroy!
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def send_now
@@ -33,7 +33,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
       @schedule_message.destroy!
     end
 
-    render json: { success: true, message: t('.send_now.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private

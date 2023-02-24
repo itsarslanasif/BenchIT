@@ -25,7 +25,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       authorize! :create, @message
       @message.save!
 
-      render json: { success: true, message: t('.create.success') }, status: :ok
+      render json: { success: true, message: t('.success') }, status: :ok
     else
       @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
       authorize! :create, @schedule_message
@@ -35,7 +35,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def update
     @message.update!(conversation_messages_params)
-    render json: { success: true, message: t('.update.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
@@ -47,7 +47,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.destroy!
     end
 
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def recent_files
@@ -85,7 +85,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def paginate_messages
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
-    return render json: { success: false, error: t('.paginate_messages.failure') }, status: :not_found if @pagy.nil?
+    return render json: { success: false, error: t('.failure') }, status: :not_found if @pagy.nil?
   end
 
   def set_message
@@ -129,7 +129,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
-    render json: { success: false, error: t('.set_receiver.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
   def authenticate_message
