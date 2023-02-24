@@ -70,9 +70,9 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def check_user_membership
-    return unless @message.bench_conversation.conversationable_type.eql?('BenchChannel')
-    return if bench_conversation.conversationable.profile_ids.include?(current_profile.id)
+    conversation = @schedule_message.bench_conversation
+    return unless conversation.conversationable_type.eql?('BenchChannel') && conversation.conversationable.profile_ids.exclude?(current_profile.id)
 
-    ChannelParticipant.create!(bench_channel_id: 1, profile_id: current_profile.id, permission: true)
+    current_profile.channel_participants.create!(bench_channel_id: conversation.conversationable_id, permission: true)
   end
 end
