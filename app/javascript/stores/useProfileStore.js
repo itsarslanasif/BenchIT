@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia';
-import { getAllProfiles } from '../api/profiles/profiles';
+import { getAllProfiles, updateCurrentProfile } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
+import { useUserProfileStore } from './useUserProfileStore';
+import { encryption } from '../modules/crypto/crypto';
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
@@ -28,6 +30,29 @@ export const useProfileStore = () => {
         if (index !== -1) {
           this.profiles[index].status = data.status;
           this.profiles[index].is_active = data.is_active;
+        }
+      },
+      getProfileById(id) {
+        return this.profiles.find((profile)=>{
+          return profile.id = id
+        })
+      },
+      async updateProfile(data) {
+        const currentProfileStore = useCurrentProfileStore();
+        const userProfileStore = useUserProfileStore();
+        try {
+          const profile = await updateCurrentProfile(
+            currentProfileStore.currentProfile.workspace_id,
+            currentProfileStore.currentProfile.id,
+            data
+          );
+          currentProfileStore.currentProfile = profile;
+          userProfileStore.setUserProfile(profile);
+          let index = this.profiles.findIndex(profile => profile.id === currentProfileStore.currentProfile.id);
+          this.profiles[index] = profile;
+          encryption(sessionStorage, 'currentProfile', profile);
+        } catch (e) {
+          console.error(e);
         }
       },
     },

@@ -13,7 +13,7 @@ import { useShortcutAndAttachmentStore } from '../../../stores/useShortcutAndAtt
 import { ref } from 'vue';
 
 export default {
-  props: ['shortcut', 'isThread'],
+  props: ['shortcut', 'isThread', 'toggleCreateTextSnippetModal'],
   setup() {
     const ShortcutAndAttachmentStore = useShortcutAndAttachmentStore();
     return {
@@ -31,13 +31,7 @@ export default {
         shortcut.key ===
         this.generateKey(this.$t('create_text_snippet.create_text_snippet'))
       ) {
-        this.ShortcutAndAttachmentStore.showCreateTextSnippitModal =
-          !this.isThread;
-        this.ShortcutAndAttachmentStore.showCreateTextSnippitModalThread =
-          this.isThread;
-
-        this.ShortcutAndAttachmentStore.showModalInThread = false;
-        this.ShortcutAndAttachmentStore.showModalInChat = false;
+        this.toggleCreateTextSnippetModal();
       }
     },
     generateKey(label) {

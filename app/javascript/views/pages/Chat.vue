@@ -158,6 +158,9 @@ export default {
           ) {
             filename += '.mp4';
             file = this.getFileFromBlob(file, filename);
+          } else if (fileExtension == 'plain') {
+            filename += '.txt';
+            file = this.getFileFromBlob(file, filename);
           } else {
             filename += `.${fileExtension}`;
           }
