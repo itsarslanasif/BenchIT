@@ -25,7 +25,7 @@
               {{ statusClearAfterTime(profileStatus.clear_after) }}
             </span>
           </n-tooltip>
-          <n-avatar class="self-baseline" size="medium"  />
+          <n-avatar class="self-baseline" size="medium" :src="profileAvatar" />
         </div>
         <div
           class="flex absolute icon"

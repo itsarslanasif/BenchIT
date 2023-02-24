@@ -72,6 +72,7 @@ Rails.application.routes.draw do
               get :set_is_active
               get :remove_is_active
             end
+            resource :preference, only: %i[update]
           end
         end
         resources :downloads, only: %i[index create destroy] do
