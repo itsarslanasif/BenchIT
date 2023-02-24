@@ -34,17 +34,15 @@ Rails.application.routes.draw do
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
             get :send_message
-            get :index_saved_messages
             get :recent_files
             get :unread_messages
             get :reactions
           end
           member do
-            post :save_message
-            delete :unsave_message
             get :bench_channel_messages, :group_messages, :profile_messages
           end
         end
+        resources :saved_items, only: %i[index create destroy]
         resources :favourites, only: %i[create destroy]
 
         resources :searches, only: %i[index]

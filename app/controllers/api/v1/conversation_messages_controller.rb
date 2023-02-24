@@ -5,7 +5,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, :authenticate_message, only: %i[destroy update]
-  before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
@@ -51,20 +50,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     render json: { success: true, message: t('.destroy.success') }, status: :ok
   end
 
-  def index_saved_messages
-    @pagy, @saved_items = pagination_for_save_messages(params[:page])
-  end
-
-  def save_message
-    @saved_item = current_profile.saved_items.new(conversation_message_id: params[:id])
-    @saved_item.save!
-  end
-
-  def unsave_message
-    @saved_item.destroy!
-    render json: { success: true, message: t('.unsave_message.success') }, status: :ok
-  end
-
   def recent_files
     @messages = current_profile.conversation_messages.includes(:profile, :reactions).with_attached_message_attachments
   end
@@ -101,11 +86,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
     return render json: { success: false, error: t('.paginate_messages.failure') }, status: :not_found if @pagy.nil?
-  end
-
-  def set_saved_item
-    @saved_item = current_profile.saved_items.find_by!(conversation_message_id: params[:id])
-    authorize! :destroy, @saved_item
   end
 
   def set_message
