@@ -8,33 +8,33 @@ class Ability
     workspace = profile.workspace
 
     can %i[create destroy], Reaction do |reaction|
-      check_ability(reaction, profile) && reaction.profile_id.eql?(profile.id)
+      reaction.profile_id.eql?(profile.id) && check_ability(reaction.bench_conversation, profile)
     end
 
     can %i[destroy], Pin do |pin|
-      check_ability(pin, profile)
+      check_ability(pin.bench_conversation, profile)
     end
 
     can %i[create], Pin do |pin|
-      check_ability_for_create(pin, profile)
+      check_membership(pin.bench_conversation, profile)
     end
 
     can %i[update destroy], ConversationMessage do |message|
-      check_ability(message, profile) && message.sender_id.eql?(profile.id)
+      message.sender_id.eql?(profile.id) && check_ability(message.bench_conversation, profile)
     end
 
     can %i[create], ConversationMessage do |message|
-      check_ability_for_message_create(message, profile)
+      check_membership(message.bench_conversation, profile)
     end
 
     can %i[create], ScheduleMessage do |message|
-      check_ability_for_create(message, profile)
+      check_membership(message.bench_conversation, profile)
     end
 
     can %i[destroy update send_now], ScheduleMessage, profile_id: profile.id
 
-    can %i[create update destroy], DraftMessage do |draft_message|
-      check_ability_for_create(draft_message, profile)
+    can %i[create update destroy], DraftMessage do |message|
+      message.profile_id.eql?(profile.id) && check_membership(message.bench_conversation, profile)
     end
 
     can :destroy, Status, profile_id: profile.id
@@ -43,12 +43,6 @@ class Ability
 
     can %i[get add_member], Group do |group|
       group.profile_ids.include?(profile.id)
-    end
-
-    can %i[create destroy], Favourite do |favourite|
-      favourite.profile_id.eql?(profile.id) && check_ability_for_favourite(
-        get_conversation(favourite.favourable_type, favourite.favourable_id, profile.id), profile
-      )
     end
 
     can %i[destroy], BenchChannel, creator_id: profile.id
@@ -66,30 +60,26 @@ class Ability
     can %i[destroy], SavedItem, profile_id: profile.id
 
     can %i[join_public_channel], BenchChannel, { is_private: false, workspace: { id: workspace.id } }
+
+    can %i[create destroy], Favourite do |favourite|
+      conversation = get_conversation(favourite.favourable_type, favourite.favourable_id, profile.id)
+      favourite.profile_id.eql?(profile.id) && check_membership(conversation, profile)
+    end
   end
 
   private
 
-  def check_membership(bench_conversation, profile)
-    profile_ids = if bench_conversation.conversationable_type.eql?('Profile')
-                    [bench_conversation.conversationable_id, bench_conversation.sender_id]
+  def check_membership(conversation, profile)
+    profile_ids = if conversation.conversationable_type.eql?('Profile')
+                    [conversation.conversationable_id, conversation.sender_id]
                   else
-                    bench_conversation.conversationable.profile_ids
+                    conversation.conversationable.profile_ids
                   end
 
     profile_ids.include?(profile.id)
   end
 
-  def check_ability_for_create(object, profile)
-    object.profile_id.eql?(profile.id) ? check_membership(object.bench_conversation, profile) : false
-  end
-
-  def check_ability_for_message_create(object, profile)
-    object.sender_id.eql?(profile.id) ? check_membership(object.bench_conversation, profile) : false
-  end
-
-  def check_ability(object, profile)
-    conversation = object.bench_conversation
+  def check_ability(conversation, profile)
     conversationable = conversation.conversationable
     if conversation.conversationable_type.eql?('BenchChannel')
       conversationable.is_private ? check_membership(conversation, profile) : true
@@ -107,9 +97,5 @@ class Ability
     when 'Profile'
       BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
     end
-  end
-
-  def check_ability_for_favourite(conversation, profile)
-    check_membership(conversation, profile)
   end
 end
