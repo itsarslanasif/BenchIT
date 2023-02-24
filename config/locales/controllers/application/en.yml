@@ -1,5 +1,10 @@
 en:
   application:
+    services:
+      left_message: left the channel
+      add_message: added by
+      join_message: joined this channel.
+      along_message: along with
     render_error:
       not_found_error: Sorry, The record not found.
       invalid_error: Sorry, The record is invalid.
