@@ -1,5 +1,6 @@
 class Api::V1::BenchChannelsController < Api::ApiController
   include Pagination
+  include CanAuthorization
 
   before_action :set_bench_channel, :authenticate_channel, only: %i[show update destroy leave_channel]
   before_action :set_channel_participant, only: :leave_channel
@@ -125,13 +126,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def authenticate_channel
-    case action_name
-    when 'show'
-      authorize! :get, @bench_channel
-    when 'update'
-      authorize! :update, @bench_channel
-    when 'destroy'
-      authorize! :destroy, @bench_channel
-    end
+    authorize_action(action_name, @bench_channel) unless action_name.eql?('leave_channel')
   end
 end

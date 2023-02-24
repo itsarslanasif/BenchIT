@@ -1,6 +1,7 @@
 class Api::V1::PinsController < Api::ApiController
   include MemberShip
   include Conversation
+  include CanAuthorization
 
   before_action :find_conversation, only: %i[index create]
   before_action :set_pin, :set_conversation, only: %i[destroy]
@@ -48,13 +49,6 @@ class Api::V1::PinsController < Api::ApiController
   end
 
   def authenticate_pin
-    case action_name
-    when 'create'
-      authorize! :create, @pin
-    when 'destroy'
-      authorize! :destroy, @pin
-    else
-      check_membership(@conversation)
-    end
+    action_name.eql?('index') ? check_membership(@conversation) : authorize_action(action_name, @pin)
   end
 end

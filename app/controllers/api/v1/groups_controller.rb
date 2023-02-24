@@ -1,4 +1,6 @@
 class Api::V1::GroupsController < Api::ApiController
+  include CanAuthorization
+
   before_action :set_group, :authenticate_group, only: %i[show add_member]
   before_action :group_size, :check_group_members, only: %i[add_member]
 
@@ -23,11 +25,7 @@ class Api::V1::GroupsController < Api::ApiController
   end
 
   def authenticate_group
-    if action_name.eql?('show')
-      authorize! :get, @group
-    else
-      authorize! :add_member, @group
-    end
+    authorize_action(action_name, @group)
   end
 
   def group_size

@@ -2,6 +2,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   include MemberShip
   include Conversation
   include Pagination
+  include CanAuthorization
 
   before_action :fetch_conversation, only: %i[create]
   before_action :set_message, :authenticate_message, only: %i[destroy update]
@@ -117,11 +118,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def authenticate
-    if action_name.eql?('group_messages')
-      authorize! :get, @group
-    else
-      authorize! :get, @bench_channel
-    end
+    action_name.eql?('group_messages') ? (authorize! :get, @group) : (authorize! :get, @bench_channel)
   end
 
   def set_receiver
@@ -133,11 +130,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def authenticate_message
-    if action_name.eql?('update')
-      authorize! :update, @message
-    else
-      authorize! :destroy, @message
-    end
+    authorize_action(action_name, @message)
   end
 
   def marked_chat_read

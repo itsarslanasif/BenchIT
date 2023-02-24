@@ -1,4 +1,6 @@
 class Api::V1::ReactionsController < Api::ApiController
+  include CanAuthorization
+
   before_action :initialize_reaction, only: %i[create]
   before_action :set_reaction, only: %i[destroy]
   before_action :authenticate_reaction, only: %i[create destroy]
@@ -28,11 +30,6 @@ class Api::V1::ReactionsController < Api::ApiController
   end
 
   def authenticate_reaction
-    case action_name
-    when 'create'
-      authorize! :create, @reaction
-    when 'destroy'
-      authorize! :destroy, @reaction
-    end
+    authorize_action(action_name, @reaction)
   end
 end

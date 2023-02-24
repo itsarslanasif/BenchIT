@@ -1,6 +1,7 @@
 class Api::V1::DraftMessagesController < Api::ApiController
   include Conversation
   include Pagination
+  include CanAuthorization
 
   before_action :fetch_conversation, :initialize_draft, :verify_draft, :decide_draft_action, only: %i[create]
   before_action :set_draft_message, :set_conversation, :authenticate_draft, only: %i[destroy update]
@@ -84,10 +85,6 @@ class Api::V1::DraftMessagesController < Api::ApiController
   end
 
   def authenticate_draft
-    if action_name.eql?('update')
-      authorize! :update, @draft_message
-    else
-      authorize! :destroy, @draft_message
-    end
+    authorize_action(action_name, @draft_message)
   end
 end

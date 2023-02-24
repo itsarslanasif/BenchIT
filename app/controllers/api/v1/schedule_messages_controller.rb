@@ -1,5 +1,6 @@
 class Api::V1::ScheduleMessagesController < Api::ApiController
   include Pagination
+  include CanAuthorization
 
   before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
   before_action :delete_job, only: %i[destroy]
@@ -49,14 +50,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def authenticate_message
-    case action_name
-    when 'update'
-      authorize! :update, @schedule_message
-    when 'destroy'
-      authorize! :destroy, @schedule_message
-    else
-      authorize! :send_now, @schedule_message
-    end
+    authorize_action(action_name, @schedule_message)
   end
 
   def delete_job
