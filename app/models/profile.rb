@@ -12,7 +12,7 @@ class Profile < ApplicationRecord
     }
   end
 
-  after_commit :attach_avatar, on: %i[create]
+  after_commit :attach_avatar, :create_preference, on: %i[create]
   after_commit :broadcast_profile
 
   belongs_to :user
@@ -34,6 +34,7 @@ class Profile < ApplicationRecord
   has_many :downloads, dependent: :destroy
   has_many :schedule_messages, dependent: :destroy
   has_many :direct_message_users, dependent: :destroy
+  has_one :preference, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }

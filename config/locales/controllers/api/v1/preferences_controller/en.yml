@@ -1,0 +1,6 @@
+en:
+  api:
+    v1:
+      preferences:
+        update:
+          success: Preferences updated.
