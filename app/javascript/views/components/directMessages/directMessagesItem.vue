@@ -21,14 +21,14 @@
         class="flex item-center w-full"
       >
         <n-avatar :size="25" :src="user.image_url" />
-        <div class="flex z-10">
+        <div class="flex z-10 items-end">
           <div
             v-if="user.is_active"
-            class="bg-green-700 absolute bottom-0 awayStatus text-black-800 inactivePosition h-2 w-2 rounded-xl"
+            class="bg-green-700 awayStatus text-black-800 inactivePosition h-2 w-2 rounded-xl"
           />
           <div
             v-else
-            class="bg-black-800 absolute bottom-0 awayStatus text-black-800 inactivePosition h-2 w-2 border-2 border-white rounded-xl"
+            class="bg-black-800 awayStatus text-black-800 inactivePosition h-2 w-2 border-2 border-white rounded-xl"
           />
         </div>
         <p class="ml-2 text-sm text-white truncate">{{ user.username }}</p>
