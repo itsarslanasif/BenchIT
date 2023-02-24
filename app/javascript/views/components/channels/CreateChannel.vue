@@ -104,7 +104,7 @@ export default {
               this.closeModal();
             }
             else {
-              this.error = 'Name has already been taken.';
+              this.error = response.data.message;
             }
           })
       }
