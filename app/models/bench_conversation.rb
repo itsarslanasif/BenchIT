@@ -16,7 +16,7 @@ class BenchConversation < ApplicationRecord
   }
 
   scope :get_bench_conversation, lambda { |type, id|
-    where(conversationable_type: type, conversationable_id: id)
+    find_by(conversationable_type: type, conversationable_id: id) || none
   }
 
   def self.previous_or_create_new_profile_conversation(receiver_id)

@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     return if user.blank?
 
-    profile ||= user.user_profile
+    profile ||= Current.profile
     workspace = profile.workspace
 
     can %i[create destroy], Reaction do |reaction|
@@ -91,9 +91,9 @@ class Ability
   def get_conversation(favourable_type, favourable_id, profile_id)
     case favourable_type
     when 'BenchChannel'
-      BenchConversation.get_bench_conversation('BenchChannel', favourable_id).first
+      BenchConversation.get_bench_conversation('BenchChannel', favourable_id)
     when 'Group'
-      BenchConversation.get_bench_conversation('Group', favourable_id).first
+      BenchConversation.get_bench_conversation('Group', favourable_id)
     when 'Profile'
       BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
     end
