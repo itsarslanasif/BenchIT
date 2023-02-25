@@ -12,8 +12,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :authenticate, only: %i[bench_channel_messages group_messages]
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
-  def send_message
-    @pagy, @messages = pagination_for_send_messages(params[:page])
+  def sent_message
+    @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
   end
 
   def reactions

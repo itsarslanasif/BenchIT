@@ -33,7 +33,7 @@ Rails.application.routes.draw do
         end
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
-            get :send_message
+            get :sent_message
             get :recent_files
             get :unread_messages
             get :reactions
