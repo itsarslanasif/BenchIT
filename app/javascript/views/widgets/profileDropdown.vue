@@ -105,7 +105,7 @@ export default {
       status: '',
       prevStatus: '',
       statusIcon: '',
-      preferencesModal: true,
+      preferencesModal: false,
       showModal: false,
       options: [
         {

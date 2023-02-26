@@ -16,24 +16,36 @@
   <div v-if="showChannelModal">
     <CreateChannel :close-modal="toggleCreateChannelModal" />
   </div>
+  <n-modal v-model:show="preferencesModal">
+      <Preferences />
+  </n-modal>
 </template>
 
 <script>
-import { NDropdown, NButton } from 'naive-ui';
+import { NDropdown, NButton, NModal } from 'naive-ui';
 import options from './options.js';
 import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
 import { decryption } from '../../../modules/crypto/crypto';
 import CreateChannel from '../../components/channels/CreateChannel.vue';
 import { removeActiveStatus } from '../../../api/profiles/profileStatus';
+import Preferences from '../../components/preferences/Preferences.vue';
 
 export default {
-  components: { NButton, NDropdown, UserInviteModal, CreateChannel },
+  components: {
+    NButton,
+    NDropdown,
+    UserInviteModal,
+    CreateChannel,
+    Preferences,
+    NModal
+  },
   data() {
     return {
       options: [],
       showModal: false,
       showChannelModal: false,
+      preferencesModal: false,
     };
   },
   beforeUnmount() {
@@ -49,6 +61,9 @@ export default {
       switch (key) {
         case 'sign-out-of-your-account':
           this.signOut();
+          break;
+        case 'preferences':
+          this.preferencesModal = !this.preferencesModal;
           break;
         case 'invite-people':
           this.showModal = true;

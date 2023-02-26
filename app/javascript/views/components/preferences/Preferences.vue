@@ -1,6 +1,6 @@
 <template>
   <n-card :title="$t('preferences.title')" class="w-1/2">
-    <div class="flex  overflow-y-scroll">
+    <div class="flex">
       <div class="w-1/4">
         <div
           v-for="item of options"
@@ -12,7 +12,7 @@
           {{ item.title }}
         </div>
       </div>
-      <div class="w-3/4 px-5 custom-height">
+      <div class="w-3/4 px-5 custom-height overflow-y-scroll">
         <Notification v-if="options.notification.flag" />
         <Sidebar v-if="options.sidebar.flag" />
         <Themes v-if="options.themes.flag" />
@@ -64,7 +64,7 @@ export default {
         notification: {
           title: 'Notification',
           key: 'notification',
-          flag: false,
+          flag: true,
         },
         sidebar: {
           title: 'Sidebar',
@@ -99,7 +99,7 @@ export default {
         audioVideo: {
           title: 'Audio & Video',
           key: 'audioVideo',
-          flag: true,
+          flag: false,
         },
         connectedAccounts: {
           title: 'Connected Accounts',
