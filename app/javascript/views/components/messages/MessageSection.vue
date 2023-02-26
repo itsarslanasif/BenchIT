@@ -6,6 +6,7 @@
 
 <script>
 import { Remarkable } from 'remarkable';
+import { useProfileStore } from '../../../stores/useProfileStore';
 export default {
   props: {
     section: {
@@ -18,10 +19,17 @@ export default {
       text: '',
     };
   },
-  mounted() {
+  async mounted() {
     const html = new Remarkable({ html: true });
-    this.text = html.render(this.section.text.text);
+    const { replacedStr } = await this.profileStore.getMentionsFromIds(html.render(this.section.text.text))
+    this.text = replacedStr
   },
+  setup() {
+    const profileStore = useProfileStore()
+    return {
+      profileStore
+    }
+  }
 };
 </script>
 <style lang="scss">

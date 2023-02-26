@@ -32,9 +32,27 @@ export const useProfileStore = () => {
           this.profiles[index].is_active = data.is_active;
         }
       },
+      async getMentionsFromIds(str) {
+        const regex = /&lt;\s*@(\d+)\s*&gt;/g;
+        const ids = [];
+        let match;
+        while ((match = regex.exec(str)) !== null) {
+          ids.push(match[1]);
+        }
+        const profiles = await Promise.all(ids.map(id => this.getProfileById(id)));
+        const replacedStr = ids.reduce((acc, id, index) => {
+          const profile = profiles[index];
+          if (profile) {
+            const { username } = profile;
+            acc = acc.replace(new RegExp(`&lt;@${id}&gt;`, 'g'), `@${username}`);
+          }
+          return acc;
+        }, str);
+        return { profiles, replacedStr };
+      },          
       getProfileById(id) {
         return this.profiles.find((profile)=>{
-          return profile.id = id
+          return profile.id == id
         })
       },
       async updateProfile(data) {
