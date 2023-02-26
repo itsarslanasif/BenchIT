@@ -29,6 +29,12 @@ class ConversationMessage < ApplicationRecord
                                                    bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
   }
 
+  scope :messages_with_other_reactions, lambda { |current_profile|
+    joins(:reactions)
+      .where.not(reactions: { profile_id: current_profile.id })
+      .uniq
+  }
+
   scope :send_messages, -> { includes(:profile, :bench_conversation).where(sender_id: Current.profile.id).order(created_at: :desc) }
 
   def self.recent_conversation_ids(conversation_ids)
@@ -41,7 +47,7 @@ class ConversationMessage < ApplicationRecord
     message = model_basic_content
     message = message_data(message)
     message[:replies] = replies.map(&:message_content) if parent_message_id.nil?
-
+    message[:shared_message] = ConversationMessage.find_by(id: shared_message_id) if shared_message_id.present?
     message
   end
 
@@ -104,6 +110,7 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at,
       isSaved: saved?(id),
       pinned: pin.present?,
+      shared_message_id: shared_message_id,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,
       conversationable_id: bench_conversation.conversationable_id

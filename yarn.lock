@@ -393,7 +393,7 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@popperjs/core@^2.11.0", "@popperjs/core@^2.9.0":
+"@popperjs/core@^2.11.0", "@popperjs/core@^2.11.6", "@popperjs/core@^2.9.0":
   version "2.11.6"
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.6.tgz#cee20bd55e68a1720bdab363ecf0c821ded4cd45"
   integrity sha512-50/17A98tWUfQ176raKiOGXuYpLyyVMkxxG6oylzL3BPOlA6ADGdK7EYunSa4I064xerltq9TGXs8HmOk5E+vw==
@@ -545,6 +545,11 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-list-item/-/extension-list-item-2.0.0-beta.217.tgz#811c1197023bed2ed96f1e88f14ee66eac77d8f7"
   integrity sha512-yJmB/Je6CAiyjjJyVl77PPv4AWNFejrhxxmIdPfkYNRuQx9xX5yccx/zXC5RMaUFZVttlC4+gXDZsCvxMiVF1g==
 
+"@tiptap/extension-mention@^2.0.0-beta.218":
+  version "2.0.0-beta.218"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-mention/-/extension-mention-2.0.0-beta.218.tgz#ec1e05d3054bd8e4ed2b5b5007c8dfac65d10c2d"
+  integrity sha512-pP6ktxnjgJscv5xTn8BT9p5JjkdrHcnugR1qA0jAQpDRUioFKDIxR5DK0oDcR29YftulZBgkEPQjuw7U1zAboQ==
+
 "@tiptap/extension-ordered-list@^2.0.0-beta.217":
   version "2.0.0-beta.217"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-ordered-list/-/extension-ordered-list-2.0.0-beta.217.tgz#37ec7a2b10c03bb6f53fe901873ffdbc1626c79f"
@@ -618,6 +623,11 @@
     "@tiptap/extension-paragraph" "^2.0.0-beta.217"
     "@tiptap/extension-strike" "^2.0.0-beta.217"
     "@tiptap/extension-text" "^2.0.0-beta.217"
+
+"@tiptap/suggestion@^2.0.0-beta.218":
+  version "2.0.0-beta.218"
+  resolved "https://registry.yarnpkg.com/@tiptap/suggestion/-/suggestion-2.0.0-beta.218.tgz#c19b88f61f93e9caf9d669a5444b5fc066082fa0"
+  integrity sha512-wuySgX9mBjr15dGjFZlAIEHC+fs4MiAXJXywEcFUYl+hFDhCejyeKCl/Bw4Xf7JZiiUtfE0REeL5DkPvPmlFwQ==
 
 "@tiptap/vue-3@^2.0.0-beta.217":
   version "2.0.0-beta.217"
@@ -1777,6 +1787,11 @@ pinia@^2.0.13:
     "@vue/devtools-api" "^6.4.5"
     vue-demi "*"
 
+popper.js@^1.16.1:
+  version "1.16.1"
+  resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha512-Wb4p1J4zyFTbM+u6WuO4XstYx4Ky9Cewe4DWrel7B0w6VVICvPwdOpotjzcf6eD8TsckVnIMNONQyPIUFOUbCQ==
+
 postcss-attribute-case-insensitive@^5.0.2:
   version "5.0.2"
   resolved "https://registry.yarnpkg.com/postcss-attribute-case-insensitive/-/postcss-attribute-case-insensitive-5.0.2.tgz#03d761b24afc04c09e757e92ff53716ae8ea2741"
@@ -2296,6 +2311,11 @@ readdirp@~3.6.0:
   dependencies:
     picomatch "^2.2.1"
 
+recordrtc@^5.6.2:
+  version "5.6.2"
+  resolved "https://registry.yarnpkg.com/recordrtc/-/recordrtc-5.6.2.tgz#48fc214b35084973ccce82c6251198b5742bc327"
+  integrity sha512-1QNKKNtl7+KcwD1lyOgP3ZlbiJ1d0HtXnypUy7yq49xEERxk31PHvE9RCciDrulPCY7WJ+oz0R9hpNxgsIurGQ==
+
 reduce-css-calc@^2.1.6:
   version "2.1.8"
   resolved "https://registry.yarnpkg.com/reduce-css-calc/-/reduce-css-calc-2.1.8.tgz#7ef8761a28d614980dc0c982f772c93f7a99de03"
@@ -2694,6 +2714,11 @@ w3c-keyname@^2.2.0:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/w3c-keyname/-/w3c-keyname-2.2.6.tgz#8412046116bc16c5d73d4e612053ea10a189c85f"
   integrity sha512-f+fciywl1SJEniZHD6H+kUO8gOnwIr7f4ijKA6+ZvJFjeGi1r4PDLl53Ayud9O/rk64RqgoQine0feoeOU0kXg==
+
+wavesurfer.js@^6.4.0:
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/wavesurfer.js/-/wavesurfer.js-6.4.0.tgz#cda4eb93fe945e3b69fbf0b7ea5c45c3f1abac5c"
+  integrity sha512-+i9GkYdMTm998goOWvycWqCgxfbolnuGTPgrdGss7ZbQDuu+n6AHdnJwYnqxW8RZo5A2ck6ztzXbrXGuCi0m5g==
 
 wrappy@1:
   version "1.0.2"

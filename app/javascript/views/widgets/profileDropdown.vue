@@ -62,6 +62,8 @@ import { clearStatus } from '../../api/profiles/profileStatus';
 import { setActiveStatus } from '../../api/profiles/profileStatus';
 import { removeActiveStatus } from '../../api/profiles/profileStatus';
 import Preferences from '../components/preferences/Preferences.vue';
+import { useUserProfileStore } from '../../stores/useUserProfileStore';
+import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
 export default {
   components: {
@@ -77,6 +79,8 @@ export default {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
     const currentWorkspaceStore = useCurrentWorkspaceStore();
+    const userProfileStore = useUserProfileStore();
+    const rightPaneStore = useRightPaneStore();
     const { currentProfile } = storeToRefs(profileStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { status } = storeToRefs(profileStore);
@@ -87,6 +91,8 @@ export default {
       profileCurrentStatus: status,
       profileStore,
       currentWorkspace,
+      userProfileStore,
+      rightPaneStore,
     };
   },
 
@@ -257,6 +263,9 @@ export default {
           break;
         case 'preferences':
           this.preferencesModal = !this.preferencesModal;
+        case 'profile':
+          this.userProfileStore.setUserProfile(this.profile)
+          this.rightPaneStore.toggleUserProfileShow(true)
           break;
         case 'downloads':
           this.showModal = true;

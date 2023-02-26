@@ -1,39 +1,5 @@
 <template>
   <div>
-    <AttachmentShortCutVue
-      :isThread="isThread"
-      class="margintop absolute z-10"
-    />
-    <CreateTextSnippetModal
-      v-if="
-        isThread
-          ? attachmentAndShortcutStore.showCreateTextSnippitModalThread
-          : attachmentAndShortcutStore.showCreateTextSnippitModal
-      "
-      :sendMessage="sendMessage"
-      :isThread="isThread"
-      :recieverName="fileRecieverName"
-    />
-    <div
-      v-if="showMentions || showChannels"
-      class="w-1/4 p-2 text-sm shadow-inner bg-secondary text-white absolute z-10"
-    >
-      <div
-        v-if="
-          (showMentions && hasMentionCommand) ||
-          (showChannels && hasChannelCommand)
-        "
-      >
-        <div
-          v-for="item in filteredList"
-          :key="item.name"
-          class="p-1 rounded-md hover:bg-secondaryHover"
-          @click="addMentionToText"
-        >
-          {{ item.creator_id ? item.name : item.username }}
-        </div>
-      </div>
-    </div>
     <div>
       <div
         v-if="schedule"
@@ -41,45 +7,6 @@
       >
         {{ getScheduleNotification() }}
       </div>
-      <!-- <editor
-        v-model="newMessage"
-        @keydown.enter="sendMessagePayload"
-        api-key="no-api-key"
-        :init="{
-          placeholder: getPlaceholder,
-          menubar: false,
-          statusbar: false,
-          toolbar_location: 'bottom',
-          toolbar1:
-            'AddAttachments bold italic underline strikethrough | link |  bullist numlist  | alignleft | code | codesample | sendButton',
-          setup: editor => {
-            editor.ui.registry.addButton('AddAttachments', {
-              text: '➕',
-              onAction: handleCustomButton,
-            });
-          },
-          plugins: ' lists link code codesample emoticons',
-          codesample_languages: [none],
-          formats: {
-            code: {
-              selector: 'p',
-              styles: {
-                background:
-                  'rgba(var(--sk_foreground_min_solid, 248, 248, 248), 1)',
-                border: '1px solid gray',
-                'border-radius': '3px',
-                'font-size': '10px',
-                'font-variant-ligatures': 'none',
-                'line-height': '1.5',
-                'margin-bottom': '14px',
-                padding: '0px 8px 0px 8px',
-                position: 'relative',
-                'font-family': 'monospace',
-              },
-            },
-          },
-        }"
-      /> -->
       <div
         v-if="editor"
         class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
@@ -159,10 +86,23 @@
         </div>
 
         <editor-content
+          @keydown.enter="sendMessagePayload"
           :editor="editor"
           class="mt-4"
-          @keydown.enter="sendMessagePayload"
         />
+
+        <div>
+          <div v-if="videoFiles.length" class="flex gap-1 mt-2 relative">
+            <div v-for="file in videoFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0 z-10 cursor-pointer"
+                @click="removeVideoFiles(file)"
+              />
+              <VisualizeVideo :blob="file" />
+            </div>
+          </div>
+        </div>
 
         <div>
           <div v-if="readerFile.length" class="flex gap-1 mt-2 relative">
@@ -179,34 +119,46 @@
             </div>
           </div>
         </div>
+        <div>
+          <div v-if="audioFiles.length" class="flex w-20 gap-1 mt-2 relative">
+            <div v-for="file in audioFiles" :key="file" class="relative">
+              <font-awesome-icon
+                icon="fa-circle-xmark"
+                class="absolute right-0"
+                @click="removeAudioFile(file)"
+              />
+              <visualize-voice
+                :fileID="new Date().getTime()"
+                :audioURL="createURL(file)"
+              />
+            </div>
+          </div>
+        </div>
         <div v-if="scheduleModalFlag">
           <ScheduleModal
             :setSchedule="setSchedule"
-            :toggleSchedule="toggleSchedule"
+            :toggleShow="toggleSchedule"
           />
         </div>
-
         <div class="flex justify-between mt-4">
           <div class="flex items-center gap-1">
             <button
               v-if="!editMessage"
               class="bg-transparent rounded-full focus:outline-none focus:bg-black-300"
             >
-              <Attachments :getImages="getImages" />
+              <Attachments
+                :getImages="getImages"
+                :sendMessage="sendMessage"
+                :isThread="isThread"
+                :recieverName="fileRecieverName"
+              />
             </button>
             <div v-if="!editMessage" class="vl" />
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-video" />
-            </button>
-            <button
-              v-if="!editMessage"
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
-            >
-              <font-awesome-icon icon="fa-microphone" />
-            </button>
+            <VideoRecord
+              :getVideoFiles="getVideoFiles"
+              :editMessage="editMessage"
+            />
+            <VoiceRecorder :getAudio="getAudio" v-if="!editMessage" />
             <div v-if="!editMessage" class="vl" />
             <button
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -276,12 +228,13 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue';
+import { ref, watch, onMounted } from 'vue';
 import { markdownToBlocks } from '@tryfabric/mack';
 import TurndownService from 'turndown';
 import Attachments from '../attachments/Attachments.vue';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useChannelStore } from '../../../stores/useChannelStore';
+import { useSearchStore } from '../../../stores/useSearchStore';
 import { storeToRefs } from 'pinia';
 import { NMention, NDivider } from 'naive-ui';
 import ScheduleModal from '../../widgets/schedule.vue';
@@ -295,6 +248,13 @@ import CreateTextSnippetModal from './CreateTextSnippetModal.vue';
 import StarterKit from '@tiptap/starter-kit';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Editor, EditorContent } from '@tiptap/vue-3';
+import Mention from '@tiptap/extension-mention';
+import suggestion from './suggestion';
+import { CONSTANTS } from '../../../assets/constants';
+import VoiceRecorder from './VoiceRecorder.vue';
+import VisualizeVoice from './VisualizeVoice.vue';
+import VideoRecord from '../../widgets/videoRecord.vue';
+import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 
 export default {
   data() {
@@ -310,23 +270,6 @@ export default {
   beforeUnmount() {
     this.editor.destroy();
   },
-  mounted() {
-    this.editor = new Editor({
-      extensions: [
-        StarterKit,
-        Placeholder.configure({
-          placeholder: this.getPlaceholder,
-        }),
-      ],
-      onUpdate: () => {
-        this.editorContent = this.editor.getHTML();
-      },
-      content: this.newMessage,
-    });
-    if (this.isEditScheduled()) {
-      this.newMessage = this.messageToEdit.content;
-    }
-  },
   components: {
     Attachments,
     NMention,
@@ -335,6 +278,10 @@ export default {
     CreateTextSnippetModal,
     EditorContent,
     NDivider,
+    VoiceRecorder,
+    VisualizeVoice,
+    VideoRecord,
+    VisualizeVideo,
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -358,34 +305,15 @@ export default {
     recieverName: {
       type: String,
     },
-  },
-  computed: {
-    getPlaceholder() {
-      return this.isThread
-        ? this.$t('chat.reply_placeholder')
-        : `${this.$t('actions.message')} ${this.getRecipientName}`;
-    },
-    getRecipientName() {
-      return (
-        this.getChannelName ||
-        this.selectedChat.username ||
-        this.$t('chat.empty_placeholder')
-      );
-    },
-    getChannelName() {
-      return this.selectedChat.name
-        ? (this.selectedChat.is_private
-            ? this.$t('chat.lock')
-            : this.$t('chat.hash')) + this.selectedChat.name
-        : false;
-    },
-    fileRecieverName() {
-      return (
-        this.recieverName || this.getChannelName || this.selectedChat.username
-      );
+    repliedParentMessage: {
+      type: String,
     },
   },
   methods: {
+    createURL(file) {
+      return URL.createObjectURL(file);
+    },
+
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
       const url = window.prompt('URL', previousUrl);
@@ -407,89 +335,122 @@ export default {
     async makeBlocks(line) {
       const block = await markdownToBlocks(line);
       return block[0];
-    },
-
-    async sendMessagePayload(event, buttonClicked) {
-      if (
-        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
-        !this.editMessage
-      ) {
-        const mrkdwn = [];
-        const htmlList = this.editorContent.split('<br>');
-        htmlList.forEach(async line => {
-          line = line.replace(/<s>/g, '~~');
-          line = line.replace(/<\/s>/g, '~~');
-          mrkdwn.push(this.turndownService.turndown(line));
-        });
-        const result = await Promise.all(
-          mrkdwn.map(async line => {
-            line = line.replace(/\*\*/g, '****');
-            return await this.makeBlocks(line);
-          })
-        );
-        if (result.length) {
-          this.sendMessage({ blocks: result }, this.files, this.schedule);
-          this.newMessage = '';
-          this.readerFile = [];
-          this.files = [];
-          this.schedule = null;
-        }
-      }
-    },
+    }
   },
+
   setup(props) {
     const channelStore = useChannelStore();
     const profileStore = useProfileStore();
+    const searchStore = useSearchStore();
     const FilesStore = useRecentFilesStore();
     const turndownService = new TurndownService();
     const { channels } = storeToRefs(channelStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
+    const { searches } = storeToRefs(searchStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
     const newMessage = ref('');
     const editorContent = ref('');
-    const showMentions = ref(false);
-    const showChannels = ref(false);
-    const hasMentionCommand = ref(false);
-    const hasChannelCommand = ref(false);
     const readerFile = ref([]);
+    const audioFiles = ref([]);
     const files = ref([]);
+    const videoFiles = ref([]);
     const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
+    const editor = ref(null);
 
-    watch(newMessage, (curr, old) => {
-      const currentMessage = ignoreHTML(curr);
-      const oldMessage = ignoreHTML(old);
-      const message = ignoreHTML(newMessage.value);
-
-      if (
-        message &&
-        getLastIndex(currentMessage) == '@' &&
-        getLastIndex(oldMessage) == ';'
-      ) {
-        enableMention();
-      } else if (
-        message &&
-        getLastIndex(currentMessage) == '#' &&
-        getLastIndex(oldMessage) == ';'
-      ) {
-        enableChannels();
-      } else if (message.length === 1 && getLastIndex(currentMessage) == '@') {
-        enableMention();
-      } else if (message.length === 1 && getLastIndex(currentMessage) == '#') {
-        enableChannels();
-      } else if (!message) {
-        disableAll();
-      } else {
-        disableAll();
+    onMounted(() => {
+      editor.value = new Editor({
+        extensions: [
+          StarterKit,
+          Mention.configure({
+            HTMLAttributes: {
+              class: 'mention',
+            },
+            suggestion,
+          }),
+          Placeholder.configure({
+            placeholder: getPlaceholder,
+          }),
+        ],
+        onUpdate: () => {
+          editorContent.value = editor.value.getHTML();
+        },
+        content: newMessage.value,
+      });
+      if (isEditScheduled()) {
+        newMessage.value = props.messageToEdit.content;
       }
     });
 
-    const getLastIndex = value => {
-      return value[value.length - 1];
+    const makeBlocks = async line => {
+      const block = await markdownToBlocks(line);
+      return block[0];
     };
+
+    const formatBlockContent = array => {
+      return array.map(item => {
+        if (
+          item.text &&
+          item.text.type === 'mrkdwn' &&
+          typeof item.text.text === 'string'
+        ) {
+          item.text.text = item.text.text.replace(/&quot;/g, `"`);
+          item.text.text = item.text.text.replace(/&#39;/g, `'`);
+          item.text.text = item.text.text.replace(/~/g, '~~');
+        }
+        return item;
+      });
+    };
+
+    const sendMessagePayload = async (event, buttonClicked) => {
+      if (
+        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        !props.editMessage
+      ) {
+        const mrkdwn = [];
+        const htmlList = editorContent.value.split('<br>');
+        htmlList.forEach(async line => {
+          turndownService.addRule('s', {
+            filter: ['s'],
+            replacement: function (content) {
+              return '~~' + content + '~~';
+            },
+          });
+
+          turndownService.addRule('', {
+            filter: [`"`],
+            replacement: function (content) {
+              return `"` + content + `"`;
+            },
+          });
+
+          mrkdwn.push(turndownService.turndown(line));
+        });
+
+        const result = await Promise.all(
+          mrkdwn.map(async line => {
+            line = line.replace(/\*\*/g, '****');
+            return await makeBlocks(line);
+          })
+        );
+
+        if (result[0] != null) {
+          const output = formatBlockContent(result);
+          props.sendMessage({ blocks: output }, files.value, schedule.value);
+          newMessage.value = '';
+          readerFile.value = [];
+          files.value = [];
+          audioFiles.value = [];
+          videoFiles.value = [];
+          schedule.value = null;
+          editor.value.commands.setContent([]);
+        }
+      }
+    };
+
     const setSchedule = value => {
       schedule.value = value;
       toggleSchedule();
@@ -552,51 +513,75 @@ export default {
       } on ${date.format('MMMM DD, YYYY')} at ${date.format('h:mm A')}`;
     };
 
-    const enableMention = () => {
-      filteredList.value = profiles.value;
-      hasMentionCommand.value = true;
-      showMentions.value = true;
-      hasChannelCommand.value = false;
-      showChannels.value = false;
-    };
-
-    const enableChannels = () => {
-      filteredList.value = channels.value;
-      hasChannelCommand.value = true;
-      showChannels.value = true;
-      hasMentionCommand.value = false;
-      showMentions.value = false;
-    };
-
-    const disableAll = () => {
-      hasMentionCommand.value = false;
-      showMentions.value = false;
-      hasChannelCommand.value = false;
-      showChannels.value = false;
-    };
-
-    const addMentionToText = e => {
-      newMessage.value = `${newMessage.value.slice(0, -4)}<span>${
-        e.target.outerText
-      }</span> ${newMessage.value.slice(-4)}`;
-      showMentions.value = false;
-      hasMentionCommand.value = false;
-    };
-
-    const ignoreHTML = message => {
-      return message.replace(/<[^>]+>/g, '');
-    };
-
     const removeFile = file => {
       const index = readerFile.value.indexOf(file);
       files.value.splice(index, 1);
       readerFile.value.splice(index, 1);
+    };
+    const removeAudioFile = file => {
+      const index = audioFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      audioFiles.value.splice(index, 1);
     };
     const getImages = file => {
       files.value[files.value?.length] = file;
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => readerFile.value.push(reader.result);
+    };
+    const getAudio = file => {
+      files.value[files.value?.length] = file;
+      audioFiles.value.push(file);
+    };
+    const getVideoFiles = file => {
+      files.value[files.value?.length] = file;
+      videoFiles.value.push(file);
+    };
+    const removeVideoFiles = file => {
+      const index = videoFiles.value.indexOf(file);
+      files.value.splice(index, 1);
+      videoFiles.value.splice(index, 1);
+    };
+
+    const getPlaceholder = () => {
+      return props.isThread
+        ? CONSTANTS.REPLY_PLACEHOLDER
+        : `${CONSTANTS.MESSAGE} ${getRecipientName()}`;
+    };
+
+    const getRecipientName = () => {
+      return (
+        getChannelName() || selectedChat.username || CONSTANTS.EMPTY_PLACEHOLDER
+      );
+    };
+
+    const getChannelName = () => {
+      return selectedChat.value.name
+        ? (selectedChat.value.is_private ? CONSTANTS.LOCK : CONSTANTS.HASH) +
+            selectedChat.value.name
+        : false;
+    };
+
+    const fileRecieverName = () => {
+      return recieverName || getChannelName || selectedChat.value.username;
+    };
+
+    const setLink = () => {
+      const previousUrl = editor.value.getAttributes('link').href;
+      const url = window.prompt('URL', previousUrl);
+      if (url === null) {
+        return;
+      }
+      if (url === '') {
+        editor.value.chain().focus().extendMarkRange('link').unsetLink().run();
+        return;
+      }
+      editor.value
+        .chain()
+        .focus()
+        .extendMarkRange('link')
+        .setLink({ href: url })
+        .run();
     };
 
     const toggleSchedule = () => {
@@ -606,12 +591,8 @@ export default {
     return {
       newMessage,
       readerFile,
+      audioFiles,
       files,
-      showMentions,
-      showChannels,
-      hasChannelCommand,
-      hasMentionCommand,
-      filteredList,
       channels,
       profiles,
       schedule,
@@ -619,8 +600,9 @@ export default {
       messageStore,
       messageToEdit,
       removeFile,
+      removeAudioFile,
       getImages,
-      addMentionToText,
+      getAudio,
       toggleSchedule,
       setSchedule,
       getScheduleNotification,
@@ -632,6 +614,14 @@ export default {
       attachmentAndShortcutStore,
       turndownService,
       editorContent,
+      editor,
+      fileRecieverName,
+      setLink,
+      videoFiles,
+      getVideoFiles,
+      removeVideoFiles,
+      formatBlockContent,
+      sendMessagePayload
     };
   },
 };
@@ -701,7 +691,7 @@ export default {
     background: #5a4d041c;
     font-family: 'JetBrainsMono', monospace;
     color: #726933;
-    padding: 0.75rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 0.3rem;
     border-width: 0.01rem;
 
@@ -739,5 +729,11 @@ button {
 }
 .margintop {
   margin-top: -270px;
+}
+.mention {
+  border: 1px solid #000;
+  border-radius: 0.4rem;
+  padding: 0.1rem 0.3rem;
+  box-decoration-break: clone;
 }
 </style>

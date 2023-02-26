@@ -15,6 +15,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @messages = pagination_for_send_messages(params[:page])
   end
 
+  def reactions
+    @reactions = current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+  end
+
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
@@ -107,7 +111,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def conversation_messages_params
-    params.permit(:content, :is_threaded, :parent_message_id, :is_sent_to_chat, message_attachments: []).tap do |param|
+    params.permit(:content, :is_threaded, :parent_message_id, :is_sent_to_chat, :shared_message_id, message_attachments: []).tap do |param|
       param[:sender_id] = current_profile.id
     end
   end

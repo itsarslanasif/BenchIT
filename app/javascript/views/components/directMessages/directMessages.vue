@@ -99,7 +99,12 @@
                     isOwnMessage ? 'You' : firstName(message.sender_name)
                   }}:</span
                 >
-                <span v-html="message.content"></span>
+                <span v-for="block in messageBlocks" :key="block">
+                  <MessageSection
+                    v-if="block.type === 'section'"
+                    :section="block"
+                  />
+                </span>
               </div>
             </div>
             <div class="ml-auto text-black-200">
@@ -122,13 +127,11 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import vClickOutside from 'click-outside-vue3';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
-import {
-  getDirectMessagesList,
-  getLastDirectMessagesList,
-} from '../../../api/directMessages/directMessages';
+import { getLastDirectMessagesList } from '../../../api/directMessages/directMessages';
+import MessageSection from '../messages/MessageSection.vue';
 
 export default {
-  components: { NAvatar },
+  components: { NAvatar, MessageSection },
   data() {
     return {
       last_messages: [],
@@ -219,6 +222,9 @@ export default {
     },
   },
   computed: {
+    messageBlocks() {
+      return JSON.parse(this.currMessage.content).blocks;
+    },
     isToday() {
       return (
         new Date(this.currMessage.created_at).toDateString() ===

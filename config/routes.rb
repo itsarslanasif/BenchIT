@@ -37,6 +37,7 @@ Rails.application.routes.draw do
             get :index_saved_messages
             get :recent_files
             get :unread_messages
+            get :reactions
           end
           member do
             post :save_message
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
               get :set_is_active
               get :remove_is_active
             end
+            resource :preference, only: %i[update]
           end
         end
         resources :downloads, only: %i[index create destroy] do

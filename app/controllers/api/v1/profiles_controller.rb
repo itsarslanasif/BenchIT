@@ -5,6 +5,7 @@ class Api::V1::ProfilesController < Api::ApiController
   before_action :check_profile_already_exists, only: %i[create]
   before_action :check_user_member_of_workspace, only: %i[show update]
   before_action :find_profile, only: %i[update set_status clear_status set_is_active remove_is_active]
+  before_action :fetch_country_name, only: %i[update]
 
   def index
     @profiles = if params[:query].presence
@@ -29,11 +30,8 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def update
-    if (@profile = current_profile.update!(profile_params))
-      render json: { success: true, message: t('.update.success') }, status: :ok
-    else
-      render json: { success: false, error: t('.update.failure') }, status: :unprocessable_entity
-    end
+    current_profile.update!(profile_params)
+    @profile = current_profile
   end
 
   def set_status
@@ -77,10 +75,14 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def profile_params
-    params.require(:profile).permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status, :emoji_status,
-                                    :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
+    params.permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status, :emoji_status,
+                  :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
+  end
+
+  def fetch_country_name
+    params[:time_zone] = params[:time_zone].split[1..].join(' ') if params[:time_zone].present?
   end
 
   def check_user_member_of_workspace

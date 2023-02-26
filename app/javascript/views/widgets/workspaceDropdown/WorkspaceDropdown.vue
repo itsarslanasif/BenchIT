@@ -1,20 +1,25 @@
 <template>
-  <n-dropdown
-    v-if="currentWorkspace"
-    trigger="click"
-    :options="options"
-    @select="handleSelect($event)"
-    size="large"
-    class="w-80 rounded-md bg-white"
-  >
-    <div class="mx-3 my-2 flex text-white cursor-pointer">
-      <strong class="text-xl">{{ currentWorkspace.company_name }}</strong>
-      <i class="fa-solid fa-chevron-down self-center fa-lg ml-1" />
+  <div>
+    <n-dropdown
+      v-if="currentWorkspace"
+      trigger="click"
+      :options="options"
+      @select="handleSelect($event)"
+      size="large"
+      class="w-80 rounded-md bg-white"
+    >
+      <div class="mx-3 my-2 flex text-white cursor-pointer">
+        <strong class="text-xl">{{ currentWorkspace.company_name }}</strong>
+        <i class="fa-solid fa-chevron-down self-center fa-lg ml-1" />
+      </div>
+    </n-dropdown>
+    <UserInviteModal v-model:show="showModal" />
+    <div v-if="showChannelModal">
+      <CreateChannel :close-modal="toggleCreateChannelModal" />
     </div>
-  </n-dropdown>
-  <UserInviteModal v-model:show="showModal" />
-  <div v-if="showChannelModal">
-    <CreateChannel :close-modal="toggleCreateChannelModal" />
+    <div v-if="showWorkspaceModal">
+      <CreateWorkspace :close-modal="toggleWorkspaceModal" />
+    </div>
   </div>
   <n-modal v-model:show="preferencesModal">
       <Preferences />
@@ -28,6 +33,7 @@ import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
 import { decryption } from '../../../modules/crypto/crypto';
 import CreateChannel from '../../components/channels/CreateChannel.vue';
+import CreateWorkspace from '../../components/workspace/CreateWorkspace.vue';
 import { removeActiveStatus } from '../../../api/profiles/profileStatus';
 import Preferences from '../../components/preferences/Preferences.vue';
 
@@ -39,6 +45,7 @@ export default {
     CreateChannel,
     Preferences,
     NModal
+    CreateWorkspace,
   },
   data() {
     return {
@@ -46,6 +53,7 @@ export default {
       showModal: false,
       showChannelModal: false,
       preferencesModal: false,
+      showWorkspaceModal: false,
     };
   },
   beforeUnmount() {
@@ -71,6 +79,9 @@ export default {
         case 'create-a-channel':
           this.showChannelModal = true;
           break;
+        case 'add-workspaces':
+          this.showWorkspaceModal = true;
+          break;
       }
     },
     async signOut() {
@@ -89,6 +100,9 @@ export default {
     },
     toggleCreateChannelModal() {
       this.showChannelModal = !this.showChannelModal;
+    },
+    toggleWorkspaceModal() {
+      this.showWorkspaceModal = !this.showWorkspaceModal;
     },
   },
 };
