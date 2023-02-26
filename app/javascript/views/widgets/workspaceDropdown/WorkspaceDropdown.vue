@@ -44,7 +44,7 @@ export default {
     UserInviteModal,
     CreateChannel,
     Preferences,
-    NModal
+    NModal,
     CreateWorkspace,
   },
   data() {
