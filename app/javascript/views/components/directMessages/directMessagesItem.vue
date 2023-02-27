@@ -105,7 +105,6 @@ export default {
   },
   computed: {
     unReadMessageExist() {
-      console.log('check:', this.unreadDetails);
       return this.unreadDetails?.messages.length > 0;
     },
   },
