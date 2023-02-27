@@ -20,7 +20,6 @@ module ExceptionHandler
       ActionController::UnknownFormat => { message: I18n.t('application.render_error.unknown_format_error'), status: :unprocessable_entity },
       ActionController::BadRequest => { message: I18n.t('application.render_error.bad_request_error'), status: :bad_request },
       ActionController::NotImplemented => { message: I18n.t('application.render_error.not_implemented_error'), status: :unprocessable_entity },
-      ActionController::InvalidAuthenticityToken => { message: I18n.t('application.render_error.token_error'), status: :unprocessable_entity },
       ActionController::MissingFile => { message: I18n.t('application.render_error.missing_file_error'), status: :unprocessable_entity },
       ActionView::Template::Error => { message: I18n.t('application.render_error.template_error'), status: :unprocessable_entity },
       JSON::GeneratorError => { message: I18n.t('application.render_error.json_error'), status: :unprocessable_entity },
