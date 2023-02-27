@@ -142,8 +142,8 @@ export default {
         formData.append('is_threaded', false);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
-        if (schedule && schedule.value) {
-          formData.append('scheduled_at', schedule.value);
+        if (schedule) {
+          formData.append('scheduled_at', schedule);
         }
         files.forEach(file => {
           const fileExtension = file.type.split('/')[1];
