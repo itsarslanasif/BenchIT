@@ -6,7 +6,7 @@
       </p>
       <div v-for="item in accessibility.zoom.settings">
         <input type="radio" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
       <p>{{ accessibility.zoom.tagline }}</p>
     </div>
@@ -17,7 +17,7 @@
       </p>
       <div v-for="item in accessibility.links.settings">
         <input type="checkbox" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
     <hr class="my-5" />
@@ -27,7 +27,7 @@
       </p>
       <div v-for="item in accessibility.animation.settings">
         <input type="checkbox" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
     <div class="mb-3">
@@ -42,7 +42,7 @@
       </p>
       <div v-for="item in accessibility.messageFormat.settings">
         <input type="checkbox" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
     <div class="mb-3">
@@ -52,7 +52,7 @@
       <p>{{ accessibility.directMessageAnnouncement.tagline }}</p>
       <div v-for="item in accessibility.directMessageAnnouncement.settings">
         <input type="checkbox" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
       <p>
         {{ accessibility.directMessageAnnouncement.goTo }}
@@ -68,7 +68,7 @@
       <p>{{ accessibility.huddleAnnouncement.tagline }}</p>
       <div v-for="item in accessibility.huddleAnnouncement.settings">
         <input type="checkbox" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
     <hr class="my-5" />
@@ -87,7 +87,7 @@
       </p>
       <div v-for="item in accessibility.keyboard.settings">
         <input type="radio" />
-        <labeL class="pl-3">{{ item.label }}</labeL>
+        <label class="pl-3">{{ item.label }}</label>
       </div>
       <p>
         {{ accessibility.keyboard.note }}

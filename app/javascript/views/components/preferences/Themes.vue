@@ -69,7 +69,7 @@
           </div>
           <div class="py-3 px-5">
             <input type="radio" />
-            <label class="px-3 font-semibold"> Ochin</label>
+            <label class="px-3 font-semibold">Ochin</label>
           </div>
         </div>
       </div>
@@ -104,7 +104,7 @@
           </div>
           <div class="py-3 px-5">
             <input type="radio" />
-            <label class="px-3 font-semibold"> Ochin</label>
+            <label class="px-3 font-semibold">Ochin</label>
           </div>
         </div>
       </div>
