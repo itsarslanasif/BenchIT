@@ -99,15 +99,12 @@
                     isOwnMessage ? 'You' : firstName(message.sender_name)
                   }}:</span
                 >
-                <div
-                  class="text-black-200"
-                  v-for="block in messageBlock(message.content).blocks"
-                >
+                <span v-for="block in messageBlocks" :key="block">
                   <MessageSection
                     v-if="block.type === 'section'"
                     :section="block"
                   />
-                </div>
+                </span>
               </div>
             </div>
             <div class="ml-auto text-black-200">
@@ -134,6 +131,7 @@ import {
   getDirectMessagesList,
   getLastDirectMessagesList,
 } from '../../../api/directMessages/directMessages';
+import { getLastDirectMessagesList } from '../../../api/directMessages/directMessages';
 import MessageSection from '../messages/MessageSection.vue';
 
 export default {
@@ -231,6 +229,9 @@ export default {
     },
   },
   computed: {
+    messageBlocks() {
+      return JSON.parse(this.currMessage.content).blocks;
+    },
     isToday() {
       return (
         new Date(this.currMessage.created_at).toDateString() ===

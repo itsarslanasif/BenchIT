@@ -2,7 +2,9 @@
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
       <div class="">
-        <div class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer">
+        <div
+          class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer"
+        >
           <div v-if="selectedChat.is_private" class="self-center mr-1">
             <font-awesome-icon icon="fa-lock" />
           </div>
@@ -10,7 +12,7 @@
             <font-awesome-icon icon="fa-hashtag" />
           </div>
           <div
-            @click="openChannelDetailModal(true)"
+            @click="toggleShowModal"
             class="flex overflow-x-hidden text-ellipsis"
           >
             <p class="text-xl font-bold self-center mr-1">
@@ -20,7 +22,6 @@
           </div>
         </div>
       </div>
-
       <ChannelMembersInfoVue
         :showMemberClickListener="this.openChannelDetailMemberModal"
         :channelId="selectedChat.id"
@@ -28,16 +29,16 @@
       />
     </div>
   </div>
-  <ChannelDetailModal
+  <ChatDetailModal
     v-if="modalOpen"
-    :currentChannel="this.currentChannel"
-    :detailsopen="this.openChannelDetailModal"
+    :chat="this.currentChannel"
+    :toggleModal="toggleShowModal"
     class="m-auto absolute inset-x-0"
   />
 </template>
 
 <script>
-import ChannelDetailModal from '../../containers/ChannelDetailModal.vue';
+import ChatDetailModal from '../../containers/ChatDetailModal.vue';
 import ChannelMembersInfoVue from './ChannelMembersInfo.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 import { useChannelStore } from '../../../stores/useChannelStore';
@@ -47,7 +48,7 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   name: 'ChannelInfo',
-  components: { ChannelDetailModal, ChannelMembersInfoVue },
+  components: { ChatDetailModal, ChannelMembersInfoVue },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     const channelStore = useChannelStore();
@@ -62,13 +63,14 @@ export default {
       currentChannel: {},
     };
   },
-
   methods: {
-    openChannelDetailModal(open) {
-      this.modalOpen = open;
-      this.ChannelDetailStore.setSlectedOption('about');
-      this.getCurrentChannel();
-      this.channelStore.setCurrentChannel(this.currentChannel);
+    toggleShowModal() {
+      if (!this.modalOpen) {
+        this.ChannelDetailStore.setSlectedOption('about');
+        this.getCurrentChannel();
+        this.channelStore.setCurrentChannel(this.currentChannel);
+      }
+      this.modalOpen = !this.modalOpen;
     },
     openChannelDetailMemberModal(open) {
       this.ChannelDetailStore.setSlectedOption('members');

@@ -6,6 +6,8 @@ inherit_from: .rubocop_todo.yml
 
 Layout/LineLength:
   Max: 150
+  Exclude:
+    - 'db/migrate/20230222134724_create_preferences.rb'
 
 Metrics/ClassLength:
   Max: 125

@@ -23,6 +23,7 @@ import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
 import { decryption } from './modules/crypto/crypto';
 import { checkAuth } from './api/user_auth/check_auth';
+import MentionsAndReactions from './views/components/mentionsAndReactions/MentionsAndReactions.vue'
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -163,6 +164,14 @@ const router = createRouter({
             auth: true,
           },
         },
+        {
+          path: '/mentions_and_reactions',
+          component: MentionsAndReactions,
+          name: 'mentions-and-reactions',
+          meta: {
+            auth: true,
+          },
+        }
       ],
     },
     {
