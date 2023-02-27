@@ -10,22 +10,27 @@
             :value="item.field"
             v-model="notifyMeAbout"
           />
-          <label :for="item.field" class="pl-3">{{ item.label }}</label
-          ><br />
+          <label :for="item.field" class="pl-3">
+            {{ item.label }}
+          </label><br />
         </div>
       </div>
     </div>
     <div>
       <div v-for="item in notificationSettings.settingForPhone.settings">
         <input type="checkbox" :id="item.field" />
-        <label :for="item.field" class="pl-3">{{ item.label }}</label>
+        <label :for="item.field" class="pl-3">
+          {{ item.label }}
+        </label>
       </div>
     </div>
     <hr class="my-3" />
     <div>
       <div v-for="item in notificationSettings.huddleAndReplies.settings">
         <input type="checkbox" :id="item.field" />
-        <label :for="item.field" class="pl-3">{{ item.label }}</label
+        <label :for="item.field" class="pl-3">
+          {{ item.label }}
+          </label
         ><br />
       </div>
       <p class="py-2">
@@ -37,8 +42,9 @@
     <div class="my-3">
       <div v-for="item in notificationSettings.huddleAndReplies.badgeSetting">
         <input type="checkbox" :id="item.field" />
-        <label :for="item.field" class="pl-3">{{ item.label }}</label
-        ><br />
+        <label :for="item.field" class="pl-3">
+          {{ item.label }}
+        </label><br />
       </div>
     </div>
     <div>
@@ -115,14 +121,14 @@
         Show an example</button
       ><br />
       <input type="checkbox" id="show-badge-in-sidebar" />
-      <label for="show-badge-in-sidebar" class="pl-3"
-        >Include a preview of the message in each notification (disable this for
-        extra privacy)</label
-      ><br />
+      <label for="show-badge-in-sidebar" class="pl-3">
+        Include a preview of the message in each notification (disable this for
+        extra privacy)
+      </label><br />
       <input type="checkbox" id="show-badge-in-sidebar" />
-      <label for="show-badge-in-sidebar" class="pl-3"
-        >Mute all sounds from Slack</label
-      ><br />
+      <label for="show-badge-in-sidebar" class="pl-3">
+        Mute all sounds from Slack
+      </label><br />
       <div class="my-3">
         <div v-for="item in notificationSettings.soundAndAppearance.settings">
           <label>{{ item.label }}</label>
@@ -140,9 +146,9 @@
     <div>
       <strong>{{ notificationSettings.notActiveOnDesktop.title }}</strong>
       <br />
-      <label>{{
-        notificationSettings.notActiveOnDesktop.sectionHeading
-      }}</label>
+      <label>
+        {{ notificationSettings.notActiveOnDesktop.sectionHeading}}
+      </label>
       <br />
       <select
         v-for="item in notificationSettings.notActiveOnDesktop.settings"
@@ -153,8 +159,8 @@
         </option></select
       ><br />
       <input type="checkbox" id="notify-me-about-replies" />
-      <label for="notify-me-about-replies" class="pl-3"
-        >Send me email notifications for mentions and direct messages
+      <label for="notify-me-about-replies" class="pl-3">
+        Send me email notifications for mentions and direct messages
       </label>
     </div>
     <hr class="my-3" />
