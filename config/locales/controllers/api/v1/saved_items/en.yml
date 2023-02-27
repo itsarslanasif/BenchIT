@@ -1,0 +1,6 @@
+en:
+  api:
+    v1:
+      saved_items:
+        destroy:
+          success: The Item has been deleted successfully.

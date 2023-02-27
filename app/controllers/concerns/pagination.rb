@@ -20,8 +20,8 @@ module Pagination
       raise PaginationError, e.message
     end
 
-    def pagination_for_send_messages(page_no = 1)
-      @pagy, @messages = pagy(ConversationMessage.send_messages, page: page_no, items: 10)
+    def pagination_for_sent_messages(page_no = 1)
+      @pagy, @messages = pagy(ConversationMessage.sent_messages, page: page_no, items: 10)
       [@pagy, @messages]
     end
 
