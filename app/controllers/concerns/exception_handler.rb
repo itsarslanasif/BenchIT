@@ -3,36 +3,40 @@ module ExceptionHandler
 
   def error_data_for_exception(exception)
     {
-      ActiveRecord::RecordNotFound => { message: I18n.t('application.render_error.not_found_error'), status: :not_found },
-      ActiveRecord::RecordInvalid => { message: I18n.t('application.render_error.invalid_error'), status: :unprocessable_entity },
-      ActiveRecord::RecordNotSaved => { message: I18n.t('application.render_error.not_saved_error'), status: :unprocessable_entity },
-      ActiveRecord::RecordNotUnique => { message: I18n.t('application.render_error.unique_error'), status: :unprocessable_entity },
-      ActiveRecord::RecordNotDestroyed => { message: I18n.t('application.render_error.not_destroy_error'), status: :unprocessable_entity },
-      ActiveRecord::NotNullViolation => { message: I18n.t('application.render_error.not_null_violation_error'), status: :unprocessable_entity },
-      ActiveRecord::SubclassNotFound => { message: I18n.t('application.render_error.sub_class_error'), status: :not_found },
-      ActiveRecord::AssociationTypeMismatch => { message: I18n.t('application.render_error.association_type_error'), status: :unprocessable_entity },
-      ActiveRecord::InverseOfAssociationNotFoundError => { message: I18n.t('application.render_error.inverse_association_error'),
-                                                           status: :unprocessable_entity },
-      ActiveRecord::HasManyThroughAssociationNotFoundError => { message: I18n.t('application.render_error.has_many_association_error'),
-                                                                status: :unprocessable_entity },
-      ActionController::ParameterMissing => { message: I18n.t('application.render_error.params_error'), status: :unprocessable_entity },
-      ActionController::RoutingError => { message: I18n.t('application.render_error.routing_error'), status: :not_found },
-      ActionController::UnknownFormat => { message: I18n.t('application.render_error.unknown_format_error'), status: :unprocessable_entity },
-      ActionController::BadRequest => { message: I18n.t('application.render_error.bad_request_error'), status: :bad_request },
-      ActionController::NotImplemented => { message: I18n.t('application.render_error.not_implemented_error'), status: :unprocessable_entity },
-      ActionController::MissingFile => { message: I18n.t('application.render_error.missing_file_error'), status: :unprocessable_entity },
-      ActionView::Template::Error => { message: I18n.t('application.render_error.template_error'), status: :unprocessable_entity },
-      JSON::GeneratorError => { message: I18n.t('application.render_error.json_error'), status: :unprocessable_entity },
-      I18n::InvalidLocaleData => { message: I18n.t('application.render_error.local_error'), status: :unprocessable_entity },
-      CanCan::AccessDenied => { message: I18n.t('application.render_error.access_denied_error'), status: :unauthorized },
-      NoMethodError => { message: I18n.t('application.render_error.no_method_error'), status: :unprocessable_entity },
-      UnAuthorized => { message: I18n.t('application.render_error.unauthorized_error'), status: :unauthorized },
-      PaginationError => { message: I18n.t('application.render_error.pagination_error'), status: :unprocessable_entity },
-      ArgumentError => { message: I18n.t('application.render_error.argument_error'), status: :unprocessable_entity },
-      SyntaxError => { message: I18n.t('application.render_error.syntax_error'), status: :unprocessable_entity },
-      TypeError => { message: I18n.t('application.render_error.type_error'), status: :unprocessable_entity },
-      IndexError => { message: I18n.t('application.render_error.index_error'), status: :unprocessable_entity },
-      NameError => { message: I18n.t('application.render_error.name_error'), status: :unprocessable_entity }
-    }[exception.class] || { message: I18n.t('application.render_error.server_error'), status: :internal_server_error }
+      ActiveRecord::RecordNotFound => prepare_local('not_found_error', 'not_found'),
+      ActiveRecord::RecordInvalid => prepare_local('invalid_error', 'unprocessable_entity'),
+      ActiveRecord::RecordNotSaved => prepare_local('not_saved_error', 'unprocessable_entity'),
+      ActiveRecord::RecordNotUnique => prepare_local('unique_error', 'unprocessable_entity'),
+      ActiveRecord::RecordNotDestroyed => prepare_local('not_destroy_error', 'unprocessable_entity'),
+      ActiveRecord::NotNullViolation => prepare_local('not_null_violation_error', 'unprocessable_entity'),
+      ActiveRecord::SubclassNotFound => prepare_local('sub_class_error', 'not_found'),
+      ActiveRecord::AssociationTypeMismatch => prepare_local('association_type_error', 'unprocessable_entity'),
+      ActiveRecord::InverseOfAssociationNotFoundError => prepare_local('inverse_association_error', 'unprocessable_entity'),
+      ActiveRecord::HasManyThroughAssociationNotFoundError => prepare_local('has_many_association_error', 'unprocessable_entity'),
+      ActionController::ParameterMissing => prepare_local('params_error', 'unprocessable_entity'),
+      ActionController::RoutingError => prepare_local('routing_error', 'not_found'),
+      ActionController::UnknownFormat => prepare_local('unknown_format_error', 'unprocessable_entity'),
+      ActionController::BadRequest => prepare_local('bad_request_error', 'bad_request'),
+      ActionController::NotImplemented => prepare_local('not_implemented_error', 'unprocessable_entity'),
+      ActionController::MissingFile => prepare_local('missing_file_error', 'unprocessable_entity'),
+      ActionView::Template::Error => prepare_local('template_error', 'unprocessable_entity'),
+      JSON::GeneratorError => prepare_local('json_error', 'unprocessable_entity'),
+      I18n::InvalidLocaleData => prepare_local('local_error', 'unprocessable_entity'),
+      CanCan::AccessDenied => prepare_local('access_denied_error', 'unauthorized'),
+      NoMethodError => prepare_local('no_method_error', 'unprocessable_entity'),
+      UnAuthorized => prepare_local('unauthorized_error', 'unauthorized'),
+      PaginationError => prepare_local('pagination_error', 'unprocessable_entity'),
+      ArgumentError => prepare_local('argument_error', 'unprocessable_entity'),
+      SyntaxError => prepare_local('syntax_error', 'unprocessable_entity'),
+      TypeError => prepare_local('type_error', 'unprocessable_entity'),
+      IndexError => prepare_local('index_error', 'unprocessable_entity'),
+      NameError => prepare_local('name_error', 'unprocessable_entity')
+    }[exception.class] || prepare_local('server_error', 'internal_server_error')
+  end
+
+  private
+
+  def prepare_local(error_name, status_code)
+    { message: I18n.t("application.render_error.#{error_name}"), status: status_code.to_sym }
   end
 end

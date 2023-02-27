@@ -89,13 +89,10 @@ class Ability
   end
 
   def get_conversation(favourable_type, favourable_id, profile_id)
-    case favourable_type
-    when 'BenchChannel'
-      BenchConversation.get_bench_conversation('BenchChannel', favourable_id)
-    when 'Group'
-      BenchConversation.get_bench_conversation('Group', favourable_id)
-    when 'Profile'
+    if favourable_type.eql?('Profile')
       BenchConversation.profile_to_profile_conversation(favourable_id, profile_id)
+    else
+      BenchConversation.get_bench_conversation(favourable_type, favourable_id)
     end
   end
 end
