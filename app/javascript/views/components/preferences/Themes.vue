@@ -16,7 +16,6 @@
         <label class="px-3 font-semibold">Light</label>
       </div>
     </div>
-
     <div class="bg-black-900 text-white border rounded">
       <div class="flex items-center px-5 py-3 border-b">
         <div class="w-12">
@@ -32,9 +31,7 @@
         <label class="px-3 font-semibold">Dark</label>
       </div>
     </div>
-
     <hr class="my-3" />
-
     <div>
       <strong>Colors</strong>
       <p>
@@ -42,7 +39,6 @@
         <span class="text-info">Create a custom theme</span>
       </p>
     </div>
-
     <div>
       <p class="font-semibold pt-3 text-black-700">Tried and true</p>
       <div class="flex justify-between px-3">
@@ -78,7 +74,6 @@
         </div>
       </div>
     </div>
-
     <div>
       <p class="font-semibold pt-3 text-black-700">Clean and minimal</p>
       <div class="flex justify-between px-3">

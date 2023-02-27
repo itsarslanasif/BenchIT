@@ -4,9 +4,7 @@
     <div v-if="isCameraOpen" class="my-3">
       <video ref="camera" autoplay class="rounded"></video>
     </div>
-
     <hr class="my-3" />
-
     <div>
       <p class="font-semibold">{{ audioVideoSettings.microphone.title }}</p>
       <select class="py-3 px-10 mr-3 rounded border">
@@ -20,7 +18,6 @@
       <input type="checkbox" />
       <label class="px-3">Enable noise suppression</label>
     </div>
-
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.speaker.title }}</p>
       <select class="py-3 px-10 mr-3 rounded border">
@@ -29,14 +26,11 @@
         </option>
       </select>
     </div>
-
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.troubleshoot.title }}</p>
       <p class="text-info">{{ audioVideoSettings.troubleshoot.tagline }}</p>
     </div>
-
     <hr class="my-3" />
-
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.joinedSlack.title }}</p>
       <div v-for="item in audioVideoSettings.joinedSlack.settings" class="py-1">
@@ -44,9 +38,7 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <hr class="my-3" />
-
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.inHuddle.title }}</p>
       <div v-for="item in audioVideoSettings.inHuddle.settings" class="py-1">
@@ -54,7 +46,6 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.inBackground.title }}</p>
       <div
@@ -74,9 +65,7 @@
         mute or unmute your mic.
       </p>
     </div>
-
     <hr class="my-5" />
-
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.onScreenSaver.title }}</p>
       <div v-for="item in audioVideoSettings.onScreenSaver.settings" class="py-1">
@@ -86,6 +75,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { audioVideoSettings } from '../../../assets/settings/audioVideo';
 export default {
@@ -120,6 +110,7 @@ export default {
           alert("May the browser didn't support or there is some errors.");
         });
     },
+
     stopCameraStream() {
       let tracks = this.$refs.camera.srcObject.getTracks();
       tracks.forEach(track => {
@@ -129,4 +120,3 @@ export default {
   },
 };
 </script>
-<style lang=""></style>

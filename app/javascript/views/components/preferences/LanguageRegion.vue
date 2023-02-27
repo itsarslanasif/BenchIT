@@ -11,7 +11,6 @@
       </select>
       <p>{{ languageRegion.language.tagline }}</p>
     </div>
-
     <div class="my-10">
       <p>
         <strong>{{ languageRegion.timezone.title }}</strong>
@@ -23,7 +22,6 @@
       </select>
       <p>{{ languageRegion.timezone.tagline }}</p>
     </div>
-
     <div class="my-10">
       <p>
         <strong>{{ languageRegion.spellCheck.title }}</strong>

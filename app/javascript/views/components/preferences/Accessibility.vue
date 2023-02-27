@@ -10,9 +10,7 @@
       </div>
       <p>{{ accessibility.zoom.tagline }}</p>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p>
         <strong>{{ accessibility.links.title }}</strong>
@@ -22,9 +20,7 @@
         <labeL class="pl-3">{{ item.label }}</labeL>
       </div>
     </div>
-
     <hr class="my-5" />
-
     <div class="mb-3">
       <p>
         <strong>{{ accessibility.animation.title }}</strong>
@@ -34,14 +30,12 @@
         <labeL class="pl-3">{{ item.label }}</labeL>
       </div>
     </div>
-
     <div class="mb-3">
       <p>
         <strong>{{ accessibility.screenReader.title }}</strong>
       </p>
       <p>{{ accessibility.screenReader.tagline }}</p>
     </div>
-
     <div class="mb-3">
       <p>
         <strong>{{ accessibility.messageFormat.title }}</strong>
@@ -51,7 +45,6 @@
         <labeL class="pl-3">{{ item.label }}</labeL>
       </div>
     </div>
-
     <div class="mb-3">
       <p>
         <strong>{{ accessibility.directMessageAnnouncement.title }}</strong>
@@ -68,7 +61,6 @@
         </span>
       </p>
     </div>
-
     <div>
       <p>
         <strong>{{ accessibility.huddleAnnouncement.title }}</strong>
@@ -79,9 +71,7 @@
         <labeL class="pl-3">{{ item.label }}</labeL>
       </div>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p>
         <strong>{{ accessibility.keyboard.title }}</strong>
@@ -105,6 +95,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { accessibility } from '../../../assets/settings/accessibility';
 export default {

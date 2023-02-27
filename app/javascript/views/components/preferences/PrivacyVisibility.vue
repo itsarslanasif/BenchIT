@@ -17,7 +17,6 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <div class="mt-5 bg-gray-100 border-2 p-5 border-black-500 rounded">
       <p class="font-semibold">
         {{ privacyVisibilitySettings.preferences.title }}
@@ -29,9 +28,7 @@
         }}</span>
       </p>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p class="font-semibold">
         {{ privacyVisibilitySettings.contactSharing.title }}
@@ -48,9 +45,7 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p class="font-semibold">
         {{ privacyVisibilitySettings.invitation.title }}
@@ -76,4 +71,3 @@ export default {
   },
 };
 </script>
-<style lang=""></style>

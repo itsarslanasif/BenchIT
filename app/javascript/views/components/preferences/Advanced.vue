@@ -9,7 +9,6 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <div>
       <p class="font-semibold">
         {{ advancedSettings.writingMessage.title }}
@@ -22,9 +21,7 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p class="font-semibold">
         {{ advancedSettings.search.title }}
@@ -41,9 +38,7 @@
       </button>
       <p class="text-black-700 text-xs">{{ advancedSettings.search.note }}</p>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p class="font-semibold">
         {{ advancedSettings.confirmationWarning.title }}
@@ -53,9 +48,7 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
     </div>
-
     <hr class="my-5" />
-
     <div>
       <p class="font-semibold">
         {{ advancedSettings.otherOptions.title }}
@@ -67,6 +60,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { advancedSettings } from '../../../assets/settings/advanced';
 export default {
@@ -77,4 +71,3 @@ export default {
   },
 };
 </script>
-<style lang=""></style>

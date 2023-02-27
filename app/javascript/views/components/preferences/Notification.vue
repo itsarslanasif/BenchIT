@@ -74,17 +74,32 @@
           {{ option.label }}
         </option>
       </select>
-      <select v-for="item in notificationSettings.notificationSchedule.from"  class="py-3 px-5 mr-3 rounded">
-        <option v-for="option in item.options" class="bg-gray-50">{{ option.label }}</option>
+      <select
+        v-for="item in notificationSettings.notificationSchedule.from"
+        class="py-3 px-5 mr-3 rounded"
+      >
+        <option v-for="option in item.options" class="bg-gray-50">
+          {{ option.label }}
+        </option>
       </select>
       to
-      <select v-for="item in notificationSettings.notificationSchedule.to"  class="py-3 px-5 mr-3 rounded">
-        <option v-for="option in item.options" class="bg-gray-50">{{ option.label }}</option>
-      </select><br /><br />
+      <select
+        v-for="item in notificationSettings.notificationSchedule.to"
+        class="py-3 px-5 mr-3 rounded"
+      >
+        <option v-for="option in item.options" class="bg-gray-50">
+          {{ option.label }}
+        </option></select
+      ><br /><br />
       <strong>Set a default time for reminder notifications:</strong><br />
-      <select v-for="item in notificationSettings.notificationSchedule.defaultTime"  class="py-3 px-5 mr-3 rounded">
-        <option v-for="option in item.options" class="bg-gray-50">{{ option.label }}</option>
-      </select><br />
+      <select
+        v-for="item in notificationSettings.notificationSchedule.defaultTime"
+        class="py-3 px-5 mr-3 rounded"
+      >
+        <option v-for="option in item.options" class="bg-gray-50">
+          {{ option.label }}
+        </option></select
+      ><br />
       <p class="text-xs text-black-600 -mt-1">
         <span class="text-info">Reminders you set</span> for a specific day
         (like “tomorrow”) will be sent at the time you select.
@@ -125,11 +140,18 @@
     <div>
       <strong>{{ notificationSettings.notActiveOnDesktop.title }}</strong>
       <br />
-      <label>{{ notificationSettings.notActiveOnDesktop.sectionHeading }}</label>
+      <label>{{
+        notificationSettings.notActiveOnDesktop.sectionHeading
+      }}</label>
       <br />
-      <select v-for="item in notificationSettings.notActiveOnDesktop.settings" class="py-3 px-10 mr-3 rounded mb-5">
-        <option v-for="option in item.options" class="bg-gray-50">{{ option.label }}</option>
-      </select><br />
+      <select
+        v-for="item in notificationSettings.notActiveOnDesktop.settings"
+        class="py-3 px-10 mr-3 rounded mb-5"
+      >
+        <option v-for="option in item.options" class="bg-gray-50">
+          {{ option.label }}
+        </option></select
+      ><br />
       <input type="checkbox" id="notify-me-about-replies" />
       <label for="notify-me-about-replies" class="pl-3"
         >Send me email notifications for mentions and direct messages
@@ -150,11 +172,6 @@ export default {
       differentSettingForMobile: '',
       notificationSettings,
     };
-  },
-  watch: {
-    notifyMeAbout() {
-      console.log(this.notifyMeAbout);
-    },
   },
 };
 </script>

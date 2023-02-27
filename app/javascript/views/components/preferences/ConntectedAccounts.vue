@@ -6,14 +6,12 @@
       sign-in, rich previews of links and more.
       <span class="text-info cursor-pointer">Learn more</span>
     </p>
-
     <hr class="my-3" />
     <p class="font-semibold">Signed in with Slack</p>
     <p class="px-3 py-2 my-3 bg-gray-50 rounded">
       For now, you can find the apps that you have signed in with slack in your
       <span class="text-info">app management page</span>.
     </p>
-
     <hr class="my-3" />
     <p class="font-semibold">Links and content from other apps</p>
     <p>
@@ -27,7 +25,6 @@
         >Allow Slack to connect with other apps</label
       >
     </div>
-
     <div>
       <p class="font-semibold">Connected (1)</p>
       <div class="flex justify-between items-center bg-gray-50 rounded my-3">
@@ -47,7 +44,3 @@
     </div>
   </div>
 </template>
-<script>
-export default {};
-</script>
-<style lang=""></style>
