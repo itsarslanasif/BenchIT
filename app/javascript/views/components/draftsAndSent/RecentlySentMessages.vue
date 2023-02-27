@@ -84,7 +84,12 @@
             {{ $t('heading.message_in_group') + message.group_id }}
           </div>
           <br />
-          <span class="text-black-600" v-html="message.content"></span>
+          <div
+            class="text-black-600"
+            v-for="block in messageBlock(message.content).blocks"
+          >
+            <MessageSection v-if="block.type === 'section'" :section="block" />
+          </div>
         </div>
         <div class="margin-left text-black-600">
           {{ time }}
@@ -101,10 +106,12 @@ import { NAvatar, NDivider } from 'naive-ui';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { storeToRefs } from 'pinia';
 import { useChannelStore } from '../../../stores/useChannelStore';
+import MessageSection from '../messages/MessageSection.vue';
 export default {
   components: {
     NAvatar,
     NDivider,
+    MessageSection,
   },
   data() {
     return {
@@ -153,6 +160,9 @@ export default {
         channel => channel.id === message.conversationable_id
       );
       return `fa-${channelDetail.is_private ? 'lock' : 'hashtag'}`;
+    },
+    messageBlock(message) {
+      return JSON.parse(message);
     },
   },
   async mounted() {

@@ -46,7 +46,12 @@
             {{ `${$t('search_bar.from')} ${item.sender_name}` }}
           </div>
           <div>
-            {{ item.content }}
+            <div v-for="block in messageBlock(item.content).blocks">
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -55,8 +60,12 @@
 </template>
 <script>
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
+import MessageSection from '../components/messages/MessageSection.vue';
 
 export default {
+  components: {
+    MessageSection,
+  },
   props: ['searches', 'closeSearchModal'],
   setup() {
     const leftPaneStore = useLeftpaneStore();
@@ -65,15 +74,18 @@ export default {
     };
   },
   methods: {
+    messageBlock(message) {
+      return JSON.parse(message);
+    },
     goToChat(item) {
-      let conversationType
+      let conversationType;
 
       if (item['workspace_id']) {
-        conversationType = 'profiles'
+        conversationType = 'profiles';
       } else if (item['creator_id']) {
-        conversationType = 'channels'
+        conversationType = 'channels';
       } else {
-        conversationType = 'groups'
+        conversationType = 'groups';
       }
 
       this.$router.push(`/${conversationType}/${item.id}`);
@@ -84,7 +96,7 @@ export default {
 
       this.closeSearchModal();
     },
-    
+
     isMobileView() {
       return window.innerWidth < 1400;
     },

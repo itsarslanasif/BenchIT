@@ -237,7 +237,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_25_004333) do
   end
 
   create_table "schedule_messages", force: :cascade do |t|
-    t.text "content", null: false
+    t.json "content", null: false
     t.string "scheduled_at", null: false
     t.string "job_id", default: "", null: false
     t.bigint "profile_id", null: false
