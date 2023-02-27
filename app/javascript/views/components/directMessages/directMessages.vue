@@ -131,7 +131,6 @@ import {
   getDirectMessagesList,
   getLastDirectMessagesList,
 } from '../../../api/directMessages/directMessages';
-import { getLastDirectMessagesList } from '../../../api/directMessages/directMessages';
 import MessageSection from '../messages/MessageSection.vue';
 
 export default {
