@@ -79,7 +79,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
-    current_profile.direct_message_users.create(receiver_id: @receiver.id)
+    direct_message = current_profile.direct_message_users.find_by(receiver_id: @receiver.id)
+    current_profile.direct_message_users.create!(receiver_id: @receiver.id) if direct_message.nil?
     paginate_messages
   end
 

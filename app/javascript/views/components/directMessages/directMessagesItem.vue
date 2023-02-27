@@ -105,6 +105,7 @@ export default {
   },
   computed: {
     unReadMessageExist() {
+      console.log('check:', this.unreadDetails);
       return this.unreadDetails?.messages.length > 0;
     },
   },
@@ -132,6 +133,8 @@ export default {
             this.$t('conversations.profiles'),
             this.user.id
           );
+          break;
+        default:
           break;
       }
     },
