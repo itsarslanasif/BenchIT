@@ -625,7 +625,7 @@ export default {
     isVideoFile() {
       const fileExtension =
         this.currAttachment.attachment.filename.split('.')[1];
-      return fileExtension === 'webm-codecs=vp8,opus';
+      return fileExtension === 'mp4';
     },
     isSharedMessage() {
       return this.currMessage.shared_message != null;
