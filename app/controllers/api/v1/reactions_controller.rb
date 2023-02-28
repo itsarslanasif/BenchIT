@@ -1,17 +1,18 @@
 class Api::V1::ReactionsController < Api::ApiController
-  include MemberShip
+  include CanAuthorization
 
-  before_action :verify_membership, only: %i[create]
-  before_action :set_reaction, :authenticate_reaction, only: %i[destroy]
+  before_action :initialize_reaction, only: %i[create]
+  before_action :set_reaction, only: %i[destroy]
+  before_action :authenticate_reaction, only: %i[create destroy]
 
   def create
     @reaction.save!
-    render json: { success: true, message: t('.create.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
     @reaction.destroy!
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private
@@ -24,16 +25,11 @@ class Api::V1::ReactionsController < Api::ApiController
     params.require(:reaction).permit(:conversation_message_id, :emoji)
   end
 
-  def authenticate_reaction
-    if @reaction.profile_id.eql?(current_profile.id)
-      check_membership(@reaction.bench_conversation)
-    else
-      render json: { success: false, error: t('.authenticate_reaction.failure') }, status: :unauthorized
-    end
+  def initialize_reaction
+    @reaction = current_profile.reactions.new(reaction_params)
   end
 
-  def verify_membership
-    @reaction = current_profile.reactions.find_or_create_by(reaction_params)
-    check_membership(@reaction.bench_conversation)
+  def authenticate_reaction
+    authorize_action(action_name, @reaction)
   end
 end

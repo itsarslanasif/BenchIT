@@ -48,13 +48,15 @@ export const useMessageStore = () => {
     actions: {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
-        const directMessageStore = useDirectMessagesStore();
-        const isObjectInArray = directMessageStore.directMessageUsers.find(
-          obj => obj.id === selectedChat.id
-        );
-        isObjectInArray
-          ? null
-          : directMessageStore.directMessageUsers.push(selectedChat);
+        if (selectedChat.hasOwnProperty('user_id')) {
+          const directMessageStore = useDirectMessagesStore();
+          const isObjectInArray = directMessageStore.directMessageUsers.find(
+            obj => obj.id === selectedChat.id
+          );
+          isObjectInArray
+            ? null
+            : directMessageStore.directMessageUsers.push(selectedChat);
+        }
       },
       deleteChannelName() {
         delete this.selectedChat.name;

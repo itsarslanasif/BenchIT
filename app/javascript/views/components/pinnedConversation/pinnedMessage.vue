@@ -26,7 +26,11 @@
       </span>
     </div>
     <div class="mt-px">
-      <span class="text-black-900 text-sm" v-html="currMessage.content" />
+      <div>
+        <div v-for="block in messageBlock(currMessage.content).blocks">
+          <MessageSection v-if="block.type === 'section'" :section="block" />
+        </div>
+      </div>
       <div v-if="currMessage.attachments">
         <div v-for="attachment in currMessage.attachments" :key="attachment.id">
           <div
@@ -68,6 +72,7 @@ import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { NAvatar } from 'naive-ui';
+import MessageSection from '../messages/MessageSection.vue'
 import moment from 'moment';
 
 export default {
@@ -92,6 +97,7 @@ export default {
   props: ['currMessage'],
   components: {
     NAvatar,
+    MessageSection,
   },
   methods: {
     formatDate(date) {
@@ -124,6 +130,10 @@ export default {
     toggleThread() {
       this.threadStore.setMessage(this.currMessage);
       this.rightPaneStore.toggleThreadShow(true);
+    },
+
+    messageBlock(message) {
+      return JSON.parse(message)
     },
 
     jumpToConversation() {

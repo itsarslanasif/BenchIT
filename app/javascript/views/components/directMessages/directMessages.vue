@@ -127,7 +127,10 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import vClickOutside from 'click-outside-vue3';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
-import { getLastDirectMessagesList } from '../../../api/directMessages/directMessages';
+import {
+  getDirectMessagesList,
+  getLastDirectMessagesList,
+} from '../../../api/directMessages/directMessages';
 import MessageSection from '../messages/MessageSection.vue';
 
 export default {
@@ -219,6 +222,9 @@ export default {
       return message.sender_id === this.currentProfile.id
         ? message.receiver_name
         : message.sender_name;
+    },
+    messageBlock(message) {
+      return JSON.parse(message);
     },
   },
   computed: {

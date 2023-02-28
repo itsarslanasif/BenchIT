@@ -2,17 +2,18 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   include MemberShip
   include Conversation
   include Pagination
+  include CanAuthorization
 
-  before_action :fetch_conversation, :verify_membership, only: %i[create]
+  before_action :fetch_conversation, only: %i[create]
   before_action :set_message, :authenticate_message, only: %i[destroy update]
-  before_action :set_saved_item, only: %i[unsave_message]
   before_action :set_bench_channel, only: %i[bench_channel_messages]
   before_action :set_group, only: %i[group_messages]
   before_action :set_receiver, only: %i[profile_messages]
+  before_action :authenticate, only: %i[bench_channel_messages group_messages]
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
-  def send_message
-    @pagy, @messages = pagination_for_send_messages(params[:page])
+  def sent_message
+    @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
   end
 
   def reactions
@@ -22,18 +23,20 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      authorize! :create, @message
       @message.save!
 
-      render json: { success: true, message: t('.create.success') }, status: :ok
+      render json: { success: true, message: t('.success') }, status: :ok
     else
       @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
+      authorize! :create, @schedule_message
       @schedule_message.save!
     end
   end
 
   def update
     @message.update!(conversation_messages_params)
-    render json: { success: true, message: t('.update.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
@@ -45,21 +48,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.destroy!
     end
 
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
-  end
-
-  def index_saved_messages
-    @pagy, @saved_items = pagination_for_save_messages(params[:page])
-  end
-
-  def save_message
-    @saved_item = current_profile.saved_items.new(conversation_message_id: params[:id])
-    @saved_item.save!
-  end
-
-  def unsave_message
-    @saved_item.destroy!
-    render json: { success: true, message: t('.unsave_message.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def recent_files
@@ -79,7 +68,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
-    @current_profile.direct_message_users.create(receiver_id: @receiver.id)
+    direct_message = current_profile.direct_message_users.find_by(receiver_id: @receiver.id)
+    current_profile.direct_message_users.create!(receiver_id: @receiver.id) if direct_message.nil?
     paginate_messages
   end
 
@@ -97,13 +87,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def paginate_messages
     @pagy, @messages = pagination_for_chat_messages(@conversation.id, params[:page])
 
-    return render json: { success: false, error: t('.paginate_messages.failure') }, status: :not_found if @pagy.nil?
-  end
-
-  def set_saved_item
-    @saved_item = current_profile.saved_items.find_by(conversation_message_id: params[:id])
-
-    return render json: { success: false, message: t('.set_saved_item.failure') }, status: :not_found if @saved_item.nil?
+    return render json: { success: false, error: t('.failure') }, status: :not_found if @pagy.nil?
   end
 
   def set_message
@@ -128,39 +112,26 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def set_bench_channel
     @bench_channel = BenchChannel.find(params[:id])
-    authorization(@bench_channel)
-
-    return if !@bench_channel.is_private || current_profile.bench_channel_ids.include?(@bench_channel.id)
-
-    render json: { success: false, error: t('.set_bench_channel.failure') }, status: :not_found
   end
 
   def set_group
     @group = Group.find(params[:id])
-    return if @group.profile_ids.include?(current_profile.id)
+  end
 
-    render json: { success: false, error: t('.set_group.failure') }, status: :not_found
+  def authenticate
+    action_name.eql?('group_messages') ? (authorize! :get, @group) : (authorize! :get, @bench_channel)
   end
 
   def set_receiver
     @receiver = Profile.find(params[:id])
-    authorization(@receiver)
 
     return if @receiver.workspace_id.eql?(current_workspace.id)
 
-    render json: { success: false, error: t('.set_receiver.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
   def authenticate_message
-    if @message.sender_id.eql?(current_profile.id)
-      check_membership(@message.bench_conversation)
-    else
-      render json: { success: false, error: t('.authenticate_message.failure') }, status: :unauthorized
-    end
-  end
-
-  def verify_membership
-    check_membership(@bench_conversation)
+    authorize_action(action_name, @message)
   end
 
   def marked_chat_read
@@ -191,9 +162,5 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: t('.delete_text'))
     end
-  end
-
-  def authorization(record)
-    authorize record
   end
 end

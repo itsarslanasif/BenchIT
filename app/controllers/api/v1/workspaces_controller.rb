@@ -1,5 +1,4 @@
 class Api::V1::WorkspacesController < Api::ApiController
-  before_action :authorization, only: %i[create invite]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
@@ -13,14 +12,14 @@ class Api::V1::WorkspacesController < Api::ApiController
   def create
     @workspace = Workspace.new(workspace_params)
     @workspace.save!
-    render json: { workspace: @workspace, success: true, message: t('.create.success') }, status: :ok
+    render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
   end
 
   def invite
     @token = Token.new.generate
     create_invitable if @user.present?
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
-    render json: { success: true, message: t('.invite.success',
+    render json: { success: true, message: t('.success',
                                              email: params[:email], company_name: @workspace.company_name) }, status: :ok
   end
 
@@ -29,7 +28,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
     return unless @invitable.errors.any?
 
-    render json: { success: false, error: t('.create_invitable.failure') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
   def switch_workspace
@@ -49,7 +48,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   def find_profile
     @profile = current_user.profiles.find_by(workspace_id: @workspace)
 
-    render json: { success: false, error: t('.find_profile.failure') }, status: :unprocessable_entity if @profile.nil?
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
   end
 
   def check_profile
@@ -57,10 +56,6 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.blank?
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
-    render json: { success: false, error: t('.check_profile.failure') }, status: :unprocessable_entity
-  end
-
-  def authorization
-    authorize Workspace
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 end

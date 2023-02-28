@@ -1,14 +1,26 @@
 <template>
-  <div class="flex justify-between relative" @mouseover="toggleOptionsOn" @mouseleave="toggleOptionsOff">
+  <div
+    class="flex justify-between relative"
+    @mouseover="toggleOptionsOn"
+    @mouseleave="toggleOptionsOff"
+  >
     <div v-if="optionsFlag" class="right-0 absolute">
-      <ScheduleOptions :payload="payload" :toggleRecheduleFlag="toggleRecheduleFlag" />
+      <ScheduleOptions
+        :payload="payload"
+        :toggleRecheduleFlag="toggleRecheduleFlag"
+      />
     </div>
     <div class="flex">
       <div>
-        <n-avatar v-if="payload.conversation_type === $t('conversation_type.profile')" class="rounded align-middle w-12 h-12"
-          :src="payload.receiver.image_url" />
-        <div v-if="payload.conversation_type === $t('conversation_type.channel')"
-          class="w-12 h-12 bg-slate-100 rounded flex justify-center items-center text-xl">
+        <n-avatar
+          v-if="payload.conversation_type === $t('conversation_type.profile')"
+          class="rounded align-middle w-12 h-12"
+          :src="payload.receiver.image_url"
+        />
+        <div
+          v-if="payload.conversation_type === $t('conversation_type.channel')"
+          class="w-12 h-12 bg-slate-100 rounded flex justify-center items-center text-xl"
+        >
           <font-awesome-icon :icon="getIcon(payload.receiver)" />
         </div>
       </div>
@@ -17,7 +29,9 @@
           {{ getChatName(payload.receiver) }}
         </div>
         <div>
-          {{ ignoreHTML(payload.content) }}
+          <div v-for="block in messageBlock(payload.content).blocks">
+            <MessageSection v-if="block.type === 'section'" :section="block" />
+          </div>
         </div>
       </div>
     </div>
@@ -29,19 +43,21 @@
 
 <script>
 import moment from 'moment';
-import ScheduleOptions from './ScheduleOptions.vue'
+import ScheduleOptions from './ScheduleOptions.vue';
+import MessageSection from '../components/messages/MessageSection.vue';
 import { NAvatar, NModal, NCard } from 'naive-ui';
 export default {
   components: {
     NAvatar,
     ScheduleOptions,
     NModal,
-    NCard
+    NCard,
+    MessageSection,
   },
   data() {
     return {
       optionsFlag: false,
-    }
+    };
   },
   props: {
     payload: {
@@ -49,7 +65,7 @@ export default {
     },
     toggleRecheduleFlag: {
       type: Function,
-    }
+    },
   },
   methods: {
     ignoreHTML(message) {
@@ -59,7 +75,7 @@ export default {
       return payload.user_id ? payload.username : payload.name;
     },
     getIcon(payload) {
-      return `fa-${payload.is_private ? 'lock' : 'hashtag'}`
+      return `fa-${payload.is_private ? 'lock' : 'hashtag'}`;
     },
     getScheduleTime(time) {
       const dateAndTime = moment(time);
@@ -68,11 +84,14 @@ export default {
       )} at ${dateAndTime.format('h:mm A')}`;
     },
     toggleOptionsOn() {
-      this.optionsFlag = true
+      this.optionsFlag = true;
     },
     toggleOptionsOff() {
-      this.optionsFlag = false
+      this.optionsFlag = false;
     },
-  }
-}
+    messageBlock(message) {
+      return JSON.parse(message)
+    },
+  },
+};
 </script>
