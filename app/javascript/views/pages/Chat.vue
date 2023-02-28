@@ -26,6 +26,7 @@
 import ChatHeader from '../components/chats/ChatHeader.vue';
 import JoinChannel from '../widgets/JoinChannel.vue';
 import { NInput, NSpace } from 'naive-ui';
+import { Remarkable } from 'remarkable';
 import ChatBody from '../components/chats/ChatBody.vue';
 import TextEditorVue from '../components/editor/TextEditor.vue';
 import { createCable, unsubscribe } from '@/plugins/cable';
@@ -37,6 +38,7 @@ import { storeToRefs } from 'pinia';
 import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+import { useProfileStore } from '../../stores/useProfileStore';
 
 export default {
   name: 'Chat',
@@ -64,6 +66,7 @@ export default {
     }
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
+    const profileStore = useProfileStore();
     const unreadStore = useUnreadStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
@@ -102,6 +105,7 @@ export default {
       id,
       channelMembers,
       currentProfile,
+      profileStore,
     };
   },
   watch: {
@@ -135,8 +139,12 @@ export default {
       const file = new File([blob], fileName, { type: blob.type });
       return file;
     },
-    sendMessage(message, files, schedule) {
+    async sendMessage(message, files, schedule) {
       if (message.blocks[0] != undefined) {
+        const profiles =  await Promise.all( message.blocks.map( async (block) => {
+          return await this.getMentionedUsers(block)
+        }))
+        debugger
         let formData = new FormData();
         formData.append('content', JSON.stringify(message));
         formData.append('is_threaded', false);
@@ -183,6 +191,11 @@ export default {
     getConversationType() {
       return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile';
     },
+    async getMentionedUsers(section) {
+      const html = new Remarkable({ html: true });
+      const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
+      return profiles
+    }
   },
 };
 </script>
