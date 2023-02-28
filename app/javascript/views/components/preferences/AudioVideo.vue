@@ -56,12 +56,18 @@
         <label class="pl-3">{{ item.label }}</label>
       </div>
       <p>
-        Use <span class="bg-black-700 text-white px-2 py-1 rounded">Ctrl</span>
-        <span class="bg-black-700 text-white px-2 ml-1 py-1 rounded"
-          >Shift</span
-        >
+        Use
+        <span class="bg-black-700 text-white px-2 py-1 rounded">
+          Ctrl
+        </span>
+        <span class="bg-black-700 text-white px-2 ml-1 py-1 rounded">
+          Shift
+        </span>
         +
-        <span class="bg-black-700 text-white px-2 py-1 rounded">Space</span> to
+        <span class="bg-black-700 text-white px-2 py-1 rounded">
+          Space
+        </span>
+        to
         mute or unmute your mic.
       </p>
     </div>

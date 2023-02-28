@@ -28,7 +28,7 @@
           <input type="radio" :id="item.field" />
           <label :for="item.field" class="pl-3">
             {{ item.label }}
-            </label><br />
+          </label><br />
         </div>
       </div>
     </div>
@@ -38,7 +38,7 @@
         <input type="checkbox" :id="item.field" />
         <label :for="item.field" class="pl-3">
           {{ item.label }}
-          </label><br />
+        </label><br />
       </div>
     </div>
   </div>
@@ -53,4 +53,3 @@ export default {
   },
 };
 </script>
-<style lang=""></style>

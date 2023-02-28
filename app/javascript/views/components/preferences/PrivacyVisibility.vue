@@ -4,9 +4,9 @@
       <p class="font-semibold">
         {{ privacyVisibilitySettings.title }}
         <span
-          class="text-xs ml-5 py-1 bg-info text-white px-3 rounded font-normal"
-          >COMING SOON</span
-        >
+          class="text-xs ml-5 py-1 bg-info text-white px-3 rounded font-normal">
+          COMING SOON
+        </span>
       </p>
       <p>{{ privacyVisibilitySettings.tagline }}</p>
       <div
@@ -23,9 +23,9 @@
       </p>
       <p>
         {{ privacyVisibilitySettings.preferences.description }}
-        <span class="text-info">{{
-          privacyVisibilitySettings.preferences.findMyWorkspace
-        }}</span>
+        <span class="text-info">
+          {{ privacyVisibilitySettings.preferences.findMyWorkspace }}
+        </span>
       </p>
     </div>
     <hr class="my-5" />

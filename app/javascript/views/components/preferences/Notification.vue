@@ -104,8 +104,9 @@
       >
         <option v-for="option in item.options" class="bg-gray-50">
           {{ option.label }}
-        </option></select
-      ><br />
+        </option>
+      </select>
+      <br />
       <p class="text-xs text-black-600 -mt-1">
         <span class="text-info">Reminders you set</span> for a specific day
         (like “tomorrow”) will be sent at the time you select.
