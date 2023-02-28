@@ -440,6 +440,8 @@ en:
         channels: 'channels'
         groups: 'groups'
         profiles: 'profiles'
+      preferences:
+        title: 'Preferences'
         group_type: 'Group'
         group_message: 'Group Messages'
       mentions_and_reactions:

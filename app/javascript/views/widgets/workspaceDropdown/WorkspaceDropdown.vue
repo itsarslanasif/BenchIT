@@ -21,10 +21,13 @@
       <CreateWorkspace :close-modal="toggleWorkspaceModal" />
     </div>
   </div>
+  <n-modal v-model:show="preferencesModal">
+      <Preferences />
+  </n-modal>
 </template>
 
 <script>
-import { NDropdown, NButton } from 'naive-ui';
+import { NDropdown, NButton, NModal } from 'naive-ui';
 import options from './options.js';
 import UserInviteModal from '../userInviteModal.vue';
 import { userSignOut } from '../../../api/user_auth/user_sign_out_api';
@@ -32,6 +35,7 @@ import { decryption } from '../../../modules/crypto/crypto';
 import CreateChannel from '../../components/channels/CreateChannel.vue';
 import CreateWorkspace from '../../components/workspace/CreateWorkspace.vue';
 import { removeActiveStatus } from '../../../api/profiles/profileStatus';
+import Preferences from '../../components/preferences/Preferences.vue';
 
 export default {
   components: {
@@ -39,6 +43,8 @@ export default {
     NDropdown,
     UserInviteModal,
     CreateChannel,
+    Preferences,
+    NModal,
     CreateWorkspace,
   },
   data() {
@@ -46,6 +52,7 @@ export default {
       options: [],
       showModal: false,
       showChannelModal: false,
+      preferencesModal: false,
       showWorkspaceModal: false,
     };
   },
@@ -62,6 +69,9 @@ export default {
       switch (key) {
         case 'sign-out-of-your-account':
           this.signOut();
+          break;
+        case 'preferences':
+          this.preferencesModal = !this.preferencesModal;
           break;
         case 'invite-people':
           this.showModal = true;
