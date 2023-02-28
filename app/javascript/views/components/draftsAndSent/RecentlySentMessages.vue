@@ -1,6 +1,6 @@
 <template>
-  <div class="scrollable bg-gray-100 mb-2">
-    <div ref="body" v-for="message in sentMessages" :key="message.id">
+  <div ref="body" class="scrollable bg-gray-100 mb-2">
+    <div v-for="message in sentMessages" :key="message.id">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
         <div v-if="isToday" class="text-xs text-black ml-10 font-bold m-4">
@@ -141,7 +141,6 @@ export default {
     const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
-
     const { sentMessages } = storeToRefs(draftAndSentMessagesStore);
     const { currentPage } = storeToRefs(draftAndSentMessagesStore);
     const { maxPages } = storeToRefs(draftAndSentMessagesStore);
@@ -205,13 +204,6 @@ export default {
       let node = this.$refs['body'];
       this.previousScrollHeightMinusScrollTop =
         node.scrollHeight - node.scrollTop;
-    },
-    restoreScrollPosition() {
-      if (!this.firstMount) {
-        let node = this.$refs['body'];
-        node.scrollTop =
-          node.scrollHeight - this.previousScrollHeightMinusScrollTop;
-      }
     },
   },
   computed: {
