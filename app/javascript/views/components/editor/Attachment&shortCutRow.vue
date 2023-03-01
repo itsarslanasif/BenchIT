@@ -1,9 +1,9 @@
 <template>
   <div
-    class="flex px-1 py-2 w-full hover-trigger hover:bg-slate-800 rounded-md group hover:text-white"
+    class="flex px-3 py-1 my-1 w-full hover-trigger hover:bg-primaryHover rounded group hover:text-white duration-200"
     @click="onSelect(shortcut)"
   >
-    <span> <font-awesome-icon class="h-5 w-5" :icon="shortcut.icon" /></span>
+    <span> <font-awesome-icon :icon="shortcut.icon" /></span>
     <span class="px-2 cursor-pointer">{{ shortcut.label }}</span>
   </div>
 </template>
