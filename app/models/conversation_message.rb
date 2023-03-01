@@ -12,8 +12,9 @@ class ConversationMessage < ApplicationRecord
   has_many :saved_items, dependent: :delete_all
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :destroy
+  has_many :draft_messages, dependent: :destroy
 
-  validates :content, presence: true, length: { minimum: 1, maximum: 100 }
+  validates :content, presence: true, length: { minimum: 1 }
 
   searchkick word_start: [:content]
 
@@ -28,7 +29,15 @@ class ConversationMessage < ApplicationRecord
                                                    bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
   }
 
-  def self.recent_last_conversation(conversation_ids)
+  scope :messages_with_other_reactions, lambda { |current_profile|
+    joins(:reactions)
+      .where.not(reactions: { profile_id: current_profile.id })
+      .uniq
+  }
+
+  scope :sent_messages, -> { includes(:profile, :bench_conversation).where(sender_id: Current.profile.id).order(created_at: :desc) }
+
+  def self.recent_conversation_ids(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time
     ConversationMessage.where(bench_conversation_id: conversation_ids).where('created_at > ?',
                                                                              two_weaks_ago_time).distinct.pluck(:bench_conversation_id)
@@ -38,7 +47,7 @@ class ConversationMessage < ApplicationRecord
     message = model_basic_content
     message = message_data(message)
     message[:replies] = replies.map(&:message_content) if parent_message_id.nil?
-
+    message[:shared_message] = ConversationMessage.find_by(id: shared_message_id) if shared_message_id.present?
     message
   end
 
@@ -101,6 +110,7 @@ class ConversationMessage < ApplicationRecord
       updated_at: updated_at,
       isSaved: saved?(id),
       pinned: pin.present?,
+      shared_message_id: shared_message_id,
       bench_conversation_id: bench_conversation_id,
       conversationable_type: bench_conversation.conversationable_type,
       conversationable_id: bench_conversation.conversationable_id

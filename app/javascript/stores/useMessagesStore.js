@@ -12,6 +12,7 @@ import {
   editScheduledContent,
   reScheduleTime,
 } from '../api/scheduleMessages';
+import { useDirectMessagesStore } from './useDirectMessagesStore';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -47,6 +48,15 @@ export const useMessageStore = () => {
     actions: {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
+        if (selectedChat.hasOwnProperty('user_id')) {
+          const directMessageStore = useDirectMessagesStore();
+          const isObjectInArray = directMessageStore.directMessageUsers.find(
+            obj => obj.id === selectedChat.id
+          );
+          isObjectInArray
+            ? null
+            : directMessageStore.directMessageUsers.push(selectedChat);
+        }
       },
       deleteChannelName() {
         delete this.selectedChat.name;
@@ -89,6 +99,9 @@ export const useMessageStore = () => {
       },
       getMessage(id) {
         return this.messages.find(message => message.id === id);
+      },
+      getSharedMessage(id) {
+        return this.messages.find(message => message.shared_message_id === id);
       },
       addScheduleMessage(payload) {
         this.scheduleMessage.push(payload);

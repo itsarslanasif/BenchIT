@@ -10,7 +10,8 @@ class BenchChannel < ApplicationRecord
   before_validation :set_profile_and_workspace
   before_validation :set_lower_case_channel_name
 
-  validates :name, uniqueness: true, presence: true, length: { minimum: 1, maximum: 80 }
+  validates :name, presence: true, length: { minimum: 1, maximum: 80 }
+  validates :name, uniqueness: { scope: %i[workspace_id] }
   validates :description, length: { maximum: 500 }
 
   scope :private_channels, -> { where(is_private: true, workspace_id: Current.workspace) }

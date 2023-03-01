@@ -1,5 +1,7 @@
 <template>
   <div
+    v-for="block in messageBlock.blocks"
+    :key="block"
     class="py-1"
     :class="{
       'bg-yellow-50': isSavedMessage,
@@ -96,17 +98,28 @@
                 }}
               </p>
             </span>
-            <span
-              v-if="
-                isSameUser &&
-                isSameDayMessage &&
-                !isFirstMessage &&
-                !currMessage.is_info &&
-                !isDeleted
-              "
-              class="text-black-800 text-sm flex-wrap rich-content"
-              v-html="currMessage.content"
-            />
+            <div>
+              <div
+                v-if="
+                  isSameUser &&
+                  isSameDayMessage &&
+                  !isFirstMessage &&
+                  !currMessage.is_info &&
+                  !isDeleted
+                "
+              >
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+                />
+                <div v-if="isSharedMessage" class="flex ml-4 flex-center">
+                  <ShareMessageVue
+                    :inThread="inThread"
+                    :currMessage="currMessage.shared_message"
+                  />
+                </div>
+              </div>
+            </div>
             <span
               v-if="
                 isSameUser && isSameDayMessage && !isFirstMessage && isDeleted
@@ -139,19 +152,30 @@
                 :class="
                   currMessage.is_info ? 'text-black-600' : 'text-black-800'
                 "
-                class="text-sm flex-wrap rich-content"
-                v-html="currMessage.content"
-              />
+                class="text-sm flex-wrap"
+              >
+                <MessageSection
+                  v-if="block.type === 'section'"
+                  :section="block"
+                />
+              </span>
               <EditedAtTime
                 v-if="currMessage.is_edited && isDeleted"
                 :updated_at="currMessage.updated_at"
+              />
+            </div>
+            <div v-if="isSharedMessage" class="flex -ml-12 flex-center">
+              <ShareMessageVue
+                :inThread="inThread"
+                :currMessage="currMessage.shared_message"
               />
             </div>
           </span>
           <span
             v-if="
               (!isSameUser || !isSameDayMessage || isFirstMessage) &&
-              currMessage.content === $t('deleteMessageModal.success')
+              JSON.parse(this.currMessage.content).blocks[0].text.text ===
+                $t('deleteMessageModal.success')
             "
             class="text-black-600 text-sm flex mt-2"
           >
@@ -159,14 +183,27 @@
           >
           <div
             v-if="!currMessage.info && currMessage.attachments"
-            class="flex gap-2"
+            class="flex gap-10"
           >
             <div
               v-for="attachment in currMessage.attachments"
-              :key="attachment.id"
+              :key="attachment.attachment.id"
               class="w-64"
             >
+              {{ setAttachment(attachment) }}
+              <div
+                v-if="isAudioFile"
+                :class="{
+                  'ml-12': isSameUser && isSameDayMessage && !isFirstMessage,
+                }"
+              >
+                <visualize-voice
+                  :fileID="currAttachment.attachment.id"
+                  :audioURL="currAttachment.attachment_link"
+                />
+              </div>
               <n-popover
+                v-if="!isAudioFile"
                 class="rounded-md border-black-300 border text-black-600"
                 placement="top-end"
                 trigger="hover"
@@ -178,15 +215,24 @@
                       'ml-12':
                         isSameUser && isSameDayMessage && !isFirstMessage,
                     }"
-                    v-if="isTxtFile(attachment.attachment_link)"
+                    v-if="isTxtFile"
                   >
                     <font-awesome-icon
                       class="w-10 h-10"
                       icon="fa-solid fa-file"
                     />
                   </div>
+                  <div
+                    :class="{
+                      'ml-12':
+                        isSameUser && isSameDayMessage && !isFirstMessage,
+                    }"
+                    v-if="isVideoFile"
+                  >
+                    <video controls :src="attachment.attachment_link"></video>
+                  </div>
                   <img
-                    v-else
+                    v-if="!isVideoFile && !isTxtFile"
                     :src="attachment.attachment_link"
                     class="rounded"
                     :class="{
@@ -247,9 +293,7 @@
                   emoji
                 }}</span>
                 <span class="text-md"
-                  >{{
-                    getUsers(emoji, currentProfileStore.currentProfile.username)
-                  }}
+                  >{{ getUsers(emoji, currentProfile.username) }}
                   {{ $t('chat.reacted') }}</span
                 >
               </div>
@@ -276,7 +320,8 @@
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
             (emojiModalStatus || openEmojiModal || showOptions) &&
-            currMessage.content !== $t('deleteMessageModal.success')
+            JSON.parse(this.currMessage.content).blocks[0].text.text !==
+              $t('deleteMessageModal.success')
           "
         >
           <template v-for="emoji in topReactions" :key="emoji">
@@ -307,6 +352,7 @@
             v-else-if="!inThread"
             icon="fa-solid fa-share"
             :actionText="$t('emojiModalButton.share_message')"
+            :action="setShareMessageModal"
           />
           <EmojiModalButton
             icon="fa-solid fa-bookmark"
@@ -341,8 +387,13 @@
     :message="currMessage"
     :setDeleteModal="setDeleteModal"
   />
+  <ShareMessageModal
+    v-model:show="showShareMessageModal"
+    :message="currMessage"
+    :toggleModal="setShareMessageModal"
+  />
   <div
-    class="bg-yellow-50 pl-16 pr-4"
+    class="bg-yellow-100 pl-16 p-2"
     v-if="
       messagesStore.isMessageToEdit(currMessage) &&
       (!inThread || !currMessage.is_threaded)
@@ -369,6 +420,7 @@ import {
 } from 'naive-ui';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import EmojiModalButton from '../../widgets/emojiModalButton.vue';
+import MessageSection from './MessageSection.vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { save } from '../../../api/save_messages/savemessage.js';
@@ -390,10 +442,13 @@ import downloadsModal from '../../widgets/downloadsModal/downloadsModal.vue';
 import { fileDownload } from '../../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../../stores/useDownloadsStore';
 import ReplyAndThreadButton from '../../widgets/ReplyAndThreadButton.vue';
+import ShareMessageVue from '../../widgets/sharedMessage.vue';
 import DeleteMessageModal from '../../widgets/deleteMessageModal.vue';
+import ShareMessageModal from '../../widgets/shareMessageModal.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
+import VisualizeVoice from '../editor/VisualizeVoice.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -436,11 +491,15 @@ export default {
     NPopover,
     downloadsModal,
     ReplyAndThreadButton,
+    ShareMessageVue,
     DeleteMessageModal,
+    ShareMessageModal,
     NAvatar,
     TextEditorVue,
     EditedAtTime,
     UnPinModal,
+    MessageSection,
+    VisualizeVoice,
   },
   props: {
     currMessage: {
@@ -491,6 +550,9 @@ export default {
       showFileOptions: false,
       showDeleteModal: false,
       showUnpinModal: false,
+      currAttachment: null,
+      sharedMessage: '',
+      showShareMessageModal: false,
     };
   },
   beforeUnmount() {
@@ -498,6 +560,9 @@ export default {
     this.displayedReactions = [];
   },
   computed: {
+    messageBlock() {
+      return JSON.parse(this.currMessage.content);
+    },
     time() {
       return moment(new Date(this.currMessage.created_at)).fromNow();
     },
@@ -563,13 +628,33 @@ export default {
       return savedMessage ? true : false;
     },
     isDeleted() {
-      return this.currMessage.content === this.$t('deleteMessageModal.success');
+      return (
+        JSON.parse(this.currMessage.content).blocks[0].text.text ===
+        this.$t('deleteMessageModal.success')
+      );
+    },
+    isTxtFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'txt';
+    },
+    isAudioFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'wav';
+    },
+    isVideoFile() {
+      const fileExtension =
+        this.currAttachment.attachment.filename.split('.')[1];
+      return fileExtension === 'mp4';
+    },
+    isSharedMessage() {
+      return this.currMessage.shared_message != null;
     },
   },
   methods: {
-    isTxtFile(url) {
-      const fileExtension = url.split('/').pop().split('.').pop();
-      return fileExtension === 'txt';
+    setAttachment(attachment) {
+      this.currAttachment = attachment;
     },
     editMessage(text) {
       let updatedMessage = JSON.parse(JSON.stringify(this.currMessage));
@@ -705,7 +790,7 @@ export default {
     downloadFile(attachment) {
       try {
         fileDownload(attachment).then(response => {
-          this.downloadsStore.downloads.unshift(response.data);
+          this.downloadsStore.downloads.unshift(response.data.download);
           this.downloadsStore.response = response;
           this.downloadsStore.downloadAlert = true;
         });
@@ -732,10 +817,6 @@ export default {
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
     },
-
-    isDeleted(content) {
-      return content === this.$t('deleteMessageModal.success');
-    },
     getConversationType(type) {
       switch (type) {
         case 'BenchChannel':
@@ -755,6 +836,15 @@ export default {
         }/${this.currMessage.id}`
       );
     },
+    getSharedMessage() {
+      this.sharedMessage = this.messagesStore.getSharedMessage(
+        this.currMessage.shared_message_id
+      );
+    },
+
+    setShareMessageModal() {
+      this.showShareMessageModal = !this.showShareMessageModal;
+    },
   },
 };
 </script>
@@ -766,38 +856,5 @@ export default {
 .hover-trigger:hover .hover-target {
   display: inline;
   cursor: pointer;
-}
-
-.rich-content {
-  ul {
-    li {
-      margin-left: 10px;
-      list-style-type: disc;
-
-      li {
-        list-style-type: circle;
-
-        li {
-          list-style-type: square;
-        }
-      }
-    }
-  }
-
-  ol {
-    li {
-      margin-left: 10px;
-      list-style-type: decimal;
-
-      li {
-        list-style-type: lower-alpha;
-      }
-    }
-  }
-
-  a {
-    color: rgba(39, 39, 238, 0.914);
-    text-decoration: underline;
-  }
 }
 </style>

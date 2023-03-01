@@ -14,7 +14,7 @@
       </div>
       <div class="flex gap-4">
         <div
-          @click="openChannelDetailModal(true)"
+          @click="toggleShowModal"
           class="px-5 py-1 border bg-white border-black-500 rounded hover:bg-slate-50 cursor-pointer duration-200"
         >
           {{ $t('actions.details') }}
@@ -28,15 +28,15 @@
       </div>
     </div>
   </div>
-  <ChannelDetailModal
+  <ChatDetailModal
     v-if="modalOpen"
-    :currentChannel="this.currentChannel"
-    :detailsopen="this.openChannelDetailModal"
+    :chat="currentChannel"
+    :toggleShow="toggleShowModal"
     class="m-auto mt-12 absolute top-0 inset-x-0"
   />
 </template>
 <script>
-import ChannelDetailModal from '../containers/ChannelDetailModal.vue';
+import ChatDetailModal from '../containers/ChatDetailModal.vue';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { useChannelStore } from '../../stores/useChannelStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
@@ -44,7 +44,7 @@ import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 export default {
   components: {
-    ChannelDetailModal,
+    ChatDetailModal,
   },
   setup() {
     const messageStore = useMessageStore();
@@ -66,8 +66,8 @@ export default {
     };
   },
   methods: {
-    openChannelDetailModal(open) {
-      this.modalOpen = open;
+    toggleShowModal() {
+      this.modalOpen = !this.modalOpen;
     },
     async joinChannel() {
       await this.channelStore.joinChannel(this.selectedChat.id);

@@ -11,7 +11,7 @@
         <MessageWrapper :inThread="true" :curr-message="threadStore.message" />
       </div>
       <n-divider
-        v-if="threadStore.message.replies"
+        v-if="threadStore.message.replies.length"
         title-placement="left"
         class="text-black-500 text-xs"
       >
@@ -29,10 +29,7 @@
         </template>
       </template>
     </div>
-    <div
-      class="relative mx-1"
-      :class="{ 'mt-10': !threadStore.message.replies.length }"
-    >
+    <div class="relative mx-1">
       <TextEditorVue
         :isThread="true"
         :sendMessage="sendMessage"
@@ -98,21 +95,44 @@ export default {
     },
   },
   methods: {
+    getFileFromBlob(blob, fileName) {
+      const file = new File([blob], fileName, { type: blob.type });
+      return file;
+    },
     sendMessage(message, files) {
-      let formData = new FormData();
-      formData.append('sender_id', 1);
-      formData.append('content', message);
-      formData.append('is_threaded', false);
-      formData.append('parent_message_id', this.threadStore.message.id);
-      formData.append('conversation_type', this.conversation_type);
-      formData.append('conversation_id', this.id);
-      files.forEach(file => {
-        formData.append('message_attachments[]', file, message);
-      });
-      try {
-        conversation(formData);
-      } catch (e) {
-        console.error(e);
+      if (message.blocks[0] != undefined) {
+        let formData = new FormData();
+        formData.append('sender_id', 1);
+        formData.append('content', JSON.stringify(message));
+        formData.append('is_threaded', false);
+        formData.append('parent_message_id', this.threadStore.message.id);
+        formData.append('conversation_type', this.conversation_type);
+        formData.append('conversation_id', this.id);
+        files.forEach(file => {
+          const fileExtension = file.type.split('/')[1];
+          const ts = new Date().getTime();
+          let filename = ts;
+          if (fileExtension == 'webm;codecs=opus') {
+            filename += '.wav';
+            file = this.getFileFromBlob(file, filename);
+          } else if (
+            fileExtension == 'x-matroska;codecs=avc1,opus' ||
+            fileExtension == 'x-matroska;codecs=avc1'
+          ) {
+            filename += '.mp4';
+            file = this.getFileFromBlob(file, filename);
+          } else {
+            filename += `.${fileExtension}`;
+          }
+          formData.append('message_attachments[]', file, filename);
+        });
+        try {
+          conversation(formData);
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        return false;
       }
     },
   },

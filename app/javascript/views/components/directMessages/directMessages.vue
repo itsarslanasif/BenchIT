@@ -99,7 +99,12 @@
                     isOwnMessage ? 'You' : firstName(message.sender_name)
                   }}:</span
                 >
-                <span v-html="message.content"></span>
+                <span v-for="block in messageBlocks" :key="block">
+                  <MessageSection
+                    v-if="block.type === 'section'"
+                    :section="block"
+                  />
+                </span>
               </div>
             </div>
             <div class="ml-auto text-black-200">
@@ -126,9 +131,10 @@ import {
   getDirectMessagesList,
   getLastDirectMessagesList,
 } from '../../../api/directMessages/directMessages';
+import MessageSection from '../messages/MessageSection.vue';
 
 export default {
-  components: { NAvatar },
+  components: { NAvatar, MessageSection },
   data() {
     return {
       last_messages: [],
@@ -172,13 +178,7 @@ export default {
     },
   },
   async mounted() {
-    const dmList = await getDirectMessagesList(this.currentWorkspace.id);
-    const dmIDs = dmList.map(dm => {
-      if (dm.id != null) {
-        return dm.id;
-      }
-    });
-    this.last_messages = await getLastDirectMessagesList(dmIDs);
+    this.last_messages = await getLastDirectMessagesList();
     this.filteredList = this.allProfiles;
   },
   methods: {
@@ -223,8 +223,14 @@ export default {
         ? message.receiver_name
         : message.sender_name;
     },
+    messageBlock(message) {
+      return JSON.parse(message);
+    },
   },
   computed: {
+    messageBlocks() {
+      return JSON.parse(this.currMessage.content).blocks;
+    },
     isToday() {
       return (
         new Date(this.currMessage.created_at).toDateString() ===

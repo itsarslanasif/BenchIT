@@ -6,7 +6,7 @@ class UsersInvitationsController < Devise::InvitationsController
     if params[:invitation_token]
       redirect_to "#{request.base_url}/password_form?invitation_token=#{params[:invitation_token]}"
     else
-      render json: { errors: user.errors.full_messages }
+      render json: { success: false, errors: user.errors.full_messages }
     end
   end
 

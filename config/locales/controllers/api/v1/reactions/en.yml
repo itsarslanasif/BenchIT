@@ -1,0 +1,10 @@
+en:
+  api:
+    v1:
+      reactions:
+        create:
+          success: Reaction has been created successfully.
+        update:
+          success: Reaction has been updated successfully.
+        destroy:
+          success: Reaction has been deleted successfully.

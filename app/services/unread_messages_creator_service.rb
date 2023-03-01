@@ -30,7 +30,12 @@ class UnreadMessagesCreatorService
       previous_unread_messages_details = previous_unread_messages_details.nil? ? {} : JSON.parse(previous_unread_messages_details)
       key = generate_key
       previous_unread_messages_details[key] ||= []
-      previous_unread_messages_details[key] << @message_id
+
+      if previous_unread_messages_details[key].empty?
+        previous_unread_messages_details[key] = [@message_id, 1]
+      else
+        previous_unread_messages_details[key][1] += 1
+      end
 
       REDIS.set("unreadMessages#{Current.workspace.id}#{id}", previous_unread_messages_details.to_json)
     end

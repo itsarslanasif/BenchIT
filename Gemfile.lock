@@ -94,6 +94,7 @@ GEM
     bundler-audit (0.9.1)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
+    cancancan (3.4.0)
     capybara (3.38.0)
       addressable
       matrix
@@ -399,6 +400,7 @@ GEM
 
 PLATFORMS
   x86_64-darwin-20
+  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES
@@ -406,6 +408,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   bundler-audit
+  cancancan
   capybara
   capybara-email
   debug
@@ -450,4 +453,4 @@ DEPENDENCIES
   webdrivers
 
 BUNDLED WITH
-   2.3.24
+   2.3.17

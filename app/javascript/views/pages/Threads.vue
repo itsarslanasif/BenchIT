@@ -140,6 +140,10 @@ export default {
           return;
       }
     },
+    getFileFromBlob(blob, fileName) {
+      const file = new File([blob], fileName, { type: blob.type });
+      return file;
+    },
     sendMessage(
       message,
       files,
@@ -148,7 +152,7 @@ export default {
       parent_message_id
     ) {
       let formData = new FormData();
-      formData.append('content', message);
+      formData.append('content', JSON.stringify(message));
       formData.append('is_threaded', true);
       formData.append('parent_message_id', parent_message_id);
       formData.append(
@@ -157,7 +161,25 @@ export default {
       );
       formData.append('conversation_id', conversation_id);
       files.forEach(file => {
-        formData.append('message_attachments[]', file);
+        const fileExtension = file.type.split('/')[1];
+        const ts = new Date().getTime();
+        let filename = ts;
+        if (fileExtension == 'webm;codecs=opus') {
+          filename += '.wav';
+          file = this.getFileFromBlob(file, filename);
+        } else if (
+          fileExtension == 'x-matroska;codecs=avc1,opus' ||
+          fileExtension == 'x-matroska;codecs=avc1'
+        ) {
+          filename += '.mp4';
+          file = this.getFileFromBlob(file, filename);
+        } else if (fileExtension == 'plain') {
+          filename += '.txt';
+          file = this.getFileFromBlob(file, filename);
+        } else {
+          filename += `.${fileExtension}`;
+        }
+        formData.append('message_attachments[]', file, filename);
       });
       try {
         conversation(formData).then(() => {

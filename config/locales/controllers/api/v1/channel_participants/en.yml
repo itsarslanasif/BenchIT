@@ -1,0 +1,15 @@
+en:
+  api:
+    v1:
+      channel_participants:
+        join_public_channel:
+          success: User has joined the channel successfully.
+        mute_channel:
+          success: Channel has been muted successfully.
+        unmute_channel:
+          success: Channel has been un-muted successfully.
+        check_profile_ids:
+          failure: Sorry, The profiles not found.
+        invite_outsider:
+          success: User has been invited to this channel.
+

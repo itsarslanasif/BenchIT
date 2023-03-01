@@ -1,0 +1,6 @@
+en:
+  concerns:
+    membership:
+      error: Sorry, There is something went wrong.
+    conversation:
+      error: Sorry, The type is invalid.

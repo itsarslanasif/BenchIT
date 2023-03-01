@@ -53,6 +53,24 @@ import {
   faPenToSquare,
   faEllipsis,
   faBoltLightning,
+  faItalic,
+  faBold,
+  faUnderline,
+  faStrikethrough,
+  faCode,
+  faLaptopCode,
+  faLink,
+  faQuoteRight,
+  faToggleOff,
+  faCloudArrowUp,
+  faVideoSlash,
+  faMicrophoneSlash,
+  faMicrophone,
+  faVideo,
+  faGear,
+  faRecordVinyl,
+  faPause,
+  faDisplay
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -110,7 +128,26 @@ library.add(
   faHardDrive,
   faPenToSquare,
   faEllipsis,
-  faBoltLightning
+  faBoltLightning,
+  faItalic,
+  faBold,
+  faUnderline,
+  faStrikethrough,
+  faCode,
+  faLaptopCode,
+  faLink,
+  faQuoteRight,
+  faToggleOff,
+  faCloudArrowUp,
+  faVideoSlash,
+  faMicrophoneSlash,
+  faGear,
+  faMicrophone,
+  faVideo,
+  faRecordVinyl,
+  faPause,
+  faDisplay
+
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

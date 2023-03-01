@@ -1,9 +1,9 @@
 import axios from '../../modules/axios/index';
 import { getHeaders } from '../../modules/auth';
 
-export const getDirectMessagesList = async id => {
+export const getDirectMessagesList = async () => {
   return axios
-    .get(`v1/workspaces/${id}/profiles/previous_direct_messages`, {
+    .get(`v1/direct_message_users`, {
       headers: getHeaders(),
     })
     .then(response => {
@@ -11,15 +11,21 @@ export const getDirectMessagesList = async id => {
     });
 };
 
-export const getLastDirectMessagesList = async dmIDs => {
+export const removeChatFromList = async chat_id => {
   return axios
-    .post(
-      `v1/conversation_messages/last_messages`,
-      { dm_ids: dmIDs },
-      {
-        headers: getHeaders(),
-      }
-    )
+    .delete(`v1/direct_message_users/${chat_id}`, {
+      headers: getHeaders(),
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const getLastDirectMessagesList = async () => {
+  return axios
+    .get(`v1/direct_message_users/recent_direct_messages`, {
+      headers: getHeaders(),
+    })
     .then(response => {
       return response.data;
     });

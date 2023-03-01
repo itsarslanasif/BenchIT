@@ -1,11 +1,13 @@
 class Api::V1::ScheduleMessagesController < Api::ApiController
-  include MemberShip
+  include Pagination
+  include CanAuthorization
 
   before_action :set_schedule_message, :authenticate_message, only: %i[destroy update send_now]
   before_action :delete_job, only: %i[destroy]
+  before_action :check_user_membership, only: %i[send_now]
 
   def index
-    @messages = @current_profile.schedule_messages.includes(:bench_conversation, :profile).order(created_at: :desc)
+    @pagy, @messages = pagination_for_schedule_messages(params[:page])
   end
 
   def update
@@ -16,30 +18,30 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
       reschedule_job
     end
 
-    render json: { success: true, message: 'Message updated' }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
     @schedule_message.destroy!
-    render json: { success: true, message: 'Message deleted' }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def send_now
     ActiveRecord::Base.transaction do
       delete_job
-      @current_profile.conversation_messages.create!(content: @schedule_message.content,
-                                                     bench_conversation_id: @schedule_message.bench_conversation_id)
+      current_profile.conversation_messages.create!(content: @schedule_message.content,
+                                                    bench_conversation_id: @schedule_message.bench_conversation_id)
       @schedule_message.destroy!
     end
 
-    render json: { success: true, message: 'Message send' }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private
 
   def schedule_message_params
     params.permit(:content, :scheduled_at).tap do |param|
-      param[:profile_id] = @current_profile.id
+      param[:profile_id] = current_profile.id
     end
   end
 
@@ -48,11 +50,7 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def authenticate_message
-    if @schedule_message.profile_id.eql?(@current_profile.id)
-      check_membership(@schedule_message.bench_conversation)
-    else
-      render json: { error: 'Sorry, this message is not yours.' }, status: :unauthorized
-    end
+    authorize_action(action_name, @schedule_message)
   end
 
   def delete_job
@@ -66,8 +64,15 @@ class Api::V1::ScheduleMessagesController < Api::ApiController
   end
 
   def reschedule_job
-    time = @schedule_message.scheduled_at.in_time_zone(@current_profile.time_zone)
-    job = ScheduleMessageJob.set(wait_until: time).perform_later(@current_profile.id, @schedule_message.id)
+    time = @schedule_message.scheduled_at.in_time_zone(current_profile.time_zone)
+    job = ScheduleMessageJob.set(wait_until: time).perform_later(current_profile.id, @schedule_message.id)
     @schedule_message.update!(job_id: job.provider_job_id)
+  end
+
+  def check_user_membership
+    conversation = @schedule_message.bench_conversation
+    return unless conversation.conversationable_type.eql?('BenchChannel') && conversation.conversationable.profile_ids.exclude?(current_profile.id)
+
+    current_profile.channel_participants.create!(bench_channel_id: conversation.conversationable_id, permission: true)
   end
 end

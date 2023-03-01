@@ -1,0 +1,15 @@
+en:
+  api:
+    v1:
+      bench_channels:
+        update:
+          failure: Sorry, There is an error in updating the channel.
+        destroy:
+          failure: Sorry, There is an error in deleting the channel.
+        leave_channel:
+          success: User has left the channel successfully.
+        bench_channel_cannot_be_public_again:
+          failure: Sorry, You cannot change the channel to public again.
+        sort_bench_channels:
+          failure: Sorry, Cannot sort due to invalid sorting parameter.
+

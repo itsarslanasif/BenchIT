@@ -20,25 +20,15 @@ export default {
       return window.location.pathname.split('/')[param];
     }
 
-    function getConversationType(type) {
-      switch (type) {
-        case 'channels':
-          return 'BenchChannel';
-        case 'profiles':
-          return 'Profile';
-        case 'groups':
-          return 'Group';
-        default:
-          return;
-      }
-    }
     const pinnedConversationStore = usePinnedConversation();
     const conversation_type = getIndexByParams(1);
     const conversation_id = getIndexByParams(2);
+
     pinnedConversationStore.index(
-      getConversationType(conversation_type),
+      conversation_type,
       conversation_id
     );
+
     return { pinnedConversationStore };
   },
 };

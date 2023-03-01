@@ -33,19 +33,18 @@ Rails.application.routes.draw do
         end
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
-            get :send_message
-            get :index_saved_messages
+            get :sent_message
             get :recent_files
             get :unread_messages
             post :last_messages
             get :threads
+            get :reactions
           end
           member do
-            post :save_message
-            delete :unsave_message
             get :bench_channel_messages, :group_messages, :profile_messages
           end
         end
+        resources :saved_items, only: %i[index create destroy]
         resources :favourites, only: %i[create destroy]
 
         resources :searches, only: %i[index]
@@ -67,15 +66,13 @@ Rails.application.routes.draw do
           end
 
           resources :profiles, only: %i[index create show update] do
-            collection do
-              get :previous_direct_messages
-            end
             member do
               post :set_status
               post :clear_status
               get :set_is_active
               get :remove_is_active
             end
+            resource :preference, only: %i[update]
           end
         end
         resources :downloads, only: %i[index create destroy] do
@@ -87,11 +84,18 @@ Rails.application.routes.draw do
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[index create update destroy]
         resources :reactions, only: %i[create destroy]
+        resources :direct_message_users, only: %i[index destroy] do
+          collection do
+            get :previous_direct_messages
+            get :recent_direct_messages
+          end
+        end
         resources :channel_participants, only: %i[create index] do
           collection do
             post :join_public_channel
             post :mute_channel
             post :unmute_channel
+            post :invite_outsider
           end
         end
         resources :draft_messages, only: %i[index create update destroy]

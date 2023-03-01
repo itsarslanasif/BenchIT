@@ -1,10 +1,11 @@
 class Api::V1::GroupsController < Api::ApiController
-  before_action :set_group, only: %i[show add_member]
-  before_action :group_size, only: %i[add_member]
-  before_action :check_group_members, only: %i[add_member]
+  include CanAuthorization
+
+  before_action :set_group, :authenticate_group, only: %i[show add_member]
+  before_action :group_size, :check_group_members, only: %i[add_member]
 
   def index
-    render json: Current.profile.groups
+    render json: current_profile.groups
   end
 
   def show
@@ -13,27 +14,29 @@ class Api::V1::GroupsController < Api::ApiController
 
   def add_member
     @group.profile_ids += params[:profile_ids]
-    if @group.save
-      render json: { message: 'Members are added successfully.' }, status: :ok
-    else
-      render json: { error: 'Unable to add members', errors: @group.errors }, status: :unprocessable_entity
-    end
+    @group.save!
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private
 
   def set_group
     @group = Group.find(params[:id])
-    render json: { error: 'User is not part of this group' }, status: :not_found unless @group.profile_ids.include?(Current.profile.id)
+  end
+
+  def authenticate_group
+    authorize_action(action_name, @group)
   end
 
   def group_size
-    render json: { error: 'Max group size is 9' }, status: :bad_request if (@group.profile_ids.size + params[:profile_ids].size) > 9
+    return unless (@group.profile_ids.size + params[:profile_ids].size) > 9
+
+    render json: { success: false, error: t('.failure') }, status: :bad_request
   end
 
   def check_group_members
     return unless (@group.profile_ids & params[:profile_ids]).any?
 
-    render json: { error: 'One or Many Users already member of this group' }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 end

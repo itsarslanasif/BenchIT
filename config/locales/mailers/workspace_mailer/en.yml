@@ -1,0 +1,5 @@
+en:
+  workspace_mailer:
+    send_email:
+      workspace_invitation_subject: 'Invitation to join %{company_name}'
+
