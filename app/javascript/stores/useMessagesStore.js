@@ -13,6 +13,7 @@ import {
   reScheduleTime,
 } from '../api/scheduleMessages';
 import { useDirectMessagesStore } from './useDirectMessagesStore';
+import { useProfileStore } from './useProfileStore';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -57,6 +58,13 @@ export const useMessageStore = () => {
             ? null
             : directMessageStore.directMessageUsers.push(selectedChat);
         }
+      },
+      setSelectedChatForDm(id){
+        const directMessageStore = useProfileStore();
+        const profile = directMessageStore.profiles.find(
+          obj => obj.id === id
+        );
+        this.selectedChat=profile;
       },
       deleteChannelName() {
         delete this.selectedChat.name;

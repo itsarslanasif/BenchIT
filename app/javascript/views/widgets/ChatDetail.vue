@@ -129,7 +129,7 @@ export default {
       return this.conversation_type === 'channels';
     },
     isProfile() {
-      return this.conversation_type === 'profiles';
+      return this.conversation_type != 'channels';
     },
     isOwnChat() {
       return this.currentProfile?.id === this.selectedChat?.id;

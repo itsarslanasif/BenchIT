@@ -13,6 +13,7 @@
         filterable
         placeholder="Please select a song"
         :options="options"
+        multiple
       />
     </template>
     <template #header v-else>

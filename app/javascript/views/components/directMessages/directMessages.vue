@@ -9,9 +9,8 @@
         </div>
       </span>
       <div>
-        <div
-          class="flex flex-col px-4 border-b border-slate-400 bg-secondary h-12"
-        >
+        <!-- dm search bar -->
+        <div class="flex flex-col px-4 border-b border-slate-400 bg-red h-12">
           <div v-click-outside="closeSearchModal" class="w-full">
             <div
               class="w-full flex justify-center gap-2 mt-3"
@@ -69,8 +68,25 @@
         <hr />
       </div>
     </div>
-    <div
-      class="scrollable bg-slate-700 rounded text-white h-screen overflow-hidden"
+
+    <div class="m-3 bg-red-500">
+      <n-select
+        v-model:value="selectedDirectMessages"
+        filterable
+        placeholder="@someone or somebody@gmail.com"
+        :options="directMessages"
+        multiple
+        @change="handleChange"
+      />
+    </div>
+    {{ selectedDirectMessages }}
+    <DirectMessagesChatVue
+      conversation_type="profiles"
+      :id="selectedDirectMessages[0]"
+    />
+
+    <!-- <div
+      class="scrollable bg-red-500 rounded text-white h-screen overflow-hidden"
     >
       <div class="m-4">
         <div v-for="message in last_messages" :key="message.id">
@@ -113,20 +129,23 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import moment from 'moment';
-import { NAvatar } from 'naive-ui';
+import { NAvatar, NSelect, darkTheme } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import vClickOutside from 'click-outside-vue3';
+import ChatBody from '../chats/ChatBody.vue';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
+import DirectMessagesChatVue from '../../pages/directMessagesChat.vue';
+// import useUnreadStore from '../../../stores/useUnreadStore';
 import {
   getDirectMessagesList,
   getLastDirectMessagesList,
@@ -134,7 +153,14 @@ import {
 import MessageSection from '../messages/MessageSection.vue';
 
 export default {
-  components: { NAvatar, MessageSection },
+  components: {
+    NAvatar,
+    MessageSection,
+    ChatBody,
+    NSelect,
+    darkTheme,
+    DirectMessagesChatVue,
+  },
   data() {
     return {
       last_messages: [],
@@ -142,8 +168,25 @@ export default {
       prevMessage: {},
       searchModalToggle: false,
       search: '',
+      selectedDirectMessages: [],
       filteredList: [],
       allProfiles: [],
+      directMessages: [],
+      themeOverrides: {
+        common: {
+          primaryColor: '#FF0000',
+        },
+        Button: {
+          textColor: '#FF0000',
+        },
+        Select: {
+          peers: {
+            InternalSelection: {
+              textColor: '#FF0000',
+            },
+          },
+        },
+      },
     };
   },
   directives: {
@@ -158,6 +201,8 @@ export default {
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
     const { profiles } = storeToRefs(profileStore);
+    const { messages, currMessage, currentPage, newMessageSent } =
+      storeToRefs(messageStore);
     return {
       currentWorkspace,
       currentProfile,
@@ -177,9 +222,18 @@ export default {
       );
     },
   },
+  unmounted() {
+    this.selectedDirectMessages = [];
+  },
   async mounted() {
     this.last_messages = await getLastDirectMessagesList();
     this.filteredList = this.allProfiles;
+    this.directMessages = this.allProfiles.map(record => ({
+      value: record.id,
+      label: record.username,
+    }));
+
+    console.log(this.directMessages);
   },
   methods: {
     setMessage(message) {
@@ -225,6 +279,15 @@ export default {
     },
     messageBlock(message) {
       return JSON.parse(message);
+    },
+    handleChange() {
+      console.log(this.selectedDirectMessages);
+      this.messageStore.currentPage = 1;
+      if (this.selectedDirectMessages.length > 0) {
+        this.messageStore.setSelectedChatForDm(
+          this.selectedDirectMessages.length
+        );
+      }
     },
   },
   computed: {
