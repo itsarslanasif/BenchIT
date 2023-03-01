@@ -12,6 +12,10 @@ class Api::V1::GroupsController < Api::ApiController
     @profiles = Profile.where(id: @group.profile_ids)
   end
 
+  def create
+    @group = Group.create!(profile_ids: params[:profile_ids])
+  end
+
   def add_member
     @group.profile_ids += params[:profile_ids]
     @group.save!
