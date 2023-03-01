@@ -448,6 +448,7 @@ en:
         title: 'Mentions & reactions'
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
+        mentioned: 'mentioned you in'
     admin:
       title: 'Admin'
       save: 'Save'
