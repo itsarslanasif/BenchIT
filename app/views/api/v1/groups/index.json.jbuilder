@@ -6,6 +6,6 @@ json.groups @groups do |group|
     ).present?
   end
   json.isScheduled? scheduled?(group.bench_conversation.id)
-
+  json.partial! 'api/v1/shared/partials/profiles', profiles: Profile.where(id: group.profile_ids)
   json.bench_conversation_id group.bench_conversation.id
 end
