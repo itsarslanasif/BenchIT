@@ -4,8 +4,6 @@ en:
       groups:
         add_member:
           success: Members are added successfully.
-        set_group:
-          failure: Sorry, User is not part of this group.
         group_size:
           failure: Sorry, The max group size is 9.
         check_group_members:

@@ -51,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.bigint "workspace_id", null: false
     t.bigint "creator_id"
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
-    t.index ["name"], name: "index_bench_channels_on_name", unique: true
+    t.index ["name", "workspace_id"], name: "index_bench_channels_on_name_and_workspace_id", unique: true
     t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
   end
 
@@ -247,7 +247,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   end
 
   create_table "schedule_messages", force: :cascade do |t|
-    t.text "content", null: false
+    t.json "content", null: false
     t.string "scheduled_at", null: false
     t.string "job_id", default: "", null: false
     t.bigint "profile_id", null: false

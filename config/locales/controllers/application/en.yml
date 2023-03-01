@@ -1,5 +1,10 @@
 en:
   application:
+    services:
+      left_message: left the channel
+      add_message: added by
+      join_message: joined this channel.
+      along_message: along with
     render_error:
       not_found_error: Sorry, The record not found.
       invalid_error: Sorry, The record is invalid.
@@ -16,3 +21,17 @@ en:
       type_error: Sorry, The type is not supported, no implicit conversion of type.
       index_error: Sorry, The index is invalid.
       name_error: Sorry, The name is invalid or undefined.
+      access_denied_error: You are not authorized.
+      template_error: Sorry, The template is not found or missing or name is incorrect .
+      local_error: I18n transpilation Error.
+      params_error: Param is missing or the value is empty.
+      json_error: The data is invalid.
+      routing_error: The route path is invalid.
+      unknown_format_error: The request format is not recognized.
+      bad_request_error: The request is malformed.
+      not_implemented_error: The controller action has not been implemented.
+      missing_file_error: The file is not found.
+      sub_class_error: The Sub Class not found.
+      association_type_error: The association is assigned an object of the wrong type.
+      inverse_association_error: The inverse association not found.
+      has_many_association_error: The has_many_through_association not found.

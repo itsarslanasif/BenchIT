@@ -1,9 +1,11 @@
 class Api::V1::PinsController < Api::ApiController
   include MemberShip
   include Conversation
+  include CanAuthorization
 
   before_action :find_conversation, only: %i[index create]
-  before_action :set_pin, only: %i[destroy]
+  before_action :set_pin, :set_conversation, only: %i[destroy]
+  before_action :initialize_pin, only: %i[create]
   before_action :authenticate_pin, only: %i[index create destroy]
 
   def index
@@ -11,14 +13,13 @@ class Api::V1::PinsController < Api::ApiController
   end
 
   def create
-    @pin = @conversation.pins.new(profile_id: current_profile.id, conversation_message_id: pin_params[:conversation_message_id])
     @pin.save!
-    render json: { success: true, message: t('.create.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def destroy
     @pin.destroy!
-    render json: { success: true, message: t('.destroy.success') }, status: :ok
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   private
@@ -37,10 +38,17 @@ class Api::V1::PinsController < Api::ApiController
 
   def set_pin
     @pin = Pin.find(params[:id])
+  end
+
+  def set_conversation
     @conversation = @pin.bench_conversation
   end
 
+  def initialize_pin
+    @pin = @conversation.pins.new(profile_id: current_profile.id, conversation_message_id: pin_params[:conversation_message_id])
+  end
+
   def authenticate_pin
-    check_membership(@conversation)
+    action_name.eql?('index') ? check_membership(@conversation) : authorize_action(action_name, @pin)
   end
 end

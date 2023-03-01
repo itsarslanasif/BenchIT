@@ -35,10 +35,11 @@
               {{ new Date(message.created_at).toDateString() }} at {{ time }}
             </p>
           </span>
-          <span
-            class="text-black-800 text-sm flex-wrap"
-            v-html="message.content"
-          />
+          <div>
+            <div v-for="block in messageBlock(message.content).blocks">
+              <MessageSection v-if="block.type === 'section'" :section="block" />
+            </div>
+          </div>
           <div v-if="message.attachments">
             <n-collapse arrow-placement="right" :default-expanded-names="['1']">
               <n-collapse-item name="1">
@@ -119,6 +120,7 @@ import { NModal, NAvatar, NCollapse, NCollapseItem, NPopover } from 'naive-ui';
 import { fileDownload } from '../../api/downloads/downloads.js';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import { ref } from 'vue';
+import MessageSection from '../components/messages/MessageSection.vue';
 import moment from 'moment';
 
 export default {
@@ -132,7 +134,7 @@ export default {
       rightPaneStore,
       userProfileStore,
       profilesStore,
-      downloadsStore,
+      downloadsStore
     };
   },
   props: ['message', 'setDeleteModal'],
@@ -143,6 +145,7 @@ export default {
     NCollapseItem,
     NPopover,
     downloadsModal,
+    MessageSection
   },
   data() {
     return {
@@ -167,6 +170,10 @@ export default {
         profile => profile.id === this.message.sender_id
       );
       this.userProfileStore.setUserProfile(profile);
+    },
+
+    messageBlock(message) {
+      return JSON.parse(message)
     },
 
     handleClick() {

@@ -8,5 +8,3 @@ en:
           success: Reaction has been updated successfully.
         destroy:
           success: Reaction has been deleted successfully.
-        authenticate_reaction:
-          failure: Sorry, This reaction is not yours.
