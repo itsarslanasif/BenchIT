@@ -141,7 +141,7 @@ export default {
   },
   mounted() {
     this.setUpInterSectionObserver();
-    draftAndSentMessagesStore.loadDraftMessages();
+    this.draftAndSentMessagesStore.loadDraftMessages();
   },
   beforeUnmount() {
     this.draftMessages = [];
