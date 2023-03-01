@@ -141,15 +141,19 @@ export default {
     },
     async sendMessage(message, files, schedule) {
       if (message.blocks[0] != undefined) {
-        // const profiles =  await Promise.all( message.blocks.map( async (block) => {
-        //   return await this.getMentionedUsers(block)
-        // }))
-        // debugger
+        let profileList =  await Promise.all( message.blocks.map( async (block) => {
+          return await this.getMentionedUsers(block)
+        }))
+        profileList = profileList.flat(2)
+        profileList = profileList.map(profile => {
+          return profile.id
+        })
         let formData = new FormData();
         formData.append('content', JSON.stringify(message));
         formData.append('is_threaded', false);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
+        formData.append('profile_list[]', profileList)
         if (schedule) {
           formData.append('scheduled_at', schedule);
         }
@@ -191,11 +195,11 @@ export default {
     getConversationType() {
       return this.conversation_type === 'channels' ? 'BenchChannel' : 'Profile';
     },
-    // async getMentionedUsers(section) {
-    //   const html = new Remarkable({ html: true });
-    //   const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
-    //   return profiles
-    // }
+    async getMentionedUsers(section) {
+      const html = new Remarkable({ html: true });
+      const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
+      return profiles
+    }
   },
 };
 </script>
