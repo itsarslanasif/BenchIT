@@ -68,7 +68,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
-    add_in_direct_message_list
+    create_direct_messages
     paginate_messages
   end
 
@@ -163,7 +163,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     end
   end
 
-  def add_in_direct_message_list
+  def create_direct_messages
     current_profile.direct_message_users.find_or_create_by!(receiver_id: @receiver.id)
     @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
   end
