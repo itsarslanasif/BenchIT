@@ -15,15 +15,13 @@
       />
     </div>
     <div
-      class="bottom-0 ml-12 py-2 absolute z-10"
+      class="bottom-0 ml-6 py-2 absolute z-10"
       v-click-outside="closeModal"
       v-if="openAttach"
     >
       <n-card
-        :bordered="false"
-        size="huge"
-        class="border shadow-xl border-black-300"
-        style="width: 400px"
+        class="border shadow-xl border-black-400 m-0"
+        size="small"
       >
         <template #header>
           <n-space vertical>
@@ -52,13 +50,15 @@
               :isThread="isThread"
             />
           </div>
-          <hr class="my-2 text-black-500" />
+          <hr class="py-2 text-black-500" />
           <span class="text-black-500 float-left">{{
             $t('create_text_snippet.attachments')
           }}</span>
           <label for="getFile">
             <div
-              class="flex px-1 py-2 w-full hover-trigger hover:bg-slate-800 rounded-md group hover:text-white"
+              class="flex px-3 py-1 my-1 w-full hover-trigger 
+                hover:bg-primaryHover rounded group 
+                hover:text-white duration-200"
             >
               <span> <font-awesome-icon icon="fa-laptop" /></span>
               <span class="px-2 cursor-pointer">{{
