@@ -163,14 +163,18 @@ export default {
       this.message = message;
     },
     handleClick(message) {
-      if (message.conversationable_type === 'BenchChannel') {
-        this.$router.push(
-          `/channels/${message.conversationable_id}/${message.id}`
-        );
-      } else if (message.conversationable_type === 'Profile') {
-        this.$router.push(`/profiles/${message.receiver_id}/${message.id}`);
-      } else if (message.conversationable_type === 'Group') {
-        this.$router.push(`/groups/${message.group_id}/${message.id}`);
+      switch (message.conversationable_type) {
+        case 'BenchChannel':
+          this.$router.push(`/channels/${message.conversationable_id}`);
+          break;
+        case 'Profile':
+          this.$router.push(`/profiles/${message.conversationable_id}`);
+          break;
+        case 'Group':
+          this.$router.push(`/groups/${message.conversationable_id}`);
+          break;
+        default:
+          break;
       }
     },
     getImageSrc(message) {
