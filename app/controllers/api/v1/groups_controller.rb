@@ -5,7 +5,7 @@ class Api::V1::GroupsController < Api::ApiController
   before_action :group_size, :check_group_members, only: %i[add_member]
 
   def index
-    render json: current_profile.groups
+    @groups = current_profile.groups
   end
 
   def show
@@ -13,7 +13,11 @@ class Api::V1::GroupsController < Api::ApiController
   end
 
   def create
-    @group = Group.create!(profile_ids: params[:profile_ids])
+    ActiveRecord::Base.transaction do
+      @group = Group.find_or_create_by!(profile_ids: params[:profile_ids].sort)
+      BenchConversation.find_or_create_by!(conversationable_type: 'Group', conversationable_id: @group.id)
+    end
+    render json: { success: true, message: t('.success'), group: @group }, status: :ok
   end
 
   def add_member

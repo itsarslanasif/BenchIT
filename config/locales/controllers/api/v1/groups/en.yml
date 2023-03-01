@@ -2,6 +2,8 @@ en:
   api:
     v1:
       groups:
+        create:
+          success: Group created successfully.
         add_member:
           success: Members are added successfully.
         group_size:
