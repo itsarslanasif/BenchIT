@@ -68,8 +68,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
-    direct_message = current_profile.direct_message_users.find_by(receiver_id: @receiver.id)
-    current_profile.direct_message_users.create!(receiver_id: @receiver.id) if direct_message.nil?
+    create_direct_messages
     paginate_messages
   end
 
@@ -162,5 +161,10 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       @message.message_attachments&.delete_all
       @message.update!(content: t('.delete_text'))
     end
+  end
+
+  def create_direct_messages
+    current_profile.direct_message_users.find_or_create_by!(receiver_id: @receiver.id)
+    @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
   end
 end
