@@ -153,7 +153,10 @@ export default {
         formData.append('is_threaded', false);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
-        formData.append('profile_list[]', profileList)
+        if (profileList.length != 0)
+        {
+          formData.append('profile_list[]', profileList)
+        }
         if (schedule) {
           formData.append('scheduled_at', schedule);
         }

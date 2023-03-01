@@ -30,7 +30,7 @@ class ConversationMessage < ApplicationRecord
                                                    bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
   }
 
-  scope :messages_with_other_reactions_and_mentions, lambda { |current_profile|
+  scope :messages_with_other_reactions, lambda { |current_profile|
     joins(:reactions)
       .where.not(reactions: { profile_id: current_profile.id })
       .uniq

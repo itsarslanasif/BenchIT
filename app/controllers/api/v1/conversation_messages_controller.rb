@@ -16,8 +16,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
   end
 
-  def reactions
-    @reactions = current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+  def reactions_and_mentions
+    @reactions = ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)) + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create
@@ -28,11 +28,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
         if params[:profile_list].present?
           params[:profile_list].each do |p|
             @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: p)
-          end
-        end
-        if params[:channel_list].present?
-          params[:channel_list].each do |c|
-            @message.mentions.create!(mentionable_type: 'BenchChannel', mentionable_id: c)
           end
         end
       end
