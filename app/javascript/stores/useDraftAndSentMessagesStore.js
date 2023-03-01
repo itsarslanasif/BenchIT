@@ -14,7 +14,8 @@ export const useDraftAndSentMessagesStore = () => {
       getDraftMessages: state => state.draftMessages,
     },
     actions: {
-      async index() {
+      loadDraftMessages() {},
+      async loadSentMessages() {
         try {
           let newSentMessages = await getSentMessages(this.currentPage);
           this.sentMessages = [

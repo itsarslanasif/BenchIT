@@ -130,12 +130,14 @@ export default {
   },
   mounted() {
     this.setUpInterSectionObserver();
-    this.draftAndSentMessagesStore.index();
+    this.draftAndSentMessagesStore.loadSentMessages();
   },
   beforeUnmount() {
     this.sentMessages = [];
     this.message = this.prevMessage = null;
+    this.draftAndSentMessagesStore.sentMessages = [];
     this.draftAndSentMessagesStore.currentPage = 1;
+    this.draftAndSentMessagesStore.maxPages = null;
   },
   setup() {
     const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
@@ -197,7 +199,9 @@ export default {
     handleIntersection([entry]) {
       if (entry.isIntersecting) {
         this.recordScrollPosition();
-        this.draftAndSentMessagesStore.index();
+        if (this.sentMessages.length > 0) {
+          this.draftAndSentMessagesStore.loadSentMessages();
+        }
       }
     },
     recordScrollPosition() {

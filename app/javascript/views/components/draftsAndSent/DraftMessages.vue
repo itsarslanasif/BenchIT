@@ -141,6 +141,7 @@ export default {
   },
   mounted() {
     this.setUpInterSectionObserver();
+    draftAndSentMessagesStore.loadDraftMessages();
   },
   beforeUnmount() {
     this.draftMessages = [];
@@ -151,7 +152,6 @@ export default {
     const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
     const profileStore = useProfileStore();
     const channelStore = useChannelStore();
-    draftAndSentMessagesStore.index();
     const { draftMessages, maxPages, currentPage } = storeToRefs(
       draftAndSentMessagesStore
     );
@@ -206,7 +206,7 @@ export default {
     handleIntersection([entry]) {
       if (entry.isIntersecting) {
         this.recordScrollPosition();
-        this.draftAndSentMessagesStore.index();
+        this.draftAndSentMessagesStore.loadDraftMessages();
       }
     },
     recordScrollPosition() {
