@@ -10,7 +10,6 @@ const createMessage = data => {
   const receiver = profile_list.getProfileById(data.sender_id);
   const direct_message_list = useDirectMessagesStore();
   direct_message_list.appendToDirectMessagesList(receiver);
-
   const unreadMessagesStore = useUnreadStore();
   const getIndexByParams = param => {
     return window.location.pathname.split('/')[param];
