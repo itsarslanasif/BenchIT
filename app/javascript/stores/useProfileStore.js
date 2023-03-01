@@ -39,12 +39,25 @@ export const useProfileStore = () => {
         while ((match = regex.exec(str)) !== null) {
           ids.push(match[1]);
         }
-        const profiles = await Promise.all(ids.map(id => this.getProfileById(id)));
+        const profiles = await Promise.all(
+          ids.map(id => this.getProfileById(id))
+        );
         const replacedStr = ids.reduce((acc, id, index) => {
           const profile = profiles[index];
           if (profile) {
             const { username } = profile;
-            acc = acc.replace(new RegExp(`&lt;@${id}&gt;`, 'g'), `@${username}`);
+            const mention = document.createElement('span');
+            mention.classList.add('mention');
+            mention.style.backgroundColor = 'yellow';
+            mention.innerText = `@${username}`;
+            mention.onclick = () => {
+              // function to call on click
+            };
+            mention.onmouseover = () => {
+              // function to call on hover
+            };
+            const regex = new RegExp(`&lt;@${id}&gt;`, 'g');
+            acc = acc.replace(regex, mention.outerHTML);
           }
           return acc;
         }, str);
