@@ -17,7 +17,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def reactions_and_mentions
-    @reactions = mention_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create
@@ -177,7 +177,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
   end
 
-  def mention_messages
+  def mentioned_messages
     ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id))
   end
 end
