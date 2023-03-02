@@ -17,7 +17,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def reactions_and_mentions
-    @reactions = ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)) + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+    @reactions = ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)).where.not(sender_id: current_profile.id) + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create
