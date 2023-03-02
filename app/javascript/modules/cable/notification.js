@@ -18,10 +18,6 @@ const getMessageBody = (details, data) => {
 };
 
 const showNotification = (details, data) => {
-  if (!('Notification' in window)) {
-    console.log('This browser does not support notifications.');
-    return;
-  }
   const messageBody = getMessageBody(details, data);
   Notification.requestPermission().then(permission => {
     if (permission === 'granted') {
@@ -94,21 +90,19 @@ const ChannelParticipantDelete = async data => {
 };
 
 const updateProfileStatus = data => {
-  const { setProfileStatus, setProfileActiveStatus, currentProfile } =
-    useCurrentProfileStore();
+  const { setProfileStatus, setProfileActiveStatus, currentProfile } = useCurrentProfileStore();
   const { updateProfileStatus } = useProfileStore();
-  const { updateProfileStatus: updateDmProfileStatus } =
-    useDirectMessagesStore();
+  const { updateProfileStatus:updateDmProfileStatus } = useDirectMessagesStore();
   const { updateSelectedprofileStatus } = useMessageStore();
 
   if (currentProfile.id === data.id) {
     setProfileStatus(data.status);
-    setProfileActiveStatus(data.is_active);
+    setProfileActiveStatus(data.is_active)
   }
-  updateProfileStatus(data);
-  updateDmProfileStatus(data);
-  updateSelectedprofileStatus(data);
-};
+    updateProfileStatus(data);
+    updateDmProfileStatus(data);
+    updateSelectedprofileStatus(data)
+  };
 
 const notificationActions = {
   MessageCreate: createMessage,
