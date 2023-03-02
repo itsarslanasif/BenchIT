@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="showTopBar ? '' : 'mt-8'">
     <div>
       <div
         v-if="schedule"
@@ -11,7 +11,7 @@
         v-if="editor"
         class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
       >
-        <div class="flex overflow-auto items-center gap-1">
+        <div v-show="showTopBar" class="flex overflow-auto items-center gap-1">
           <button
             @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
@@ -182,9 +182,10 @@
               <font-awesome-icon icon="fa-at" />
             </button>
             <button
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
+              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none"
+              @click="toggleTopBar"
             >
-              <font-awesome-icon icon="fa-toggle-off" />
+              <font-awesome-icon :icon="toggleIcon" />
             </button>
           </div>
           <div v-if="editMessage" class="flex gap-2 rounded items-center">
@@ -295,6 +296,11 @@ export default {
     VisualizeVideo,
     EmojiPicker,
   },
+  computed: {
+    toggleIcon() {
+      return this.showTopBar ? 'fa-toggle-off' : 'fa-toggle-on';
+    },
+  },
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -325,6 +331,9 @@ export default {
     createURL(file) {
       return URL.createObjectURL(file);
     },
+    toggleTopBar() {
+      this.showTopBar = !this.showTopBar;
+    },
 
     setLink() {
       const previousUrl = this.editor.getAttributes('link').href;
@@ -347,7 +356,7 @@ export default {
     async makeBlocks(line) {
       const block = await markdownToBlocks(line);
       return block[0];
-    }
+    },
   },
 
   setup(props) {
@@ -373,6 +382,7 @@ export default {
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
     const emojiModalFlag = ref(false);
+    const showTopBar = ref(true);
 
     onMounted(() => {
       editor.value = new Editor({
@@ -401,11 +411,11 @@ export default {
     const addReaction = emoji => {
       editor.value.commands.insertContent(emoji.i);
       toggleModal();
-    }
+    };
 
     const toggleModal = () => {
       emojiModalFlag.value = !emojiModalFlag.value;
-    }
+    };
 
     const makeBlocks = async line => {
       const block = await markdownToBlocks(line);
@@ -646,7 +656,8 @@ export default {
       formatBlockContent,
       sendMessagePayload,
       addReaction,
-      toggleModal
+      toggleModal,
+      showTopBar,
     };
   },
 };
