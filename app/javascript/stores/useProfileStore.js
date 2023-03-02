@@ -49,7 +49,6 @@ export const useProfileStore = () => {
             const { username, id } = profile;
             const mention = document.createElement('span');
             $(document).on('click', '.mention', e => {
-              console.log(e.target.dataset.id);
               this.showUserProfile(parseInt(e.target.dataset.id));
               e.stopImmediatePropagation();
             });
@@ -58,7 +57,6 @@ export const useProfileStore = () => {
             mention.style.backgroundColor = 'yellow';
             mention.innerText = `@${username}`;
             mention.onmouseover = () => {
-              console.log('hi');
             };
             const regex = new RegExp(`&lt;@${id}&gt;`, 'g');
             acc = acc.replace(regex, mention.outerHTML);
