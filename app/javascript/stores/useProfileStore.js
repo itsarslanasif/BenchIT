@@ -3,6 +3,7 @@ import { getAllProfiles, updateCurrentProfile } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
 import { useUserProfileStore } from './useUserProfileStore';
 import { encryption } from '../modules/crypto/crypto';
+import { useRightPaneStore } from './useRightPaneStore'
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
@@ -45,16 +46,19 @@ export const useProfileStore = () => {
         const replacedStr = ids.reduce((acc, id, index) => {
           const profile = profiles[index];
           if (profile) {
-            const { username } = profile;
+            const { username, id } = profile;
             const mention = document.createElement('span');
+            $(document).on('click', '.mention', e => {
+              console.log(e.target.dataset.id);
+              this.showUserProfile(parseInt(e.target.dataset.id));
+              e.stopImmediatePropagation();
+            });
+            mention.setAttribute('data-id', id);
             mention.classList.add('mention');
             mention.style.backgroundColor = 'yellow';
             mention.innerText = `@${username}`;
-            mention.onclick = () => {
-              // function to call on click
-            };
             mention.onmouseover = () => {
-              // function to call on hover
+              console.log('hi');
             };
             const regex = new RegExp(`&lt;@${id}&gt;`, 'g');
             acc = acc.replace(regex, mention.outerHTML);
@@ -62,11 +66,11 @@ export const useProfileStore = () => {
           return acc;
         }, str);
         return { profiles, replacedStr };
-      },          
+      },
       getProfileById(id) {
-        return this.profiles.find((profile)=>{
-          return profile.id == id
-        })
+        return this.profiles.find(profile => {
+          return profile.id == id;
+        });
       },
       async updateProfile(data) {
         const currentProfileStore = useCurrentProfileStore();
@@ -79,12 +83,23 @@ export const useProfileStore = () => {
           );
           currentProfileStore.currentProfile = profile;
           userProfileStore.setUserProfile(profile);
-          let index = this.profiles.findIndex(profile => profile.id === currentProfileStore.currentProfile.id);
+          let index = this.profiles.findIndex(
+            profile => profile.id === currentProfileStore.currentProfile.id
+          );
           this.profiles[index] = profile;
           encryption(sessionStorage, 'currentProfile', profile);
         } catch (e) {
           console.error(e);
         }
+      },
+      showUserProfile(profileId) {
+        debugger;
+        this.setUserProfileForPane(profileId);
+        useRightPaneStore().toggleUserProfileShow(true);
+      },
+      setUserProfileForPane(profileId) {
+        const profile = this.profiles.find(profile => profile.id === profileId);
+        useUserProfileStore().setUserProfile(profile);
       },
     },
   });
