@@ -16,13 +16,22 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
   end
 
-  def reactions
-    @reactions = current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+  def reactions_and_mentions
+    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      ActiveRecord::Base.transaction do
+        @message.save!
+        if params[:profile_list].present?
+          params[:profile_list].each do |profile_id|
+            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
+          end
+        end
+      end
+
       authorize! :create, @message
       @message.save!
 
@@ -166,5 +175,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create_direct_messages
     current_profile.direct_message_users.find_or_create_by!(receiver_id: @receiver.id)
     @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
+  end
+
+  def mentioned_messages
+    ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)).where.not(sender_id: current_profile.id)
   end
 end

@@ -13,6 +13,7 @@ class ConversationMessage < ApplicationRecord
   has_many :reactions, dependent: :delete_all
   has_one :pin, dependent: :destroy
   has_many :draft_messages, dependent: :destroy
+  has_many :mentions, dependent: :destroy
 
   validates :content, presence: true, length: { minimum: 1 }
 

@@ -6,7 +6,7 @@
       @mouseleave="emojiModalStatus = false"
     >
       <div
-        v-if="currMessage.conversationable_type === $t('conversation.channel')"
+        v-if="currMessage.conversationable_type === $t('conversation.channel') && reactedBy()"
         class="text-black-600 font-semibold flex m-2"
       >
         {{ reactedBy() }} {{ $t('mentions_and_reactions.reacted') }}
@@ -15,18 +15,29 @@
           {{ currMessage.channel_name }}</span
         >
       </div>
+      <div v-if="currMessage.conversationable_type === $t('conversation.channel') && !reactedBy()"
+        class="text-black-600 font-semibold flex m-2">
+        {{ mentionedBy() }} {{ $t('mentions_and_reactions.mentioned') }}
+        <span class="ml-2 hover:underline"
+          ><font-awesome-icon :icon="getIcon" />
+          {{ currMessage.channel_name }}</span>
+      </div>
       <div
-        v-if="currMessage.conversationable_type === $t('conversation.profile')"
+        v-if="currMessage.conversationable_type === $t('conversation.profile') && reactedBy()"
         class="text-black-600 font-semibold flex m-2"
       >
         {{ reactedBy() }} {{ $t('mentions_and_reactions.reacted_by') }}
       </div>
-      <div class="flex">
-        <div
-          class="h-10 w-10 mr-1 ml-1 rounded flex justify-center items-center"
-        >
-          <span class="text-4xl">{{ getReaction() }}</span>
-        </div>
+        <div class="flex">
+          <div
+            class="h-10 w-10 mr-1 ml-1 rounded flex justify-center items-center"
+          >
+            <span v-if="getReaction()" class="text-4xl">{{ getReaction() }}</span>
+            <div v-else><user-profile-modal
+            :profile_id="currMessage.sender_id"
+            :sender_avatar="currMessage.sender_avatar"
+          /> </div>
+          </div>
         <div>
           <div class="ml-1">
             <span class="items-center flex text-black-800 text-lg m-0">
@@ -229,7 +240,6 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
-
 export default {
   name: 'MessageWrapper',
   setup() {
@@ -455,7 +465,10 @@ export default {
       const otherReactions = this.currMessage.reactions.filter(
         reaction => reaction.profile_id !== this.currentProfile.id
       );
-      return otherReactions.slice(-1)[0].emoji;
+      return otherReactions?.slice(-1)[0]?.emoji;
+    },
+    mentionedBy() {
+      return this.currMessage.sender_name
     },
     reactedBy() {
       let users = this.currMessage.reactions
