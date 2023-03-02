@@ -263,6 +263,7 @@ export default {
           break;
         case 'preferences':
           this.preferencesModal = !this.preferencesModal;
+          break;
         case 'profile':
           this.userProfileStore.setUserProfile(this.profile)
           this.rightPaneStore.toggleUserProfileShow(true)
