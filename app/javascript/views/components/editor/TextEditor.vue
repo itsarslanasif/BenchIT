@@ -162,9 +162,19 @@
             <div v-if="!editMessage" class="vl" />
             <button
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
+              @click="toggleModal"
             >
               <font-awesome-icon icon="fa-smile" />
             </button>
+
+            <div v-if="emojiModalFlag" class="absolute bottom-0 ml-32">
+              <EmojiPicker
+                v-if="emojiModalFlag"
+                :toggleModal="toggleModal"
+                :addReaction="addReaction"
+              />
+            </div>
+
             <button
               v-if="!editMessage"
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -255,6 +265,7 @@ import VoiceRecorder from './VoiceRecorder.vue';
 import VisualizeVoice from './VisualizeVoice.vue';
 import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
+import EmojiPicker from '../../widgets/emojipicker.vue';
 
 export default {
   data() {
@@ -282,6 +293,7 @@ export default {
     VisualizeVoice,
     VideoRecord,
     VisualizeVideo,
+    EmojiPicker,
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -360,6 +372,7 @@ export default {
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
+    const emojiModalFlag = ref(false);
 
     onMounted(() => {
       editor.value = new Editor({
@@ -384,6 +397,15 @@ export default {
         newMessage.value = props.messageToEdit.content;
       }
     });
+
+    const addReaction = emoji => {
+      editor.value.commands.insertContent(emoji.i);
+      toggleModal();
+    }
+
+    const toggleModal = () => {
+      emojiModalFlag.value = !emojiModalFlag.value;
+    }
 
     const makeBlocks = async line => {
       const block = await markdownToBlocks(line);
@@ -598,6 +620,7 @@ export default {
       schedule,
       scheduleModalFlag,
       messageStore,
+      emojiModalFlag,
       messageToEdit,
       removeFile,
       removeAudioFile,
@@ -621,7 +644,9 @@ export default {
       getVideoFiles,
       removeVideoFiles,
       formatBlockContent,
-      sendMessagePayload
+      sendMessagePayload,
+      addReaction,
+      toggleModal
     };
   },
 };
