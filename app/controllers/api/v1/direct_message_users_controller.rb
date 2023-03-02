@@ -4,7 +4,8 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
   before_action :set_recent_message_users, only: %i[recent_direct_messages]
 
   def index
-    @profiles = Profile.where(id: current_profile.direct_message_users.pluck(:receiver_id) & @direct_message_users_ids) | Profile.where(id: current_profile.id)
+    @profiles = Profile.where(id: current_profile.direct_message_users.pluck(:receiver_id) & @direct_message_users_ids) |
+                Profile.where(id: current_profile.id)
   end
 
   def destroy
