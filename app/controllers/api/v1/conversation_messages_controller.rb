@@ -17,7 +17,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def reactions_and_mentions
-    @reactions = mention_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create

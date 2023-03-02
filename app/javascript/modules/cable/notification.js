@@ -5,6 +5,48 @@ import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 
+const getMessageBody = (details, data) => {
+  let messageContent =
+    data.conversationable_type === 'BenchChannel'
+      ? `${data.sender_name}: `
+      : '';
+  const blocks = JSON.parse(data.content).blocks;
+  for (let key in blocks) {
+    messageContent += `${blocks[key].text.text} `;
+  }
+  return messageContent;
+};
+
+const showNotification = (details, data) => {
+  const messageBody = getMessageBody(details, data);
+  Notification.requestPermission().then(permission => {
+    if (permission === 'granted') {
+      new Notification(
+        `New message from ${
+          details.creator_id ? details.name : details.username
+        }`,
+        {
+          body: messageBody,
+        }
+      );
+    }
+  });
+};
+
+const createPayloadForNotification = async data => {
+  let messageDetail;
+  if (data.conversationable_type === 'BenchChannel') {
+    const channels = useChannelStore().getChannels;
+    messageDetail = channels
+      .filter(channel => channel.id === data.conversationable_id)
+      .pop();
+  } else if (data.conversationable_type === 'Profile') {
+    const profileStore = useProfileStore();
+    messageDetail = profileStore.getProfileById(data.conversationable_id);
+  }
+  showNotification(messageDetail, data);
+};
+
 const createMessage = data => {
   const profiles = useProfileStore();
   const receiver = profiles.getProfileById(data.sender_id);
@@ -16,6 +58,7 @@ const createMessage = data => {
   };
   const conversation_type = getIndexByParams(1);
   const id = getIndexByParams(2);
+  createPayloadForNotification(data);
   try {
     if (!data.parent_message_id) {
       unreadMessagesStore.addNewMessage(data, conversation_type, id);
