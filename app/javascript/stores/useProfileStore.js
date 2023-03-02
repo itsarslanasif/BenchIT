@@ -93,7 +93,6 @@ export const useProfileStore = () => {
         }
       },
       showUserProfile(profileId) {
-        debugger;
         this.setUserProfileForPane(profileId);
         useRightPaneStore().toggleUserProfileShow(true);
       },
