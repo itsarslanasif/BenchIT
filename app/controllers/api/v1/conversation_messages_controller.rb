@@ -26,8 +26,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       ActiveRecord::Base.transaction do
         @message.save!
         if params[:profile_list].present?
-          params[:profile_list].each do |profile|
-            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile)
+          params[:profile_list].each do |profile_id|
+            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
           end
         end
       end
