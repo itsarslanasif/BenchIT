@@ -17,7 +17,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def reactions_and_mentions
-    @reactions = ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)) + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
+    @reactions = mention_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def create
@@ -26,8 +26,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
       ActiveRecord::Base.transaction do
         @message.save!
         if params[:profile_list].present?
-          params[:profile_list].each do |p|
-            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: p)
+          params[:profile_list].each do |profile|
+            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile)
           end
         end
       end
@@ -175,5 +175,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create_direct_messages
     current_profile.direct_message_users.find_or_create_by!(receiver_id: @receiver.id)
     @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
+  end
+
+  def mention_messages
+    ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id))
   end
 end
