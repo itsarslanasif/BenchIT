@@ -182,7 +182,7 @@
               <font-awesome-icon icon="fa-at" />
             </button>
             <button
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
+              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none"
               @click="toggleTopBar"
             >
               <font-awesome-icon :icon="toggleIcon" />
