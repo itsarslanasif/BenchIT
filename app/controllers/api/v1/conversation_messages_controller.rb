@@ -178,6 +178,6 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def mention_messages
-    ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id))
+    ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)).where.not(sender_id: current_profile.id)
   end
 end
