@@ -309,6 +309,8 @@ en:
         title: 'Profile'
         active: 'Active'
         away: 'Away'
+      groups:
+        title: 'Groups'
       filters:
         filter: 'Filter'
         all_types: 'All types'
