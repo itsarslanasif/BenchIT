@@ -1,8 +1,8 @@
 class CreateProfiles < ActiveRecord::Migration[7.0]
   def change
-    create_table :profiles do |t|
-      t.references :user, null: false, foreign_key: true
-      t.references :workspace, null: false, foreign_key: true
+    create_table :profiles, id: :uuid do |t|
+      t.references :user, null: false, foreign_key: true,type: :uuid
+      t.references :workspace, null: false, foreign_key: true, type: :uuid
       t.string :username, null: false
       t.text :description, limit: 150
 

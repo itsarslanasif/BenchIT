@@ -1,7 +1,7 @@
 class CreatePreferences < ActiveRecord::Migration[7.0]
   def change
     create_table :preferences do |t|
-      t.references :profile, null: false, foreign_key: true
+      t.references :profile, null: false, foreign_key: true, type: :uuid
       t.json :notifications, null: false, default: '{"notify_me_about": 1, [], "my_keywords": [], "allow_notifications": "", "default_time_for_remider_notifications": "", "sound_and_appearance: [1],}'
       t.json :sidebar, null: false, default: '{"alway_show_in_sidebar":[1,2,5,6], "show": 1, "sort":{1,[1,4,5,6]} }'
       t.json :themes, null: false, default: '{"sync_with_os_settings": true, "colors":4,}'
