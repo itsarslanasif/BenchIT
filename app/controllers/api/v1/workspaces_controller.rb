@@ -19,6 +19,8 @@ class Api::V1::WorkspacesController < Api::ApiController
     @token = Token.new.generate
     create_invitable if @user.present?
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
+    user = User.new(email: params[:email], password: 'Password1!')
+    user.save!
     render json: { success: true, message: t('.success',
                                              email: params[:email], company_name: @workspace.company_name) }, status: :ok
   end

@@ -92,7 +92,8 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def check_profile_already_exists
-    return if current_user.profiles.find_by(workspace_id: params[:workspace_id]).nil?
+    @user = User.find_by(email: params[:email])
+    return if @user.present? && @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { success: false, error: t('.success') }, status: :unprocessable_entity
   end

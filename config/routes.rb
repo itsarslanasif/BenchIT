@@ -8,7 +8,7 @@ Rails.application.routes.draw do
       sessions: 'users/sessions'
     }
     devise_scope :user do
-      get 'check_auth', to: 'users/sessions#check_auth'
+      get 'check_auth', to: 'users/sessions#check_auth', except: 'profiles/create'
     end
     root to: 'application#index'
     namespace :api, defaults: { format: 'json' } do
