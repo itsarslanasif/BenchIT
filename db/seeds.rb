@@ -52,8 +52,8 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
                            is_threaded: false, bench_conversation_id: 1, sender_id: 1)
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Arnold"}}]}',
                            is_threaded: false, bench_conversation_id: 1, sender_id: 2)
-Group.create( profile_ids: [1, 2])
-Group.create( profile_ids: [1, 2, 3])
+Group.create(profile_ids: [1, 2])
+Group.create(profile_ids: [1, 2, 3])
 BenchConversation.create(conversationable_type: 'Group', conversationable_id: Group.first.id)
 
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alva"}}]}',
@@ -101,10 +101,10 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
 # end
 
 w = Workspace.create!(company_name: 'TechHub',
-                  workspace_type: :work,
-                  bench_it_url: 'https://www.techhub.com',
-                  capacity: 2000,
-                  organization_type: :financial_services)
+                      workspace_type: :work,
+                      bench_it_url: 'https://www.techhub.com',
+                      capacity: 2000,
+                      organization_type: :financial_services)
 user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: w.id, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
                        text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
 Current.profile = user1.profiles.second
