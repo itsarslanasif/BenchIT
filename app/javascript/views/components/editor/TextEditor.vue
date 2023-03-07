@@ -86,7 +86,7 @@
         </div>
 
         <editor-content
-          @keydown.enter="sendMessagePayload"
+          @keydown.enter="handleKey"
           :editor="editor"
           class="mt-4"
         />
@@ -267,6 +267,7 @@ import VisualizeVoice from './VisualizeVoice.vue';
 import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
+import { Extension } from '@tiptap/core';
 
 export default {
   data() {
@@ -384,9 +385,32 @@ export default {
     const emojiModalFlag = ref(false);
     const showTopBar = ref(true);
 
+    const handleKey = event => {
+      if (event.keyCode === 13 && event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendMessagePayload();
+        console.log('enter');
+      }
+      // if (event.keyCode === 13 && event.key === 'Enter' && event.shiftKey) {
+      //   event.preventDefault();
+      //   editor.value.commands.enter();
+      //   console.log('shift+enter');
+      // }
+    };
+
     onMounted(() => {
       editor.value = new Editor({
         extensions: [
+          Extension.create({
+            addKeyboardShortcuts() {
+              return {
+                'shift- ': () => {
+                  this.editor.commands.enter();
+                  console.log('shift and space');
+                },
+              };
+            },
+          }),
           StarterKit,
           Mention.configure({
             HTMLAttributes: {
@@ -432,16 +456,14 @@ export default {
           item.text.text = item.text.text.replace(/&quot;/g, `"`);
           item.text.text = item.text.text.replace(/&#39;/g, `'`);
           item.text.text = item.text.text.replace(/~/g, '~~');
+          item.text.text = item.text.text.replace(/•/g, '\n•');
         }
         return item;
       });
     };
 
-    const sendMessagePayload = async (event, buttonClicked) => {
-      if (
-        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
-        !props.editMessage
-      ) {
+    const sendMessagePayload = async event => {
+      if (!props.editMessage) {
         const mrkdwn = [];
         const htmlList = editorContent.value.split('<br>');
         htmlList.forEach(async line => {
@@ -517,25 +539,6 @@ export default {
       messageToEdit.isScheduled &&
       messageToEdit.scheduledId;
 
-    const message = newMessage => {
-      let messageData;
-      let filterData;
-      let actuallData;
-      const startWithBr = newMessage.value.startsWith('<p><br />', 0);
-      const endWithBr = newMessage.value.endsWith('<br /></p>');
-      const endWithBrAndP = newMessage.value.endsWith(
-        '<br /></p>\n<p>&nbsp;</p>'
-      );
-      if (startWithBr || endWithBr || endWithBrAndP) {
-        messageData = newMessage.value.split('<br />');
-        filterData = messageData.filter(el => el !== '');
-        actuallData = filterData.join().split('\n')[0].replace(/,/g, ' ');
-      } else {
-        actuallData = newMessage.value;
-      }
-      return actuallData;
-    };
-
     const getScheduleNotification = () => {
       const date = moment(schedule.value);
       return `Your message will be sent to ${
@@ -583,7 +586,9 @@ export default {
 
     const getRecipientName = () => {
       return (
-        getChannelName() || selectedChat.username || CONSTANTS.EMPTY_PLACEHOLDER
+        getChannelName() ||
+        selectedChat.value.username ||
+        CONSTANTS.EMPTY_PLACEHOLDER
       );
     };
 
@@ -658,6 +663,7 @@ export default {
       addReaction,
       toggleModal,
       showTopBar,
+      handleKey,
     };
   },
 };
