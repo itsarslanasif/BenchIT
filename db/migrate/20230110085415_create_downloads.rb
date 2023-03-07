@@ -1,6 +1,6 @@
 class CreateDownloads < ActiveRecord::Migration[7.0]
   def change
-    create_table :downloads do |t|
+    create_table :downloads, id: :uuid do |t|
       t.uuid :profile_id
       t.string :file_name
       t.string :file_link

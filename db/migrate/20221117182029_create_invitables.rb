@@ -1,6 +1,6 @@
 class CreateInvitables < ActiveRecord::Migration[7.0]
   def change
-    create_table :invitables do |t|
+    create_table :invitables, id: :uuid do |t|
       t.string :token
       t.integer :user_id
       t.uuid :workspace_id

@@ -1,6 +1,6 @@
 class CreateStatuses < ActiveRecord::Migration[7.0]
   def change
-    create_table :statuses do |t|
+    create_table :statuses, id: :uuid do |t|
       t.string :text
       t.string :emoji
       t.string :clear_after

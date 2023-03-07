@@ -1,6 +1,6 @@
 class CreateSavedItems < ActiveRecord::Migration[7.0]
   def change
-    create_table :saved_items do |t|
+    create_table :saved_items, id: :uuid do |t|
       t.uuid :profile_id
       t.integer :conversation_message_id
 
