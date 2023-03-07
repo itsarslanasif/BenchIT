@@ -81,6 +81,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
 
   create_table "channel_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "permission", default: true
+    t.datetime "left_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "bench_channel_id", null: false
@@ -153,7 +154,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   create_table "groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "profile_ids", default: [], array: true
+    t.uuid "profile_ids", default: [], array: true
   end
 
   create_table "invitables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
