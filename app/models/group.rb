@@ -5,11 +5,10 @@ class Group < ApplicationRecord
 
   before_validation :sort_ids
 
-  validates :profile_ids, presence: true, uniqueness: true, length: { in: 2..9 }
+  validates :profile_ids, presence: true, length: { in: 2..9 }
   validates :profile_ids, inclusion: { in: Current.workspace.profile_ids }
 
   after_commit :broadcast_group
-
 
   def broadcast_group
     message = {
@@ -18,19 +17,18 @@ class Group < ApplicationRecord
     }
     message[:content] = {
       id: id,
-      name: self.name,
-      profile_ids: self.profile_ids
+      name: name,
+      profile_ids: profile_ids
     }
 
     BroadcastMessageNotificationService.new(message, profile_ids).call
   end
-
 
   def name
     Profile.where(id: profile_ids).pluck(:username).join(',')
   end
 
   def sort_ids
-    self.profile_ids = self.profile_ids.sort.uniq
+    self.profile_ids = profile_ids.sort.uniq
   end
 end
