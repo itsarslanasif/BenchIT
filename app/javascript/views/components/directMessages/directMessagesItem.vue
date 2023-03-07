@@ -36,7 +36,7 @@
           {{ $t('pinconversation.you') }}
         </p>
         <n-tooltip trigger="hover">
-        <template #trigger>
+          <template #trigger>
             <p class="ml-2 text-sm self-center text-white">
               {{ user?.status?.emoji }}
             </p>

@@ -5,6 +5,7 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
+import { getGroup } from '../api/groups/groups';
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -88,6 +89,9 @@ export const useMessageStore = () => {
         } else if (conversation_type === 'channels') {
           this.selectedChat = await getChannel(id);
           this.selectedChat.conversation_type = 'Channel';
+        }
+        else if(conversation_type === 'groups'){
+          this.selectedChat = await getGroup(id);
         }
       },
       async addMessage(msg) {

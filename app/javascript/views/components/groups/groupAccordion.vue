@@ -1,6 +1,10 @@
 <template>
   <div class="hover-trigger">
-    <!-- <ChannelsDropDown :onlyIcon="true" /> -->
+    <!-- add group button  -->
+    <font-awesome-icon
+      icon="fa-plus"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+    />
     <AccordionList class="mt-5 ml-4 text-base text-slate-50">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
@@ -15,15 +19,9 @@
             class="hover:bg-primaryHover"
             @click.stop="stopPropagation"
           >
-            <GroupItem :group="group" />
-            <!-- <ChannelItem
-              :channel="channel"
-              :goTo="goToChannelChat"
-              :toggleShow="toggleChannelOptionShow"
-              :isShowOptions="showChannelOptions"
-            /> -->
+            <GroupItem :group="group" :goTo="goToGroupChat" />
           </h5>
-          <!-- <div
+          <div
             @click="toggleModal"
             @click.stop="stopPropagation"
             class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2"
@@ -33,17 +31,14 @@
               class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
             />
             <p class="text-sm self-center text-white truncate">
-              {{ $t('channels.add_new_channel') }}
+              {{ $t('groups.add_new_group') }}
             </p>
-          </div> -->
+          </div>
         </div>
       </AccordionItem>
-      <!-- <div v-if="showCreateChannelModal">
-        <CreateChannel
-          :closeModal="toggleModal"
-          @click.stop="stopPropagation"
-        />
-      </div> -->
+      <div v-if="showCreateGroupModal">
+        <CreateGroup :closeModal="toggleModal" @click.stop="stopPropagation" />
+      </div>
     </AccordionList>
   </div>
 </template>
@@ -51,16 +46,22 @@
 <script>
 import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import { useGroupStore } from '../../../stores/useGroupStore';
+import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import CreateGroup from './createGroupModal.vue';
 import GroupItem from './groupItem.vue';
 export default {
   components: {
     AccordionList,
     AccordionItem,
     GroupItem,
+    CreateGroup,
   },
   data() {
     return {
       groups: [],
+      listOpen: true,
+      showCreateGroupModal: false,
     };
   },
   unmounted() {
@@ -68,13 +69,32 @@ export default {
   },
   setup() {
     const groupStore = useGroupStore();
+    const leftPaneStore = useLeftpaneStore();
+    const messagesStore = useMessageStore();
     groupStore.index();
-    console.log(groupStore.groups);
     return {
       groupStore,
+      leftPaneStore,
+      messagesStore,
     };
   },
-  methods: {},
+  methods: {
+    toggleModal() {
+      console.log('chal ja sim sim ');
+      this.showCreateGroupModal = !this.showCreateGroupModal;
+    },
+    toggleList() {
+      this.listOpen = !this.listOpen;
+    },
+    goToGroupChat(chatURL, group) {
+      console.log(group);
+      this.messagesStore.setSelectedChat(group);
+      this.$router.push(chatURL);
+      // if (this.isMobileView()) {
+      //   this.leftPaneStore.closeLeftPane();
+      // }
+    },
+  },
 };
 </script>
 <style scoped></style>

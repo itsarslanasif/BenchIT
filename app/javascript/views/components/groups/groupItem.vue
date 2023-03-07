@@ -1,6 +1,7 @@
 <template>
   <div
     class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
+    @click="goTo(`/groups/${group.id}`, group)"
   >
     <span class="flex item-center w-full">
       <n-avatar :size="25" :src="group.profiles[0].image_url" />
@@ -22,7 +23,7 @@
 import { NAvatar } from 'naive-ui';
 export default {
   components: { NAvatar },
-  props: ['group'],
+  props: ['group', 'goTo'],
   setup() {
     // const channelStore = useChannelStore();
     // const unreadStore = useUnreadStore();

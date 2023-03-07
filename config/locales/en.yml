@@ -311,6 +311,11 @@ en:
         away: 'Away'
       groups:
         title: 'Groups'
+        add_new_group: 'Add new group'
+        create_group: 'Create group'
+        add_group_note: 'You can only add 9 members to a group, inorder to add more please create channel.'
+        group_chat_note: This is the very beginning of your direct message history with
+        and: 'and'
       filters:
         filter: 'Filter'
         all_types: 'All types'

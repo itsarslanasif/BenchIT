@@ -8,12 +8,18 @@ export const getGroups = async () => {
   return result.data.groups;
 };
 
-// export const getGroups = () => {
-//    axios
-//     .get(`/v1/groups`, {
-//       headers: getHeaders(),
-//     })
-//     .then(response => {
-//       return response;
-//     });
-// };
+export const getGroup = async id => {
+  let result = await axios.get(`/v1/groups/${id}`, {
+    headers: getHeaders(),
+  });
+  return result.data;
+};
+
+export const createGroup = async members => {
+  let result = await axios.post(`/v1/groups`, {
+    headers: getHeaders(),
+      profile_ids:members
+  });
+  return result.data;
+};
+
