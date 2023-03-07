@@ -9,7 +9,7 @@ workspace = Workspace.create!(company_name: 'BenchIT',
 Current.workspace = workspace
 
 admin = workspace.profiles.create!(username: 'admin', description: 'Admin of workspace', user_id: user0.id, display_name: 'admin', phone: '1234567890',
-                           skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
+                                   skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')
 
@@ -22,23 +22,23 @@ workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after:
 user1 = User.create!(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 
 alva = workspace.profiles.create!(username: 'Alva', description: 'ASE', user_id: user1.id, display_name: 'alva', phone: '1234567890', skype: '1234567890',
-                           text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂')
+                                  text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂')
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
                                   filename: 'alva.png', content_type: 'image/png')
 
 user2 = User.create!(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 arnold = workspace.profiles.create!(username: 'Arnold', description: 'ASQE', user_id: user2.id, display_name: 'arnold', phone: '1234567890', skype: '1234567890',
-                           text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
+                                    text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arnold.png]).open,
                                   filename: 'arnold.png', content_type: 'image/png')
 user3 = User.create!(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 arthur = workspace.profiles.create!(username: 'Arthur', description: 'SE', user_id: user3.id, display_name: 'arthur', phone: '1234567890', skype: '1234567890',
-                           text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
+                                    text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arthur.png]).open,
                                   filename: 'arthur.png', content_type: 'image/png')
 user4 = User.create!(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 austin = workspace.profiles.create!(username: 'Austin', description: 'SSE', user_id: user4.id, display_name: 'austin', phone: '1234567890', skype: '1234567890',
-                           text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
+                                    text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
                                   filename: 'austin.png', content_type: 'image/png')
 
