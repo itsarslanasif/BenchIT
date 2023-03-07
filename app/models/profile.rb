@@ -46,11 +46,11 @@ class Profile < ApplicationRecord
   validates :workspace, uniqueness: { scope: %i[user_id] }
 
   enum role: {
-    primary_owner: 0,
-    workspace_owner: 1,
-    workspace_admin: 2,
-    member: 3,
-    outsider: 4
+    workspace_owner: 0,
+    workspace_admin: 1,
+    regular_member: 2,
+    multi_channel_guest: 3,
+    single_channel_guest: 4
   }
 
   scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }

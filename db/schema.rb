@@ -215,7 +215,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "role", default: 3
+    t.integer "role", default: 2
     t.string "display_name", limit: 80, default: "", null: false
     t.string "title", default: "", null: false
     t.string "pronounce_name", default: "", null: false
