@@ -4,13 +4,13 @@
     @click="goTo(`/groups/${group.id}`, group)"
   >
     <span class="flex item-center w-full">
-      <n-avatar :size="25" :src="group.profiles[0].image_url" />
+      <n-avatar :size="25" :src="membersProfileImage" />
       <div class="flex z-10 items-end">
         <div
           class="bg-black-700 flex items-center justify-center awayStatus text-black-800 inactivePosition h-3 w-3 border rounded"
         >
           <span class="text-white font-bold text_size">
-            {{ group.profiles.length }}</span
+            {{ getMembersCount }}</span
           >
         </div>
       </div>
@@ -21,14 +21,13 @@
 
 <script>
 import { NAvatar } from 'naive-ui';
+import { useProfileStore } from '../../../stores/useProfileStore';
 export default {
   components: { NAvatar },
   props: ['group', 'goTo'],
   setup() {
-    // const channelStore = useChannelStore();
-    // const unreadStore = useUnreadStore();
-    // const { unreadMessages } = storeToRefs(unreadStore);
-    // return { channelStore, unreadMessages, unreadStore };
+    const profileStore = useProfileStore();
+    return { profileStore };
   },
   data() {
     return {
@@ -43,6 +42,16 @@ export default {
     // unReadMessageExist() {
     //   return this.unreadDetails?.messages.length > 0;
     // },
+    membersProfileImage() {
+      return this.group.profiles
+        ? this.group.profiles[0].image_url
+        : this.profileStore.getProfileById(this.group.profile_ids[0]).image_url;
+    },
+    getMembersCount() {
+      return this.group.profiles
+        ? this.group.profiles.length
+        : this.group.profile_ids.length;
+    },
   },
   methods: {
     // handleSelect(key) {

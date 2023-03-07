@@ -2,7 +2,7 @@
   <div class="flex p-2 rounded-md border border-black-500 shadow-sm">
     <div class="flex cursor-pointer">
       <div
-        v-for="member in messageStore.selectedChat.profiles"
+        v-for="member in getGroupMembers"
         :key="member.id"
         class="flex cursor-pointer"
       >
@@ -14,10 +14,6 @@
         </p>
       </div>
     </div>
-    <n-divider vertical class="self-center text-black" />
-    <!-- <div class="ml-3">
-      <AddPeopleToChannel :channelName="channelName" />
-    </div> -->
   </div>
 </template>
 
@@ -41,8 +37,11 @@ export default {
     return { channelDetailStore, messageStore };
   },
   computed: {
-    getChannelMembers() {
-      return this.channelDetailStore.channelMembers.slice(-3);
+    getGroupMembers() {
+      // console.log(this.messageStore.selectedChat.profiles);
+      if (this.messageStore.selectedChat.profiles) {
+        return this.messageStore.selectedChat?.profiles.slice(-3);
+      }
     },
   },
   data() {

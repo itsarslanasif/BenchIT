@@ -17,7 +17,7 @@ class Api::V1::GroupsController < Api::ApiController
       @group = Group.find_or_create_by!(profile_ids: params[:profile_ids].sort)
       BenchConversation.find_or_create_by!(conversationable_type: 'Group', conversationable_id: @group.id)
     end
-    render json: { success: true, message: t('.success'), group: @group }, status: :ok
+    render json: { success: true, message: t('.success'), group: @group, name: @group.name }, status: :ok
   end
 
   def add_member

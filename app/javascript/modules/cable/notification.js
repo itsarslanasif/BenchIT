@@ -4,6 +4,7 @@ import { useChannelStore } from '../../stores/useChannelStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { useGroupStore } from '../../stores/useGroupStore';
 
 const createMessage = data => {
   const unreadMessagesStore = useUnreadStore();
@@ -57,12 +58,18 @@ const updateProfileStatus = data => {
     updateSelectedprofileStatus(data)
   };
 
+  const createGroup = data =>{
+    const groupStore=useGroupStore()
+    groupStore.groups.push(data)
+  };
+
 const notificationActions = {
   MessageCreate: createMessage,
   MessageDelete: deleteMessage,
   ChannelParticipantCreate: ChannelParticipantCreate,
   ChannelParticipantDelete: ChannelParticipantDelete,
   ProfileUpdate: updateProfileStatus,
+  GroupCreate : createGroup
 };
 
 export const notifyActions = data => {

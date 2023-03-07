@@ -74,6 +74,7 @@ import { useProfileStore } from '../../../stores/useProfileStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { ref } from 'vue';
 import { createGroup } from '../../../api/groups/groups';
+import { useGroupStore } from '../../../stores/useGroupStore';
 export default {
   components: {
     NForm,
@@ -124,23 +125,32 @@ export default {
     const splitter = new GraphemeSplitter();
     const messageStore = useMessage();
     const profilesStore = useProfileStore();
+    const groupStore = useGroupStore();
     const { currentProfile } = useCurrentProfileStore();
+
     return {
       channelStore,
       profilesStore,
       messageStore,
       currentProfile,
+      groupStore,
       countGraphemes: value => splitter.countGraphemes(value),
     };
   },
   methods: {
     onSubmit() {
       this.selectedValues.push(this.currentProfile.id);
-      createGroup(this.selectedValues).then(res => {
-        // console.log(`/${res.group.id}`);
-        this.$router.push(`/groups/${res.group.id}`);
-        this.closeModal();
-      });
+      createGroup(this.selectedValues)
+        .then(res => {
+          const { group, name } = res;
+          const updatedGroup = { ...group, name };
+          this.groupStore.groups.push(updatedGroup);
+          this.$router.push(`/groups/${group.id}`);
+          this.closeModal();
+        })
+        .catch(err => {
+          console.error(err);
+        });
     },
     setValue(id, type) {
       return [...id, ...type];
