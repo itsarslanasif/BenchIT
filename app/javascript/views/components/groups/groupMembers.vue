@@ -13,7 +13,16 @@
       v-if="channelDetailStore.channelMembers.length > 0"
       class="maxHeight overflow-auto"
     >
-      <div v-for="member in channelDetailStore.channelMembers" :key="member.id">
+      <div
+        class="flex place-items-center ml-1 border border-transparent rounded-md px-4 py-2 mb-1 shadow-sm cursor-pointer hover:bg-transparent hover:font-bold"
+      >
+        <font-awesome-icon class="w-8 h-8" icon="fa-solid fa-user-plus" />
+        <span class="ml-3">Add people</span>
+      </div>
+      <div
+        v-for="member in messageStore.selectedChat.profiles"
+        :key="member.id"
+      >
         <MermberCard
           class="cursor-pointer"
           :name="member.username"
@@ -39,10 +48,13 @@ export default {
   mounted() {
     this.searchQuery();
   },
+  data() {
+    return {};
+  },
   setup() {
     const channelDetailStore = useChannelDetailStore();
     const messageStore = useMessageStore();
-    return { channelDetailStore };
+    return { channelDetailStore, messageStore };
   },
   methods: {
     async searchQuery() {

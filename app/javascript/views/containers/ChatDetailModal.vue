@@ -4,9 +4,12 @@
     class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
     <div class="flex gap-1 self-center items-center px-3 mt-2 mr-1">
-      <font-awesome-icon v-if="!isProfile && chat.is_private" icon="fa-lock" />
       <font-awesome-icon
-        v-if="!isProfile && !chat.is_private"
+        v-if="!isProfile && chat.is_private && !isGroup"
+        icon="fa-lock"
+      />
+      <font-awesome-icon
+        v-if="!isProfile && !chat.is_private && !isGroup"
         icon="fa-hashtag"
       />
       <img
@@ -80,8 +83,21 @@
         {{ $t('chat_detail.settings') }}
       </p>
     </div>
-    <About v-if="ChannelDetailStore.isAbout()" :chat="chat" :toggleModal="toggleModal" />
-    <members v-if="ChannelDetailStore.isMembers()" />
+    <About
+      v-if="ChannelDetailStore.isAbout()"
+      :chat="chat"
+      :toggleModal="toggleModal"
+    />
+
+    <members
+      v-if="
+        ChannelDetailStore.isMembers() &&
+        messagesStore.selectedChat.conversation_type === 'Channel'
+      "
+    />
+    <GroupMembers
+      v-if="messagesStore.selectedChat.conversation_type === 'Group'"
+    />
   </div>
 </template>
 
@@ -94,15 +110,16 @@ import vClickOutside from 'click-outside-vue3';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 import { NAvatar } from 'naive-ui';
+import GroupMembers from '../components/groups/groupMembers.vue';
 export default {
-  components: { About, StarUnstar, Members, NAvatar },
+  components: { About, StarUnstar, Members, NAvatar, GroupMembers },
   directives: {
     clickOutside: vClickOutside.directive,
   },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     const messagesStore = useMessageStore();
-    return { ChannelDetailStore };
+    return { ChannelDetailStore, messagesStore };
   },
   props: {
     toggleModal: Function,
@@ -111,6 +128,9 @@ export default {
   computed: {
     isProfile() {
       return this.chat.conversation_type === 'Profile';
+    },
+    isGroup() {
+      return this.chat.conversation_type === 'Group';
     },
   },
 };

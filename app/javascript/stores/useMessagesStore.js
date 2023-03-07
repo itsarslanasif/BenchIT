@@ -92,6 +92,7 @@ export const useMessageStore = () => {
         }
         else if(conversation_type === 'groups'){
           this.selectedChat = await getGroup(id);
+          this.selectedChat.conversation_type = 'Group';
         }
       },
       async addMessage(msg) {

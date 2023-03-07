@@ -9,10 +9,13 @@ export const getGroups = async () => {
 };
 
 export const getGroup = async id => {
-  let result = await axios.get(`/v1/groups/${id}`, {
-    headers: getHeaders(),
-  });
-  return result.data;
+  return await axios
+    .get(`/v1/groups/${id}`, {
+      headers: getHeaders(),
+    })
+    .then(response => {
+      return response.data;
+    });
 };
 
 export const createGroup = async members => {

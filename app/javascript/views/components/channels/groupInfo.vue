@@ -19,6 +19,12 @@
       <GroupMembersInfoVue />
     </div>
   </div>
+  <ChatDetailModal
+    v-if="modalOpen"
+    :chat="this.currentGroup"
+    :toggleModal="toggleShowModal"
+    class="m-auto absolute inset-x-0"
+  />
 </template>
 
 <script>
@@ -26,6 +32,7 @@ import ChatDetailModal from '../../containers/ChatDetailModal.vue';
 import GroupMembersInfoVue from './GroupMembersInfo.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
+import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 
@@ -35,37 +42,28 @@ export default {
   setup() {
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
+    const ChannelDetailStore = useChannelDetailStore();
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
-    return { joinedChannels, channelStore, selectedChat };
+    return { joinedChannels, ChannelDetailStore, channelStore, selectedChat };
   },
   data() {
     return {
       modalOpen: false,
-      currentChannel: {},
+      currentGroup: {},
     };
   },
   methods: {
     toggleShowModal() {
       if (!this.modalOpen) {
         this.ChannelDetailStore.setSlectedOption('about');
-        this.getCurrentChannel();
-        this.channelStore.setCurrentChannel(this.currentChannel);
+        this.currentGroup = this.selectedChat;
       }
       this.modalOpen = !this.modalOpen;
     },
     openChannelDetailMemberModal(open) {
       this.ChannelDetailStore.setSlectedOption('members');
       this.modalOpen = open;
-    },
-    getCurrentChannel() {
-      this.currentChannel =
-        this.channelStore.joinedChannels.find(
-          obj => obj.id === Number(this.selectedChat.id)
-        ) ||
-        this.channelStore.starChannels.find(
-          obj => obj.id === Number(this.selectedChat.id)
-        );
     },
   },
 };
