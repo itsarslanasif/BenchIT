@@ -243,7 +243,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
 
   create_table "saved_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "profile_id"
-    t.integer "conversation_message_id"
+    t.uuid "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true

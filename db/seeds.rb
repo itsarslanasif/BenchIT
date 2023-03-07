@@ -8,21 +8,21 @@ workspace = Workspace.create!(company_name: 'BenchIT',
 
 Current.workspace = workspace
 
-admin = workspace.profiles.create!(username: 'admin', description: 'Admin of workspace', user_id: user0.id, display_name: 'admin', phone: '1234567890',
-                                   skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
-                                  filename: 'admin.png', content_type: 'image/png')
-
 workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
 workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
 workspace.statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today')
 workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
 workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
 
+admin = workspace.profiles.create!(username: 'admin', description: 'Admin of workspace', user_id: user0.id, display_name: 'admin', phone: '1234567890',
+                                   skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
+                                  filename: 'admin.png', content_type: 'image/png')
+
 user1 = User.create!(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
 
 alva = workspace.profiles.create!(username: 'Alva', description: 'ASE', user_id: user1.id, display_name: 'alva', phone: '1234567890', skype: '1234567890',
-                                  text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂')
+                                  text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂', role: :workspace_admin)
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
                                   filename: 'alva.png', content_type: 'image/png')
 
@@ -45,84 +45,101 @@ Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images aust
 Current.user = user0
 Current.profile = admin
 
-bench_channel = BenchChannel.create!(name: 'dev', description: 'dev')
+channel1 = BenchChannel.create!(name: 'general', description: 'general')
+channel2 = BenchChannel.create!(name: 'dev', description: 'dev')
+channel3 = BenchChannel.create!(name: 'devsinc', description: 'IT company', is_private: true)
 
-b = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: bench_channel.id)
-ChannelParticipant.create!(permission: true, profile_id: Profile.first.id, bench_channel_id: bench_channel.id)
-ChannelParticipant.create!(permission: true, profile_id: Profile.second.id, bench_channel_id: bench_channel.id)
-ChannelParticipant.create!(permission: true, profile_id: Profile.fourth.id, bench_channel_id: bench_channel.id)
+channel_conversation1 = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel1.id)
+channel_conversation2 = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel2.id)
+channel_conversation3 = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel3.id)
 
-ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Dev Channel** from _Alva_"}}]}',
-                            is_threaded: false, bench_conversation_id: b.id, sender_id: Profile.first.id)
-ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Arnold"}}]}',
-                            is_threaded: false, bench_conversation_id: b.id, sender_id: Profile.second.id)
-# Group.create!(profile_ids: [Profile.first.id, Profile.second.id])
-# Group.create!(profile_ids: [Profile.first.id, Profile.second.id, Profile.third.id])
-# BenchConversation.create!(conversationable_type: 'Group', conversationable_id: Group.first.id)
+channel1.channel_participants.create!(permission: true, profile_id: admin.id)
+channel1.channel_participants.create!(permission: true, profile_id: alva.id)
+channel1.channel_participants.create!(permission: true, profile_id: arnold.id)
+channel1.channel_participants.create!(permission: true, profile_id: arthur.id)
+channel1.channel_participants.create!(permission: true, profile_id: austin.id)
 
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alva"}}]}',
-#                             is_threaded: false, bench_conversation_id: 2, sender_id: Profile.first.id)
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Arnold"}}]}',
-#                             is_threaded: false, bench_conversation_id: 2, sender_id: Profile.second.id)
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Arthur"}}]}',
-#                             is_threaded: false, bench_conversation_id: 2, sender_id: Profile.third.id)
-# BenchConversation.create!(conversationable_type: 'Profile', conversationable_id: Profile.first.id, sender_id: Profile.fourth.id)
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from Austin"}}]}',
-#                             is_threaded: false, bench_conversation_id: 3, sender_id: Profile.fourth.id)
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from Alva"}}]}',
-#                             is_threaded: false, bench_conversation_id: 3, sender_id: Profile.first.id)
+channel2.channel_participants.create!(permission: true, profile_id: admin.id)
 
-# bench_channel1 = BenchChannel.create!(name: 'watercooler', description: 'memes')
-# BenchChannel.create!(name: 'Benchit-devs', description: 'developers', is_private: true)
-# BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: bench_channel1.id)
-# ChannelParticipant.create(permission: true, profile_id: Profile.first.id, bench_channel_id: bench_channel1.id)
-# ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from watercooler"}}]}',
-#                            is_threaded: false, bench_conversation_id: 4, sender_id: Profile.first.id)
+channel3.channel_participants.create!(permission: true, profile_id: admin.id)
+channel3.channel_participants.create!(permission: true, profile_id: alva.id)
+channel3.channel_participants.create!(permission: true, profile_id: arnold.id)
+channel3.channel_participants.create!(permission: true, profile_id: arthur.id)
+channel3.channel_participants.create!(permission: true, profile_id: austin.id)
 
-# bench_channel4 = BenchChannel.create!(name: 'general', description: 'general')
-# BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: bench_channel4.id)
-# ChannelParticipant.create!(permission: true, profile_id: Profile.first.id, bench_channel_id: bench_channel4.id)
-# ChannelParticipant.create!(permission: true, profile_id: Profile.second.id, bench_channel_id: bench_channel4.id)
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from general"}}]}',
-#                             is_threaded: false, bench_conversation_id: 5, sender_id: Profile.second.id)
-# Favourite.create!(profile_id: Profile.first.id, favourable_type: 'Profile', favourable_id: Profile.fourth.id)
-# # Favourite.create!(profile_id: Profile.first.id, favourable_type: 'Group', favourable_id: Group.first.id)
-# Favourite.create!(profile_id: Profile.first.id, favourable_type: 'BenchChannel', favourable_id: BenchChannel.second.id)
-# Favourite.create!(profile_id: Profile.second.id, favourable_type: 'BenchChannel', favourable_id: BenchChannel.first.id)
-# Favourite.create!(profile_id: Profile.second.id, favourable_type: 'BenchChannel', favourable_id: BenchChannel.second.id)
-# # Favourite.create!(profile_id: Profile.second.id, favourable_type: 'Group', favourable_id: Group.second.id)
-# ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"1st reply"}}]}',
-#                             is_threaded: false, bench_conversation_id: 1, sender_id: Profile.first.id, parent_message_id: 1)
-# # BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: BenchChannel.third.id)
-# # ChannelParticipant.create!(permission: true, profile_id: Profile.first.id, bench_channel_id: BenchChannel.third.id)
-# # ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from developer"}}]}',
-# #                             is_threaded: false, bench_conversation_id: 6, sender_id: Profile.first.id)
+channel1_message1 = admin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **General** from _Admin_"}}]}',
+                                                        is_threaded: false, bench_conversation_id: channel_conversation1.id)
+channel1_message2 = alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **General** from _Alva_"}}]}',
+                                                       is_threaded: false, bench_conversation_id: channel_conversation1.id)
+channel1_message3 = arnold.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi General from Arnold"}}]}',
+                                                         is_threaded: false, bench_conversation_id: channel_conversation1.id)
+channel1_message4 = arthur.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi General from Arthur"}}]}',
+                                                         is_threaded: false, bench_conversation_id: channel_conversation1.id)
+channel1_message5 = austin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi General from Austin"}}]}',
+                                                         is_threaded: false, bench_conversation_id: channel_conversation1.id)
 
-# # (1..5).each do |i|
-# #   ScheduleMessage.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message #{i}"}}]}),
-# #                           profile_id: Profile.first.id, scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: i)
-# #   DraftMessage.create!(content: i.to_s, profile_id: Profile.first.id, bench_conversation_id: i)
-# # end
+admin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Dev** from _Admin_"}}]}',
+                                    is_threaded: false, bench_conversation_id: channel_conversation2.id)
 
-# w = Workspace.create!(company_name: 'TechHub',
-#                       workspace_type: :work,
-#                       bench_it_url: 'https://www.techhub.com',
-#                       capacity: 2000,
-#                       organization_type: :financial_services)
-# user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: w.id, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
-#                        text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
-# Current.profile = user1.profiles.second
-# Current.workspace = Workspace.second
-# b = BenchChannel.create!(name: 'DevsChannel1', description: 'fdsfsdf')
-# BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: b.id)
-# # ChannelParticipant.create!(permission: true, profile_id: Profile., bench_channel_id: b.id)
-# # ConversationMessage.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alvi"}}]}',
-# #                             is_threaded: false, bench_conversation_id: 7, sender_id: Profile.sixth)
+admin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Devsinc** from _Admin_"}}]}',
+                                    is_threaded: false, bench_conversation_id: channel_conversation3.id)
 
-# # Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')
-# # Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bookmarkable_id: 1, bookmark_URL: 'www.facebook.com')
+group1 = Group.create!(profile_ids: [alva.id, arnold.id, arthur.id])
+group2 = Group.create!(profile_ids: [alva.id, arnold.id, austin.id])
+group3 = Group.create!(profile_ids: [alva.id, arthur.id, austin.id])
 
-# Pin.create!(profile_id: Profile.first.id, bench_conversation_id: 1, conversation_message_id: 1)
-# Pin.create!(profile_id: Profile.first.id, bench_conversation_id: 1, conversation_message_id: 2)
-# User.create!(name: 'Michael', email: 'michael@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-# BenchConversation.create!(conversationable_type: 'Group', conversationable_id: Group.second.id)
+group_conversation1 = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group1.id)
+group_conversation2 = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group2.id)
+group_conversation3 = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group3.id)
+
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#1** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: group_conversation1.id)
+
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#2** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: group_conversation2.id)
+
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#3** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: group_conversation3.id)
+
+profile_conversation1 = BenchConversation.create!(conversationable_type: 'Profile', conversationable_id: arthur.id, sender_id: alva.id)
+
+Pin.create!(bench_conversation_id: channel_conversation1.id, conversation_message_id: channel1_message1.id, profile_id: alva.id)
+Pin.create!(bench_conversation_id: channel_conversation1.id, conversation_message_id: channel1_message2.id, profile_id: alva.id)
+
+alva.reactions.create!(emoji: '😍', conversation_message_id: channel1_message3.id)
+arnold.reactions.create!(emoji: '😍', conversation_message_id: channel1_message3.id)
+arthur.reactions.create!(emoji: '😍', conversation_message_id: channel1_message4.id)
+austin.reactions.create!(emoji: '😍', conversation_message_id: channel1_message5.id)
+
+alva.saved_items.create!(conversation_message_id: channel1_message1.id)
+arnold.saved_items.create!(conversation_message_id: channel1_message1.id)
+arthur.saved_items.create!(conversation_message_id: channel1_message1.id)
+austin.saved_items.create!(conversation_message_id: channel1_message1.id)
+
+Favourite.create!(profile_id: alva.id, favourable_type: 'BenchChannel', favourable_id: channel1.id)
+Favourite.create!(profile_id: arnold.id, favourable_type: 'BenchChannel', favourable_id: channel1.id)
+Favourite.create!(profile_id: arthur.id, favourable_type: 'BenchChannel', favourable_id: channel1.id)
+Favourite.create!(profile_id: austin.id, favourable_type: 'BenchChannel', favourable_id: channel1.id)
+
+alva.schedule_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message in channel"}}]}),
+                               scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: channel_conversation1.id)
+alva.schedule_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message in group"}}]}),
+                               scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: group_conversation1.id)
+alva.schedule_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message in profile"}}]}),
+                               scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: profile_conversation1.id)
+
+alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in channel"}}]}),
+                            bench_conversation_id: channel_conversation1.id)
+alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in group"}}]}),
+                            bench_conversation_id: group_conversation1.id)
+alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in profile"}}]}),
+                            bench_conversation_id: profile_conversation1.id)
+workspace = Workspace.create!(company_name: 'TechHub',
+                              workspace_type: :work,
+                              bench_it_url: 'https://www.techhub.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
+user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: workspace.id, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
+                       text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡', role: :workspace_owner)
+Current.profile = user1.profiles.second
+Current.workspace = workspace
