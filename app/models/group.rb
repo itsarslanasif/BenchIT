@@ -25,7 +25,7 @@ class Group < ApplicationRecord
   end
 
   def name
-    Profile.where(id: profile_ids).pluck(:username).join(',')
+    Profile.where(id: profile_ids).pluck(:username).join(', ')
   end
 
   def sort_ids
