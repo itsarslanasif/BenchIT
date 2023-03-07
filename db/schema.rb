@@ -79,9 +79,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
   end
 
-  create_table "channel_participants", force: :cascade do |t|
+  create_table "channel_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.boolean "permission", default: true
-    t.datetime "left_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "bench_channel_id", null: false
@@ -124,6 +123,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.string "file_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["profile_id"], name: "index_downloads_on_profile_id"
   end
 
   create_table "draft_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -158,12 +158,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
 
   create_table "invitables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "token"
-    t.integer "user_id"
+    t.uuid "user_id"
     t.uuid "workspace_id"
     t.string "token_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_invitables_on_token"
+    t.index ["user_id"], name: "index_invitables_on_user_id"
+    t.index ["workspace_id"], name: "index_invitables_on_workspace_id"
   end
 
   create_table "mentions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -229,7 +231,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
   end
 
-  create_table "reactions", force: :cascade do |t|
+  create_table "reactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "conversation_message_id"
     t.string "emoji"
     t.datetime "created_at", null: false

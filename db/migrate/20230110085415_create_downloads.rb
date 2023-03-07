@@ -8,5 +8,6 @@ class CreateDownloads < ActiveRecord::Migration[7.0]
       t.string :file_type
       t.timestamps
     end
+    add_index :downloads, :profile_id
   end
 end

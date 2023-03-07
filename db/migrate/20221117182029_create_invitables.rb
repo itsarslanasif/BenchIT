@@ -2,7 +2,7 @@ class CreateInvitables < ActiveRecord::Migration[7.0]
   def change
     create_table :invitables, id: :uuid do |t|
       t.string :token
-      t.integer :user_id
+      t.uuid :user_id
       t.uuid :workspace_id
       t.string :user_email
       t.string :token_type
@@ -12,5 +12,7 @@ class CreateInvitables < ActiveRecord::Migration[7.0]
       t.timestamps
     end
     add_index :invitables, :token
+    add_index :invitables, :user_id
+    add_index :invitables, :workspace_id
   end
 end
