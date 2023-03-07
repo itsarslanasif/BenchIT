@@ -90,6 +90,6 @@ export default {
 </script>
 <style scoped>
 .custom-border {
-  border-bottom: 0.5px solid gray;
+  border-bottom: 0.5px solid rgba(19, 19, 19, 0.139);
 }
 </style>

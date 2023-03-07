@@ -9,7 +9,7 @@
       </div>
       <div
         v-if="editor"
-        class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
+        class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-300 m-1 focus:border-primaryHover"
       >
         <div v-show="showTopBar" class="flex overflow-auto items-center gap-1">
           <button

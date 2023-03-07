@@ -1,15 +1,12 @@
 <template>
-  <div class="flex p-2 rounded-md border border-black-500 shadow-sm">
+  <div class="flex p-2 rounded-md custom-border">
     <div class="flex cursor-pointer" @click="showMemberClickListener(true)">
       <div
         v-for="member in getChannelMembers"
         :key="member.id"
         class="flex cursor-pointer"
       >
-        <img
-          class="w-6 h-6 mr-1 rounded "
-          :src="member.image_url"
-        />
+        <img class="w-6 h-6 mr-1 rounded" :src="member.image_url" />
       </div>
       <div class="w-3 ml-1">
         <p class="ml-1 font-bold text-black">
@@ -65,3 +62,8 @@ export default {
   },
 };
 </script>
+<style>
+.custom-border {
+  border: 1px solid rgba(19, 19, 19, 0.139);
+}
+</style>

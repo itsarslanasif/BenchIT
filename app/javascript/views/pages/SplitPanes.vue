@@ -144,17 +144,17 @@ export default {
   position: absolute;
   left: 0;
   top: 0;
-  transition: opacity 0.4s;
+  transition: opacity 0.5s;
   background-color: #475569;
   opacity: 0;
   z-index: 1;
 }
 .splitpanes__splitter:hover:before {
-  opacity: 1;
+  opacity: 0.7;
 }
 .splitpanes--vertical > .splitpanes__splitter:before {
-  left: -5px;
-  right: -5px;
+  left: -1px;
+  right: -1px;
   height: 100%;
 }
 .splitpanes--horizontal > .splitpanes__splitter:before {

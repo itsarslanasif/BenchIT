@@ -12,7 +12,7 @@
     <UserChatInfo />
   </div>
   <div
-    class="flex items-center h-8 justify-between px-1 mt-1 shadow-md custom-border"
+    class="flex items-center h-8 justify-between px-1 mt-1 shadow-sm"
   >
     <div
       class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer"
@@ -113,13 +113,13 @@ export default {
   },
 };
 </script>
-<style scoped>
+<style lang="scss">
 .bookmarkText {
   color: rgb(99, 98, 98);
   font-size: small;
 }
 .custom-border {
-  border-bottom: 0.5px solid gray;
+  border-bottom: 0.5px solid rgba(19, 19, 19, 0.139);
 }
 .loading {
   width: 80%;
@@ -128,5 +128,13 @@ export default {
   justify-content: center;
   align-items: center;
   position: fixed;
+}
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
 }
 </style>
