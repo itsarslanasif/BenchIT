@@ -4,9 +4,9 @@ class CreateStatuses < ActiveRecord::Migration[7.0]
       t.string :text
       t.string :emoji
       t.string :clear_after
-      t.uuid :profile_id
+      t.string :profile_id
       t.integer :type
-      t.uuid :workspace_id
+      t.string :workspace_id
 
       t.timestamps
     end

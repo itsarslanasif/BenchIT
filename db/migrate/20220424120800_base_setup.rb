@@ -1,6 +1,6 @@
 class BaseSetup < ActiveRecord::Migration[7.0]
   def change
-    create_table :users, id: :uuid do |t|
+    create_table :users, id: :string do |t|
       t.timestamps
       t.string :email
     end

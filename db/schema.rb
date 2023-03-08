@@ -15,17 +15,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "active_storage_attachments", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_attachments", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.uuid "record_id", null: false
-    t.uuid "blob_id", null: false
+    t.string "record_id", null: false
+    t.integer "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "active_storage_blobs", id: :serial, force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -37,20 +37,20 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "blob_id", null: false
+  create_table "active_storage_variant_records", id: :serial, force: :cascade do |t|
+    t.integer "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "bench_channels", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "bench_channels", id: :string, force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.boolean "is_private", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "workspace_id", null: false
-    t.uuid "creator_id"
+    t.string "workspace_id", null: false
+    t.string "creator_id"
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
     t.index ["name", "workspace_id"], name: "index_bench_channels_on_name_and_workspace_id", unique: true
     t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
@@ -58,19 +58,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
 
   create_table "bench_conversations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "conversationable_type"
-    t.uuid "conversationable_id"
+    t.string "conversationable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "sender_id"
+    t.string "sender_id"
     t.index ["conversationable_id", "conversationable_type", "sender_id"], name: "bench_conversation_index", unique: true
     t.index ["conversationable_type", "conversationable_id"], name: "index_chat_conversations_on_conversationable"
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"
   end
 
   create_table "bookmarks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "profile_id", null: false
+    t.string "profile_id", null: false
     t.string "bookmarkable_type"
-    t.uuid "bookmarkable_id"
+    t.string "bookmarkable_id"
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
@@ -84,22 +84,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.datetime "left_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "bench_channel_id", null: false
-    t.uuid "profile_id", null: false
+    t.string "bench_channel_id", null: false
+    t.string "profile_id", null: false
     t.boolean "muted", default: false, null: false
     t.index ["bench_channel_id", "profile_id"], name: "index_channel_participants_on_bench_channel_id_and_profile_id", unique: true
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
     t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
   end
 
-  create_table "conversation_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "conversation_messages", id: :string, force: :cascade do |t|
     t.json "content"
     t.boolean "is_threaded"
-    t.uuid "parent_message_id"
+    t.string "parent_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.uuid "bench_conversation_id"
-    t.uuid "sender_id"
+    t.string "sender_id"
     t.boolean "is_info", default: false, null: false
     t.boolean "is_sent_to_chat", default: false, null: false
     t.integer "shared_message_id"
@@ -109,15 +109,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   end
 
   create_table "direct_message_users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "profile_id", null: false
-    t.uuid "receiver_id", null: false
+    t.string "profile_id", null: false
+    t.string "receiver_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["receiver_id", "profile_id"], name: "index_direct_message_users_on_receiver_id_and_profile_id", unique: true
   end
 
   create_table "downloads", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "profile_id", null: false
+    t.string "profile_id", null: false
     t.string "file_name", null: false
     t.string "file_link", null: false
     t.string "file_download_link", null: false
@@ -127,13 +127,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.index ["profile_id"], name: "index_downloads_on_profile_id"
   end
 
-  create_table "draft_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "draft_messages", id: :string, force: :cascade do |t|
     t.text "content", null: false
     t.uuid "bench_conversation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "profile_id", null: false
-    t.uuid "conversation_message_id"
+    t.string "profile_id", null: false
+    t.string "conversation_message_id"
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
     t.index ["conversation_message_id"], name: "index_draft_messages_on_conversation_message_id"
     t.index ["profile_id", "bench_conversation_id", "conversation_message_id"], name: "draft_message", unique: true
@@ -142,25 +142,25 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
 
   create_table "favourites", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "favourable_type"
-    t.uuid "favourable_id"
+    t.string "favourable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "profile_id", null: false
+    t.string "profile_id", null: false
     t.index ["favourable_id", "favourable_type", "profile_id"], name: "favourite_index", unique: true
     t.index ["favourable_type", "favourable_id"], name: "index_favourites_on_favourable"
     t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
 
-  create_table "groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "groups", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "profile_ids", default: [], array: true
+    t.string "profile_ids", default: [], array: true
   end
 
   create_table "invitables", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "token"
-    t.uuid "user_id"
-    t.uuid "workspace_id"
+    t.string "user_id"
+    t.string "workspace_id"
     t.string "token_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -170,9 +170,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   end
 
   create_table "mentions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "conversation_message_id", null: false
+    t.string "conversation_message_id", null: false
     t.string "mentionable_type"
-    t.uuid "mentionable_id"
+    t.string "mentionable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_message_id"], name: "index_mentions_on_conversation_message_id"
@@ -180,8 +180,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   end
 
   create_table "pins", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "conversation_message_id", null: false
-    t.uuid "profile_id", null: false
+    t.string "conversation_message_id", null: false
+    t.string "profile_id", null: false
     t.uuid "bench_conversation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -192,7 +192,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   end
 
   create_table "preferences", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "profile_id", null: false
+    t.string "profile_id", null: false
     t.json "notifications", default: "{\"notify_me_about\": 1, [], \"my_keywords\": [], \"allow_notifications\": \"\", \"default_time_for_remider_notifications\": \"\", \"sound_and_appearance: [1],}", null: false
     t.json "sidebar", default: "{\"alway_show_in_sidebar\":[1,2,5,6], \"show\": 1, \"sort\":{1,[1,4,5,6]} }", null: false
     t.json "themes", default: "{\"sync_with_os_settings\": true, \"colors\":4,}", null: false
@@ -209,9 +209,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.index ["profile_id"], name: "index_preferences_on_profile_id"
   end
 
-  create_table "profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.uuid "workspace_id", null: false
+  create_table "profiles", id: :string, force: :cascade do |t|
+    t.string "user_id", null: false
+    t.string "workspace_id", null: false
     t.string "username", null: false
     t.text "description"
     t.datetime "created_at", null: false
@@ -233,28 +233,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   end
 
   create_table "reactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "conversation_message_id"
+    t.string "conversation_message_id"
     t.string "emoji"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.uuid "profile_id", null: false
+    t.string "profile_id", null: false
     t.index ["emoji", "conversation_message_id", "profile_id"], name: "reaction_index", unique: true
     t.index ["profile_id"], name: "index_reactions_on_profile_id"
   end
 
   create_table "saved_items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "profile_id"
-    t.uuid "conversation_message_id"
+    t.string "profile_id"
+    t.string "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true
   end
 
-  create_table "schedule_messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "schedule_messages", id: :string, force: :cascade do |t|
     t.json "content", null: false
     t.string "scheduled_at", null: false
     t.string "job_id", default: "", null: false
-    t.uuid "profile_id", null: false
+    t.string "profile_id", null: false
     t.uuid "bench_conversation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -266,13 +266,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.string "text", null: false
     t.string "emoji", null: false
     t.string "clear_after", null: false
-    t.uuid "profile_id"
-    t.uuid "workspace_id"
+    t.string "profile_id"
+    t.string "workspace_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "users", id: :string, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "email"
@@ -303,7 +303,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  create_table "workspaces", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "workspaces", id: :string, force: :cascade do |t|
     t.string "company_name", null: false
     t.integer "workspace_type", default: 0, null: false
     t.string "bench_it_url", null: false

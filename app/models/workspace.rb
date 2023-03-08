@@ -1,5 +1,6 @@
 class Workspace < ApplicationRecord
   include AvatarGeneration
+  include UuidGenerator
 
   has_one_attached :workspace_avatar, dependent: :destroy
 
@@ -12,6 +13,7 @@ class Workspace < ApplicationRecord
   validates :bench_it_url, uniqueness: true, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 
+  before_create :set_id
   after_commit :attach_avatar, on: %i[create]
 
   enum workspace_type: {
@@ -40,5 +42,11 @@ class Workspace < ApplicationRecord
 
   def attach_avatar
     generate_avatar(company_name, workspace_avatar)
+  end
+
+  private
+
+  def set_id
+    generate_and_appent_uuid(self)
   end
 end
