@@ -30,7 +30,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
       return this.channelMemberCount;
     },
-    setSlectedOption(option) {
+    setSelectedOption(option) {
       this.selectedOption = option;
     },
     isAbout() {

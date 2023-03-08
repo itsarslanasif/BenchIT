@@ -1,7 +1,7 @@
 <template>
   <n-dropdown
     trigger="click"
-    class="rounded-md"
+    class="hover-trigger rounded-md"
     placement="bottom-end"
     size="medium"
     :options="options"
@@ -10,7 +10,7 @@
     <div v-if="onlyIcon">
       <font-awesome-icon
         icon="fa-plus"
-        class="focus:outline-none px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+        class="hover-target focus:outline-none px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
       />
     </div>
     <div v-else>
@@ -75,3 +75,13 @@ export default {
   },
 };
 </script>
+<style scoped>
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
+}
+</style>

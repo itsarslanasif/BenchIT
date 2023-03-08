@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg-white flex flex-col p-5 gap-3">
     <div class="py-5">
@@ -15,12 +14,7 @@
       class="maxHeight overflow-auto"
     >
       <div v-for="member in channelDetailStore.channelMembers" :key="member.id">
-        <MermberCard
-          class="cursor-pointer"
-          :name="member.username"
-          :description="member.description"
-          :img-url="member.image_url"
-        />
+        <MemberCard @click="showUserProfile(member.id)" :member="member" />
       </div>
     </div>
     <p v-if="channelDetailStore.channelMembers.length == 0">
@@ -30,18 +24,29 @@
 </template>
 
 <script>
-import MermberCard from '../../widgets/memberCard.vue';
+import MemberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import { useProfileStore } from '../../../stores/useProfileStore';
+import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 export default {
-  name: 'About',
-  components: { MermberCard },
+  components: { MemberCard },
+  props: { toggleModal: Function },
   query: '',
   mounted() {
     this.searchQuery();
   },
   setup() {
     const channelDetailStore = useChannelDetailStore();
-    return { channelDetailStore };
+    const rightPaneStore = useRightPaneStore();
+    const profilesStore = useProfileStore();
+    const userProfileStore = useUserProfileStore();
+    return {
+      channelDetailStore,
+      rightPaneStore,
+      profilesStore,
+      userProfileStore,
+    };
   },
   methods: {
     async searchQuery() {
@@ -49,9 +54,20 @@ export default {
       try {
         await this.channelDetailStore.getChannelMembers(this.query, channel_id);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
+    },
+    showUserProfile(profile_id) {
+      this.setUserProfileForPane(profile_id);
+      this.rightPaneStore.toggleUserProfileShow(true);
+    },
 
+    setUserProfileForPane(profile_id) {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile.id === profile_id
+      );
+      this.userProfileStore.setUserProfile(profile);
+      this.toggleModal();
     },
   },
 };

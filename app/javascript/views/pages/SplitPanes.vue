@@ -136,7 +136,7 @@ export default {
 
 <style>
 .splitpanes__splitter {
-  background-color: #ccc;
+  background-color: #717082;
   position: relative;
 }
 .splitpanes__splitter:before {
@@ -145,7 +145,7 @@ export default {
   left: 0;
   top: 0;
   transition: opacity 0.5s;
-  background-color: #475569;
+  background-color: #717082;
   opacity: 0;
   z-index: 1;
 }

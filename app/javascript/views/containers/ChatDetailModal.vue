@@ -1,7 +1,7 @@
 <template>
   <div
     v-click-outside="toggleModal"
-    class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
+    class="sm:w-flexible-md md:w-flexible-lg lg:w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
     <div class="flex gap-1 self-center items-center px-3 mt-2 mr-1">
       <font-awesome-icon v-if="!isProfile && chat.is_private" icon="fa-lock" />
@@ -40,9 +40,9 @@
         <p class="text-sm">{{ $t('chat_detail.start_a_call') }}</p>
       </span>
     </div>
-    <div class="flex ml-4">
+    <div class="flex ml-4 overflow-auto">
       <p
-        @click="ChannelDetailStore.setSlectedOption('about')"
+        @click="ChannelDetailStore.setSelectedOption('about')"
         :class="{
           'text-slate-800 bg-transparent': ChannelDetailStore.isAbout(),
         }"
@@ -52,7 +52,7 @@
       </p>
       <p
         v-if="!isProfile"
-        @click="ChannelDetailStore.setSlectedOption('members')"
+        @click="ChannelDetailStore.setSelectedOption('members')"
         :class="{
           'text-slate-800 bg-transparent': ChannelDetailStore.isMembers(),
         }"
@@ -61,7 +61,7 @@
         {{ $t('chat_detail.members') }}
       </p>
       <p
-        @click="ChannelDetailStore.setSlectedOption('integrations')"
+        @click="ChannelDetailStore.setSelectedOption('integrations')"
         :class="{
           'text-slate-800 bg-transparent': ChannelDetailStore.isIntegrations(),
         }"
@@ -71,7 +71,7 @@
       </p>
       <p
         v-if="!isProfile"
-        @click="ChannelDetailStore.setSlectedOption('settings')"
+        @click="ChannelDetailStore.setSelectedOption('settings')"
         :class="{
           'text-slate-800 bg-transparent': ChannelDetailStore.isSettings(),
         }"
@@ -80,8 +80,15 @@
         {{ $t('chat_detail.settings') }}
       </p>
     </div>
-    <About v-if="ChannelDetailStore.isAbout()" :chat="chat" :toggleModal="toggleModal" />
-    <members v-if="ChannelDetailStore.isMembers()" />
+    <About
+      v-if="ChannelDetailStore.isAbout()"
+      :chat="chat"
+      :toggleModal="toggleModal"
+    />
+    <members
+      :toggleModal="toggleModal"
+      v-if="!isProfile && ChannelDetailStore.isMembers()"
+    />
   </div>
 </template>
 
@@ -91,8 +98,6 @@ import Members from '../components/channeldetail/members.vue';
 import StarUnstar from '../components/channeldetail/StarUnstar.vue';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import vClickOutside from 'click-outside-vue3';
-import { useMessageStore } from '../../stores/useMessagesStore';
-import { storeToRefs } from 'pinia';
 import { NAvatar } from 'naive-ui';
 export default {
   components: { About, StarUnstar, Members, NAvatar },
@@ -101,12 +106,14 @@ export default {
   },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
-    const messagesStore = useMessageStore();
     return { ChannelDetailStore };
   },
   props: {
     toggleModal: Function,
     chat: Object,
+  },
+  beforeUnmount() {
+    this.ChannelDetailStore.setSelectedOption('about');
   },
   computed: {
     isProfile() {

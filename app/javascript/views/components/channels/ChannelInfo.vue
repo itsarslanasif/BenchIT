@@ -1,25 +1,23 @@
 <template>
   <div class="relative">
-    <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div class="">
+    <div
+      class="border-b border-light px-1 h-12 items-center flex justify-between"
+    >
+      <div class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer">
+        <div v-if="selectedChat.is_private" class="self-center mr-1">
+          <font-awesome-icon icon="fa-lock" />
+        </div>
+        <div v-else class="self-center mr-1">
+          <font-awesome-icon icon="fa-hashtag" />
+        </div>
         <div
-          class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer"
+          @click="toggleShowModal"
+          class="flex overflow-x-hidden text-ellipsis"
         >
-          <div v-if="selectedChat.is_private" class="self-center mr-1">
-            <font-awesome-icon icon="fa-lock" />
-          </div>
-          <div v-else class="self-center mr-1">
-            <font-awesome-icon icon="fa-hashtag" />
-          </div>
-          <div
-            @click="toggleShowModal"
-            class="flex overflow-x-hidden text-ellipsis"
-          >
-            <p class="text-xl font-bold self-center mr-1">
-              {{ selectedChat.name }}
-            </p>
-            <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
-          </div>
+          <p class="text-xl font-bold self-center mr-1">
+            {{ selectedChat.name }}
+          </p>
+          <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
         </div>
       </div>
       <ChannelMembersInfoVue
@@ -66,14 +64,14 @@ export default {
   methods: {
     toggleShowModal() {
       if (!this.modalOpen) {
-        this.ChannelDetailStore.setSlectedOption('about');
+        this.ChannelDetailStore.setSelectedOption('about');
         this.getCurrentChannel();
         this.channelStore.setCurrentChannel(this.currentChannel);
       }
       this.modalOpen = !this.modalOpen;
     },
     openChannelDetailMemberModal(open) {
-      this.ChannelDetailStore.setSlectedOption('members');
+      this.ChannelDetailStore.setSelectedOption('members');
       this.modalOpen = open;
     },
     getCurrentChannel() {
@@ -88,8 +86,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.custom-border {
-  border-bottom: 0.5px solid rgba(19, 19, 19, 0.139);
-}
-</style>

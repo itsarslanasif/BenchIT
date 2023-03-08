@@ -1,6 +1,8 @@
 <template>
   <div class="relative">
-    <div class="custom-border px-1 h-12 items-center flex justify-between">
+    <div
+      class="border-b border-light px-1 h-12 items-center flex justify-between"
+    >
       <div
         @click="toggleShowModal"
         v-if="selectedChat"

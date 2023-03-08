@@ -12,6 +12,7 @@
     <div
       @contextmenu.prevent
       class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer"
+      :class="{ 'bg-primaryHover': isChatOpen }"
       @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleRightClickMenu"
     >
@@ -50,6 +51,7 @@ import {
   unreadMessagesLength,
 } from '../../../modules/unreadMessages';
 import { useUnreadStore } from '../../../stores/useUnreadStore';
+import { useMessageStore } from '../../../stores/useMessagesStore.js';
 export default {
   components: { NDropdown, markStar },
   props: ['goTo', 'toggleShow', 'isShowOptions', 'channel'],
@@ -57,7 +59,9 @@ export default {
     const channelStore = useChannelStore();
     const unreadStore = useUnreadStore();
     const { unreadMessages } = storeToRefs(unreadStore);
-    return { channelStore, unreadMessages, unreadStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { channelStore, unreadMessages, unreadStore, selectedChat };
   },
   data() {
     return {
@@ -71,6 +75,13 @@ export default {
   computed: {
     unReadMessageExist() {
       return this.unreadDetails?.messages.length > 0;
+    },
+    isChatOpen() {
+      return (
+        this.selectedChat.id === this.channel.id &&
+        !this.selectedChat.hasOwnProperty('user_id') &&
+        !this.channel.hasOwnProperty('user_id')
+      );
     },
   },
   methods: {

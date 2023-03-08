@@ -11,8 +11,8 @@
   >
     <div
       v-if="user"
-      class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
-      :class="isUnreadDM(user) ? 'font-bold' : ''"
+      class="flex items-center hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer"
+      :class="{ 'bg-primaryHover': isChatOpen, 'font-bold': isUnreadDM(user) }"
       @click.right="toggleRightClickMenu"
       @contextmenu.prevent
     >
@@ -81,6 +81,7 @@ import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
 import { NDropdown } from 'naive-ui';
 import Options from '../channels/rightClickMenuOptions';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   props: ['user', 'isOwnChat', 'goToChat'],
@@ -96,16 +97,26 @@ export default {
   setup() {
     const unreadStore = useUnreadStore();
     const directMessagesStore = useDirectMessagesStore();
+    const messagesStore = useMessageStore();
     const { unreadMessages } = storeToRefs(unreadStore);
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
       unreadMessages,
       directMessagesStore,
       unreadStore,
+      selectedChat,
     };
   },
   computed: {
     unReadMessageExist() {
       return this.unreadDetails?.messages.length > 0;
+    },
+    isChatOpen() {
+      return (
+        this.selectedChat.id === this.user.id &&
+        this.selectedChat.hasOwnProperty('user_id') &&
+        this.user.hasOwnProperty('user_id')
+      );
     },
   },
   methods: {

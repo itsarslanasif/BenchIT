@@ -767,9 +767,11 @@ button {
   margin-top: -270px;
 }
 .mention {
-  border: 1px solid #000;
-  border-radius: 0.4rem;
+  background-color: rgba(0, 110, 255, 0.2) !important;
+  border-radius: 0.3rem;
+  color: rgb(4, 101, 229);
   padding: 0.1rem 0.3rem;
   box-decoration-break: clone;
+  cursor: pointer;
 }
 </style>

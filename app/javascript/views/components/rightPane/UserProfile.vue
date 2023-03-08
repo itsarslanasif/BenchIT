@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-hidden">
     <right-pane-header :paneTitle="$t('rightpane.profile')" />
     <n-modal v-model:show="editProfileFlag">
       <EditProfile :toggleEditProfile="toggleEditProfile" />
@@ -315,7 +315,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import EditContactInfoModal from '../../widgets/EditContactInfoModal.vue';
 import EditAboutMeModal from '../../widgets/EditAboutMeModal.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import EditProfile from '../editprofile/editProfile.vue'
+import EditProfile from '../editprofile/editProfile.vue';
 
 export default {
   components: {
@@ -331,7 +331,7 @@ export default {
     return {
       showContactInfoModal: false,
       showAboutMeModal: false,
-      editProfileFlag: false
+      editProfileFlag: false,
     };
   },
   setup() {
@@ -375,7 +375,7 @@ export default {
     },
     toggleEditProfile() {
       this.editProfileFlag = !this.editProfileFlag;
-    }
+    },
   },
 };
 </script>
