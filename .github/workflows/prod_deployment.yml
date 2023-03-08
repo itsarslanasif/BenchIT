@@ -1,0 +1,41 @@
+name: production_deployment
+
+on:
+  push:
+    branches: [ deployer ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install SSH key to Server
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.PROD_SSH_KEY }}
+          name: github-actions
+          known_hosts: 'random-placeholder-value-replaced-by-keyscan-below'
+          config: |
+            host 65.1.194.133
+            IdentityFile ~/.ssh/github-actions
+      - name: Adding Known Hosts
+        run: ssh-keyscan -H 65.1.194.133
+      - uses: actions/checkout@v2
+      - name: Setup Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0.4'
+          bundler-cache: true
+      - name: Install Bundler
+        run: gem install bundler
+      - name: Install Dependencies
+        run: bundle install
+      - name: Install Yarn
+        run: yarn install
+      - name: Deploy
+        run: |
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/github-actions
+          bundle exec cap staging deploy
+        env:
+          STAGE: development
+          SSH_PRIVATE_KEY: ${{ secrets.PROD_SSH_KEY }}
