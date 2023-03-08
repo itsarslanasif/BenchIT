@@ -2,29 +2,37 @@
   <div
     class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
-    <div class="flex gap-1 self-center items-center px-3 mt-2 mr-1">
-      <font-awesome-icon
-        v-if="!isProfile && chat.is_private && !isGroup"
-        icon="fa-lock"
-      />
-      <font-awesome-icon
-        v-if="!isProfile && !chat.is_private && !isGroup"
-        icon="fa-hashtag"
-      />
-      <img
-        v-if="isProfile"
-        :src="chat.image_url"
-        class="w-20 h-20 rounded mr-2 bg-slate-50"
-      />
-      <div class="flex flex-col">
-        <span class="font-bold text-lg">
-          {{ isProfile ? chat.username : chat.name }}
-        </span>
-        <span>
-          {{ isProfile ? chat.description : '' }}
-        </span>
+    <div
+      class="flex justify-between gap-1 self-center items-center px-3 mt-2 mr-1"
+    >
+      <div class="flex self-center items-center px-3 mt-2">
+        <font-awesome-icon
+          v-if="!isProfile && chat.is_private && !isGroup"
+          icon="fa-lock"
+        />
+        <font-awesome-icon
+          v-if="!isProfile && !chat.is_private && !isGroup"
+          icon="fa-hashtag"
+        />
+        <img
+          v-if="isProfile"
+          :src="chat.image_url"
+          class="w-20 h-20 rounded mr-2 bg-slate-50"
+        />
+        <div class="flex flex-col">
+          <span class="font-bold text-lg">
+            {{ isProfile ? chat.username : chat.name }}
+          </span>
+          <span>
+            {{ isProfile ? chat.description : '' }}
+          </span>
+        </div>
       </div>
-      <p class="m">asad</p>
+      <font-awesome-icon
+        @click="toggleModal"
+        class="hover:text-primary text-black-500 w-5 h-5"
+        icon="fa-solid fa-xmark"
+      />
     </div>
 
     <div class="flex gap-2 my-5">

@@ -16,7 +16,7 @@
         @click="toggleModal"
       >
         <font-awesome-icon class="w-8 h-8" icon="fa-solid fa-user-plus" />
-        <span class="ml-3">Add people</span>
+        <span class="ml-3">{{ $t('groups.add_people') }}</span>
       </div>
       <div
         v-for="member in messageStore.selectedChat.profiles"

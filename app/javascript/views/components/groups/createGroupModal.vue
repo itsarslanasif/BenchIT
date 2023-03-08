@@ -164,13 +164,6 @@ export default {
           });
       }
     },
-    setValue(id, type) {
-      return [...id, ...type];
-    },
-
-    resetSelectedTag() {
-      // this.value = '';
-    },
   },
 };
 </script>

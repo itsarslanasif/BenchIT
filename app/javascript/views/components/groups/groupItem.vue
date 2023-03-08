@@ -29,19 +29,7 @@ export default {
     const profileStore = useProfileStore();
     return { profileStore };
   },
-  data() {
-    return {
-      // rightClickMenuOptions: [],
-      // currentGroup: {},
-      // showRightClickMenu: false,
-      // unread: [],
-      // unreadDetails: null,
-    };
-  },
   computed: {
-    // unReadMessageExist() {
-    //   return this.unreadDetails?.messages.length > 0;
-    // },
     membersProfileImage() {
       return this.group.profiles
         ? this.group.profiles[0].image_url
@@ -52,62 +40,6 @@ export default {
         ? this.group.profiles.length
         : this.group.profile_ids.length;
     },
-  },
-  methods: {
-    // handleSelect(key) {
-    //   switch (key) {
-    //     case 'star-channel':
-    //       markStar(this.currentGroup, this.channelStore);
-    //       break;
-    //     case 'unstar-channel':
-    //       markStar(this.currentGroup, this.channelStore);
-    //       break;
-    //     case 'mark-as-read':
-    //       this.unreadStore.markedChatAsRead('channels', this.channel.id);
-    //       break;
-    //   }
-    // },
-    // checkcurrentGroup(channel) {
-    //   if (channel.favourite_id) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // },
-    // setRightClickMenuOptions() {
-    //   this.rightClickMenuOptions = new Option(
-    //     this.checkcurrentGroup(this.currentGroup),
-    //     this.unReadMessageExist,
-    //     true
-    //   ).getOptions();
-    // },
-    // setcurrentGroup() {
-    //   this.currentGroup =
-    //     this.channelStore.joinedChannels.find(
-    //       obj => obj.id === Number(this.channel.id)
-    //     ) ||
-    //     this.channelStore.starChannels.find(
-    //       obj => obj.id === Number(this.channel.id)
-    //     );
-    //   this.channelStore.setcurrentGroup(this.currentGroup);
-    //   this.setRightClickMenuOptions();
-    // },
-    // toggleRightClickMenu() {
-    //   this.showRightClickMenu = !this.showRightClickMenu;
-    //   if (this.showRightClickMenu) {
-    //     this.setcurrentGroup();
-    //   }
-    // },
-    // isUnreadChannel(channel) {
-    //   this.unreadDetails = unreadMessagesCount(
-    //     this.unreadMessages,
-    //     `BenchChannel${channel?.id}`
-    //   );
-    //   return this.unreadDetails?.messages.length;
-    // },
-    // totalUnreadMessages(unreadDetails) {
-    //   return unreadMessagesLength(unreadDetails);
-    // },
   },
 };
 </script>

@@ -81,7 +81,6 @@ import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
 import { NDropdown } from 'naive-ui';
 import Options from '../channels/rightClickMenuOptions';
-import { getGroups } from '../../../api/groups/groups';
 
 export default {
   props: ['user', 'isOwnChat', 'goToChat'],
@@ -148,8 +147,6 @@ export default {
     toggleRightClickMenu() {
       this.showRightClickMenu = !this.showRightClickMenu;
       if (this.showRightClickMenu) {
-        let groups = getGroups();
-        console.log(groups);
         this.setRightClickMenuOptions();
       }
     },

@@ -1,6 +1,5 @@
 <template>
   <div class="hover-trigger">
-    <!-- add group button  -->
     <font-awesome-icon
       icon="fa-plus"
       class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
@@ -29,6 +28,7 @@
             <font-awesome-icon
               icon="fa-plus"
               class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+              @click="toggleModal"
             />
             <p class="text-sm self-center text-white truncate">
               {{ $t('groups.add_new_group') }}
@@ -38,7 +38,7 @@
       </AccordionItem>
       <div v-if="showCreateGroupModal">
         <CreateGroup
-          title="Create Group"
+          :title="$t('groups.create_group')"
           :createNewGroup="true"
           :closeModal="toggleModal"
           @click.stop="stopPropagation"
@@ -91,14 +91,9 @@ export default {
       this.listOpen = !this.listOpen;
     },
     goToGroupChat(chatURL, group) {
-      console.log(group);
       this.messagesStore.setSelectedChat(group);
       this.$router.push(chatURL);
-      // if (this.isMobileView()) {
-      //   this.leftPaneStore.closeLeftPane();
-      // }
     },
   },
 };
 </script>
-<style scoped></style>
