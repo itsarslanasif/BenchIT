@@ -72,6 +72,9 @@
           />
         </div>
       </div>
+      <div v-if="unsentQueue.length" v-for="message in unsentQueue">
+        <MessageWrapper :currMessage="message" :prevMessage="prevMessage" :isUnsentMessage=true />
+      </div>
     </div>
   </div>
 </template>
@@ -140,13 +143,14 @@ export default {
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages, currMessage, hasMoreMessages, newMessageSent } =
+    const { messages, currMessage, hasMoreMessages, newMessageSent, unsentQueue } =
       storeToRefs(messageStore);
     return {
       messages,
       currMessage,
       hasMoreMessages,
       newMessageSent,
+      unsentQueue
     };
   },
   methods: {

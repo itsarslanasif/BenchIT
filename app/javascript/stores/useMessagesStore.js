@@ -1,3 +1,4 @@
+import moment from 'moment/moment';
 import { defineStore } from 'pinia';
 import { getMessageHistory } from '../modules/socket/messageHistory';
 import { deleteMessage } from '../api/messages';
@@ -19,6 +20,8 @@ export const useMessageStore = () => {
     state: () => ({
       messages: [],
       currMessage: [],
+      unsentQueue: [],
+      sendingMessages: [],
       scheduleMessage: [],
       currentPage: 1,
       maxPages: null,
@@ -163,6 +166,16 @@ export const useMessageStore = () => {
           scheduledMessage.scheduled_at = payload.scheduled_at;
         });
       },
+      unsendMessagesQueue(formData) {
+        const date = moment()
+        const message = {}
+        for (const pair of formData.entries()) {
+          message[pair[0]] = pair[1]
+        }
+        message.created_at = date.format()
+        this.unsentQueue.push(message);
+        this.sendingMessages.push(formData)
+      }
     },
   });
 

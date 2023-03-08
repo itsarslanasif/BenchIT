@@ -50,6 +50,7 @@
         <user-profile-modal
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
+          :isUnsentMessage="isUnsentMessage ? true : false"
         />
       </template>
       <span class="message">
@@ -66,7 +67,11 @@
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
-              <b>{{ currMessage.sender_name }}</b>
+              <b :class="isUnsentMessage ? 'opacity-50' : 'opacity-100'">{{
+                isUnsentMessage
+                  ? currentProfile.username
+                  : currMessage.sender_name
+              }}</b>
             </p>
             <span
               :class="{
@@ -110,6 +115,7 @@
               >
                 <MessageSection
                   v-if="block.type === 'section'"
+                  :isUnsentMessage="isUnsentMessage ? true : false"
                   :section="block"
                 />
                 <div v-if="isSharedMessage" class="flex ml-4 flex-center">
@@ -156,6 +162,7 @@
               >
                 <MessageSection
                   v-if="block.type === 'section'"
+                  :isUnsentMessage="isUnsentMessage ? true : false"
                   :section="block"
                 />
               </span>
@@ -500,6 +507,10 @@ export default {
       default: undefined,
     },
     inThread: {
+      type: Boolean,
+      default: false,
+    },
+    isUnsentMessage: {
       type: Boolean,
       default: false,
     },

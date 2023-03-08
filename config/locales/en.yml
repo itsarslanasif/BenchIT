@@ -450,6 +450,8 @@ en:
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
         mentioned: 'mentioned you in'
+      connection:
+        trying_to_connect: 'Trying to connect...'
     admin:
       title: 'Admin'
       save: 'Save'

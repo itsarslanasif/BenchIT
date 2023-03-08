@@ -72,6 +72,7 @@ import {
   faPause,
   faDisplay,
   faToggleOn,
+  faWifi,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -148,8 +149,8 @@ library.add(
   faRecordVinyl,
   faPause,
   faDisplay,
-  faToggleOn
-
+  faToggleOn,
+  faWifi
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 
