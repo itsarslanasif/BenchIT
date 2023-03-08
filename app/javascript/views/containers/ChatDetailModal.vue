@@ -96,7 +96,10 @@
       "
     />
     <GroupMembers
-      v-if="messagesStore.selectedChat.conversation_type === 'Group'"
+      v-if="
+        ChannelDetailStore.isMembers() &&
+        messagesStore.selectedChat.conversation_type === 'Group'
+      "
     />
   </div>
 </template>

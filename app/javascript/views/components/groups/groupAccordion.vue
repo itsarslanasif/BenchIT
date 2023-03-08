@@ -37,7 +37,12 @@
         </div>
       </AccordionItem>
       <div v-if="showCreateGroupModal">
-        <CreateGroup :closeModal="toggleModal" @click.stop="stopPropagation" />
+        <CreateGroup
+          title="Create Group"
+          :createNewGroup="true"
+          :closeModal="toggleModal"
+          @click.stop="stopPropagation"
+        />
       </div>
     </AccordionList>
   </div>
@@ -80,7 +85,6 @@ export default {
   },
   methods: {
     toggleModal() {
-      console.log('chal ja sim sim ');
       this.showCreateGroupModal = !this.showCreateGroupModal;
     },
     toggleList() {

@@ -26,3 +26,12 @@ export const createGroup = async members => {
   return result.data;
 };
 
+export const addGroupMembers = async (members,id) => {
+  let result = await axios.post(`/v1/groups/${id}/add_member`, {
+    headers: getHeaders(),
+      profile_ids:members
+  });
+  return result.data;
+};
+
+

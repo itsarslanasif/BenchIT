@@ -10,7 +10,7 @@
         <div class="p-8">
           <header id="modalTitle" class="flex w-full">
             <div class="w-5/6 text-lg text-black-900">
-              <h1>{{ $t('groups.create_groups') }}</h1>
+              <h1>{{ title }}</h1>
             </div>
             <button
               type="button"
@@ -26,7 +26,6 @@
                 {{ $t('groups.add_group_note') }}
               </p>
             </div>
-            <!-- addd here  -->
             <n-select
               vertical
               v-model:value="selectedValues"
@@ -46,7 +45,7 @@
               @click="onSubmit"
               class="bg-success text-white py-2 px-5 text-base float-right my-3 rounded"
             >
-              {{ $t('actions.create') }}
+              {{ createNewGroup ? $t('actions.create') : $t('actions.add') }}
             </button>
             >
           </div>
@@ -75,6 +74,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { ref } from 'vue';
 import { createGroup } from '../../../api/groups/groups';
 import { useGroupStore } from '../../../stores/useGroupStore';
+import { addGroupMembers } from '../../../api/groups/groups';
 export default {
   components: {
     NForm,
@@ -88,7 +88,7 @@ export default {
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  props: ['closeModal'],
+  props: ['closeModal', 'title', 'createNewGroup', 'groupId'],
   data() {
     return {
       rules: {
@@ -139,18 +139,31 @@ export default {
   },
   methods: {
     onSubmit() {
-      this.selectedValues.push(this.currentProfile.id);
-      createGroup(this.selectedValues)
-        .then(res => {
-          const { group, name } = res;
-          const updatedGroup = { ...group, name };
-          this.groupStore.groups.push(updatedGroup);
-          this.$router.push(`/groups/${group.id}`);
-          this.closeModal();
-        })
-        .catch(err => {
-          console.error(err);
-        });
+      if (this.createNewGroup) {
+        this.selectedValues.push(this.currentProfile.id);
+        createGroup(this.selectedValues)
+          .then(res => {
+            const { group, name } = res;
+            const updatedGroup = { ...group, name };
+            this.groupStore.groups.push(updatedGroup);
+            this.$router.push(`/groups/${group.id}`);
+            this.closeModal();
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      } else {
+        //add members api call
+        addGroupMembers(this.selectedValues, this.groupId)
+          .then(res => {
+            const { group, name } = res;
+            const updatedGroup = { ...group, name };
+            console.log(updatedGroup);
+          })
+          .catch(err => {
+            console.error(err);
+          });
+      }
     },
     setValue(id, type) {
       return [...id, ...type];

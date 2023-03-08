@@ -15,6 +15,7 @@
     >
       <div
         class="flex place-items-center ml-1 border border-transparent rounded-md px-4 py-2 mb-1 shadow-sm cursor-pointer hover:bg-transparent hover:font-bold"
+        @click="toggleModal"
       >
         <font-awesome-icon class="w-8 h-8" icon="fa-solid fa-user-plus" />
         <span class="ml-3">Add people</span>
@@ -34,6 +35,14 @@
     <p v-if="channelDetailStore.channelMembers.length == 0">
       {{ $t('channel_details.no_matches_found') }} " {{ query }} "
     </p>
+    <CreateGroupModal
+      v-if="showCreateGroupModal"
+      title="Add people"
+      :createNewGroup="false"
+      :closeModal="toggleModal"
+      :groupId="messageStore.selectedChat.id"
+      @click.stop="stopPropagation"
+    />
   </div>
 </template>
 
@@ -41,15 +50,18 @@
 import MermberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import CreateGroupModal from './createGroupModal.vue';
 export default {
   name: 'About',
-  components: { MermberCard },
+  components: { MermberCard, CreateGroupModal },
   query: '',
   mounted() {
     this.searchQuery();
   },
   data() {
-    return {};
+    return {
+      showCreateGroupModal: false,
+    };
   },
   setup() {
     const channelDetailStore = useChannelDetailStore();
@@ -57,6 +69,10 @@ export default {
     return { channelDetailStore, messageStore };
   },
   methods: {
+    toggleModal() {
+      console.log('clicked');
+      this.showCreateGroupModal = !this.showCreateGroupModal;
+    },
     async searchQuery() {
       let channel_id = window.location.pathname.split('/')[2];
       try {
