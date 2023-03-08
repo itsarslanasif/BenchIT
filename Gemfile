@@ -28,6 +28,8 @@ gem 'sidekiq', '~>6.0'
 gem 'sprockets-rails'
 gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 gem 'vite_rails'
+gem 'ed25519'
+gem 'bcrypt_pbkdf'
 
 group :development, :test do
   gem 'debug', platforms: %i[mri mingw x64_mingw]
