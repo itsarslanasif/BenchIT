@@ -51,7 +51,7 @@ ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type"
                            is_threaded: false, bench_conversation_id: 1, sender_id: 1)
 ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Arnold"}}]}',
                            is_threaded: false, bench_conversation_id: 1, sender_id: 2)
-Group.create(id: 1, profile_ids: [1, 2])
+Group.create(id: 1, profile_ids: [1, 2, 4])
 Group.create(id: 2, profile_ids: [1, 2, 3])
 BenchConversation.create(conversationable_type: 'Group', conversationable_id: 1)
 

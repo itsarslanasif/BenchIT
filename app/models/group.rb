@@ -5,7 +5,7 @@ class Group < ApplicationRecord
 
   before_validation :sort_ids
 
-  validates :profile_ids, presence: true, length: { in: 2..9 }
+  validates :profile_ids, presence: true, length: { in: 3..9 }
   validates :profile_ids, inclusion: { in: Current.workspace.profile_ids }
 
   after_commit :broadcast_group

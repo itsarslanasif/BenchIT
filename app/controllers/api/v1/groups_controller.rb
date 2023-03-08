@@ -26,7 +26,7 @@ class Api::V1::GroupsController < Api::ApiController
     else
       @group.profile_ids += params[:profile_ids]
       @group.save!
-      render json: { success: true, message: t('.success') }, status: :ok
+      render json: { success: true, message: t('.success'), group: @group, name: @group.name }, status: :ok
     end
   end
 
