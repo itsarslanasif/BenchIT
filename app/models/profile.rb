@@ -125,6 +125,6 @@ class Profile < ApplicationRecord
   private
 
   def set_id
-    generate_and_appent_uuid(self)
+    generate_and_append_uuid(self)
   end
 end

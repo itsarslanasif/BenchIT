@@ -1,7 +1,7 @@
 module UuidGenerator
   extend ActiveSupport::Concern
 
-  def generate_and_appent_uuid(record)
+  def generate_and_append_uuid(record)
     record.id = case record.class.name
                 when 'Workspace'
                   "W#{SecureRandom.alphanumeric(10).upcase}"
