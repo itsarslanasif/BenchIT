@@ -47,7 +47,6 @@
             >
               {{ createNewGroup ? $t('actions.create') : $t('actions.add') }}
             </button>
-            >
           </div>
         </div>
       </div>
@@ -145,7 +144,7 @@ export default {
           .then(res => {
             const { group, name } = res;
             const updatedGroup = { ...group, name };
-            this.groupStore.groups.push(updatedGroup);
+            this.groupStore.isNewGroup(updatedGroup);
             this.$router.push(`/groups/${group.id}`);
             this.closeModal();
           })
@@ -153,12 +152,12 @@ export default {
             console.error(err);
           });
       } else {
-        //add members api call
         addGroupMembers(this.selectedValues, this.groupId)
           .then(res => {
             const { group, name } = res;
             const updatedGroup = { ...group, name };
-            console.log(updatedGroup);
+            this.groupStore.updateGroup(updatedGroup);
+            this.$router.push(`/groups/${updatedGroup.id}`);
           })
           .catch(err => {
             console.error(err);

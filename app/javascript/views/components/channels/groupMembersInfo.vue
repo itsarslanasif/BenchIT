@@ -28,9 +28,6 @@ export default {
     AddPeopleToChannel,
     NDivider,
   },
-  mounted() {
-    // this.getChannelMembersCount();
-  },
   setup() {
     const channelDetailStore = useChannelDetailStore();
     const messageStore = useMessageStore();
@@ -38,7 +35,6 @@ export default {
   },
   computed: {
     getGroupMembers() {
-      // console.log(this.messageStore.selectedChat.profiles);
       if (this.messageStore.selectedChat.profiles) {
         return this.messageStore.selectedChat?.profiles.slice(-3);
       }

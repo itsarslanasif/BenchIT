@@ -33,7 +33,6 @@ import GroupMembersInfoVue from './GroupMembersInfo.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
-import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {

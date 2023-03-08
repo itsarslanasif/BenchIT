@@ -4,13 +4,11 @@
       <input
         class="searchbar shadow bg-neutral-900 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         type="text"
-        v-model="query"
         :placeholder="$t('channel_details.find_members')"
-        @keyup="searchQuery()"
       />
     </div>
     <div
-      v-if="channelDetailStore.channelMembers.length > 0"
+      v-if="messageStore.selectedChat.profiles.length > 0"
       class="maxHeight overflow-auto"
     >
       <div
@@ -32,7 +30,7 @@
         />
       </div>
     </div>
-    <p v-if="channelDetailStore.channelMembers.length == 0">
+    <p v-if="messageStore.selectedChat.profiles.length == 0">
       {{ $t('channel_details.no_matches_found') }} " {{ query }} "
     </p>
     <CreateGroupModal
@@ -55,9 +53,6 @@ export default {
   name: 'About',
   components: { MermberCard, CreateGroupModal },
   query: '',
-  mounted() {
-    this.searchQuery();
-  },
   data() {
     return {
       showCreateGroupModal: false,
@@ -70,7 +65,6 @@ export default {
   },
   methods: {
     toggleModal() {
-      console.log('clicked');
       this.showCreateGroupModal = !this.showCreateGroupModal;
     },
     async searchQuery() {

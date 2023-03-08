@@ -1,6 +1,5 @@
 <template>
   <div
-    v-click-outside="toggleModal"
     class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
     <div class="flex gap-1 self-center items-center px-3 mt-2 mr-1">
@@ -25,7 +24,9 @@
           {{ isProfile ? chat.description : '' }}
         </span>
       </div>
+      <p class="m">asad</p>
     </div>
+
     <div class="flex gap-2 my-5">
       <StarUnstar :chat="chat" />
       <span
