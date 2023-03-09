@@ -68,7 +68,7 @@
       </p>
     </span>
     <span
-      v-if="isProfile"
+      v-if="isProfile && !isOwnProfile"
       class="flex gap-2 items-center border border-black-300 mt-2 hover:bg-transparent p-4 rounded-md"
     >
       <i class="fa-solid fa-user-plus mx-1" />
@@ -87,11 +87,11 @@
 </template>
 
 <script>
-import { storeToRefs } from 'pinia';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import moment from 'moment';
 
 export default {
@@ -103,17 +103,22 @@ export default {
     isProfile() {
       return this.chat.conversation_type === 'Profile';
     },
+    isOwnProfile() {
+      return this.currentProfileStore.currentProfile.id === this.chat.id;
+    },
   },
   setup() {
     const channelStore = useChannelStore();
     const profilesStore = useProfileStore();
     const userProfileStore = useUserProfileStore();
+    const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
     return {
       channelStore,
       profilesStore,
       rightPaneStore,
       userProfileStore,
+      currentProfileStore,
     };
   },
   methods: {

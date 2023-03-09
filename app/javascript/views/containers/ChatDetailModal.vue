@@ -26,14 +26,14 @@
     <div class="flex gap-2 my-5">
       <StarUnstar :chat="chat" />
       <span
-        v-if="isProfile"
+        v-if="isProfile && !isOwnProfile"
         class="flex gap-1 border items-center rounded px-3 h-8 cursor-pointer hover:bg-transparent"
       >
         <i class="fa-regular fa-bell" />
         <p class="text-sm">{{ $t('chat_detail.mute') }}</p>
       </span>
       <span
-        v-if="isProfile"
+        v-if="isProfile && !isOwnProfile"
         class="flex gap-1 border items-center rounded px-3 h-8 cursor-pointer hover:bg-transparent"
       >
         <i class="fa-solid fa-phone" />
@@ -42,9 +42,9 @@
     </div>
     <div class="flex ml-4 overflow-auto">
       <p
-        @click="ChannelDetailStore.setSelectedOption('about')"
+        @click="channelDetailStore.setSelectedOption('about')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isAbout(),
+          'text-slate-800 bg-transparent': channelDetailStore.isAbout(),
         }"
         class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
@@ -52,18 +52,18 @@
       </p>
       <p
         v-if="!isProfile"
-        @click="ChannelDetailStore.setSelectedOption('members')"
+        @click="channelDetailStore.setSelectedOption('members')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isMembers(),
+          'text-slate-800 bg-transparent': channelDetailStore.isMembers(),
         }"
         class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('chat_detail.members') }}
       </p>
       <p
-        @click="ChannelDetailStore.setSelectedOption('integrations')"
+        @click="channelDetailStore.setSelectedOption('integrations')"
         :class="{
-          'bg-transparent': ChannelDetailStore.isIntegrations(),
+          'bg-transparent': channelDetailStore.isIntegrations(),
         }"
         class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
@@ -71,9 +71,9 @@
       </p>
       <p
         v-if="!isProfile"
-        @click="ChannelDetailStore.setSelectedOption('settings')"
+        @click="channelDetailStore.setSelectedOption('settings')"
         :class="{
-          'bg-transparent': ChannelDetailStore.isSettings(),
+          'bg-transparent': channelDetailStore.isSettings(),
         }"
         class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
@@ -81,13 +81,13 @@
       </p>
     </div>
     <About
-      v-if="ChannelDetailStore.isAbout()"
+      v-if="channelDetailStore.isAbout()"
       :chat="chat"
       :toggleModal="toggleModal"
     />
     <members
       :toggleModal="toggleModal"
-      v-if="!isProfile && ChannelDetailStore.isMembers()"
+      v-if="!isProfile && channelDetailStore.isMembers()"
     />
   </div>
 </template>
@@ -99,25 +99,31 @@ import StarUnstar from '../components/channeldetail/StarUnstar.vue';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import vClickOutside from 'click-outside-vue3';
 import { NAvatar } from 'naive-ui';
+import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
+
 export default {
   components: { About, StarUnstar, Members, NAvatar },
   directives: {
     clickOutside: vClickOutside.directive,
   },
   setup() {
-    const ChannelDetailStore = useChannelDetailStore();
-    return { ChannelDetailStore };
+    const channelDetailStore = useChannelDetailStore();
+    const currentProfileStore = useCurrentProfileStore();
+    return { currentProfileStore, channelDetailStore };
   },
   props: {
     toggleModal: Function,
     chat: Object,
   },
   beforeUnmount() {
-    this.ChannelDetailStore.setSelectedOption('about');
+    this.channelDetailStore.setSelectedOption('about');
   },
   computed: {
     isProfile() {
       return this.chat.conversation_type === 'Profile';
+    },
+    isOwnProfile() {
+      return this.currentProfileStore.currentProfile.id === this.chat.id;
     },
   },
 };
