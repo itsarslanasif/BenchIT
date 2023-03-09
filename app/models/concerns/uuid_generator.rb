@@ -11,9 +11,9 @@ module UuidGenerator
                   "D0#{SecureRandom.alphanumeric(12).upcase}"
                 when 'BenchChannel'
                   if record.is_private?
-                    "C0PR#{SecureRandom.alphanumeric(10).upcase}"
+                    "CPR0#{SecureRandom.alphanumeric(10).upcase}"
                   else
-                    "C0PU#{SecureRandom.alphanumeric(10).upcase}"
+                    "CPU0#{SecureRandom.alphanumeric(10).upcase}"
                   end
                 when 'Group'
                   "G0#{SecureRandom.alphanumeric(12).upcase}"
