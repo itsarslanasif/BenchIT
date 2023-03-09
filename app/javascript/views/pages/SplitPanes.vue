@@ -10,7 +10,7 @@
       </div>
       <splitpanes @resize="resizePane">
         <pane
-          max-size="30"
+          max-size="20"
           :size="isMobileView() ? '300px' : 15"
           :class="isMobileView() ? 'relative z-10' : ''"
           min-size="10"

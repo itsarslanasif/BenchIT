@@ -46,7 +46,7 @@
         :class="{
           'text-slate-800 bg-transparent': ChannelDetailStore.isAbout(),
         }"
-        class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
+        class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('chat_detail.about') }}
       </p>
@@ -56,16 +56,16 @@
         :class="{
           'text-slate-800 bg-transparent': ChannelDetailStore.isMembers(),
         }"
-        class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
+        class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('chat_detail.members') }}
       </p>
       <p
         @click="ChannelDetailStore.setSelectedOption('integrations')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isIntegrations(),
+          'bg-transparent': ChannelDetailStore.isIntegrations(),
         }"
-        class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
+        class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('chat_detail.integrations') }}
       </p>
@@ -73,9 +73,9 @@
         v-if="!isProfile"
         @click="ChannelDetailStore.setSelectedOption('settings')"
         :class="{
-          'text-slate-800 bg-transparent': ChannelDetailStore.isSettings(),
+          'bg-transparent': ChannelDetailStore.isSettings(),
         }"
-        class="ml-3 hover:bg-transparent text-slate-200 hover:text-slate-800 px-2 rounded cursor-pointer"
+        class="ml-3 hover:bg-transparent hover:text-slate-800 px-2 rounded cursor-pointer"
       >
         {{ $t('chat_detail.settings') }}
       </p>

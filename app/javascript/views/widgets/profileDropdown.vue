@@ -31,11 +31,10 @@
           class="flex absolute icon"
           :class="
             profileActiveStatus
-              ? 'active text-green-700 border-2 border-black-900 rounded-xl'
-              : 'away text-black border-2 border-white rounded-xl'
+              ? 'bg-green-700 border-white border rounded-full h-3 w-3'
+              : 'bg-black-900 border-white border rounded-full h-3 w-3'
           "
         >
-          <i class="fa-solid fa-circle"></i>
         </div>
       </n-button>
     </n-dropdown>
@@ -403,14 +402,5 @@ export default {
 .icon {
   right: 14px;
   top: 33px;
-}
-
-.active {
-  font-size: 9px;
-}
-
-.away {
-  font-size: 6px;
-  outline: 3px solid rgb(28, 29, 28);
 }
 </style>

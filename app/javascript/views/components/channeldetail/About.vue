@@ -2,7 +2,7 @@
   <div v-if="chat" class="bg-white flex flex-col p-4 overflow-auto">
     <span
       :class="!isProfile ? 'border-b-0 rounded-t-md' : 'rounded-md'"
-      class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-3 rounded-t-md"
+      class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-4 rounded-t-md"
     >
       <span>
         <p class="font-bold">{{ $t('chat_detail.topic') }}</p>
@@ -17,14 +17,14 @@
     </span>
     <span
       v-if="!isProfile"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 border-b-1"
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 border-b-1"
     >
       <p class="font-bold">{{ $t('chat_detail.description') }}</p>
       <p>{{ chat.description }}</p>
     </span>
     <span
       v-if="!isProfile"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-3 border-t-0"
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 border-t-0"
     >
       <p class="font-bold">{{ $t('chat_detail.created_by') }}</p>
       <p>
@@ -34,14 +34,14 @@
     </span>
     <span
       v-if="!isProfile"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 mb-4 border-t-0 rounded-b-md"
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 mb-4 border-t-0 rounded-b-md"
       @click="leaveChannel"
     >
       <p class="text-danger font-bold">{{ $t('chat_detail.leave') }}</p>
     </span>
     <span
       v-if="isProfile"
-      class="border border-black-300 mt-2 hover:bg-transparent p-2 py-3 rounded-md"
+      class="border border-black-300 mt-2 hover:bg-transparent p-4 rounded-md"
     >
       <span class="flex gap-2 p-1 items-center">
         <i class="fa-regular fa-clock mx-1" />
@@ -69,7 +69,7 @@
     </span>
     <span
       v-if="isProfile"
-      class="flex gap-2 items-center border border-black-300 mt-2 hover:bg-transparent p-3 py-4 rounded-md"
+      class="flex gap-2 items-center border border-black-300 mt-2 hover:bg-transparent p-4 rounded-md"
     >
       <i class="fa-solid fa-user-plus mx-1" />
       <p class="text-info font-semibold cursor-pointer hover:underline w-fit">
@@ -78,7 +78,7 @@
     </span>
     <span
       :class="isProfile && 'mt-2'"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-2 rounded-md"
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 rounded-md"
     >
       <p class="font-bold">{{ $t('chat_detail.files') }}</p>
       <p>{{ $t('chat_detail.file_content') }}</p>

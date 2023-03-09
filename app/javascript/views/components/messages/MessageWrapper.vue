@@ -80,7 +80,7 @@
               <p
                 class="text-xs ml-1 text-black-500 hover:underline cursor-pointer"
                 :class="{
-                  'hover-target':
+                  'hover-target w-12':
                     !isDeleted &&
                     isSameUser &&
                     isSameDayMessage &&
@@ -273,7 +273,7 @@
                   !isFirstMessage,
               },
             ]"
-            class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
+            class="mt-1 mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
           >
             <n-tooltip
               placement="top"

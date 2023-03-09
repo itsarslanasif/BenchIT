@@ -1,15 +1,12 @@
 <template>
   <div v-if="selectedChat.id" class="p-4">
-    <div
-      @click="isProfile ? showUserProfile(selectedChat?.id) : null"
-      class="flex"
-      :class="isProfile && 'cursor-pointer'"
-    >
+    <div class="flex">
       <span>
         <img
           v-if="isProfile"
+          @click="showUserProfile(selectedChat?.id)"
           :src="selectedChat?.image_url"
-          class="w-20 h-20 rounded mr-2 bg-slate-50"
+          class="w-20 h-20 rounded mr-2 bg-slate-50 cursor-pointer"
         />
         <font-awesome-icon
           v-if="isChannel"
@@ -19,18 +16,23 @@
       </span>
       <span :class="isProfile && 'self-center'">
         <span>
-          <div v-if="isProfile" class="flex font-semibold">
+          <div
+            v-if="isProfile"
+            @click="showUserProfile(selectedChat?.id)"
+            class="flex items-center font-semibold cursor-pointer"
+          >
             {{ selectedChat?.username }}
             {{ isOwnChat ? $t('chat.you') : '' }}
-
-            <span class="flex text-md mx-4 mt-1 break-words text-black-800">
+            <span
+              class="flex text-md self-center mx-1 mt-1 break-words text-black-800"
+            >
               <span
                 v-if="selectedChat?.is_active"
-                class="bg-green-700 rounded-full border-green-700 border-2 h-3 w-3 relative"
+                class="bg-green-700 border-white border rounded-full h-3 w-3"
               />
               <span
                 v-else
-                class="bg-white rounded-full border-black border-2 h-3 w-3 relative"
+                class="bg-black border-white border rounded-full h-3 w-3"
               />
             </span>
           </div>
