@@ -8,17 +8,16 @@
         role="dialog"
       >
         <div class="p-8">
-          <header id="modalTitle" class="flex w-full">
+          <header id="modalTitle" class="flex w-full justify-between">
             <div class="w-5/6 text-lg text-black-900">
               <h1>{{ title }}</h1>
             </div>
-            <button
-              type="button"
-              class="w-1/6 bg-none py-1 px-3 text-base float-right text-black-900 rounded"
+
+            <font-awesome-icon
               @click="closeModal"
-            >
-              {{ $t('actions.close') }}
-            </button>
+              class="hover:text-primary text-black-500 px-3 py-1 w-5 h-5"
+              icon="fa-solid fa-xmark"
+            />
           </header>
           <div class="m-0 relative mt-5">
             <div class="mb-6 text-black-500">
@@ -41,12 +40,14 @@
               :show-arrow="false"
               size="large"
             />
-            <button
+            <n-button
               @click="onSubmit"
               class="bg-success text-white py-2 px-5 text-base float-right my-3 rounded"
+              :disabled="isDisabled"
+              type="success"
             >
               {{ createNewGroup ? $t('actions.create') : $t('actions.add') }}
-            </button>
+            </n-button>
           </div>
         </div>
       </div>
@@ -88,6 +89,16 @@ export default {
     clickOutside: vClickOutside.directive,
   },
   props: ['closeModal', 'title', 'createNewGroup', 'groupId'],
+
+  computed: {
+    isDisabled() {
+      if (!this.createNewGroup)
+        return this.selectedValues === null || this.selectedValues.length === 0;
+      else {
+        return this.selectedValues === null || this.selectedValues.length < 2;
+      }
+    },
+  },
   data() {
     return {
       rules: {
@@ -95,7 +106,6 @@ export default {
           required: true,
           message: CONSTANTS.CHANNEL_NAME_ERROR,
           trigger: ['input'],
-          selectedValues: null,
         },
       },
       formValue: {
@@ -106,9 +116,11 @@ export default {
       error: '',
       status: 0,
       options: ref([]),
+      selectedValues: ref(null),
       maxCount: 6,
     };
   },
+
   mounted() {
     const { profilesStore, currentProfile } = this;
     const filteredProfiles = profilesStore.profiles.filter(
@@ -139,8 +151,7 @@ export default {
   methods: {
     onSubmit() {
       if (this.createNewGroup) {
-        this.selectedValues.push(this.currentProfile.id);
-        createGroup(this.selectedValues)
+        createGroup([...this.selectedValues, this.currentProfile.id])
           .then(res => {
             const { group, name } = res;
             const updatedGroup = { ...group, name };
@@ -158,6 +169,7 @@ export default {
             const updatedGroup = { ...group, name };
             this.groupStore.updateGroup(updatedGroup);
             this.$router.push(`/groups/${updatedGroup.id}`);
+            this.closeModal();
           })
           .catch(err => {
             console.error(err);

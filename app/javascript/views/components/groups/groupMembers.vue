@@ -80,6 +80,6 @@ export default {
 </script>
 <style scoped>
 .maxHeight {
-  max-height: 400px;
+  max-height: 300px;
 }
 </style>

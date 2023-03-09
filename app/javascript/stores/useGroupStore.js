@@ -22,7 +22,6 @@ export const useGroupStore = defineStore('useGroupStore', {
             this.groups[index] = group;
           }
         }
-        return obj;
       });
     },
   },
