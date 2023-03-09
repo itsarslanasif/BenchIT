@@ -1,4 +1,3 @@
-import moment from 'moment/moment';
 import { defineStore } from 'pinia';
 import { getMessageHistory } from '../modules/socket/messageHistory';
 import { deleteMessage } from '../api/messages';
@@ -6,7 +5,6 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
-import { conversation } from '../modules/axios/editorapi'
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -21,8 +19,6 @@ export const useMessageStore = () => {
     state: () => ({
       messages: [],
       currMessage: [],
-      unsentQueue: [],
-      sendingMessages: [],
       scheduleMessage: [],
       currentPage: 1,
       maxPages: null,
@@ -166,24 +162,6 @@ export const useMessageStore = () => {
           );
           scheduledMessage.scheduled_at = payload.scheduled_at;
         });
-      },
-      unsendMessagesQueue(formData) {
-        const date = moment()
-        const message = {}
-        for (const pair of formData.entries()) {
-          message[pair[0]] = pair[1]
-        }
-        message.created_at = date.format()
-        this.unsentQueue.push(message);
-        this.sendingMessages.push(formData)
-      },
-      sendAllUnsentMessages() {
-        conversation(this.sendingMessages.shift()).then(res => {
-          if (res.scheduled_at) {
-            this.addScheduleMessage(res);
-          }
-        });
-        this.unsentQueue.shift()
       },
     },
   });

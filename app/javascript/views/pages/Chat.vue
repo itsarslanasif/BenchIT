@@ -109,7 +109,8 @@ export default {
       channelMembers,
       currentProfile,
       profileStore,
-      isConnected
+      isConnected,
+      connectionStore
     };
   },
   watch: {
@@ -194,7 +195,7 @@ export default {
           });
           this.newMessageSent = true;
         } else {
-          this.messageStore.unsendMessagesQueue(formData)
+          this.connectionStore.unsendMessagesQueue(formData)
         }
       } else {
         return false;

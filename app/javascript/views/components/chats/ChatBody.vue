@@ -72,8 +72,10 @@
           />
         </div>
       </div>
+      {{  }}
       <div v-if="unsentQueue.length" v-for="message in unsentQueue">
-        <MessageWrapper :currMessage="message" :prevMessage="prevMessage" :isUnsentMessage=true />
+        {{  }}
+        <MessageWrapper v-if="isSameChat(message)" :currMessage="message" :prevMessage="prevMessage" :isUnsentMessage=true />
       </div>
     </div>
   </div>
@@ -83,6 +85,7 @@ import MessageWrapper from '../messages/MessageWrapper.vue';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { NButton, NSpace, NDivider } from 'naive-ui';
 import { storeToRefs } from 'pinia';
+import { useConnectionStore } from '../../../stores/useConnectionStore';
 import PinnedConversationModal from '../pinnedConversation/pinnedConversationModal.vue';
 import JumpToDateVue from '../../widgets/JumpToDate.vue';
 import moment from 'moment';
@@ -143,14 +146,17 @@ export default {
   },
   setup() {
     const messageStore = useMessageStore();
-    const { messages, currMessage, hasMoreMessages, newMessageSent, unsentQueue } =
+    const connectionStore = useConnectionStore();
+    const { messages, currMessage, hasMoreMessages, newMessageSent, selectedChat } =
       storeToRefs(messageStore);
+    const { unsentQueue } = storeToRefs(connectionStore)
     return {
       messages,
       currMessage,
       hasMoreMessages,
       newMessageSent,
-      unsentQueue
+      unsentQueue,
+      selectedChat
     };
   },
   methods: {
@@ -256,6 +262,10 @@ export default {
         this.$emit('load-more-messages');
       }
     },
+    isSameChat(message){
+      return this.selectedChat.id == message.conversation_id && 
+        this.selectedChat?.conversation_type?.toLowerCase() == message?.conversation_type.slice(0, -1)
+    }
   },
   updated() {
     const message_id = this.$route.params.message_id;
