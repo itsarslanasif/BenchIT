@@ -7,7 +7,7 @@
     </span>
   </div>
   <div class="overflow-auto h-screen">
-    <div v-if="!threadStore.threads" class="m-4">
+    <div v-if="threadStore.threads" class="m-4">
       <div
         class="m-4 rounded-xl border-transparent border shadow-inner overflow-hidden"
         v-for="message in threadStore.threads"
