@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_09_104837) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
@@ -87,6 +87,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
     t.string "bench_channel_id", null: false
     t.string "profile_id", null: false
     t.boolean "muted", default: false, null: false
+    t.integer "role", default: 0
     t.index ["bench_channel_id", "profile_id"], name: "index_channel_participants_on_bench_channel_id_and_profile_id", unique: true
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
     t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
