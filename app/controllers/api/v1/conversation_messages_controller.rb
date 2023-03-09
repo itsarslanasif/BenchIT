@@ -75,13 +75,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def threads
-    @threads = Current.profile.conversation_messages
-                      .where.not(parent_message_id: nil)
-                      .select(:parent_message_id)
-                      .distinct
-                      .map(&:parent_message)
-                      .sort_by(&:created_at)
-                      .reverse
+    parent_messages = ConversationMessage.current_profile_threads(current_profile).map(&:parent_message)
+    reply_messages = current_profile.conversation_messages.select { |message| message.replies.any? }
+
+    @threads = (parent_messages + reply_messages).uniq
+
+    @threads = @threads.sort_by do |thread|
+      last_reply = thread.replies.max_by(&:created_at)
+      last_reply.created_at
+    end.reverse
   end
 
   def profile_messages

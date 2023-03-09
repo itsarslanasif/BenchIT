@@ -75,32 +75,16 @@
             </p>
             <span
               :class="{
-                'flex w-12':
-                  !isDeleted &&
-                  isSameUser &&
-                  isSameDayMessage &&
-                  !isFirstMessage,
+                'flex w-12': !isDeleted && isSameUserAndDay,
               }"
             >
               <p
                 class="text-xs ml-1 text-black-500 hover:underline cursor-pointer"
                 :class="{
-                  'hover-target':
-                    !isDeleted &&
-                    isSameUser &&
-                    isSameDayMessage &&
-                    !isFirstMessage,
+                  'hover-target': !isDeleted && isSameUserAndDay,
                 }"
               >
-                {{
-                  isDeleted
-                    ? null
-                    : currMessage.is_info || fromThreadPage
-                    ? time
-                    : isSameUser && isSameDayMessage && !isFirstMessage
-                    ? timeWithoutAMPM
-                    : time
-                }}
+                {{ messageSentAt }}
               </p>
             </span>
             <div>
@@ -275,11 +259,7 @@
             :class="[
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
               {
-                'ml-12 -mr-10':
-                  !currMessage.is_info &&
-                  isSameUser &&
-                  isSameDayMessage &&
-                  !isFirstMessage,
+                'ml-12 -mr-10': !currMessage.is_info && isSameUserAndDay,
               },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
@@ -328,7 +308,8 @@
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
-            ((emojiModalStatus || openEmojiModal || showOptions) && !isUnsentMessage) &&
+            (emojiModalStatus || openEmojiModal || showOptions) &&
+            !isUnsentMessage &&
             JSON.parse(this.currMessage.content).blocks[0].text.text !==
               $t('deleteMessageModal.success')
           "
@@ -458,7 +439,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
-import MessageFailed from '../../widgets/MessageFailed.vue'
+import MessageFailed from '../../widgets/MessageFailed.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -665,6 +646,24 @@ export default {
     },
     isSharedMessage() {
       return this.currMessage.shared_message != null;
+    },
+    isSameUserAndDay() {
+      return this.isSameUser && this.isSameDayMessage && !this.isFirstMessage;
+    },
+    messageSentAt() {
+      if (this.isDeleted) {
+        return null;
+      }
+
+      if (this.currMessageisInfo || this.fromThreadPage) {
+        return this.time;
+      }
+
+      if (this.isSameUserAndDay) {
+        return this.timeWithoutAMPM;
+      }
+
+      return this.time;
     },
   },
   methods: {
