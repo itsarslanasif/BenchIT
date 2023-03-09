@@ -6,6 +6,7 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
+import { conversation } from '../modules/axios/editorapi'
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -175,7 +176,15 @@ export const useMessageStore = () => {
         message.created_at = date.format()
         this.unsentQueue.push(message);
         this.sendingMessages.push(formData)
-      }
+      },
+      sendAllUnsentMessages() {
+        conversation(this.sendingMessages.shift()).then(res => {
+          if (res.scheduled_at) {
+            this.addScheduleMessage(res);
+          }
+        });
+        this.unsentQueue.shift()
+      },
     },
   });
 

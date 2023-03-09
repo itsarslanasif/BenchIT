@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { useMessageStore } from './useMessagesStore'
 
 export const useConnectionStore = () => {
   const connectionStore = defineStore('useConnectionStore', {
@@ -13,6 +14,10 @@ export const useConnectionStore = () => {
     actions: {
       toggleConnection(status) {
         this.isConnected = status;
+        if (status) {
+          const messageStore = useMessageStore()
+          messageStore.sendAllUnsentMessages();
+        }
       }
     },
   });
