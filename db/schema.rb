@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_09_131437) do
     t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
   end
 
-  create_table "channel_participants", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "channel_participants", id: :string, force: :cascade do |t|
     t.boolean "permission", default: true
     t.datetime "left_on"
     t.datetime "created_at", null: false

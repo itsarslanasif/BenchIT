@@ -1,6 +1,6 @@
 class CreateUserChatChannels < ActiveRecord::Migration[7.0]
   def change
-    create_table :user_chat_channels, id: :uuid do |t|
+    create_table :user_chat_channels, id: :string do |t|
       t.boolean :permission, default: true
       t.datetime :left_on
       t.timestamps

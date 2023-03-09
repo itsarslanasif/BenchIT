@@ -5,7 +5,7 @@ class ChannelParticipant < ApplicationRecord
   validates :permission, presence: true
   validates :bench_channel, uniqueness: { scope: %i[profile_id] }
 
-  before_create :set_role
+  before_create :set_role, :set_id
   after_commit :broadcast_channel, :broadcast_member_profile
 
   enum role: {
@@ -46,5 +46,9 @@ class ChannelParticipant < ApplicationRecord
                 else
                   :member
                 end
+  end
+
+  def set_id
+    self.id = bench_channel_id + profile_id
   end
 end
