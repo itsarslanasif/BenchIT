@@ -11,7 +11,7 @@
       <n-select
         v-model:value="selectedChannelID"
         filterable
-        placeholder="Please select a song"
+        :placeholder="$t('chat.share_title')"
         :options="options"
       />
     </template>

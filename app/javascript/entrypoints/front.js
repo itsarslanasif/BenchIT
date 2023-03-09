@@ -70,7 +70,8 @@ import {
   faGear,
   faRecordVinyl,
   faPause,
-  faDisplay
+  faDisplay,
+  faToggleOn,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -146,7 +147,8 @@ library.add(
   faVideo,
   faRecordVinyl,
   faPause,
-  faDisplay
+  faDisplay,
+  faToggleOn
 
 );
 const I18n = createI18n({ locale: 'current', messages: translations });

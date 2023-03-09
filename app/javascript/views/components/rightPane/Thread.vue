@@ -45,10 +45,12 @@ import TextEditorVue from '../editor/TextEditor.vue';
 import { NDivider } from 'naive-ui';
 import Editor from '@tinymce/tinymce-vue';
 import { useThreadStore } from '../../../stores/useThreadStore';
+import { useProfileStore } from '../../../stores/useProfileStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
 import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
+import { Remarkable } from 'remarkable';
 import { CONSTANTS } from '../../../assets/constants';
 
 export default {
@@ -63,8 +65,9 @@ export default {
   setup() {
     const threadStore = useThreadStore();
     const currentUserStore = useUserInviteStore();
+    const profileStore = useProfileStore();
     const { currentUser } = storeToRefs(currentUserStore);
-    return { threadStore, currentUser };
+    return { threadStore, currentUser, profileStore };
   },
 
   data() {
@@ -99,8 +102,15 @@ export default {
       const file = new File([blob], fileName, { type: blob.type });
       return file;
     },
-    sendMessage(message, files) {
+    async sendMessage(message, files) {
       if (message.blocks[0] != undefined) {
+        let profileList =  await Promise.all( message.blocks.map( async (block) => {
+          return await this.getMentionedUsers(block)
+        }))
+        profileList = profileList.flat(2)
+        profileList = profileList.map(profile => {
+          return profile.id
+        })
         let formData = new FormData();
         formData.append('sender_id', 1);
         formData.append('content', JSON.stringify(message));
@@ -108,6 +118,10 @@ export default {
         formData.append('parent_message_id', this.threadStore.message.id);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
+        if (profileList.length != 0)
+        {
+          formData.append('profile_list[]', profileList)
+        }
         files.forEach(file => {
           const fileExtension = file.type.split('/')[1];
           const ts = new Date().getTime();
@@ -135,6 +149,11 @@ export default {
         return false;
       }
     },
+    async getMentionedUsers(section) {
+      const html = new Remarkable({ html: true });
+      const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
+      return profiles
+    }
   },
   mounted() {
     const message_id = this.$route.params.message_id;

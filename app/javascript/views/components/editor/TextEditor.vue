@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="showTopBar ? '' : 'mt-8'">
     <div>
       <div
         v-if="schedule"
@@ -11,7 +11,7 @@
         v-if="editor"
         class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
       >
-        <div class="flex overflow-auto items-center gap-1">
+        <div v-show="showTopBar" class="flex overflow-auto items-center gap-1">
           <button
             @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
@@ -162,9 +162,19 @@
             <div v-if="!editMessage" class="vl" />
             <button
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
+              @click="toggleModal"
             >
               <font-awesome-icon icon="fa-smile" />
             </button>
+
+            <div v-if="emojiModalFlag" class="absolute bottom-0 ml-32">
+              <EmojiPicker
+                v-if="emojiModalFlag"
+                :toggleModal="toggleModal"
+                :addReaction="addReaction"
+              />
+            </div>
+
             <button
               v-if="!editMessage"
               class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
@@ -172,9 +182,10 @@
               <font-awesome-icon icon="fa-at" />
             </button>
             <button
-              class="px-2 py-1 hover:bg-transparent rounded focus:outline-none focus:bg-black-300"
+              class="px-2 py-1 hover:bg-transparent rounded italic focus:outline-none"
+              @click="toggleTopBar"
             >
-              <font-awesome-icon icon="fa-toggle-off" />
+              <font-awesome-icon :icon="toggleIcon" />
             </button>
           </div>
           <div v-if="editMessage" class="flex gap-2 rounded items-center">
@@ -255,6 +266,7 @@ import VoiceRecorder from './VoiceRecorder.vue';
 import VisualizeVoice from './VisualizeVoice.vue';
 import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
+import EmojiPicker from '../../widgets/emojipicker.vue';
 
 export default {
   data() {
@@ -282,6 +294,12 @@ export default {
     VisualizeVoice,
     VideoRecord,
     VisualizeVideo,
+    EmojiPicker,
+  },
+  computed: {
+    toggleIcon() {
+      return this.showTopBar ? 'fa-toggle-off' : 'fa-toggle-on';
+    },
   },
   directives: {
     clickOutside: vClickOutside.directive,
@@ -324,6 +342,9 @@ export default {
   methods: {
     createURL(file) {
       return URL.createObjectURL(file);
+    },
+    toggleTopBar() {
+      this.showTopBar = !this.showTopBar;
     },
 
     setLink() {
@@ -372,6 +393,8 @@ export default {
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
+    const emojiModalFlag = ref(false);
+    const showTopBar = ref(true);
 
     onMounted(() => {
       editor.value = new Editor({
@@ -396,6 +419,15 @@ export default {
         newMessage.value = props.messageToEdit.content;
       }
     });
+
+    const addReaction = emoji => {
+      editor.value.commands.insertContent(emoji.i);
+      toggleModal();
+    };
+
+    const toggleModal = () => {
+      emojiModalFlag.value = !emojiModalFlag.value;
+    };
 
     const makeBlocks = async line => {
       const block = await markdownToBlocks(line);
@@ -625,6 +657,7 @@ export default {
       schedule,
       scheduleModalFlag,
       messageStore,
+      emojiModalFlag,
       messageToEdit,
       removeFile,
       removeAudioFile,
@@ -649,6 +682,9 @@ export default {
       removeVideoFiles,
       formatBlockContent,
       sendMessagePayload,
+      addReaction,
+      toggleModal,
+      showTopBar,
     };
   },
 };

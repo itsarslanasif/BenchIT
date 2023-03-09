@@ -35,6 +35,7 @@ class Profile < ApplicationRecord
   has_many :schedule_messages, dependent: :destroy
   has_many :direct_message_users, dependent: :destroy
   has_one :preference, dependent: :destroy
+  has_many :mentions, as: :mentionable, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }

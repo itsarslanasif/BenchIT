@@ -39,6 +39,7 @@ Rails.application.routes.draw do
             post :last_messages
             get :threads
             get :reactions
+            get :reactions_and_mentions
           end
           member do
             get :bench_channel_messages, :group_messages, :profile_messages

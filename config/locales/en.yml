@@ -171,6 +171,7 @@ en:
           messages and share files with"
         share_private_chat_note: 'This message is from a private conversation, so it can only be shared
           in this thread'
+        share_title: 'Search for channel or a person'
         view_conversation : 'View Conversation'
         posted_in: 'Posted in # '
       conversation_type:
@@ -449,6 +450,7 @@ en:
         title: 'Mentions & reactions'
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
+        mentioned: 'mentioned you in'
     admin:
       title: 'Admin'
       save: 'Save'
