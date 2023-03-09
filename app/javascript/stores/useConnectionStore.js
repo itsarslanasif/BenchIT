@@ -42,6 +42,11 @@ export const useConnectionStore = () => {
         })
         this.sendingMessages = []
       },
+      deleteTheMessage(message){
+        const indexOfMessage = this.unsentQueue.indexOf(message)
+        this.unsentQueue.splice(indexOfMessage, 1);
+        this.sendingMessages.splice(indexOfMessage, 1);
+      }
     },
   });
 

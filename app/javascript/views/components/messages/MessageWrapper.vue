@@ -118,6 +118,7 @@
                   :isUnsentMessage="isUnsentMessage ? true : false"
                   :section="block"
                 />
+                <MessageFailed v-if="isUnsentMessage" :message="currMessage" />
                 <div v-if="isSharedMessage" class="flex ml-4 flex-center">
                   <ShareMessageVue
                     :inThread="inThread"
@@ -165,6 +166,7 @@
                   :isUnsentMessage="isUnsentMessage ? true : false"
                   :section="block"
                 />
+                <MessageFailed v-if="isUnsentMessage" :message="currMessage" />
               </span>
               <EditedAtTime
                 v-if="currMessage.is_edited && isDeleted"
@@ -323,7 +325,7 @@
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
-            (emojiModalStatus || openEmojiModal || showOptions) &&
+            ((emojiModalStatus || openEmojiModal || showOptions) && !isUnsentMessage) &&
             JSON.parse(this.currMessage.content).blocks[0].text.text !==
               $t('deleteMessageModal.success')
           "
@@ -444,6 +446,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
+import MessageFailed from '../../widgets/MessageFailed.vue'
 
 export default {
   name: 'MessageWrapper',
@@ -496,6 +499,7 @@ export default {
     UnPinModal,
     MessageSection,
     VisualizeVoice,
+    MessageFailed,
   },
   props: {
     currMessage: {
