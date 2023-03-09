@@ -198,6 +198,7 @@ en:
         workspace_type: "Please select workspace type"
       sidebar:
         threads: 'Threads'
+        no_threads_to_show: 'No threads to show'
         direct_messages: 'Direct Messages'
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Drafts & Sent'

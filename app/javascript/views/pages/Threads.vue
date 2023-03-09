@@ -1,71 +1,71 @@
 <template>
-  <div>
-    <div class="grid text-slate-200 bg-primary grid-cols-1">
-      <span class="flex justify-between">
-        <div class="p-2 text-white text-xl">
-          {{ $t('sidebar.threads') }}
-        </div>
-      </span>
-    </div>
-    <div class="overflow-auto h-screen">
-      <div v-if="threadStore.threads" class="m-4">
-        <div
-          class="m-4 rounded-xl border-transparent border shadow-inner overflow-hidden"
-          v-for="message in threadStore.threads"
-          :key="message.id"
-        >
-          {{ setMessage(message) }}
-          <div class="p-2 px-4 bg-transparent">
-            <div class="text-lg flex gap-1 text-primary font-semibold">
-              <div
-                v-if="currMessage.receiver_name"
-                class="rounded-xl text-xs self-center"
-                :class="isActive ? 'text-green-700' : 'text-black'"
-              >
-                <i class="fa-solid fa-circle"></i>
-              </div>
-              <div v-else>
-                <font-awesome-icon v-if="isPrivate" icon="fa-lock" />
-                <font-awesome-icon v-else icon="fa-hashtag" />
-              </div>
-              <p>{{ conversationName }}</p>
+  <div class="grid grid-cols-1 border-b border-primary">
+    <span class="flex justify-between">
+      <div class="p-2 text-black-900 font-semibold text-xl">
+        {{ $t('sidebar.threads') }}
+      </div>
+    </span>
+  </div>
+  <div class="overflow-auto h-screen">
+    <div v-if="!threadStore.threads" class="m-4">
+      <div
+        class="m-4 rounded-xl border-transparent border shadow-inner overflow-hidden"
+        v-for="message in threadStore.threads"
+        :key="message.id"
+      >
+        {{ setMessage(message) }}
+        <div class="p-2 px-4 bg-transparent">
+          <div class="text-lg flex gap-1 text-primary font-semibold">
+            <div
+              v-if="currMessage.receiver_name"
+              class="rounded-xl text-xs self-center"
+              :class="isActive ? 'text-green-700' : 'text-black'"
+            >
+              <i class="fa-solid fa-circle"></i>
             </div>
-            <p class="text-xs text-black-600 font-normal self-center">
-              {{ threadParticipants }}
-            </p>
+            <div v-else>
+              <font-awesome-icon v-if="isPrivate" icon="fa-lock" />
+              <font-awesome-icon v-else icon="fa-hashtag" />
+            </div>
+            <p>{{ conversationName }}</p>
           </div>
+          <p class="text-xs text-black-600 font-normal self-center">
+            {{ threadParticipants }}
+          </p>
+        </div>
+        <MessageWrapper
+          :conversationType="currMessage.conversationable_type"
+          :conversationId="currMessage.conversationable_id"
+          :fromThreadPage="true"
+          :currMessage="currMessage"
+        />
+        <div v-for="reply in message.replies" :key="reply.id">
           <MessageWrapper
+            :inThread="true"
+            :fromThreadPage="true"
+            :currMessage="reply"
+          />
+        </div>
+        <div class="p-4">
+          <TextEditor
+            :isThread="true"
+            :sendMessage="sendMessage"
+            :fromThreads="true"
             :conversationType="currMessage.conversationable_type"
             :conversationId="currMessage.conversationable_id"
-            :fromThreadPage="true"
-            :currMessage="currMessage"
+            :parentMessageId="currMessage.id"
           />
-          <div v-for="reply in message.replies" :key="reply.id">
-            <MessageWrapper
-              :inThread="true"
-              :fromThreadPage="true"
-              :currMessage="reply"
-            />
-          </div>
-          <div class="p-4">
-            <TextEditor
-              :isThread="true"
-              :sendMessage="sendMessage"
-              :fromThreads="true"
-              :conversationType="currMessage.conversationable_type"
-              :conversationId="currMessage.conversationable_id"
-              :parentMessageId="currMessage.id"
-            />
-          </div>
         </div>
       </div>
-      <div class="flex flex-col gap-2 justify-center items-center m-10" v-else>
-        <font-awesome-icon
-          icon="fa-regular fa-comment"
-          class="font-bold text-xl"
-        />
-        <p class="font-semibold text-lg">No threads to show</p>
-      </div>
+    </div>
+    <div class="flex flex-col gap-2 justify-center items-center m-10" v-else>
+      <font-awesome-icon
+        icon="fa-regular fa-comment"
+        class="font-bold text-xl"
+      />
+      <p class="font-semibold text-lg">
+        {{ $t('sidebar.no_threads_to_show') }}
+      </p>
     </div>
   </div>
 </template>
