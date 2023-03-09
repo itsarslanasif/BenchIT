@@ -54,7 +54,7 @@ export const CONSTANTS = {
   CUSTOM: 'Custom',
   COPY_LINK: 'Copy link',
   PIN_TO_CONVERSATION: 'Pin to this conversation',
-  UNPIN_FROM_CONVERSATION: 'Un-pin from this conversation',
+  UNPIN_FROM_CONVERSATION: 'Unpin from this conversation',
   EDIT: 'Edit message',
   DELETE: 'Delete message',
   POLLY: 'Create a polly',

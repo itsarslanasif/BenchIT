@@ -10,9 +10,7 @@
     aria-modal="true"
   >
     <template #header>
-      <span class="text-2xl font-bold">{{
-        $t('pinconversation.title')
-      }}</span>
+      <span class="text-2xl font-bold">{{ $t('pinconversation.title') }}</span>
     </template>
     <span>{{ $t('pinconversation.confirmation') }}</span>
     <div
@@ -55,14 +53,11 @@ export default {
     NPopover,
     PinnedMessageContent,
   },
-  data() {
-    return {};
-  },
-  computed: {},
+
   methods: {
-    unpinMessage() {
+    async unpinMessage() {
       try {
-        unPinMessage(this.currMessage.pin.id);
+        await unPinMessage(this.currMessage.pin.id);
       } catch (e) {
         console.error(e);
       }

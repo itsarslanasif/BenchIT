@@ -67,10 +67,10 @@ export default {
     return { pinnedConversationStore, currentProfileStore, messageStore };
   },
   beforeMount() {
-
     if (this.message) {
       this.Options = new Options(
-        this.message.pinned, this.message.is_info,
+        this.message.pinned,
+        this.message.is_info,
         this.isMyMessage(this.currentProfileStore.currentProfile, this.message)
       );
     }
@@ -84,22 +84,7 @@ export default {
     isMyMessage(currentProfileStore, message) {
       return message.sender_id == currentProfileStore.id;
     },
-    handleSelect(key, message, pinnedConversationStore, messageStore) {
-      const getIndexByParams = param => {
-        return window.location.pathname.split('/')[param];
-      };
-      const getConversationType = type => {
-        switch (type) {
-          case 'channels':
-            return 'BenchChannel';
-          case 'profiles':
-            return 'Profile';
-          case 'groups':
-            return 'Group';
-          default:
-            return;
-        }
-      };
+    async handleSelect(key, message, messageStore) {
       switch (key) {
         case 'copy-link':
           this.copyLinkToMessage(message);
@@ -108,23 +93,17 @@ export default {
           this.setDeleteModal();
           break;
         case 'pin-to-this-conversation':
-          const conversation_type = getIndexByParams(1);
-          const conversation_id = getIndexByParams(2);
           try {
-            pinMessage(
-              message.bench_conversation_id,
-              message.id
-            );
+            await pinMessage(message.bench_conversation_id, message.id);
           } catch (e) {
             console.error(e);
           }
           break;
-        case 'un-pin-from-this-conversation':
+        case 'unpin-from-this-conversation':
           this.setUnpinModal();
           break;
         case 'edit-message':
-          if (message)
-            messageStore.setMessageToEdit(message);
+          if (message) messageStore.setMessageToEdit(message);
           break;
       }
     },

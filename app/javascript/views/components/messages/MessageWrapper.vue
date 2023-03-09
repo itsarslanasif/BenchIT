@@ -2,23 +2,56 @@
   <div
     v-for="block in messageBlock.blocks"
     :key="block"
-    class="py-1"
+    class=""
     :class="{
-      'bg-yellow-50': isSavedMessage,
+      'bg-yellow-50': isSavedMessage || currMessage.pinned,
     }"
   >
-    <div v-if="!currMessage.info && currMessage.pinned">
+    <div v-if="currMessage.pinned && !currMessage.info && !isSavedMessage">
       <span
-        class="pl-4 items-center text-black-800 text-xs flex bg-yellow-50 relative"
+        class="pl-4 text-black-800 text-xs"
+        :class="{
+          'pl-12':
+            !isDeleted && isSameUser && isSameDayMessage && !isFirstMessage,
+        }"
       >
-        <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
+        <font-awesome-icon
+          class="px-1 text-yellow-900"
+          icon="fa-solid fa-thumbtack"
+        />
         {{ $t('pinconversation.pinned_by') }}
         {{ currMessage.pin.pinned_by }}
       </span>
     </div>
-    <div v-if="isSavedMessage" class="flex ml-4 items-center bg-yellow-50">
-      <i class="far fa-bookmark text-red-500"></i>
-      <p class="ml-2">{{ $t('actions.save_items') }}</p>
+    <div
+      v-if="isSavedMessage && !currMessage.info && !currMessage.pinned"
+      class="pl-5 flex items-center text-black-800 text-xs"
+      :class="{
+        'pl-12':
+          !isDeleted && isSameUser && isSameDayMessage && !isFirstMessage,
+      }"
+    >
+      <font-awesome-icon
+        class="pr-2 text-red-500"
+        icon="fa-solid fa-bookmark"
+      />
+      {{ $t('actions.save_items') }}
+    </div>
+    <div v-if="!currMessage.info && currMessage.pinned && isSavedMessage">
+      <span
+        class="pl-4 text-black-800 text-xs"
+        :class="{
+          'pl-12':
+            !isDeleted && isSameUser && isSameDayMessage && !isFirstMessage,
+        }"
+      >
+        <font-awesome-icon
+          class="px-1 text-yellow-900"
+          icon="fa-solid fa-thumbtack"
+        />
+        {{ $t('pinconversation.pinned_by') }}
+        {{ currMessage.pin.pinned_by }} - {{ $t('actions.saved') }}
+      </span>
     </div>
     <div
       class="hover-trigger flex p-1 px-4 hover:bg-transparent relative"

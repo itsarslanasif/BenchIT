@@ -277,6 +277,7 @@ en:
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
         save_items: 'Added to your saved items'
+        saved: 'Saved'
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
         save_changes: 'Save Changes'

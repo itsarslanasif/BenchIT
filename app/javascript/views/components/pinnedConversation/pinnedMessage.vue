@@ -8,7 +8,10 @@
     {{ $t('pinconversation.pinned_by') }}
     {{ currMessage.pin.pinned_by }}
   </div>
-  <div class="p-px px-4 relative mt-2">
+  <div
+    @click="jumpToConversation"
+    class="p-px px-4 relative mt-2 cursor-pointer"
+  >
     <div class="flex">
       <n-avatar
         @click="showUserProfile"
@@ -72,7 +75,7 @@ import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { NAvatar } from 'naive-ui';
-import MessageSection from '../messages/MessageSection.vue'
+import MessageSection from '../messages/MessageSection.vue';
 import moment from 'moment';
 
 export default {
@@ -133,7 +136,7 @@ export default {
     },
 
     messageBlock(message) {
-      return JSON.parse(message)
+      return JSON.parse(message);
     },
 
     jumpToConversation() {
