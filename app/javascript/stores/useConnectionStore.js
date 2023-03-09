@@ -23,10 +23,10 @@ export const useConnectionStore = () => {
       },
       unsendMessagesQueue(formData) {
         const date = moment()
-        const message = {}
-        for (const pair of formData.entries()) {
-          message[pair[0]] = pair[1]
-        }
+        const message = formData.entries().reduce((message, [key, value]) => {
+          message[key] = value;
+          return message;
+        }, {});
         message.created_at = date.format()
         this.unsentQueue.push(message);
         this.sendingMessages.push(formData)
@@ -42,7 +42,7 @@ export const useConnectionStore = () => {
         })
         this.sendingMessages = []
       },
-      deleteMessage(message){
+      deleteMessage(message) {
         const indexOfMessage = this.unsentQueue.indexOf(message)
         this.unsentQueue.splice(indexOfMessage, 1);
         this.sendingMessages.splice(indexOfMessage, 1);

@@ -72,9 +72,7 @@
           />
         </div>
       </div>
-      {{  }}
       <div v-if="unsentQueue.length" v-for="message in unsentQueue">
-        {{  }}
         <MessageWrapper v-if="isSameChat(message)" :currMessage="message" :prevMessage="prevMessage" :isUnsentMessage=true />
       </div>
     </div>
@@ -262,10 +260,12 @@ export default {
         this.$emit('load-more-messages');
       }
     },
-    isSameChat(message){
-      return this.selectedChat.id == message.conversation_id && 
-        this.selectedChat?.conversation_type?.toLowerCase() == message?.conversation_type.slice(0, -1)
-    }
+    isSameChat(message) {
+      if (this.selectedChat.conversation_type) {
+        return this.selectedChat.id == message.conversation_id && 
+          this.selectedChat.conversation_type.toLowerCase() == message.conversation_type.slice(0, -1)
+      }
+    },
   },
   updated() {
     const message_id = this.$route.params.message_id;
