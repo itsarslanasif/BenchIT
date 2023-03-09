@@ -50,7 +50,7 @@
         <user-profile-modal
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
-          :isUnsentMessage="isUnsentMessage ? true : false"
+          :isUnsentMessage="isUnsentMessage"
         />
       </template>
       <span class="message">
@@ -115,7 +115,7 @@
               >
                 <MessageSection
                   v-if="block.type === 'section'"
-                  :isUnsentMessage="isUnsentMessage ? true : false"
+                  :isUnsentMessage="isUnsentMessage"
                   :section="block"
                 />
                 <MessageFailed v-if="isUnsentMessage" :message="currMessage" />
@@ -163,7 +163,7 @@
               >
                 <MessageSection
                   v-if="block.type === 'section'"
-                  :isUnsentMessage="isUnsentMessage ? true : false"
+                  :isUnsentMessage="isUnsentMessage"
                   :section="block"
                 />
                 <MessageFailed v-if="isUnsentMessage" :message="currMessage" />

@@ -6,7 +6,7 @@
     </p>
     <div class="flex gap-3 my-2">
       <p
-        @click="deleteTheMessage"
+        @click="deleteMessage"
         class="hover:text-white hover:bg-danger text-danger py-0.5 px-2 border border-danger hover:border-transparent rounded duration-200 cursor-pointer"
       >
         <font-awesome-icon icon="fa-trash" class="pr-1" />
@@ -53,8 +53,8 @@ export default {
   },
   
   methods: {
-    deleteTheMessage() {
-      this.connectionStore.deleteTheMessage(this.message);
+    deleteMessage() {
+      this.connectionStore.deleteMessage(this.message);
       this.success(this.$t('connection.message_deleted_successfully'))
     },
     retry() {
