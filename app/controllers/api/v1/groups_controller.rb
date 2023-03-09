@@ -15,7 +15,7 @@ class Api::V1::GroupsController < Api::ApiController
   def create
     ActiveRecord::Base.transaction do
       @group = Group.find_or_create_by!(profile_ids: params[:profile_ids].sort)
-      BenchConversation.find_or_create_by!(conversationable_type: 'Group', conversationable_id: @group.id)
+      BenchConversation.find_or_create_by!(conversationable: @group)
     end
     render json: { success: true, message: t('.success'), group: @group, name: @group.name }, status: :ok
   end

@@ -15,16 +15,9 @@ class BroadcastMessageNotificationService
 
     @profile_ids.each do |id|
       notification_key = "NotificationChannel#{Current.workspace.id}-#{id}"
-      if @message_json[:type].eql?('Group')
-        notify_group(notification_key)
-      elsif @message_json[:type].eql?('Profile') || (id != Current.profile.id)
-        ActionCable.server.broadcast(notification_key,
-                                     { message: @message_json })
+      if ['Group', 'Profile'].include?(@message_json[:type]) || (id != Current.profile.id)
+        ActionCable.server.broadcast(notification_key, { message: @message_json })
       end
     end
-  end
-
-  def notify_group(notification_key)
-    ActionCable.server.broadcast(notification_key, { message: @message_json })
   end
 end
