@@ -15,7 +15,7 @@ workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don
 workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
 
 admin = workspace.profiles.create!(username: 'admin', description: 'Admin of workspace', user_id: user0.id,
-                                   display_name: 'admin', phone: '1234567890', skype: '1234567890', text_status: 'Happy',
+                                   display_name: 'Admin', phone: '1234567890', skype: '1234567890', text_status: 'Happy',
                                    time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')

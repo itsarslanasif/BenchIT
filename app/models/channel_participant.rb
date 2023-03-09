@@ -41,6 +41,10 @@ class ChannelParticipant < ApplicationRecord
   end
 
   def set_role
-    self.role = bench_channel.creator_id.eql?(profile_id) ? :channel_manager : :member
+    self.role = if bench_channel.creator_id.eql?(profile_id) || profile.workspace_owner? || profile.workspace_admin?
+                  :channel_manager
+                else
+                  :member
+                end
   end
 end
