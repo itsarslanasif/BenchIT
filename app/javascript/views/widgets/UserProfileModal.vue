@@ -12,7 +12,12 @@
       <n-avatar
         class="mr-1"
         size="large"
-        :src="sender_avatar"
+        :class="isUnsentMessage ? 'opacity-50' : 'opacity-100'"
+        :src="
+          isUnsentMessage
+            ? currentProfileStore.getCurrentProfile.image_url
+            : sender_avatar
+        "
         @mouseover="setUserProfileForModal"
       />
     </div>
@@ -39,6 +44,10 @@ export default {
     sender_avatar: {
       type: String,
       default: undefined,
+    },
+    isUnsentMessage: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
