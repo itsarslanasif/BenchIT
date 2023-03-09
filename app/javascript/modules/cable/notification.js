@@ -91,24 +91,31 @@ const ChannelParticipantDelete = async data => {
 };
 
 const updateProfileStatus = data => {
-  const { setProfileStatus, setProfileActiveStatus, currentProfile } = useCurrentProfileStore();
+  const { setProfileStatus, setProfileActiveStatus, currentProfile } =
+    useCurrentProfileStore();
   const { updateProfileStatus } = useProfileStore();
-  const { updateProfileStatus:updateDmProfileStatus } = useDirectMessagesStore();
+  const { updateProfileStatus: updateDmProfileStatus } =
+    useDirectMessagesStore();
   const { updateSelectedprofileStatus } = useMessageStore();
 
   if (currentProfile.id === data.id) {
     setProfileStatus(data.status);
-    setProfileActiveStatus(data.is_active)
+    setProfileActiveStatus(data.is_active);
   }
-    updateProfileStatus(data);
-    updateDmProfileStatus(data);
-    updateSelectedprofileStatus(data)
-  };
+  updateProfileStatus(data);
+  updateDmProfileStatus(data);
+  updateSelectedprofileStatus(data);
+};
 
-  const createGroup = data =>{
-    const groupStore=useGroupStore()
-    groupStore.groups.push(data)
-  };
+const createGroup = data => {
+  const groupStore = useGroupStore();
+  groupStore.groups.push(data);
+};
+
+const updateGroup = data => {
+  const groupStore = useGroupStore();
+  groupStore.updateGroup(data);
+};
 
 const notificationActions = {
   MessageCreate: createMessage,
@@ -116,7 +123,8 @@ const notificationActions = {
   ChannelParticipantCreate: ChannelParticipantCreate,
   ChannelParticipantDelete: ChannelParticipantDelete,
   ProfileUpdate: updateProfileStatus,
-  GroupCreate : createGroup
+  GroupCreate: createGroup,
+  GroupUpdate: updateGroup,
 };
 
 export const notifyActions = data => {
