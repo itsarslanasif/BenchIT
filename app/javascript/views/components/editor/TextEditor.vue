@@ -235,6 +235,12 @@
         </div>
       </div>
     </div>
+    <div v-if="!isConnected" class="px-3 flex gap-1 text-black-600">
+        <div class="cross">
+          <font-awesome-icon icon="fa-wifi" class="" />
+        </div>
+        {{ $t('connection.trying_to_connect') }}
+    </div>
   </div>
 </template>
 
@@ -267,6 +273,7 @@ import VisualizeVoice from './VisualizeVoice.vue';
 import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
+import { useConnectionStore } from '../../../stores/useConnectionStore.js'
 
 export default {
   data() {
@@ -376,8 +383,10 @@ export default {
     const profileStore = useProfileStore();
     const searchStore = useSearchStore();
     const FilesStore = useRecentFilesStore();
+    const connectionStore = useConnectionStore();
     const turndownService = new TurndownService();
     const { channels } = storeToRefs(channelStore);
+    const { isConnected } = storeToRefs(connectionStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
     const { searches } = storeToRefs(searchStore);
@@ -654,6 +663,7 @@ export default {
       files,
       channels,
       profiles,
+      isConnected,
       schedule,
       scheduleModalFlag,
       messageStore,
@@ -798,5 +808,20 @@ button {
   border-radius: 0.4rem;
   padding: 0.1rem 0.3rem;
   box-decoration-break: clone;
+}
+
+.cross {
+  position: relative;
+}
+
+.cross::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #6E6F73;
+  left: 0;
+  top: 50%;
+  transform: rotate(-45deg);
 }
 </style>
