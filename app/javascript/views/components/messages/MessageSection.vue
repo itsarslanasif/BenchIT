@@ -1,5 +1,5 @@
 <template>
-  <div class="text-sm">
+  <div class="text-sm" :class="isUnsentMessage ? 'opacity-50' : 'opacity-100'">
     <div class="rich-content" v-html="text"></div>
   </div>
 </template>
@@ -13,6 +13,10 @@ export default {
       type: Object,
       required: true,
     },
+    isUnsentMessage: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {

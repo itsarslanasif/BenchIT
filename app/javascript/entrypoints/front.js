@@ -72,6 +72,8 @@ import {
   faPause,
   faDisplay,
   faToggleOn,
+  faWifi,
+  faArrowRotateRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faGoogle,
@@ -148,8 +150,9 @@ library.add(
   faRecordVinyl,
   faPause,
   faDisplay,
-  faToggleOn
-
+  faToggleOn,
+  faWifi,
+  faArrowRotateRight
 );
 const I18n = createI18n({ locale: 'current', messages: translations });
 

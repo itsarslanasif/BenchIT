@@ -450,6 +450,13 @@ en:
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
         mentioned: 'mentioned you in'
+      connection:
+        trying_to_connect: 'Trying to connect...'
+        message_failed: 'Failed to send'
+        delete: 'Delete this message'
+        retry: 'Retry'
+        not_connected_to_internet: 'You are not connected to internet.'
+        message_deleted_successfully: 'Message is deleted successfully'
     admin:
       title: 'Admin'
       save: 'Save'
