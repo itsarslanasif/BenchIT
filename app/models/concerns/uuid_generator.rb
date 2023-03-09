@@ -1,24 +1,30 @@
 module UuidGenerator
   extend ActiveSupport::Concern
 
-  def generate_and_append_uuid(record)
-    record.id = case record.class.name
-                when 'Workspace'
-                  "W0#{SecureRandom.alphanumeric(12).upcase}"
-                when 'User'
-                  "U0#{SecureRandom.alphanumeric(12).upcase}"
-                when 'Profile'
-                  "D0#{SecureRandom.alphanumeric(12).upcase}"
-                when 'BenchChannel'
-                  if record.is_private?
-                    "CPR0#{SecureRandom.alphanumeric(8).upcase}"
-                  else
-                    "CPU0#{SecureRandom.alphanumeric(8).upcase}"
-                  end
-                when 'Group'
-                  "G0#{SecureRandom.alphanumeric(12).upcase}"
-                else
-                  "M0#{SecureRandom.alphanumeric(12).upcase}"
-                end
+  included do
+    before_create :set_id
+  end
+
+  def set_id
+    self.id = case self.class.name
+              when 'Workspace'
+                generate_id('W0')
+              when 'User'
+                generate_id('U0')
+              when 'Profile'
+                generate_id('D0')
+              when 'BenchChannel'
+                is_private? ? generate_id('CPR0', 8) : generate_id('CPU', 8)
+              when 'Group'
+                generate_id('G0')
+              else
+                generate_id('M0')
+              end
+  end
+
+  private
+
+  def generate_id(text, number = 12)
+    "#{text}#{SecureRandom.alphanumeric(number).upcase}"
   end
 end

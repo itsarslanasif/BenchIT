@@ -13,7 +13,6 @@ class Profile < ApplicationRecord
     }
   end
 
-  before_create :set_id
   after_commit :attach_avatar, :create_preference, on: %i[create]
   after_commit :broadcast_profile
 
@@ -120,11 +119,5 @@ class Profile < ApplicationRecord
 
   def get_favourite_id(favourable_id, favourable_type)
     Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
-  end
-
-  private
-
-  def set_id
-    generate_and_append_uuid(self)
   end
 end

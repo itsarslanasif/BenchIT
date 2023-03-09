@@ -12,7 +12,6 @@ class BenchChannel < ApplicationRecord
 
   before_validation :set_profile_and_workspace
   before_validation :set_lower_case_channel_name
-  before_create :set_id
 
   validates :name, presence: true, length: { minimum: 1, maximum: 80 }
   validates :name, uniqueness: { scope: %i[workspace_id] }
@@ -86,9 +85,5 @@ class BenchChannel < ApplicationRecord
       creator_name: creator.username,
       profiles: []
     }
-  end
-
-  def set_id
-    generate_and_append_uuid(self)
   end
 end

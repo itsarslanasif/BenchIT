@@ -8,15 +8,7 @@ class Group < ApplicationRecord
   validates :profile_ids, presence: true, length: { in: 2..9 }
   validates :profile_ids, inclusion: { in: Current.workspace.profile_ids }
 
-  before_create :set_id
-
   def fetch_group_chat_name
     Profile.where(id: profile_ids).pluck(:username).join(',')
-  end
-
-  private
-
-  def set_id
-    generate_and_append_uuid(self)
   end
 end

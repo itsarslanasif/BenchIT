@@ -10,7 +10,7 @@ class ScheduleMessage < ApplicationRecord
   validate :schedule_date_after_current_date
 
   before_validation :update_scheduled_time, on: :create
-  before_create :set_id
+
   after_create :set_job
 
   private
@@ -29,9 +29,5 @@ class ScheduleMessage < ApplicationRecord
 
   def update_scheduled_time
     self.scheduled_at = Time.zone.parse(scheduled_at).in_time_zone(Current.profile.time_zone)
-  end
-
-  def set_id
-    generate_and_append_uuid(self)
   end
 end
