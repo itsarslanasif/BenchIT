@@ -38,7 +38,7 @@
               "
               class="px-2"
             >
-              {{ $t('groups.and') }}
+              and
             </a>
             <a
               @click="showUserProfile(profile.id)"

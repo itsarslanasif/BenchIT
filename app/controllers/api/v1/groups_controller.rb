@@ -22,7 +22,7 @@ class Api::V1::GroupsController < Api::ApiController
 
   def add_member
     if @existing_group.present?
-      render json: { success: true, group: @existing_group }, status: :ok
+      render json: { success: true, group: @existing_group, name: @existing_group.name }, status: :ok
     else
       @group.profile_ids += params[:profile_ids]
       @group.save!

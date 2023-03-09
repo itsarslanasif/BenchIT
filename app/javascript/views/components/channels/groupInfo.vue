@@ -16,7 +16,7 @@
           </div>
         </div>
       </div>
-      <GroupMembersInfoVue />
+      <GroupMembersInfoVue @click="toggleShowModal" />
     </div>
   </div>
   <ChatDetailModal

@@ -1,5 +1,5 @@
 <template>
-  <div class="hover-trigger">
+  <div class="hover-trigger" @click="toggleModal">
     <font-awesome-icon
       icon="fa-plus"
       class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
@@ -28,7 +28,6 @@
             <font-awesome-icon
               icon="fa-plus"
               class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
-              @click="toggleModal"
             />
             <p class="text-sm self-center text-white truncate">
               {{ $t('groups.add_new_group') }}

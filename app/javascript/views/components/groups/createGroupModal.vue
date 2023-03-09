@@ -65,7 +65,6 @@ import {
   NSelect,
 } from 'naive-ui';
 import { useChannelStore } from '../../../stores/useChannelStore';
-import { CONSTANTS } from '../../../assets/constants';
 import vClickOutside from 'click-outside-vue3';
 import GraphemeSplitter from 'grapheme-splitter';
 import { useMessage } from 'naive-ui';
@@ -101,20 +100,6 @@ export default {
   },
   data() {
     return {
-      rules: {
-        channelName: {
-          required: true,
-          message: CONSTANTS.CHANNEL_NAME_ERROR,
-          trigger: ['input'],
-        },
-      },
-      formValue: {
-        channelName: '',
-        Description: '',
-        isPrivate: false,
-      },
-      error: '',
-      status: 0,
       options: ref([]),
       selectedValues: ref(null),
       maxCount: 6,
@@ -167,7 +152,6 @@ export default {
           .then(res => {
             const { group, name } = res;
             const updatedGroup = { ...group, name };
-            this.groupStore.updateGroup(updatedGroup);
             this.$router.push(`/groups/${updatedGroup.id}`);
             this.closeModal();
           })

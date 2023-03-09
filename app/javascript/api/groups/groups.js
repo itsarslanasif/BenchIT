@@ -21,17 +21,15 @@ export const getGroup = async id => {
 export const createGroup = async members => {
   let result = await axios.post(`/v1/groups`, {
     headers: getHeaders(),
-      profile_ids:members
+    profile_ids: members,
   });
   return result.data;
 };
 
-export const addGroupMembers = async (members,id) => {
+export const addGroupMembers = async (members, id) => {
   let result = await axios.post(`/v1/groups/${id}/add_member`, {
     headers: getHeaders(),
-      profile_ids:members
+    profile_ids: members,
   });
   return result.data;
 };
-
-

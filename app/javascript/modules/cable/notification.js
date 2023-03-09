@@ -109,12 +109,13 @@ const updateProfileStatus = data => {
 
 const createGroup = data => {
   const groupStore = useGroupStore();
-  groupStore.groups.push(data);
+  groupStore.appendUniqueGroup(data);
 };
 
 const updateGroup = data => {
   const groupStore = useGroupStore();
-  groupStore.updateGroup(data);
+  const messageStore = useMessageStore();
+  messageStore.selectedChat = groupStore.updateGroup(data);
 };
 
 const notificationActions = {

@@ -20,8 +20,11 @@
           class="w-20 h-20 rounded mr-2 bg-slate-50"
         />
         <div class="flex flex-col">
-          <span class="font-bold text-lg">
+          <span v-if="!isGroup" class="font-bold text-lg">
             {{ isProfile ? chat.username : chat.name }}
+          </span>
+          <span v-if="isGroup" class="font-bold text-lg">
+            {{ messagesStore.selectedChat.name }}
           </span>
           <span>
             {{ isProfile ? chat.description : '' }}

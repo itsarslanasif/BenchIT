@@ -67,14 +67,6 @@ export default {
     toggleModal() {
       this.showCreateGroupModal = !this.showCreateGroupModal;
     },
-    async searchQuery() {
-      let channel_id = window.location.pathname.split('/')[2];
-      try {
-        await this.channelDetailStore.getChannelMembers(this.query, channel_id);
-      } catch (e) {
-        console.error(e);
-      }
-    },
   },
 };
 </script>
