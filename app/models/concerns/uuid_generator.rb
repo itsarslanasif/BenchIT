@@ -5,6 +5,8 @@ module UuidGenerator
     before_create :set_id
   end
 
+  private
+
   def set_id
     self.id = case self.class.name
               when 'Workspace'
@@ -14,15 +16,13 @@ module UuidGenerator
               when 'Profile'
                 generate_id('D0')
               when 'BenchChannel'
-                is_private? ? generate_id('CPR0', 8) : generate_id('CPU', 8)
+                is_private? ? generate_id('CPR0', 8) : generate_id('CPU0', 8)
               when 'Group'
                 generate_id('G0')
               else
                 generate_id('M0')
               end
   end
-
-  private
 
   def generate_id(text, number = 12)
     "#{text}#{SecureRandom.alphanumeric(number).upcase}"
