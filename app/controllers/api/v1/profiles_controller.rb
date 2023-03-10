@@ -30,8 +30,8 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def update
-    current_profile.update!(profile_params)
-    @profile = current_profile
+    @profile.update!(profile_params)
+    @current_profile = @profile
   end
 
   def set_status
