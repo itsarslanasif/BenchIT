@@ -1,4 +1,6 @@
 class Pin < ApplicationRecord
+  include UuidGenerator
+
   after_commit :broadcast_pin
 
   belongs_to :conversation_message

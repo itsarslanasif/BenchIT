@@ -1,4 +1,6 @@
 class ScheduleMessage < ApplicationRecord
+  include UuidGenerator
+
   belongs_to :profile
   belongs_to :bench_conversation
 

@@ -1,4 +1,6 @@
 class DraftMessage < ApplicationRecord
+  include UuidGenerator
+
   belongs_to :profile
   belongs_to :bench_conversation
   belongs_to :conversation_message, optional: true

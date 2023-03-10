@@ -1,4 +1,6 @@
 class Bookmark < ApplicationRecord
+  include UuidGenerator
+
   after_commit :broadcast_bookmark
 
   belongs_to :bookmarkable, polymorphic: true
