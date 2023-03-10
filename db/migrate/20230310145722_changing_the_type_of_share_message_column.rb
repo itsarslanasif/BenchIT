@@ -13,5 +13,5 @@ class ChangingTheTypeOfShareMessageColumn < ActiveRecord::Migration[7.0]
     remove_foreign_key :conversation_messages, column: :shared_message_id
 
     change_column :conversation_messages, :shared_message_id, :integer, using: 'shared_message_id::integer'
-  e
+  end
 end
