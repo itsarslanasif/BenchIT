@@ -95,11 +95,7 @@ export default {
           break;
         case 'pin-to-this-conversation':
           try {
-            pinMessage(
-              message.conversationable_type,
-              message.conversationable_id,
-              message.id
-            );
+            pinMessage(message.conversationable_id, message.id);
           } catch (e) {
             console.error(e);
           }
