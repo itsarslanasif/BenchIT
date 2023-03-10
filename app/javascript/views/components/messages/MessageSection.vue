@@ -1,6 +1,6 @@
 <template>
   <div class="text-sm">
-    <div class="rich-content" v-html="text"></div>
+    <div class="rich-content max-w-5xl" v-html="text"></div>
   </div>
 </template>
 
@@ -21,15 +21,17 @@ export default {
   },
   async mounted() {
     const html = new Remarkable({ html: true });
-    const { replacedStr } = await this.profileStore.getMentionsFromIds(html.render(this.section.text.text))
-    this.text = replacedStr
+    const { replacedStr } = await this.profileStore.getMentionsFromIds(
+      html.render(this.section.text.text)
+    );
+    this.text = replacedStr;
   },
   setup() {
-    const profileStore = useProfileStore()
+    const profileStore = useProfileStore();
     return {
-      profileStore
-    }
-  }
+      profileStore,
+    };
+  },
 };
 </script>
 <style lang="scss">

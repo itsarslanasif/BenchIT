@@ -21,11 +21,11 @@
             @click="showUserProfile(selectedChat?.id)"
             class="flex items-center font-semibold cursor-pointer"
           >
-            {{ selectedChat?.username }}
-            {{ isOwnChat ? $t('chat.you') : '' }}
-            <span
-              class="flex text-md self-center mx-1 mt-1 break-words text-black-800"
-            >
+            <span class="flex items-center gap-1">
+              <p>
+                {{ selectedChat?.username }}
+                {{ isOwnChat ? $t('chat.you') : '' }}
+              </p>
               <span
                 v-if="selectedChat?.is_active"
                 class="bg-green-700 border-white border rounded-full h-3 w-3"

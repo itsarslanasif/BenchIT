@@ -451,6 +451,7 @@ en:
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
         mentioned: 'mentioned you in'
+        no_mentions_and_reactions: 'No mentions and reactions'
     admin:
       title: 'Admin'
       save: 'Save'

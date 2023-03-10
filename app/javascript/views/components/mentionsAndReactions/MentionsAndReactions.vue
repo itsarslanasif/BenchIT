@@ -1,14 +1,24 @@
 <template>
-  <div class="flex py-1 px-4 border-b border-black-300">
-    <div class="flex overflow-y-hidden text-ellipsis p-1">
+  <div class="flex py-2 px-4 border-b border-black-300">
+    <div class="flex overflow-y-hidden text-ellipsis">
       <p class="text-slate-800 text-xl font-semibold">
         {{ $t('mentions_and_reactions.title') }}
       </p>
     </div>
   </div>
-  <div class="overflow-auto h-screen bg-gray-100">
-    <div v-for="message in messages" :key="message.id">
-      <MessageContent :currMessage="message" />
+  <div
+    class="overflow-auto h-screen bg-gray-100"
+    :class="!messages.length && 'flex items-center justify-center'"
+  >
+    <div v-if="messages.length">
+      <div v-for="message in messages" :key="message.id">
+        <MessageContent :currMessage="message" />
+      </div>
+    </div>
+    <div v-else>
+      <p class="text-xl">
+        {{ $t('mentions_and_reactions.no_mentions_and_reactions') }}
+      </p>
     </div>
   </div>
 </template>
