@@ -5,7 +5,13 @@ class ChannelParticipant < ApplicationRecord
   validates :permission, presence: true
   validates :bench_channel, uniqueness: { scope: %i[profile_id] }
 
+  before_create :set_role_and_id
   after_commit :broadcast_channel, :broadcast_member_profile
+
+  enum role: {
+    member: 0,
+    channel_manager: 1
+  }
 
   private
 
@@ -32,5 +38,14 @@ class ChannelParticipant < ApplicationRecord
       type: 'ChannelParticipant',
       action: ActionPerformed.new.action_performed(self)
     }
+  end
+
+  def set_role_and_id
+    self.role = if bench_channel.creator_id.eql?(profile_id) || profile.workspace_owner? || profile.workspace_admin?
+                  :channel_manager
+                else
+                  :member
+                end
+    self.id = bench_channel_id + profile_id
   end
 end
