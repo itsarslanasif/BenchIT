@@ -49,10 +49,13 @@ const createPayloadForNotification = async data => {
 };
 
 const createMessage = data => {
-  const profiles = useProfileStore();
-  const receiver = profiles.getProfileById(data.sender_id);
-  const direct_messages = useDirectMessagesStore();
-  direct_messages.appendToDirectMessagesList(receiver);
+  if (data.conversationable_type == 'Profile')
+  {
+    const profiles = useProfileStore();
+    const receiver = profiles.getProfileById(data.sender_id);
+    const direct_messages = useDirectMessagesStore();
+    direct_messages.appendToDirectMessagesList(receiver);
+  }
   const unreadMessagesStore = useUnreadStore();
   const getIndexByParams = param => {
     return window.location.pathname.split('/')[param];
