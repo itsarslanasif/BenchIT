@@ -39,6 +39,7 @@ import { useUnreadStore } from '../../stores/useUnreadStore';
 import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
+import { useConnectionStore } from '../../stores/useConnectionStore';
 
 export default {
   name: 'Chat',
@@ -68,6 +69,7 @@ export default {
     const currentUserStore = useCurrentUserStore();
     const profileStore = useProfileStore();
     const unreadStore = useUnreadStore();
+    const connectionStore = useConnectionStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
     const conversation_type = getIndexByParams(1);
@@ -79,6 +81,7 @@ export default {
       hasMoreMessages,
       newMessageSent,
     } = storeToRefs(messageStore);
+    const { isConnected } = storeToRefs(connectionStore);
     const { currentUser } = storeToRefs(currentUserStore);
     const { channelMembers } = storeToRefs(channelDetailStore);
     const currentProfile = currentProfileStore.getCurrentProfile;
@@ -106,6 +109,8 @@ export default {
       channelMembers,
       currentProfile,
       profileStore,
+      isConnected,
+      connectionStore
     };
   },
   watch: {
@@ -182,13 +187,17 @@ export default {
           }
           formData.append('message_attachments[]', file, filename);
         });
-        conversation(formData).then(res => {
-          if (res.scheduled_at) {
-            this.messageStore.addScheduleMessage(res);
-          }
-          this.message = '';
-        });
-        this.newMessageSent = true;
+        if (this.isConnected) {
+          conversation(formData).then(res => {
+            if (res.scheduled_at) {
+              this.messageStore.addScheduleMessage(res);
+            }
+            this.message = '';
+          });
+          this.newMessageSent = true;
+        } else {
+          this.connectionStore.unsendMessagesQueue(formData)
+        }
       } else {
         return false;
       }
