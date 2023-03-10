@@ -20,7 +20,7 @@ Rails.application.routes.draw do
           end
         end
 
-        resources :groups, only: %i[index show] do
+        resources :groups, only: %i[index show create] do
           member do
             post :add_member
           end

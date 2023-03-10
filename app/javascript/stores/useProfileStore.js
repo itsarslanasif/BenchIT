@@ -3,7 +3,7 @@ import { getAllProfiles, updateCurrentProfile } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
 import { useUserProfileStore } from './useUserProfileStore';
 import { encryption } from '../modules/crypto/crypto';
-import { useRightPaneStore } from './useRightPaneStore'
+import { useRightPaneStore } from './useRightPaneStore';
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
@@ -56,8 +56,7 @@ export const useProfileStore = () => {
             mention.classList.add('mention');
             mention.style.backgroundColor = 'yellow';
             mention.innerText = `@${username}`;
-            mention.onmouseover = () => {
-            };
+            mention.onmouseover = () => {};
             const regex = new RegExp(`&lt;@${id}&gt;`, 'g');
             acc = acc.replace(regex, mention.outerHTML);
           }
@@ -89,6 +88,16 @@ export const useProfileStore = () => {
         } catch (e) {
           console.error(e);
         }
+      },
+      getProfilesByIds(profileIds) {
+        const matchingProfiles = [];
+        for (let i = 0; i < this.profiles.length; i++) {
+          const profile = this.profiles[i];
+          if (profileIds.includes(profile.id)) {
+            matchingProfiles.push(profile);
+          }
+        }
+        return matchingProfiles;
       },
       showUserProfile(profileId) {
         this.setUserProfileForPane(profileId);
