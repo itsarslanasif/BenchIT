@@ -16,7 +16,7 @@
       </span>
     </span>
     <span
-      v-if="!isProfile"
+      v-if="!isProfile && !isGroup"
       class="border border-black-300 cursor-pointer hover:bg-transparent p-2 border-b-1"
     >
       <p class="font-bold">{{ $t('chat_detail.description') }}</p>
@@ -33,7 +33,7 @@
       </p>
     </span>
     <span
-      v-if="!isProfile"
+      v-if="!isProfile && !isGroup"
       class="border border-black-300 cursor-pointer hover:bg-transparent p-2 mb-4 border-t-0 rounded-b-md"
       @click="leaveChannel"
     >
@@ -102,6 +102,12 @@ export default {
   computed: {
     isProfile() {
       return this.chat.conversation_type === 'Profile';
+    },
+    isGroup() {
+      return this.chat.conversation_type === 'Group';
+    },
+    isChannel() {
+      return this.chat.conversation_type === 'Channel';
     },
   },
   setup() {

@@ -16,6 +16,38 @@
           :icon="selectedChat?.is_private ? 'fa-lock' : 'fa-hashtag'"
           class="p-3 rounded mr-2 bg-slate-50"
         />
+        <div class="flex flex-row" v-if="isGroup">
+          <span v-for="profile in selectedChat.profiles" :key="profile.id">
+            <img
+              :src="profile.image_url"
+              class="w-20 h-20 rounded mr-2 bg-slate-50"
+            />
+          </span>
+        </div>
+        <div class="mt-3 flex flex-row text-black-600" v-if="isGroup">
+          {{ $t('groups.group_chat_note') }}
+          <div
+            class="px-1"
+            v-for="profile in selectedChat.profiles"
+            :key="profile.id"
+          >
+            <a
+              v-if="
+                profile ===
+                selectedChat.profiles[selectedChat.profiles.length - 1]
+              "
+              class="px-2"
+            >
+              and
+            </a>
+            <a
+              @click="showUserProfile(profile.id)"
+              class="text-info cursor-pointer bg-slate-50 p-1 rounded"
+            >
+              @{{ profile.username }}
+            </a>
+          </div>
+        </div>
       </span>
       <span :class="isProfile && 'self-center'">
         <span>
@@ -130,6 +162,9 @@ export default {
     },
     isProfile() {
       return this.conversation_type === 'profiles';
+    },
+    isGroup() {
+      return this.conversation_type === 'groups';
     },
     isOwnChat() {
       return this.currentProfile?.id === this.selectedChat?.id;
