@@ -153,7 +153,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
 
-  create_table "groups", force: :cascade do |t|
+  create_table "groups", id: :serial, force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_ids", default: [], array: true

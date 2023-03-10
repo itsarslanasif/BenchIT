@@ -1,9 +1,10 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create mute_channel unmute_channel invite_outsider]
-  before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]
+  before_action :set_bench_channel, only: %i[index create destroy mute_channel unmute_channel invite_outsider]
+  before_action :set_channel_paticipant, only: %i[destroy mute_channel unmute_channel]
   before_action :check_profile_ids, only: %i[create]
   before_action :pluck_name_of_participants, only: %i[create]
   before_action :set_and_authenticate_channel, only: %i[join_public_channel]
+  before_action :check_permission, only: %i[destroy]
 
   def index
     @profiles = if params[:query].present?
@@ -25,6 +26,21 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
     end
     render json: { success: true, member_count: @users_joined.count }, status: :ok
+  end
+
+  def destroy
+    ActiveRecord::Base.transaction do
+      @channel_participant.destroy!
+      ConversationMessage.create!(
+        content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"#{I18n.t('application.services.left_message')} #{@channel.name}"}}]}),
+        is_threaded: false,
+        bench_conversation_id: @channel.bench_conversation_id,
+        sender_id: @channel_participant.profile_id,
+        is_info: true
+      )
+    end
+
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def join_public_channel
@@ -55,7 +71,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   private
 
   def set_bench_channel
-    @bench_channel = current_profile.bench_channels.find(params[:bench_channel_id])
+    @bench_channel = current_profile.bench_channels.includes(:channel_participants).find_by(id: params[:bench_channel_id])
   end
 
   def set_channel_paticipant
@@ -75,5 +91,13 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def set_and_authenticate_channel
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
     authorize! :join_public_channel, @bench_channel
+  end
+
+  def check_permission
+    current_profile_role = @bench_channel.channel_participants.find_by!(profile_id: current_profile.id)
+
+    return unless current_profile_role.member?
+
+    render json: { success: false, error: t('.failure') }, status: :unauthorized
   end
 end

@@ -16,7 +16,7 @@ class ChannelParticipant < ApplicationRecord
   private
 
   def broadcast_channel
-    return unless ActionPerformed.new.action_performed(self).eql?('Create')
+    return if ActionPerformed.new.action_performed(self).eql?('Update')
 
     message = channel_participant_content
     message[:content] = bench_channel.bench_channel_content
