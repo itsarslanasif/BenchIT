@@ -106,6 +106,7 @@ Metrics/MethodLength:
     - 'db/migrate/20211219031453_update_foreign_keys_on_delete.rb'
     - 'app/models/ability.rb'
     - 'app/controllers/concerns/exception_handler.rb'
+    - 'db/migrate/20230310144853_update_profile_id.rb'
 Rails/CreateTableWithTimestamps:
   Exclude:
     - 'db/migrate/20170207092002_acts_as_taggable_on_migration.acts_as_taggable_on_engine.rb'
@@ -124,6 +125,7 @@ Metrics/AbcSize:
     - 'db/migrate/20211219031453_update_foreign_keys_on_delete.rb'
     - 'app/models/ability.rb'
     - 'app/controllers/concerns/exception_handler.rb'
+    - 'db/migrate/20230310144853_update_profile_id.rb'
 Metrics/CyclomaticComplexity:
   Max: 7
   Exclude:
