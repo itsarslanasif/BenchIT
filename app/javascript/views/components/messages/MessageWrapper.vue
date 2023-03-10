@@ -83,6 +83,7 @@
         <user-profile-modal
           :profile_id="currMessage.sender_id"
           :sender_avatar="currMessage.sender_avatar"
+          :isUnsentMessage="isUnsentMessage"
         />
       </template>
       <span class="message">
@@ -99,7 +100,11 @@
               "
               class="mr-1 text-sm hover:underline cursor-pointer"
             >
-              <b>{{ currMessage.sender_name }}</b>
+              <b :class="isUnsentMessage ? 'opacity-50' : 'opacity-100'">{{
+                isUnsentMessage
+                  ? currentProfile.username
+                  : currMessage.sender_name
+              }}</b>
             </p>
             <span
               :class="{
@@ -143,8 +148,10 @@
               >
                 <MessageSection
                   v-if="block.type === 'section'"
+                  :isUnsentMessage="isUnsentMessage"
                   :section="block"
                 />
+                <MessageFailed v-if="isUnsentMessage" :message="currMessage" />
                 <div v-if="isSharedMessage" class="flex ml-4 flex-center">
                   <ShareMessageVue
                     :inThread="inThread"
@@ -189,8 +196,10 @@
               >
                 <MessageSection
                   v-if="block.type === 'section'"
+                  :isUnsentMessage="isUnsentMessage"
                   :section="block"
                 />
+                <MessageFailed v-if="isUnsentMessage" :message="currMessage" />
               </span>
               <EditedAtTime
                 v-if="currMessage.is_edited && isDeleted"
@@ -349,7 +358,7 @@
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
-            (emojiModalStatus || openEmojiModal || showOptions) &&
+            ((emojiModalStatus || openEmojiModal || showOptions) && !isUnsentMessage) &&
             JSON.parse(this.currMessage.content).blocks[0].text.text !==
               $t('deleteMessageModal.success')
           "
@@ -470,6 +479,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
+import MessageFailed from '../../widgets/MessageFailed.vue'
 
 export default {
   name: 'MessageWrapper',
@@ -522,6 +532,7 @@ export default {
     UnPinModal,
     MessageSection,
     VisualizeVoice,
+    MessageFailed,
   },
   props: {
     currMessage: {
@@ -533,6 +544,10 @@ export default {
       default: undefined,
     },
     inThread: {
+      type: Boolean,
+      default: false,
+    },
+    isUnsentMessage: {
       type: Boolean,
       default: false,
     },

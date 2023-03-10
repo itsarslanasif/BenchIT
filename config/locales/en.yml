@@ -311,6 +311,13 @@ en:
         title: 'Profile'
         active: 'Active'
         away: 'Away'
+      groups:
+        title: 'Groups'
+        add_new_group: 'Add new group'
+        create_group: 'Create group'
+        add_group_note: 'You can only add 9 members to a group, inorder to add more please create channel.'
+        group_chat_note: This is the very beginning of your direct message history with
+        add_people: 'Add people'
       filters:
         filter: 'Filter'
         all_types: 'All types'
@@ -452,6 +459,13 @@ en:
         reacted_by: 'reacted to your message'
         mentioned: 'mentioned you in'
         no_mentions_and_reactions: 'No mentions and reactions'
+      connection:
+        trying_to_connect: 'Trying to connect...'
+        message_failed: 'Failed to send'
+        delete: 'Delete this message'
+        retry: 'Retry'
+        not_connected_to_internet: 'You are not connected to internet.'
+        message_deleted_successfully: 'Message is deleted successfully'
     admin:
       title: 'Admin'
       save: 'Save'
