@@ -240,10 +240,8 @@ export default {
     isLastPage() {
       return this.maxPages === this.currentPage - 1;
     },
-        isFirstMessage() {
-      return (
-        this.sentMessages && this.sentMessages[0].id === this.message.id
-      );
+    isFirstMessage() {
+      return this.sentMessages && this.sentMessages[0].id === this.message.id;
     },
   },
 };
