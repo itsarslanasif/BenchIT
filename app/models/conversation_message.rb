@@ -1,6 +1,4 @@
 class ConversationMessage < ApplicationRecord
-  include UuidGenerator
-
   after_commit :add_unread_messages, :notify_profiles, :broadcast_message
 
   belongs_to :bench_conversation

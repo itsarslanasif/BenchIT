@@ -57,6 +57,11 @@ class Ability
 
     can %i[leave_channel], ChannelParticipant, profile_id: profile.id
 
+    can %i[destroy], ChannelParticipant do |participant|
+      role = participant.bench_channel.channel_participants.find_by!(profile_id: profile.id)
+      role.channel_manager?
+    end
+
     can %i[destroy], SavedItem, profile_id: profile.id
 
     can %i[join_public_channel], BenchChannel, { is_private: false, workspace: { id: workspace.id } }

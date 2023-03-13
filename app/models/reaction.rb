@@ -1,6 +1,4 @@
 class Reaction < ApplicationRecord
-  include UuidGenerator
-
   after_commit :reaction_broadcast
 
   belongs_to :profile

@@ -1,6 +1,4 @@
 class BenchConversation < ApplicationRecord
-  include UuidGenerator
-
   belongs_to :conversationable, polymorphic: true
   belongs_to :sender, class_name: 'Profile', optional: true
   has_many :conversation_messages, dependent: :destroy

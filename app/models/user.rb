@@ -1,6 +1,5 @@
 class User < ApplicationRecord
   include Devise::JWT::RevocationStrategies::JTIMatcher
-  include UuidGenerator
 
   devise :invitable, :database_authenticatable, :jwt_authenticatable, jwt_revocation_strategy: self
 

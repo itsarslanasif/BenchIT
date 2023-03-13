@@ -131,6 +131,7 @@ Metrics/CyclomaticComplexity:
   Exclude:
     - 'db/migrate/20190819005836_add_missing_indexes_on_taggings.acts_as_taggable_on_engine.rb'
     - 'app/models/ability.rb'
+    - 'app/models/concerns/uuid_generator.rb'
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/models/ability.rb'

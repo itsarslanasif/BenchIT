@@ -1,6 +1,4 @@
 class SavedItem < ApplicationRecord
-  include UuidGenerator
-
   belongs_to :profile
   belongs_to :conversation_message
 

@@ -1,6 +1,5 @@
 class Profile < ApplicationRecord
   include AvatarGeneration
-  include UuidGenerator
 
   searchkick word_start: [:username, :description]
 

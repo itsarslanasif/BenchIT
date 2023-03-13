@@ -2,7 +2,7 @@ module UuidGenerator
   extend ActiveSupport::Concern
 
   included do
-    before_create :set_id
+    before_create :set_id unless instance_of?(::ChannelParticipant)
   end
 
   private
@@ -19,6 +19,8 @@ module UuidGenerator
                 is_private? ? generate_id('CPR0', 10) : generate_id('CPU0', 10)
               when 'Group'
                 generate_id('G0', 12)
+              when 'ChannelParticipant'
+                self.id = bench_channel_id + profile_id
               else
                 generate_id('M0', 12)
               end

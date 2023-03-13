@@ -1,6 +1,4 @@
 class BenchChannel < ApplicationRecord
-  include UuidGenerator
-
   belongs_to :creator, class_name: 'Profile'
   belongs_to :workspace
   has_many :channel_participants, dependent: :destroy

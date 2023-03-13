@@ -1,6 +1,4 @@
 class DirectMessageUser < ApplicationRecord
-  include UuidGenerator
-
   belongs_to :profile
   validates :profile, uniqueness: { scope: %i[receiver_id] }
 

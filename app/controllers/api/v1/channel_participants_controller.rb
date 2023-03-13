@@ -4,7 +4,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :check_profile_ids, only: %i[create]
   before_action :pluck_name_of_participants, only: %i[create]
   before_action :set_and_authenticate_channel, only: %i[join_public_channel]
-  before_action :check_permission, only: %i[destroy]
+  before_action :authenticate_channel_participant, only: %i[destroy]
 
   def index
     @profiles = if params[:query].present?
@@ -71,7 +71,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   private
 
   def set_bench_channel
-    @bench_channel = current_profile.bench_channels.includes(:channel_participants).find_by(id: params[:bench_channel_id])
+    @bench_channel = current_profile.bench_channels.includes(:channel_participants).find(params[:bench_channel_id])
   end
 
   def set_channel_paticipant
@@ -93,11 +93,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     authorize! :join_public_channel, @bench_channel
   end
 
-  def check_permission
-    current_profile_role = @bench_channel.channel_participants.find_by!(profile_id: current_profile.id)
-
-    return unless current_profile_role.member?
-
-    render json: { success: false, error: t('.failure') }, status: :unauthorized
+  def authenticate_channel_participant
+    authorize! :destroy, @channel_participant
   end
 end
