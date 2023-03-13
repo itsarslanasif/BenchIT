@@ -7,14 +7,16 @@
       class="flex justify-between gap-1 self-center items-center px-3 mt-2 mr-1"
     >
       <div class="flex self-center items-center px-3 mt-2">
-        <font-awesome-icon
-          v-if="!isProfile && chat.is_private && !isGroup"
-          icon="fa-lock"
-        />
-        <font-awesome-icon
-          v-if="!isProfile && !chat.is_private && !isGroup"
-          icon="fa-hashtag"
-        />
+        <span class="mr-1">
+          <font-awesome-icon
+            v-if="!isProfile && chat.is_private && !isGroup"
+            icon="fa-lock"
+          />
+          <font-awesome-icon
+            v-if="!isProfile && !chat.is_private && !isGroup"
+            icon="fa-hashtag"
+          />
+        </span>
         <img
           v-if="isProfile"
           :src="chat.image_url"

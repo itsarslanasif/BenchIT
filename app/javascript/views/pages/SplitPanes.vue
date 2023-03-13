@@ -124,7 +124,7 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
-   
+
     onMounted(() => {
       window.addEventListener('resize', handleResize);
       handleResize()
@@ -192,7 +192,7 @@ export default {
 .grid-container {
   grid-auto-rows: 44px auto;
   grid-template-columns: 1fr 2fr;
-  grid-template-areas: 
+  grid-template-areas:
   "header header "
   "main main "
   ;

@@ -302,46 +302,48 @@
           </div>
         </div>
         {{ displayReaction }}
-        <template v-for="emoji in displayedReactions" :key="emoji">
-          <div
-            @click="addReaction(emoji)"
-            :class="[
-              { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
-              {
-                'ml-12 -mr-10':
-                  !currMessage.is_info &&
-                  isSameUser &&
-                  isSameDayMessage &&
-                  !isFirstMessage,
-              },
-            ]"
-            class="mt-1 mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
-          >
-            <n-tooltip
-              placement="top"
-              :style="{ width: '170px' }"
-              trigger="hover"
+        <div class="flex">
+          <template v-for="emoji in displayedReactions" :key="emoji">
+            <div
+              @click="addReaction(emoji)"
+              :class="[
+                { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
+                {
+                  'ml-12 -mr-10':
+                    !currMessage.is_info &&
+                    isSameUser &&
+                    isSameDayMessage &&
+                    !isFirstMessage,
+                },
+              ]"
+              class="mt-1 mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer flex justify-center border border-black-200 hover:border-black-500 hover:bg-white"
             >
-              <template #trigger>
-                <n-text class="ml-1"
-                  >{{ emoji }}
-                  <span class="text-xs ml-1">{{
-                    countReaction(emoji)
-                  }}</span></n-text
-                >
-              </template>
-              <div class="flex flex-col items-center">
-                <span class="text-3xl bg-white rounded text-center w-12">{{
-                  emoji
-                }}</span>
-                <span class="text-md"
-                  >{{ getUsers(emoji, currentProfile.username) }}
-                  {{ $t('chat.reacted') }}</span
-                >
-              </div>
-            </n-tooltip>
-          </div>
-        </template>
+              <n-tooltip
+                placement="top"
+                :style="{ width: '170px' }"
+                trigger="hover"
+              >
+                <template #trigger>
+                  <n-text class="ml-1"
+                    >{{ emoji }}
+                    <span class="text-xs ml-1">{{
+                      countReaction(emoji)
+                    }}</span></n-text
+                  >
+                </template>
+                <div class="flex flex-col items-center">
+                  <span class="text-3xl bg-white rounded text-center w-12">{{
+                    emoji
+                  }}</span>
+                  <span class="text-md"
+                    >{{ getUsers(emoji, currentProfile.username) }}
+                    {{ $t('chat.reacted') }}</span
+                  >
+                </div>
+              </n-tooltip>
+            </div>
+          </template>
+        </div>
         <reply-and-thread-button
           v-if="
             !currMessage.info && currMessage?.replies?.length > 0 && !inThread
@@ -358,7 +360,8 @@
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
-            ((emojiModalStatus || openEmojiModal || showOptions) && !isUnsentMessage) &&
+            (emojiModalStatus || openEmojiModal || showOptions) &&
+            !isUnsentMessage &&
             JSON.parse(this.currMessage.content).blocks[0].text.text !==
               $t('deleteMessageModal.success')
           "
@@ -479,7 +482,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
-import MessageFailed from '../../widgets/MessageFailed.vue'
+import MessageFailed from '../../widgets/MessageFailed.vue';
 
 export default {
   name: 'MessageWrapper',
