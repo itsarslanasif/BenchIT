@@ -16,7 +16,7 @@
       </span>
     </span>
     <span
-      v-if="!isProfile"
+      v-if="!isProfile && !isGroup"
       class="border border-black-300 cursor-pointer hover:bg-transparent p-4 border-b-1"
     >
       <p class="font-bold">{{ $t('chat_detail.description') }}</p>
@@ -33,7 +33,7 @@
       </p>
     </span>
     <span
-      v-if="!isProfile"
+      v-if="!isProfile && !isGroup"
       class="border border-black-300 cursor-pointer hover:bg-transparent p-4 mb-4 border-t-0 rounded-b-md"
       @click="leaveChannel"
     >
@@ -59,7 +59,6 @@
           {{ chat.contact_info.email }}
         </p>
       </span>
-
       <p
         @click="showUserProfile(chat.id)"
         class="text-info font-semibold mx-2 mt-1 cursor-pointer hover:underline w-fit"
@@ -68,7 +67,7 @@
       </p>
     </span>
     <span
-      v-if="isProfile"
+      v-if="isProfile && !isOwnProfile"
       class="flex gap-2 items-center border border-black-300 mt-2 hover:bg-transparent p-4 rounded-md"
     >
       <i class="fa-solid fa-user-plus mx-1" />
@@ -87,11 +86,11 @@
 </template>
 
 <script>
-import { storeToRefs } from 'pinia';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import moment from 'moment';
 
 export default {
@@ -103,17 +102,28 @@ export default {
     isProfile() {
       return this.chat.conversation_type === 'Profile';
     },
+    isOwnProfile() {
+      return this.currentProfileStore.currentProfile.id === this.chat.id;
+    },
+    isGroup() {
+      return this.chat.conversation_type === 'Group';
+    },
+    isChannel() {
+      return this.chat.conversation_type === 'Channel';
+    },
   },
   setup() {
     const channelStore = useChannelStore();
     const profilesStore = useProfileStore();
     const userProfileStore = useUserProfileStore();
+    const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
     return {
       channelStore,
       profilesStore,
       rightPaneStore,
       userProfileStore,
+      currentProfileStore,
     };
   },
   methods: {

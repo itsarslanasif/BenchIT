@@ -13,6 +13,38 @@
           :icon="selectedChat?.is_private ? 'fa-lock' : 'fa-hashtag'"
           class="p-3 rounded mr-2 bg-slate-50"
         />
+        <div class="flex flex-row" v-if="isGroup">
+          <span v-for="profile in selectedChat.profiles" :key="profile.id">
+            <img
+              :src="profile.image_url"
+              class="w-20 h-20 rounded mr-2 bg-slate-50"
+            />
+          </span>
+        </div>
+        <div class="mt-3 flex flex-row text-black-600" v-if="isGroup">
+          {{ $t('groups.group_chat_note') }}
+          <div
+            class="px-1"
+            v-for="profile in selectedChat.profiles"
+            :key="profile.id"
+          >
+            <a
+              v-if="
+                profile ===
+                selectedChat.profiles[selectedChat.profiles.length - 1]
+              "
+              class="px-2"
+            >
+              and
+            </a>
+            <a
+              @click="showUserProfile(profile.id)"
+              class="text-info cursor-pointer bg-slate-50 p-1 rounded"
+            >
+              @{{ profile.username }}
+            </a>
+          </div>
+        </div>
       </span>
       <span :class="isProfile && 'self-center'">
         <span>
@@ -21,11 +53,11 @@
             @click="showUserProfile(selectedChat?.id)"
             class="flex items-center font-semibold cursor-pointer"
           >
-            {{ selectedChat?.username }}
-            {{ isOwnChat ? $t('chat.you') : '' }}
-            <span
-              class="flex text-md self-center mx-1 mt-1 break-words text-black-800"
-            >
+            <span class="flex items-center gap-1">
+              <p>
+                {{ selectedChat?.username }}
+                {{ isOwnChat ? $t('chat.you') : '' }}
+              </p>
               <span
                 v-if="selectedChat?.is_active"
                 class="bg-green-700 border-white border rounded-full h-3 w-3"
@@ -132,6 +164,9 @@ export default {
     },
     isProfile() {
       return this.conversation_type === 'profiles';
+    },
+    isGroup() {
+      return this.conversation_type === 'groups';
     },
     isOwnChat() {
       return this.currentProfile?.id === this.selectedChat?.id;

@@ -1,12 +1,16 @@
 <template>
   <div v-for="block in messageBlock.blocks" :key="block">
     <div
-      class="hover-trigger py-2 px-4 bg-white relative border border-black-300 shadow-sm rounded-xl m-4"
+      class="hover-trigger p-4 bg-white hover:bg-transparent cursor-pointer relative border border-black-300 shadow-sm rounded-xl m-4"
+      @click="goToChat"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
       <div
-        v-if="currMessage.conversationable_type === $t('conversation.channel') && reactedBy()"
+        v-if="
+          currMessage.conversationable_type === $t('conversation.channel') &&
+          reactedBy()
+        "
         class="text-black-600 font-semibold flex m-2"
       >
         {{ reactedBy() }} {{ $t('mentions_and_reactions.reacted') }}
@@ -15,29 +19,40 @@
           {{ currMessage.channel_name }}</span
         >
       </div>
-      <div v-if="currMessage.conversationable_type === $t('conversation.channel') && !reactedBy()"
-        class="text-black-600 font-semibold flex m-2">
+      <div
+        v-if="
+          currMessage.conversationable_type === $t('conversation.channel') &&
+          !reactedBy()
+        "
+        class="text-black-600 font-semibold flex m-2"
+      >
         {{ mentionedBy() }} {{ $t('mentions_and_reactions.mentioned') }}
         <span class="ml-2 hover:underline"
           ><font-awesome-icon :icon="getIcon" />
-          {{ currMessage.channel_name }}</span>
+          {{ currMessage.channel_name }}</span
+        >
       </div>
       <div
-        v-if="currMessage.conversationable_type === $t('conversation.profile') && reactedBy()"
+        v-if="
+          currMessage.conversationable_type === $t('conversation.profile') &&
+          reactedBy()
+        "
         class="text-black-600 font-semibold flex m-2"
       >
         {{ reactedBy() }} {{ $t('mentions_and_reactions.reacted_by') }}
       </div>
-        <div class="flex">
-          <div
-            class="h-10 w-10 mr-1 ml-1 rounded flex justify-center items-center"
-          >
-            <span v-if="getReaction()" class="text-4xl">{{ getReaction() }}</span>
-            <div v-else><user-profile-modal
-            :profile_id="currMessage.sender_id"
-            :sender_avatar="currMessage.sender_avatar"
-          /> </div>
+      <div class="flex">
+        <div
+          class="h-10 w-10 mr-1 ml-1 rounded flex justify-center items-center"
+        >
+          <span v-if="getReaction()" class="text-4xl">{{ getReaction() }}</span>
+          <div v-else>
+            <user-profile-modal
+              :profile_id="currMessage.sender_id"
+              :sender_avatar="currMessage.sender_avatar"
+            />
           </div>
+        </div>
         <div>
           <div class="ml-1">
             <span class="items-center flex text-black-800 text-lg m-0">
@@ -468,7 +483,7 @@ export default {
       return otherReactions?.slice(-1)[0]?.emoji;
     },
     mentionedBy() {
-      return this.currMessage.sender_name
+      return this.currMessage.sender_name;
     },
     reactedBy() {
       let users = this.currMessage.reactions
@@ -480,6 +495,26 @@ export default {
         type: 'conjunction',
       });
       return formatter.format(users);
+    },
+    getConversationType(type) {
+      let conversation_type = '';
+      switch (type) {
+        case 'BenchChannel':
+          conversation_type = 'channels';
+          break;
+        case 'Group':
+          conversation_type = 'groups';
+          break;
+        case 'Profile':
+          conversation_type = 'profiles';
+          break;
+      }
+      return conversation_type;
+    },
+    goToChat() {
+      return `${this.getConversationType(
+        this.currMessage.conversationable_type
+      )}/${this.currMessage.conversationable_id}/${this.currMessage.id}`;
     },
   },
 };

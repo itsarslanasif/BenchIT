@@ -48,6 +48,7 @@
       <StarredChannelsAccordion />
       <ChannelsAccordion />
       <DirectMessageAccordian />
+      <groupAccordion />
     </div>
   </div>
 </template>
@@ -62,6 +63,7 @@ import { CONSTANTS } from '../../../assets/constants';
 import { h, ref } from 'vue';
 import { NDropdown } from 'naive-ui';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import groupAccordion from '../groups/groupAccordion.vue';
 import {
   faStream,
   faComments,
@@ -89,6 +91,7 @@ export default {
     WorkspaceDropdown,
     StarredChannelsAccordion,
     NDropdown,
+    groupAccordion,
   },
   setup() {
     const router = useRouter();

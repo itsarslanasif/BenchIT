@@ -6,7 +6,7 @@
     <ChannelInfo />
   </div>
   <div v-if="conversation_type === $t('conversations.groups')">
-    <ChannelInfo />
+    <GroupInfoVue />
   </div>
   <div v-else-if="conversation_type === $t('conversations.profiles')">
     <UserChatInfo />
@@ -35,6 +35,7 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 import { getHeaders } from '../../../modules/auth';
+import GroupInfoVue from '../channels/groupInfo.vue';
 
 export default {
   name: 'ChatHeader',
@@ -49,6 +50,7 @@ export default {
     PinnedConversation,
     ChannelInfo,
     UserChatInfo,
+    GroupInfoVue,
   },
   data() {
     return {
