@@ -2,22 +2,25 @@
   <div ref="body" class="scrollable bg-gray-100 mb-2">
     <div v-for="message in sentMessages" :key="message.id">
       {{ setMessage(message) }}
-      <div v-if="!isSameDayMessage">
-        <div v-if="isToday" class="text-xs text-black ml-10 font-bold m-4">
+      <div v-if="!isSameDayMessage || isFirstMessage">
+        <div v-if="isToday" class="text-xs text-black-900 font-bold m-4">
           <p>{{ $t('chat.today') }}</p>
         </div>
-        <div v-else class="text-xs text-black ml-10 font-bold m-4">
+        <div v-else class="text-xs text-black-900 font-bold m-4">
           <p>{{ new Date(message.created_at).toDateString() }}</p>
         </div>
       </div>
       <div
         @click="handleClick(message)"
-        class="ml-2 mr-2 bg-white border border-black-100 cursor-pointer flex p-4 hover:bg-gray-100"
+        class="bg-transparent mx-4 my-1 mb-1 gap-1 rounded cursor-pointer flex p-4 hover:bg-black-200"
       >
         <div class="min-w-fit ml-1">
-          <div v-if="message.conversationable_type === 'Profile'">
-            <img :src="getImageSrc(message)" class="w-10 rounded" />
-          </div>
+          <span
+            v-if="message.conversationable_type === 'Profile'"
+            class="w-12 h-12"
+          >
+            <n-avatar :src="getImageSrc(message)" :size="40" />
+          </span>
           <div
             class="bg-slate-100 w-10 h-10 rounded flex items-center justify-center text-base"
             v-else
@@ -34,7 +37,7 @@
             </div>
           </div>
         </div>
-        <div class="ml-3 leading-3 flex justify-center flex-col">
+        <div class="ml-3 flex justify-center flex-col">
           <div
             v-if="
               !message.is_threaded &&
@@ -89,12 +92,11 @@
           >
             {{ $t('heading.message_in_group') + message.group_id }}
           </div>
-          <br />
           <span v-for="block in messageBlocks" :key="block">
             <MessageSection v-if="block.type === 'section'" :section="block" />
           </span>
         </div>
-        <div class="margin-left text-black-600">
+        <div class="ml-auto mt-auto text-xs w-30 text-black-600">
           {{ time }}
         </div>
       </div>
@@ -238,6 +240,11 @@ export default {
     isLastPage() {
       return this.maxPages === this.currentPage - 1;
     },
+        isFirstMessage() {
+      return (
+        this.sentMessages && this.sentMessages[0].id === this.message.id
+      );
+    },
   },
 };
 </script>
@@ -246,8 +253,5 @@ export default {
 .scrollable {
   overflow-y: scroll;
   height: 85vh;
-}
-.margin-left {
-  margin-left: auto;
 }
 </style>

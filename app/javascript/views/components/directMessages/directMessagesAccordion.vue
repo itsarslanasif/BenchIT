@@ -3,7 +3,7 @@
     <font-awesome-icon
       @click="goToDirectMessages"
       icon="fa-plus"
-      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-secondary"
     />
     <AccordionList
       class="mt-5 ml-4 text-base text-slate-50"
@@ -11,7 +11,7 @@
     >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer truncate">
+          <span class="ml-2 cursor-pointer font-semibold truncate">
             {{ $t('direct_messages.direct_messages') }}
           </span>
         </template>

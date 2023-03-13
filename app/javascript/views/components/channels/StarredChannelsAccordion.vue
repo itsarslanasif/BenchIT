@@ -7,7 +7,7 @@
     >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="cursor-pointer ml-2">
+          <span class="ml-2 cursor-pointer font-semibold truncate">
             {{ $t('channels.starred') }}
           </span>
         </template>

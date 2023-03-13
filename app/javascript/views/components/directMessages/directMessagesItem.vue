@@ -54,14 +54,14 @@
         <div v-if="unreadDetails">
           <div
             v-if="unreadDetails.messages.length"
-            class="px-2 py-auto mt-1 rounded-full text-xs bg-successHover ml-auto mr-2"
+            class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
           >
             {{ totalUnreadMessages(unreadDetails) }}
           </div>
         </div>
         <div
           @click="removeChatFromList"
-          class="hover-target-x ml-2 w-fit mr-4 py-auto text-black-400 hover:text-white"
+          class="hover-target-x px-2 py-auto rounded-full text-xs ml-auto mr-2"
         >
           <i class="fas fa-xmark" />
         </div>

@@ -8,11 +8,12 @@
       size="large"
       class="w-80 rounded-md bg-white"
     >
-      <div class="mx-3 my-2 flex text-white cursor-pointer">
+      <div class="mx-3 my-2 flex text-white shadow-sm cursor-pointer">
         <strong class="text-xl">{{ currentWorkspace.company_name }}</strong>
         <i class="fa-solid fa-chevron-down self-center fa-lg ml-1" />
       </div>
     </n-dropdown>
+    <div class="custom-border" />
     <UserInviteModal v-model:show="showModal" />
     <div v-if="showChannelModal">
       <CreateChannel :close-modal="toggleCreateChannelModal" />
@@ -22,7 +23,7 @@
     </div>
   </div>
   <n-modal v-model:show="preferencesModal">
-      <Preferences />
+    <Preferences />
   </n-modal>
 </template>
 
@@ -107,3 +108,8 @@ export default {
   },
 };
 </script>
+<style>
+.custom-border {
+  border-bottom: 1px solid #717082;
+}
+</style>

@@ -7,7 +7,7 @@
     >
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer">
+          <span class="ml-2 cursor-pointer font-semibold truncate">
             {{ $t('channels.title') }}
           </span>
         </template>
@@ -32,7 +32,7 @@
           >
             <font-awesome-icon
               icon="fa-plus"
-              class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+              class="self-center mr-2 text-xs cursor-pointer text-white bg-secondary rounded-md p-2 "
             />
             <p class="text-sm self-center text-white truncate">
               {{ $t('channels.add_new_channel') }}
@@ -50,7 +50,7 @@
   </div>
   <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
     <h5
-      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
+      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-secondary"
     >
       <ChannelItem
         :channel="selectedChannel"

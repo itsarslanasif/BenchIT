@@ -10,7 +10,7 @@
     <div v-if="onlyIcon">
       <font-awesome-icon
         icon="fa-plus"
-        class="hover-target focus:outline-none px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+        class="hover-target focus:outline-none px-2 p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-secondary"
       />
     </div>
     <div v-else>
