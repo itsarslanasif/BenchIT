@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { getChannelMembers } from '../api/channels/channels';
+import { useErrorStore } from './useErrorStore';
 
 export const useChannelDetailStore = defineStore('channelDetailStore ', {
   state: () => ({
     selectedOption: 'about',
     channelMemberCount: 0,
     channelMembers: [],
-    error: {}
   }),
   getters: {
     getSelectedOption() {
@@ -19,7 +19,8 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       try {
         this.channelMembers = await getChannelMembers(query, bench_channel_id);
       } catch (e) {
-        this.handleError(e);
+        this.handleError(e.response.data.error)
+;
       }
     },
     async getChannelMembersCount(bench_channel_id) {
@@ -27,7 +28,8 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
         this.channelMembers = await getChannelMembers('', bench_channel_id);
         this.channelMemberCount = this.channelMembers.length;
       } catch (e) {
-        this.handleError(e);
+        this.handleError(e.response.data.error)
+;
       }
       return this.channelMemberCount;
     },
@@ -65,7 +67,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
     },
     handleError(error) {
-     this.error = error;
+      useErrorStore().showError(error) 
     }
   },
 });

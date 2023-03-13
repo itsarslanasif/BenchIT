@@ -1,12 +1,12 @@
 import { defineStore } from 'pinia';
 import { getAllProfiles } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
+import { useErrorStore } from './useErrorStore';
 
 export const useProfileStore = () => {
   const profileStore = defineStore('profileStore', {
     state: () => ({
       profiles: [],
-      error: {}
     }),
 
     getters: {
@@ -21,11 +21,11 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          this.handleError(e);
+          this.handleError(e.response.data.error)
         }
       },
-      handleError(err) {
-        this.error = err
+      handleError(error) {
+        useErrorStore().showError(error) 
       },
       updateProfileStatus(data) {
         let index = this.profiles.findIndex(profile => data.id === profile.id);

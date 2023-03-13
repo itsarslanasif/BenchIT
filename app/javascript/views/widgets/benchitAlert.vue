@@ -35,7 +35,7 @@ export default {
   {
     const errorStore = useErrorStore()
     const closeAlert = () => {
-      props.setApiResponseStatusNull() || errorStore.toggleErrorFlag();
+      errorStore.toggleErrorFlag()
     }
     return {
       errorStore,

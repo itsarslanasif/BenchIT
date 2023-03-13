@@ -67,7 +67,8 @@ export const useMessageStore = () => {
           this.maxPages = newMessages.page_information.pages;
           this.hasMoreMessages = this.currentPage > this.maxPages;
         } catch (e) {
-          this.handleError(error)
+          this.handleError(error.response.data.error)
+
         }
         if (conversation_type === 'profiles') {
           const currentWorkspace = decryption(
@@ -78,14 +79,16 @@ export const useMessageStore = () => {
           this.selectedChat = await getUserProfile(currentWorkspace.id, id);
           this.selectedChat.conversation_type = 'Profile';
           } catch (error) {
-            this.handleError(error)
+            this.handleError(error.response.data.error)
+
           }
         } else if (conversation_type === 'channels') {
           try {
           this.selectedChat = await getChannel(id);
           this.selectedChat.conversation_type = 'Channel';
           } catch (error) {
-            this.handleError(error)
+            this.handleError(error.response.data.error)
+
           }
         }
       },
@@ -97,7 +100,8 @@ export const useMessageStore = () => {
         try {
         await deleteMessage(id);
         } catch (error) {
-          this.handleError(error)
+          this.handleError(error.response.data.error)
+
         }
       },
       getMessage(id) {
@@ -163,7 +167,7 @@ export const useMessageStore = () => {
           scheduledMessage.scheduled_at = payload.scheduled_at;
         });
       },
-      handleError (error) {
+      handleError(error) {
         useErrorStore().showError(error) 
       }
     },

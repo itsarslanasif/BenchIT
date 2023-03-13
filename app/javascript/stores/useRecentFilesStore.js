@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAllRecentAttachments } from '../api/attachments/attachments';
+import { useErrorStore } from './useErrorStore';
 
 export const useRecentFilesStore = () => {
   const recentFilesStore = defineStore('recentFilesStore', {
@@ -18,7 +19,7 @@ export const useRecentFilesStore = () => {
         try {
           this.recentFiles = await getAllRecentAttachments();
         } catch (e) {
-          this.handleError(e);
+          this.handleError(e.response.data.error)
         }
       },
       toggleModalInChat() {
@@ -27,8 +28,8 @@ export const useRecentFilesStore = () => {
       toggleModalInThread() {
         this.showModalInThread = !this.showModalInThread;
       },
-      handleError(err) {
-        this.error = err
+      handleError(error) {
+        useErrorStore().showError(error) 
       },
     },
   });

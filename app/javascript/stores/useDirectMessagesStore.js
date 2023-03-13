@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia';
 import { getDirectMessagesList } from '../api/directMessages/directMessages';
+import { useErrorStore } from './useErrorStore';
 
 export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
   state: () => ({
     directMessagesList: [],
-    error: {}
   }),
 
   actions: {
@@ -25,7 +25,8 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       try {
         this.directMessagesList = await getDirectMessagesList(workspace_id);
       } catch (e) {
-        this.handleError(e)
+        this.handleError(e.response.data.error)
+
       }
     },
     updateProfileStatus(profile) {
@@ -80,7 +81,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       this.directMessagesList.unshift(ownChat);
     },
     handleError(error) {
-      this.error = error;
+      useErrorStore().showError(error) 
     }
   },
 });

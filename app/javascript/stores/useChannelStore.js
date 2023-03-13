@@ -6,6 +6,7 @@ import {
   memberLeaveChannel,
   getJoinedChannels,
 } from '../api/channels/channels';
+import { addMemberstoChannel } from '../api/members/membersApi';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
 import { useErrorStore } from './useErrorStore';
 import { useApiResponseStatusStore as apiResponseStatusStore } from './useApiResponseStatusStore';
@@ -50,7 +51,7 @@ export const useChannelStore = () => {
           );
           this.sortChannelsList();
         } catch (e) {
-          this.handleError(e)
+          this.handleError(e.response.data.error)
         }
       },
 
@@ -77,7 +78,7 @@ export const useChannelStore = () => {
           this.joinedChannels.push(joinedChannel);
           this.sortChannelsList();
         } catch (e) {
-          this.handleError(e)
+          this.handleError(e.response.data.error)
         }
       },
 
@@ -87,16 +88,28 @@ export const useChannelStore = () => {
           this.joinedChannels = this.joinedChannels.filter(
             channel => channel.id != id
           );
-          // let foundIndex = this.channels.findIndex(channel => channel.id == id);
-          // this.channels[foundIndex].profiles = this.channels[
-          //   foundIndex
-          // ].profiles.filter(profile => {
-          //   profile.id === this.currentProfileStore.currentProfile.id;
-          // });
+          let foundIndex = this.channels.findIndex(channel => channel.id == id);
+          this.channels[foundIndex].profiles = this.channels[
+            foundIndex
+          ].profiles.filter(profile => {
+            profile.id === this.currentProfileStore.currentProfile.id;
+          });
           this.starChannels = this.starChannels.filter(
             channel => channel.id != id
           );
           return response;
+        } catch (e) {
+          this.handleError(e.response.data.error)
+        }
+      },
+
+      async addMembersToChannel(channelId, selectedValues) {
+        try {
+          let response = await addMemberstoChannel(
+            channelId,
+            selectedValues
+          );
+          return response
         } catch (e) {
           this.handleError(e.response.data.error)
         }
@@ -175,8 +188,7 @@ export const useChannelStore = () => {
       },
 
       handleError(error) {
-        debugger
-        useErrorStore().showError(error.response.data.error) 
+        useErrorStore().showError(error) 
       }
     },
   });
