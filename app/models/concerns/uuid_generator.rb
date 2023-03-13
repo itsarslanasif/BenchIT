@@ -16,17 +16,21 @@ module UuidGenerator
               when 'Profile'
                 generate_id('D0', 12)
               when 'BenchChannel'
-                is_private? ? generate_id('CPR0', 10) : generate_id('CPU0', 10)
+                generate_id_for_channel
               when 'Group'
                 generate_id('G0', 12)
               when 'ChannelParticipant'
                 self.id = bench_channel_id + profile_id
               else
-                generate_id('M0', 12)
+                generate_id('M0', 18)
               end
   end
 
   def generate_id(text, number)
     "#{text}#{SecureRandom.alphanumeric(number).upcase}"
+  end
+
+  def generate_id_for_channel
+    is_private? ? generate_id('CPR0', 10) : generate_id('CPU0', 10)
   end
 end
