@@ -5,9 +5,9 @@
     <div
       v-if="!leftPaneStore.getLeftpaneFlag"
       @click="leftPaneStore.openLeftPane"
-      class="text-xl items-center text-white hover:bg-slate-600 rounded cursor-pointer"
+      class="text-xl flex items-center text-white hover:bg-secondary rounded cursor-pointer sidebutton"
     >
-      <font-awesome-icon class="p-2" icon="fa-solid fa-bars" />
+      <font-awesome-icon class="p-1" icon="fa-solid fa-bars" />
     </div>
     <div v-click-outside="closeSearchModal" class="flex w-1/2">
       <div class="w-full" @click="searchModalToggle = true">
@@ -210,3 +210,10 @@ export default {
   },
 };
 </script>
+<style>
+.sidebutton {
+  position: absolute;
+  left: 20px;
+  top: 8px;
+}
+</style>

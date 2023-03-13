@@ -8,12 +8,12 @@
       class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
     >
       <n-button>
-        <div class="flex avatar absolute">
+        <div
+          class="flex avatar absolute bg-secondary rounded-md cursor-pointer"
+        >
           <n-tooltip v-if="profileStatus" trigger="hover">
             <template #trigger>
-              <div
-                class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent self-baseline text-sm"
-              >
+              <div class="flex justify-center items-center px-2 text-sm">
                 <p>{{ profileStatus.emoji }}</p>
               </div>
             </template>
@@ -25,17 +25,16 @@
               {{ statusClearAfterTime(profileStatus.clear_after) }}
             </span>
           </n-tooltip>
-          <n-avatar class="self-baseline" size="medium" :src="profileAvatar" />
+          <n-avatar class="self-center" size="small" :src="profileAvatar" />
         </div>
         <div
-          class="flex absolute icon"
+          class="flex absolute -mt-1 mr-1 icon"
           :class="
             profileActiveStatus
-              ? 'bg-green-700 border-white border rounded-full h-3 w-3'
-              : 'bg-black-900 border-white border rounded-full h-3 w-3'
+              ? 'bg-green-700 border-white border rounded-full h-2 w-2'
+              : 'bg-black-900 border-white border rounded-full h-2 w-2'
           "
-        >
-        </div>
+        ></div>
       </n-button>
     </n-dropdown>
     <DownloadModal v-model:show="showModal" />
@@ -264,8 +263,8 @@ export default {
           this.preferencesModal = !this.preferencesModal;
           break;
         case 'profile':
-          this.userProfileStore.setUserProfile(this.profile)
-          this.rightPaneStore.toggleUserProfileShow(true)
+          this.userProfileStore.setUserProfile(this.profile);
+          this.rightPaneStore.toggleUserProfileShow(true);
           break;
         case 'downloads':
           this.showModal = true;
