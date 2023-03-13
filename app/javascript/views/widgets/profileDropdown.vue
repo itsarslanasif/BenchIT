@@ -392,7 +392,7 @@ export default {
 <style>
 .avatar {
   right: 20px;
-  top: 8px;
+  top: 5px;
 }
 
 .dropdown {
