@@ -5,7 +5,7 @@ Bentch-it is a new way to communicate with your team. It's faster, better organi
 **Rails + Vite + Vue + Pina + tailwind-css**
 
 - VueJS
-- Ruby 3.0.4
+- Ruby 3.1.2
 - Ruby on Rails 7
 - Postgresql
 - Application Server: Puma
