@@ -38,10 +38,9 @@ end
 
 group :development do
   gem 'capistrano'
+  gem 'capistrano-bundler'
   gem 'capistrano-rvm'
   gem 'capistrano-rails'
-  gem 'capistrano-bundler'
-  gem 'capistrano3-puma'
   gem 'rubocop', require: false
   gem 'rubocop-performance', require: false
   gem 'rubocop-rails', require: false

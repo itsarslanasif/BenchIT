@@ -7,7 +7,7 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server '65.1.194.133', user: 'deployer', roles: %w{app db web}
+server '65.1.194.133', user: 'deployer', roles: %w[app db web]
 
 # role-based syntax
 # ==================
@@ -61,13 +61,13 @@ server '65.1.194.133', user: 'deployer', roles: %w{app db web}
 #   }
 
 
-set :branch, 'develop'
+set :branch, 'CI/CI_implementation_git'
 set :deploy_to, '/home/deployer/app/benchit'
 set :stage, :development
 set :rails_env, 'development'
 
 namespace :deploy do
-  desc "Restart sidekiq"
+  desc 'Restart sidekiq'
   task :restart_sidekiq do
     on roles(:sidekiq), in: :sequence, wait: 5 do
       execute :sudo, :systemctl, :restart, 'sidekiq-worker'
