@@ -1,6 +1,5 @@
 class Workspace < ApplicationRecord
   include AvatarGeneration
-  include UuidGenerator
 
   has_one_attached :workspace_avatar, dependent: :destroy
 
