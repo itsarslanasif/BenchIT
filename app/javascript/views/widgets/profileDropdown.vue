@@ -41,11 +41,14 @@
     </n-dropdown>
     <DownloadModal v-model:show="showModal" />
     <SetProfileStatusModal v-if="profileStatusStore.showProfileStatusPopUp" />
+    <n-modal v-model:show="preferencesModal">
+      <Preferences />
+    </n-modal>
   </div>
 </template>
 
 <script>
-import { NDropdown, NAvatar, NText, NTooltip } from 'naive-ui';
+import { NDropdown, NAvatar, NText, NTooltip, NModal } from 'naive-ui';
 import { h } from 'vue';
 import { CONSTANTS } from '../../assets/constants';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
@@ -58,6 +61,9 @@ import moment from 'moment';
 import { clearStatus } from '../../api/profiles/profileStatus';
 import { setActiveStatus } from '../../api/profiles/profileStatus';
 import { removeActiveStatus } from '../../api/profiles/profileStatus';
+import Preferences from '../components/preferences/Preferences.vue';
+import { useUserProfileStore } from '../../stores/useUserProfileStore';
+import { useRightPaneStore } from '../../stores/useRightPaneStore';
 
 export default {
   components: {
@@ -66,11 +72,15 @@ export default {
     DownloadModal,
     SetProfileStatusModal,
     NTooltip,
+    NModal,
+    Preferences,
   },
   setup() {
     const profileStatusStore = useProfileStatusStore();
     const profileStore = useCurrentProfileStore();
     const currentWorkspaceStore = useCurrentWorkspaceStore();
+    const userProfileStore = useUserProfileStore();
+    const rightPaneStore = useRightPaneStore();
     const { currentProfile } = storeToRefs(profileStore);
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { status } = storeToRefs(profileStore);
@@ -81,6 +91,8 @@ export default {
       profileCurrentStatus: status,
       profileStore,
       currentWorkspace,
+      userProfileStore,
+      rightPaneStore,
     };
   },
 
@@ -99,6 +111,7 @@ export default {
       status: '',
       prevStatus: '',
       statusIcon: '',
+      preferencesModal: false,
       showModal: false,
       options: [
         {
@@ -247,6 +260,13 @@ export default {
           sessionStorage.removeItem('currentWorkspace');
           sessionStorage.removeItem('currentProfile');
           this.$router.push('/workspace_dashboard');
+          break;
+        case 'preferences':
+          this.preferencesModal = !this.preferencesModal;
+          break;
+        case 'profile':
+          this.userProfileStore.setUserProfile(this.profile)
+          this.rightPaneStore.toggleUserProfileShow(true)
           break;
         case 'downloads':
           this.showModal = true;

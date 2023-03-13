@@ -2,6 +2,7 @@
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
       <div
+        @click="toggleShowModal"
         v-if="selectedChat"
         class="flex px-1 mx-3 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
       >
@@ -20,7 +21,7 @@
         />
 
         <span v-if="selectedChat">
-          <p class="text-xl self-center ml-2 font-semibold pl-1">
+          <p class="text-xl self-center font-semibold pl-1">
             {{ selectedChat.username }}
           </p>
         </span>
@@ -40,6 +41,12 @@
         <i class="fa-solid fa-phone self-center" />
       </div>
     </div>
+    <ChatDetailModal
+      v-if="showChatDetail"
+      :chat="selectedChat"
+      :toggleModal="toggleShowModal"
+      class="m-auto absolute inset-x-0"
+    />
   </div>
 </template>
 
@@ -49,15 +56,31 @@ import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore.j
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore.js';
 import { storeToRefs } from 'pinia';
+import ChatDetailModal from '../../containers/ChatDetailModal.vue';
+import { ref } from 'vue';
+
 export default {
-  name: 'UserChatInfo',
-  components: { NAvatar, NTooltip },
+  components: { NAvatar, NTooltip, ChatDetailModal },
   setup() {
     const directMessagesStore = useDirectMessagesStore();
     const leftPaneStore = useLeftpaneStore();
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
-    return { directMessagesStore, selectedChat, leftPaneStore };
+    let showChatDetail = ref(false);
+    const openChatDetailModal = open => {
+      showChatDetail.value = open;
+    };
+    const toggleShowModal = () => {
+      showChatDetail.value = !showChatDetail.value;
+    };
+    return {
+      directMessagesStore,
+      selectedChat,
+      leftPaneStore,
+      toggleShowModal,
+      showChatDetail,
+      openChatDetailModal,
+    };
   },
 };
 </script>

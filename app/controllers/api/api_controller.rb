@@ -11,7 +11,7 @@ class Api::ApiController < ApplicationController
 
   def set_workspace_in_session
     if session[:current_workspace_id].nil?
-      render json: { error: 'No Workspace Selected.' }, status: :unprocessable_entity
+      render json: { success: false, error: t('api.no_workspace') }, status: :unprocessable_entity
     else
       Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
     end
@@ -19,13 +19,12 @@ class Api::ApiController < ApplicationController
 
   def set_profile
     Current.profile = Current.user.profiles.find_by(workspace_id: Current.workspace)
-    @current_profile = Current.profile
   end
 
   def presence_of_api_token
     return unless request.headers['Authorization'].nil?
 
-    render json: { error: 'You need to sign in before to access this.' }, status: :unauthorized
+    raise UnAuthorized, 'unauthorized'
   end
 
   def authenticate_api_with_token
@@ -33,9 +32,16 @@ class Api::ApiController < ApplicationController
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
     @current_user = User.find(jwt_payload[0]['sub'])
 
-    render json: { error: 'You need to sign in before to access this.' }, status: :unauthorized unless current_user
+    raise UnAuthorized, 'unauthorized' unless @current_user
+
     Current.user = @current_user
-  rescue StandardError
-    render json: { error: 'You need to sign in before to access this.' }, status: :unauthorized
+  end
+
+  def current_profile
+    @current_profile ||= Current.profile
+  end
+
+  def current_workspace
+    @current_workspace ||= Current.workspace
   end
 end

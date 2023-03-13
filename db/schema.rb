@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
+ActiveRecord::Schema[7.0].define(version: 2023_02_27_120013) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -51,7 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
     t.bigint "workspace_id", null: false
     t.bigint "creator_id"
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
-    t.index ["name"], name: "index_bench_channels_on_name", unique: true
+    t.index ["name", "workspace_id"], name: "index_bench_channels_on_name_and_workspace_id", unique: true
     t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
   end
 
@@ -92,7 +92,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
   end
 
   create_table "conversation_messages", force: :cascade do |t|
-    t.text "content"
+    t.json "content"
     t.boolean "is_threaded"
     t.bigint "parent_message_id"
     t.datetime "created_at", null: false
@@ -101,9 +101,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
     t.bigint "sender_id"
     t.boolean "is_info", default: false, null: false
     t.boolean "is_sent_to_chat", default: false, null: false
+    t.integer "shared_message_id"
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
+  end
+
+  create_table "direct_message_users", force: :cascade do |t|
+    t.integer "profile_id", null: false
+    t.integer "receiver_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["receiver_id", "profile_id"], name: "index_direct_message_users_on_receiver_id_and_profile_id", unique: true
   end
 
   create_table "downloads", force: :cascade do |t|
@@ -122,8 +131,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "profile_id", null: false
+    t.bigint "conversation_message_id"
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
-    t.index ["profile_id", "bench_conversation_id"], name: "index_draft_messages_on_profile_id_and_bench_conversation_id", unique: true
+    t.index ["conversation_message_id"], name: "index_draft_messages_on_conversation_message_id"
+    t.index ["profile_id", "bench_conversation_id", "conversation_message_id"], name: "draft_message", unique: true
     t.index ["profile_id"], name: "index_draft_messages_on_profile_id"
   end
 
@@ -154,6 +165,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
     t.index ["token"], name: "index_invitables_on_token"
   end
 
+  create_table "mentions", force: :cascade do |t|
+    t.bigint "conversation_message_id", null: false
+    t.string "mentionable_type"
+    t.bigint "mentionable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["conversation_message_id"], name: "index_mentions_on_conversation_message_id"
+    t.index ["mentionable_type", "mentionable_id"], name: "index_mentions_on_mentionable"
+  end
+
   create_table "pins", force: :cascade do |t|
     t.bigint "conversation_message_id", null: false
     t.bigint "profile_id", null: false
@@ -164,6 +185,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
     t.index ["conversation_message_id", "bench_conversation_id"], name: "index_pins_on_conversation_message_id_and_bench_conversation_id", unique: true
     t.index ["conversation_message_id"], name: "index_pins_on_conversation_message_id"
     t.index ["profile_id"], name: "index_pins_on_profile_id"
+  end
+
+  create_table "preferences", force: :cascade do |t|
+    t.bigint "profile_id", null: false
+    t.json "notifications", default: "{\"notify_me_about\": 1, [], \"my_keywords\": [], \"allow_notifications\": \"\", \"default_time_for_remider_notifications\": \"\", \"sound_and_appearance: [1],}", null: false
+    t.json "sidebar", default: "{\"alway_show_in_sidebar\":[1,2,5,6], \"show\": 1, \"sort\":{1,[1,4,5,6]} }", null: false
+    t.json "themes", default: "{\"sync_with_os_settings\": true, \"colors\":4,}", null: false
+    t.json "messages_and_media", default: "{\"theme\": 1, \"names\": 1, \"additional_options\": [1, 3], \"emoji\": { \"default_skin_tone\": 1, \"additional_options\": [2, 4],\"one_click_emoji\": 2 },\"inline_media_and_links\": [1, 2]}", null: false
+    t.json "language_and_region", default: "{\"language\": \"English(US)\", \"timezone\":\"Islamabad,Karachi\", \"spell_check\":true}", null: false
+    t.json "accessibility", default: "{\"zoom\": 4, \"links\": true, \"animation\": true, \"message_format\": 1, \"direct_message_announcements\":true, \"huddles_announcements\":[1, 2], \"keyboard\": 1}", null: false
+    t.json "mark_as_read", default: "{\"when_i_view_a_channel\": 1, \"when_i_mark_everything_as_read\": true}", null: false
+    t.json "audio_and_video", default: "{\"microphone\": {1, [1, 2]}, \"speaker\": 1, \"when_joining_a_slackcall\": [1], \"when_joining_a_huddle\": [1,4,5], \"when_slack_is_in_the_background\": true, \"when_your_screen_saver_starts_or_computer_locks\": [1, 2]}", null: false
+    t.json "connected_accounts", default: "{\"links_and_content_from_other_apps\": true}", null: false
+    t.json "privacy_and_visibility", default: "{\"slack_connect_discoverability\": 1, \"contact_sharing\": 1 }", null: false
+    t.json "advanced", default: "{\"input_options\": [], \"when_writing_a_message\": 1, \"search_options\": \"\", \"download_action\": {true,\"\"}, \"confirmations_and_warnings\": [1, 2, 3, 4], \"other_options\": [1]}", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["profile_id"], name: "index_preferences_on_profile_id"
   end
 
   create_table "profiles", force: :cascade do |t|
@@ -208,7 +247,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
   end
 
   create_table "schedule_messages", force: :cascade do |t|
-    t.text "content", null: false
+    t.json "content", null: false
     t.string "scheduled_at", null: false
     t.string "job_id", default: "", null: false
     t.bigint "profile_id", null: false
@@ -283,11 +322,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_06_124702) do
   add_foreign_key "conversation_messages", "bench_conversations"
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
   add_foreign_key "downloads", "profiles"
+  add_foreign_key "draft_messages", "conversation_messages"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
+  add_foreign_key "mentions", "conversation_messages"
   add_foreign_key "pins", "bench_conversations"
   add_foreign_key "pins", "conversation_messages"
   add_foreign_key "pins", "profiles"
+  add_foreign_key "preferences", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
   add_foreign_key "reactions", "profiles"

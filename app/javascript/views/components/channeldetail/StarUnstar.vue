@@ -1,21 +1,22 @@
 <template>
   <div>
-    <div v-if="this.currentChannel?.favourite_id">
-      <span @click="markChannel"> <i class="fa-solid fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
-    </div>
-    <div v-else>
-      <span @click="markChannel"><i class="fa-regular fa-star border-2 w-10 rounded p-2 ml-8 m-2"></i></span>
-    </div>
+    <span
+      class="flex items-center border rounded h-8 px-3 ml-4 hover:bg-transparent cursor-pointer"
+      v-on="{ click: isProfile ? null : markChannel }"
+    >
+      <i v-if="chat.favourite_id" class="fa-solid fa-star" />
+      <i v-else class="fa-regular fa-star" />
+    </span>
   </div>
 </template>
 
 <script>
-
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { markStar } from '../../../modules/starunstar/starunstar.js';
 export default {
   components: { markStar },
+  props: { chat: Object },
   setup() {
     const channelStore = useChannelStore();
     const { currentChannel } = storeToRefs(channelStore);
@@ -23,6 +24,11 @@ export default {
       channelStore,
       currentChannel,
     };
+  },
+  computed: {
+    isProfile() {
+      return this.chat.conversation_type === 'Profile';
+    },
   },
   methods: {
     markChannel() {

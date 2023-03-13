@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg-white flex flex-col p-5 gap-3">
     <div class="py-5">
@@ -19,7 +18,7 @@
           class="cursor-pointer"
           :name="member.username"
           :description="member.description"
-          :img-url="member.image_url"
+          :image_url="member.image_url"
         />
       </div>
     </div>
@@ -32,6 +31,7 @@
 <script>
 import MermberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 export default {
   name: 'About',
   components: { MermberCard },
@@ -41,6 +41,7 @@ export default {
   },
   setup() {
     const channelDetailStore = useChannelDetailStore();
+    const messageStore = useMessageStore();
     return { channelDetailStore };
   },
   methods: {
@@ -49,9 +50,8 @@ export default {
       try {
         await this.channelDetailStore.getChannelMembers(this.query, channel_id);
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
-
     },
   },
 };

@@ -6,6 +6,7 @@ import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
 import { useErrorStore } from './useErrorStore';
+import { getGroup } from '../api/groups/groups';
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -13,6 +14,7 @@ import {
   editScheduledContent,
   reScheduleTime,
 } from '../api/scheduleMessages';
+import { useDirectMessagesStore } from './useDirectMessagesStore';
 
 export const useMessageStore = () => {
   const messageStore = defineStore('messages', {
@@ -48,6 +50,15 @@ export const useMessageStore = () => {
     actions: {
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
+        if (selectedChat.hasOwnProperty('user_id')) {
+          const directMessageStore = useDirectMessagesStore();
+          const isObjectInArray = directMessageStore.directMessageUsers.find(
+            obj => obj.id === selectedChat.id
+          );
+          isObjectInArray
+            ? null
+            : directMessageStore.directMessageUsers.push(selectedChat);
+        }
       },
       deleteChannelName() {
         delete this.selectedChat.name;
@@ -91,6 +102,10 @@ export const useMessageStore = () => {
 
           }
         }
+        else if(conversation_type === 'groups'){
+          this.selectedChat = await getGroup(id);
+          this.selectedChat.conversation_type = 'Group';
+        }
       },
       async addMessage(msg) {
         messageStore;
@@ -106,6 +121,9 @@ export const useMessageStore = () => {
       },
       getMessage(id) {
         return this.messages.find(message => message.id === id);
+      },
+      getSharedMessage(id) {
+        return this.messages.find(message => message.shared_message_id === id);
       },
       addScheduleMessage(payload) {
         this.scheduleMessage.push(payload);

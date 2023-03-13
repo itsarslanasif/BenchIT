@@ -30,6 +30,6 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_failure
-    render json: { message: 'Something went wrong' }, status: :unauthorized
+    render json: { success: false, message: I18.t('users.sessions.log_out_failure.failure') }, status: :unauthorized
   end
 end

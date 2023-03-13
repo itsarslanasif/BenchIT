@@ -6,36 +6,29 @@ class Api::V1::WorkspacesController < Api::ApiController
   skip_before_action :set_profile, only: %i[index switch_workspace]
 
   def index
-    @workspaces = Current.user.workspaces
+    @workspaces = current_user.workspaces
   end
 
   def create
     @workspace = Workspace.new(workspace_params)
-
-    if @workspace.save
-      render json: @workspace, status: :ok
-    else
-      render json: { error: 'Error while creating workspace', errors: @workspace.errors }, status: :unprocessable_entity
-    end
+    @workspace.save!
+    render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
   end
 
   def invite
     @token = Token.new.generate
     create_invitable if @user.present?
     WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
-    render json: { message: "#{params[:email]} is sucessfully invited to #{@workspace.company_name}" }, status: :ok
+    render json: { success: true, message: t('.success',
+                                             email: params[:email], company_name: @workspace.company_name) }, status: :ok
   end
 
   def create_invitable
-    @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id,
-                                  token: @token, token_type: 'workspace_invitation')
+    @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id, token: @token, token_type: 'workspace_invitation')
 
     return unless @invitable.errors.any?
 
-    render json: {
-      error: 'There was an error in inviting the user to workspace',
-      errors: @invitable.errors
-    }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
   def switch_workspace
@@ -49,15 +42,13 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def find_workspace
-    @workspace = Workspace.find_by(id: params[:id])
-
-    render json: { error: 'Workspace not found' }, status: :not_found if @workspace.nil?
+    @workspace = Workspace.find(params[:id])
   end
 
   def find_profile
-    @profile = Current.user.profiles.find_by(workspace_id: @workspace)
+    @profile = current_user.profiles.find_by(workspace_id: @workspace)
 
-    render json: { error: 'You are not a part of this workspace' }, status: :unprocessable_entity if @profile.nil?
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
   end
 
   def check_profile
@@ -65,6 +56,6 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.blank?
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
-    render json: { error: t('.error') }, status: :unprocessable_entity
+    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 end

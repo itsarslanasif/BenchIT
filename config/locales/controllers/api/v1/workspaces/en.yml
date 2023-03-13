@@ -1,0 +1,15 @@
+en:
+  api:
+    v1:
+      workspaces:
+        create:
+          success: Workspace has been created successfully.
+          failure: Error while creating workspace.
+        invite:
+          success: '%{email} is successfully invited to the %{company_name}.'
+        create_invitable:
+          failure: Sorry, There was an error in inviting the user to workspace.
+        find_profile:
+          failure: Sorry, You are not a part of this workspace.
+        check_profile:
+          failure: Sorry, The user already has profile in this workspace.

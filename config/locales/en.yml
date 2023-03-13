@@ -40,6 +40,9 @@ en:
           error_message: 'Invalid email or password'
       workspaces:
         title: 'Details About Your Workspace'
+        new_workspace_title: 'Add Title Of Your Workspace'
+        new_name_placeholder: 'e.g BenchIT'
+        new_url_placeholder: 'e.g www.benchit.com'
         usage: 'What will your team use it for?'
         company_type_info: 'What kind of company is it?'
         company_size_info: 'How big is your company?'
@@ -118,6 +121,7 @@ en:
         channel: 'BenchChannel'
         profile: 'Profile'
         group: 'Group'
+        direct_message: 'Direct Message'
       rightpane:
         send: 'Send'
         replies: 'replies'
@@ -164,9 +168,15 @@ en:
           bear in mind you’ll have to supply both sides of the conversation.'
         this_conversation_is_between_two_of_you: "This conversation is just between the two of you. Here you can send
           messages and share files with"
+        share_private_chat_note: 'This message is from a private conversation, so it can only be shared
+          in this thread'
+        share_title: 'Search for channel or a person'
+        view_conversation : 'View Conversation'
+        posted_in: 'Posted in # '
       conversation_type:
         profile: 'Profile'
         channel: 'BenchChannel'
+        group: 'Group'
       right_pane:
         thread: 'Thread'
         profile: 'Profile'
@@ -183,6 +193,8 @@ en:
         launch_workspace: 'Launch Workspace'
         sign_in_to_your_workspace: 'Sign in to your workspace'
         new_workspace_tagline: 'Looking to create a workspace instead?'
+        workspace_not_found: 'We couldn’t find your workspace.'
+        workspace_type: "Please select workspace type"
       sidebar:
         threads: 'Threads'
         direct_messages: 'Direct Messages'
@@ -233,6 +245,8 @@ en:
         request_reason_placeholder: 'Add a note for your admin'
         error_message: 'User does not exist!'
         success_message: 'Invitation sent successfully!'
+      voice_mail:
+        recording: 'recording...'
       actions:
         add: 'Add'
         save: 'Save'
@@ -266,8 +280,10 @@ en:
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
         save_changes: 'Save Changes'
+        upload_photo: 'Upload Photo'
+        remove_photo: 'Remove Photo'
       schedule:
-        title: 'Schedule message'
+        schedule_message: 'Schedule message'
         tomorrow: 'Tomorrow at 9:00 AM'
         next_monday: 'Next Monday at 9:00 AM'
         custom_time: 'Custom time'
@@ -285,7 +301,7 @@ en:
         email: 'Email'
         phone: 'Phone'
         workspace: 'acme@benchit.com'
-        enter_workspace_url: 'your-workspace.slack.com'
+        enter_workspace_url: 'your-workspace.benchit.com'
         add_people_to_channel: 'ex. Nathalie, or james@acme.com'
       profile:
         contact_information: 'Contact Information'
@@ -294,6 +310,13 @@ en:
         title: 'Profile'
         active: 'Active'
         away: 'Away'
+      groups:
+        title: 'Groups'
+        add_new_group: 'Add new group'
+        create_group: 'Create group'
+        add_group_note: 'You can only add 9 members to a group, inorder to add more please create channel.'
+        group_chat_note: This is the very beginning of your direct message history with
+        add_people: 'Add people'
       filters:
         filter: 'Filter'
         all_types: 'All types'
@@ -330,6 +353,25 @@ en:
         for_workspace: 'For Workspace'
         automatically_updates: 'Automatically updates'
         until: 'until'
+      edit_profile:
+        heading: 'Edit your profile'
+        full_name: 'Full name'
+        display_name: 'Display name'
+        display_name_desc: "This could be your first name, or a nickname — however you'd like
+              people to refer to you in Slack."
+        title: 'Title'
+        record_audio_clip: 'Record Audio Clip'
+        title_desc: 'Let people know what you do at Devsinc.'
+        name_pronounce: 'Name pronounciation'
+        name_pronounce_placeholder: "Zoe (pronounced 'zo-ee')"
+        name_pronounce_desc: 'This could be a phonetic pronunciation, or an example of something
+              your name sounds like.'
+        play: 'Play'
+        stop_recording: 'Stop Recording'
+        time_zone: 'Time zone'
+        time_zone_default_option: 'Please choose the option'
+        time_zone_desc: 'Your current time zone. Used to send summary and notification
+              emails, for times in your activity feeds, and for reminders.'
       create_text_snippet:
         create_snippet: 'Create snippet'
         title: 'Title (optional)'
@@ -353,18 +395,35 @@ en:
         browse_all_shortcuts: 'Browse all shortcuts'
         recent_files: 'Recent files'
         upload_from_your_computer: 'Upload from your computer'
-      channeldetail:
+      chat_detail:
         about: 'About'
         members: 'Members'
         integrations: 'Integrations'
         settings: 'Settings'
-        channelname: 'Channel name'
+        channel_name: 'Channel name'
         topic: 'Topic'
         description: 'Description'
         created_by: 'Created by'
         leave: 'Leave Channel'
         files: 'Files'
-        filecontent: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
+        file_content: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
+        add_topic: 'Add topic'
+        mute: 'Mute'
+        start_a_call: 'Start a call'
+        view_full_profile: 'View full profile'
+        add_people_to_this_conversation: 'Add people to this conversation'
+        local_time: 'local time'
+      video_recording:
+        upload_video: 'Upload Video'
+        screen_record: 'Screen Record'
+        start_over: 'Start Over'
+        recorded: 'recorded'
+        done: 'Done'
+        stop: 'Stop'
+        record: 'Record'
+        inactive: 'inactive'
+        recording: 'recording'
+        record_video_clip: 'Record video clip'
       welcome:
         no_chat_selected: 'No Chat Selected'
         tagline: 'Select any chat from sidebar to see messages'
@@ -389,6 +448,22 @@ en:
         channels: 'channels'
         groups: 'groups'
         profiles: 'profiles'
+      preferences:
+        title: 'Preferences'
+        group_type: 'Group'
+        group_message: 'Group Messages'
+      mentions_and_reactions:
+        title: 'Mentions & reactions'
+        reacted: 'reacted in'
+        reacted_by: 'reacted to your message'
+        mentioned: 'mentioned you in'
+      connection:
+        trying_to_connect: 'Trying to connect...'
+        message_failed: 'Failed to send'
+        delete: 'Delete this message'
+        retry: 'Retry'
+        not_connected_to_internet: 'You are not connected to internet.'
+        message_deleted_successfully: 'Message is deleted successfully'
     admin:
       title: 'Admin'
       save: 'Save'
@@ -423,3 +498,4 @@ en:
               blank: 'Mandatory field'
             band:
               blank: 'Please select a band'
+

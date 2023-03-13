@@ -1,0 +1,10 @@
+en:
+  api:
+    v1:
+      bookmarks:
+        create:
+          success: Bookmark has been created successfully.
+        update:
+          success: Bookmark has been updated successfully.
+        destroy:
+          success: Bookmark has been deleted successfully.

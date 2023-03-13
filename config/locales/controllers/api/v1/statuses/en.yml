@@ -1,0 +1,6 @@
+en:
+  api:
+    v1:
+      statuses:
+        destroy:
+          success: The status has been cleared successfully.

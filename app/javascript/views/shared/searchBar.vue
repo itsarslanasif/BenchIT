@@ -40,19 +40,19 @@
               </p>
               <div class="flex gap-2">
                 <button
-                  class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover"
+                  class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover text-white"
                   @click="searchMessagesOnly"
                 >
                   {{ $t('search_bar.messages') }}
                 </button>
                 <button
-                  class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover"
+                  class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover text-white"
                   @click="searchChannelsOnly"
                 >
                   {{ $t('search_bar.channels') }}
                 </button>
                 <button
-                  class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover"
+                  class="px-3 py-1 w-auto rounded border-primaryHover border-2 hover:bg-primaryHover text-white"
                   @click="searchPeopleOnly"
                 >
                   {{ $t('search_bar.people') }}
@@ -191,6 +191,8 @@ export default {
     const leftPaneStore = useLeftpaneStore();
     profileStore.index();
     channelStore.index();
+    channelStore.fetchJoinedChannels();
+
     return {
       ApiResponseStatusStore,
       leftPaneStore,

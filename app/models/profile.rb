@@ -12,7 +12,7 @@ class Profile < ApplicationRecord
     }
   end
 
-  after_commit :attach_avatar, on: %i[create]
+  after_commit :attach_avatar, :create_preference, on: %i[create]
   after_commit :broadcast_profile
 
   belongs_to :user
@@ -33,6 +33,9 @@ class Profile < ApplicationRecord
   has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :downloads, dependent: :destroy
   has_many :schedule_messages, dependent: :destroy
+  has_many :direct_message_users, dependent: :destroy
+  has_one :preference, dependent: :destroy
+  has_many :mentions, as: :mentionable, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
@@ -46,7 +49,8 @@ class Profile < ApplicationRecord
     primary_owner: 0,
     workspace_owner: 1,
     workspace_admin: 2,
-    member: 3
+    member: 3,
+    outsider: 4
   }
 
   scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }

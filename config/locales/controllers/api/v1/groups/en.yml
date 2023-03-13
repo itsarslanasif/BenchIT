@@ -1,0 +1,12 @@
+en:
+  api:
+    v1:
+      groups:
+        create:
+          success: Group created successfully.
+        add_member:
+          success: Members are added successfully.
+        group_size:
+          failure: Sorry, The max group size is 9.
+        check_group_members:
+          success: Sorry, One or Many Users already member of this group.

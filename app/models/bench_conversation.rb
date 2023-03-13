@@ -15,6 +15,10 @@ class BenchConversation < ApplicationRecord
       none
   }
 
+  scope :get_bench_conversation, lambda { |type, id|
+    find_by(conversationable_type: type, conversationable_id: id) || none
+  }
+
   def self.previous_or_create_new_profile_conversation(receiver_id)
     conversation = BenchConversation.profile_to_profile_conversation(Current.profile.id, receiver_id)
 
@@ -23,10 +27,16 @@ class BenchConversation < ApplicationRecord
     BenchConversation.create(conversationable_type: 'Profile', conversationable_id: receiver_id, sender_id: Current.profile.id)
   end
 
-  def self.recent_last_conversation
+  def self.recent_conversation_ids
     BenchConversation.where(
       'conversationable_type = :conversationable_type AND (sender_id = :sender_id OR conversationable_id = :conversationable_id)',
       { conversationable_type: 'Profile', sender_id: Current.profile, conversationable_id: Current.profile }
     ).pluck(:id)
+  end
+
+  %w[profile bench_channel group].each do |type|
+    define_method("#{type}?") do
+      conversationable_type.eql?(type.camelcase)
+    end
   end
 end

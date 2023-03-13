@@ -1,11 +1,9 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create join_public_channel mute_channel unmute_channel]
+  before_action :set_bench_channel, only: %i[index create mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[mute_channel unmute_channel]
   before_action :check_profile_ids, only: %i[create]
-  before_action :check_channel_participants, only: %i[create]
-  before_action :check_workspace, only: %i[join_public_channel]
-  before_action :check_already_joined_channel, only: %i[join_public_channel]
-  before_action :check_private_channel, only: %i[join_public_channel]
+  before_action :pluck_name_of_participants, only: %i[create]
+  before_action :set_and_authenticate_channel, only: %i[join_public_channel]
 
   def index
     @profiles = if params[:query].present?
@@ -22,81 +20,60 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def create
     ActiveRecord::Base.transaction do
       params[:profile_ids].each do |profile_id|
-        ChannelParticipant.create(bench_channel_id: @bench_channel.id, profile_id: profile_id, permission: true)
+        ChannelParticipant.create!(bench_channel_id: @bench_channel.id, profile_id: profile_id, permission: true)
       end
-
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
-      render json: { member_count: @users_joined.count }, status: :ok
     end
+    render json: { success: true, member_count: @users_joined.count }, status: :ok
   end
 
   def join_public_channel
-    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id, permission: true)
+    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: current_profile.id, permission: true)
     ActiveRecord::Base.transaction do
-      if @channel_participant.save
-        InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
-        render json: { message: "Joined ##{@bench_channel.name}." }, status: :ok
-      else
-        render json: { error: "Unable to join ##{@bench_channel.name}.", errors: @channel_participant.errors }, status: :unprocessable_entity
-      end
+      @channel_participant.save!
+      InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
     end
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def mute_channel
-    if @channel_participant.update(muted: true)
-      render json: { message: t('.channel_muted') }, status: :ok
-    else
-      render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
-    end
+    @channel_participant.update!(muted: true)
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def unmute_channel
-    if @channel_participant.update(muted: false)
-      render json: { message: t('.channel_unmuted') }, status: :ok
-    else
-      render json: { errors: @channel_participant.errors }, status: :unprocessable_entity
-    end
+    @channel_participant.update!(muted: false)
+    render json: { success: true, message: t('.success') }, status: :ok
+  end
+
+  def invite_outsider
+    @token = Token.new.generate
+    ChannelMailer.send_email(params[:email], @bench_channel, @token).deliver!
+    render json: { success: true, message: t('.success'), company_name: @bench_channel.workspace.company_name }, status: :ok
   end
 
   private
 
   def set_bench_channel
-    @bench_channel = BenchChannel.find(params[:bench_channel_id])
-    return if !@bench_channel.is_private || Current.profile.bench_channel_ids.include?(@bench_channel.id)
-
-    render json: { errors: 'User is not part of channel.' }, status: :not_found
+    @bench_channel = current_profile.bench_channels.find(params[:bench_channel_id])
   end
 
   def set_channel_paticipant
-    @channel_participant = ChannelParticipant.where(bench_channel_id: @bench_channel.id, profile_id: Current.profile.id)
+    @channel_participant = @bench_channel.channel_participants.find_by!(profile_id: current_profile.id)
   end
 
-  def check_workspace
-    return if Current.profile.workspace.eql?(@bench_channel.workspace)
-
-    render json: { error: 'This Channel is not part of your workspace.' }, status: :forbidden
-  end
-
-  def check_already_joined_channel
-    is_channel_participant = @bench_channel.profile_ids.include?(Current.profile.id)
-
-    render json: { error: 'User already part of this channel.' }, status: :unprocessable_entity if is_channel_participant
-  end
-
-  def check_private_channel
-    return render json: { error: 'You cannot join Private Channel yourself.' }, status: :forbidden if @bench_channel.is_private?
-  end
-
-  def check_channel_participants
-    @channel_members = ChannelParticipant.where(profile_id: params[:profile_ids], bench_channel_id: @bench_channel.id).ids
-    return render json: { error: 'One or Many Users already participant of this channel' }, status: :forbidden if @channel_members.present?
-
+  def pluck_name_of_participants
     @users_joined = Profile.where(id: params[:profile_ids]).pluck(:username)
   end
 
   def check_profile_ids
-    return if (params[:profile_ids] - Current.workspace.profile_ids).blank?
+    return if (params[:profile_ids] - current_workspace.profile_ids).blank?
 
-    render json: { error: 'Profiles cannot be found' }, status: :not_found
+    render json: { success: false, error: t('.failure') }, status: :not_found
+  end
+
+  def set_and_authenticate_channel
+    @bench_channel = BenchChannel.find(params[:bench_channel_id])
+    authorize! :join_public_channel, @bench_channel
   end
 end

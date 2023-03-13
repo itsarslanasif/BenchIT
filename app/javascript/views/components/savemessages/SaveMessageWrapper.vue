@@ -20,12 +20,17 @@
       <div
         class="flex m-1 text-xs text-black-600 font-semibold hover:underline cursor-pointer"
       >
-        <div v-if="message.conversation_type == 'User'">Direct Message</div>
-        <div v-else-if="message.conversation_type == 'BenchChannel'">
-          {{ message.channel_name }}
+        <div v-if="message.conversation_type == $t('conversation.profile')">
+          {{ $t('conversation.direct_message') }}
         </div>
-        <div v-else-if="message.conversation_type == 'Group'">
-          Group Message
+        <div
+          v-else-if="message.conversation_type == $t('conversation.channel')"
+        >
+          <font-awesome-icon :icon="getChannelIcon(message.receiver)" />
+          {{ message.receiver.name }}
+        </div>
+        <div v-else-if="message.conversation_type == $t('conversation.group')">
+          {{ $t('conversation.group_message') }}
         </div>
       </div>
       <div class="flex">
@@ -33,7 +38,7 @@
           <n-avatar
             v-if="!isSameUser || !isSameDayMessage"
             size="large"
-            src="../../../assets/images/user.png"
+            :src="message.profile.image_url"
           />
         </div>
         <div>
@@ -52,10 +57,15 @@
                 {{ time }}
               </p>
             </span>
-            <span
+            <div
               class="text-black-800 text-sm flex-wrap"
-              v-html="currMessage.message.content"
-            />
+              v-for="block in messageBlock(currMessage.message.content).blocks"
+            >
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
+            </div>
           </div>
           <div v-if="currMessage?.attachments" class="flex gap-2 mb-3">
             <div
@@ -131,6 +141,7 @@ import { usePinnedConversation } from '../../../stores/UsePinnedConversationStor
 import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
 import { CONSTANTS } from '../../../assets/constants';
+import MessageSection from '../messages/MessageSection.vue';
 
 export default {
   name: 'MessageWrapper',
@@ -143,6 +154,7 @@ export default {
     NAvatar,
     EmojiPicker,
     EmojiModalButton,
+    MessageSection,
   },
   props: {
     currMessage: {
@@ -208,6 +220,12 @@ export default {
       } catch (e) {
         console.error(e);
       }
+    },
+    messageBlock(message) {
+      return JSON.parse(message);
+    },
+    getChannelIcon(channel) {
+      return `fa-${channel.is_private ? 'lock' : 'hashtag'}`;
     },
   },
 };

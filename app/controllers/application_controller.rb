@@ -1,5 +1,7 @@
 class ApplicationController < ActionController::Base
   require 'sidekiq/api'
+  include ExceptionHandler
+
   protect_from_forgery with: :exception
 
   around_action :set_locale_from_url
@@ -12,17 +14,11 @@ class ApplicationController < ActionController::Base
   private
 
   def render_error(exception)
-    error_map = {
-      ActiveRecord::RecordNotFound => { message: 'Record Not Found.', status: :not_found },
-      ActiveRecord::RecordInvalid => { message: 'Record Invalid.', status: :unprocessable_entity },
-      ActiveRecord::RecordNotSaved => { message: 'Record Not saved', status: :unprocessable_entity },
-      NoMethodError => { message: 'No Method Error.', status: :unprocessable_entity },
-      ActiveRecord::RecordNotUnique => { message: 'Record Not Unique.', status: :unprocessable_entity },
-      ActiveRecord::RecordNotDestroyed => { message: 'Record Not Destroyed', status: :unprocessable_entity },
-      PaginationError => { message: 'Page not found.', status: :unprocessable_entity },
-      :else => { message: 'Internal Server Error.', status: :internal_server_error }
-    }
-    error_data = error_map[exception.class] || error_map[:else]
+    error_data = error_data_for_exception(exception)
     render json: { success: false, error: error_data[:message], message: exception.message }, status: error_data[:status]
   end
 end
+
+class UnAuthorized < StandardError; end
+
+class PaginationError < StandardError; end

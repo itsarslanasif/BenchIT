@@ -7,7 +7,7 @@ export const getScheduleMessages = async () => {
       headers: getHeaders(),
     })
     .then(response => {
-      return response.data;
+      return response.data.schedule_messages;
     });
 };
 
