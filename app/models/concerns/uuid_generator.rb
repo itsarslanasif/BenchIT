@@ -16,7 +16,7 @@ module UuidGenerator
               when 'Profile'
                 generate_id('D0', 12)
               when 'BenchChannel'
-                is_private? ? generate_id('CPR0', 8) : generate_id('CPU0', 8)
+                is_private? ? generate_id('CPR0', 10) : generate_id('CPU0', 10)
               when 'Group'
                 generate_id('G0', 12)
               else
