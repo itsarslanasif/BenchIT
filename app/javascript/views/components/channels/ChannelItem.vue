@@ -79,8 +79,8 @@ export default {
     isChatOpen() {
       return (
         this.selectedChat.id === this.channel.id &&
-        !this.selectedChat.hasOwnProperty('user_id') &&
-        !this.channel.hasOwnProperty('user_id')
+        this.selectedChat.conversation_type === 'Channel' &&
+        this.channel.conversation_type === 'BenchChannel'
       );
     },
   },
