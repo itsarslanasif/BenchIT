@@ -29,7 +29,7 @@
 
 <script>
 import ChatDetailModal from '../../containers/ChatDetailModal.vue';
-import GroupMembersInfoVue from './GroupMembersInfo.vue';
+import groupMembersInfoVue from './groupMembersInfo.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
@@ -37,7 +37,7 @@ import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   name: 'ChannelInfo',
-  components: { ChatDetailModal, GroupMembersInfoVue },
+  components: { ChatDetailModal, groupMembersInfoVue },
   setup() {
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);

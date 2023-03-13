@@ -51,6 +51,7 @@
 
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
+import { onMounted, onUnmounted } from 'vue';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/workspaceDropdown/WorkspaceDropdown.vue';
 import SearchBar from '../shared/searchBar.vue';
@@ -123,6 +124,22 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
+   
+    onMounted(() => {
+      window.addEventListener('resize', handleResize);
+      handleResize()
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleResize);
+    });
+
+    const handleResize = () => {
+      const height = window.innerHeight - 44;
+      const splitpanes = document.getElementsByClassName("splitpanes");
+      splitpanes[0].style.height = `${height}px`;
+    }
+
     return {
       screenStore,
       rightPaneStore,
@@ -137,7 +154,6 @@ export default {
 <style>
 .splitpanes {
   grid-area: main;
-  height: calc(100vh-44px);
 }
 .splitpanes__splitter {
   background-color: #ccc;
