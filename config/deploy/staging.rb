@@ -7,7 +7,7 @@
 # server "example.com", user: "deploy", roles: %w{app web}, other_property: :other_value
 # server "db.example.com", user: "deploy", roles: %w{db}
 
-server '65.1.194.133', user: 'deployer', roles: %w[app db web]
+
 
 # role-based syntax
 # ==================
@@ -60,7 +60,7 @@ server '65.1.194.133', user: 'deployer', roles: %w[app db web]
 #     # password: "please use keys"
 #   }
 
-
+server '65.1.194.133', user: 'deployer', roles: %w[app db web]
 set :branch, 'CI/CD_implementation_git'
 set :deploy_to, '/home/deployer/app/benchit'
 set :stage, :development

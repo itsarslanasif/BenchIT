@@ -7,7 +7,7 @@ set :application,     'benchit'
 set :user,            'deployer'
 
 # Don't change these unless you know what you're doing
-# set :pty,             true
+set :pty,             true
 set :use_sudo,        true
 set :stage,           :development
 set :deploy_via,      :remote_cache
@@ -16,7 +16,8 @@ set :deploy_to,       "/home/#{fetch(:user)}/app/#{fetch(:application)}"
 set :log_level,       :debug
 
 ## Linked Files & Directories (Default None):
-set :linked_files,    %w[.env]
+# Rake::Task["deploy:assets:backup_manifest"].clear_actions
+set :linked_files,    %w[config/master.key config/credentials.yml.enc]
 set :linked_dirs,     %w[bin log tmp/pids tmp/cache tmp/sockets vendor/bundle]
 
 # namespace :deploy do
