@@ -24,7 +24,6 @@ export const useSavedItemsStore = defineStore('savedItem', {
     },
     handleError (error) {
       errorHandler(error.response.data.message); 
- 
     }
   },
 });

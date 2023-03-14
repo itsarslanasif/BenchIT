@@ -30,8 +30,7 @@ export default {
   name: 'BenchITAlert',
   components: { NAlert },
   props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
-  setup(props)
-  {
+  setup(props) {
     const closeAlert = () => {
       props.setApiResponseStatusNull()
     }

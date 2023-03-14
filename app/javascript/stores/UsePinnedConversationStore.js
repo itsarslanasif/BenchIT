@@ -29,7 +29,6 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
       }
       catch (error) {
         this.handleError(error.response.data.error)
-
       }
     },
     pinMessage(message) {

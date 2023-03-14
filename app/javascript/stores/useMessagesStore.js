@@ -90,8 +90,7 @@ export const useMessageStore = () => {
           this.selectedChat = await getUserProfile(currentWorkspace.id, id);
           this.selectedChat.conversation_type = 'Profile';
           } catch (error) {
-            this.handleError(error.response.data.error)
-
+            this.handleError(error.response.data.error);
           }
         } else if (conversation_type === 'channels') {
           try {
@@ -99,7 +98,6 @@ export const useMessageStore = () => {
           this.selectedChat.conversation_type = 'Channel';
           } catch (error) {
             this.handleError(error.response.data.error)
-
           }
         }
         else if(conversation_type === 'groups'){
@@ -116,7 +114,6 @@ export const useMessageStore = () => {
         await deleteMessage(id);
         } catch (error) {
           this.handleError(error.response.data.error)
-
         }
       },
       getMessage(id) {
