@@ -1,8 +1,7 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :set_bench_channel, only: %i[index create destroy mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[destroy mute_channel unmute_channel]
-  before_action :check_profile_ids, only: %i[create]
-  before_action :pluck_name_of_participants, only: %i[create]
+  before_action :check_profile_ids, :pluck_name_of_participants, only: %i[create]
   before_action :set_and_authenticate_channel, only: %i[join_public_channel]
   before_action :authorize_channel_participant, only: %i[destroy]
 
