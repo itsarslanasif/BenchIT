@@ -13,7 +13,7 @@ class BroadcastMessageNotificationService
   def send_notification_ws
     return if @profile_ids.empty?
 
-    type = %w[Group Profile]
+    type = MODEL_NAMES[1, 2]
 
     @profile_ids.each do |id|
       notification_key = "NotificationChannel#{Current.workspace.id}-#{id}"
