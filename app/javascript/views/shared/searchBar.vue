@@ -5,7 +5,7 @@
     <div
       v-if="!leftPaneStore.getLeftpaneFlag"
       @click="leftPaneStore.openLeftPane"
-      class="text-xl items-center text-white hover:bg-slate-600 rounded cursor-pointer sidebutton"
+      class="text-xl flex items-center text-white hover:bg-secondary rounded cursor-pointer sidebutton"
     >
       <font-awesome-icon class="p-1" icon="fa-solid fa-bars" />
     </div>
@@ -15,12 +15,13 @@
           type="text"
           @keydown.enter="goToSearches"
           :placeholder="getPlaceholder()"
-          class="text-center border-2 rounded-t w-full bg-primary border-primaryHover text-white"
+          class="px-3 border-2 rounded w-full bg-secondary border-primaryHover text-white focus:outline-none"
+          :class="!search && 'text-center'"
           v-model="search"
         />
       </div>
       <div
-        class="w-1/6 text-center text-white"
+        class="w-1/6 text-center text-white cursor-pointer"
         v-if="searchModalToggle"
         @click="closeSearchModal()"
       >
@@ -54,12 +55,6 @@
               >
                 {{ $t('search_bar.people') }}
               </button>
-            </div>
-          </div>
-          <div v-if="search" class="pb-2 border-b border-primaryHover">
-            <div class="px-5 py-2 rounded hover:bg-primaryHover">
-              <font-awesome-icon icon="fa-magnifying-glass" class="pr-3" />
-              {{ search }}
             </div>
           </div>
           <div class="mt-2">
@@ -211,9 +206,9 @@ export default {
 };
 </script>
 <style>
-  .sidebutton {
-    position: absolute;
-    left: 20px;
-    top: 8px;
-  }
+.sidebutton {
+  position: absolute;
+  left: 15px;
+  top: 8px;
+}
 </style>

@@ -1,5 +1,6 @@
 <template>
   <div
+    :class="{ 'bg-primaryHover': isChatOpen }"
     class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
     @click="goTo(`/groups/${group.id}`, group)"
   >
@@ -22,12 +23,16 @@
 <script>
 import { NAvatar } from 'naive-ui';
 import { useProfileStore } from '../../../stores/useProfileStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 export default {
   components: { NAvatar },
   props: ['group', 'goTo'],
   setup() {
     const profileStore = useProfileStore();
-    return { profileStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { profileStore, selectedChat };
   },
   computed: {
     membersProfileImage() {
@@ -39,6 +44,12 @@ export default {
       return this.group.profiles
         ? this.group.profiles.length
         : this.group.profile_ids.length;
+    },
+    isChatOpen() {
+      return (
+        this.selectedChat.id === this.group.id &&
+        this.selectedChat.conversation_type === this.group.conversation_type
+      );
     },
   },
 };

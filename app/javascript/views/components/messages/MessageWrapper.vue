@@ -118,7 +118,7 @@
               <p
                 class="text-xs ml-1 text-black-500 hover:underline cursor-pointer"
                 :class="{
-                  'hover-target w-12':
+                  'hover-target':
                     !isDeleted &&
                     isSameUser &&
                     isSameDayMessage &&
