@@ -35,7 +35,7 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 import { getHeaders } from '../../../modules/auth';
-import GroupInfoVue from '../channels/groupInfo.vue';
+import GroupInfoVue from '../channels/GroupInfo.vue';
 
 export default {
   name: 'ChatHeader',
