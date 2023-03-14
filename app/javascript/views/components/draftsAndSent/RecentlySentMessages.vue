@@ -12,7 +12,7 @@
       </div>
       <div
         @click="handleClick(message)"
-        class="bg-transparent mx-4 my-1 mb-1 gap-1 rounded cursor-pointer flex p-4 hover:bg-black-200"
+        class="bg-transparent mx-4 my-1 mb-1 gap-1 rounded cursor-pointer flex p-4 hover:bg-black-200 duration-200"
       >
         <div class="min-w-fit ml-1">
           <span
@@ -22,7 +22,7 @@
             <n-avatar :src="getImageSrc(message)" :size="40" />
           </span>
           <div
-            class="bg-slate-100 w-10 h-10 rounded flex items-center justify-center text-base"
+            class="bg-secondaryHover w-10 h-10 rounded flex items-center justify-center text-base"
             v-else
           >
             <div

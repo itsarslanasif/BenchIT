@@ -1,7 +1,7 @@
 <template>
   <div
     v-click-outside="toggleModal"
-    class="sm:w-flexible-md md:w-flexible-lg lg:w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
+    class="w-150 absolute z-10 inset-px bg-white rounded-xl p-2 shadow-xl border border-black-300"
   >
     <div
       class="flex justify-between gap-1 self-center items-center px-3 mt-2 mr-1"
@@ -41,7 +41,7 @@
       />
     </div>
 
-    <div class="flex gap-2 my-5">
+    <div class="flex ml-2 my-5">
       <StarUnstar :chat="chat" />
       <span
         v-if="isProfile && !isOwnProfile"

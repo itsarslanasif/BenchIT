@@ -203,7 +203,7 @@ en:
         people_and_user_group: 'People & User Group'
         all_channels: 'All Channels'
         more: 'More'
-        save_message: 'Save items'
+        saved_items: 'Saved items'
       channels:
         channels: 'Channels'
         public_channels: 'Public Channels'

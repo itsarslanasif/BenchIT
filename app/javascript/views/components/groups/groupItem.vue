@@ -1,7 +1,7 @@
 <template>
   <div
-    :class="{ 'bg-primaryHover': isChatOpen }"
-    class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
+    :class="{ 'bg-dark': isChatOpen }"
+    class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer duration-200"
     @click="goTo(`/groups/${group.id}`, group)"
   >
     <span class="flex item-center w-full">

@@ -16,7 +16,7 @@
       />
       <IconElement
         icon="fa-regular fa-bookmark"
-        :name="$t('sidebar.save_message')"
+        :name="$t('sidebar.saved_items')"
         @click="goTo(`/savemessages`)"
       />
       <IconElement

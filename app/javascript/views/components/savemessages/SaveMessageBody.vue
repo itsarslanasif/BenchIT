@@ -31,7 +31,7 @@
       :key="message.id"
       :id="message.id"
     >
-      <div class="border border-black-200 m-5">
+      <div class="border rounded border-black-200 m-5">
         <SaveMessageWrapper :currMessage="message" />
       </div>
     </div>

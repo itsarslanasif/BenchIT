@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white">
+  <div class="bg-white rounded-md cursor-pointer" @click="goToChat">
     <div v-if="pinnedConversationStore.isPinned(currMessage)">
       <span
         class="p-1 items-center text-black-800 text-xs flex bg-yellow-100 relative"
@@ -10,7 +10,7 @@
       </span>
     </div>
     <div
-      class="flex p-1 relative hover:bg-transparent items-start flex-col"
+      class="flex p-1 rounded relative hover:bg-transparent items-start flex-col"
       :class="{
         messageContentpinned: pinnedConversationStore.isPinned(currMessage),
       }"
@@ -60,6 +60,7 @@
             <div
               class="text-black-800 text-sm flex-wrap"
               v-for="block in messageBlock(currMessage.message.content).blocks"
+              :key="block.id"
             >
               <MessageSection
                 v-if="block.type === 'section'"
@@ -144,7 +145,6 @@ import { CONSTANTS } from '../../../assets/constants';
 import MessageSection from '../messages/MessageSection.vue';
 
 export default {
-  name: 'MessageWrapper',
   setup() {
     const savedItemsStore = useSavedItemsStore();
     const pinnedConversationStore = usePinnedConversation();
@@ -226,6 +226,28 @@ export default {
     },
     getChannelIcon(channel) {
       return `fa-${channel.is_private ? 'lock' : 'hashtag'}`;
+    },
+    goToChat() {
+      this.$router.push(
+        `/${this.getConversationType(this.currMessage.conversation_type)}/${
+          this.currMessage.receiver.id
+        }/${this.currMessage.message.id}`
+      );
+    },
+    getConversationType(type) {
+      let conversation_type = '';
+      switch (type) {
+        case 'BenchChannel':
+          conversation_type = 'channels';
+          break;
+        case 'Group':
+          conversation_type = 'groups';
+          break;
+        case 'Profile':
+          conversation_type = 'profiles';
+          break;
+      }
+      return conversation_type;
     },
   },
 };
