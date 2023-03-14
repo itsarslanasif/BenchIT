@@ -86,15 +86,15 @@ export const useMessageStore = () => {
             'currentWorkspace'
           );
           try {
-          this.selectedChat = await getUserProfile(currentWorkspace.id, id);
-          this.selectedChat.conversation_type = 'Profile';
+            this.selectedChat = await getUserProfile(currentWorkspace.id, id);
+            this.selectedChat.conversation_type = 'Profile';
           } catch (e) {
             this.handleError(e.response.data.error);
           }
         } else if (conversation_type === 'channels') {
           try {
-          this.selectedChat = await getChannel(id);
-          this.selectedChat.conversation_type = 'Channel';
+            this.selectedChat = await getChannel(id);
+            this.selectedChat.conversation_type = 'Channel';
           } catch (e) {
             this.handleError(e.response.data.error)
           }
@@ -110,7 +110,7 @@ export const useMessageStore = () => {
       },
       async deleteMessage(id) {
         try {
-        await deleteMessage(id);
+         deleteMessage(id);
         } catch (e) {
           this.handleError(e.response.data.error)
         }

@@ -60,7 +60,7 @@ export const useUnreadStore = () => {
     actions: {
       async index() {
         try {
-        this.unreadMessages = await getUnreadMessages();
+          this.unreadMessages = await getUnreadMessages();
         } catch (e) {
           this.handleError(e.response.data.error)
         }

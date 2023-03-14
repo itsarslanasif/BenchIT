@@ -95,7 +95,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       this.directMessageUsers.unshift(myProfile);
     },
     handleError(error) {
-     errorHandler(error) 
+      errorHandler(error) 
     }
   },
 });
