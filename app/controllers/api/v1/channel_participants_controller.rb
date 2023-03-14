@@ -2,7 +2,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :set_bench_channel, only: %i[index create destroy mute_channel unmute_channel invite_outsider]
   before_action :set_channel_paticipant, only: %i[destroy mute_channel unmute_channel]
   before_action :check_profile_ids, :pluck_name_of_participants, only: %i[create]
-  before_action :set_and_authenticate_channel, only: %i[join_public_channel]
+  before_action :set_and_authorize_channel, only: %i[join_public_channel]
   before_action :authorize_channel_participant, only: %i[destroy]
 
   def index
@@ -88,7 +88,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     render json: { success: false, error: t('.failure') }, status: :not_found
   end
 
-  def set_and_authenticate_channel
+  def set_and_authorize_channel
     @bench_channel = BenchChannel.find(params[:bench_channel_id])
     authorize! :join_public_channel, @bench_channel
   end
