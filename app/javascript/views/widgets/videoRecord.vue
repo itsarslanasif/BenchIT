@@ -293,8 +293,8 @@ export default {
             this.$refs.previewVideoElement.srcObject = stream;
             this.$refs.previewVideoElement.play();
           })
-          .catch(error => {
-            errorHandler(error.response.data.message);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
         await navigator.mediaDevices
           .getUserMedia(constraints)
@@ -306,8 +306,8 @@ export default {
             this.recordStream = stream;
             this.isCameraAvailable = true;
           })
-          .catch(error => {
-            errorHandler(error.response.data.message);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       } else {
         await navigator.mediaDevices
@@ -324,8 +324,8 @@ export default {
             this.isCameraAvailable = true;
             this.screenRecord = true;
           })
-          .catch(error => {
-            errorHandler(error.response.data.message);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       }
     },

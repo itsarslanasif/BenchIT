@@ -656,8 +656,8 @@ export default {
       updatedMessage.content = text;
       try {
         updateMessage(updatedMessage);
-      } catch (error) {
-        errorHandler(error.response.data.message);
+      } catch (e) {
+        errorHandler(e.response.data.message);
       }
     },
     async addReaction(emoji) {
@@ -790,7 +790,7 @@ export default {
           this.downloadsStore.downloadAlert = true;
         });
         this.downloadsStore.downloadAlert = false;
-      } catch (error) {
+      } catch (e) {
         this.downloadsStore.downloadAlert = true;
       }
     },

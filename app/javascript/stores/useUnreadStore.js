@@ -61,8 +61,8 @@ export const useUnreadStore = () => {
       async index() {
         try {
         this.unreadMessages = await getUnreadMessages();
-        } catch (err) {
-          this.handleError(err.response.data.error)
+        } catch (e) {
+          this.handleError(e.response.data.error)
         }
       },
       addNewMessage(message, conversation_type, conversation_id) {

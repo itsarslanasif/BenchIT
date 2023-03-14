@@ -73,7 +73,7 @@ export default {
         this.members = await getMembers(this.currentWorkspace.id, query, sort);
         this.showSpinner = false;
       } catch (e) {
-        errorHandler(e.response.data.message)(e);
+        errorHandler(e.response.data.message);
       }
     },
     setUserProfileForPane() {

@@ -79,7 +79,6 @@ export const useMessageStore = () => {
           this.hasMoreMessages = this.currentPage > this.maxPages;
         } catch (e) {
           this.handleError(error.response.data.error)
-
         }
         if (conversation_type === 'profiles') {
           const currentWorkspace = decryption(
@@ -89,15 +88,15 @@ export const useMessageStore = () => {
           try {
           this.selectedChat = await getUserProfile(currentWorkspace.id, id);
           this.selectedChat.conversation_type = 'Profile';
-          } catch (error) {
-            this.handleError(error.response.data.error);
+          } catch (e) {
+            this.handleError(e.response.data.error);
           }
         } else if (conversation_type === 'channels') {
           try {
           this.selectedChat = await getChannel(id);
           this.selectedChat.conversation_type = 'Channel';
-          } catch (error) {
-            this.handleError(error.response.data.error)
+          } catch (e) {
+            this.handleError(e.response.data.error)
           }
         }
         else if(conversation_type === 'groups'){
@@ -112,8 +111,8 @@ export const useMessageStore = () => {
       async deleteMessage(id) {
         try {
         await deleteMessage(id);
-        } catch (error) {
-          this.handleError(error.response.data.error)
+        } catch (e) {
+          this.handleError(e.response.data.error)
         }
       },
       getMessage(id) {

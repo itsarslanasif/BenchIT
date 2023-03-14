@@ -64,8 +64,8 @@ const createMessage = data => {
     if (!data.parent_message_id) {
       unreadMessagesStore.addNewMessage(data, conversation_type, id);
     }
-  } catch (err) {
-    errorHandler(error.response.data.message)(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -75,8 +75,8 @@ const deleteMessage = data => {
     if (!data.parent_message_id) {
       unreadMessagesStore.removeMessage(data);
     }
-  } catch (err) {
-    errorHandler(error.response.data.message)(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -132,7 +132,7 @@ export const notifyActions = data => {
   try {
     const key = data.type + data.action;
     notificationActions[key](data.content);
-  } catch (err) {
-    errorHandler(error.response.data.message)(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };

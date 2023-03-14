@@ -60,8 +60,8 @@ export default {
             this.recordingTime += 1;
           }, 1000);
         })
-        .catch(error => {
-          errorHandler(error.response.data.message)
+        .catch(e => {
+          errorHandler(e.response.data.message)
         });
     },
     stopRecording() {

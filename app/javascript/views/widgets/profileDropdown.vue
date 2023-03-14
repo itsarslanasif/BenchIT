@@ -251,8 +251,8 @@ export default {
         .then(response => {
           this.profileStore.setProfileStatus(null);
         })
-        .catch(err => {
-          errorHandler(err.response.data.message);
+        .catch(e => {
+          errorHandler(e.response.data.message);
         });
     },
     handleSelect(key) {

@@ -27,8 +27,8 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
       this.pinnedConversation = await pinnedMessages(conversation_type, id);
       this.pinToggle = false;
       }
-      catch (error) {
-        this.handleError(error.response.data.error)
+      catch (e) {
+        this.handleError(e.response.data.error)
       }
     },
     pinMessage(message) {

@@ -145,8 +145,8 @@ export default {
             this.$router.push(`/groups/${group.id}`);
             this.closeModal();
           })
-          .catch(err => {
-            errorHandler(err.response.data.message);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       } else {
         addGroupMembers(this.selectedValues, this.groupId)
@@ -156,8 +156,8 @@ export default {
             this.$router.push(`/groups/${updatedGroup.id}`);
             this.closeModal();
           })
-          .catch(err => {
-            errorHandler(err.response.data.message);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       }
     },

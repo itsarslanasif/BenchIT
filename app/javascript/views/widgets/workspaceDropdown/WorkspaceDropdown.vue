@@ -95,8 +95,8 @@ export default {
         const res = await userSignOut(token);
         this.response = res;
         this.$router.push('/sign_in');
-      } catch (error) {
-        errorHandler(error.response.data.message);
+      } catch (e) {
+        errorHandler(e.response.data.message);
       }
     },
     toggleCreateChannelModal() {

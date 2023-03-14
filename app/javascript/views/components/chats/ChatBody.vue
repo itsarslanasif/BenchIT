@@ -256,7 +256,7 @@ export default {
         } else {
           this.$emit('load-more-messages');
         }
-      } catch (error) {
+      } catch (e) {
         this.$emit('load-more-messages');
       }
     },

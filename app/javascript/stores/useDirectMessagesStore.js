@@ -28,7 +28,6 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
         this.directMessageUsers = await getDirectMessagesList(workspace_id);
       } catch (e) {
         this.handleError(e.response.data.message)
-
       }
     },
     updateProfileStatus(profile) {
