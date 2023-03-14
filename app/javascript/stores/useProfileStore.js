@@ -24,7 +24,7 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.message)
         }
       },
       handleError(error) {

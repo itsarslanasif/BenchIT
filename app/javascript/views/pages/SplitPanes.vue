@@ -2,10 +2,11 @@
   <n-message-provider placement="top-right">
     <div class="relative bg-primary text-sm h-screen grid grid-rows-18">
       <alert v-if="downloadsStore.downloadAlert" />
-      <switching-workspace-loader
+      <switching-workspace-loader 
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
-      <div class="row-span-1">
+        <global-alert-messages v-if="errorStore.errorFlag" />
+        <div class="row-span-1">
         <SearchBar />
       </div>
       <splitpanes @resize="resizePane">
@@ -67,6 +68,8 @@ import { NMessageProvider } from 'naive-ui';
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import alert from '../widgets/alert.vue';
+import GlobalAlertMessages from '../widgets/GlobalAlertMessages.vue';
+import { useErrorStore } from '../../stores/useErrorStore';
 
 export default {
   components: {
@@ -82,6 +85,7 @@ export default {
     NMessageProvider,
     NMessageProvider,
     alert,
+    GlobalAlertMessages,
   },
   data() {
     return {
@@ -123,12 +127,15 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
+    const errorStore = useErrorStore()
+
     return {
       screenStore,
       rightPaneStore,
       leftPaneStore,
       currentWorkspaceStore,
       downloadsStore,
+      errorStore
     };
   },
 };

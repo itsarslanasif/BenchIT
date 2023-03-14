@@ -16,6 +16,7 @@ export const useErrorStore = () => {
     async toggleErrorFlag() {
       this.errorFlag = false
       this.error = {}
+      console.log('hi')
     }
   },
 })

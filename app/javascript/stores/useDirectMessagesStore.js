@@ -28,7 +28,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       try {
         this.directMessageUsers = await getDirectMessagesList(workspace_id);
       } catch (e) {
-        this.handleError(e.response.data.error)
+        this.handleError(e.response.data.message)
 
       }
     },

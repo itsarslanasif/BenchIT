@@ -54,7 +54,7 @@ export const useChannelStore = () => {
           this.sortChannelsList();
           this.fetchStarredChannels();
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -87,7 +87,7 @@ export const useChannelStore = () => {
           this.joinedChannels.push(joinedChannel);
           this.sortChannelsList();
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -108,7 +108,7 @@ export const useChannelStore = () => {
           );
           return response;
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -120,7 +120,7 @@ export const useChannelStore = () => {
           );
           return response
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.message)
         }
       },
 

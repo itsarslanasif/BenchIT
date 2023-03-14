@@ -19,7 +19,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       try {
         this.channelMembers = await getChannelMembers(query, bench_channel_id);
       } catch (e) {
-        this.handleError(e.response.data.error)
+        this.handleError(e.response.data.message)
 ;
       }
     },
@@ -28,7 +28,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
         this.channelMembers = await getChannelMembers('', bench_channel_id);
         this.channelMemberCount = this.channelMembers.length;
       } catch (e) {
-        this.handleError(e.response.data.error)
+        this.handleError(e.response.data.message)
 ;
       }
       return this.channelMemberCount;

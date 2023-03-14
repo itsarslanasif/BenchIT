@@ -15,7 +15,7 @@ export const useProfileStatusStore = defineStore('ProfileStatusStore', {
       try {
       this.channelMembers = await getChannelMembers(query, bench_channel_id);
       } catch (e) {
-        this.handleError(e.response.data.error)
+        this.handleError(e.response.data.message)
       }
     },
     toggleProfileStatusPopUp() {
@@ -27,14 +27,14 @@ export const useProfileStatusStore = defineStore('ProfileStatusStore', {
           this.recent_statuses = response.recent_statuses;
           this.workspace_statuses = response.workspace_statuses;
         })
-        .catch(e => this.handleError(e.response.data.error));
+        .catch(e => this.handleError(e.response.data.message));
     },
     deleteRecentStatus(id) {
       deleteRecentStatus(id)
         .then(response => {
           this.setRecentAndWorkspaceStatus();
         })
-        .catch(e => this.handleError(e.response.data.error));
+        .catch(e => this.handleError(e.response.data.message));
     },
     handleError(error) {
       useErrorStore().showError(error) 

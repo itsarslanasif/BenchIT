@@ -11,7 +11,7 @@ export const useSavedItemsStore = defineStore('savedItem', {
       try {
         this.savedItems = await getSaveMessages();
       } catch (e) {
-        this.handleError(e.response.data.error)
+        this.handleError(e.response.data.message)
       }
     },
     addSavedItem(item) {

@@ -19,7 +19,7 @@ export const useSearchStore = () => {
         try {
           this.searches = await getSearching(query, filter);
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.message)
         }
       },
       clearSearches() {
