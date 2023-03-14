@@ -62,4 +62,3 @@ export const unsubscribe = () => {
 export const unsubscribeNotification = () => {
   notificationChannel.unsubscribe();
 }
-

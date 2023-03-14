@@ -29,7 +29,7 @@
 
 <script>
 import ChatDetailModal from '../../containers/ChatDetailModal.vue';
-import GroupMembersInfoVue from './groupMembersInfo.vue';
+import GroupMembersInfoVue from './GroupMembersInfo.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';

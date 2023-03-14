@@ -2,7 +2,7 @@ module UuidGenerator
   extend ActiveSupport::Concern
 
   included do
-    before_create :set_id unless instance_of?(::ChannelParticipant)
+    before_create :set_id
   end
 
   private
