@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getChannelMembers } from '../api/channels/channels';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useChannelDetailStore = defineStore('channelDetailStore ', {
   state: () => ({
@@ -18,7 +19,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       try {
         this.channelMembers = await getChannelMembers(query, bench_channel_id);
       } catch (e) {
-        console.error(e);
+        this.handleError(e.response.data.message);
       }
     },
     async getChannelMembersCount(bench_channel_id) {
@@ -26,7 +27,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
         this.channelMembers = await getChannelMembers('', bench_channel_id);
         this.channelMemberCount = this.channelMembers.length;
       } catch (e) {
-        console.error(e);
+        this.handleError(e.response.data.message);
       }
       return this.channelMemberCount;
     },
@@ -63,5 +64,8 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
         this.channelMemberCount -= 1;
       }
     },
+    handleError(error) {
+      errorHandler(error)
+    }
   },
 });

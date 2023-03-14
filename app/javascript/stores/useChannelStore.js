@@ -6,7 +6,9 @@ import {
   memberLeaveChannel,
   getJoinedChannels,
 } from '../api/channels/channels';
+import { addMemberstoChannel } from '../api/members/membersApi';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 import { useApiResponseStatusStore as apiResponseStatusStore } from './useApiResponseStatusStore';
 export const useChannelStore = () => {
   const channelStore = defineStore('channelStore', {
@@ -19,7 +21,6 @@ export const useChannelStore = () => {
       currentChannel: {},
       pageInfo: [],
       currentProfileStore: useCurrentProfileStore(),
-      error: [],
     }),
 
     getters: {
@@ -41,7 +42,7 @@ export const useChannelStore = () => {
           this.channels = [...newChannels.bench_channels];
           this.pageInfo = newChannels.page_information;
         } catch (e) {
-          console.error(e);
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -51,7 +52,7 @@ export const useChannelStore = () => {
           this.sortChannelsList();
           this.fetchStarredChannels();
         } catch (e) {
-          this.handleError(e);
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -84,7 +85,7 @@ export const useChannelStore = () => {
           this.joinedChannels.push(joinedChannel);
           this.sortChannelsList();
         } catch (e) {
-          console.error(e);
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -105,7 +106,19 @@ export const useChannelStore = () => {
           );
           return response;
         } catch (e) {
-          console.error(e);
+          this.handleError(e.response.data.message)
+        }
+      },
+
+      async addMembersToChannel(channelId, selectedValues) {
+        try {
+          let response = await addMemberstoChannel(
+            channelId,
+            selectedValues
+          );
+          return response
+        } catch (e) {
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -181,9 +194,9 @@ export const useChannelStore = () => {
         }
       },
 
-      handleError(err) {
-        this.error = err;
-      },
+      handleError(error) {
+        errorHandler(error) 
+      }
     },
   });
   const store = channelStore();

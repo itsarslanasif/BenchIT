@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getGroups } from '../api/groups/groups';
+import { errorHandler } from '../views/widgets/messageProvider';
 import { useProfileStore } from './useProfileStore';
 export const useGroupStore = defineStore('useGroupStore', {
   state: () => ({
@@ -8,7 +9,11 @@ export const useGroupStore = defineStore('useGroupStore', {
 
   actions: {
     async index() {
-      this.groups = await getGroups();
+      try {
+        this.groups = await getGroups();
+      } catch (e) {
+        errorHandler(e.response.data.message);
+      }
     },
     isNewGroup(group) {
       if (!this.groups.some(obj => obj.id === group.id)) {

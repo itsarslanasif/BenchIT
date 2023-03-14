@@ -1,11 +1,4 @@
 <template>
-  <div v-if="response?.data">
-    <benchit-alert
-      :errorMessage="$t('members.error_message')"
-      :successMessage="successMessage"
-      :success="isSuccessfullResponse"
-    />
-  </div>
   <div>
     <div
       @click.self="closeModal()"
@@ -77,16 +70,13 @@ import { storeToRefs } from 'pinia';
 import { defineComponent } from 'vue';
 import {
   getMembers,
-  addMemberstoChannel
 } from '../../../api/members/membersApi';
-import { CONSTANTS } from '../../../assets/constants';
+import { useChannelStore } from '../../../stores/useChannelStore';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
-import benchitAlert from '../../widgets/benchitAlert.vue';
 
 export default defineComponent({
   components: {
     NSelect,
-    benchitAlert,
   },
   props: {
     channelName: {
@@ -100,9 +90,11 @@ export default defineComponent({
   },
   setup() {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
+    const channelStore = useChannelStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     return {
       currentWorkspace,
+      channelStore
     };
   },
   data() {
@@ -120,32 +112,11 @@ export default defineComponent({
   mounted() {
     this.getMembersList('');
   },
-  computed: {
-    isSuccessfullResponse() {
-      return this.response.data.status === 'ok';
-    },
-    successMessage() {
-      let status = this.response?.data.status;
-      if (status && status == 'ok') {
-        return `${this.response.data.member_count} ${CONSTANTS.MEMBER_SUCCESS_MESSAGE}`;
-      } else {
-        return CONSTANTS.SOMETHING_WENT_WRONG;
-      }
-    },
-  },
   methods: {
     async submit() {
       let channel_id = window.location.pathname.split('/')[2];
-      try {
-        let response = await addMemberstoChannel(
-          channel_id,
-          this.selectedValues
-        );
-        this.response = response;
-        this.closeModal();
-      } catch (e) {
-        console.error(e);
-      }
+      this.response = await this.channelStore.addMembersToChannel(channel_id, this.selectedValues)
+      this.closeModal();
     },
     handleSearch(query) {
       if (!query.length) {

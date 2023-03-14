@@ -64,6 +64,7 @@ import { removeActiveStatus } from '../../api/profiles/profileStatus';
 import Preferences from '../components/preferences/Preferences.vue';
 import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
+import { errorHandler } from './messageProvider';
 
 export default {
   components: {
@@ -250,8 +251,8 @@ export default {
         .then(response => {
           this.profileStore.setProfileStatus(null);
         })
-        .catch(err => {
-          console.error(err);
+        .catch(e => {
+          errorHandler(e.response.data.message);
         });
     },
     handleSelect(key) {

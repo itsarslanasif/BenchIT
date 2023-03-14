@@ -35,8 +35,8 @@ const createMessage = (data, messageStore, threadStore) => {
         messageStore.addMessage(data);
       }
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -85,8 +85,8 @@ const deleteMessage = (data, messageStore, threadStore, pinStore, rightPaneStore
         }
       }
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -118,8 +118,8 @@ const updateMessage = (data, messageStore, threadStore) => {
     if (MessageIndex === -1 && data.attachments) {
       createMessage(data, messageStore, threadStore);
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -141,8 +141,8 @@ const createReaction = (data, messageStore) => {
         message.reactions.push(data);
       }
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -161,8 +161,8 @@ const deleteReaction = (data, messageStore) => {
     if (message != -1 && findMessageReactionIndex != -1) {
       message.reactions.splice(findMessageReactionIndex, 1);
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -201,8 +201,8 @@ const pinMessage = (data, messageStore, threadStore, pinStore) => {
         }
       }
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -241,8 +241,8 @@ const unPinMessage = (data, messageStore, threadStore, pinStore) => {
         }
       }
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -283,7 +283,7 @@ export const cableActions = data => {
       pinStore,
       rightPaneStore
     );
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
