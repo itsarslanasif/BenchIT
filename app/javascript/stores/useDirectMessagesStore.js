@@ -3,8 +3,7 @@ import {
   getDirectMessagesList,
   removeChatFromList,
 } from '../api/directMessages/directMessages';
-import { useErrorStore } from './useErrorStore';
-
+import { errorHandler } from '../views/widgets/messageProvider';
 export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
   state: () => ({
     directMessageUsers: [],
@@ -97,7 +96,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       this.directMessageUsers.unshift(myProfile);
     },
     handleError(error) {
-      useErrorStore().showError(error) 
+     errorHandler(error) 
     }
   },
 });

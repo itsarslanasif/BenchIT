@@ -36,6 +36,7 @@ import CreateChannel from '../../components/channels/CreateChannel.vue';
 import CreateWorkspace from '../../components/workspace/CreateWorkspace.vue';
 import { removeActiveStatus } from '../../../api/profiles/profileStatus';
 import Preferences from '../../components/preferences/Preferences.vue';
+import { errorHandler } from '../messageProvider';
 
 export default {
   components: {
@@ -95,7 +96,7 @@ export default {
         this.response = res;
         this.$router.push('/sign_in');
       } catch (error) {
-        console.error(error);
+        errorHandler(error.response.data.message);
       }
     },
     toggleCreateChannelModal() {

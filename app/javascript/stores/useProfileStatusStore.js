@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { getRecentStatuses } from '../api/profiles/profileStatus';
 import { deleteRecentStatus } from '../api/profiles/profileStatus';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useProfileStatusStore = defineStore('ProfileStatusStore', {
   state: () => ({
@@ -37,7 +37,7 @@ export const useProfileStatusStore = defineStore('ProfileStatusStore', {
         .catch(e => this.handleError(e.response.data.message));
     },
     handleError(error) {
-      useErrorStore().showError(error) 
+      errorHandler(error.response.data.message); 
     }
   },
 });

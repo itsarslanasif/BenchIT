@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
+import { handleError } from 'vue';
 import { createWorkspace } from '../../../app/javascript/api/workspaces/workspacesApi.js';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useCurrentWorkspaceStore = defineStore(
   'useCurrentWorkspaceStore',
@@ -30,7 +32,7 @@ export const useCurrentWorkspaceStore = defineStore(
 
           return new_workspace;
         } catch (e) {
-          return e.response;
+          errorHandler(e.response.data.message);
         }
       },
     },

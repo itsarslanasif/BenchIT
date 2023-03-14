@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia';
 import { getChannelMembers } from '../api/channels/channels';
-import { useErrorStore } from './useErrorStore';
 
 export const useChannelDetailStore = defineStore('channelDetailStore ', {
   state: () => ({
@@ -67,7 +66,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
     },
     handleError(error) {
-      useErrorStore().showError(error) 
+      handleError(error) 
     }
   },
 });

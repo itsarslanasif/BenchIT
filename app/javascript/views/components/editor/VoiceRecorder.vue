@@ -28,6 +28,7 @@
 
 <script>
 import RecordRTC from 'recordrtc';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   props: ['getAudio'],
@@ -60,7 +61,7 @@ export default {
           }, 1000);
         })
         .catch(error => {
-          console.error('Error accessing media devices.', error);
+          errorHandler(error.response.data.message)
         });
     },
     stopRecording() {

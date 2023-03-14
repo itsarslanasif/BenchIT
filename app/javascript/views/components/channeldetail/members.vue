@@ -32,6 +32,7 @@
 import MermberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { errorHandler } from '../../widgets/messageProvider';
 export default {
   name: 'About',
   components: { MermberCard },
@@ -50,7 +51,7 @@ export default {
       try {
         await this.channelDetailStore.getChannelMembers(this.query, channel_id);
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
   },

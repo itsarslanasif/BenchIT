@@ -5,7 +5,7 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 import { getGroup } from '../api/groups/groups';
 import {
   getScheduleMessages,
@@ -186,7 +186,7 @@ export const useMessageStore = () => {
         });
       },
       handleError(error) {
-        useErrorStore().showError(error) 
+        errorHandler(error.response.data.message); 
       }
     },
   });

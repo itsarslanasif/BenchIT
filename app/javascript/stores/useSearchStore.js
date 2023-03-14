@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getSearching } from '../api/searchBar';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useSearchStore = () => {
   const searchStore = defineStore('useSearchStore', {
@@ -31,7 +31,7 @@ export const useSearchStore = () => {
         this.searched = search
       },
       handleError(error) {
-        useErrorStore().showError(error) 
+        errorHandler(error.response.data.message);  
       }
     },
   });

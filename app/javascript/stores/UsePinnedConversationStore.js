@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { pinnedMessages } from '../api/messages/pinnedMessages';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const usePinnedConversation = defineStore('pinnedConversationStore', {
   state: () => ({
@@ -52,7 +52,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
       this.pinToggle = false;
     },
     handleError(error) {
-      useErrorStore().showError(error) 
+      errorHandler(error.response.data.message); 
     },
   },
 });

@@ -65,7 +65,7 @@ const createMessage = data => {
       unreadMessagesStore.addNewMessage(data, conversation_type, id);
     }
   } catch (err) {
-    console.error(err);
+    errorHandler(error.response.data.message)(err);
   }
 };
 
@@ -76,7 +76,7 @@ const deleteMessage = data => {
       unreadMessagesStore.removeMessage(data);
     }
   } catch (err) {
-    console.error(err);
+    errorHandler(error.response.data.message)(err);
   }
 };
 
@@ -133,6 +133,6 @@ export const notifyActions = data => {
     const key = data.type + data.action;
     notificationActions[key](data.content);
   } catch (err) {
-    console.error(err);
+    errorHandler(error.response.data.message)(err);
   }
 };

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getUnreadMessages } from '../api/notification';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 const getConversationType = type => {
   let conversation_type = '';
@@ -138,7 +138,7 @@ export const useUnreadStore = () => {
         return null;
       },
       handleError (error) {
-        useErrorStore().showError(error) 
+        errorHandler(error.response.data.message);  
       }
     },
   });

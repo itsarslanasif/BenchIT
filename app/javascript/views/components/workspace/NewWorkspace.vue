@@ -36,6 +36,7 @@ import WorkspaceURL from './WorkspaceURL.vue';
 import { WorkspaceStore } from '../../../stores/workspace_store';
 import { createWorkspace } from '../../../api/workspaces/workspacesApi';
 import './style.css';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   data() {
@@ -59,7 +60,7 @@ export default {
           this.workspaceStore.capacityError = '';
         }
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
   },

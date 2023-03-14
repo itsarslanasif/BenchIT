@@ -5,7 +5,6 @@
       <switching-workspace-loader 
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
-        <global-alert-messages v-if="errorStore.errorFlag" />
         <div class="row-span-1">
         <SearchBar />
       </div>
@@ -64,12 +63,10 @@ import UserProfile from '../components/rightPane/UserProfile.vue';
 import { useSelectedScreenStore } from '../../stores/useSelectedScreen';
 import SwitchingWorkspaceLoader from '../components/workspace/SwitchingWorkspaceLoader.vue';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
-import { NMessageProvider } from 'naive-ui';
+import { NMessageProvider, useMessage } from 'naive-ui';
 import { useLeftpaneStore } from '../../stores/useLeftpaneStore';
 import { useDownloadsStore } from '../../stores/useDownloadsStore';
 import alert from '../widgets/alert.vue';
-import GlobalAlertMessages from '../widgets/GlobalAlertMessages.vue';
-import { useErrorStore } from '../../stores/useErrorStore';
 
 export default {
   components: {
@@ -85,7 +82,6 @@ export default {
     NMessageProvider,
     NMessageProvider,
     alert,
-    GlobalAlertMessages,
   },
   data() {
     return {
@@ -127,7 +123,7 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
-    const errorStore = useErrorStore()
+    window.$message = useMessage()
 
     return {
       screenStore,
@@ -135,7 +131,6 @@ export default {
       leftPaneStore,
       currentWorkspaceStore,
       downloadsStore,
-      errorStore
     };
   },
 };

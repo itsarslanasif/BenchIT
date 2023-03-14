@@ -447,6 +447,7 @@ import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
 import MessageFailed from '../../widgets/MessageFailed.vue'
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   name: 'MessageWrapper',
@@ -656,7 +657,7 @@ export default {
       try {
         updateMessage(updatedMessage);
       } catch (error) {
-        console.error(error);
+        errorHandler(error.response.data.message);
       }
     },
     async addReaction(emoji) {
@@ -679,13 +680,13 @@ export default {
         try {
           await remove_reaction(emoji_id);
         } catch (e) {
-          console.error(e);
+          errorHandler(e.response.data.message);
         }
       } else {
         try {
           await add_reaction(this.currMessage.id, temp);
         } catch (e) {
-          console.error(e);
+          errorHandler(e.response.data.message);
         }
       }
     },
@@ -730,7 +731,7 @@ export default {
           });
         }
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
 

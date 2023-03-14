@@ -26,19 +26,16 @@
 
 <script>
 import { NAlert } from 'naive-ui';
-import { useErrorStore } from '../../stores/useErrorStore'
 export default {
   name: 'BenchITAlert',
   components: { NAlert },
   props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
   setup(props)
   {
-    const errorStore = useErrorStore()
     const closeAlert = () => {
-      errorStore.toggleErrorFlag()
+      props.setApiResponseStatusNull()
     }
     return {
-      errorStore,
       closeAlert,
     }
   }

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { getAllRecentAttachments } from '../api/attachments/attachments';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useRecentFilesStore = () => {
   const recentFilesStore = defineStore('recentFilesStore', {
@@ -29,7 +29,7 @@ export const useRecentFilesStore = () => {
         this.showModalInThread = !this.showModalInThread;
       },
       handleError(error) {
-        useErrorStore().showError(error) 
+        errorHandler(error.response.data.message);  
       },
     },
   });

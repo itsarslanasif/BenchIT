@@ -8,7 +8,7 @@ import {
 } from '../api/channels/channels';
 import { addMemberstoChannel } from '../api/members/membersApi';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
-import { useErrorStore } from './useErrorStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 import { useApiResponseStatusStore as apiResponseStatusStore } from './useApiResponseStatusStore';
 export const useChannelStore = () => {
   const channelStore = defineStore('channelStore', {
@@ -19,10 +19,8 @@ export const useChannelStore = () => {
       joinedChannels: [],
       starChannels: [],
       currentChannel: {},
-      error: {},
       pageInfo: [],
       currentProfileStore: useCurrentProfileStore(),
-      error: [],
     }),
 
     getters: {
@@ -44,7 +42,7 @@ export const useChannelStore = () => {
           this.channels = [...newChannels.bench_channels];
           this.pageInfo = newChannels.page_information;
         } catch (e) {
-          console.error(e);
+          this.handleError(e.response.data.message)
         }
       },
 
@@ -197,7 +195,7 @@ export const useChannelStore = () => {
       },
 
       handleError(error) {
-        useErrorStore().showError(error) 
+        errorHandler(error) 
       }
     },
   });

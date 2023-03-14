@@ -31,6 +31,7 @@ import { useProfileStore } from '../../../stores/useProfileStore';
 import ProfileSortFilter from '../../widgets/profileSort&filter.vue';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { ref } from 'vue';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   props: ['filterComponentData'],
@@ -72,7 +73,7 @@ export default {
         this.members = await getMembers(this.currentWorkspace.id, query, sort);
         this.showSpinner = false;
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message)(e);
       }
     },
     setUserProfileForPane() {
