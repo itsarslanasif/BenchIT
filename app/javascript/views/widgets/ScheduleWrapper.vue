@@ -29,6 +29,7 @@
         >
           <p>G</p>
         </div>
+        <!-- {{payload}} -->
       </div>
       <div class="align-middle ml-3">
         <div class="text-base font-semibold">
@@ -87,7 +88,7 @@ export default {
       }
     },
     getIcon() {
-      return `fa-${this.payload.is_private ? 'lock' : 'hashtag'}`;
+      return `fa-${this.payload.receiver.is_private ? 'lock' : 'hashtag'}`;
     },
     isProfileMessage() {
       return this.payload.conversation_type === 'Profile';
