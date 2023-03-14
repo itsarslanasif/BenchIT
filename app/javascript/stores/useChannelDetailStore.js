@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getChannelMembers } from '../api/channels/channels';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useChannelDetailStore = defineStore('channelDetailStore ', {
   state: () => ({
@@ -64,7 +65,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
     },
     handleError(error) {
-      handleError(error) 
+      errorHandler(error)
     }
   },
 });
