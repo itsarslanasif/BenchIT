@@ -4,7 +4,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   before_action :check_profile_ids, only: %i[create]
   before_action :pluck_name_of_participants, only: %i[create]
   before_action :set_and_authenticate_channel, only: %i[join_public_channel]
-  before_action :authenticate_channel_participant, only: %i[destroy]
+  before_action :authorize_channel_participant, only: %i[destroy]
 
   def index
     @profiles = if params[:query].present?
@@ -31,6 +31,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def destroy
     ActiveRecord::Base.transaction do
       @channel_participant.destroy!
+
       ConversationMessage.create!(
         content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"#{I18n.t('application.services.left_message')} #{@channel.name}"}}]}),
         is_threaded: false,
@@ -93,7 +94,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     authorize! :join_public_channel, @bench_channel
   end
 
-  def authenticate_channel_participant
+  def authorize_channel_participant
     authorize! :destroy, @channel_participant
   end
 end

@@ -3,11 +3,13 @@ class ChatChannel < ApplicationCable::Channel
     stream_from case params[:type]
                 when 'profiles'
                   conversation = BenchConversation.profile_to_profile_conversation(params[:id], params[:current_profile_id])
+
                   if conversation.blank?
                     conversation = BenchConversation.new(conversationable_type: 'Profile', conversationable_id: params[:id],
                                                          sender_id: params[:current_profile_id])
                     conversation.save
                   end
+
                   "ChatChannelProfile#{conversation.conversationable_id}-#{conversation.sender_id}"
                 when 'groups'
                   "ChatChannelGroup#{params[:id]}"
