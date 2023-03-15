@@ -26,6 +26,7 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def log_out_success
+    ActiveRecord::Base.establish_connection(:development)
     redirect_to helpers.sign_in_url
   end
 

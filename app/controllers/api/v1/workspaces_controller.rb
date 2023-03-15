@@ -42,10 +42,22 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def find_workspace
-    @workspace = Workspace.find(params[:id])
+    ActiveRecord::Base.establish_connection(
+      adapter: 'postgresql',
+      encoding: 'unicode',
+      pool: ENV.fetch('RAILS_MAX_THREADS', 5),
+      username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
+      password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
+      host: ENV.fetch('POSTGRES_HOST', 'localhost'),
+      database: Workspace.find(params[:id]).company_name.downcase
+    )
+    # byebug
+    session[:current_workspace_id] = Workspace.first.id
+    @workspace = Workspace.first
   end
 
   def find_profile
+    # byebug
     @profile = current_user.profiles.find_by(workspace_id: @workspace)
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
