@@ -187,7 +187,6 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: auto;
   grid-area: main;
 }
 .grid-container {
