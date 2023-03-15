@@ -24,25 +24,25 @@
         <div class="mt-3 flex flex-row text-black-600" v-if="isGroup">
           {{ $t('groups.group_chat_note') }}
           <div
-            class="px-1"
+            class="px-1 flex items-start"
             v-for="profile in selectedChat.profiles"
             :key="profile.id"
           >
-            <a
+            <p
               v-if="
                 profile ===
                 selectedChat.profiles[selectedChat.profiles.length - 1]
               "
-              class="px-2"
+              class="px-1"
             >
               and
-            </a>
-            <a
+            </p>
+            <p
               @click="showUserProfile(profile.id)"
-              class="text-info cursor-pointer bg-slate-50 p-1 rounded"
+              class="text-info cursor-pointer bg-slate-50 px-1 mx-1 rounded"
             >
               @{{ profile.username }}
-            </a>
+            </p>
           </div>
         </div>
       </span>

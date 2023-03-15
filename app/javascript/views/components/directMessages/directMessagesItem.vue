@@ -11,8 +11,8 @@
   >
     <div
       v-if="user"
-      class="flex items-center hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer"
-      :class="{ 'bg-primaryHover': isChatOpen, 'font-bold': isUnreadDM(user) }"
+      class="flex items-center hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
+      :class="{ 'bg-dark': isChatOpen, 'font-bold': isUnreadDM(user) }"
       @click.right="toggleRightClickMenu"
       @contextmenu.prevent
     >

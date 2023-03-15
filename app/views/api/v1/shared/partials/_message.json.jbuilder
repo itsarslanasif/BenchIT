@@ -46,9 +46,10 @@ json.conversationable_type message.bench_conversation.conversationable_type
 json.conversationable_id message.bench_conversation.conversationable_id
 json.channel_name message.bench_conversation.conversationable.name if
   message.bench_conversation.conversationable_type.eql?('BenchChannel')
-
-json.group_id message.bench_conversation.conversationable_id if
-  message.bench_conversation.conversationable_type.eql?('Group')
+if message.bench_conversation.conversationable_type.eql?('Group')
+  json.group_id message.bench_conversation.conversationable_id
+  json.group_name message.bench_conversation.conversationable.name
+end
 
 if message.bench_conversation.conversationable_type.eql?('Profile')
   if message.bench_conversation.conversationable_id == message.sender_id

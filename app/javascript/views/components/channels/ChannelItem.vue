@@ -11,8 +11,8 @@
   >
     <div
       @contextmenu.prevent
-      class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer"
-      :class="{ 'bg-primaryHover': isChatOpen }"
+      class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
+      :class="{ 'bg-dark': isChatOpen }"
       @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleRightClickMenu"
     >
