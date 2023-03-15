@@ -17,17 +17,21 @@
         <div class="p-2 px-4 bg-transparent">
           <div class="text-lg flex gap-1 text-primary font-semibold">
             <div
-              v-if="currMessage.receiver_name"
+              v-if="isProfileMessage"
               class="rounded-xl text-xs self-center"
               :class="isActive ? 'text-green-700' : 'text-black'"
             >
               <i class="fa-solid fa-circle"></i>
             </div>
-            <div v-else>
+            <div v-else-if="isChannelMessage">
               <font-awesome-icon v-if="isPrivate" icon="fa-lock" />
               <font-awesome-icon v-else icon="fa-hashtag" />
             </div>
-            <p>{{ conversationName }}</p>
+            <div v-else-if="isGroupMessage">
+              <font-awesome-icon icon="fas fa-users" />
+              {{ currMessage.sender_name }}
+            </div>
+            <p v-if="!isGroupMessage">{{ conversationName }}</p>
           </div>
           <p class="text-xs text-black-600 font-normal self-center">
             {{ threadParticipants }}
@@ -262,6 +266,15 @@ export default {
         }
       }
       return '';
+    },
+    isProfileMessage() {
+      return this.currMessage.conversationable_type === 'Profile';
+    },
+    isChannelMessage() {
+      return this.currMessage.conversationable_type === 'BenchChannel';
+    },
+    isGroupMessage() {
+      return this.currMessage.conversationable_type === 'Group';
     },
   },
 };
