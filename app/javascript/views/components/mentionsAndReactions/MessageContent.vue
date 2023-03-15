@@ -240,6 +240,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import { useChannelStore } from '../../../stores/useChannelStore';
+import { errorHandler } from '../../widgets/messageProvider';
 export default {
   name: 'MessageWrapper',
   setup() {
@@ -340,8 +341,8 @@ export default {
       updatedMessage.content = text;
       try {
         updateMessage(updatedMessage);
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        errorHandler(e.response.data.message);
       }
     },
     async addReaction(emoji) {
@@ -362,7 +363,7 @@ export default {
           await add_reaction(this.currMessage.id, temp);
         }
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
     setEmojiModal() {
@@ -400,7 +401,7 @@ export default {
           });
         }
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
     countReaction(emoji) {
@@ -443,7 +444,7 @@ export default {
           this.downloadsStore.downloadAlert = true;
         });
         this.downloadsStore.downloadAlert = false;
-      } catch (error) {
+      } catch (e) {
         this.downloadsStore.downloadAlert = true;
       }
     },

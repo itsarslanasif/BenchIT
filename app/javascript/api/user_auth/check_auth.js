@@ -4,8 +4,7 @@ export const checkAuth = async () => {
   try {
     const { data } = await axios.get('/check_auth');
     return data.success
-  }
-  catch (err) {
+  } catch (e) {
     return false;
   }
 }

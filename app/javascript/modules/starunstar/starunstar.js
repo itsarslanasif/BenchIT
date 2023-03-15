@@ -24,6 +24,6 @@ export const markStar = (currentChannel, channelStore) => {
       });
     }
   } catch (e) {
-    console.error(e);
+    errorHandler(e.response.data.message);
   }
 };

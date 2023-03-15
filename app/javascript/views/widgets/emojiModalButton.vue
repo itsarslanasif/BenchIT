@@ -45,6 +45,7 @@ import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { pinMessage } from '../../api/messages/pinnedMessages';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
+import { errorHandler } from './messageProvider';
 
 export default {
   name: 'EmojiModalButton',
@@ -97,7 +98,7 @@ export default {
           try {
             pinMessage(message.conversationable_id, message.id);
           } catch (e) {
-            console.error(e);
+            errorHandler(e.response.data.message);
           }
           break;
         case 'un-pin-from-this-conversation':

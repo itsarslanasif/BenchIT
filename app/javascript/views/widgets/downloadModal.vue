@@ -112,7 +112,7 @@ export default {
           this.downloadsStore.downloadAlert = true;
         });
         this.downloadsStore.downloadAlert = false;
-      } catch (error) {
+      } catch (e) {
         this.downloadsStore.downloadAlert = true;
       }
     },
@@ -129,7 +129,7 @@ export default {
           this.downloadsStore.downloadAlert = true;
         });
         this.downloadsStore.downloadAlert = false;
-      } catch (error) {
+      } catch (e) {
         this.downloadsStore.downloadAlert = true;
       }
     },
@@ -160,7 +160,7 @@ export default {
       getDownloads().then(response => {
         this.downloadsStore.downloads = response.data;
       });
-    } catch (error) {
+    } catch (e) {
       this.downloadsStore.downloadAlert = true;
     }
   },

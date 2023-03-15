@@ -22,6 +22,7 @@ import AddPeopleToChannel from './AddPeopleToChannel.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
 import { NDivider } from 'naive-ui';
 import { useMessageStore } from '../../../stores/useMessagesStore';
+import { errorHandler } from '../../widgets/messageProvider';
 export default {
   props: ['showMemberClickListener', 'channelId', 'channelName'],
   components: {
@@ -53,7 +54,7 @@ export default {
           channelId
         );
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
   },

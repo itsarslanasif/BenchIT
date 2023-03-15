@@ -142,6 +142,7 @@ import { unsave } from '../../../api/save_messages/unsavemessage.js';
 import { useSavedItemsStore } from '../../../stores/useSavedItemStore.js';
 import { CONSTANTS } from '../../../assets/constants';
 import MessageSection from '../messages/MessageSection.vue';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   name: 'MessageWrapper',
@@ -218,7 +219,7 @@ export default {
           });
         }
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
     messageBlock(message) {
