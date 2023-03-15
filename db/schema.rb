@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_10_145007) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
-    t.string "record_id", null: false
+    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
@@ -42,22 +42,22 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "bench_channels", id: :serial, force: :cascade do |t|
+  create_table "bench_channels", force: :cascade do |t|
     t.string "name", null: false
     t.text "description"
     t.boolean "is_private", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "workspace_id", null: false
-    t.string "creator_id", null: false
+    t.string "creator_id"
     t.index ["creator_id"], name: "index_bench_channels_on_creator_id"
     t.index ["name", "workspace_id"], name: "index_bench_channels_on_name_and_workspace_id", unique: true
     t.index ["workspace_id"], name: "index_bench_channels_on_workspace_id"
   end
 
-  create_table "bench_conversations", id: :serial, force: :cascade do |t|
-    t.string "conversationable_type", null: false
-    t.string "conversationable_id", null: false
+  create_table "bench_conversations", force: :cascade do |t|
+    t.string "conversationable_type"
+    t.bigint "conversationable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sender_id"
@@ -66,10 +66,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"
   end
 
-  create_table "bookmarks", id: :serial, force: :cascade do |t|
+  create_table "bookmarks", force: :cascade do |t|
     t.string "profile_id", null: false
-    t.string "bookmarkable_type", null: false
-    t.string "bookmarkable_id", null: false
+    t.string "bookmarkable_type"
+    t.bigint "bookmarkable_id"
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
@@ -78,47 +78,45 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
   end
 
-  create_table "channel_participants", id: :serial, force: :cascade do |t|
+  create_table "channel_participants", force: :cascade do |t|
     t.boolean "permission", default: true
     t.datetime "left_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "bench_channel_id", null: false
+    t.bigint "bench_channel_id", null: false
     t.string "profile_id", null: false
     t.boolean "muted", default: false, null: false
-    t.integer "role", default: 0, null: false
     t.index ["bench_channel_id", "profile_id"], name: "index_channel_participants_on_bench_channel_id_and_profile_id", unique: true
     t.index ["bench_channel_id"], name: "index_channel_participants_on_bench_channel_id"
     t.index ["profile_id"], name: "index_channel_participants_on_profile_id"
   end
 
-  create_table "conversation_messages", id: :serial, force: :cascade do |t|
+  create_table "conversation_messages", force: :cascade do |t|
     t.json "content"
     t.boolean "is_threaded"
-    t.string "parent_message_id"
+    t.integer "parent_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "bench_conversation_id", null: false
-    t.string "sender_id", null: false
+    t.bigint "bench_conversation_id"
+    t.string "sender_id"
     t.boolean "is_info", default: false, null: false
     t.boolean "is_sent_to_chat", default: false, null: false
-    t.string "shared_message_id"
+    t.integer "shared_message_id"
     t.index ["bench_conversation_id"], name: "index_conversation_messages_on_bench_conversation_id"
     t.index ["parent_message_id"], name: "index_conversation_messages_on_parent_message_id"
     t.index ["sender_id"], name: "index_conversation_messages_on_sender_id"
-    t.index ["shared_message_id"], name: "index_conversation_messages_on_shared_message_id"
   end
 
-  create_table "direct_message_users", id: :serial, force: :cascade do |t|
+  create_table "direct_message_users", force: :cascade do |t|
     t.string "profile_id", null: false
-    t.string "receiver_id", null: false
+    t.bigint "receiver_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["profile_id"], name: "index_direct_message_users_on_profile_id"
     t.index ["receiver_id", "profile_id"], name: "index_direct_message_users_on_receiver_id_and_profile_id", unique: true
   end
 
-  create_table "downloads", id: :serial, force: :cascade do |t|
+  create_table "downloads", force: :cascade do |t|
     t.string "profile_id", null: false
     t.string "file_name", null: false
     t.string "file_link", null: false
@@ -126,25 +124,24 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.string "file_type", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["profile_id"], name: "index_downloads_on_profile_id"
   end
 
-  create_table "draft_messages", id: :serial, force: :cascade do |t|
-    t.json "content", null: false
-    t.string "bench_conversation_id", null: false
+  create_table "draft_messages", force: :cascade do |t|
+    t.text "content", null: false
+    t.integer "bench_conversation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_id", null: false
-    t.string "conversation_message_id"
+    t.bigint "conversation_message_id"
     t.index ["bench_conversation_id"], name: "index_draft_messages_on_bench_conversation_id"
     t.index ["conversation_message_id"], name: "index_draft_messages_on_conversation_message_id"
     t.index ["profile_id", "bench_conversation_id", "conversation_message_id"], name: "draft_message", unique: true
     t.index ["profile_id"], name: "index_draft_messages_on_profile_id"
   end
 
-  create_table "favourites", id: :serial, force: :cascade do |t|
-    t.string "favourable_type", null: false
-    t.string "favourable_id", null: false
+  create_table "favourites", force: :cascade do |t|
+    t.string "favourable_type"
+    t.bigint "favourable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_id", null: false
@@ -153,38 +150,37 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["profile_id"], name: "index_favourites_on_profile_id"
   end
 
-  create_table "groups", id: :serial, force: :cascade do |t|
+  create_table "groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_ids", default: [], array: true
   end
 
-  create_table "invitables", id: :serial, force: :cascade do |t|
+  create_table "invitables", force: :cascade do |t|
     t.string "token"
-    t.string "user_id", null: false
-    t.string "workspace_id", null: false
+    t.bigint "user_id"
+    t.string "workspace_id"
     t.string "token_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["token"], name: "index_invitables_on_token"
-    t.index ["user_id"], name: "index_invitables_on_user_id"
     t.index ["workspace_id"], name: "index_invitables_on_workspace_id"
   end
 
-  create_table "mentions", id: :serial, force: :cascade do |t|
-    t.string "conversation_message_id", null: false
-    t.string "mentionable_type", null: false
-    t.string "mentionable_id", null: false
+  create_table "mentions", force: :cascade do |t|
+    t.bigint "conversation_message_id", null: false
+    t.string "mentionable_type"
+    t.bigint "mentionable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_message_id"], name: "index_mentions_on_conversation_message_id"
     t.index ["mentionable_type", "mentionable_id"], name: "index_mentions_on_mentionable"
   end
 
-  create_table "pins", id: :serial, force: :cascade do |t|
-    t.string "conversation_message_id", null: false
+  create_table "pins", force: :cascade do |t|
+    t.bigint "conversation_message_id", null: false
     t.string "profile_id", null: false
-    t.string "bench_conversation_id", null: false
+    t.bigint "bench_conversation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bench_conversation_id"], name: "index_pins_on_bench_conversation_id"
@@ -193,7 +189,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["profile_id"], name: "index_pins_on_profile_id"
   end
 
-  create_table "preferences", id: :serial, force: :cascade do |t|
+  create_table "preferences", force: :cascade do |t|
     t.string "profile_id", null: false
     t.json "notifications", default: "{\"notify_me_about\": 1, [], \"my_keywords\": [], \"allow_notifications\": \"\", \"default_time_for_remider_notifications\": \"\", \"sound_and_appearance: [1],}", null: false
     t.json "sidebar", default: "{\"alway_show_in_sidebar\":[1,2,5,6], \"show\": 1, \"sort\":{1,[1,4,5,6]} }", null: false
@@ -234,40 +230,38 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["workspace_id"], name: "index_profiles_on_workspace_id"
   end
 
-  create_table "reactions", id: :serial, force: :cascade do |t|
-    t.string "conversation_message_id"
+  create_table "reactions", force: :cascade do |t|
+    t.integer "conversation_message_id"
     t.string "emoji"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "profile_id", null: false
-    t.index ["conversation_message_id"], name: "index_reactions_on_conversation_message_id"
     t.index ["emoji", "conversation_message_id", "profile_id"], name: "reaction_index", unique: true
     t.index ["profile_id"], name: "index_reactions_on_profile_id"
   end
 
-  create_table "saved_items", id: :serial, force: :cascade do |t|
-    t.string "profile_id", null: false
-    t.string "conversation_message_id", null: false
+  create_table "saved_items", force: :cascade do |t|
+    t.string "profile_id"
+    t.integer "conversation_message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["conversation_message_id", "profile_id"], name: "index_saved_items_on_conversation_message_id_and_profile_id", unique: true
-    t.index ["conversation_message_id"], name: "index_saved_items_on_conversation_message_id"
     t.index ["profile_id"], name: "index_saved_items_on_profile_id"
   end
 
-  create_table "schedule_messages", id: :serial, force: :cascade do |t|
+  create_table "schedule_messages", force: :cascade do |t|
     t.json "content", null: false
     t.string "scheduled_at", null: false
     t.string "job_id", default: "", null: false
     t.string "profile_id", null: false
-    t.string "bench_conversation_id", null: false
+    t.bigint "bench_conversation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bench_conversation_id"], name: "index_schedule_messages_on_bench_conversation_id"
     t.index ["profile_id"], name: "index_schedule_messages_on_profile_id"
   end
 
-  create_table "statuses", id: :serial, force: :cascade do |t|
+  create_table "statuses", force: :cascade do |t|
     t.string "text", null: false
     t.string "emoji", null: false
     t.string "clear_after", null: false
@@ -331,16 +325,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
-  add_foreign_key "conversation_messages", "conversation_messages", column: "parent_message_id"
-  add_foreign_key "conversation_messages", "conversation_messages", column: "shared_message_id"
   add_foreign_key "conversation_messages", "profiles", column: "sender_id"
   add_foreign_key "direct_message_users", "profiles"
   add_foreign_key "downloads", "profiles"
-  add_foreign_key "draft_messages", "bench_conversations"
   add_foreign_key "draft_messages", "conversation_messages"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
-  add_foreign_key "invitables", "users"
   add_foreign_key "invitables", "workspaces"
   add_foreign_key "mentions", "conversation_messages"
   add_foreign_key "pins", "bench_conversations"
@@ -349,9 +339,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   add_foreign_key "preferences", "profiles"
   add_foreign_key "profiles", "users"
   add_foreign_key "profiles", "workspaces"
-  add_foreign_key "reactions", "conversation_messages"
   add_foreign_key "reactions", "profiles"
-  add_foreign_key "saved_items", "conversation_messages"
   add_foreign_key "saved_items", "profiles"
   add_foreign_key "schedule_messages", "bench_conversations"
   add_foreign_key "schedule_messages", "profiles"

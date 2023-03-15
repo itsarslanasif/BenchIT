@@ -30,14 +30,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def destroy
     ActiveRecord::Base.transaction do
       @channel_participant.destroy!
-
-      ConversationMessage.create!(
-        content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"#{I18n.t('application.services.left_message')} #{@channel.name}"}}]}),
-        is_threaded: false,
-        bench_conversation_id: @channel.bench_conversation_id,
-        sender_id: @channel_participant.profile_id,
-        is_info: true
-      )
+      create_user_left_message_in_channel
     end
 
     render json: { success: true, message: t('.success') }, status: :ok
@@ -95,5 +88,15 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def authorize_channel_participant
     authorize! :destroy, @channel_participant
+  end
+
+  def create_user_left_message_in_channel
+    ConversationMessage.create!(
+      content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"#{I18n.t('application.services.left_message')} #{@channel.name}"}}]}),
+      is_threaded: false,
+      bench_conversation_id: @channel.bench_conversation_id,
+      sender_id: @channel_participant.profile_id,
+      is_info: true
+    )
   end
 end
