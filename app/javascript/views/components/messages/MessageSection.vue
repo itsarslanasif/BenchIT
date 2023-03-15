@@ -82,9 +82,10 @@ export default {
     padding: 0.5rem;
     border-radius: 0.3rem;
     border-width: 0.01rem;
+    white-space: pre-wrap;
 
     code {
-      color: inherit;
+      color: black;
       padding: 0;
       background: none;
       font-size: 0.8rem;
