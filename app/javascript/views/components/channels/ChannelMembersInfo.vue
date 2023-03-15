@@ -6,7 +6,7 @@
         :key="member.id"
         class="flex cursor-pointer"
       >
-        <img class="w-6 h-6 rounded" :src="member.image_url" />
+        <img class="w-6 h-6 mr-1 rounded" :src="member.image_url" />
       </div>
       <div class="w-3 ml-1">
         <p class="font-bold text-black">

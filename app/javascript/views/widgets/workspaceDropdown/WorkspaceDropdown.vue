@@ -5,7 +5,7 @@
       trigger="click"
       :options="options"
       @select="handleSelect($event)"
-      size="large"
+      size="medium"
       class="w-80 rounded-md bg-white"
     >
       <div class="mx-3 my-2 flex text-white shadow-sm cursor-pointer">
