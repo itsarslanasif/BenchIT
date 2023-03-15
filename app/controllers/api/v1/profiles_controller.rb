@@ -86,7 +86,7 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def check_user_member_of_workspace
-    return if current_workspace.id.eql?(params[:workspace_id].to_i)
+    return if current_workspace.id.eql?(params[:workspace_id])
 
     render json: { success: false, error: t('.success') }, status: :unauthorized
   end
