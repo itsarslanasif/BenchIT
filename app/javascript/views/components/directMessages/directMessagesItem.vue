@@ -12,7 +12,10 @@
     <div
       v-if="user"
       class="flex items-center hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
-      :class="{ 'bg-dark': isChatOpen, 'font-bold': isUnreadDM(user) }"
+      :class="{
+        'bg-dark': isChatOpen,
+        'font-semibold text-white': isUnreadDM(user),
+      }"
       @click.right="toggleRightClickMenu"
       @contextmenu.prevent
     >
@@ -31,13 +34,18 @@
             class="bg-black-900 border-white border rounded-full h-2 w-2"
           />
         </span>
-        <p class="ml-2 text-sm text-white truncate">{{ user.username }}</p>
+        <p
+          class="ml-2 text-sm truncate"
+          :class="isChatOpen || isUnreadDM(user) ? 'text-white' : 'text-black-400'"
+        >
+          {{ user.username }}
+        </p>
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
         <n-tooltip trigger="hover">
           <template #trigger>
-            <p class="ml-2 text-sm self-center text-white">
+            <p class="ml-2 text-sm self-center text-black-400">
               {{ user?.status?.emoji }}
             </p>
           </template>

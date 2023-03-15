@@ -3,9 +3,9 @@
     <div class="px-2 flex hover:bg-primaryHover cursor-pointer py-1">
       <font-awesome-icon
         icon="fa-plus"
-        class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-secondary"
+        class="self-center mr-2 text-xs cursor-pointer text-black-400 rounded-md p-2 bg-secondary"
       />
-      <p class="text-sm self-center text-white truncate">
+      <p class="text-sm self-center text-black-400 truncate">
         {{ $t('direct_messages.add_teammates') }}
       </p>
     </div>

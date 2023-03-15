@@ -12,7 +12,13 @@
     <div
       @contextmenu.prevent
       class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
-      :class="{ 'bg-dark': isChatOpen }"
+      :class="
+        isUnreadChannel(channel)
+          ? 'font-semibold text-white'
+          : isChatOpen
+          ? 'bg-dark text-white'
+          : ''
+      "
       @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleRightClickMenu"
     >
@@ -26,7 +32,7 @@
       </div>
       <div
         class="px-2 truncate"
-        :class="isUnreadChannel(channel) ? 'font-bold' : ''"
+        :class="isChatOpen || isUnreadChannel(channel) ? 'text-white' : 'text-black-400'"
       >
         {{ channel.name }}
       </div>

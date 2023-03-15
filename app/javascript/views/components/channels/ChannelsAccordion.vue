@@ -2,7 +2,7 @@
   <div class="hover-trigger">
     <ChannelsDropDown :onlyIcon="true" />
     <AccordionList
-      class="mt-5 ml-4 text-base text-slate-50"
+      class="mt-5 ml-4 text-base text-black-400"
       @click="toggleList"
     >
       <AccordionItem :default-opened="listOpen">
@@ -32,9 +32,9 @@
           >
             <font-awesome-icon
               icon="fa-plus"
-              class="self-center mr-2 text-xs cursor-pointer text-white bg-secondary rounded-md p-2 "
+              class="self-center mr-2 text-xs cursor-pointer text-black-400 bg-secondary rounded-md p-2 "
             />
-            <p class="text-sm self-center text-white truncate">
+            <p class="text-sm self-center text-black-400 truncate">
               {{ $t('channels.add_new_channel') }}
             </p>
           </div>
@@ -50,7 +50,7 @@
   </div>
   <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
     <h5
-      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-secondary"
+      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-black-400 bg-secondary"
     >
       <ChannelItem
         :channel="selectedChannel"

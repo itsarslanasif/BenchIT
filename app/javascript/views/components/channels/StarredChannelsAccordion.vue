@@ -2,7 +2,7 @@
   <div v-if="starChannels.length > 0" class="hover-trigger">
     <ChannelsDropDown :onlyIcon="true" />
     <AccordionList
-      class="mt-5 ml-4 text-base text-slate-50"
+      class="mt-5 ml-4 text-base text-black-400"
       @click="toggleList"
     >
       <AccordionItem :default-opened="listOpen">

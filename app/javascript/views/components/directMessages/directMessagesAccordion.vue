@@ -3,10 +3,10 @@
     <font-awesome-icon
       @click="goToDirectMessages"
       icon="fa-plus"
-      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-secondary"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-black-400 rounded-md hover:bg-secondary"
     />
     <AccordionList
-      class="mt-5 ml-4 text-base text-slate-50"
+      class="mt-5 ml-4 text-base text-black-400"
       @click="toggleList"
     >
       <AccordionItem :default-opened="listOpen">
@@ -42,7 +42,7 @@
     </AccordionList>
     <div v-if="!listOpen && checkSetChat()">
       <h5
-        class="hover:bg-primaryHover text-base cursor-pointer text-white bg-slate-600"
+        class="hover:bg-primaryHover text-base cursor-pointer text-black-500 bg-slate-600"
       >
         <directMessagesItemVue
           :user="this.selectedUser"

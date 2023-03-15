@@ -10,12 +10,12 @@
         <div
           class="bg-black-700 flex items-center justify-center awayStatus text-black-800 inactivePosition h-3 w-3 border rounded"
         >
-          <span class="text-white font-bold text_size">
+          <span class="text-black-400 font-bold text_size">
             {{ getMembersCount }}</span
           >
         </div>
       </div>
-      <p class="ml-2 text-sm text-white truncate">{{ group.name }}</p>
+      <p class="ml-2 text-sm truncate" :class="isChatOpen ? 'text-white' : 'text-black-400'">{{ group.name }}</p>
     </span>
   </div>
 </template>
