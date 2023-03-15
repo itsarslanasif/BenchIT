@@ -16,7 +16,7 @@
       class="pr-20"
       title="Error"
       type="error"
-      :onClose="setApiResponseStatusNull"
+      :onClose="closeAlert"
       closable
     >
       {{ errorMessage }}
@@ -30,5 +30,14 @@ export default {
   name: 'BenchITAlert',
   components: { NAlert },
   props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
+  setup(props) {
+    const closeAlert = () => {
+      props.setApiResponseStatusNull()
+    }
+    return {
+      closeAlert,
+    }
+  }
 };
 </script>
+

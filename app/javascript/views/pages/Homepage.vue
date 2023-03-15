@@ -1,10 +1,13 @@
 <template>
-  <div>
-    <SplitPanesVue />
-  </div>
+  <n-message-provider placement="top-right">
+    <div>
+      <SplitPanesVue />
+    </div>
+  </n-message-provider>
 </template>
 <script>
 import SplitPanesVue from './SplitPanes.vue';
+import { NMessageProvider } from 'naive-ui';
 import { useCurrentWorkspaceStore } from '../../stores/useCurrentWorkspaceStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
@@ -20,6 +23,7 @@ import {
 export default {
   components: {
     SplitPanesVue,
+    NMessageProvider,
   },
   data() {
     return {

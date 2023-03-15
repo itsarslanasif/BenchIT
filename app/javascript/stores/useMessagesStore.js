@@ -5,6 +5,7 @@ import { CONSTANTS } from '../assets/constants';
 import { getUserProfile } from '../api/profiles/userProfile';
 import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
+import { errorHandler } from '../views/widgets/messageProvider';
 import { getGroup } from '../api/groups/groups';
 import {
   getScheduleMessages,
@@ -77,18 +78,26 @@ export const useMessageStore = () => {
           this.maxPages = newMessages.page_information.pages;
           this.hasMoreMessages = this.currentPage > this.maxPages;
         } catch (e) {
-          console.error(e);
+          this.handleError(error.response.data.error)
         }
         if (conversation_type === 'profiles') {
           const currentWorkspace = decryption(
             sessionStorage,
             'currentWorkspace'
           );
-          this.selectedChat = await getUserProfile(currentWorkspace.id, id);
-          this.selectedChat.conversation_type = 'Profile';
+          try {
+            this.selectedChat = await getUserProfile(currentWorkspace.id, id);
+            this.selectedChat.conversation_type = 'Profile';
+          } catch (e) {
+            this.handleError(e.response.data.error);
+          }
         } else if (conversation_type === 'channels') {
-          this.selectedChat = await getChannel(id);
-          this.selectedChat.conversation_type = 'Channel';
+          try {
+            this.selectedChat = await getChannel(id);
+            this.selectedChat.conversation_type = 'Channel';
+          } catch (e) {
+            this.handleError(e.response.data.error)
+          }
         }
         else if(conversation_type === 'groups'){
           this.selectedChat = await getGroup(id);
@@ -100,7 +109,11 @@ export const useMessageStore = () => {
         this.messages.push(msg);
       },
       async deleteMessage(id) {
-        await deleteMessage(id);
+        try {
+         deleteMessage(id);
+        } catch (e) {
+          this.handleError(e.response.data.error)
+        }
       },
       getMessage(id) {
         return this.messages.find(message => message.id === id);
@@ -168,6 +181,9 @@ export const useMessageStore = () => {
           scheduledMessage.scheduled_at = payload.scheduled_at;
         });
       },
+      handleError(error) {
+        errorHandler(error.response.data.message); 
+      }
     },
   });
 

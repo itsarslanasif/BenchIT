@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getSentMessages } from '../api/recentlySent/recentlySentMessages';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useDraftAndSentMessagesStore = () => {
   const draftAndSentMessagesStore = defineStore('draftAndSentMessages', {
@@ -26,7 +27,7 @@ export const useDraftAndSentMessagesStore = () => {
           this.currentPage += 1;
           this.maxPages = newSentMessages.page_information.pages;
         } catch (e) {
-          console.error(e);
+          errorHandler(e.response.data.message);
         }
       },
       sortMessages() {

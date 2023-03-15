@@ -74,6 +74,7 @@ import { ref } from 'vue';
 import { createGroup } from '../../../api/groups/groups';
 import { useGroupStore } from '../../../stores/useGroupStore';
 import { addGroupMembers } from '../../../api/groups/groups';
+import { errorHandler } from '../../widgets/messageProvider';
 export default {
   components: {
     NForm,
@@ -144,8 +145,8 @@ export default {
             this.$router.push(`/groups/${group.id}`);
             this.closeModal();
           })
-          .catch(err => {
-            console.error(err);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       } else {
         addGroupMembers(this.selectedValues, this.groupId)
@@ -155,8 +156,8 @@ export default {
             this.$router.push(`/groups/${updatedGroup.id}`);
             this.closeModal();
           })
-          .catch(err => {
-            console.error(err);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       }
     },

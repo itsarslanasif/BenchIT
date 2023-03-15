@@ -25,6 +25,7 @@
 
 <script>
 import { getReactions } from '../../../api/mentions_and_reactions/reactions';
+import { errorHandler } from '../../widgets/messageProvider';
 import MessageContent from './MessageContent.vue';
 
 export default {
@@ -38,7 +39,7 @@ export default {
     try {
       this.messages = await getReactions();
     } catch (e) {
-      console.error(e);
+      errorHandler(e.response.data.message);
     }
   },
 };
