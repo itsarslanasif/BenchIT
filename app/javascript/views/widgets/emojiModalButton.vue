@@ -5,7 +5,7 @@
         <n-dropdown
           class="rounded-md border border-slate-100"
           placement="bottom-start"
-          size="medium"
+          size="small"
           trigger="click"
           :message="message"
           :options="Options.getOptions()"
