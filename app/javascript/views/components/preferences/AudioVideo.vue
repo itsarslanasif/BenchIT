@@ -84,6 +84,7 @@
 
 <script>
 import { audioVideoSettings } from '../../../assets/settings/audioVideo';
+import { errorHandler } from '../../widgets/messageProvider';
 export default {
   data() {
     return {
@@ -112,8 +113,8 @@ export default {
         .then(stream => {
           this.$refs.camera.srcObject = stream;
         })
-        .catch(error => {
-          alert("May the browser didn't support or there is some errors.");
+        .catch(e => {
+          errorHandler(e.response.data.message);
         });
     },
 

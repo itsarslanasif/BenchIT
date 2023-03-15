@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getUnreadMessages } from '../api/notification';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 const getConversationType = type => {
   let conversation_type = '';
@@ -58,7 +59,11 @@ export const useUnreadStore = () => {
 
     actions: {
       async index() {
-        this.unreadMessages = await getUnreadMessages();
+        try {
+          this.unreadMessages = await getUnreadMessages();
+        } catch (e) {
+          this.handleError(e.response.data.error)
+        }
       },
       addNewMessage(message, conversation_type, conversation_id) {
         let unreadDetails = this.unreadMessages.find(unread_message_detail =>
@@ -132,6 +137,9 @@ export const useUnreadStore = () => {
         }
         return null;
       },
+      handleError (error) {
+        errorHandler(error.response.data.message);  
+      }
     },
   });
 

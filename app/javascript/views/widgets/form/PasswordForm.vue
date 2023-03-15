@@ -55,8 +55,8 @@ export default {
             .then(response => {
               return response.data;
             })
-            .catch(error => {
-              return error;
+            .catch(e => {
+              return e;
             });
         this.$router.push('/workspace_dashboard');
       } else {

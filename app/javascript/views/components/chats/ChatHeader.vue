@@ -69,9 +69,9 @@ export default {
         this.bookmarks = response.data.bookmarks;
         this.loading = false;
       })
-      .catch(error => {
+      .catch(e => {
         this.loading = false;
-        return error;
+        return e;
       });
   },
   setup() {
@@ -107,9 +107,9 @@ export default {
           this.members = response.data.profiles;
           this.loading = false;
         })
-        .catch(error => {
+        .catch(e => {
           this.loading = false;
-          return error;
+          return e;
         });
     },
   },

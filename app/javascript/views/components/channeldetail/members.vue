@@ -29,6 +29,8 @@ import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js'
 import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { errorHandler } from '../../widgets/messageProvider';
 export default {
   components: { MemberCard },
   props: { toggleModal: Function },
@@ -54,7 +56,7 @@ export default {
       try {
         await this.channelDetailStore.getChannelMembers(this.query, channel_id);
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
     showUserProfile(profile_id) {

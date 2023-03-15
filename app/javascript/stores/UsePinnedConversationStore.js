@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia';
 import { pinnedMessages } from '../api/messages/pinnedMessages';
+import { errorHandler } from '../views/widgets/messageProvider';
+
 export const usePinnedConversation = defineStore('pinnedConversationStore', {
   state: () => ({
     pinnedConversation: [],
@@ -21,8 +23,12 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
 
   actions: {
     async index(conversation_type, id) {
-      this.pinnedConversation = await pinnedMessages(conversation_type, id);
-      this.pinToggle = false;
+      try {
+        this.pinnedConversation = await pinnedMessages(conversation_type, id);
+        this.pinToggle = false;
+      } catch (e) {
+        this.handleError(e.response.data.error)
+      }
     },
     pinMessage(message) {
       this.pinnedConversation.push(message);
@@ -42,6 +48,9 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
     },
     closeModal() {
       this.pinToggle = false;
+    },
+    handleError(error) {
+      errorHandler(error.response.data.message); 
     },
   },
 });

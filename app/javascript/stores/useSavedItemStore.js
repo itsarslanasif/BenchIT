@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { getSaveMessages } from '../api/save_messages/savemessages';
+import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useSavedItemsStore = defineStore('savedItem', {
   state: () => ({
@@ -10,7 +11,7 @@ export const useSavedItemsStore = defineStore('savedItem', {
       try {
         this.savedItems = await getSaveMessages();
       } catch (e) {
-        console.error(e);
+        this.handleError(e.response.data.message)
       }
     },
     addSavedItem(item) {
@@ -21,5 +22,8 @@ export const useSavedItemsStore = defineStore('savedItem', {
         item => item.message.id !== currMessage.id
       );
     },
+    handleError (error) {
+      errorHandler(error.response.data.message); 
+    }
   },
 });

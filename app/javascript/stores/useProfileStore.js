@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { getAllProfiles, updateCurrentProfile } from '../api/profiles/profiles';
 import { useCurrentProfileStore } from './useCurrentProfileStore';
+import { errorHandler } from '../views/widgets/messageProvider';
 import { useUserProfileStore } from './useUserProfileStore';
 import { encryption } from '../modules/crypto/crypto';
 import { useRightPaneStore } from './useRightPaneStore';
@@ -23,8 +24,11 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          console.error(e);
+          this.handleError(e.response.data.message)
         }
+      },
+      handleError(error) {
+        errorHandler(error.response.data.message); 
       },
       updateProfileStatus(data) {
         let index = this.profiles.findIndex(profile => data.id === profile.id);
@@ -86,7 +90,7 @@ export const useProfileStore = () => {
           this.profiles[index] = profile;
           encryption(sessionStorage, 'currentProfile', profile);
         } catch (e) {
-          console.error(e);
+          this.handleError(e.response.data.message)
         }
       },
       getProfilesByIds(profileIds) {

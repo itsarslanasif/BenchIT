@@ -40,6 +40,7 @@ import { NModal, NAvatar, NPopover } from 'naive-ui';
 import PinnedMessageContent from './pinnedMessage.vue';
 import { unPinMessage } from '../../../api/messages/pinnedMessages';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   setup() {
@@ -59,7 +60,7 @@ export default {
       try {
         await unPinMessage(this.currMessage.pin.id);
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
       if (
         this.pinnedConversationStore.getCount == 0 &&
