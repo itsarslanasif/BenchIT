@@ -5,12 +5,16 @@ class ChannelParticipant < ApplicationRecord
   validates :permission, presence: true
   validates :bench_channel, uniqueness: { scope: %i[profile_id] }
 
+  before_create :set_role
+
   after_commit :broadcast_channel, :broadcast_member_profile
+
+  enum role: { member: 0, channel_manager: 1 }
 
   private
 
   def broadcast_channel
-    return unless ActionPerformed.new.action_performed(self).eql?('Create')
+    return if ActionPerformed.new.action_performed(self).eql?('Update')
 
     message = channel_participant_content
     message[:content] = bench_channel.bench_channel_content
@@ -32,5 +36,13 @@ class ChannelParticipant < ApplicationRecord
       type: 'ChannelParticipant',
       action: ActionPerformed.new.action_performed(self)
     }
+  end
+
+  def set_role
+    self.role = if bench_channel.creator_id.eql?(profile_id) || profile.workspace_owner? || profile.workspace_admin?
+                  :channel_manager
+                else
+                  :member
+                end
   end
 end

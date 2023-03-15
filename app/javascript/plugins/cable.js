@@ -28,7 +28,7 @@ export const createCable = options => {
       channel: options.channel,
       id: options.id,
       type: options.type,
-      current_user_id: options.current_user_id,
+      profile_id: options.profile_id,
     },
     {
       received(data) {

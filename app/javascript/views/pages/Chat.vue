@@ -125,7 +125,7 @@ export default {
       channel: 'ChatChannel',
       id: this.id,
       type: this.conversation_type,
-      current_user_id: this.currentUser.id,
+      current_profile_id: this.currentProfile.id,
     });
     this.Cable.on('chat', data => {
       cableActions(data.message);

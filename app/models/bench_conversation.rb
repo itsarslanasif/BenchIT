@@ -34,7 +34,7 @@ class BenchConversation < ApplicationRecord
     ).pluck(:id)
   end
 
-  %w[profile bench_channel group].each do |type|
+  MODEL_NAMES[0, 3].each do |type|
     define_method("#{type}?") do
       conversationable_type.eql?(type.camelcase)
     end
