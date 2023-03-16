@@ -1,6 +1,6 @@
 <template>
   <WorkspaceDropdown />
-  <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden">
+  <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden pb-6">
     <div class="m-2">
       <IconElement
         icon="fa-regular fa-comment"
