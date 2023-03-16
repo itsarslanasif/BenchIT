@@ -3,7 +3,7 @@ import {
   getDirectMessagesList,
   removeChatFromList,
 } from '../api/directMessages/directMessages';
-
+import { errorHandler } from '../views/widgets/messageProvider';
 export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
   state: () => ({
     directMessageUsers: [],
@@ -27,7 +27,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       try {
         this.directMessageUsers = await getDirectMessagesList(workspace_id);
       } catch (e) {
-        console.error(e);
+        this.handleError(e.response.data.message)
       }
     },
     updateProfileStatus(profile) {
@@ -94,5 +94,8 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
     addMyProfileAtTop(myProfile) {
       this.directMessageUsers.unshift(myProfile);
     },
+    handleError(error) {
+      errorHandler(error) 
+    }
   },
 });

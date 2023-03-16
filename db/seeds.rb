@@ -1,42 +1,50 @@
-workspace = Workspace.create!(company_name: 'BenchIT',
+password = ENV.fetch('PASSWORD', nil)
+uuid = "U0#{SecureRandom.alphanumeric(12).upcase}"
+
+user_first = User.create!(name: 'admin', email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+
+workspace = Workspace.create!(company_name: 'Devsinc',
                               workspace_type: :work,
-                              bench_it_url: 'https://www.benchit.com',
+                              bench_it_url: 'https://www.devsinc.com',
                               capacity: 2000,
                               organization_type: :financial_services)
+
 Current.workspace = workspace
 
-user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user1.save!
-user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
-                                  filename: 'alva.png', content_type: 'image/png')
-user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user2.save!
-user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1, display_name: 'arnold', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arnold.png]).open,
-                                  filename: 'arnold.png', content_type: 'image/png')
-user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user3.save!
-user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: 1, display_name: 'arthur', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arthur.png]).open,
-                                  filename: 'arthur.png', content_type: 'image/png')
-user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user.save!
-user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1, display_name: 'austin', phone: '1234567890', skype: '1234567890',
-                      text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
-                                  filename: 'austin.png', content_type: 'image/png')
-admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password', jti: SecureRandom.uuid)
-admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1, display_name: 'admin', phone: '1234567890',
-                       skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍')
+admin = workspace.profiles.create!(username: 'admin', description: 'Admin of workspace', user_id: user_first.id,
+                                   display_name: 'Admin', phone: '1234567890', skype: '1234567890', text_status: 'Happy',
+                                   time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')
 
+user_second = User.create!(name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+
+alva = workspace.profiles.create!(username: 'Alva', description: 'ASE', user_id: user_second.id, display_name: 'alva',
+                                  phone: '1234567890', skype: '1234567890', text_status: 'Laughing', time_zone: 'Karachi',
+                                  emoji_status: '😂', role: :workspace_admin)
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
+
+user_third = User.create!(name: 'Arnold', email: 'arnold@gmail.com', password: password, jti: SecureRandom.uuid)
+arnold = workspace.profiles.create!(username: 'Arnold', description: 'ASQE', user_id: user_third.id, display_name: 'arnold',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arnold.png]).open,
+                                  filename: 'arnold.png', content_type: 'image/png')
+user_fourth = User.create!(name: 'Arthur', email: 'arthur@gmail.com', password: password, jti: SecureRandom.uuid)
+arthur = workspace.profiles.create!(username: 'Arthur', description: 'SE', user_id: user_fourth.id, display_name: 'arthur',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arthur.png]).open,
+                                  filename: 'arthur.png', content_type: 'image/png')
+user_fifth = User.create!(name: 'Austin', email: 'austin@gmail.com', password: password, jti: SecureRandom.uuid)
+austin = workspace.profiles.create!(username: 'Austin', description: 'SSE', user_id: user_fifth.id, display_name: 'austin',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
+                                  filename: 'austin.png', content_type: 'image/png')
+
+user1 = user_second
+
 ActiveRecord::Base.connection.execute('COMMIT')
-ActiveRecord::Base.connection.execute('CREATE DATABASE benchit')
+ActiveRecord::Base.connection.execute("CREATE DATABASE #{workspace.company_name.downcase}")
 ActiveRecord::Base.connection.execute('BEGIN')
 
 ActiveRecord::Base.establish_connection(
@@ -46,13 +54,15 @@ ActiveRecord::Base.establish_connection(
   username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
   password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
   host: ENV.fetch('POSTGRES_HOST', 'localhost'),
-  database: 'benchit'
+  database: workspace.company_name.downcase
 )
 ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
 
-workspace = Workspace.create!(company_name: 'BenchIT',
+user_first = User.create!(id: user_first.id, email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+
+workspace = Workspace.create!(id: workspace.id, company_name: 'Devsinc',
                               workspace_type: :work,
-                              bench_it_url: 'https://www.benchit.com',
+                              bench_it_url: 'https://www.devsinc.com',
                               capacity: 2000,
                               organization_type: :financial_services)
 Current.workspace = workspace
@@ -63,108 +73,153 @@ workspace.statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today'
 workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
 workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
 
-user1 = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user1.save!
-user1.profiles.create!(username: 'Alva', description: 'ASE', workspace_id: 1, display_name: 'alva', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Laughing', time_zone: 'Karachi', emoji_status: '😂')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
-                                  filename: 'alva.png', content_type: 'image/png')
-user2 = User.new(name: 'Arnold', email: 'arnold@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user2.save!
-user2.profiles.create!(username: 'Arnold', description: 'ASQE', workspace_id: 1, display_name: 'arnold', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arnold.png]).open,
-                                  filename: 'arnold.png', content_type: 'image/png')
-user3 = User.new(name: 'Arthur', email: 'arthur@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user3.save!
-user3.profiles.create!(username: 'Arthur', description: 'SE', workspace_id: 1, display_name: 'arthur', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arthur.png]).open,
-                                  filename: 'arthur.png', content_type: 'image/png')
-user = User.new(name: 'Austin', email: 'austin@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user.save!
-user.profiles.create!(username: 'Austin', description: 'SSE', workspace_id: 1, display_name: 'austin', phone: '1234567890', skype: '1234567890',
-                      text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
-Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
-                                  filename: 'austin.png', content_type: 'image/png')
-admin = User.create!(email: 'admin@domain.com', password: 'password', password_confirmation: 'password', jti: SecureRandom.uuid)
-admin.profiles.create!(username: 'admin', description: 'Admin of workspace', workspace_id: 1, display_name: 'admin', phone: '1234567890',
-                       skype: '1234567890', text_status: 'Happy', time_zone: 'UTC', emoji_status: '😍')
+admin = workspace.profiles.create!(id: admin.id, username: 'admin', description: 'Admin of workspace', user_id: user_first.id,
+                                   display_name: 'Admin', phone: '1234567890', skype: '1234567890', text_status: 'Happy',
+                                   time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')
 
-Current.user = user1
-Current.profile = user1.profiles.first
+user_second = User.create!(id: user_second.id, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
 
-BenchChannel.create(name: 'dev', description: 'dev')
-BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 1)
-ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 1)
-ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 1)
-ChannelParticipant.create(permission: true, profile_id: 4, bench_channel_id: 1)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Dev Channel** from _Alva_"}}]}',
-                           is_threaded: false, bench_conversation_id: 1, sender_id: 1)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi Dev Channel from Arnold"}}]}',
-                           is_threaded: false, bench_conversation_id: 1, sender_id: 2)
-Group.create(id: 1, profile_ids: [1, 2, 4])
-Group.create(id: 2, profile_ids: [1, 2, 3])
-BenchConversation.create(conversationable_type: 'Group', conversationable_id: 1)
+alva = workspace.profiles.create!(id: alva.id, username: 'Alva', description: 'ASE', user_id: user_second.id, display_name: 'alva',
+                                  phone: '1234567890', skype: '1234567890', text_status: 'Laughing', time_zone: 'Karachi',
+                                  emoji_status: '😂', role: :workspace_admin)
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
 
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alva"}}]}',
-                           is_threaded: false, bench_conversation_id: 2, sender_id: 1)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Arnold"}}]}',
-                           is_threaded: false, bench_conversation_id: 2, sender_id: 2)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Arthur"}}]}',
-                           is_threaded: false, bench_conversation_id: 2, sender_id: 3)
-BenchConversation.create(conversationable_type: 'Profile', conversationable_id: 1, sender_id: 4)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from Austin"}}]}',
-                           is_threaded: false, bench_conversation_id: 3, sender_id: 4)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from Alva"}}]}',
-                           is_threaded: false, bench_conversation_id: 3, sender_id: 1)
+user_third = User.create!(id: user_third.id, name: 'Arnold', email: 'arnold@gmail.com', password: password, jti: SecureRandom.uuid)
+arnold = workspace.profiles.create!(id: arnold.id, username: 'Arnold', description: 'ASQE', user_id: user_third.id, display_name: 'arnold',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arnold.png]).open,
+                                  filename: 'arnold.png', content_type: 'image/png')
 
-BenchChannel.create(name: 'watercooler', description: 'memes')
-BenchChannel.create(name: 'Benchit-devs', description: 'developers', is_private: true)
-BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 2)
-ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 2)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from watercooler"}}]}',
-                           is_threaded: false, bench_conversation_id: 4, sender_id: 1)
+user_fourth = User.create!(id: user_fourth.id, name: 'Arthur', email: 'arthur@gmail.com', password: password, jti: SecureRandom.uuid)
+arthur = workspace.profiles.create!(id: arthur.id, username: 'Arthur', description: 'SE', user_id: user_fourth.id, display_name: 'arthur',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arthur.png]).open,
+                                  filename: 'arthur.png', content_type: 'image/png')
 
-BenchChannel.create(name: 'general', description: 'general')
-BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 4)
-ChannelParticipant.create(permission: true, profile_id: 2, bench_channel_id: 4)
-ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 4)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from general"}}]}',
-                           is_threaded: false, bench_conversation_id: 5, sender_id: 2)
-Favourite.create(profile_id: 1, favourable_type: 'Profile', favourable_id: 4)
-# Favourite.create(profile_id: 1, favourable_type: 'Group', favourable_id: 1)
-Favourite.create(profile_id: 1, favourable_type: 'BenchChannel', favourable_id: 2)
-Favourite.create(profile_id: 2, favourable_type: 'BenchChannel', favourable_id: 1)
-Favourite.create(profile_id: 2, favourable_type: 'BenchChannel', favourable_id: 2)
-# Favourite.create(profile_id: 2, favourable_type: 'Group', favourable_id: 2)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"1st reply"}}]}',
-                           is_threaded: false, bench_conversation_id: 1, sender_id: 1, parent_message_id: 1)
-BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: 3)
-ChannelParticipant.create(permission: true, profile_id: 1, bench_channel_id: 3)
-ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi User from developer"}}]}',
-                           is_threaded: false, bench_conversation_id: 6, sender_id: 1)
+user_fifth = User.create!(id: user_fifth.id, name: 'Austin', email: 'austin@gmail.com', password: password, jti: SecureRandom.uuid)
+austin = workspace.profiles.create!(id: austin.id, username: 'Austin', description: 'SSE', user_id: user_fifth.id, display_name: 'austin',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
+                                  filename: 'austin.png', content_type: 'image/png')
 
-(1..6).each do |i|
-  ScheduleMessage.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message #{i}"}}]}),
-                          profile_id: 1, scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: i)
-  DraftMessage.create!(content: i.to_s, profile_id: 1, bench_conversation_id: i)
-end
+Current.user = user_first
+Current.profile = admin
+
+channel_first = BenchChannel.create!(name: 'general', description: 'general')
+channel_second = BenchChannel.create!(name: 'dev', description: 'dev')
+channel_third = BenchChannel.create!(name: 'devsinc', description: 'IT company', is_private: true)
+
+channel_conversation_first = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id)
+channel_conversation_second = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_second.id)
+channel_conversation_third = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_third.id)
+
+channel_first.channel_participants.create!(permission: true, profile_id: admin.id)
+channel_first.channel_participants.create!(permission: true, profile_id: alva.id)
+channel_first.channel_participants.create!(permission: true, profile_id: arnold.id)
+channel_first.channel_participants.create!(permission: true, profile_id: arthur.id)
+channel_first.channel_participants.create!(permission: true, profile_id: austin.id)
+
+channel_second.channel_participants.create!(permission: true, profile_id: admin.id)
+
+channel_third.channel_participants.create!(permission: true, profile_id: admin.id)
+channel_third.channel_participants.create!(permission: true, profile_id: alva.id)
+channel_third.channel_participants.create!(permission: true, profile_id: arnold.id)
+channel_third.channel_participants.create!(permission: true, profile_id: arthur.id)
+channel_third.channel_participants.create!(permission: true, profile_id: austin.id)
+
+admin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **General** from _Admin_"}}]}',
+                                    is_threaded: false, bench_conversation_id: channel_conversation_first.id)
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **General** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: channel_conversation_first.id)
+arnold.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi General from Arnold"}}]}',
+                                     is_threaded: false, bench_conversation_id: channel_conversation_first.id)
+arthur.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi General from Arthur"}}]}',
+                                     is_threaded: false, bench_conversation_id: channel_conversation_first.id)
+austin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi General from Austin"}}]}',
+                                     is_threaded: false, bench_conversation_id: channel_conversation_first.id)
+
+admin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Dev** from _Admin_"}}]}',
+                                    is_threaded: false, bench_conversation_id: channel_conversation_second.id)
+
+admin.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Devsinc** from _Admin_"}}]}',
+                                    is_threaded: false, bench_conversation_id: channel_conversation_third.id)
+
+group_first = Group.create!(profile_ids: [alva.id, arnold.id, arthur.id])
+group_second = Group.create!(profile_ids: [alva.id, arnold.id, austin.id])
+group_third = Group.create!(profile_ids: [alva.id, arthur.id, austin.id])
+
+group_conversation_first = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_first.id)
+group_conversation_second = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_second.id)
+group_conversation_third = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_third.id)
+
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#1** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: group_conversation_first.id)
+
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#2** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: group_conversation_second.id)
+
+alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#3** from _Alva_"}}]}',
+                                   is_threaded: false, bench_conversation_id: group_conversation_third.id)
+
+profile_conversation_first = BenchConversation.create!(conversationable_type: 'Profile', conversationable_id: arthur.id, sender_id: alva.id)
+
+sms_first = ConversationMessage.first
+sms_second = ConversationMessage.second
+
+Pin.create!(bench_conversation_id: channel_conversation_first.id, conversation_message_id: sms_first.id, profile_id: alva.id)
+Pin.create!(bench_conversation_id: channel_conversation_first.id, conversation_message_id: sms_second.id, profile_id: alva.id)
+
+alva.reactions.create!(emoji: '😍', conversation_message_id: sms_first.id)
+arnold.reactions.create!(emoji: '😍', conversation_message_id: sms_first.id)
+arthur.reactions.create!(emoji: '😍', conversation_message_id: sms_second.id)
+austin.reactions.create!(emoji: '😍', conversation_message_id: sms_second.id)
+
+alva.saved_items.create!(conversation_message_id: sms_first.id)
+arnold.saved_items.create!(conversation_message_id: sms_first.id)
+arthur.saved_items.create!(conversation_message_id: sms_first.id)
+austin.saved_items.create!(conversation_message_id: sms_first.id)
+
+Favourite.create!(profile_id: alva.id, favourable_type: 'BenchChannel', favourable_id: channel_first.id)
+Favourite.create!(profile_id: arnold.id, favourable_type: 'BenchChannel', favourable_id: channel_first.id)
+Favourite.create!(profile_id: arthur.id, favourable_type: 'BenchChannel', favourable_id: channel_first.id)
+Favourite.create!(profile_id: austin.id, favourable_type: 'BenchChannel', favourable_id: channel_first.id)
+
+alva.schedule_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message in channel"}}]}),
+                               scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: channel_conversation_first.id)
+alva.schedule_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message in group"}}]}),
+                               scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: group_conversation_first.id)
+alva.schedule_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"I am schedule message in profile"}}]}),
+                               scheduled_at: Time.zone.now.tomorrow, bench_conversation_id: profile_conversation_first.id)
+
+alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in channel"}}]}),
+                            bench_conversation_id: channel_conversation_first.id)
+alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in group"}}]}),
+                            bench_conversation_id: group_conversation_first.id)
+alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in profile"}}]}),
+                            bench_conversation_id: profile_conversation_first.id)
+
+user_second = user1
+
 ActiveRecord::Base.establish_connection(:development)
-workspace2 = Workspace.create!(company_name: 'TechHub',
-                  workspace_type: :work,
-                  bench_it_url: 'https://www.techhub.com',
-                  capacity: 2000,
-                  organization_type: :financial_services)
 
-Current.workspace = workspace2
-user1.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: 2, display_name: 'alvi', phone: '1234567890', skype: '1234567890',
-                       text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
+workspace = Workspace.create!(company_name: 'TechHub',
+                              workspace_type: :work,
+                              bench_it_url: 'https://www.techhub.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
+alvi = user_second.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: workspace.id, display_name: 'alvi', phone: '1234567890',
+                                    skype: '1234567890', text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡', role: 0)
+
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
+Current.profile = alvi
+Current.workspace = workspace
 
 ActiveRecord::Base.connection.execute('COMMIT')
-ActiveRecord::Base.connection.execute('CREATE DATABASE techhub')
+ActiveRecord::Base.connection.execute("CREATE DATABASE #{workspace.company_name.downcase}")
 ActiveRecord::Base.connection.execute('BEGIN')
 
 ActiveRecord::Base.establish_connection(
@@ -174,35 +229,28 @@ ActiveRecord::Base.establish_connection(
   username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
   password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
   host: ENV.fetch('POSTGRES_HOST', 'localhost'),
-  database: 'techhub'
+  database: workspace.company_name.downcase
 )
 ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
 
-workspace = Workspace.create!(company_name: 'TechHub',
-                  workspace_type: :work,
-                  bench_it_url: 'https://www.techhub.com',
-                  capacity: 2000,
-                  organization_type: :financial_services)
+user_second = User.create!(id: user1.id, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+
+workspace = Workspace.create!(id: workspace.id, company_name: 'TechHub',
+                              workspace_type: :work,
+                              bench_it_url: 'https://www.techhub.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
+alvi = user_second.profiles.create!(id: alvi.id, username: 'Alvi', description: 'ASE', workspace_id: workspace.id, display_name: 'alvi', role: 0,
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
+
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
+
+Current.profile = alvi
 Current.workspace = workspace
 
-user = User.new(name: 'Alva', email: 'alva@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-user.save!
+channel_first = BenchChannel.create!(name: 'general', description: 'general')
+BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id)
+channel_first.channel_participants.create!(permission: true, profile_id: alvi.id)
 
-user.profiles.create!(workspace_id: workspace.id, username: 'Alvi', description: 'ASE', display_name: 'alvi', phone: '1234567890', skype: '1234567890',
-                      text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
-Current.profile = user.profiles.first
-
-
-channel = BenchChannel.create(name: 'DevsChannel1', description: 'fdsfsdf')
-conversation = BenchConversation.create(conversationable_type: 'BenchChannel', conversationable_id: channel.id)
-ChannelParticipant.create(permission: true, profile_id: Current.profile.id, bench_channel_id: channel.id)
-message = ConversationMessage.create(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi group from Alvi"}}]}',
-                           is_threaded: false, bench_conversation_id: conversation.id, sender_id: Current.profile.id )
-
-# Bookmark.create!(name: 'Google', profile_id: 1, bookmarkable_type: 'BenchChannel', bookmarkable_id: 1, bookmark_URL: 'www.google.com')
-# Bookmark.create!(name: 'Facebook', profile_id: 1, bookmarkable_type: 'Group', bookmarkable_id: 1, bookmark_URL: 'www.facebook.com')
-
-Pin.create!(profile_id: Current.profile.id, bench_conversation_id: conversation.id, conversation_message_id: message.id)
-# Pin.create!(profile_id: Current.profile.id, bench_conversation_id: conversation.id, conversation_message_id: 2)
-User.create(name: 'Michael', email: 'michael@gmail.com', password: 'Password1!', jti: SecureRandom.uuid)
-BenchConversation.create(conversationable_type: 'Group', conversationable_id: 2)
+ActiveRecord::Base.establish_connection(:development)

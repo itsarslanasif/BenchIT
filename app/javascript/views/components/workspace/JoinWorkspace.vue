@@ -46,6 +46,7 @@ import { NSpace, NAlert } from 'naive-ui';
 import benchitAlert from '../../widgets/benchitAlert.vue';
 import { joinWorkspace } from '../../../api/workspaces/joinWorkspace.js';
 import { CONSTANTS } from '../../../assets/constants';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   components: {
@@ -87,7 +88,7 @@ export default {
           }
         });
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
   },

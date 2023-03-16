@@ -49,10 +49,10 @@ const createPayloadForNotification = async data => {
 };
 
 const createMessage = data => {
-  const profiles = useProfileStore();
-  const receiver = profiles.getProfileById(data.sender_id);
-  const direct_messages = useDirectMessagesStore();
-  direct_messages.appendToDirectMessagesList(receiver);
+  if (data.conversationable_type == 'Profile') {
+    const receiver = useProfileStore().getProfileById(data.sender_id);
+    useDirectMessagesStore().appendToDirectMessagesList(receiver);
+  };
   const unreadMessagesStore = useUnreadStore();
   const getIndexByParams = param => {
     return window.location.pathname.split('/')[param];
@@ -64,8 +64,8 @@ const createMessage = data => {
     if (!data.parent_message_id) {
       unreadMessagesStore.addNewMessage(data, conversation_type, id);
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -75,8 +75,8 @@ const deleteMessage = data => {
     if (!data.parent_message_id) {
       unreadMessagesStore.removeMessage(data);
     }
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };
 
@@ -132,7 +132,7 @@ export const notifyActions = data => {
   try {
     const key = data.type + data.action;
     notificationActions[key](data.content);
-  } catch (err) {
-    console.error(err);
+  } catch (e) {
+    errorHandler(e.response.data.message);
   }
 };

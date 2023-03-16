@@ -52,6 +52,7 @@ import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
 import { Remarkable } from 'remarkable';
 import { CONSTANTS } from '../../../assets/constants';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   name: 'RightPane',
@@ -143,7 +144,7 @@ export default {
         try {
           conversation(formData);
         } catch (e) {
-          console.error(e);
+          errorHandler(e.response.data.message);
         }
       } else {
         return false;

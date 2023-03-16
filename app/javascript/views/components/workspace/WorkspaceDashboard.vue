@@ -83,6 +83,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
 import { setActiveStatus } from '../../../api/profiles/profileStatus';
 import { NAlert } from 'naive-ui';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   data() {
@@ -99,7 +100,7 @@ export default {
     try {
       this.joinedWorkspaces = await joinedWorkspaces();
     } catch (e) {
-      console.error(e);
+      errorHandler(e.response.data.message);
     }
   },
   setup() {

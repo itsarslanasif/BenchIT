@@ -78,7 +78,7 @@ class Profile < ApplicationRecord
   end
 
   def groups
-    Group.where('profile_ids @> ARRAY[?]::integer[]', [id])
+    Group.where('profile_ids::text[] @> ARRAY[?]::text[]', [id])
   end
 
   def broadcastable_content

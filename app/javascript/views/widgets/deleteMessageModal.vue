@@ -202,7 +202,7 @@ export default {
           this.downloadsStore.downloadAlert = true;
         });
         this.downloadsStore.downloadAlert = false;
-      } catch (error) {
+      } catch (e) {
         this.downloadsStore.downloadAlert = true;
       }
     },

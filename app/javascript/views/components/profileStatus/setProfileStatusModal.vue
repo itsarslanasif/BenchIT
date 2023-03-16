@@ -165,6 +165,7 @@ import { setProfileStatus } from '../../../api/profiles/profileStatus';
 import { clearStatus } from '../../../api/profiles/profileStatus';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
 import { CONSTANTS } from '../../../assets/constants';
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   name: 'CreateChannel',
@@ -315,8 +316,8 @@ export default {
           this.currentProfileStore.setProfileStatus(null);
           this.directMessagesStore.updateProfileStatus(response);
         })
-        .catch(err => {
-          console.log(err);
+        .catch(e => {
+          errorHandler(e.response.data.message);
         });
       this.profileStatusStore.toggleProfileStatusPopUp();
     },

@@ -137,6 +137,7 @@ import {
 } from 'naive-ui';
 import { ref } from 'vue';
 import RecordRTC from 'recordrtc';
+import { errorHandler } from './messageProvider';
 export default {
   props: ['editMessage', 'getVideoFiles'],
   components: {
@@ -292,8 +293,8 @@ export default {
             this.$refs.previewVideoElement.srcObject = stream;
             this.$refs.previewVideoElement.play();
           })
-          .catch(error => {
-            console.error(error);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
         await navigator.mediaDevices
           .getUserMedia(constraints)
@@ -305,8 +306,8 @@ export default {
             this.recordStream = stream;
             this.isCameraAvailable = true;
           })
-          .catch(error => {
-            console.error(error);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       } else {
         await navigator.mediaDevices
@@ -323,8 +324,8 @@ export default {
             this.isCameraAvailable = true;
             this.screenRecord = true;
           })
-          .catch(error => {
-            console.error(error);
+          .catch(e => {
+            errorHandler(e.response.data.message);
           });
       }
     },

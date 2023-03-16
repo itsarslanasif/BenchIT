@@ -35,7 +35,7 @@ import PinnedConversation from '../pinnedConversation/pinnedConversation.vue';
 import ChannelInfo from '../channels/ChannelInfo.vue';
 import UserChatInfo from './UserChatInfo.vue';
 import { getHeaders } from '../../../modules/auth';
-import GroupInfoVue from '../channels/groupInfo.vue';
+import GroupInfoVue from '../channels/GroupInfo.vue';
 
 export default {
   name: 'ChatHeader',
@@ -69,9 +69,9 @@ export default {
         this.bookmarks = response.data.bookmarks;
         this.loading = false;
       })
-      .catch(error => {
+      .catch(e => {
         this.loading = false;
-        return error;
+        return e;
       });
   },
   setup() {
@@ -107,9 +107,9 @@ export default {
           this.members = response.data.profiles;
           this.loading = false;
         })
-        .catch(error => {
+        .catch(e => {
           this.loading = false;
-          return error;
+          return e;
         });
     },
   },

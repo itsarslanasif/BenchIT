@@ -447,6 +447,7 @@ import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
 import MessageFailed from '../../widgets/MessageFailed.vue'
+import { errorHandler } from '../../widgets/messageProvider';
 
 export default {
   name: 'MessageWrapper',
@@ -655,8 +656,8 @@ export default {
       updatedMessage.content = text;
       try {
         updateMessage(updatedMessage);
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        errorHandler(e.response.data.message);
       }
     },
     async addReaction(emoji) {
@@ -679,13 +680,13 @@ export default {
         try {
           await remove_reaction(emoji_id);
         } catch (e) {
-          console.error(e);
+          errorHandler(e.response.data.message);
         }
       } else {
         try {
           await add_reaction(this.currMessage.id, temp);
         } catch (e) {
-          console.error(e);
+          errorHandler(e.response.data.message);
         }
       }
     },
@@ -730,7 +731,7 @@ export default {
           });
         }
       } catch (e) {
-        console.error(e);
+        errorHandler(e.response.data.message);
       }
     },
 
@@ -789,7 +790,7 @@ export default {
           this.downloadsStore.downloadAlert = true;
         });
         this.downloadsStore.downloadAlert = false;
-      } catch (error) {
+      } catch (e) {
         this.downloadsStore.downloadAlert = true;
       }
     },
