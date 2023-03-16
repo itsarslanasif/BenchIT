@@ -75,32 +75,16 @@
             </p>
             <span
               :class="{
-                'flex w-12':
-                  !isDeleted &&
-                  isSameUser &&
-                  isSameDayMessage &&
-                  !isFirstMessage,
+                'flex w-12': !isDeleted && isSameUserAndDay,
               }"
             >
               <p
                 class="text-xs ml-1 text-black-500 hover:underline cursor-pointer"
                 :class="{
-                  'hover-target':
-                    !isDeleted &&
-                    isSameUser &&
-                    isSameDayMessage &&
-                    !isFirstMessage,
+                  'hover-target': !isDeleted && isSameUserAndDay,
                 }"
               >
-                {{
-                  isDeleted
-                    ? null
-                    : currMessage.is_info
-                    ? time
-                    : isSameUser && isSameDayMessage && !isFirstMessage
-                    ? timeWithoutAMPM
-                    : time
-                }}
+                {{ messageSentAt }}
               </p>
             </span>
             <div>
@@ -275,11 +259,7 @@
             :class="[
               { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
               {
-                'ml-12 -mr-10':
-                  !currMessage.is_info &&
-                  isSameUser &&
-                  isSameDayMessage &&
-                  !isFirstMessage,
+                'ml-12 -mr-10': !currMessage.is_info && isSameUserAndDay,
               },
             ]"
             class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
@@ -311,7 +291,10 @@
         </template>
         <reply-and-thread-button
           v-if="
-            !currMessage.info && currMessage?.replies?.length > 0 && !inThread
+            !currMessage.info &&
+            currMessage?.replies?.length > 0 &&
+            !inThread &&
+            !fromThreadPage
           "
           :currMessage="currMessage"
           :isSameDayMessage="isSameDayMessage"
@@ -325,7 +308,8 @@
         <div
           class="bg-white text-black-500 p-2 border border-slate-100 rounded absolute top-0 right-0 -mt-8 mr-3 shadow-xl"
           v-if="
-            ((emojiModalStatus || openEmojiModal || showOptions) && !isUnsentMessage) &&
+            (emojiModalStatus || openEmojiModal || showOptions) &&
+            !isUnsentMessage &&
             JSON.parse(this.currMessage.content).blocks[0].text.text !==
               $t('deleteMessageModal.success')
           "
@@ -349,6 +333,13 @@
             :action="toggleThread"
           />
           <EmojiModalButton
+            v-if="fromThreadPage && !inThread"
+            icon="fa-solid fa-hashtag"
+            :actionText="$t('emojiModalButton.go_to_channel')"
+            :action="goToChannel"
+          />
+          <EmojiModalButton
+            v-else-if="!inThread"
             icon="fa-solid fa-share"
             :actionText="$t('emojiModalButton.share_message')"
             :action="setShareMessageModal"
@@ -364,6 +355,8 @@
             :action="setOptionsModal"
             :message="currMessage"
             :pinnedConversationStore="pinnedConversationStore"
+            :conversation_type="currMessage.conversationable_type"
+            :conversation_id="currMessage.conversationable_id"
             :setDeleteModal="setDeleteModal"
             :setUnpinModal="setUnpinModal"
           />
@@ -478,7 +471,6 @@ export default {
       currentProfile,
     };
   },
-
   components: {
     NCard,
     NDivider,
@@ -514,6 +506,18 @@ export default {
     inThread: {
       type: Boolean,
       default: false,
+    },
+    fromThreadPage: {
+      type: Boolean,
+      default: false,
+    },
+    conversationType: {
+      type: String,
+      default: undefined,
+    },
+    conversationId: {
+      type: String,
+      default: undefined,
     },
     isUnsentMessage: {
       type: Boolean,
@@ -557,9 +561,7 @@ export default {
       return JSON.parse(this.currMessage.content);
     },
     time() {
-      return moment(new Date(this.currMessage.created_at).getTime()).format(
-        'h:mm A'
-      );
+      return moment(new Date(this.currMessage.created_at)).fromNow();
     },
     timeWithoutAMPM() {
       return moment(new Date(this.currMessage.created_at).getTime()).format(
@@ -645,6 +647,24 @@ export default {
     },
     isSharedMessage() {
       return this.currMessage.shared_message != null;
+    },
+    isSameUserAndDay() {
+      return this.isSameUser && this.isSameDayMessage && !this.isFirstMessage;
+    },
+    messageSentAt() {
+      if (this.isDeleted) {
+        return null;
+      }
+
+      if (this.currMessageisInfo || this.fromThreadPage) {
+        return this.time;
+      }
+
+      if (this.isSameUserAndDay) {
+        return this.timeWithoutAMPM;
+      }
+
+      return this.time;
     },
   },
   methods: {
@@ -812,7 +832,25 @@ export default {
     setUnpinModal() {
       this.showUnpinModal = !this.showUnpinModal;
     },
-
+    getConversationType(type) {
+      switch (type) {
+        case 'BenchChannel':
+          return 'channels';
+        case 'Profile':
+          return 'profiles';
+        case 'Group':
+          return 'groups';
+        default:
+          return;
+      }
+    },
+    goToChannel() {
+      this.$router.push(
+        `${this.getConversationType(this.conversationType)}/${
+          this.conversationId
+        }/${this.currMessage.id}`
+      );
+    },
     getSharedMessage() {
       this.sharedMessage = this.messagesStore.getSharedMessage(
         this.currMessage.shared_message_id

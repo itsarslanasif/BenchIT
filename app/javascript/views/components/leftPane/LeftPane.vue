@@ -5,7 +5,8 @@
   >
     <hr class="text-slate-400" />
     <div class="mt-4 mb-4 text-white">
-      <IconElement icon="fa-regular fa-comment" :name="$t('sidebar.threads')" />
+      <IconElement icon="fa-regular fa-comment" :name="$t('sidebar.threads')"
+        @click="goTo('/threads')" />
       <IconElement
         icon="fa-regular fa-comments"
         :name="$t('sidebar.direct_messages')"

@@ -327,6 +327,18 @@ export default {
     message: {
       type: Object,
     },
+    fromThreads: {
+      type: Boolean,
+    },
+    conversationType: {
+      type: String,
+    },
+    conversationId: {
+      type: Number,
+    },
+    parentMessageId: {
+      type: Number,
+    },
     recieverName: {
       type: String,
     },
@@ -480,7 +492,19 @@ export default {
 
         if (result[0] != null) {
           const output = formatBlockContent(result);
-          props.sendMessage({ blocks: output }, files.value, schedule.value);
+          props.fromThreads
+            ? props.sendMessage(
+                { blocks: output },
+                files.value,
+                props.conversationType,
+                props.conversationId,
+                props.parentMessageId
+              )
+            : props.sendMessage(
+                { blocks: output },
+                files.value,
+                schedule.value
+              );
           newMessage.value = '';
           readerFile.value = [];
           files.value = [];
@@ -521,10 +545,13 @@ export default {
       messageStore.removeMessageToEdit();
     };
 
-    const isEditScheduled = () =>
-      messageToEdit.content &&
-      messageToEdit.isScheduled &&
-      messageToEdit.scheduledId;
+    const isEditScheduled = () => {
+      return (
+        messageToEdit.content &&
+        messageToEdit.isScheduled &&
+        messageToEdit.scheduledId
+      );
+    };
 
     const message = newMessage => {
       let messageData;

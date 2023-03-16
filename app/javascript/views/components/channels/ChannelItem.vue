@@ -107,10 +107,10 @@ export default {
     setCurrentChannel() {
       this.currentChannel =
         this.channelStore.joinedChannels.find(
-          obj => obj.id === Number(this.channel.id)
+          obj => obj.id === this.channel.id
         ) ||
         this.channelStore.starChannels.find(
-          obj => obj.id === Number(this.channel.id)
+          obj => obj.id === this.channel.id
         );
       this.channelStore.setCurrentChannel(this.currentChannel);
       this.setRightClickMenuOptions();

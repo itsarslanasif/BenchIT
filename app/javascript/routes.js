@@ -21,6 +21,7 @@ import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
+import Threads from './views/pages/Threads.vue';
 import { decryption } from './modules/crypto/crypto';
 import { checkAuth } from './api/user_auth/check_auth';
 import MentionsAndReactions from './views/components/mentionsAndReactions/MentionsAndReactions.vue'
@@ -98,6 +99,11 @@ const router = createRouter({
           path: '/profiles/:id/:message_id?',
           component: Chat,
           name: 'channel-chat',
+        },
+        {
+          path: '/threads',
+          component: Threads,
+          name: 'threads',
         },
         {
           path: '/channels/:id/:message_id?',

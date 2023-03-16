@@ -53,6 +53,7 @@ en:
         find_another_reaction: 'Find another reaction'
         reply_in_thread: 'Reply in thread'
         share_message: 'Share message...'
+        go_to_channel: 'Go to channel'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
       downloadsModal:
@@ -197,6 +198,7 @@ en:
         workspace_type: "Please select workspace type"
       sidebar:
         threads: 'Threads'
+        no_threads_to_show: 'No threads to show'
         direct_messages: 'Direct Messages'
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Drafts & Sent'

@@ -79,10 +79,10 @@ export default {
     getCurrentChannel() {
       this.currentChannel =
         this.channelStore.joinedChannels.find(
-          obj => obj.id === Number(this.selectedChat.id)
+          obj => obj.id === this.selectedChat.id
         ) ||
         this.channelStore.starChannels.find(
-          obj => obj.id === Number(this.selectedChat.id)
+          obj => obj.id === this.selectedChat.id
         );
     },
   },
