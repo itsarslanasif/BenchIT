@@ -2,14 +2,18 @@ module UuidGenerator
   extend ActiveSupport::Concern
 
   included do
-    before_create :set_id
+    before_create :decide_id
   end
 
   private
 
-  def set_id
+  def decide_id
     return unless id.nil?
 
+    set_id
+  end
+
+  def set_id
     self.id = case self.class.name
               when 'Workspace'
                 generate_id('W0', 12)

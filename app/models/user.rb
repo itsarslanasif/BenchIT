@@ -12,5 +12,5 @@ class User < ApplicationRecord
 
   scope :workspace_users, -> { joins(:profiles).where(workspace_id: Current.workspace).distinct }
 
-  establish_connection(:development)
+  # establish_connection(:development)
 end

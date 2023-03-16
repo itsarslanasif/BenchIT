@@ -1,7 +1,7 @@
 password = ENV.fetch('PASSWORD', nil)
 uuid = "U0#{SecureRandom.alphanumeric(12).upcase}"
 
-user_first = User.create!(name: 'admin', email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+user_first = User.create!(name: 'Admin', email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
 
 workspace = Workspace.create!(company_name: 'Devsinc',
                               workspace_type: :work,
@@ -17,7 +17,7 @@ admin = workspace.profiles.create!(username: 'admin', description: 'Admin of wor
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')
 
-user_second = User.create!(name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+user_second = User.create!(id: uuid, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
 
 alva = workspace.profiles.create!(username: 'Alva', description: 'ASE', user_id: user_second.id, display_name: 'alva',
                                   phone: '1234567890', skype: '1234567890', text_status: 'Laughing', time_zone: 'Karachi',
@@ -58,7 +58,7 @@ ActiveRecord::Base.establish_connection(
 )
 ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
 
-user_first = User.create!(id: user_first.id, email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+user_first = User.create!(id: user_first.id, name: 'Admin', email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
 
 workspace = Workspace.create!(id: workspace.id, company_name: 'Devsinc',
                               workspace_type: :work,
@@ -79,7 +79,7 @@ admin = workspace.profiles.create!(id: admin.id, username: 'admin', description:
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')
 
-user_second = User.create!(id: user_second.id, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+user_second = User.create!(id: uuid, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
 
 alva = workspace.profiles.create!(id: alva.id, username: 'Alva', description: 'ASE', user_id: user_second.id, display_name: 'alva',
                                   phone: '1234567890', skype: '1234567890', text_status: 'Laughing', time_zone: 'Karachi',
@@ -233,7 +233,7 @@ ActiveRecord::Base.establish_connection(
 )
 ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
 
-user_second = User.create!(id: user1.id, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+user_second = User.create!(id: uuid, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
 
 workspace = Workspace.create!(id: workspace.id, company_name: 'TechHub',
                               workspace_type: :work,
