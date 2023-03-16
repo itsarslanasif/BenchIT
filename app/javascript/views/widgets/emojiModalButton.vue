@@ -105,7 +105,7 @@ export default {
           this.setUnpinModal();
           break;
         case 'edit-message':
-          if (message) this.messageStore.setMessageToEdit(message);
+          if (message) messageStore.setMessageToEdit(message);
           break;
       }
     },

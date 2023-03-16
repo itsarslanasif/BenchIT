@@ -22,7 +22,7 @@
     </div>
   </div>
   <n-modal v-model:show="preferencesModal">
-      <Preferences />
+    <Preferences />
   </n-modal>
 </template>
 

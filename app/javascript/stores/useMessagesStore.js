@@ -78,7 +78,7 @@ export const useMessageStore = () => {
           this.maxPages = newMessages.page_information.pages;
           this.hasMoreMessages = this.currentPage > this.maxPages;
         } catch (e) {
-          this.handleError(error.response.data.error)
+          this.handleError(error.response.data.error);
         }
         if (conversation_type === 'profiles') {
           const currentWorkspace = decryption(
@@ -96,10 +96,9 @@ export const useMessageStore = () => {
             this.selectedChat = await getChannel(id);
             this.selectedChat.conversation_type = 'Channel';
           } catch (e) {
-            this.handleError(e.response.data.error)
+            this.handleError(e.response.data.error);
           }
-        }
-        else if(conversation_type === 'groups'){
+        } else if (conversation_type === 'groups') {
           this.selectedChat = await getGroup(id);
           this.selectedChat.conversation_type = 'Group';
         }
@@ -110,9 +109,9 @@ export const useMessageStore = () => {
       },
       async deleteMessage(id) {
         try {
-         deleteMessage(id);
+          deleteMessage(id);
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.error);
         }
       },
       getMessage(id) {
@@ -182,8 +181,8 @@ export const useMessageStore = () => {
         });
       },
       handleError(error) {
-        errorHandler(error.response.data.message); 
-      }
+        errorHandler(error.response.data.message);
+      },
     },
   });
 

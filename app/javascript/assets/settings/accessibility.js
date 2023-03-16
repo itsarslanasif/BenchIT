@@ -43,10 +43,10 @@ export const accessibility = {
   animation: {
     title: 'Animation',
     settings: [
-        {
-          label: 'Automatically play animated GIFs and emojis',
-        },
-      ],
+      {
+        label: 'Automatically play animated GIFs and emojis',
+      },
+    ],
   },
   screenReader: {
     title: 'Screen reader',
@@ -65,7 +65,8 @@ export const accessibility = {
   },
   directMessageAnnouncement: {
     title: 'Direct message announcements',
-    tagline: 'Choose which announcements you’d like to receive while using a screen reader inside a direct message.',
+    tagline:
+      'Choose which announcements you’d like to receive while using a screen reader inside a direct message.',
     goTo: 'To change notification sounds, go to',
     notification: 'Notifications',
     settings: [
@@ -76,7 +77,8 @@ export const accessibility = {
   },
   huddleAnnouncement: {
     title: 'Huddles announcements',
-    tagline: 'Choose what announcements you’d like to receive while using a screen reader inside of a huddle',
+    tagline:
+      'Choose what announcements you’d like to receive while using a screen reader inside of a huddle',
     settings: [
       {
         label: 'Read emoji reactions out loud',
@@ -94,13 +96,16 @@ export const accessibility = {
     note: 'Note: You can always press CTRL + "." to edit your last message.',
     settings: [
       {
-        label: 'Move focus to the message list. The most recent message in the list will be selected',
+        label:
+          'Move focus to the message list. The most recent message in the list will be selected',
       },
       {
-        label: 'Move focus to the message list, only if the message field is empty. The most recent message in the list will be selected',
+        label:
+          'Move focus to the message list, only if the message field is empty. The most recent message in the list will be selected',
       },
       {
-        label: 'Edit your last message. The last message you sent will be selected and in editing mode',
+        label:
+          'Edit your last message. The last message you sent will be selected and in editing mode',
       },
     ],
   },

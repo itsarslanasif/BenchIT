@@ -15,8 +15,8 @@ export default {
     },
     isUnsentMessage: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -25,15 +25,17 @@ export default {
   },
   async mounted() {
     const html = new Remarkable({ html: true });
-    const { replacedStr } = await this.profileStore.getMentionsFromIds(html.render(this.section.text.text))
-    this.text = replacedStr
+    const { replacedStr } = await this.profileStore.getMentionsFromIds(
+      html.render(this.section.text.text)
+    );
+    this.text = replacedStr;
   },
   setup() {
-    const profileStore = useProfileStore()
+    const profileStore = useProfileStore();
     return {
-      profileStore
-    }
-  }
+      profileStore,
+    };
+  },
 };
 </script>
 <style lang="scss">

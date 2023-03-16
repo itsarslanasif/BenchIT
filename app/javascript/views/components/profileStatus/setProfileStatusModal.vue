@@ -284,7 +284,7 @@ export default {
       this.formValue.dateTimeString = String(key);
       this.formValue.clear_status_after =
         this.handleDateTime.convertStringToTimeStamp(String(key));
-        this.showDateTimeInputFields = String(key) === CONSTANTS.CHOOSE_DATE_TIME;
+      this.showDateTimeInputFields = String(key) === CONSTANTS.CHOOSE_DATE_TIME;
     },
 
     deleteRecentStatus(id) {
@@ -350,7 +350,7 @@ export default {
         selectedOption.clear_after
       );
       if (
-        convertedClearAterTime  == CONSTANTS.THIRTY_MINUTES ||
+        convertedClearAterTime == CONSTANTS.THIRTY_MINUTES ||
         convertedClearAterTime == CONSTANTS.FOUR_HOURS ||
         convertedClearAterTime == CONSTANTS.THIS_WEEK ||
         convertedClearAterTime == CONSTANTS.ONE_HOUR
@@ -383,7 +383,8 @@ export default {
     },
 
     toggleSteps() {
-      this.secondStep  =  this.formValue.text_status != '' || this.formValue.emoji_status != '🙂';
+      this.secondStep =
+        this.formValue.text_status != '' || this.formValue.emoji_status != '🙂';
     },
 
     closeProfileStatusModal() {

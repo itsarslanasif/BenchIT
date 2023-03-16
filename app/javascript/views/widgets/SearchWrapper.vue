@@ -113,9 +113,9 @@ export default {
 
     getConversationType(type) {
       if (this.$t('conversation.channel') === type) {
-        return this.$t('search_bar.channels').toLowerCase()
+        return this.$t('search_bar.channels').toLowerCase();
       } else if (this.$t('conversation.profile') === type) {
-        return this.$t('search_bar.profiles').toLowerCase()
+        return this.$t('search_bar.profiles').toLowerCase();
       } else {
         return this.$t('search_bar.groups').toLowerCase();
       }

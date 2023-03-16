@@ -10,9 +10,7 @@
     aria-modal="true"
   >
     <template #header>
-      <span class="text-2xl font-bold">{{
-        $t('pinconversation.title')
-      }}</span>
+      <span class="text-2xl font-bold">{{ $t('pinconversation.title') }}</span>
     </template>
     <span>{{ $t('pinconversation.confirmation') }}</span>
     <div

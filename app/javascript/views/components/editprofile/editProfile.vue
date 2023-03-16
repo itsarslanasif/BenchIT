@@ -23,7 +23,7 @@
             <input
               type="text"
               :class="
-                displayName.length && displayName.length < 50 
+                displayName.length && displayName.length < 50
                   ? 'success'
                   : 'error'
               "
@@ -178,7 +178,7 @@ export default {
   },
   methods: {
     readFile(file) {
-      this.readerFile = []
+      this.readerFile = [];
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => this.readerFile.push(reader.result);
@@ -186,7 +186,7 @@ export default {
     uploadFile() {
       this.file = this.$refs.file.files[0];
       if (this.file.type.slice(0, 6) === 'image/') {
-        this.readFile(this.file)
+        this.readFile(this.file);
       }
       this.image = this.file;
     },
@@ -194,14 +194,14 @@ export default {
       return fetch('../../../assets/images/user.png')
         .then(res => res.arrayBuffer())
         .then(buffer => {
-          return new File([buffer], 'user.png', { type: 'image/png' })
-        })
+          return new File([buffer], 'user.png', { type: 'image/png' });
+        });
     },
     async removeFile() {
       this.readerFile = [];
-      this.file = await this.fetchImage()
-      this.readFile(this.file)
-      this.image = this.file
+      this.file = await this.fetchImage();
+      this.readFile(this.file);
+      this.image = this.file;
     },
     saveChanges() {
       let formData = new FormData();
@@ -223,13 +223,15 @@ export default {
       if (this.audioBlob) {
         formData.append('recording', this.audioBlob);
       }
-      if (this.image !== this.currentProfile.image_url){
+      if (this.image !== this.currentProfile.image_url) {
         formData.append('profile_image', this.image);
       }
-      if (this.timezone){
+      if (this.timezone) {
         formData.append('time_zone', this.timezone);
       }
-      this.profileStore.updateProfile(formData).then(() => this.toggleEditProfile())
+      this.profileStore
+        .updateProfile(formData)
+        .then(() => this.toggleEditProfile());
     },
     submit(audioChunks, audioBlob, audioRecorder) {
       this.audioChunks = audioChunks;

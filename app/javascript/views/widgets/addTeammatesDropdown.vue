@@ -69,7 +69,7 @@ export default {
           break;
         case 'new-conversation':
           this.$router.push('/direct_messages');
-        break;
+          break;
       }
     },
     toggleModal() {

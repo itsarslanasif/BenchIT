@@ -1,61 +1,73 @@
 <template>
   <div class="flex flex-col">
-    <div class="text-md font-semibold py-2">{{ $t('filters.channel_type') }}</div>
-    <div class=""><n-select :options="options" v-model:value=filterChannelsValue @update:value="handleUpdateValue" />
+    <div class="text-md font-semibold py-2">
+      {{ $t('filters.channel_type') }}
     </div>
-    <div class="text-md font-semibold py-3">{{ $t('filters.more_options') }}</div>
-    <n-checkbox :label="$t('filters.hide_my_channels')" v-model:checked=hideMyChannels
-      @update:checked="handleCheckBoxChange" />
+    <div class="">
+      <n-select
+        :options="options"
+        v-model:value="filterChannelsValue"
+        @update:value="handleUpdateValue"
+      />
+    </div>
+    <div class="text-md font-semibold py-3">
+      {{ $t('filters.more_options') }}
+    </div>
+    <n-checkbox
+      :label="$t('filters.hide_my_channels')"
+      v-model:checked="hideMyChannels"
+      @update:checked="handleCheckBoxChange"
+    />
   </div>
 </template>
 
 <script>
-import { useChannelStore } from "../../stores/useChannelStore";
-import { NSelect, NCheckbox } from "naive-ui";
-import { storeToRefs } from "pinia";
-import { ref } from "vue";
-import { CONSTANTS } from "../../assets/constants";
+import { useChannelStore } from '../../stores/useChannelStore';
+import { NSelect, NCheckbox } from 'naive-ui';
+import { storeToRefs } from 'pinia';
+import { ref } from 'vue';
+import { CONSTANTS } from '../../assets/constants';
 
 export default {
   components: {
     NSelect,
-    NCheckbox
+    NCheckbox,
   },
   setup() {
-    const channelStore = useChannelStore()
-    const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore)
+    const channelStore = useChannelStore();
+    const { filterChannelsValue, hideMyChannels } = storeToRefs(channelStore);
     const options = ref([
       {
         label: CONSTANTS.ALL_CHANNELS,
-        value: ""
+        value: '',
       },
       {
         label: CONSTANTS.PUBLIC_CHANNELS,
-        value: CONSTANTS.PUBLIC
+        value: CONSTANTS.PUBLIC,
       },
       {
         label: CONSTANTS.PRIVATE_CHANNELS,
-        value: CONSTANTS.PRIVATE
+        value: CONSTANTS.PRIVATE,
       },
       {
         label: CONSTANTS.ARCHIVED_CHANNELS,
-        value: CONSTANTS.ARCHIVED
+        value: CONSTANTS.ARCHIVED,
       },
-    ])
-    const handleCheckBoxChange = (checkedValue) => {
+    ]);
+    const handleCheckBoxChange = checkedValue => {
       hideMyChannels.value = checkedValue;
-    }
-    const handleUpdateValue = (value) => {
-      filterChannelsValue.value = value
-    }
+    };
+    const handleUpdateValue = value => {
+      filterChannelsValue.value = value;
+    };
 
     return {
       options,
       filterChannelsValue,
       hideMyChannels,
       handleCheckBoxChange,
-      handleUpdateValue
+      handleUpdateValue,
     };
-  }
+  },
 };
 </script>

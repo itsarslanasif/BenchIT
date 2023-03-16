@@ -1,4 +1,4 @@
-import axios from '../../modules/axios/index'
+import axios from '../../modules/axios/index';
 import { getHeaders } from '../../modules/auth';
 
 export const getSearching = async (query, filter) => {
@@ -10,4 +10,4 @@ export const getSearching = async (query, filter) => {
     .then(response => {
       return response.data;
     });
-}
+};

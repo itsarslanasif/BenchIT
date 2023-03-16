@@ -33,9 +33,13 @@ export const deleteScheduledMessage = async id => {
 
 export const editScheduledContent = async payload => {
   return axios
-    .patch(`v1/schedule_messages/${payload.id}`, { content: payload.content }, {
-      headers: getHeaders(),
-    })
+    .patch(
+      `v1/schedule_messages/${payload.id}`,
+      { content: payload.content },
+      {
+        headers: getHeaders(),
+      }
+    )
     .then(response => {
       return response.data;
     });
@@ -43,9 +47,13 @@ export const editScheduledContent = async payload => {
 
 export const reScheduleTime = async payload => {
   return axios
-    .patch(`v1/schedule_messages/${payload.id}`, { scheduled_at: payload.scheduled_at }, {
-      headers: getHeaders(),
-    })
+    .patch(
+      `v1/schedule_messages/${payload.id}`,
+      { scheduled_at: payload.scheduled_at },
+      {
+        headers: getHeaders(),
+      }
+    )
     .then(response => {
       return response.data;
     });

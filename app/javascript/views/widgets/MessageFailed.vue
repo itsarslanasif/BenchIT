@@ -36,12 +36,12 @@ export default {
   setup() {
     const connectionStore = useConnectionStore();
     const message = useMessage();
-    
+
     const error = errorMessage => {
       message.error(errorMessage);
     };
 
-    const success = (successMessage) => {
+    const success = successMessage => {
       message.success(successMessage);
     };
 
@@ -51,11 +51,11 @@ export default {
       success,
     };
   },
-  
+
   methods: {
     deleteMessage() {
       this.connectionStore.deleteMessage(this.message);
-      this.success(this.$t('connection.message_deleted_successfully'))
+      this.success(this.$t('connection.message_deleted_successfully'));
     },
     retry() {
       this.error(this.$t('connection.not_connected_to_internet'));

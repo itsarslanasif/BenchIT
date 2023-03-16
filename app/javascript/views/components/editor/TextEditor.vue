@@ -236,10 +236,10 @@
       </div>
     </div>
     <div v-if="!isConnected" class="px-3 flex gap-1 text-black-600">
-        <div class="cross">
-          <font-awesome-icon icon="fa-wifi" class="" />
-        </div>
-        {{ $t('connection.trying_to_connect') }}
+      <div class="cross">
+        <font-awesome-icon icon="fa-wifi" class="" />
+      </div>
+      {{ $t('connection.trying_to_connect') }}
     </div>
   </div>
 </template>
@@ -273,7 +273,7 @@ import VisualizeVoice from './VisualizeVoice.vue';
 import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
-import { useConnectionStore } from '../../../stores/useConnectionStore.js'
+import { useConnectionStore } from '../../../stores/useConnectionStore.js';
 
 export default {
   data() {
@@ -819,7 +819,7 @@ button {
   position: absolute;
   width: 100%;
   height: 2px;
-  background-color: #6E6F73;
+  background-color: #6e6f73;
   left: 0;
   top: 50%;
   transform: rotate(-45deg);

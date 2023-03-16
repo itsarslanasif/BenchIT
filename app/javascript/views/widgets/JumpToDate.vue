@@ -99,7 +99,7 @@ export default {
           break;
         case this.generateKey(CONSTANTS.LAST_MONTH):
           const last_month = new Date(date.getFullYear(), date.getMonth() - 1);
-          console.log(last_month)
+          console.log(last_month);
           this.scrollToMessageByDate(last_month);
           break;
         case this.generateKey(CONSTANTS.THE_VERY_BEGINNING):
