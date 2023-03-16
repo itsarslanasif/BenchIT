@@ -36,6 +36,7 @@ Rails.application.routes.draw do
             get :sent_message
             get :recent_files
             get :unread_messages
+            get :threads
             get :reactions_and_mentions
           end
           member do

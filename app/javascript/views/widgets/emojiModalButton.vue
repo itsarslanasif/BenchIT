@@ -43,7 +43,6 @@ import Options from './options.js';
 import { NPopover, NDropdown } from 'naive-ui';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { pinMessage } from '../../api/messages/pinnedMessages';
-
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useMessageStore } from '../../stores/useMessagesStore';
 import { errorHandler } from './messageProvider';
@@ -60,6 +59,8 @@ export default {
     'pinnedConversationStore',
     'setDeleteModal',
     'setUnpinModal',
+    'conversationType',
+    'conversationId',
   ],
   setup() {
     const pinnedConversationStore = usePinnedConversation();
@@ -85,7 +86,7 @@ export default {
     isMyMessage(currentProfileStore, message) {
       return message.sender_id == currentProfileStore.id;
     },
-    async handleSelect(key, message, messageStore) {
+    async handleSelect(key, message) {
       switch (key) {
         case 'copy-link':
           this.copyLinkToMessage(message);
@@ -95,7 +96,7 @@ export default {
           break;
         case 'pin-to-this-conversation':
           try {
-            await pinMessage(message.bench_conversation_id, message.id);
+            await pinMessage(message.conversationable_id, message.id);
           } catch (e) {
             errorHandler(e.response.data.message);
           }
@@ -104,7 +105,7 @@ export default {
           this.setUnpinModal();
           break;
         case 'edit-message':
-          if (message) messageStore.setMessageToEdit(message);
+          if (message) this.messageStore.setMessageToEdit(message);
           break;
       }
     },

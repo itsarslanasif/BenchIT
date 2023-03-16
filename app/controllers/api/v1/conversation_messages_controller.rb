@@ -74,6 +74,18 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     paginate_messages
   end
 
+  def threads
+    parent_messages = ConversationMessage.current_profile_threads(current_profile).map(&:parent_message)
+    reply_messages = current_profile.conversation_messages.select { |message| message.replies.any? }
+
+    @threads = (parent_messages + reply_messages).uniq
+
+    @threads = @threads.sort_by do |thread|
+      last_reply = thread.replies.max_by(&:created_at)
+      last_reply.created_at
+    end.reverse
+  end
+
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
     create_conversation if @conversation.blank?
