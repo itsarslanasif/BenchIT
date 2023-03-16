@@ -12,10 +12,6 @@ class Workspace < ApplicationRecord
   validates :bench_it_url, uniqueness: true, presence: true
   validates :capacity, numericality: { greater_than_or_equal_to: 1, less_than_or_equal_to: 5000 }
 
-  # before_create :create_database
-  # after_create :establish_connection
-
-  # establish_connection(:techhub)
   after_commit :attach_avatar, on: %i[create]
 
   enum workspace_type: {
@@ -44,23 +40,5 @@ class Workspace < ApplicationRecord
 
   def attach_avatar
     generate_avatar(company_name, workspace_avatar)
-  end
-
-  # def establish_connection
-  #   ActiveRecord::Base.establish_connection(
-  #     adapter: 'postgresql',
-  #     encoding: 'unicode',
-  #     pool: ENV.fetch('RAILS_MAX_THREADS', 5),
-  #     username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
-  #     password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
-  #     host: ENV.fetch('POSTGRES_HOST', 'localhost'),
-  #     database: company_name.downcase
-  #   )
-  # end
-
-  def create_database
-    ActiveRecord::Base.connection.execute('COMMIT')
-    ActiveRecord::Base.connection.execute("CREATE DATABASE #{company_name}")
-    ActiveRecord::Base.connection.execute('BEGIN')
   end
 end

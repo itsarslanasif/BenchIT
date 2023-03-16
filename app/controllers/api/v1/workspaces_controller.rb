@@ -4,8 +4,10 @@ class Api::V1::WorkspacesController < Api::ApiController
   before_action :check_profile, only: %i[invite]
   skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
+  after_action :change_database, only: :index
 
   def index
+    switch_database
     @workspaces = current_user.workspaces
   end
 
@@ -51,13 +53,12 @@ class Api::V1::WorkspacesController < Api::ApiController
       host: ENV.fetch('POSTGRES_HOST', 'localhost'),
       database: Workspace.find(params[:id]).company_name.downcase
     )
-    # byebug
+
     session[:current_workspace_id] = Workspace.first.id
     @workspace = Workspace.first
   end
 
   def find_profile
-    # byebug
     @profile = current_user.profiles.find_by(workspace_id: @workspace)
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
@@ -69,5 +70,9 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
+  end
+
+  def change_database
+    establish_connection(Current.workspace.company_name.downcase)
   end
 end

@@ -1,4 +1,6 @@
 class Api::ApiController < ApplicationController
+  include DatabaseHandler
+
   skip_before_action :verify_authenticity_token
   before_action :presence_of_api_token
   before_action :authenticate_api_with_token
@@ -13,6 +15,8 @@ class Api::ApiController < ApplicationController
     if session[:current_workspace_id].nil?
       render json: { success: false, error: t('api.no_workspace') }, status: :unprocessable_entity
     else
+      Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
+      establish_connection(Current.workspace.company_name.downcase)
       Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
     end
   end
@@ -30,6 +34,7 @@ class Api::ApiController < ApplicationController
   def authenticate_api_with_token
     token = request.headers['Authorization'].split[1]
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
+    switch_database
     @current_user = User.find(jwt_payload[0]['sub'])
 
     raise UnAuthorized, 'unauthorized' unless @current_user
