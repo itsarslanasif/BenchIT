@@ -2,6 +2,9 @@ en:
   api:
     v1:
       channel_participants:
+        destroy:
+          success: User has been removed from the channel successfully.
+          failure: You are not authorized to perform this action.
         join_public_channel:
           success: User has joined the channel successfully.
         mute_channel:

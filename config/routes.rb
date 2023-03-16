@@ -89,7 +89,7 @@ Rails.application.routes.draw do
             get :recent_direct_messages
           end
         end
-        resources :channel_participants, only: %i[create index] do
+        resources :channel_participants, only: %i[index create destroy] do
           collection do
             post :join_public_channel
             post :mute_channel

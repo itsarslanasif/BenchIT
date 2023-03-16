@@ -23,17 +23,17 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
+      authorize! :create, @message
+
       ActiveRecord::Base.transaction do
         @message.save!
+
         if params[:profile_list].present?
           params[:profile_list].each do |profile_id|
             @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
           end
         end
       end
-
-      authorize! :create, @message
-      @message.save!
 
       render json: { success: true, message: t('.success') }, status: :ok
     else
