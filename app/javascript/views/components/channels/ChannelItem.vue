@@ -109,9 +109,7 @@ export default {
         this.channelStore.joinedChannels.find(
           obj => obj.id === this.channel.id
         ) ||
-        this.channelStore.starChannels.find(
-          obj => obj.id === this.channel.id
-        );
+        this.channelStore.starChannels.find(obj => obj.id === this.channel.id);
       this.channelStore.setCurrentChannel(this.currentChannel);
       this.setRightClickMenuOptions();
     },
