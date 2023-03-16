@@ -1,7 +1,7 @@
 <template>
   <WorkspaceDropdown />
   <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden">
-    <div class="mt-4 mb-4">
+    <div class="m-2">
       <IconElement icon="fa-regular fa-comment" :name="$t('sidebar.threads')" />
       <IconElement
         icon="fa-regular fa-comments"

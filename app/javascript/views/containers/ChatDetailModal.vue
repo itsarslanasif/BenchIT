@@ -41,7 +41,7 @@
       />
     </div>
 
-    <div class="flex ml-2 my-5">
+    <div class="flex gap-x-1 ml-2 my-5">
       <StarUnstar :chat="chat" />
       <span
         v-if="isProfile && !isOwnProfile"

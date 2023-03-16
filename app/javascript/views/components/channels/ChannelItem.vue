@@ -1,6 +1,5 @@
 <template>
   <n-dropdown
-    class="rounded-md"
     placement="bottom-end"
     size="medium"
     :show="showRightClickMenu"
@@ -11,12 +10,12 @@
   >
     <div
       @contextmenu.prevent
-      class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
+      class="flex items-center rounded-md pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
       :class="
         isUnreadChannel(channel)
           ? 'font-semibold text-white'
           : isChatOpen
-          ? 'bg-dark text-white'
+          ? 'bg-secondary text-white'
           : ''
       "
       @click="goTo(`/channels/${channel.id}`, this.channel)"
@@ -32,7 +31,11 @@
       </div>
       <div
         class="px-2 truncate"
-        :class="isChatOpen || isUnreadChannel(channel) ? 'text-white' : 'text-black-400'"
+        :class="
+          isChatOpen || isUnreadChannel(channel)
+            ? 'text-white'
+            : 'text-black-400'
+        "
       >
         {{ channel.name }}
       </div>
@@ -124,11 +127,9 @@ export default {
     setCurrentChannel() {
       this.currentChannel =
         this.channelStore.joinedChannels.find(
-          obj => obj.id === Number(this.channel.id)
+          obj => obj.id === this.channel.id
         ) ||
-        this.channelStore.starChannels.find(
-          obj => obj.id === Number(this.channel.id)
-        );
+        this.channelStore.starChannels.find(obj => obj.id === this.channel.id);
       this.channelStore.setCurrentChannel(this.currentChannel);
       this.setRightClickMenuOptions();
     },

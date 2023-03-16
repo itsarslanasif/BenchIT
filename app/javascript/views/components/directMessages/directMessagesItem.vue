@@ -1,6 +1,5 @@
 <template>
   <n-dropdown
-    class="rounded-md"
     placement="bottom-end"
     size="medium"
     :show="showRightClickMenu"
@@ -11,9 +10,9 @@
   >
     <div
       v-if="user"
-      class="flex items-center hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
+      class="flex items-center rounded-md hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
       :class="{
-        'bg-dark': isChatOpen,
+        'bg-secondary': isChatOpen,
         'font-semibold text-white': isUnreadDM(user),
       }"
       @click.right="toggleRightClickMenu"
@@ -21,7 +20,7 @@
     >
       <span
         @click="goToChat(`/profiles/${user.id}`, user)"
-        class="flex item-center w-full"
+        class="flex item-center w-full rounded-md"
       >
         <n-avatar :size="25" :src="user.image_url" />
         <span class="flex z-10 items-end -ml-1">
@@ -36,7 +35,9 @@
         </span>
         <p
           class="ml-2 text-sm truncate"
-          :class="isChatOpen || isUnreadDM(user) ? 'text-white' : 'text-black-400'"
+          :class="
+            isChatOpen || isUnreadDM(user) ? 'text-white' : 'text-black-400'
+          "
         >
           {{ user.username }}
         </p>

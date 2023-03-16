@@ -1,17 +1,14 @@
 <template>
-  <div class="hover-trigger">
+  <div class="hover-trigger mx-2">
     <font-awesome-icon
       @click="goToDirectMessages"
       icon="fa-plus"
-      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-black-400 rounded-md hover:bg-secondary"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-black-400 hover:bg-primaryHover rounded-md"
     />
-    <AccordionList
-      class="mt-5 ml-4 text-base text-black-400"
-      @click="toggleList"
-    >
+    <AccordionList class="mt-4 ml-4 text-sm text-black-400" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer font-semibold truncate">
+          <span class="ml-1 cursor-pointer font-semibold truncate">
             {{ $t('direct_messages.direct_messages') }}
           </span>
         </template>
@@ -20,7 +17,6 @@
             <h5
               v-for="user in sortedDMList"
               :key="user"
-              class="hover:bg-primaryHover"
               @click.stop="stopPropagation"
             >
               <directMessagesItemVue
@@ -30,20 +26,14 @@
               />
             </h5>
           </div>
-          <div
-            class="hover:bg-primaryHover cursor-pointer"
-            @click="closeModal"
-            @click.stop="stopPropagation"
-          >
+          <div @click="closeModal" @click.stop="stopPropagation">
             <addTeammatesDropdown />
           </div>
         </div>
       </AccordionItem>
     </AccordionList>
-    <div v-if="!listOpen && checkSetChat()">
-      <h5
-        class="hover:bg-primaryHover text-base cursor-pointer text-black-500 bg-slate-600"
-      >
+    <div v-if="!listOpen && checkSetChat">
+      <h5 class="text-base text-white cursor-pointer">
         <directMessagesItemVue
           :user="this.selectedUser"
           :isOwnChat="isOwnChat"
@@ -60,7 +50,6 @@ import { AccordionList, AccordionItem } from 'vue3-rich-accordion';
 import addTeammatesDropdown from '../../widgets/addTeammatesDropdown.vue';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { useDirectMessagesStore } from '../../../stores/useDirectMessagesStore';
-import { CONSTANTS } from '../../../assets/constants';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
@@ -107,6 +96,12 @@ export default {
         this.currentProfileStore.currentProfile.id
       );
     },
+    checkSetChat() {
+      return (
+        this.chat_type === 'Profile' &&
+        this.selectedUser.id === this.selectedChat.id
+      );
+    },
   },
   methods: {
     closeModal() {
@@ -132,12 +127,6 @@ export default {
     toggleList() {
       this.listOpen = !this.listOpen;
       this.setType();
-    },
-    checkSetChat() {
-      return (
-        this.chat_type === 'Profile' &&
-        this.selectedUser.id === this.selectedChat.id
-      );
     },
     setType() {
       this.chat_type = this.selectedChat.conversation_type;

@@ -1,9 +1,9 @@
 <template>
-  <div class="cursor-pointer" @click="toggleModal">
-    <div class="px-2 flex hover:bg-primaryHover cursor-pointer py-1">
+  <div class="cursor-pointer mx-1" @click="toggleModal">
+    <div class="px-2 mt-1 flex rounded-md hover:bg-primaryHover">
       <font-awesome-icon
         icon="fa-plus"
-        class="self-center mr-2 text-xs cursor-pointer text-black-400 rounded-md p-2 bg-secondary"
+        class="self-center mr-2 rounded text-xs text-black-400 p-2 bg-secondary"
       />
       <p class="text-sm self-center text-black-400 truncate">
         {{ $t('direct_messages.add_teammates') }}
@@ -69,7 +69,7 @@ export default {
           break;
         case 'new-conversation':
           this.$router.push('/direct_messages');
-        break;
+          break;
       }
     },
     toggleModal() {

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-2 py-1 text-base flex text-left text-black-400 hover:bg-primaryHover -mr-2 p-0 cursor-pointer"
+    class="px-2 py-1 text-sm rounded-md flex text-left text-black-400 hover:bg-primaryHover p-0 cursor-pointer"
     @click="elementClicked"
   >
     <font-awesome-icon :icon="icon" class="w-8 mt-1" />

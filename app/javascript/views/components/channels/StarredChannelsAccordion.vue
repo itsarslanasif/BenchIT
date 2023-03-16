@@ -1,20 +1,16 @@
 <template>
-  <div v-if="starChannels.length > 0" class="hover-trigger">
+  <div v-if="starChannels.length > 0" class="hover-trigger mx-2">
     <ChannelsDropDown :onlyIcon="true" />
-    <AccordionList
-      class="mt-5 ml-4 text-base text-black-400"
-      @click="toggleList"
-    >
+    <AccordionList class="mt-4 ml-4 text-sm text-black-400" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer font-semibold truncate">
+          <span class="ml-1 cursor-pointer font-semibold truncate">
             {{ $t('channels.starred') }}
           </span>
         </template>
         <h5
           v-for="channel in starChannels"
           :key="channel.id"
-          class="hover:bg-primaryHover"
           @click.stop="stopPropagation"
         >
           <div class="-ml-4">
