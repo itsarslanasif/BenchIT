@@ -185,8 +185,7 @@ en:
         profile: 'Profile'
       heading:
         thread_in: 'Thread in'
-        thread_in_group: 'Thread in group'
-        message_in_group: 'Message in group'
+        message_in: 'Message in'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'

@@ -2,7 +2,11 @@
   <WorkspaceDropdown />
   <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden">
     <div class="m-2">
-      <IconElement icon="fa-regular fa-comment" :name="$t('sidebar.threads')" />
+      <IconElement
+        icon="fa-regular fa-comment"
+        :name="$t('sidebar.threads')"
+        @click="goTo('/threads')"
+      />
       <IconElement
         icon="fa-regular fa-comments"
         :name="$t('sidebar.direct_messages')"

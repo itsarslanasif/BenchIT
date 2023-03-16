@@ -5,7 +5,7 @@
       icon="fa-plus"
       class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-black-400 rounded-md hover:bg-secondary"
     />
-    <AccordionList class="mt-4 ml-4 text-sm text-black-400">
+    <AccordionList class="mt-4 ml-4 text-sm text-black-400" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
           <span class="ml-2 cursor-pointer font-semibold truncate">
@@ -44,6 +44,11 @@
         />
       </div>
     </AccordionList>
+    <div v-if="!listOpen && checkSetGroup">
+      <h5 class="mx-2 cursor-pointer text-white">
+        <GroupItem :group="selectedGroup" :goTo="goToGroupChat" />
+      </h5>
+    </div>
   </div>
 </template>
 
@@ -64,6 +69,8 @@ export default {
   data() {
     return {
       groups: [],
+      selectedGroup: {},
+      chat_type: '',
       listOpen: true,
       showCreateGroupModal: false,
     };
@@ -82,12 +89,27 @@ export default {
       messagesStore,
     };
   },
+  computed: {
+    checkSetGroup() {
+      return (
+        this.chat_type === 'Group' &&
+        this.selectedGroup.id === this.messagesStore.selectedChat.id
+      );
+    },
+  },
   methods: {
     toggleModal() {
       this.showCreateGroupModal = !this.showCreateGroupModal;
     },
     toggleList() {
       this.listOpen = !this.listOpen;
+      this.setGroup();
+    },
+    setGroup() {
+      this.chat_type = this.messagesStore.selectedChat.conversation_type;
+      if (this.chat_type === 'Group') {
+        this.selectedGroup = this.messagesStore.selectedChat;
+      }
     },
     goToGroupChat(chatURL, group) {
       this.messagesStore.setSelectedChat(group);

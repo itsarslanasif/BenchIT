@@ -30,7 +30,7 @@
           {{ message.receiver.name }}
         </div>
         <div v-else-if="message.conversation_type == $t('conversation.group')">
-          {{ $t('conversation.group_message') }}
+          {{ $t('conversation.group') }}
         </div>
       </div>
       <div class="flex">

@@ -81,7 +81,7 @@
             "
             class="font-semibold"
           >
-            {{ $t('heading.thread_in_group') + message.group_id }}
+            {{ $t('heading.thread_in') }}
           </div>
           <div
             v-else-if="
@@ -90,7 +90,7 @@
             "
             class="font-semibold"
           >
-            {{ $t('heading.message_in_group') + message.group_id }}
+            {{ $t('heading.message_in') }} {{ message.group_name }}
           </div>
           <span v-for="block in messageBlocks" :key="block">
             <MessageSection v-if="block.type === 'section'" :section="block" />

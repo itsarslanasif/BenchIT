@@ -25,10 +25,8 @@
       </AccordionItem>
     </AccordionList>
   </div>
-  <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
-    <h5
-      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
-    >
+  <div v-if="!listOpen && checkSetChannel">
+    <h5 class="mx-2 cursor-pointer text-white">
       <ChannelItem
         :channel="selectedChannel"
         :goTo="goToChannelChat"
@@ -84,6 +82,14 @@ export default {
       selectedChat,
     };
   },
+  computed: {
+    checkSetChannel() {
+      return (
+        this.chat_type === 'Channel' &&
+        this.selectedChannel.id === this.selectedChat.id
+      );
+    },
+  },
   methods: {
     toggleModal() {
       this.showCreateChannelModal = !this.showCreateChannelModal;
@@ -111,13 +117,6 @@ export default {
       if (this.chat_type === 'Channel') {
         this.selectedChannel = channel(chat_id, this.channelStore);
       }
-    },
-    checkSetChannel() {
-      return (
-        this.chat_type === 'Channel' &&
-        this.selectedChat.id === this.selectedChannel.id &&
-        this.selectedChannel.favourite_id
-      );
     },
     stopPropagation(event) {
       event.stopPropagation();
