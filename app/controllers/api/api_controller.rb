@@ -15,9 +15,13 @@ class Api::ApiController < ApplicationController
     if session[:current_workspace_id].nil?
       render json: { success: false, error: t('api.no_workspace') }, status: :unprocessable_entity
     else
-      Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
-      establish_connection(Current.workspace.company_name.downcase)
-      Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
+      # debugger
+      # connection = ActiveRecord::Base.connection.execute("SELECT current_database()").getvalue(0,0)
+      # if Current.workspace.id != session[:current_workspace_id]
+      ActiveRecord::Base.establish_connection(:development)
+      Current.workspace = Workspace.find(session[:current_workspace_id])
+      establish_connection_to_workspace_db(Current.workspace.company_name.downcase)
+      # end
     end
   end
 
@@ -34,7 +38,6 @@ class Api::ApiController < ApplicationController
   def authenticate_api_with_token
     token = request.headers['Authorization'].split[1]
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
-    switch_database
     @current_user = User.find(jwt_payload[0]['sub'])
 
     raise UnAuthorized, 'unauthorized' unless @current_user

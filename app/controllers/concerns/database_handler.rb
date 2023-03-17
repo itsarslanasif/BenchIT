@@ -13,7 +13,7 @@ module DatabaseHandler
     ActiveRecord::Base.connection.execute('BEGIN')
   end
 
-  def establish_connection(name)
+  def establish_connection_to_workspace_db(name)
     ActiveRecord::Base.establish_connection(
       adapter: 'postgresql',
       encoding: 'unicode',

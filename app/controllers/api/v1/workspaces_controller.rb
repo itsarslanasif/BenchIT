@@ -4,10 +4,9 @@ class Api::V1::WorkspacesController < Api::ApiController
   before_action :check_profile, only: %i[invite]
   skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
-  after_action :change_database, only: :index
 
   def index
-    switch_database
+    ActiveRecord::Base.establish_connection(:development)
     @workspaces = current_user.workspaces
   end
 
@@ -70,9 +69,5 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
-  end
-
-  def change_database
-    establish_connection(Current.workspace.company_name.downcase)
   end
 end
