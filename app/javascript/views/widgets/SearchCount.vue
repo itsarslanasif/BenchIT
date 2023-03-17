@@ -12,11 +12,11 @@
 export default {
   props: {
     category: {
-      type: Object
+      type: Object,
     },
     heading: {
-      type: String
-    }
-  }
-}
+      type: String,
+    },
+  },
+};
 </script>

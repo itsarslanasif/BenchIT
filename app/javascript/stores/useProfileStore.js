@@ -24,11 +24,11 @@ export const useProfileStore = () => {
             currentProfileStore.currentProfile.workspace_id
           );
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
       handleError(error) {
-        errorHandler(error.response.data.message); 
+        errorHandler(error.response.data.message);
       },
       updateProfileStatus(data) {
         let index = this.profiles.findIndex(profile => data.id === profile.id);
@@ -90,7 +90,7 @@ export const useProfileStore = () => {
           this.profiles[index] = profile;
           encryption(sessionStorage, 'currentProfile', profile);
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
       getProfilesByIds(profileIds) {

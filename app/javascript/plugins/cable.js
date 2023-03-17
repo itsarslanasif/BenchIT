@@ -5,9 +5,9 @@ const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
 const consumer = createConsumer(`${protocol}://${window.location.host}/cable`);
 const emitter = mitt();
 let channel = null;
-let notificationChannel = null
+let notificationChannel = null;
 
-function Cable() { }
+function Cable() {}
 
 Cable.prototype.on = (channel, callback) => {
   return emitter.on(channel, callback);
@@ -57,8 +57,8 @@ export const createNotificationCable = options => {
 
 export const unsubscribe = () => {
   channel.unsubscribe();
-}
+};
 
 export const unsubscribeNotification = () => {
   notificationChannel.unsubscribe();
-}
+};

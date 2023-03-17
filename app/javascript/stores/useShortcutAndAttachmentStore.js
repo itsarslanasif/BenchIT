@@ -14,7 +14,8 @@ export const useShortcutAndAttachmentStore = defineStore(
         this.showCreateTextSnippitModal = !this.showCreateTextSnippitModal;
       },
       toggleshowCreateTextSnippitModalThread() {
-        this.showCreateTextSnippitModalThread = !this.showCreateTextSnippitModalThread;
+        this.showCreateTextSnippitModalThread =
+          !this.showCreateTextSnippitModalThread;
       },
       toggleModalInChat() {
         this.showModalInChat = !this.showModalInChat;

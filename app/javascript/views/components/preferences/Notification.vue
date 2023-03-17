@@ -10,9 +10,7 @@
             :value="item.field"
             v-model="notifyMeAbout"
           />
-          <label :for="item.field" class="pl-3">
-            {{ item.label }}
-          </label><br />
+          <label :for="item.field" class="pl-3"> {{ item.label }} </label><br />
         </div>
       </div>
     </div>
@@ -28,10 +26,7 @@
     <div>
       <div v-for="item in notificationSettings.huddleAndReplies.settings">
         <input type="checkbox" :id="item.field" />
-        <label :for="item.field" class="pl-3">
-          {{ item.label }}
-          </label
-        ><br />
+        <label :for="item.field" class="pl-3"> {{ item.label }} </label><br />
       </div>
       <p class="py-2">
         You have set special notification rules for
@@ -42,9 +37,7 @@
     <div class="my-3">
       <div v-for="item in notificationSettings.huddleAndReplies.badgeSetting">
         <input type="checkbox" :id="item.field" />
-        <label :for="item.field" class="pl-3">
-          {{ item.label }}
-        </label><br />
+        <label :for="item.field" class="pl-3"> {{ item.label }} </label><br />
       </div>
     </div>
     <div>
@@ -124,12 +117,12 @@
       <input type="checkbox" id="show-badge-in-sidebar" />
       <label for="show-badge-in-sidebar" class="pl-3">
         Include a preview of the message in each notification (disable this for
-        extra privacy)
-      </label><br />
+        extra privacy) </label
+      ><br />
       <input type="checkbox" id="show-badge-in-sidebar" />
       <label for="show-badge-in-sidebar" class="pl-3">
-        Mute all sounds from Slack
-      </label><br />
+        Mute all sounds from Slack </label
+      ><br />
       <div class="my-3">
         <div v-for="item in notificationSettings.soundAndAppearance.settings">
           <label>{{ item.label }}</label>
@@ -148,7 +141,7 @@
       <strong>{{ notificationSettings.notActiveOnDesktop.title }}</strong>
       <br />
       <label>
-        {{ notificationSettings.notActiveOnDesktop.sectionHeading}}
+        {{ notificationSettings.notActiveOnDesktop.sectionHeading }}
       </label>
       <br />
       <select

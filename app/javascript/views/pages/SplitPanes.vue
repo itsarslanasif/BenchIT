@@ -2,10 +2,10 @@
   <n-message-provider placement="top-right">
     <div class="relative bg-primary text-sm h-screen grid grid-rows-18">
       <alert v-if="downloadsStore.downloadAlert" />
-      <switching-workspace-loader 
+      <switching-workspace-loader
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
-        <div class="row-span-1">
+      <div class="row-span-1">
         <SearchBar />
       </div>
       <splitpanes @resize="resizePane">
@@ -123,7 +123,7 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
-    window.$message = useMessage()
+    window.$message = useMessage();
 
     return {
       screenStore,

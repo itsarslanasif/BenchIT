@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export const useSelectedScreenStore = defineStore('selectedScreenStore', {
   state: () => ({
-    selectScreen: 'chat'
+    selectScreen: 'chat',
   }),
 
   getters: {
@@ -13,11 +13,11 @@ export const useSelectedScreenStore = defineStore('selectedScreenStore', {
     setSelectedScreen(screen) {
       this.selectScreen = screen;
     },
-    isChatScreen(){
-        return this.selectScreen == 'chat'
+    isChatScreen() {
+      return this.selectScreen == 'chat';
     },
-    isSearchDmScreen(){
-        return this.selectScreen == 'search-dm'
+    isSearchDmScreen() {
+      return this.selectScreen == 'search-dm';
     },
   },
 });

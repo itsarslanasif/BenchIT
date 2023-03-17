@@ -68,9 +68,7 @@
 import { NSelect } from 'naive-ui';
 import { storeToRefs } from 'pinia';
 import { defineComponent } from 'vue';
-import {
-  getMembers,
-} from '../../../api/members/membersApi';
+import { getMembers } from '../../../api/members/membersApi';
 import { useChannelStore } from '../../../stores/useChannelStore';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 
@@ -94,7 +92,7 @@ export default defineComponent({
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     return {
       currentWorkspace,
-      channelStore
+      channelStore,
     };
   },
   data() {
@@ -115,7 +113,10 @@ export default defineComponent({
   methods: {
     async submit() {
       let channel_id = window.location.pathname.split('/')[2];
-      this.response = await this.channelStore.addMembersToChannel(channel_id, this.selectedValues)
+      this.response = await this.channelStore.addMembersToChannel(
+        channel_id,
+        this.selectedValues
+      );
       this.closeModal();
     },
     handleSearch(query) {

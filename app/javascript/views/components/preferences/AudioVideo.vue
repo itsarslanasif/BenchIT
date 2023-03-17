@@ -57,24 +57,22 @@
       </div>
       <p>
         Use
-        <span class="bg-black-700 text-white px-2 py-1 rounded">
-          Ctrl
-        </span>
+        <span class="bg-black-700 text-white px-2 py-1 rounded"> Ctrl </span>
         <span class="bg-black-700 text-white px-2 ml-1 py-1 rounded">
           Shift
         </span>
         +
-        <span class="bg-black-700 text-white px-2 py-1 rounded">
-          Space
-        </span>
-        to
-        mute or unmute your mic.
+        <span class="bg-black-700 text-white px-2 py-1 rounded"> Space </span>
+        to mute or unmute your mic.
       </p>
     </div>
     <hr class="my-5" />
     <div class="mt-3">
       <p class="font-semibold">{{ audioVideoSettings.onScreenSaver.title }}</p>
-      <div v-for="item in audioVideoSettings.onScreenSaver.settings" class="py-1">
+      <div
+        v-for="item in audioVideoSettings.onScreenSaver.settings"
+        class="py-1"
+      >
         <input type="checkbox" />
         <label class="pl-3">{{ item.label }}</label>
       </div>

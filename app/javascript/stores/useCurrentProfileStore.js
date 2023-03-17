@@ -23,7 +23,7 @@ export const useCurrentProfileStore = () => {
       },
       setProfileActiveStatus(is_active) {
         this.currentProfile.is_active = is_active;
-        encryption(sessionStorage, 'currentProfile',  this.currentProfile);
+        encryption(sessionStorage, 'currentProfile', this.currentProfile);
       },
     },
   });

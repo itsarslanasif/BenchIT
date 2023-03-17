@@ -90,7 +90,7 @@ export default {
       this.optionsFlag = false;
     },
     messageBlock(message) {
-      return JSON.parse(message)
+      return JSON.parse(message);
     },
   },
 };

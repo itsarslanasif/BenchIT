@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "lint": "yarn prettier --config .prettierrc --ignore-unknown --check 'app/javascript/**/*'",
+    "lint:fix": "yarn prettier --config .prettierrc --ignore-unknown --write 'app/javascript/**/*'"
+  },
   "devDependencies": {
     "@fortawesome/fontawesome-free": "^6.2.1",
     "autoprefixer": "^10.4.13",
@@ -6,6 +10,7 @@
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-import": "^15.0.0",
     "postcss-preset-env": "^7.8.2",
+    "prettier": "^2.8.4",
     "sass": "^1.56.1",
     "vite": "^3.2.0",
     "vite-plugin-ruby": "^3.1.2"

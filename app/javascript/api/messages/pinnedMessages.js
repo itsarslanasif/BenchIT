@@ -14,10 +14,7 @@ export const pinnedMessages = (conversation_type, conversation_id) => {
     });
 };
 
-export const pinMessage = (
-  benchConversationId,
-  messageId
-) => {
+export const pinMessage = (benchConversationId, messageId) => {
   return axios
     .post(
       `v1/pins`,

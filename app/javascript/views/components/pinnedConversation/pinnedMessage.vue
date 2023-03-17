@@ -72,7 +72,7 @@ import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { usePinnedConversation } from '../../../stores/UsePinnedConversationStore';
 import { useThreadStore } from '../../../stores/useThreadStore';
 import { NAvatar } from 'naive-ui';
-import MessageSection from '../messages/MessageSection.vue'
+import MessageSection from '../messages/MessageSection.vue';
 import moment from 'moment';
 
 export default {
@@ -133,7 +133,7 @@ export default {
     },
 
     messageBlock(message) {
-      return JSON.parse(message)
+      return JSON.parse(message);
     },
 
     jumpToConversation() {

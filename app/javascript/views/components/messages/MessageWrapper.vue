@@ -439,7 +439,7 @@ import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import UnPinModal from '../pinnedConversation/unpinModal.vue';
 import VisualizeVoice from '../editor/VisualizeVoice.vue';
-import MessageFailed from '../../widgets/MessageFailed.vue'
+import MessageFailed from '../../widgets/MessageFailed.vue';
 import { errorHandler } from '../../widgets/messageProvider';
 
 export default {

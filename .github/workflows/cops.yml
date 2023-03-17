@@ -42,3 +42,12 @@ jobs:
       - name: Rubocop
         run: bundle exec rubocop --parallel
 
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Setup backend environment (node)
+        uses: ./.github/actions
+      - name: Format files in the repository
+        run: yarn prettier --config .prettierrc --ignore-unknown --check 'app/javascript/**/*'
