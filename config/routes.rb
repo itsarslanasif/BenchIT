@@ -25,7 +25,7 @@ Rails.application.routes.draw do
             post :add_member
           end
         end
-        resources :users, only: %i[index]
+        resources :users, only: %i[index create]
         resources :schedule_messages, only: %i[index update destroy] do
           member do
             get :send_now

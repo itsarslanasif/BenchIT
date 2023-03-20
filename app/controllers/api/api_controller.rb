@@ -15,7 +15,7 @@ class Api::ApiController < ApplicationController
     if session[:current_workspace_id].nil?
       render json: { success: false, error: t('api.no_workspace') }, status: :unprocessable_entity
     else
-      Current.workspace = Workspace.find(session[:current_workspace_id])
+      Current.workspace = Workspace.find(session[:current_workspace_id]) if Current.workspace.nil?
 
       if Current.workspace.id != session[:current_workspace_id]
         ActiveRecord::Base.establish_connection(:development)
