@@ -11,7 +11,13 @@ export const getChannel = async channelId => {
     });
 };
 
-export const getChannels = async (query, sort, filter, hideMyChannels, page) => {
+export const getChannels = async (
+  query,
+  sort,
+  filter,
+  hideMyChannels,
+  page
+) => {
   return axios
     .get(`/v1/bench_channels`, {
       headers: getHeaders(),

@@ -5,9 +5,7 @@
       <div class="mt-2">
         <div v-for="item in sidebarSettings.alwaysShowOnSidebar.settings">
           <input type="checkbox" :id="item.field" />
-          <label :for="item.field" class="pl-3">
-            {{ item.label }}
-          </label><br />
+          <label :for="item.field" class="pl-3"> {{ item.label }} </label><br />
         </div>
       </div>
     </div>
@@ -26,9 +24,7 @@
       <div>
         <div v-for="item in sidebarSettings.sort.settings">
           <input type="radio" :id="item.field" />
-          <label :for="item.field" class="pl-3">
-            {{ item.label }}
-          </label><br />
+          <label :for="item.field" class="pl-3"> {{ item.label }} </label><br />
         </div>
       </div>
     </div>
@@ -36,9 +32,7 @@
     <div class="my-3">
       <div v-for="item in sidebarSettings.other.settings">
         <input type="checkbox" :id="item.field" />
-        <label :for="item.field" class="pl-3">
-          {{ item.label }}
-        </label><br />
+        <label :for="item.field" class="pl-3"> {{ item.label }} </label><br />
       </div>
     </div>
   </div>

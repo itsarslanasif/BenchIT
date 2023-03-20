@@ -52,7 +52,7 @@ const createMessage = data => {
   if (data.conversationable_type == 'Profile') {
     const receiver = useProfileStore().getProfileById(data.sender_id);
     useDirectMessagesStore().appendToDirectMessagesList(receiver);
-  };
+  }
   const unreadMessagesStore = useUnreadStore();
   const getIndexByParams = param => {
     return window.location.pathname.split('/')[param];

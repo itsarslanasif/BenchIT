@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const WorkspaceStore = defineStore('workspace', {
   state: () => {
@@ -38,6 +38,6 @@ export const WorkspaceStore = defineStore('workspace', {
         { text: 'Business Owner', value: 'business_owner' },
         { text: 'Customer Support', value: 'customer_support' },
       ],
-    }
+    };
   },
-})
+});

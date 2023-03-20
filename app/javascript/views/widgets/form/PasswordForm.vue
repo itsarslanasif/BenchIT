@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="handleSubmit" class="bg-slate-50 rounded-xl my-8 mx-auto text-left p-64">
+  <form
+    @submit.prevent="handleSubmit"
+    class="bg-slate-50 rounded-xl my-8 mx-auto text-left p-64"
+  >
     <h3>{{ $t('confirmation.title') }}</h3>
     <label>{{ $t('confirmation.password') }}</label>
     <input
@@ -9,7 +12,10 @@
       placeholder="Password"
       required
     />
-    <div v-if="userStore.passwordError" class="text-danger font-bold mt-2 text-sm">
+    <div
+      v-if="userStore.passwordError"
+      class="text-danger font-bold mt-2 text-sm"
+    >
       {{ userStore.passwordError }}
     </div>
     <p>{{ $t('confirmation.description') }}</p>
@@ -25,7 +31,9 @@
       {{ userStore.confirmPasswordError }}
     </div>
     <div class="flex justify-center">
-      <button class="border-0 mt-5 py-3 px-5 w-3/4">{{ $t('confirmation.password_save') }}</button>
+      <button class="border-0 mt-5 py-3 px-5 w-3/4">
+        {{ $t('confirmation.password_save') }}
+      </button>
     </div>
   </form>
 </template>
@@ -33,7 +41,7 @@
 <script>
 import axios from '../../../modules/axios';
 import { useUserInviteStore } from '../../../stores/useUserInviteStore.js';
-import '../../components/workspace/style.css'
+import '../../components/workspace/style.css';
 
 export default {
   data() {

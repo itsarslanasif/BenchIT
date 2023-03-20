@@ -266,8 +266,8 @@ export default {
           this.preferencesModal = !this.preferencesModal;
           break;
         case 'profile':
-          this.userProfileStore.setUserProfile(this.profile)
-          this.rightPaneStore.toggleUserProfileShow(true)
+          this.userProfileStore.setUserProfile(this.profile);
+          this.rightPaneStore.toggleUserProfileShow(true);
           break;
         case 'downloads':
           this.showModal = true;

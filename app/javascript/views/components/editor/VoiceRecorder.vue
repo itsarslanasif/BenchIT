@@ -61,7 +61,7 @@ export default {
           }, 1000);
         })
         .catch(e => {
-          errorHandler(e.response.data.message)
+          errorHandler(e.response.data.message);
         });
     },
     stopRecording() {

@@ -165,21 +165,22 @@ export default {
     },
     async sendMessage(message, files, schedule) {
       if (message.blocks[0] != undefined) {
-        let profileList =  await Promise.all( message.blocks.map( async (block) => {
-          return await this.getMentionedUsers(block)
-        }))
-        profileList = profileList.flat(2)
+        let profileList = await Promise.all(
+          message.blocks.map(async block => {
+            return await this.getMentionedUsers(block);
+          })
+        );
+        profileList = profileList.flat(2);
         profileList = profileList.map(profile => {
-          return profile.id
-        })
+          return profile.id;
+        });
         let formData = new FormData();
         formData.append('content', JSON.stringify(message));
         formData.append('is_threaded', false);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
-        if (profileList.length != 0)
-        {
-          formData.append('profile_list[]', profileList)
+        if (profileList.length != 0) {
+          formData.append('profile_list[]', profileList);
         }
         if (schedule) {
           formData.append('scheduled_at', schedule);
@@ -214,7 +215,7 @@ export default {
           });
           this.newMessageSent = true;
         } else {
-          this.connectionStore.unsendMessagesQueue(formData)
+          this.connectionStore.unsendMessagesQueue(formData);
         }
       } else {
         return false;
@@ -228,9 +229,11 @@ export default {
     },
     async getMentionedUsers(section) {
       const html = new Remarkable({ html: true });
-      const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
-      return profiles
-    }
+      const { profiles } = await this.profileStore.getMentionsFromIds(
+        html.render(section.text.text)
+      );
+      return profiles;
+    },
   },
 };
 </script>

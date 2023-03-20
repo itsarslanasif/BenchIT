@@ -7,7 +7,11 @@
           :key="item"
           @click="enableComponent(item)"
           class="hover:text-white px-4 py-1 my-1 rounded cursor-pointer"
-          :class="item == selectedItem ? 'bg-primary text-white hover:bg-primary' : ' hover:bg-primaryHover'"
+          :class="
+            item == selectedItem
+              ? 'bg-primary text-white hover:bg-primary'
+              : ' hover:bg-primaryHover'
+          "
         >
           {{ item.title }}
         </div>
@@ -31,17 +35,17 @@
 
 <script>
 import { NCard } from 'naive-ui';
-import Notification from './Notification.vue'
-import Sidebar from './Sidebar.vue'
-import Themes from './Themes.vue'
-import MessagesMedia from './MessagesMedia.vue'
-import LanguageRegion from './LanguageRegion.vue'
-import Accessibility from './Accessibility.vue'
-import MarkAsRead from './MarkAsRead.vue'
-import AudioVideo from './AudioVideo.vue'
-import ConnectedAccounts from './ConntectedAccounts.vue'
-import PrivacyVisibility from './PrivacyVisibility.vue'
-import Advanced from './Advanced.vue'
+import Notification from './Notification.vue';
+import Sidebar from './Sidebar.vue';
+import Themes from './Themes.vue';
+import MessagesMedia from './MessagesMedia.vue';
+import LanguageRegion from './LanguageRegion.vue';
+import Accessibility from './Accessibility.vue';
+import MarkAsRead from './MarkAsRead.vue';
+import AudioVideo from './AudioVideo.vue';
+import ConnectedAccounts from './ConntectedAccounts.vue';
+import PrivacyVisibility from './PrivacyVisibility.vue';
+import Advanced from './Advanced.vue';
 export default {
   components: {
     NCard,
@@ -55,7 +59,7 @@ export default {
     AudioVideo,
     ConnectedAccounts,
     PrivacyVisibility,
-    Advanced
+    Advanced,
   },
   data() {
     return {
@@ -125,7 +129,7 @@ export default {
         k.flag = false;
       });
       this.options[item.key].flag = true;
-      this.selectedItem = item
+      this.selectedItem = item;
     },
   },
 };

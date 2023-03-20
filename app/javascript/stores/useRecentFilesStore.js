@@ -19,7 +19,7 @@ export const useRecentFilesStore = () => {
         try {
           this.recentFiles = await getAllRecentAttachments();
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
       toggleModalInChat() {
@@ -29,7 +29,7 @@ export const useRecentFilesStore = () => {
         this.showModalInThread = !this.showModalInThread;
       },
       handleError(error) {
-        errorHandler(error.response.data.message);  
+        errorHandler(error.response.data.message);
       },
     },
   });

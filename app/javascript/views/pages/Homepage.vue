@@ -38,11 +38,11 @@ export default {
   },
   mounted() {
     window.addEventListener('online', () => {
-      this.connectionStore.toggleConnection(true)
-    })
+      this.connectionStore.toggleConnection(true);
+    });
     window.addEventListener('offline', () => {
-      this.connectionStore.toggleConnection(false)
-    })
+      this.connectionStore.toggleConnection(false);
+    });
     this.Cable = createNotificationCable({
       channel: 'NotificationChannel',
       workspace_id: this.currentWorkspace.id,
@@ -68,7 +68,7 @@ export default {
       unreadMessageStore,
       currentWorkspace,
       currentProfile,
-      connectionStore
+      connectionStore,
     };
   },
   beforeUnmount() {
@@ -84,16 +84,16 @@ export default {
 }
 
 ::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 5px 475569; 
+  box-shadow: inset 0 0 5px 475569;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #475569; 
+  background: #475569;
   border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569; 
+  background: #475569;
 }
 </style>
