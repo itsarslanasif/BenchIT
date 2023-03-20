@@ -11,6 +11,9 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def create
+    unless ActiveRecord::Base.connection.execute("SELECT current_database()").getvalue(0,0).eql?('benchit_dev')
+      switch_database
+    end
     @workspace = Workspace.new(workspace_params)
 
     ActiveRecord::Base.transaction do
@@ -93,6 +96,9 @@ class Api::V1::WorkspacesController < Api::ApiController
     new_workspace = @workspace.dup
     new_workspace.id = @workspace.id
     new_workspace.save!
+    Current.profile = @profile
+    Current.workspace = @workspace
+    Current.user = new_user
     new_profile = @profile.dup
     new_profile.id = @profile.id
     new_profile.save!
