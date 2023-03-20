@@ -90,7 +90,7 @@ class Profile < ApplicationRecord
   end
 
   def broadcast_profile
-    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call
+    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call unless workspace.profile_ids.blank?
   end
 
   def profile_content
