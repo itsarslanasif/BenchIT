@@ -65,7 +65,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
     },
     handleError(error) {
-      errorHandler(error)
-    }
+      errorHandler(error);
+    },
   },
 });

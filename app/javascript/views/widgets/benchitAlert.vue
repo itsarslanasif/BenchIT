@@ -29,15 +29,19 @@ import { NAlert } from 'naive-ui';
 export default {
   name: 'BenchITAlert',
   components: { NAlert },
-  props: ['errorMessage', 'successMessage', 'success','setApiResponseStatusNull'],
+  props: [
+    'errorMessage',
+    'successMessage',
+    'success',
+    'setApiResponseStatusNull',
+  ],
   setup(props) {
     const closeAlert = () => {
-      props.setApiResponseStatusNull()
-    }
+      props.setApiResponseStatusNull();
+    };
     return {
       closeAlert,
-    }
-  }
+    };
+  },
 };
 </script>
-

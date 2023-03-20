@@ -62,7 +62,7 @@ export const useUnreadStore = () => {
         try {
           this.unreadMessages = await getUnreadMessages();
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.error);
         }
       },
       addNewMessage(message, conversation_type, conversation_id) {
@@ -137,9 +137,9 @@ export const useUnreadStore = () => {
         }
         return null;
       },
-      handleError (error) {
-        errorHandler(error.response.data.message);  
-      }
+      handleError(error) {
+        errorHandler(error.response.data.message);
+      },
     },
   });
 

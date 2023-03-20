@@ -25,7 +25,10 @@ const createMessage = (data, messageStore, threadStore) => {
         element => element.id === data.id
       );
 
-      if (findThreadMessage === undefined && threadMessage.id === data.parent_message_id) {
+      if (
+        findThreadMessage === undefined &&
+        threadMessage.id === data.parent_message_id
+      ) {
         threadMessage.replies.push(data);
       }
     } else {
@@ -46,7 +49,13 @@ const findMessageIndex = (messages, data) =>
 const findParentMessage = (messages, data) =>
   messages.find(message => message.id === data.parent_message_id);
 
-const deleteMessage = (data, messageStore, threadStore, pinStore, rightPaneStore) => {
+const deleteMessage = (
+  data,
+  messageStore,
+  threadStore,
+  pinStore,
+  rightPaneStore
+) => {
   try {
     const messages = messageStore.getMessages;
     if (data.parent_message_id) {

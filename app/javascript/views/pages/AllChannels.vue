@@ -143,7 +143,7 @@ export default {
 
     const totalResults = computed(() => {
       return `${pageInfo.value.count ? pageInfo.value.count : 0}  ${
-        pageInfo.value.count === 1 ? CONSTANTS.RESULT : CONSTANTS.RESULTS
+        CONSTANTS.RESULTS
       }`;
     });
 

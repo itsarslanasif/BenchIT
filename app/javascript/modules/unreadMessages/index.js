@@ -4,7 +4,7 @@ export const unreadMessagesCount = (unreadMessages, conversation_type) => {
   }
 };
 
-export const unreadMessagesLength = (unreadMessage) => {
+export const unreadMessagesLength = unreadMessage => {
   if (unreadMessage.messages.length > unreadMessage.total_unread_messages) {
     return unreadMessage.messages.length;
   } else {

@@ -110,7 +110,7 @@ export default {
       currentProfile,
       profileStore,
       isConnected,
-      connectionStore
+      connectionStore,
     };
   },
   watch: {
@@ -196,7 +196,7 @@ export default {
           });
           this.newMessageSent = true;
         } else {
-          this.connectionStore.unsendMessagesQueue(formData)
+          this.connectionStore.unsendMessagesQueue(formData);
         }
       } else {
         return false;

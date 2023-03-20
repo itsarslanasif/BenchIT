@@ -18,25 +18,23 @@
             {{ channelName }}
           </span>
         </div>
-        <div
-          class="flex flex-start items-center text-xs font-thin gap-x-2 px-3 w-flexible-3xl truncate"
-        >
+        <div class="flex flex-start items-center font-thin gap-x-2 px-3">
           <div v-if="isChannelParticipant">
-            <span class="text-success font-semibold text-xs flex items-center">
+            <span class="text-green-500 text-sm flex items-center">
               <i class="fas fa-check mr-0"></i> {{ $t('actions.joined') }}
             </span>
           </div>
-          <p>
-            {{ channelMemberCount }}
-          </p>
-          <p>
+          <div>
+            {{ channelParticipants.length }} {{ $t('channeldetail.members') }}
+          </div>
+          <div>
             {{ channelDescription }}
-          </p>
+          </div>
         </div>
       </div>
-      <div class="flex items-center gap-x-1 px-2">
+      <div class="flex items-center gap-x-2 px-3">
         <div v-if="hovered === channelId" @click="handleView">
-          <n-button aria-setsize="small">{{ $t('actions.view') }}</n-button>
+          <n-button>{{ $t('actions.view') }}</n-button>
         </div>
         <div
           v-if="hovered === channelId && isChannelParticipant"
@@ -45,7 +43,7 @@
           <n-button type="error">{{ $t('actions.leave') }}</n-button>
         </div>
         <div
-          @click="handleJoin"
+          @click="handleJoin()"
           v-if="hovered === channelId && !isChannelParticipant"
         >
           <n-button type="success">{{ $t('actions.join') }}</n-button>

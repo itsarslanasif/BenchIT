@@ -6,12 +6,12 @@ export const useSearchStore = () => {
   const searchStore = defineStore('useSearchStore', {
     state: () => ({
       searches: {},
-      searched: ''
+      searched: '',
     }),
 
     getters: {
       getSearches: state => state.searches,
-      getSearch: state => state.searched
+      getSearch: state => state.searched,
     },
 
     actions: {
@@ -19,22 +19,22 @@ export const useSearchStore = () => {
         try {
           this.searches = await getSearching(query, filter);
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
       clearSearches() {
-        if (!this.searched){
-          this.searches = {}
+        if (!this.searched) {
+          this.searches = {};
         }
       },
       setSearch(search) {
-        this.searched = search
+        this.searched = search;
       },
       handleError(error) {
-        errorHandler(error.response.data.message);  
-      }
+        errorHandler(error.response.data.message);
+      },
     },
   });
-  
+
   return searchStore();
 };

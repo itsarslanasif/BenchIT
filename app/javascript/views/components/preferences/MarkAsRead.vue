@@ -32,15 +32,11 @@
         <span class="bg-black-700 text-white px-2 py-1 rounded mr-1">
           Shift
         </span>
-        <span class="bg-black-700 text-white px-2 py-1 rounded">
-          Esc
-        </span>
+        <span class="bg-black-700 text-white px-2 py-1 rounded"> Esc </span>
       </li>
       <li class="my-2">
         {{ markAsReadSetting.keyboardShortcuts.markAsUnread }}
-        <span class="bg-black-700 text-white px-2 py-1 rounded">
-          Alt
-        </span>
+        <span class="bg-black-700 text-white px-2 py-1 rounded"> Alt </span>
         {{ markAsReadSetting.keyboardShortcuts.clickMessage }}
       </li>
     </div>
@@ -51,9 +47,7 @@
           Ctrl
         </span>
         +
-        <span class="bg-black-700 text-white px-2 py-1 rounded mr-1">
-          /
-        </span>
+        <span class="bg-black-700 text-white px-2 py-1 rounded mr-1"> / </span>
       </p>
     </div>
   </div>

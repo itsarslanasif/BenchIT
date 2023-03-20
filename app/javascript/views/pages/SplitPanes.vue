@@ -2,7 +2,7 @@
   <n-message-provider placement="top-right">
     <div class="relative bg-primary text-sm h-screen grid grid-container">
       <alert v-if="downloadsStore.downloadAlert" />
-      <switching-workspace-loader 
+      <switching-workspace-loader
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
       <div class="header">

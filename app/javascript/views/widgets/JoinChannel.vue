@@ -8,7 +8,10 @@
           <font-awesome-icon icon="fa-hashtag" class="text-sm" />
           {{ selectedChat.name }}
         </div>
-        <div class="text-sm font-normal text-black-500" v-if="selectedChat.description">
+        <div
+          class="text-sm font-normal text-black-500"
+          v-if="selectedChat.description"
+        >
           {{ selectedChat.description }}
         </div>
       </div>

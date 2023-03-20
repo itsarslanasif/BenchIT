@@ -27,7 +27,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       try {
         this.directMessageUsers = await getDirectMessagesList(workspace_id);
       } catch (e) {
-        this.handleError(e.response.data.message)
+        this.handleError(e.response.data.message);
       }
     },
     updateProfileStatus(profile) {
@@ -95,7 +95,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       this.directMessageUsers.unshift(myProfile);
     },
     handleError(error) {
-      errorHandler(error) 
-    }
+      errorHandler(error);
+    },
   },
 });

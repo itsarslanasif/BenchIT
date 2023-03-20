@@ -42,7 +42,7 @@ export const useChannelStore = () => {
           this.channels = [...newChannels.bench_channels];
           this.pageInfo = newChannels.page_information;
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
 
@@ -52,7 +52,7 @@ export const useChannelStore = () => {
           this.sortChannelsList();
           this.fetchStarredChannels();
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
 
@@ -85,7 +85,7 @@ export const useChannelStore = () => {
           this.joinedChannels.push(joinedChannel);
           this.sortChannelsList();
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
 
@@ -106,19 +106,16 @@ export const useChannelStore = () => {
           );
           return response;
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
 
       async addMembersToChannel(channelId, selectedValues) {
         try {
-          let response = await addMemberstoChannel(
-            channelId,
-            selectedValues
-          );
-          return response
+          let response = await addMemberstoChannel(channelId, selectedValues);
+          return response;
         } catch (e) {
-          this.handleError(e.response.data.message)
+          this.handleError(e.response.data.message);
         }
       },
 
@@ -195,8 +192,8 @@ export const useChannelStore = () => {
       },
 
       handleError(error) {
-        errorHandler(error) 
-      }
+        errorHandler(error);
+      },
     },
   });
   const store = channelStore();

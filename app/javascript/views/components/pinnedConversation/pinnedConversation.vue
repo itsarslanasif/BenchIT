@@ -24,10 +24,7 @@ export default {
     const conversation_type = getIndexByParams(1);
     const conversation_id = getIndexByParams(2);
 
-    pinnedConversationStore.index(
-      conversation_type,
-      conversation_id
-    );
+    pinnedConversationStore.index(conversation_type, conversation_id);
 
     return { pinnedConversationStore };
   },

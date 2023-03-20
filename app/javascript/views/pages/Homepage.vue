@@ -38,11 +38,11 @@ export default {
   },
   mounted() {
     window.addEventListener('online', () => {
-      this.connectionStore.toggleConnection(true)
-    })
+      this.connectionStore.toggleConnection(true);
+    });
     window.addEventListener('offline', () => {
-      this.connectionStore.toggleConnection(false)
-    })
+      this.connectionStore.toggleConnection(false);
+    });
     this.Cable = createNotificationCable({
       channel: 'NotificationChannel',
       workspace_id: this.currentWorkspace.id,
@@ -68,7 +68,7 @@ export default {
       unreadMessageStore,
       currentWorkspace,
       currentProfile,
-      connectionStore
+      connectionStore,
     };
   },
   beforeUnmount() {
