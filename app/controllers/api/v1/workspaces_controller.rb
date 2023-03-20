@@ -34,6 +34,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def switch_workspace
     session[:current_workspace_id] = @workspace.id
+    Current.workspace = @workspace
   end
 
   private
@@ -43,18 +44,9 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def find_workspace
-    ActiveRecord::Base.establish_connection(
-      adapter: 'postgresql',
-      encoding: 'unicode',
-      pool: ENV.fetch('RAILS_MAX_THREADS', 5),
-      username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
-      password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
-      host: ENV.fetch('POSTGRES_HOST', 'localhost'),
-      database: Workspace.find(params[:id]).company_name.downcase
-    )
-
-    session[:current_workspace_id] = Workspace.first.id
-    @workspace = Workspace.first
+    switch_database
+    establish_connection_to_workspace_db(Workspace.find(params[:id]).company_name.downcase)
+    @workspace = Workspace.find(params[:id])
   end
 
   def find_profile
