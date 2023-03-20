@@ -90,6 +90,20 @@ export default {
       id
     );
     unreadStore.markedChatAsRead(conversation_type, id);
+
+    const saveDraftMessage = () => {
+      if (editor.content)
+        {
+          draftAndSentMessageStore.createDraftMessage(editor.content, conversationId)
+        }
+    }
+
+    const insertDraftInEditor = () => {
+      const { draftMessage } = messageStore.selectedChat
+      if(draftMessage) {
+        editor.commands.insertContent(draftMessage)
+      }
+    }
     return {
       messages,
       currMessage,
@@ -110,7 +124,9 @@ export default {
       currentProfile,
       profileStore,
       isConnected,
-      connectionStore
+      connectionStore,
+      saveDraftMessage,
+      insertDraftInEditor,
     };
   },
   watch: {
@@ -130,14 +146,17 @@ export default {
     this.Cable.on('chat', data => {
       cableActions(data.message);
     });
+    insertDraftInEditor()
   },
   beforeUnmount() {
+    saveDraftMessage()
     this.chat = null;
     this.messages = [];
     this.currMessage = [];
     this.currentPage = 1;
     unsubscribe();
     this.Cable = null;
+
   },
   methods: {
     getFileFromBlob(blob, fileName) {

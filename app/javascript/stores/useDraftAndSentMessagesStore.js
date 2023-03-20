@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { getSentMessages } from '../api/recentlySent/recentlySentMessages';
+import { getSentMessages, fetchDraftMessages } from '../api/recentlySent/recentlySentMessages';
 import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useDraftAndSentMessagesStore = () => {
@@ -15,7 +15,17 @@ export const useDraftAndSentMessagesStore = () => {
       getDraftMessages: state => state.draftMessages,
     },
     actions: {
-      loadDraftMessages() {},
+      async loadDraftMessages() {
+        try {
+          let newDraftMessages = await fetchDraftMessages(this.currentPage);
+          this.draftMessages = [...this.draftMessages, ...newDraftMessages];
+          this.sortMessages();
+          this.currentPage += 1;
+          this.maxPages = newDraftMessages.page_information.pages;
+        } catch (e) {
+          errorHandler(e.response.data.message);
+        }
+      },
       async loadSentMessages() {
         try {
           let newSentMessages = await getSentMessages(this.currentPage);
