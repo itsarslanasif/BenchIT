@@ -59,7 +59,7 @@ export default {
       id: null,
       currentUser: {},
       isMember: true,
-    };
+    }
   },
   setup() {
     function getIndexByParams(param) {
