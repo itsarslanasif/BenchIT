@@ -10,7 +10,8 @@
       />
     </div>
     <div class="px-3 editor-style" v-if="isMember">
-      <TextEditorVue
+      <TextEditor
+        ref="textEditor"
         :sendMessage="sendMessage"
         :editMessage="false"
         :isThread="false"
@@ -28,7 +29,7 @@ import JoinChannel from '../widgets/JoinChannel.vue';
 import { NInput, NSpace } from 'naive-ui';
 import { Remarkable } from 'remarkable';
 import ChatBody from '../components/chats/ChatBody.vue';
-import TextEditorVue from '../components/editor/TextEditor.vue';
+import TextEditor from '../components/editor/TextEditor.vue';
 import { createCable, unsubscribe } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
@@ -40,6 +41,8 @@ import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useConnectionStore } from '../../stores/useConnectionStore';
+import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore'
+import { ref } from 'vue';
 
 export default {
   name: 'Chat',
@@ -48,7 +51,7 @@ export default {
     ChatBody,
     NInput,
     NSpace,
-    TextEditorVue,
+    TextEditor,
     JoinChannel,
   },
   data() {
@@ -65,6 +68,7 @@ export default {
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
     }
+    const textEditor = ref(null)
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
     const profileStore = useProfileStore();
@@ -74,6 +78,7 @@ export default {
     const currentProfileStore = useCurrentProfileStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore()
     const {
       messages,
       currMessage,
@@ -92,9 +97,10 @@ export default {
     unreadStore.markedChatAsRead(conversation_type, id);
 
     const saveDraftMessage = () => {
-      if (editor.content)
+      debugger
+      if (textEditor.getContent())
         {
-          draftAndSentMessageStore.createDraftMessage(editor.content, conversationId)
+          draftAndSentMessagesStore.createDraftMessage(textEditor.getContent(), conversationId)
         }
     }
 
@@ -125,6 +131,7 @@ export default {
       profileStore,
       isConnected,
       connectionStore,
+      textEditor,
       saveDraftMessage,
       insertDraftInEditor,
     };
@@ -146,17 +153,16 @@ export default {
     this.Cable.on('chat', data => {
       cableActions(data.message);
     });
-    insertDraftInEditor()
+    this.insertDraftInEditor()
   },
   beforeUnmount() {
-    saveDraftMessage()
+    this.saveDraftMessage()
     this.chat = null;
     this.messages = [];
     this.currMessage = [];
     this.currentPage = 1;
     unsubscribe();
     this.Cable = null;
-
   },
   methods: {
     getFileFromBlob(blob, fileName) {
