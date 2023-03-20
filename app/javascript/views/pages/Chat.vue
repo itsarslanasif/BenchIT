@@ -1,5 +1,8 @@
 <template>
-  <div v-if="conversation_type && id" class="flex flex-col h-full justify-between">
+  <div
+    v-if="conversation_type && id"
+    class="flex flex-col h-full justify-between"
+  >
     <div v-if="chat">
       <ChatHeader />
     </div>

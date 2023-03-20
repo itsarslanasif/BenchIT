@@ -57,7 +57,9 @@
           class="flex float-left text-md mx-4 mt-2 break-words text-black-800"
         >
         </span>
-        <span class="flex float-left items-center text-md mx-4 break-words text-black-800">
+        <span
+          class="flex float-left items-center text-md mx-4 break-words text-black-800"
+        >
           <span
             v-if="userProfileStore.userProfile.is_active"
             class="bg-green-700 border-white border rounded-full h-3 w-3 mx-1"

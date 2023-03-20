@@ -127,7 +127,7 @@ export default {
 
     onMounted(() => {
       window.addEventListener('resize', handleResize);
-      handleResize()
+      handleResize();
     });
 
     onUnmounted(() => {
@@ -136,10 +136,10 @@ export default {
 
     const handleResize = () => {
       const height = window.innerHeight - 44;
-      const splitpanes = document.getElementsByClassName("splitpanes");
+      const splitpanes = document.getElementsByClassName('splitpanes');
       splitpanes[0].style.height = `${height}px`;
-    }
-    window.$message = useMessage()
+    };
+    window.$message = useMessage();
 
     return {
       screenStore,
@@ -193,15 +193,14 @@ export default {
   grid-auto-rows: 44px auto;
   grid-template-columns: 1fr 2fr;
   grid-template-areas:
-  "header header "
-  "main main "
-  ;
+    'header header '
+    'main main ';
 }
 .header {
   grid-area: header;
 }
 .main {
-  grid-area: main
+  grid-area: main;
 }
 .sidebar {
   grid-area: sidebar;

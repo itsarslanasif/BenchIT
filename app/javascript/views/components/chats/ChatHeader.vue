@@ -11,9 +11,7 @@
   <div v-else-if="conversation_type === $t('conversations.profiles')">
     <UserChatInfo />
   </div>
-  <div
-    class="flex items-center h-8 justify-between px-1 mt-1 shadow-sm"
-  >
+  <div class="flex items-center h-8 justify-between px-1 mt-1 shadow-sm">
     <div
       class="flex overflow-y-hidden text-ellipsis items-center cursor-pointer"
     >
@@ -120,9 +118,11 @@ export default {
   color: rgb(99, 98, 98);
   font-size: small;
 }
+
 .custom-border {
   border-bottom: 0.5px solid rgba(19, 19, 19, 0.139);
 }
+
 .loading {
   width: 80%;
   height: 50%;
@@ -131,6 +131,7 @@ export default {
   align-items: center;
   position: fixed;
 }
+
 .hover-trigger .hover-target {
   display: none;
 }
