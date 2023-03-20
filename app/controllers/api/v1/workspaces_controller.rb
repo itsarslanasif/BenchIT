@@ -11,14 +11,13 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def create
-    unless ActiveRecord::Base.connection.execute("SELECT current_database()").getvalue(0,0).eql?('benchit_dev')
-      switch_database
-    end
+    switch_database
     @workspace = Workspace.new(workspace_params)
 
     ActiveRecord::Base.transaction do
       @workspace.save!
       create_profile
+      setup_database(Current.user, @profile, @workspace, @workspace.company_name.downcase)
     end
 
     Current.workspace = @workspace
@@ -74,33 +73,9 @@ class Api::V1::WorkspacesController < Api::ApiController
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
-  # def create_db
-  #   create_database(@workspace.company_name)
-  #   establish_connection_to_workspace_db(@workspace.company_name.downcase)
-  #   ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
-  #   Workspace.create!(id: @workspace.id, **workspace_params)
-  #   user = current_user.dup
-  #   user.id = current_user.id
-  #   user.save!
-  # end
-
   def create_profile
     user = Current.user
-    @profile = Current.user.profiles.create!(display_name: user.name, username: user.name, pronounce_name: user.name, workspace_id: @workspace.id, role: :workspace_owner)
-    create_database(@workspace.company_name)
-    establish_connection_to_workspace_db(@workspace.company_name.downcase)
-    ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
-    new_user = user.dup
-    new_user.id = user.id
-    new_user.save!
-    new_workspace = @workspace.dup
-    new_workspace.id = @workspace.id
-    new_workspace.save!
-    Current.profile = @profile
-    Current.workspace = @workspace
-    Current.user = new_user
-    new_profile = @profile.dup
-    new_profile.id = @profile.id
-    new_profile.save!
+    @profile = Profile.create!(display_name: user.name, username: user.name, pronounce_name: user.name, workspace_id: @workspace.id,
+                               role: 0, user_id: user.id)
   end
 end

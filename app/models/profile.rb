@@ -13,7 +13,7 @@ class Profile < ApplicationRecord
   end
 
   after_commit :attach_avatar, :create_preference, on: %i[create]
-  after_commit :broadcast_profile
+  after_commit :broadcast_profile, except: [:create]
 
   belongs_to :user
   belongs_to :workspace
@@ -90,7 +90,7 @@ class Profile < ApplicationRecord
   end
 
   def broadcast_profile
-    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call unless workspace.profile_ids.blank?
+    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call
   end
 
   def profile_content
