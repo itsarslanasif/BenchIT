@@ -2,7 +2,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
-  skip_before_action :set_workspace_in_session, only: %i[index switch_workspace]
+  skip_before_action :set_workspace_in_session, only: %i[index create switch_workspace]
   skip_before_action :set_profile, only: %i[index switch_workspace]
 
   def index
@@ -11,8 +11,10 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def create
+    switch_database
     @workspace = Workspace.new(workspace_params)
     @workspace.save!
+    create_db
     render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
   end
 
@@ -61,5 +63,15 @@ class Api::V1::WorkspacesController < Api::ApiController
     return if @user.profiles.find_by(workspace_id: @workspace).blank?
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
+  end
+
+  def create_db
+    create_database(@workspace.company_name)
+    establish_connection_to_workspace_db(@workspace.company_name.downcase)
+    ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
+    Workspace.create!(id: @workspace.id, **workspace_params)
+    user = current_user.dup
+    user.id = current_user.id
+    user.save!
   end
 end
