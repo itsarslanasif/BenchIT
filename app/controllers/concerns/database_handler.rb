@@ -10,7 +10,7 @@ module DatabaseHandler
 
   def create_database(name)
     ActiveRecord::Base.connection.execute('COMMIT')
-    ActiveRecord::Base.connection.execute( ActiveRecord::Base.sanitize_sql("CREATE DATABASE #{name}"))
+    ActiveRecord::Base.connection.execute(ActiveRecord::Base.sanitize_sql("CREATE DATABASE #{name}"))
     ActiveRecord::Base.connection.execute('BEGIN')
   end
 
