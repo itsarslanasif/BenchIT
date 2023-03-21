@@ -2,12 +2,12 @@ module UuidGenerator
   extend ActiveSupport::Concern
 
   included do
-    before_create :decide_id
+    before_create :decide_to_generate_id
   end
 
   private
 
-  def decide_id
+  def decide_to_generate_id
     return unless id.nil?
 
     set_id

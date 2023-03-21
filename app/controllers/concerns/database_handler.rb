@@ -33,8 +33,8 @@ module DatabaseHandler
   end
 
   def switch_database
-    ActiveRecord::Base.establish_connection(:development) unless ActiveRecord::Base.connection.execute('SELECT current_database()').getvalue(0,
-                                                                                                                                             0).eql?('benchit_dev')
+    current_db = ActiveRecord::Base.connection.execute('SELECT current_database()').getvalue(0, 0).eql?('benchit_dev')
+    ActiveRecord::Base.establish_connection(:development) unless current_db
   end
 
   def generate_data(user, profile, workspace)
