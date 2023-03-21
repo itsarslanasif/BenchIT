@@ -208,7 +208,7 @@
             :class="editorContent ? 'bg-success' : 'bg-white'"
           >
             <button
-              @click="sendMessagePayload($event, true)"
+              @click="sendMessagePayload({$event, buttonClicked: true})"
               class="px-2 py-1 rounded focus:outline-none"
               :class="
                 editorContent
@@ -245,7 +245,7 @@
 </template>
 
 <script>
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { markdownToBlocks } from '@tryfabric/mack';
 import TurndownService from 'turndown';
 import Attachments from '../attachments/Attachments.vue';
@@ -274,6 +274,8 @@ import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import { useConnectionStore } from '../../../stores/useConnectionStore.js';
+import { useDraftAndSentMessagesStore } from '../../../stores/useDraftAndSentMessagesStore';
+import { isHtmlOnly } from '../../utils/htmlFunctions'
 
 export default {
   data() {
@@ -287,6 +289,7 @@ export default {
     }
   },
   beforeUnmount() {
+    this.saveDraftMessage()
     this.editor.destroy();
   },
   components: {
@@ -389,6 +392,7 @@ export default {
     const { isConnected } = storeToRefs(connectionStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore
     const { searches } = storeToRefs(searchStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
@@ -398,7 +402,6 @@ export default {
     const audioFiles = ref([]);
     const files = ref([]);
     const videoFiles = ref([]);
-    const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
@@ -458,9 +461,10 @@ export default {
       });
     };
 
-    const sendMessagePayload = async (event, buttonClicked) => {
+    const sendMessagePayload = async ({$event, buttonClicked=false, isDraft=false}) => {
+      console.log(event + ' ' + buttonClicked + ' ' + isDraft)
       if (
-        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        (($event.keyCode === 13 && !$event.shiftKey) || buttonClicked) &&
         !props.editMessage
       ) {
         const mrkdwn = [];
@@ -530,7 +534,7 @@ export default {
         });
         newMessage.value = '';
       } else {
-        sendMessagePayload(event);
+        sendMessagePayload({event});
       }
     };
     const handleCustomButton = () => {
@@ -656,6 +660,23 @@ export default {
       scheduleModalFlag.value = !scheduleModalFlag.value;
     };
 
+
+    const saveDraftMessage = () => {
+      const editorContent = editor.value.getHTML().toString();
+      if (!isHtmlOnly(editorContent))
+        {
+          sendMessagePayload({isDraft: true})
+          // draftAndSentMessagesStore.createDraftMessage(editorContent, conversationId)
+        }
+    }
+
+    const insertDraftInEditor = () => {
+      const { draftMessage } = messageStore.selectedChat
+      if(draftMessage) {
+        editor.commands.insertContent(draftMessage)
+      }
+    }
+
     return {
       newMessage,
       readerFile,
@@ -695,6 +716,8 @@ export default {
       addReaction,
       toggleModal,
       showTopBar,
+      saveDraftMessage,
+      insertDraftInEditor,
     };
   },
 };

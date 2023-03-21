@@ -27,3 +27,21 @@ export const fetchDraftMessages = async page => {
     });
 };
 
+export const postDraftMessage = async (
+  messageContent,
+  conversationID,
+  parentMessageId
+) => {
+  return await axios.post(
+    `/v1/draft_messages`,
+    {
+      headers: getHeaders(),
+    },
+    {
+      content: messageContent,
+      bench_conversation_id: conversationID,
+      conversation_message_id: parentMessageId,
+      message_attachments: [],
+    }
+  );
+};

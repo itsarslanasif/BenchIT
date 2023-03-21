@@ -42,6 +42,7 @@ import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useConnectionStore } from '../../stores/useConnectionStore';
 import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore'
+import { isHtmlOnly } from '../utils/htmlFunctions/index'
 import { ref } from 'vue';
 
 export default {
@@ -96,20 +97,6 @@ export default {
     );
     unreadStore.markedChatAsRead(conversation_type, id);
 
-    const saveDraftMessage = () => {
-      debugger
-      if (textEditor.getContent())
-        {
-          draftAndSentMessagesStore.createDraftMessage(textEditor.getContent(), conversationId)
-        }
-    }
-
-    const insertDraftInEditor = () => {
-      const { draftMessage } = messageStore.selectedChat
-      if(draftMessage) {
-        editor.commands.insertContent(draftMessage)
-      }
-    }
     return {
       messages,
       currMessage,
@@ -132,8 +119,6 @@ export default {
       isConnected,
       connectionStore,
       textEditor,
-      saveDraftMessage,
-      insertDraftInEditor,
     };
   },
   watch: {
@@ -153,10 +138,9 @@ export default {
     this.Cable.on('chat', data => {
       cableActions(data.message);
     });
-    this.insertDraftInEditor()
   },
   beforeUnmount() {
-    this.saveDraftMessage()
+    // this.saveDraftMessage()
     this.chat = null;
     this.messages = [];
     this.currMessage = [];
