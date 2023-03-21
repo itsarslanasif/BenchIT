@@ -17,8 +17,9 @@ class Api::V1::WorkspacesController < Api::ApiController
     ActiveRecord::Base.transaction do
       @workspace.save!
       create_profile
-      setup_database(Current.user, @profile, @workspace, @workspace.company_name.downcase)
     end
+
+    setup_database(Current.user, @profile, @workspace, @workspace.company_name.downcase)
 
     Current.workspace = @workspace
     Current.profile = @profile
