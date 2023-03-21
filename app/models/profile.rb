@@ -12,6 +12,8 @@ class Profile < ApplicationRecord
     }
   end
 
+  before_create :set_names
+
   after_commit :attach_avatar, :create_preference, on: %i[create]
   after_commit :broadcast_profile, except: [:create]
 
@@ -90,7 +92,7 @@ class Profile < ApplicationRecord
   end
 
   def broadcast_profile
-    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call
+    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call unless Current.profile.nil?
   end
 
   def profile_content
@@ -118,5 +120,10 @@ class Profile < ApplicationRecord
 
   def get_favourite_id(favourable_id, favourable_type)
     Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
+  end
+
+  def set_names
+    self.pronounce_name = user_name if pronounce_name.nil?
+    self.display_name = user_name if display_name.nil?
   end
 end

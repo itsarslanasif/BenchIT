@@ -76,7 +76,6 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def create_profile
     user = Current.user
-    @profile = Profile.create!(display_name: user.name, username: user.name, pronounce_name: user.name, workspace_id: @workspace.id,
-                               role: 0, user_id: user.id)
+    @profile = Profile.create!(username: user.name, workspace_id: @workspace.id, role: 0, user_id: user.id)
   end
 end
