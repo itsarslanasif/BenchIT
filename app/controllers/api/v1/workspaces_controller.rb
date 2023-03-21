@@ -6,7 +6,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   skip_before_action :set_profile, only: %i[index create switch_workspace]
 
   def index
-    ActiveRecord::Base.establish_connection(:development)
+    switch_database
     @workspaces = current_user.workspaces
   end
 
