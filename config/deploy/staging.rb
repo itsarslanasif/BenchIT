@@ -61,7 +61,7 @@
 #   }
 
 server '65.1.194.133', user: 'deployer', roles: %w[app db web]
-set :branch, 'CI/CD_implementation_git'
+set :branch, 'main'
 set :deploy_to, '/home/deployer/app/benchit'
 set :stage, :development
 set :rails_env, 'development'
