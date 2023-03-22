@@ -20,7 +20,7 @@ export const fetchDraftMessages = async page => {
       params: {
         page,
       },
-      headers: getHeaders()
+      headers: getHeaders(),
     })
     .then(response => {
       return response.data;

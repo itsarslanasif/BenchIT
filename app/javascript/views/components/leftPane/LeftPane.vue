@@ -47,7 +47,6 @@
         :on-clickoutside="toggleShow"
       >
         <p />
-
       </n-dropdown>
     </div>
     <hr class="text-slate-400" />
@@ -105,15 +104,15 @@ export default {
   setup() {
     const router = useRouter();
     let showMore = ref(false);
-    const draftAndSentMessagesStore = useDraftAndSentMessagesStore()
-    const { draftMessages } = draftAndSentMessagesStore
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
+    const { draftMessages } = draftAndSentMessagesStore;
 
-    const totalDraftMessages = computed(()=>{
-      return draftMessages.length
-    })
-    const draftsExist = computed(()=>{
-      draftMessages.length >= 1
-    })
+    const totalDraftMessages = computed(() => {
+      return draftMessages.length;
+    });
+    const draftsExist = computed(() => {
+      draftMessages.length >= 1;
+    });
 
     const generateKey = label => {
       return label.toLowerCase().replace(/ /g, '-');

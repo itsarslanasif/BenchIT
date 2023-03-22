@@ -1,5 +1,9 @@
 import { defineStore } from 'pinia';
-import { getSentMessages, fetchDraftMessages, postDraftMessage } from '../api/recentlySent/recentlySentMessages';
+import {
+  getSentMessages,
+  fetchDraftMessages,
+  postDraftMessage,
+} from '../api/recentlySent/recentlySentMessages';
 import { errorHandler } from '../views/widgets/messageProvider';
 
 export const useDraftAndSentMessagesStore = () => {
@@ -18,7 +22,10 @@ export const useDraftAndSentMessagesStore = () => {
       async loadDraftMessages() {
         try {
           let newDraftMessages = await fetchDraftMessages(this.currentPage);
-          this.draftMessages = [...this.draftMessages, ...newDraftMessages.draft_messages ];
+          this.draftMessages = [
+            ...this.draftMessages,
+            ...newDraftMessages.draft_messages,
+          ];
           this.sortMessages();
           this.currentPage += 1;
           this.maxPages = newDraftMessages.page_information.pages;
@@ -42,7 +49,7 @@ export const useDraftAndSentMessagesStore = () => {
       },
       async createDraftMessage(messageContent) {
         try {
-          const response = await postDraftMessage(messageContent)
+          const response = await postDraftMessage(messageContent);
         } catch (e) {
           errorHandler(e.response.data.message);
         }

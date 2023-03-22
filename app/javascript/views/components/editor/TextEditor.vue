@@ -275,7 +275,7 @@ import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import { useConnectionStore } from '../../../stores/useConnectionStore.js';
 import { useDraftAndSentMessagesStore } from '../../../stores/useDraftAndSentMessagesStore';
-import { isHtmlOnly } from '../../utils/htmlFunctions'
+import { isHtmlOnly } from '../../utils/htmlFunctions';
 
 export default {
   data() {
@@ -289,7 +289,7 @@ export default {
     }
   },
   beforeUnmount() {
-    this.saveDraftMessage()
+    this.saveDraftMessage();
     this.editor.destroy();
   },
   components: {
@@ -392,7 +392,7 @@ export default {
     const { isConnected } = storeToRefs(connectionStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
-    const draftAndSentMessagesStore = useDraftAndSentMessagesStore
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore;
     const { searches } = storeToRefs(searchStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
@@ -461,9 +461,15 @@ export default {
       });
     };
 
-    const sendMessagePayload = async (event, buttonClicked, isDraft=false) => {
+    const sendMessagePayload = async (
+      event,
+      buttonClicked,
+      isDraft = false
+    ) => {
       if (
-        ((event?.keyCode === 13 && !event?.shiftKey) || buttonClicked || isDraft) &&
+        ((event?.keyCode === 13 && !event?.shiftKey) ||
+          buttonClicked ||
+          isDraft) &&
         !props.editMessage
       ) {
         const mrkdwn = [];
@@ -492,16 +498,12 @@ export default {
             return await makeBlocks(line);
           })
         );
-        debugger
+        debugger;
 
         if (result[0] != null) {
           const output = formatBlockContent(result);
           props.fromThreads
-            ? props.sendMessage(
-                { blocks: output },
-                files.value,
-                isDraft
-              )
+            ? props.sendMessage({ blocks: output }, files.value, isDraft)
             : props.sendMessage(
                 { blocks: output },
                 files.value,
@@ -659,21 +661,19 @@ export default {
       scheduleModalFlag.value = !scheduleModalFlag.value;
     };
 
-
     const saveDraftMessage = () => {
       const editorContent = editor.value.getHTML().toString();
-      if (!isHtmlOnly(editorContent))
-        {
-          sendMessagePayload(undefined, false, true)
-        }
-    }
+      if (!isHtmlOnly(editorContent)) {
+        sendMessagePayload(undefined, false, true);
+      }
+    };
 
     const insertDraftInEditor = () => {
-      const { draftMessage } = messageStore.selectedChat
-      if(draftMessage) {
-        editor.commands.insertContent(draftMessage)
+      const { draftMessage } = messageStore.selectedChat;
+      if (draftMessage) {
+        editor.commands.insertContent(draftMessage);
       }
-    }
+    };
 
     return {
       newMessage,

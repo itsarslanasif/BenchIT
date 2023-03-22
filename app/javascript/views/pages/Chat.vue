@@ -41,7 +41,7 @@ import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useConnectionStore } from '../../stores/useConnectionStore';
-import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore'
+import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore';
 import { ref } from 'vue';
 import { clippingParents } from '@popperjs/core';
 
@@ -63,13 +63,13 @@ export default {
       id: null,
       currentUser: {},
       isMember: true,
-    }
+    };
   },
   setup() {
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
     }
-    const textEditor = ref(null)
+    const textEditor = ref(null);
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
     const profileStore = useProfileStore();
@@ -77,7 +77,7 @@ export default {
     const connectionStore = useConnectionStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
-    const draftAndSentMessagesStore = useDraftAndSentMessagesStore()
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
     const {
@@ -96,7 +96,7 @@ export default {
       id
     );
     unreadStore.markedChatAsRead(conversation_type, id);
-    const { selectedChat } = storeToRefs(messageStore)
+    const { selectedChat } = storeToRefs(messageStore);
     return {
       messages,
       currMessage,
@@ -120,7 +120,7 @@ export default {
       connectionStore,
       textEditor,
       selectedChat,
-      draftAndSentMessagesStore
+      draftAndSentMessagesStore,
     };
   },
   watch: {
@@ -208,7 +208,7 @@ export default {
             });
             this.newMessageSent = true;
           } else {
-             this.draftAndSentMessagesStore.createDraftMessage(formData)
+            this.draftAndSentMessagesStore.createDraftMessage(formData);
           }
         } else {
           this.connectionStore.unsendMessagesQueue(formData);

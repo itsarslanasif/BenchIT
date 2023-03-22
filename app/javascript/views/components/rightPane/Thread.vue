@@ -70,7 +70,7 @@ export default {
     const profileStore = useProfileStore();
     const messagesStore = useMessageStore();
     const { currentUser } = storeToRefs(currentUserStore);
-    const { selectedChat } = storeToRefs(messagesStore)
+    const { selectedChat } = storeToRefs(messagesStore);
     return { threadStore, currentUser, profileStore, selectedChat };
   },
 
@@ -146,10 +146,10 @@ export default {
           formData.append('message_attachments[]', file, filename);
         });
         try {
-          if(!isDraft) {
+          if (!isDraft) {
             conversation(formData);
           } else {
-            this.draftAndSentMessagesStore.createDraftMessage(formData)
+            this.draftAndSentMessagesStore.createDraftMessage(formData);
           }
         } catch (e) {
           errorHandler(e.response.data.message);
