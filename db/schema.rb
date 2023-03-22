@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_22_110754) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -67,15 +67,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   end
 
   create_table "bookmarks", id: :serial, force: :cascade do |t|
-    t.string "profile_id", null: false
-    t.string "bookmarkable_type", null: false
-    t.string "bookmarkable_id", null: false
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_bookmarkable"
-    t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
+    t.string "bench_conversation_id", null: false
+    t.index ["bench_conversation_id"], name: "index_bookmarks_on_bench_conversation_id"
   end
 
   create_table "channel_participants", id: :serial, force: :cascade do |t|
@@ -327,7 +324,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   add_foreign_key "bench_channels", "profiles", column: "creator_id"
   add_foreign_key "bench_channels", "workspaces"
   add_foreign_key "bench_conversations", "profiles", column: "sender_id"
-  add_foreign_key "bookmarks", "profiles"
+  add_foreign_key "bookmarks", "bench_conversations"
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"

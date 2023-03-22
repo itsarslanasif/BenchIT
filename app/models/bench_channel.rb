@@ -5,7 +5,6 @@ class BenchChannel < ApplicationRecord
   has_many :profiles, through: :channel_participants
   has_one :bench_conversation, as: :conversationable, dependent: :destroy
   has_one :favourite, as: :favourable, dependent: :destroy
-  has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :mentions, as: :mentionable, dependent: :destroy
 
   before_validation :set_profile_and_workspace
