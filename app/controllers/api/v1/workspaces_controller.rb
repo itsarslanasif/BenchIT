@@ -6,7 +6,6 @@ class Api::V1::WorkspacesController < Api::ApiController
   skip_before_action :set_profile, only: %i[index create switch_workspace]
 
   def index
-    switch_database
     @workspaces = current_user.workspaces
   end
 
@@ -16,13 +15,11 @@ class Api::V1::WorkspacesController < Api::ApiController
 
     ActiveRecord::Base.transaction do
       @workspace.save!
+      Current.workspace = @workspace
       create_profile
     end
 
     setup_database(Current.user, @profile, @workspace, @workspace.company_name.downcase)
-
-    Current.workspace = @workspace
-    Current.profile = @profile
 
     render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
   end
@@ -45,7 +42,7 @@ class Api::V1::WorkspacesController < Api::ApiController
 
   def switch_workspace
     session[:current_workspace_id] = @workspace.id
-    Current.workspace = @workspace
+    Current.profile = @profile
   end
 
   private
@@ -55,13 +52,13 @@ class Api::V1::WorkspacesController < Api::ApiController
   end
 
   def find_workspace
-    switch_database
-    establish_connection_to_workspace_db(Workspace.find(params[:id]).company_name.downcase)
     @workspace = Workspace.find(params[:id])
+    Current.workspace = @workspace
+    establish_connection_to_workspace_db(@workspace.company_name.downcase)
   end
 
   def find_profile
-    @profile = current_user.profiles.find_by(workspace_id: @workspace)
+    @profile = current_user.profiles.find_by!(workspace_id: @workspace)
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
   end
@@ -77,5 +74,6 @@ class Api::V1::WorkspacesController < Api::ApiController
   def create_profile
     user = Current.user
     @profile = Profile.create!(username: user.name, workspace_id: @workspace.id, role: 0, user_id: user.id)
+    Current.profile = @profile
   end
 end

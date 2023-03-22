@@ -15,6 +15,8 @@ module DatabaseHandler
   end
 
   def establish_connection_to_workspace_db(name)
+    workspace, user, profile = current_values
+
     ActiveRecord::Base.establish_connection(
       adapter: 'postgresql',
       encoding: 'unicode',
@@ -24,11 +26,16 @@ module DatabaseHandler
       host: ENV.fetch('POSTGRES_HOST', 'localhost'),
       database: name
     )
+
+    set_current_values(workspace, user, profile)
   end
 
   def switch_database
-    current_db = ActiveRecord::Base.connection.execute('SELECT current_database()').getvalue(0, 0).eql?('benchit_dev')
-    ActiveRecord::Base.establish_connection(:development) unless current_db
+    return if current_database.eql?('benchit_dev')
+
+    workspace, user, profile = current_values
+    ActiveRecord::Base.establish_connection(:development)
+    set_current_values(workspace, user, profile)
   end
 
   def generate_data(user, profile, workspace)
@@ -42,11 +49,25 @@ module DatabaseHandler
       new_profile = profile.dup
       new_profile.id = profile.id
       new_profile.save!
-      Current.workspace = new_workspace
-      Current.profile = new_profile
+      set_current_values(new_workspace, new_user, new_profile)
       new_channel = BenchChannel.create!(name: 'general', description: 'general')
       BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: new_channel.id)
       new_channel.channel_participants.create!(permission: true, profile_id: profile.id, role: :channel_manager)
     end
+  end
+
+  def set_current_values(workspace, user, profile)
+    Current.workspace = workspace
+    Current.user = user
+    Current.profile = profile
+    @current_user = user
+  end
+
+  def current_values
+    [Current.workspace, Current.user, Current.profile]
+  end
+
+  def current_database
+    ActiveRecord::Base.connection.execute('SELECT current_database()').getvalue(0, 0)
   end
 end
