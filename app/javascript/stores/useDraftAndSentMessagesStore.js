@@ -18,7 +18,7 @@ export const useDraftAndSentMessagesStore = () => {
       async loadDraftMessages() {
         try {
           let newDraftMessages = await fetchDraftMessages(this.currentPage);
-          this.draftMessages = [...this.draftMessages, ...newDraftMessages];
+          this.draftMessages = [...this.draftMessages, ...newDraftMessages.draft_messages ];
           this.sortMessages();
           this.currentPage += 1;
           this.maxPages = newDraftMessages.page_information.pages;
@@ -40,10 +40,9 @@ export const useDraftAndSentMessagesStore = () => {
           errorHandler(e.response.data.message);
         }
       },
-      async createDraftMessage(messageContent, conversationID) {
+      async createDraftMessage(messageContent) {
         try {
-
-          const response = await postDraftMessage(messageContent, conversationID)
+          const response = await postDraftMessage(messageContent)
         } catch (e) {
           errorHandler(e.response.data.message);
         }

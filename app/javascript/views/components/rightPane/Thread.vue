@@ -53,6 +53,7 @@ import { storeToRefs } from 'pinia';
 import { Remarkable } from 'remarkable';
 import { CONSTANTS } from '../../../assets/constants';
 import { errorHandler } from '../../widgets/messageProvider';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   name: 'RightPane',
@@ -67,8 +68,10 @@ export default {
     const threadStore = useThreadStore();
     const currentUserStore = useUserInviteStore();
     const profileStore = useProfileStore();
+    const messagesStore = useMessageStore();
     const { currentUser } = storeToRefs(currentUserStore);
-    return { threadStore, currentUser, profileStore };
+    const { selectedChat } = storeToRefs(messagesStore)
+    return { threadStore, currentUser, profileStore, selectedChat };
   },
 
   data() {
@@ -103,7 +106,7 @@ export default {
       const file = new File([blob], fileName, { type: blob.type });
       return file;
     },
-    async sendMessage(message, files) {
+    async sendMessage(message, files, isDraft) {
       if (message.blocks[0] != undefined) {
         let profileList = await Promise.all(
           message.blocks.map(async block => {
@@ -143,7 +146,11 @@ export default {
           formData.append('message_attachments[]', file, filename);
         });
         try {
-          conversation(formData);
+          if(!isDraft) {
+            conversation(formData);
+          } else {
+            this.draftAndSentMessagesStore.createDraftMessage(formData)
+          }
         } catch (e) {
           errorHandler(e.response.data.message);
         }

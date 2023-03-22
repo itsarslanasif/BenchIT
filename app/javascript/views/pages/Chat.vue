@@ -42,8 +42,8 @@ import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useConnectionStore } from '../../stores/useConnectionStore';
 import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore'
-import { isHtmlOnly } from '../utils/htmlFunctions/index'
 import { ref } from 'vue';
+import { clippingParents } from '@popperjs/core';
 
 export default {
   name: 'Chat',
@@ -77,9 +77,9 @@ export default {
     const connectionStore = useConnectionStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore()
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
-    const draftAndSentMessagesStore = useDraftAndSentMessagesStore()
     const {
       messages,
       currMessage,
@@ -96,7 +96,7 @@ export default {
       id
     );
     unreadStore.markedChatAsRead(conversation_type, id);
-
+    const { selectedChat } = storeToRefs(messageStore)
     return {
       messages,
       currMessage,
@@ -119,6 +119,8 @@ export default {
       isConnected,
       connectionStore,
       textEditor,
+      selectedChat,
+      draftAndSentMessagesStore
     };
   },
   watch: {
@@ -140,7 +142,6 @@ export default {
     });
   },
   beforeUnmount() {
-    // this.saveDraftMessage()
     this.chat = null;
     this.messages = [];
     this.currMessage = [];
@@ -153,7 +154,7 @@ export default {
       const file = new File([blob], fileName, { type: blob.type });
       return file;
     },
-    async sendMessage(message, files, schedule) {
+    async sendMessage(message, files, schedule, isDraft) {
       if (message.blocks[0] != undefined) {
         let profileList = await Promise.all(
           message.blocks.map(async block => {
@@ -196,14 +197,19 @@ export default {
           }
           formData.append('message_attachments[]', file, filename);
         });
+
         if (this.isConnected) {
-          conversation(formData).then(res => {
-            if (res.scheduled_at) {
-              this.messageStore.addScheduleMessage(res);
-            }
-            this.message = '';
-          });
-          this.newMessageSent = true;
+          if (!isDraft) {
+            conversation(formData).then(res => {
+              if (res.scheduled_at) {
+                this.messageStore.addScheduleMessage(res);
+              }
+              this.message = '';
+            });
+            this.newMessageSent = true;
+          } else {
+             this.draftAndSentMessagesStore.createDraftMessage(formData)
+          }
         } else {
           this.connectionStore.unsendMessagesQueue(formData);
         }

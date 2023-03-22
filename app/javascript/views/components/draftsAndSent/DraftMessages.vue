@@ -4,29 +4,22 @@
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
         <div v-if="isToday" class="text-xs text-black ml-10 font-bold m-4">
-          <p>{{ $t('messages_section.today') }}</p>
+          <p>{{ $t('chat.today') }}</p>
         </div>
         <div v-else class="text-xs text-black ml-10 font-bold m-4">
           <p>{{ new Date(message.created_at).toDateString() }}</p>
         </div>
       </div>
-      <div
-        @click="handleClick(message)"
-        class="ml-2 mr-2 bg-white border border-black-100 cursor-pointer flex p-4 hover:bg-gray-100"
-      >
+      <div @click="handleClick(message)"
+        class="ml-2 mr-2 bg-white border border-black-100 cursor-pointer flex p-4 hover:bg-gray-100">
         <div class="min-w-fit ml-1">
-          <div v-if="message.conversationable_type === 'Profile'">
-            <img :src="getImageSrc(message)" class="w-10 rounded" />
+          <div v-if="message.conversation_type === 'Profile'">
+            <img :src="message.receiver.image_url" class="w-10 rounded" />
           </div>
-          <div
-            class="bg-slate-100 w-10 h-10 rounded flex items-center justify-center text-base"
-            v-else
-          >
-            <div
-              v-if="
-                message.conversationable_type === $t('conversation.channel')
-              "
-            >
+          <div class="bg-slate-100 w-10 h-10 rounded flex items-center justify-center text-base" v-else>
+            <div v-if="
+              message.conversation_type === $t('conversation.channel')
+            ">
               <font-awesome-icon :icon="getIcon(message)" />
             </div>
             <div v-else>
@@ -35,59 +28,41 @@
           </div>
         </div>
         <div class="ml-3 leading-3 flex justify-center flex-col">
-          <div
-            v-if="
-              !message.is_threaded &&
-              message.conversationable_type === $t('conversation.profile')
-            "
-            class="font-semibold"
-          >
-            {{ message.receiver_name }}
+          <div v-if="
+            !message.is_threaded &&
+            message.conversation_type === $t('conversation.profile')
+          " class="font-semibold">
+            {{ message.receiver.username }}
           </div>
-          <div
-            v-else-if="
-              !message.is_threaded &&
-              message.conversationable_type === $t('conversation.channel')
-            "
-            class="font-semibold"
-          >
-            {{ message.channel_name }}
+          <div v-else-if="
+            !message.is_threaded &&
+            message.conversation_type === $t('conversation.channel')
+          " class="font-semibold">
+            {{ message.receiver.name }}
           </div>
-          <div
-            v-else-if="
-              message.is_threaded &&
-              message.conversationable_type === $t('conversation.channel')
-            "
-            class="font-semibold"
-          >
-            {{ $t('heading.thread_in') + message.channel_name }}
+          <div v-else-if="
+            message.is_threaded &&
+            message.conversation_type === $t('conversation.channel')
+          " class="font-semibold">
+            {{ $t('heading.thread_in') + message.receiver.name }}
           </div>
-          <div
-            v-else-if="
-              message.is_threaded &&
-              message.conversationable_type === $t('conversation.profile')
-            "
-            class="font-semibold"
-          >
-            {{ $t('heading.thread_in') + message.receiver_name }}
+          <div v-else-if="
+            message.is_threaded &&
+            message.conversation_type === $t('conversation.profile')
+          " class="font-semibold">
+            {{ $t('heading.thread_in') + message.receiver.username }}
           </div>
-          <div
-            v-else-if="
-              message.is_threaded &&
-              message.conversationable_type === $t('conversation.group')
-            "
-            class="font-semibold"
-          >
-            {{ $t('heading.thread_in_group') + message.group_id }}
+          <div v-else-if="
+            message.is_threaded &&
+            message.conversation_type === $t('conversation.group')
+          " class="font-semibold">
+            {{ $t('heading.thread_in_group') + message.receiver.name }}
           </div>
-          <div
-            v-else-if="
-              !message.is_threaded &&
-              message.conversationable_type === $t('conversation.group')
-            "
-            class="font-semibold"
-          >
-            {{ $t('heading.message_in_group') + message.group_id }}
+          <div v-else-if="
+            !message.is_threaded &&
+            message.conversation_type === $t('conversation.group')
+          " class="font-semibold">
+            {{ $t('heading.message_in_group') + message.receiver.name }}
           </div>
           <br />
           <span v-for="block in messageBlocks" :key="block">
@@ -111,11 +86,7 @@
   </div>
   <div ref="sentinel"></div>
   <div class="flex items-center justify-center">
-    <n-spin
-      v-if="draftMessages.length !== 0 && !isLastPage"
-      class="self-center my-2"
-      size="small"
-    />
+    <n-spin v-if="draftMessages.length !== 0 && !isLastPage" class="self-center my-2" size="small" />
   </div>
 </template>
 <script>
@@ -141,7 +112,6 @@ export default {
   },
   mounted() {
     this.setUpInterSectionObserver();
-    this.draftAndSentMessagesStore.loadDraftMessages();
   },
   beforeUnmount() {
     this.draftMessages = [];
@@ -186,17 +156,8 @@ export default {
           break;
       }
     },
-    getImageSrc(message) {
-      const receiver = this.profiles.find(
-        profile => profile.id === message.receiver_id
-      );
-      return receiver?.image_url;
-    },
     getIcon(message) {
-      const channelDetail = this.channels.find(
-        channel => channel.id === message.conversationable_id
-      );
-      return `fa-${channelDetail.is_private ? 'lock' : 'hashtag'}`;
+      return `fa-${message.receiver.is_private ? 'lock' : 'hashtag'}`;
     },
     setUpInterSectionObserver() {
       let options = {
@@ -211,20 +172,7 @@ export default {
     },
     handleIntersection([entry]) {
       if (entry.isIntersecting) {
-        this.recordScrollPosition();
         this.draftAndSentMessagesStore.loadDraftMessages();
-      }
-    },
-    recordScrollPosition() {
-      let node = this.$refs['body'];
-      this.previousScrollHeightMinusScrollTop =
-        node.scrollHeight - node.scrollTop;
-    },
-    restoreScrollPosition() {
-      if (!this.firstMount) {
-        let node = this.$refs['body'];
-        node.scrollTop =
-          node.scrollHeight - this.previousScrollHeightMinusScrollTop;
       }
     },
   },
@@ -260,6 +208,7 @@ export default {
   overflow-y: scroll;
   height: 85vh;
 }
+
 .margin-left {
   margin-left: auto;
 }

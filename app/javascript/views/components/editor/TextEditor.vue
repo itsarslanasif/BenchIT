@@ -208,7 +208,7 @@
             :class="editorContent ? 'bg-success' : 'bg-white'"
           >
             <button
-              @click="sendMessagePayload({$event, buttonClicked: true})"
+              @click="sendMessagePayload($event, true)"
               class="px-2 py-1 rounded focus:outline-none"
               :class="
                 editorContent
@@ -461,10 +461,9 @@ export default {
       });
     };
 
-    const sendMessagePayload = async ({$event, buttonClicked=false, isDraft=false}) => {
-      console.log(event + ' ' + buttonClicked + ' ' + isDraft)
+    const sendMessagePayload = async (event, buttonClicked, isDraft=false) => {
       if (
-        (($event.keyCode === 13 && !$event.shiftKey) || buttonClicked) &&
+        ((event?.keyCode === 13 && !event?.shiftKey) || buttonClicked || isDraft) &&
         !props.editMessage
       ) {
         const mrkdwn = [];
@@ -493,6 +492,7 @@ export default {
             return await makeBlocks(line);
           })
         );
+        debugger
 
         if (result[0] != null) {
           const output = formatBlockContent(result);
@@ -500,14 +500,13 @@ export default {
             ? props.sendMessage(
                 { blocks: output },
                 files.value,
-                props.conversationType,
-                props.conversationId,
-                props.parentMessageId
+                isDraft
               )
             : props.sendMessage(
                 { blocks: output },
                 files.value,
-                schedule.value
+                schedule.value,
+                isDraft
               );
           newMessage.value = '';
           readerFile.value = [];
@@ -534,7 +533,7 @@ export default {
         });
         newMessage.value = '';
       } else {
-        sendMessagePayload({event});
+        sendMessagePayload(event);
       }
     };
     const handleCustomButton = () => {
@@ -665,8 +664,7 @@ export default {
       const editorContent = editor.value.getHTML().toString();
       if (!isHtmlOnly(editorContent))
         {
-          sendMessagePayload({isDraft: true})
-          // draftAndSentMessagesStore.createDraftMessage(editorContent, conversationId)
+          sendMessagePayload(undefined, false, true)
         }
     }
 

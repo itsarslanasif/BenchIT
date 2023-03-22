@@ -47,6 +47,7 @@
         :on-clickoutside="toggleShow"
       >
         <p />
+
       </n-dropdown>
     </div>
     <hr class="text-slate-400" />
@@ -66,8 +67,8 @@ import DirectMessageAccordian from '../directMessages/directMessagesAccordion.vu
 import WorkspaceDropdown from '../../widgets/workspaceDropdown/WorkspaceDropdown.vue';
 import StarredChannelsAccordion from '../channels/StarredChannelsAccordion.vue';
 import { CONSTANTS } from '../../../assets/constants';
-import { h, ref } from 'vue';
-import { NDropdown } from 'naive-ui';
+import { h, ref, computed } from 'vue';
+import { NDropdown, NTooltip } from 'naive-ui';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import groupAccordion from '../groups/groupAccordion.vue';
 import {
@@ -83,6 +84,7 @@ import {
   faShapes,
 } from '@fortawesome/free-solid-svg-icons';
 import { useRouter } from 'vue-router';
+import { useDraftAndSentMessagesStore } from '../../../stores/useDraftAndSentMessagesStore';
 
 const renderDropdownIcon = icon => {
   return () => {
@@ -97,11 +99,22 @@ export default {
     WorkspaceDropdown,
     StarredChannelsAccordion,
     NDropdown,
+    NTooltip,
     groupAccordion,
   },
   setup() {
     const router = useRouter();
     let showMore = ref(false);
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore()
+    const { draftMessages } = draftAndSentMessagesStore
+
+    const totalDraftMessages = computed(()=>{
+      return draftMessages.length
+    })
+    const draftsExist = computed(()=>{
+      draftMessages.length >= 1
+    })
+
     const generateKey = label => {
       return label.toLowerCase().replace(/ /g, '-');
     };
@@ -123,6 +136,7 @@ export default {
       },
       {
         label: CONSTANTS.DRAFT_AND_SEND,
+        // render: renderDraftAndSend,
         key: generateKey(CONSTANTS.DRAFT_AND_SEND),
         icon: renderDropdownIcon(faPaperPlane),
       },
@@ -202,6 +216,8 @@ export default {
       goTo,
       showMore,
       handleSelect,
+      totalDraftMessages,
+      draftsExist,
     };
   },
 };

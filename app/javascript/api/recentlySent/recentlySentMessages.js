@@ -17,31 +17,22 @@ export const getSentMessages = async page => {
 export const fetchDraftMessages = async page => {
   return await axios
     .get(`/v1/draft_messages`, {
-      headers: getHeaders(),
       params: {
         page,
       },
+      headers: getHeaders()
     })
     .then(response => {
       return response.data;
     });
 };
 
-export const postDraftMessage = async (
-  messageContent,
-  conversationID,
-  parentMessageId
-) => {
-  return await axios.post(
-    `/v1/draft_messages`,
-    {
+export const postDraftMessage = async messageContent => {
+  return axios
+    .post(`/v1/draft_messages`, messageContent, {
       headers: getHeaders(),
-    },
-    {
-      content: messageContent,
-      bench_conversation_id: conversationID,
-      conversation_message_id: parentMessageId,
-      message_attachments: [],
-    }
-  );
+    })
+    .then(res => {
+      return res.data;
+    });
 };
