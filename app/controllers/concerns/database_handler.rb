@@ -32,14 +32,21 @@ module DatabaseHandler
   end
 
   def generate_data(user, profile, workspace)
-    new_user = user.dup
-    new_user.id = user.id
-    new_user.save!
-    new_workspace = workspace.dup
-    new_workspace.id = workspace.id
-    new_workspace.save!
-    new_profile = profile.dup
-    new_profile.id = profile.id
-    new_profile.save!
+    ActiveRecord::Base.transaction do
+      new_user = user.dup
+      new_user.id = user.id
+      new_user.save!
+      new_workspace = workspace.dup
+      new_workspace.id = workspace.id
+      new_workspace.save!
+      new_profile = profile.dup
+      new_profile.id = profile.id
+      new_profile.save!
+      Current.workspace = new_workspace
+      Current.profile = new_profile
+      new_channel = BenchChannel.create!(name: 'general', description: 'general')
+      BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: new_channel.id)
+      new_channel.channel_participants.create!(permission: true, profile_id: profile.id, role: :channel_manager)
+    end
   end
 end
