@@ -11,13 +11,7 @@
     <div
       @contextmenu.prevent
       class="flex items-center rounded-md pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
-      :class="
-        isUnreadChannel(channel)
-          ? 'font-semibold text-white'
-          : isChatOpen
-          ? 'bg-secondary text-white'
-          : ''
-      "
+      :class="channelItemStyles(channel)"
       @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleRightClickMenu"
     >
@@ -151,6 +145,15 @@ export default {
 
     totalUnreadMessages(unreadDetails) {
       return unreadMessagesLength(unreadDetails);
+    },
+
+    channelItemStyles(channel) {
+      if (this.isUnreadChannel(channel)) {
+        return 'font-semibold text-white';
+      }
+      if (this.isChatOpen) {
+        return 'bg-secondary text-white';
+      }
     },
   },
 };
