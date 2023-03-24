@@ -30,7 +30,6 @@ class Profile < ApplicationRecord
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
   has_many :statuses, dependent: :destroy
-  has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :downloads, dependent: :destroy
   has_many :schedule_messages, dependent: :destroy
   has_many :direct_message_users, dependent: :destroy
