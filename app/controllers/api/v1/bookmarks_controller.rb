@@ -1,11 +1,10 @@
 class Api::V1::BookmarksController < Api::ApiController
-  include MemberShip
-  before_action :fetch_conversation, only: %i[create]
+  include CanAuthorization
+  before_action :initialize_bookmark, only: %i[create]
   before_action :set_bookmark, only: %i[destroy update]
   before_action :authenticate_bookmark, only: %i[create update destroy]
 
   def create
-    @bookmark = @bench_conversation.bookmarks.new(bookmark_params)
     @bookmark.save!
     render json: { success: true, message: t('.success') }, status: :ok
   end
@@ -24,18 +23,18 @@ class Api::V1::BookmarksController < Api::ApiController
 
   def set_bookmark
     @bookmark = Bookmark.find(params[:id])
-    @bench_conversation = @bookmark.bench_conversation
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name, :bookmark_URL)
+    params.require(:bookmark).permit(:name, :bookmark_URL, :bookmark_folder_id)
   end
 
   def authenticate_bookmark
-    check_membership(@bench_conversation)
+    authorize_action(action_name, @bookmark)
   end
 
-  def fetch_conversation
+  def initialize_bookmark
     @bench_conversation = BenchConversation.find(params[:bench_conversation_id])
+    @bookmark = @bench_conversation.bookmarks.new(bookmark_params)
   end
 end

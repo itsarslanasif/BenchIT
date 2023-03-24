@@ -2,6 +2,7 @@ class Bookmark < ApplicationRecord
   after_commit :broadcast_bookmark
 
   belongs_to :bench_conversation
+  belongs_to :bookmark_folder, optional: true
 
   validates :bookmark_URL, presence: true
   validates :name, length: { maximum: 50 }

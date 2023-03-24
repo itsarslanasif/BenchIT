@@ -82,6 +82,7 @@ Rails.application.routes.draw do
         resources :statuses, only: %i[index destroy]
         resources :pins, only: %i[index create destroy]
         resources :bookmarks, only: %i[create update destroy]
+        resources :bookmark_folders, only: %i[create update destroy]
         resources :reactions, only: %i[create destroy]
         resources :direct_message_users, only: %i[index destroy] do
           collection do

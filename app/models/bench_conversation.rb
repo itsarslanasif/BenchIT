@@ -3,6 +3,7 @@ class BenchConversation < ApplicationRecord
   belongs_to :sender, class_name: 'Profile', optional: true
   has_many :conversation_messages, dependent: :destroy
   has_many :bookmarks, dependent: :destroy
+  has_many :bookmark_folders, dependent: :destroy
   has_many :reactions, through: :conversation_messages
   has_many :draft_messages, dependent: :destroy
   has_many :pins, dependent: :destroy
