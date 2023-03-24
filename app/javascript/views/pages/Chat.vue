@@ -42,8 +42,7 @@ import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useConnectionStore } from '../../stores/useConnectionStore';
 import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore';
-import { ref } from 'vue';
-import { clippingParents } from '@popperjs/core';
+import { ref, onMounted } from 'vue';
 
 export default {
   name: 'Chat',
@@ -97,6 +96,7 @@ export default {
     );
     unreadStore.markedChatAsRead(conversation_type, id);
     const { selectedChat } = storeToRefs(messageStore);
+
     return {
       messages,
       currMessage,

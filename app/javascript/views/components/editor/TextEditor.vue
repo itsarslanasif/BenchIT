@@ -498,7 +498,6 @@ export default {
             return await makeBlocks(line);
           })
         );
-        debugger;
 
         if (result[0] != null) {
           const output = formatBlockContent(result);
