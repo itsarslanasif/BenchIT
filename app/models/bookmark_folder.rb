@@ -20,7 +20,7 @@ class BookmarkFolder < ApplicationRecord
   def bookmark_folder_content
     {
       id: id,
-      name: name,
+      name: name
     }
   end
 end

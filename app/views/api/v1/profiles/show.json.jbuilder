@@ -9,5 +9,5 @@ json.bookmarks conversation.bookmarks.where(bookmark_folder_id: nil)
 json.bookmark_folders conversation.bookmark_folders do |bookmark_folder|
   json.id bookmark_folder.id
   json.name bookmark_folder.name
-  json.bookmarks bookmark_folder.bookmarks 
+  json.bookmarks bookmark_folder.bookmarks
 end
