@@ -25,10 +25,9 @@ class Api::V1::DirectMessageUsersController < Api::ApiController
 
   def set_direct_message_list
     conversation_ids = BenchConversation.recent_conversation_ids
-    return render json: [current_profile] if conversation_ids.empty?
-
     bench_conversations_ids = ConversationMessage.recent_conversation_ids(conversation_ids)
-    return render json: [current_profile] if bench_conversations_ids.empty?
+
+    return render template: 'api/v1/direct_message_users/index', locals: { profile: [current_profile] } if bench_conversations_ids.empty?
 
     @direct_message_users_ids = BenchConversation.where(id: bench_conversations_ids).pluck(:conversationable_id, :sender_id).flatten.uniq
   end
