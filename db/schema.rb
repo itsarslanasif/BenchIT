@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_22_183336) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -66,16 +66,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"
   end
 
+  create_table "bookmark_folders", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "bench_conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bench_conversation_id"], name: "index_bookmark_folders_on_bench_conversation_id"
+  end
+
   create_table "bookmarks", id: :serial, force: :cascade do |t|
-    t.string "profile_id", null: false
-    t.string "bookmarkable_type", null: false
-    t.string "bookmarkable_id", null: false
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_bookmarkable"
-    t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
+    t.string "bench_conversation_id", null: false
+    t.string "bookmark_folder_id"
+    t.index ["bench_conversation_id"], name: "index_bookmarks_on_bench_conversation_id"
+    t.index ["bookmark_folder_id"], name: "index_bookmarks_on_bookmark_folder_id"
   end
 
   create_table "channel_participants", id: :serial, force: :cascade do |t|
@@ -327,7 +334,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   add_foreign_key "bench_channels", "profiles", column: "creator_id"
   add_foreign_key "bench_channels", "workspaces"
   add_foreign_key "bench_conversations", "profiles", column: "sender_id"
-  add_foreign_key "bookmarks", "profiles"
+  add_foreign_key "bookmark_folders", "bench_conversations"
+  add_foreign_key "bookmarks", "bench_conversations"
+  add_foreign_key "bookmarks", "bookmark_folders"
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
