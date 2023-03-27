@@ -1,6 +1,7 @@
 <template>
-  <div class="hover-trigger" @click="toggleModal">
+  <div class="hover-trigger">
     <font-awesome-icon
+      @click="toggleModal"
       icon="fa-plus"
       class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
     />
