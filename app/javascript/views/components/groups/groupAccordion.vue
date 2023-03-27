@@ -1,14 +1,14 @@
 <template>
-  <div class="hover-trigger">
+  <div class="hover-trigger mx-2">
     <font-awesome-icon
       @click="toggleModal"
       icon="fa-plus"
-      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-white rounded-md hover:bg-slate-600"
+      class="hover-target p-2 float-right -ml-12 mr-2 text-xs cursor-pointer text-center text-black-400 rounded-md hover:bg-secondary"
     />
-    <AccordionList class="mt-5 ml-4 text-base text-slate-50">
+    <AccordionList class="mt-4 ml-4 text-sm text-black-400" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="ml-2 cursor-pointer">
+          <span class="ml-2 cursor-pointer font-semibold truncate">
             {{ $t('groups.title') }}
           </span>
         </template>
@@ -16,7 +16,6 @@
           <h5
             v-for="group in groupStore.groups"
             :key="group.id"
-            class="hover:bg-primaryHover"
             @click.stop="stopPropagation"
           >
             <GroupItem :group="group" :goTo="goToGroupChat" />
@@ -24,13 +23,13 @@
           <div
             @click="toggleModal"
             @click.stop="stopPropagation"
-            class="flex hover:bg-primaryHover cursor-pointer py-1 pl-2"
+            class="cursor-pointer px-2 mt-1 flex rounded-md hover:bg-primaryHover"
           >
             <font-awesome-icon
               icon="fa-plus"
-              class="self-center mr-2 text-xs cursor-pointer text-white rounded-md p-2 bg-slate-600"
+              class="self-center mr-2 rounded text-xs text-black-400 p-2 bg-secondary"
             />
-            <p class="text-sm self-center text-white truncate">
+            <p class="text-sm self-center text-black-400 truncate">
               {{ $t('groups.add_new_group') }}
             </p>
           </div>
@@ -45,6 +44,11 @@
         />
       </div>
     </AccordionList>
+    <div v-if="!listOpen && checkSetGroup">
+      <h5 class="mx-2 cursor-pointer text-white">
+        <GroupItem :group="selectedGroup" :goTo="goToGroupChat" />
+      </h5>
+    </div>
   </div>
 </template>
 
@@ -65,6 +69,8 @@ export default {
   data() {
     return {
       groups: [],
+      selectedGroup: {},
+      chat_type: '',
       listOpen: true,
       showCreateGroupModal: false,
     };
@@ -83,12 +89,27 @@ export default {
       messagesStore,
     };
   },
+  computed: {
+    checkSetGroup() {
+      return (
+        this.chat_type === 'Group' &&
+        this.selectedGroup.id === this.messagesStore.selectedChat.id
+      );
+    },
+  },
   methods: {
     toggleModal() {
       this.showCreateGroupModal = !this.showCreateGroupModal;
     },
     toggleList() {
       this.listOpen = !this.listOpen;
+      this.setGroup();
+    },
+    setGroup() {
+      this.chat_type = this.messagesStore.selectedChat.conversation_type;
+      if (this.chat_type === 'Group') {
+        this.selectedGroup = this.messagesStore.selectedChat;
+      }
     },
     goToGroupChat(chatURL, group) {
       this.messagesStore.setSelectedChat(group);

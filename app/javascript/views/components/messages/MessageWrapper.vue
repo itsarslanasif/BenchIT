@@ -2,23 +2,56 @@
   <div
     v-for="block in messageBlock.blocks"
     :key="block"
-    class="py-1"
+    class=""
     :class="{
-      'bg-yellow-50': isSavedMessage,
+      'bg-yellow-50': isSavedMessage || currMessage.pinned,
     }"
   >
-    <div v-if="!currMessage.info && currMessage.pinned">
+    <div v-if="currMessage.pinned && !currMessage.info && !isSavedMessage">
       <span
-        class="pl-4 items-center text-black-800 text-xs flex bg-yellow-50 relative"
+        class="pl-4 text-black-800 text-xs"
+        :class="{
+          'pl-12':
+            !isDeleted && isSameUser && isSameDayMessage && !isFirstMessage,
+        }"
       >
-        <font-awesome-icon class="p-1" icon="fa-solid fa-thumbtack" />
+        <font-awesome-icon
+          class="px-1 text-yellow-900"
+          icon="fa-solid fa-thumbtack"
+        />
         {{ $t('pinconversation.pinned_by') }}
         {{ currMessage.pin.pinned_by }}
       </span>
     </div>
-    <div v-if="isSavedMessage" class="flex ml-4 items-center bg-yellow-50">
-      <i class="far fa-bookmark text-red-500"></i>
-      <p class="ml-2">{{ $t('actions.save_items') }}</p>
+    <div
+      v-if="isSavedMessage && !currMessage.info && !currMessage.pinned"
+      class="pl-5 flex items-center text-black-800 text-xs"
+      :class="{
+        'pl-12':
+          !isDeleted && isSameUser && isSameDayMessage && !isFirstMessage,
+      }"
+    >
+      <font-awesome-icon
+        class="pr-2 text-red-500"
+        icon="fa-solid fa-bookmark"
+      />
+      {{ $t('actions.save_items') }}
+    </div>
+    <div v-if="!currMessage.info && currMessage.pinned && isSavedMessage">
+      <span
+        class="pl-4 text-black-800 text-xs"
+        :class="{
+          'pl-12':
+            !isDeleted && isSameUser && isSameDayMessage && !isFirstMessage,
+        }"
+      >
+        <font-awesome-icon
+          class="px-1 text-yellow-900"
+          icon="fa-solid fa-thumbtack"
+        />
+        {{ $t('pinconversation.pinned_by') }}
+        {{ currMessage.pin.pinned_by }} - {{ $t('actions.saved') }}
+      </span>
     </div>
     <div
       class="hover-trigger flex p-1 px-4 hover:bg-transparent relative"
@@ -253,42 +286,48 @@
           </div>
         </div>
         {{ displayReaction }}
-        <template v-for="emoji in displayedReactions" :key="emoji">
-          <div
-            @click="addReaction(emoji)"
-            :class="[
-              { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
-              {
-                'ml-12 -mr-10': !currMessage.is_info && isSameUserAndDay,
-              },
-            ]"
-            class="mt-1 inline-flex mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer justify-center border border-black-200 hover:border-black-500 hover:bg-white"
-          >
-            <n-tooltip
-              placement="top"
-              :style="{ width: '170px' }"
-              trigger="hover"
+        <div class="flex">
+          <template v-for="emoji in displayedReactions" :key="emoji">
+            <div
+              @click="addReaction(emoji)"
+              :class="[
+                { 'bg-blue-100 border-blue-200': isCurrentUserReaction(emoji) },
+                {
+                  'ml-12 -mr-10':
+                    !currMessage.is_info &&
+                    isSameUser &&
+                    isSameDayMessage &&
+                    !isFirstMessage,
+                },
+              ]"
+              class="mt-1 mr-1 w-12 h-7 bg-black-200 rounded-xl cursor-pointer flex justify-center border border-black-200 hover:border-black-500 hover:bg-white"
             >
-              <template #trigger>
-                <n-text class="ml-1"
-                  >{{ emoji }}
-                  <span class="text-xs ml-1">{{
-                    countReaction(emoji)
-                  }}</span></n-text
-                >
-              </template>
-              <div class="flex flex-col items-center">
-                <span class="text-3xl bg-white rounded text-center w-12">{{
-                  emoji
-                }}</span>
-                <span class="text-md"
-                  >{{ getUsers(emoji, currentProfile.username) }}
-                  {{ $t('chat.reacted') }}</span
-                >
-              </div>
-            </n-tooltip>
-          </div>
-        </template>
+              <n-tooltip
+                placement="top"
+                :style="{ width: '170px' }"
+                trigger="hover"
+              >
+                <template #trigger>
+                  <n-text class="ml-1"
+                    >{{ emoji }}
+                    <span class="text-xs ml-1">{{
+                      countReaction(emoji)
+                    }}</span></n-text
+                  >
+                </template>
+                <div class="flex flex-col items-center">
+                  <span class="text-3xl bg-white rounded text-center w-12">{{
+                    emoji
+                  }}</span>
+                  <span class="text-md"
+                    >{{ getUsers(emoji, currentProfile.username) }}
+                    {{ $t('chat.reacted') }}</span
+                  >
+                </div>
+              </n-tooltip>
+            </div>
+          </template>
+        </div>
         <reply-and-thread-button
           v-if="
             !currMessage.info &&

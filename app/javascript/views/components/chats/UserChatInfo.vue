@@ -1,6 +1,8 @@
 <template>
   <div class="relative">
-    <div class="custom-border px-1 h-12 items-center flex justify-between">
+    <div
+      class="border-b border-light px-1 h-12 items-center flex justify-between"
+    >
       <div
         @click="toggleShowModal"
         v-if="selectedChat"
@@ -87,7 +89,7 @@ export default {
 
 <style scoped>
 .custom-border {
-  border-bottom: 0.5px solid gray;
+  border-bottom: 0.5px solid rgba(19, 19, 19, 0.139);
 }
 .away {
   margin-left: -10px;

@@ -1,10 +1,7 @@
 <template>
   <WorkspaceDropdown />
-  <div
-    class="bg-primary flex flex-col h-full overflow-y-auto overflow-x-hidden"
-  >
-    <hr class="text-slate-400" />
-    <div class="mt-4 mb-4 text-white">
+  <div class="flex flex-col h-full overflow-y-auto overflow-x-hidden pb-6">
+    <div class="m-2">
       <IconElement
         icon="fa-regular fa-comment"
         :name="$t('sidebar.threads')"
@@ -23,7 +20,7 @@
       />
       <IconElement
         icon="fa-regular fa-bookmark"
-        :name="$t('sidebar.save_message')"
+        :name="$t('sidebar.saved_items')"
         @click="goTo(`/savemessages`)"
       />
       <IconElement
@@ -49,7 +46,7 @@
         <p />
       </n-dropdown>
     </div>
-    <hr class="text-slate-400" />
+    <hr class="text-dark" />
     <div>
       <StarredChannelsAccordion />
       <ChannelsAccordion />

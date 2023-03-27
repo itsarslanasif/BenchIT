@@ -1,5 +1,5 @@
 <template>
-  <div v-if="draftMessages.length !== 0" class="scrollable bg-gray-100 mb-1">
+  <div v-if="!draftMessages" class="bg-gray-100 mb-1">
     <div v-for="message in draftMessages" :key="message.id" ref="body">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">

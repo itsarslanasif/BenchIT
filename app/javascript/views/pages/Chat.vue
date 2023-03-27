@@ -1,6 +1,9 @@
 <template>
-  <div v-if="conversation_type && id" class="flex flex-col h-full">
-    <div v-if="chat" class="chat-header-style">
+  <div
+    v-if="conversation_type && id"
+    class="flex flex-col h-full justify-between"
+  >
+    <div v-if="chat">
       <ChatHeader />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
@@ -9,7 +12,7 @@
         :oldestUnreadMessageId="oldestUnreadMessageId"
       />
     </div>
-    <div class="px-3 editor-style" v-if="isMember">
+    <div class="px-3" v-if="isMember">
       <TextEditorVue
         :sendMessage="sendMessage"
         :editMessage="false"
@@ -220,14 +223,6 @@ export default {
 </script>
 
 <style scoped>
-.editor-style {
-  flex: 0.3;
-}
-
-.chat-header-style {
-  flex: 0.1;
-}
-
 .chat-style {
   flex: 1;
 }

@@ -1,20 +1,16 @@
 <template>
-  <div v-if="starChannels.length > 0" class="hover-trigger">
+  <div v-if="starChannels.length > 0" class="hover-trigger mx-2">
     <ChannelsDropDown :onlyIcon="true" />
-    <AccordionList
-      class="mt-5 ml-4 text-base text-slate-50"
-      @click="toggleList"
-    >
+    <AccordionList class="mt-4 ml-4 text-sm text-black-400" @click="toggleList">
       <AccordionItem :default-opened="listOpen">
         <template class="flex justify-between items-center" #summary>
-          <span class="cursor-pointer ml-2">
+          <span class="ml-1 cursor-pointer font-semibold truncate">
             {{ $t('channels.starred') }}
           </span>
         </template>
         <h5
           v-for="channel in starChannels"
           :key="channel.id"
-          class="hover:bg-primaryHover"
           @click.stop="stopPropagation"
         >
           <div class="-ml-4">
@@ -29,10 +25,8 @@
       </AccordionItem>
     </AccordionList>
   </div>
-  <div v-if="!listOpen && checkSetChannel()" class="-ml-4">
-    <h5
-      class="hover:bg-primaryHover ml-4 text-base cursor-pointer text-white bg-slate-600"
-    >
+  <div v-if="!listOpen && checkSetChannel">
+    <h5 class="mx-2 cursor-pointer text-white">
       <ChannelItem
         :channel="selectedChannel"
         :goTo="goToChannelChat"
@@ -88,6 +82,14 @@ export default {
       selectedChat,
     };
   },
+  computed: {
+    checkSetChannel() {
+      return (
+        this.chat_type === 'Channel' &&
+        this.selectedChannel.id === this.selectedChat.id
+      );
+    },
+  },
   methods: {
     toggleModal() {
       this.showCreateChannelModal = !this.showCreateChannelModal;
@@ -115,13 +117,6 @@ export default {
       if (this.chat_type === 'Channel') {
         this.selectedChannel = channel(chat_id, this.channelStore);
       }
-    },
-    checkSetChannel() {
-      return (
-        this.chat_type === 'Channel' &&
-        this.selectedChat.id === this.selectedChannel.id &&
-        this.selectedChannel.favourite_id
-      );
     },
     stopPropagation(event) {
       event.stopPropagation();

@@ -3,7 +3,7 @@
     v-for="item in searches"
     :key="item.id"
     @click="goToChat(item)"
-    class="hover:bg-slate-600 p-2 rounded"
+    class="hover:bg-primaryHover p-2 rounded cursor-pointer"
   >
     <div class="flex items-center">
       <div v-if="item.sender_avatar" class="ml-3">

@@ -1,8 +1,8 @@
 <template>
   <div class="flex flex-col h-full w-full">
-    <div class="w-full flex flex-col border-b border-slate-100 header-style">
+    <div class="w-full flex flex-col border-b border-light header-style">
       <div
-        class="flex justify-between items-center px-5 py-2 border-b border-slate-100"
+        class="flex justify-between items-center px-5 py-2 border-b border-light"
       >
         <div class="text-xl font-bold">
           {{ $t('channels.all_channels') }}
@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="px-5 py-2">
-        <n-space vertical>
+        <n-space class="mb-4" vertical>
           <form @submit.prevent="handleSubmit">
             <n-input
               type="text"
@@ -37,16 +37,16 @@
           <div class="text-gray-700">
             {{ totalResults }}
           </div>
-          <div class="flex gap-4 items-center">
-            <div class="hover:bg-transparent cursor-pointer">
-              <i class="fas fa-sort" />
+          <div class="flex gap-1 items-center">
+            <div class="px-2 py-1 rounded hover:bg-transparent cursor-pointer">
+              <i class="fas fa-sort mr-1" />
               <n-popselect v-model:value="sortValue" :options="options">
                 {{ $t('filters.sort_label') + selectedLabel }}
               </n-popselect>
             </div>
             <div
               @click="toggleFilters"
-              class="hover:bg-transparent cursor-pointer"
+              class="px-2 py-1 rounded hover:bg-transparent cursor-pointer"
             >
               <i class="fas fa-sliders-h" />
               {{ $t('filters.filter') }}
@@ -54,14 +54,14 @@
             <div
               @click="resetFilters"
               v-if="isFiltered()"
-              class="hover:bg-transparent cursor-pointer text-blue-200 hover:underline"
+              class="cursor-pointer text-primary hover:underline"
             >
               {{ $t('filters.reset') }}
             </div>
             <div
               v-show="filterState"
               @click="toggleFilters"
-              class="rounded hover:bg-transparent cursor-pointer"
+              class="px-1 rounded hover:bg-transparent cursor-pointer"
             >
               <i class="fas fa-xmark self-center" />
             </div>
@@ -70,7 +70,7 @@
       </div>
     </div>
     <div class="flex body-style overflow-auto">
-      <div class="px-5 h-full w-full flex flex-col overflow-y-auto">
+      <div class="px-4 h-full w-full flex flex-col overflow-y-auto">
         <CreateChannel :closeModal="closeModal" v-if="modalOpen" />
         <div v-for="channel in searchedChannels" :key="channel.id">
           <ChannelList

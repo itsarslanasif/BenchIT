@@ -54,14 +54,11 @@ export default {
     NPopover,
     PinnedMessageContent,
   },
-  data() {
-    return {};
-  },
-  computed: {},
+
   methods: {
-    unpinMessage() {
+    async unpinMessage() {
       try {
-        unPinMessage(this.currMessage.pin.id);
+        await unPinMessage(this.currMessage.pin.id);
       } catch (e) {
         errorHandler(e.response.data.message);
       }

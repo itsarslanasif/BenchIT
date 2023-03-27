@@ -8,7 +8,10 @@
     {{ $t('pinconversation.pinned_by') }}
     {{ currMessage.pin.pinned_by }}
   </div>
-  <div class="p-px px-4 relative mt-2">
+  <div
+    @click="jumpToConversation"
+    class="p-px px-4 relative mt-2 cursor-pointer"
+  >
     <div class="flex">
       <n-avatar
         @click="showUserProfile"
