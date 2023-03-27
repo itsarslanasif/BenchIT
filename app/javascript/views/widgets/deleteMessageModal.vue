@@ -184,8 +184,8 @@ export default {
       this.showUserProfile();
     },
 
-    deleteMessage() {
-      deleteMessage(this.message.id);
+    async deleteMessage() {
+      await deleteMessage(this.message.id);
       this.setDeleteModal();
     },
 

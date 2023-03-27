@@ -1,15 +1,12 @@
 <template>
   <div v-if="selectedChat.id" class="p-4">
-    <div
-      @click="isProfile ? showUserProfile(selectedChat?.id) : null"
-      class="flex"
-      :class="isProfile && 'cursor-pointer'"
-    >
+    <div class="flex">
       <span>
         <img
           v-if="isProfile"
+          @click="showUserProfile(selectedChat?.id)"
           :src="selectedChat?.image_url"
-          class="w-20 h-20 rounded mr-2 bg-slate-50"
+          class="w-20 h-20 rounded mr-2 bg-slate-50 cursor-pointer"
         />
         <font-awesome-icon
           v-if="isChannel"
@@ -27,42 +24,47 @@
         <div class="mt-3 flex flex-row text-black-600" v-if="isGroup">
           {{ $t('groups.group_chat_note') }}
           <div
-            class="px-1"
+            class="px-1 flex items-start"
             v-for="profile in selectedChat.profiles"
             :key="profile.id"
           >
-            <a
+            <p
               v-if="
                 profile ===
                 selectedChat.profiles[selectedChat.profiles.length - 1]
               "
-              class="px-2"
+              class="px-1"
             >
               and
-            </a>
-            <a
+            </p>
+            <p
               @click="showUserProfile(profile.id)"
-              class="text-info cursor-pointer bg-slate-50 p-1 rounded"
+              class="text-info cursor-pointer bg-slate-50 px-1 mx-1 rounded"
             >
               @{{ profile.username }}
-            </a>
+            </p>
           </div>
         </div>
       </span>
       <span :class="isProfile && 'self-center'">
         <span>
-          <div v-if="isProfile" class="flex font-semibold">
-            {{ selectedChat?.username }}
-            {{ isOwnChat ? $t('chat.you') : '' }}
-
-            <span class="flex text-md mx-4 mt-1 break-words text-black-800">
+          <div
+            v-if="isProfile"
+            @click="showUserProfile(selectedChat?.id)"
+            class="flex items-center font-semibold cursor-pointer"
+          >
+            <span class="flex items-center gap-1">
+              <p>
+                {{ selectedChat?.username }}
+                {{ isOwnChat ? $t('chat.you') : '' }}
+              </p>
               <span
                 v-if="selectedChat?.is_active"
-                class="bg-green-700 rounded-full border-green-700 border-2 h-3 w-3 relative"
+                class="bg-green-700 border-white border rounded-full h-3 w-3"
               />
               <span
                 v-else
-                class="bg-white rounded-full border-black border-2 h-3 w-3 relative"
+                class="bg-black border-white border rounded-full h-3 w-3"
               />
             </span>
           </div>

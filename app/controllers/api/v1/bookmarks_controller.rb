@@ -1,13 +1,8 @@
 class Api::V1::BookmarksController < Api::ApiController
-  include MemberShip
-
+  include CanAuthorization
   before_action :initialize_bookmark, only: %i[create]
   before_action :set_bookmark, only: %i[destroy update]
   before_action :authenticate_bookmark, only: %i[create update destroy]
-
-  def index
-    @bookmarks = Bookmark.with_bookmarkable_id_and_type(params[:bookmarkable_id], params[:bookmarkable_type])
-  end
 
   def create
     @bookmark.save!
@@ -31,21 +26,15 @@ class Api::V1::BookmarksController < Api::ApiController
   end
 
   def bookmark_params
-    params.require(:bookmark).permit(:name, :bookmark_URL, :bookmarkable_type, :bookmarkable_id).tap do |param|
-      param[:profile_id] = current_profile.id
-    end
+    params.require(:bookmark).permit(:name, :bookmark_URL, :bookmark_folder_id)
   end
 
   def authenticate_bookmark
-    conversation = if @bookmark.bookmarkable_type.eql?('Profile')
-                     BenchConversation.profile_to_profile_conversation(@bookmark.bookmarkable_type, @bookmark.profile_id)
-                   else
-                     @bookmark.bookmarkable.bench_conversation
-                   end
-    check_membership(conversation)
+    authorize_action(action_name, @bookmark)
   end
 
   def initialize_bookmark
-    @bookmark = Bookmark.new(bookmark_params)
+    @bench_conversation = BenchConversation.find(params[:bench_conversation_id])
+    @bookmark = @bench_conversation.bookmarks.new(bookmark_params)
   end
 end

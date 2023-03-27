@@ -88,7 +88,7 @@ export default {
 
 ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px 475569;
-  border-radius: 10px;
+  border-radius: 5px;
 }
 
 ::-webkit-scrollbar-thumb {

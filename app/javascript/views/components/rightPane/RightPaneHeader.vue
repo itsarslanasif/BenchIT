@@ -1,6 +1,8 @@
 <template>
   <div class="relative">
-    <div class="custom-border h-12 px-1 items-center flex justify-between">
+    <div
+      class="border-b border-light h-12 px-1 items-center flex justify-between"
+    >
       <div
         @click="messageId ? goToMessage : null"
         class="flex px-1 ml-2 my-2 overflow-x-hidden text-ellipsis rounded"
@@ -9,7 +11,7 @@
         <p class="text-lg font-semibold self-center mr-2">
           {{ messageId ? $t('right_pane.thread') : $t('right_pane.profile') }}
         </p>
-        <p v-if="messageId" class="text-md text-black-600 self-center mr-1">
+        <p v-if="messageId" class="text-sm text-black-600 self-center mr-1">
           {{ paneTitle }}
         </p>
       </div>
@@ -52,8 +54,3 @@ export default {
   },
 };
 </script>
-<style scoped>
-.custom-border {
-  border-bottom: 0.5px solid gray;
-}
-</style>

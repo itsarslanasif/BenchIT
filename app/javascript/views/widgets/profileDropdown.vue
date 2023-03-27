@@ -8,12 +8,12 @@
       class="bg-gray-100 border rounded-md border-slate-100 absolute dropdown w-80"
     >
       <n-button>
-        <div class="flex avatar absolute">
+        <div
+          class="flex avatar absolute bg-secondary rounded-md cursor-pointer"
+        >
           <n-tooltip v-if="profileStatus" trigger="hover">
             <template #trigger>
-              <div
-                class="flex justify-center items-center bg-slate-700 rounded-l-lg w-8 h-9 hover:bg-transparent self-baseline text-sm"
-              >
+              <div class="flex justify-center items-center px-2 text-sm">
                 <p>{{ profileStatus.emoji }}</p>
               </div>
             </template>
@@ -25,18 +25,16 @@
               {{ statusClearAfterTime(profileStatus.clear_after) }}
             </span>
           </n-tooltip>
-          <n-avatar class="self-baseline" size="medium" :src="profileAvatar" />
+          <n-avatar class="self-center" size="small" :src="profileAvatar" />
         </div>
         <div
-          class="flex absolute icon"
+          class="flex absolute -mt-1 mr-1 icon"
           :class="
             profileActiveStatus
-              ? 'active text-green-700 border-2 border-black-900 rounded-xl'
-              : 'away text-black border-2 border-white rounded-xl'
+              ? 'bg-green-700 border-white border rounded-full h-2 w-2'
+              : 'bg-black-900 border-white border rounded-full h-2 w-2'
           "
-        >
-          <i class="fa-solid fa-circle"></i>
-        </div>
+        ></div>
       </n-button>
     </n-dropdown>
     <DownloadModal v-model:show="showModal" />
@@ -404,14 +402,5 @@ export default {
 .icon {
   right: 14px;
   top: 33px;
-}
-
-.active {
-  font-size: 9px;
-}
-
-.away {
-  font-size: 6px;
-  outline: 3px solid rgb(28, 29, 28);
 }
 </style>

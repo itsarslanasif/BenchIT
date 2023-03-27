@@ -72,13 +72,15 @@
           />
         </div>
       </div>
-      <div v-if="unsentQueue.length" v-for="message in unsentQueue">
-        <MessageWrapper
-          v-if="isSameChat(message)"
-          :currMessage="message"
-          :prevMessage="prevMessage"
-          :isUnsentMessage="true"
-        />
+      <div v-if="unsentQueue.length">
+        <div v-for="message in unsentQueue" :key="message.id">
+          <MessageWrapper
+            v-if="isSameChat(message)"
+            :currMessage="message"
+            :prevMessage="prevMessage"
+            :isUnsentMessage="true"
+          />
+        </div>
       </div>
     </div>
   </div>

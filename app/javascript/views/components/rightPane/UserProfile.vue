@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-hidden">
     <right-pane-header :paneTitle="$t('rightpane.profile')" />
     <n-modal v-model:show="editProfileFlag">
       <EditProfile :toggleEditProfile="toggleEditProfile" />
@@ -57,14 +57,16 @@
           class="flex float-left text-md mx-4 mt-2 break-words text-black-800"
         >
         </span>
-        <span class="flex float-left text-md mx-4 break-words text-black-800">
+        <span
+          class="flex float-left items-center text-md mx-4 break-words text-black-800"
+        >
           <span
             v-if="userProfileStore.userProfile.is_active"
-            class="bg-green-700 rounded-full border-green-700 mt-1 mr-1 border-2 h-3 w-3 relative"
+            class="bg-green-700 border-white border rounded-full h-3 w-3 mx-1"
           />
           <span
             v-else
-            class="bg-white rounded-full border-black mt-1 mr-1 border-2 h-3 w-3 relative"
+            class="bg-black-900 border-white border rounded-full h-3 w-3 mx-1"
           />
           <p class="ml-3 truncate">
             {{

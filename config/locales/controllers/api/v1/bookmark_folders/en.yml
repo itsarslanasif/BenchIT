@@ -1,0 +1,10 @@
+en:
+  api:
+    v1:
+      bookmark_folders:
+        create:
+          success: Bookmark folder has been created successfully.
+        update:
+          success: Bookmark folder has been updated successfully.
+        destroy:
+          success: Bookmark folder has been deleted successfully.

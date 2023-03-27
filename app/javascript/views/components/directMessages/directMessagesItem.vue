@@ -1,6 +1,5 @@
 <template>
   <n-dropdown
-    class="rounded-md"
     placement="bottom-end"
     size="medium"
     :show="showRightClickMenu"
@@ -11,33 +10,43 @@
   >
     <div
       v-if="user"
-      class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
-      :class="isUnreadDM(user) ? 'font-bold' : ''"
+      class="flex items-center rounded-md hover-trigger-x justify-between pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
+      :class="{
+        'bg-secondary': isChatOpen,
+        'font-semibold text-white': isUnreadDM(user),
+      }"
       @click.right="toggleRightClickMenu"
       @contextmenu.prevent
     >
       <span
         @click="goToChat(`/profiles/${user.id}`, user)"
-        class="flex item-center w-full"
+        class="flex item-center w-full rounded-md"
       >
         <n-avatar :size="25" :src="user.image_url" />
-        <div class="flex z-10 items-end">
-          <div
+        <span class="flex z-10 items-end -ml-1">
+          <span
             v-if="user.is_active"
-            class="bg-green-700 awayStatus text-black-800 inactivePosition h-2 w-2 rounded-xl"
+            class="bg-green-700 border-white border rounded-full h-2 w-2"
           />
-          <div
+          <span
             v-else
-            class="bg-black-800 awayStatus text-black-800 inactivePosition h-2 w-2 border-2 border-white rounded-xl"
+            class="bg-black-900 border-white border rounded-full h-2 w-2"
           />
-        </div>
-        <p class="ml-2 text-sm text-white truncate">{{ user.username }}</p>
+        </span>
+        <p
+          class="ml-2 text-sm truncate"
+          :class="
+            isChatOpen || isUnreadDM(user) ? 'text-white' : 'text-black-400'
+          "
+        >
+          {{ user.username }}
+        </p>
         <p v-if="isOwnChat(user)" class="ml-2 text-sm text-black-400">
           {{ $t('pinconversation.you') }}
         </p>
         <n-tooltip trigger="hover">
           <template #trigger>
-            <p class="ml-2 text-sm self-center text-white">
+            <p class="ml-2 text-sm self-center text-black-400">
               {{ user?.status?.emoji }}
             </p>
           </template>
@@ -54,14 +63,14 @@
         <div v-if="unreadDetails">
           <div
             v-if="unreadDetails.messages.length"
-            class="px-2 py-auto mt-1 rounded-full text-xs bg-successHover ml-auto mr-2"
+            class="px-2 py-auto rounded-full text-xs bg-successHover ml-auto mr-2"
           >
             {{ totalUnreadMessages(unreadDetails) }}
           </div>
         </div>
         <div
           @click="removeChatFromList"
-          class="hover-target-x ml-2 w-fit mr-4 py-auto text-black-400 hover:text-white"
+          class="hover-target-x px-2 py-auto rounded-full text-xs ml-auto mr-2"
         >
           <i class="fas fa-xmark" />
         </div>
@@ -81,6 +90,7 @@ import { NAvatar, NTooltip } from 'naive-ui';
 import moment from 'moment';
 import { NDropdown } from 'naive-ui';
 import Options from '../channels/rightClickMenuOptions';
+import { useMessageStore } from '../../../stores/useMessagesStore';
 
 export default {
   props: ['user', 'isOwnChat', 'goToChat'],
@@ -96,16 +106,26 @@ export default {
   setup() {
     const unreadStore = useUnreadStore();
     const directMessagesStore = useDirectMessagesStore();
+    const messagesStore = useMessageStore();
     const { unreadMessages } = storeToRefs(unreadStore);
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
       unreadMessages,
       directMessagesStore,
       unreadStore,
+      selectedChat,
     };
   },
   computed: {
     unReadMessageExist() {
       return this.unreadDetails?.messages.length > 0;
+    },
+    isChatOpen() {
+      return (
+        this.selectedChat.id === this.user.id &&
+        this.selectedChat.hasOwnProperty('user_id') &&
+        this.user.hasOwnProperty('user_id')
+      );
     },
   },
   methods: {

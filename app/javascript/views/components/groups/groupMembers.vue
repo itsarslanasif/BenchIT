@@ -22,12 +22,7 @@
         v-for="member in messageStore.selectedChat.profiles"
         :key="member.id"
       >
-        <MermberCard
-          class="cursor-pointer"
-          :name="member.username"
-          :description="member.description"
-          :image_url="member.image_url"
-        />
+        <MemberCard @click="showUserProfile(member.id)" :member="member" />
       </div>
     </div>
     <p v-if="messageStore.selectedChat.profiles.length == 0">
@@ -45,13 +40,16 @@
 </template>
 
 <script>
-import MermberCard from '../../widgets/memberCard.vue';
+import MemberCard from '../../widgets/memberCard.vue';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore.js';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import CreateGroupModal from './createGroupModal.vue';
+import { useRightPaneStore } from '../../../stores/useRightPaneStore';
+import { useProfileStore } from '../../../stores/useProfileStore';
+import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 export default {
   name: 'About',
-  components: { MermberCard, CreateGroupModal },
+  components: { MemberCard, CreateGroupModal },
   query: '',
   data() {
     return {
@@ -60,12 +58,32 @@ export default {
   },
   setup() {
     const channelDetailStore = useChannelDetailStore();
+    const rightPaneStore = useRightPaneStore();
+    const profilesStore = useProfileStore();
+    const userProfileStore = useUserProfileStore();
     const messageStore = useMessageStore();
-    return { channelDetailStore, messageStore };
+    return {
+      channelDetailStore,
+      rightPaneStore,
+      profilesStore,
+      userProfileStore,
+      messageStore,
+    };
   },
   methods: {
     toggleModal() {
       this.showCreateGroupModal = !this.showCreateGroupModal;
+    },
+    showUserProfile(profile_id) {
+      this.setUserProfileForPane(profile_id);
+      this.rightPaneStore.toggleUserProfileShow(true);
+    },
+
+    setUserProfileForPane(profile_id) {
+      const profile = this.profilesStore.profiles.find(
+        profile => profile.id === profile_id
+      );
+      this.userProfileStore.setUserProfile(profile);
     },
   },
 };

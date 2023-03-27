@@ -77,8 +77,10 @@ en:
         confirmation: 'Are you sure you want to remove this pinned item?'
       direct_messages:
         direct_messages: 'Direct Messages'
-        add_teammates: 'Add Teammates'
+        add_teammates: 'Add teammates'
       channel_details:
+        member: 'member'
+        members: 'members'
         find_members: 'Find members'
         no_matches_found: 'No matches found for '
       company:
@@ -183,6 +185,7 @@ en:
         profile: 'Profile'
       heading:
         thread_in: 'Thread in '
+        message_in: 'Message in'
         thread_in_group: 'Thread in group '
         message_in_group: 'Message in group '
       workspace:
@@ -205,7 +208,7 @@ en:
         people_and_user_group: 'People & User Group'
         all_channels: 'All Channels'
         more: 'More'
-        save_message: 'Save items'
+        saved_items: 'Saved items'
       channels:
         channels: 'Channels'
         public_channels: 'Public Channels'
@@ -279,6 +282,7 @@ en:
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
         save_items: 'Added to your saved items'
+        saved: 'Saved'
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
         save_changes: 'Save Changes'
@@ -336,7 +340,7 @@ en:
         copy_member_id: 'Copy member ID'
         no_results_found: 'No Results Found !'
         sort: 'Sort'
-        sort_label: 'Sort:'
+        sort_label: 'Sort: '
         account_type: 'Account Type'
         channel_type: 'Channel Type'
         more_options: 'More Options:'
@@ -460,6 +464,7 @@ en:
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
         mentioned: 'mentioned you in'
+        no_mentions_and_reactions: 'No mentions and reactions'
       connection:
         trying_to_connect: 'Trying to connect...'
         message_failed: 'Failed to send'
