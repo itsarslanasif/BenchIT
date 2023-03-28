@@ -410,7 +410,6 @@ export default {
     const editor = ref(null);
     const emojiModalFlag = ref(false);
     const showTopBar = ref(true);
-
     onMounted(() => {
       editor.value = new Editor({
         extensions: [
@@ -504,7 +503,7 @@ export default {
 
         if (result[0] != null) {
           const output = formatBlockContent(result);
-          props.fromThreads
+          props.isThread
             ? props.sendMessage({ blocks: output }, files.value, isDraft)
             : props.sendMessage(
                 { blocks: output },

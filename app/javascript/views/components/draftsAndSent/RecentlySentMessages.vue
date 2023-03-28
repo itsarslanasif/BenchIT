@@ -150,6 +150,7 @@ export default {
     const { maxPages } = storeToRefs(draftAndSentMessagesStore);
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
+
     return {
       profiles,
       channels,

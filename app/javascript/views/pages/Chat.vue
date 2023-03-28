@@ -12,7 +12,7 @@
         :oldestUnreadMessageId="oldestUnreadMessageId"
       />
     </div>
-    <div class="px-3 editor-style" v-if="isMember">
+    <div class="px-3" v-if="isMember">
       <TextEditor
         ref="textEditor"
         :sendMessage="sendMessage"
@@ -143,6 +143,9 @@ export default {
     this.Cable.on('chat', data => {
       cableActions(data.message);
     });
+    if(this.messageStore.selectedChat.draft_message) {
+        this.insertDraft()
+      }
   },
   beforeUnmount() {
     this.chat = null;
@@ -233,6 +236,14 @@ export default {
       );
       return profiles;
     },
+    async insertDraft() {
+      const html = new Remarkable({ html: true });
+      const draftMessageBlocks = JSON.parse(this.messageStore.selectedChat.draft_message.content).blocks
+      const draftMessageText = draftMessageBlocks.map((section)=>{
+        return html.render(section.text.text)
+      })
+      this.textEditor.editor.commands.setContent(...draftMessageText)
+    }
   },
 };
 </script>

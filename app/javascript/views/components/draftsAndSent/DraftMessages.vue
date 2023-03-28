@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!draftMessages" class="bg-gray-100 mb-1">
+  <div v-if="draftMessages" class="bg-gray-100 mb-1">
     <div v-for="message in draftMessages" :key="message.id" ref="body">
       {{ setMessage(message) }}
       <div v-if="!isSameDayMessage">
@@ -110,7 +110,7 @@
   <div ref="sentinel"></div>
   <div class="flex items-center justify-center">
     <n-spin
-      v-if="draftMessages.length !== 0 && !isLastPage"
+      v-if="!draftMessages"
       class="self-center my-2"
       size="small"
     />
@@ -138,7 +138,7 @@ export default {
     };
   },
   mounted() {
-    this.setUpInterSectionObserver();
+    this.draftAndSentMessagesStore.loadDraftMessages(1)
   },
   beforeUnmount() {
     this.draftMessages = [];
@@ -154,6 +154,7 @@ export default {
     );
     const { profiles } = storeToRefs(profileStore);
     const { channels } = storeToRefs(channelStore);
+
     return {
       profiles,
       channels,
