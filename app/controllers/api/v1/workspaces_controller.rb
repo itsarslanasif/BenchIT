@@ -1,8 +1,8 @@
 class Api::V1::WorkspacesController < Api::ApiController
+  skip_before_action :set_workspace_in_session, :set_profile, only: %i[index create switch_workspace]
   before_action :find_workspace, only: %i[invite switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
   before_action :check_profile, only: %i[invite]
-  skip_before_action :set_workspace_in_session, :set_profile, only: %i[index create switch_workspace]
 
   def index
     @workspaces = current_user.workspaces
@@ -17,6 +17,7 @@ class Api::V1::WorkspacesController < Api::ApiController
       create_profile
       create_workspace_data
       switch_workspace
+      WorkspaceMailer.send_workspace_create_mail(@workspace, @profile, current_user).deliver_now
     end
 
     render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
