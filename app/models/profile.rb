@@ -74,10 +74,6 @@ class Profile < ApplicationRecord
     end
   end
 
-  def attach_avatar
-    generate_avatar(username, profile_image)
-  end
-
   def groups
     Group.where('profile_ids::text[] @> ARRAY[?]::text[]', [id])
   end
