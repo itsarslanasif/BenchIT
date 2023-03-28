@@ -13,29 +13,39 @@
     <div class="flex">
       <div>
         <n-avatar
-          v-if="payload.conversation_type === $t('conversation_type.profile')"
+          v-if="isProfileMessage"
           class="rounded align-middle w-12 h-12"
           :src="payload.receiver.image_url"
         />
         <div
-          v-if="payload.conversation_type === $t('conversation_type.channel')"
-          class="w-12 h-12 bg-slate-100 rounded flex justify-center items-center text-xl"
+          v-if="isChannelMessage"
+          class="w-12 h-12 bg-secondaryHover rounded flex justify-center items-center text-xl"
         >
-          <font-awesome-icon :icon="getIcon(payload.receiver)" />
+          <font-awesome-icon :icon="getIcon" />
         </div>
+        <div
+          v-if="isGroupMessage"
+          class="w-12 h-12 bg-secondaryHover rounded flex justify-center items-center text-xl"
+        >
+          <p>G</p>
+        </div>
+        <!-- {{payload}} -->
       </div>
       <div class="align-middle ml-3">
-        <div class="text-base font-bold">
-          {{ getChatName(payload.receiver) }}
+        <div class="text-base font-semibold">
+          {{ getChatName }}
         </div>
         <div>
-          <div v-for="block in messageBlock(payload.content).blocks">
+          <div
+            v-for="block in messageBlock(payload.content).blocks"
+            :key="block.id"
+          >
             <MessageSection v-if="block.type === 'section'" :section="block" />
           </div>
         </div>
       </div>
     </div>
-    <div class="">
+    <div class="text-xs">
       {{ getScheduleTime(payload.scheduled_at) }}
     </div>
   </div>
@@ -67,15 +77,32 @@ export default {
       type: Function,
     },
   },
+  computed: {
+    getChatName() {
+      if (this.isProfileMessage) {
+        return this.payload.receiver.username;
+      } else if (this.isChannelMessage) {
+        return this.payload.receiver.name;
+      } else {
+        return this.payload.group_name;
+      }
+    },
+    getIcon() {
+      return `fa-${this.payload.receiver.is_private ? 'lock' : 'hashtag'}`;
+    },
+    isProfileMessage() {
+      return this.payload.conversation_type === 'Profile';
+    },
+    isChannelMessage() {
+      return this.payload.conversation_type === 'BenchChannel';
+    },
+    isGroupMessage() {
+      return this.payload.conversation_type === 'Group';
+    },
+  },
   methods: {
     ignoreHTML(message) {
       return message.replace(/<[^>]+>/g, '');
-    },
-    getChatName(payload) {
-      return payload.user_id ? payload.username : payload.name;
-    },
-    getIcon(payload) {
-      return `fa-${payload.is_private ? 'lock' : 'hashtag'}`;
     },
     getScheduleTime(time) {
       const dateAndTime = moment(time);

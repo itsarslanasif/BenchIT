@@ -1,7 +1,8 @@
 <template>
   <div v-for="block in messageBlock.blocks" :key="block">
     <div
-      class="hover-trigger py-2 px-4 bg-white relative border border-black-300 shadow-sm rounded-xl m-4"
+      class="hover-trigger p-4 bg-white hover:bg-transparent cursor-pointer relative border border-black-300 shadow-sm rounded-xl m-4"
+      @click="goToChat"
       @mouseover="emojiModalStatus = true"
       @mouseleave="emojiModalStatus = false"
     >
@@ -495,6 +496,26 @@ export default {
         type: 'conjunction',
       });
       return formatter.format(users);
+    },
+    getConversationType(type) {
+      let conversation_type = '';
+      switch (type) {
+        case 'BenchChannel':
+          conversation_type = 'channels';
+          break;
+        case 'Group':
+          conversation_type = 'groups';
+          break;
+        case 'Profile':
+          conversation_type = 'profiles';
+          break;
+      }
+      return conversation_type;
+    },
+    goToChat() {
+      return `${this.getConversationType(
+        this.currMessage.conversationable_type
+      )}/${this.currMessage.conversationable_id}/${this.currMessage.id}`;
     },
   },
 };

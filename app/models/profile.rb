@@ -118,7 +118,7 @@ class Profile < ApplicationRecord
   end
 
   def set_names
-    self.pronounce_name = user_name if pronounce_name.nil?
-    self.display_name = user_name if display_name.nil?
+    self.pronounce_name = username if pronounce_name.blank?
+    self.display_name = username if display_name.blank?
   end
 end

@@ -1,5 +1,5 @@
 <template>
-  <div class="m-3">
+  <div class="m-3 overflow-auto">
     <n-modal v-model:show="scheduleFlag">
       <n-card
         class="w-2/6"
@@ -35,8 +35,9 @@
         v-for="payload in scheduleMessage"
         @mouseover="toggleOptionsFlag"
         @mouseleave="toggleOptionsFlag"
+        :key="payload"
         @click="navigateToChat(payload)"
-        class="w-full h-auto my-3 bg-slate-50 border border-black-400 p-3 rounded-lg hover:bg-black-200 duration-200"
+        class="w-full h-auto my-2 bg-transparent border cursor-pointer border-black-200 p-3 rounded-lg hover:bg-black-200 duration-200"
       >
         <ScheduleWrapper
           :payload="payload"
@@ -77,11 +78,11 @@ export default {
   },
   methods: {
     navigateToChat(payload) {
-      const type =
-        payload.conversation_type === this.$t('conversation_type.channel')
-          ? 'channel'
-          : payload.conversation_type;
-      this.$router.push(`/${type.toLowerCase()}s/${payload.receiver.id}`);
+      this.$router.push(
+        `/${this.getConversationType(payload.conversation_type)}/${
+          payload.receiver.id
+        }`
+      );
     },
     toggleRecheduleFlag(id) {
       this.payloadId = id;
@@ -93,6 +94,21 @@ export default {
         scheduled_at: value,
       });
       this.scheduleFlag = !this.scheduleFlag;
+    },
+    getConversationType(type) {
+      let conversation_type = '';
+      switch (type) {
+        case 'BenchChannel':
+          conversation_type = 'channels';
+          break;
+        case 'Group':
+          conversation_type = 'groups';
+          break;
+        case 'Profile':
+          conversation_type = 'profiles';
+          break;
+      }
+      return conversation_type;
     },
   },
 };

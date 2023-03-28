@@ -1,13 +1,16 @@
 <template>
   <div
     :class="{
-      'flex flex-col rounded hover:bg-slate-50': hovered === channelId,
+      'flex flex-col hover:bg-transparent duration-300': hovered === channelId,
     }"
     @mouseover="onHover"
     @mouseleave="onHoverLeave"
   >
-    <div class="flex justify-between border-b border-slate-50">
-      <div class="flex flex-col p-5">
+    <div
+      class="p-5 flex justify-between border-b border-transparent cursor-pointer"
+      @click="handleView"
+    >
+      <div class="flex flex-col">
         <div class="font-bold flex">
           <span>
             <font-awesome-icon icon="fa-lock" v-if="isPrivate" />
@@ -109,6 +112,12 @@ export default {
       );
     });
 
+    const channelMemberCount = computed(() => {
+      return `${props.channelParticipants.length} ${
+        props.channelParticipants.length === 1 ? 'member' : 'members'
+      } -`;
+    });
+
     const handleJoin = async () => {
       await channelStore.joinChannel(channelId.value);
       goToChannel(channelId.value);
@@ -154,6 +163,7 @@ export default {
       handleView,
       onHover,
       onHoverLeave,
+      channelMemberCount,
     };
   },
 };

@@ -9,9 +9,12 @@
       </div>
       <div
         v-if="editor"
-        class="overflow-auto flex bg-white justify-center flex-col p-2 rounded-lg border border-black-400 m-1 focus:border-primaryHover"
+        class="flex bg-white justify-center flex-col p-2 rounded-lg border border-black-300 m-1 focus:border-primaryHover"
       >
-        <div v-show="showTopBar" class="flex overflow-auto items-center gap-1">
+        <div
+          v-show="showTopBar"
+          class="flex overflow-y-auto overflow-x-hidden items-center gap-1"
+        >
           <button
             @click="editor.chain().focus().toggleBold().run()"
             :disabled="!editor.can().chain().focus().toggleBold().run()"
@@ -715,27 +718,36 @@ export default {
   pointer-events: none;
   height: 0;
 }
+
 .ProseMirror {
   outline: none;
+
   > * + * {
     // margin-top: 0.75em;
   }
+
   ul {
     padding: 0 1rem;
+
     li {
       list-style: disc;
+
       li {
         list-style: circle;
+
         li {
           list-style: square;
         }
       }
     }
   }
+
   ol {
     padding: 0 1rem;
+
     li {
       list-style-type: style;
+
       li {
         list-style: lower-alpha;
       }
@@ -793,21 +805,27 @@ export default {
     margin: 2rem 0;
   }
 }
+
 button {
   color: #474849;
 }
+
 .vl {
   border-left: 1px solid rgba(224, 226, 224, 0.752);
   height: 25px;
 }
+
 .margintop {
   margin-top: -270px;
 }
+
 .mention {
-  border: 1px solid #000;
-  border-radius: 0.4rem;
+  background-color: rgba(0, 110, 255, 0.124) !important;
+  border-radius: 0.3rem;
+  color: rgb(73, 145, 240);
   padding: 0.1rem 0.3rem;
   box-decoration-break: clone;
+  cursor: pointer;
 }
 
 .cross {

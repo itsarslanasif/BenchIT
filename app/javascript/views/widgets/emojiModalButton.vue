@@ -5,7 +5,7 @@
         <n-dropdown
           class="rounded-md border border-slate-100"
           placement="bottom-start"
-          size="medium"
+          size="small"
           trigger="click"
           :message="message"
           :options="Options.getOptions()"
@@ -86,7 +86,7 @@ export default {
     isMyMessage(currentProfileStore, message) {
       return message.sender_id == currentProfileStore.id;
     },
-    handleSelect(key, message) {
+    async handleSelect(key, message) {
       switch (key) {
         case 'copy-link':
           this.copyLinkToMessage(message);
@@ -101,7 +101,7 @@ export default {
             errorHandler(e.response.data.message);
           }
           break;
-        case 'un-pin-from-this-conversation':
+        case 'unpin-from-this-conversation':
           this.setUnpinModal();
           break;
         case 'edit-message':

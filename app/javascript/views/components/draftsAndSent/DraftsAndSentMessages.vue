@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen">
+  <div class="h-screen overflow-hidden">
     <div class="flex p-1 px-3">
       <div class="flex overflow-y-hidden text-ellipsis p-1">
         <p class="text-slate-800 text-xl font-semibold">
