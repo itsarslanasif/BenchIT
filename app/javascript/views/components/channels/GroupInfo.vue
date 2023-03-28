@@ -1,16 +1,23 @@
 <template>
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer">
+      <div class="flex px-1 my-2 items-center rounded cursor-pointer">
         <div
-          @click="toggleShowModal"
-          class="flex overflow-x-hidden text-ellipsis"
+          class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer"
         >
-          <p class="text-xl font-bold self-center mr-1">
-            {{ selectedChat.name }}
-          </p>
-          <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
+          <div
+            @click="toggleShowModal"
+            class="flex overflow-x-hidden text-ellipsis"
+          >
+            <p class="text-xl font-bold self-center mr-1">
+              {{ selectedChat.name }}
+            </p>
+            <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
+          </div>
         </div>
+        <p v-if="selectedChat.topic" class="text-black-500">
+          {{ selectedChat.topic }}
+        </p>
       </div>
       <GroupMembersInfoVue @click="toggleShowModal" />
     </div>

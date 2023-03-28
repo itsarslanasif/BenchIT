@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_22_183336) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_27_162733) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,6 +61,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_22_183336) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sender_id"
+    t.string "topic"
     t.index ["conversationable_id", "conversationable_type", "sender_id"], name: "bench_conversation_index", unique: true
     t.index ["conversationable_type", "conversationable_id"], name: "index_chat_conversations_on_conversationable"
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"

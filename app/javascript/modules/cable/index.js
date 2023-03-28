@@ -265,6 +265,10 @@ const ChannelParticipantDelete = data => {
   channelDetailsStore.removeMember(data);
 };
 
+const updateBenchConversation = (data, messageStore) => {
+  messageStore.selectedChat.topic = data.topic;
+};
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
@@ -275,6 +279,7 @@ const actions = {
   PinDelete: unPinMessage,
   ChannelParticipantCreate: ChannelParticipantCreate,
   ChannelParticipantDelete: ChannelParticipantDelete,
+  BenchConversationUpdate: updateBenchConversation,
 };
 
 export const cableActions = data => {

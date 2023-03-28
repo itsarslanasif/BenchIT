@@ -26,6 +26,7 @@ Rails.application.routes.draw do
           end
         end
         resources :users, only: %i[index]
+        resources :bench_conversations, only: %i[update]
         resources :schedule_messages, only: %i[index update destroy] do
           member do
             get :send_now

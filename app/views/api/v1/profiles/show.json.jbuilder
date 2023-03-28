@@ -6,3 +6,4 @@ json.isScheduled? schedule_profile(@profile.id)
 conversation = get_profile_conversation(@profile.id)
 json.bench_conversation_id conversation.id
 json.partial! 'api/v1/shared/partials/bookmarks', object: conversation
+json.topic conversation.topic

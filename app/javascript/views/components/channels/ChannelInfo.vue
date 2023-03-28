@@ -3,23 +3,31 @@
     <div
       class="border-b border-light px-1 h-12 items-center flex justify-between"
     >
-      <div class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer">
-        <div v-if="selectedChat.is_private" class="self-center mr-1">
-          <font-awesome-icon icon="fa-lock" />
-        </div>
-        <div v-else class="self-center mr-1">
-          <font-awesome-icon icon="fa-hashtag" />
-        </div>
+      <div class="flex px-1 my-2 items-center gap-1 cursor-pointer">
         <div
-          @click="toggleShowModal"
-          class="flex overflow-x-hidden text-ellipsis"
+          class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer"
         >
-          <p class="text-xl font-bold self-center mr-1">
-            {{ selectedChat.name }}
-          </p>
-          <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
+          <div v-if="selectedChat.is_private" class="self-center mr-1">
+            <font-awesome-icon icon="fa-lock" />
+          </div>
+          <div v-else class="self-center mr-1">
+            <font-awesome-icon icon="fa-hashtag" />
+          </div>
+          <div
+            @click="toggleShowModal"
+            class="flex overflow-x-hidden text-ellipsis"
+          >
+            <p class="text-xl font-bold self-center mr-1">
+              {{ selectedChat.name }}
+            </p>
+            <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
+          </div>
         </div>
+        <p v-if="selectedChat.topic" class="text-black-500">
+          {{ selectedChat.topic }}
+        </p>
       </div>
+
       <ChannelMembersInfoVue
         :showMemberClickListener="this.openChannelDetailMemberModal"
         :channelId="selectedChat.id"

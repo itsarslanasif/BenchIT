@@ -4,38 +4,45 @@
       class="border-b border-light px-1 h-12 items-center flex justify-between"
     >
       <div
-        @click="toggleShowModal"
-        v-if="selectedChat"
-        class="flex px-1 mx-3 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
+        class="flex px-1 my-2 overflow-x-hidden text-ellipsis items-center rounded cursor-pointer"
       >
-        <n-avatar
-          class="mr-1 self-center"
-          size="small"
-          :src="selectedChat.image_url"
-        />
-        <span
-          v-if="selectedChat.is_active"
-          class="bg-green-700 rounded-full border-white border-2 h-3 w-3 relative -ml-3 mt-5"
-        />
-        <span
-          v-else
-          class="bg-white away rounded-full border-black border-2 h-2 w-2 relative"
-        />
+        <div
+          @click="toggleShowModal"
+          v-if="selectedChat"
+          class="flex px-1 mx-3 my-2 overflow-x-hidden text-ellipsis hover:bg-transparent rounded cursor-pointer"
+        >
+          <n-avatar
+            class="mr-1 self-center"
+            size="small"
+            :src="selectedChat.image_url"
+          />
+          <span
+            v-if="selectedChat.is_active"
+            class="bg-green-700 rounded-full border-white border-2 h-3 w-3 relative -ml-3 mt-5"
+          />
+          <span
+            v-else
+            class="bg-white away rounded-full border-black border-2 h-2 w-2 relative"
+          />
 
-        <span v-if="selectedChat">
-          <p class="text-xl self-center font-semibold pl-1">
-            {{ selectedChat.username }}
-          </p>
-        </span>
-        <span v-if="selectedChat.status" class="self-center mx-1">
-          <n-tooltip trigger="hover">
-            <template #trigger>
-              {{ selectedChat.status.emoji }}
-            </template>
-            <span> {{ selectedChat.status.text }} </span>
-          </n-tooltip>
-        </span>
-        <i class="fa-solid fa-chevron-down self-center mx-1" />
+          <span v-if="selectedChat">
+            <p class="text-xl self-center font-semibold pl-1">
+              {{ selectedChat.username }}
+            </p>
+          </span>
+          <span v-if="selectedChat.status" class="self-center mx-1">
+            <n-tooltip trigger="hover">
+              <template #trigger>
+                {{ selectedChat.status.emoji }}
+              </template>
+              <span> {{ selectedChat.status.text }} </span>
+            </n-tooltip>
+          </span>
+          <i class="fa-solid fa-chevron-down self-center mx-1" />
+        </div>
+        <p v-if="selectedChat.topic" class="text-black-500">
+          {{ selectedChat.topic }}
+        </p>
       </div>
       <div
         class="flex items-center justify-center mr-2 w-8 h-8 rounded hover:bg-transparent cursor-pointer"

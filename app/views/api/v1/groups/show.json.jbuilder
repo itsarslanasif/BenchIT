@@ -9,3 +9,4 @@ json.isScheduled? scheduled?(@group.bench_conversation.id)
 json.partial! 'api/v1/shared/partials/profiles', profiles: @profiles
 json.bench_conversation_id @group.bench_conversation.id
 json.conversation_type @group.bench_conversation.conversationable_type
+json.topic @group.bench_conversation.topic
