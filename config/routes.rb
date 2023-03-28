@@ -22,10 +22,14 @@ Rails.application.routes.draw do
 
         resources :groups, only: %i[index show create] do
           member do
-            post :add_member
+            patch :add_member
           end
         end
-        resources :users, only: %i[index]
+        resources :users, only: %i[index create] do
+          collection do
+            get :verify_email
+          end
+        end
         resources :schedule_messages, only: %i[index update destroy] do
           member do
             get :send_now

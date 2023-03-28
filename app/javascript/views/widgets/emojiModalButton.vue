@@ -96,7 +96,7 @@ export default {
           break;
         case 'pin-to-this-conversation':
           try {
-            pinMessage(message.conversationable_id, message.id);
+            pinMessage(message.bench_conversation_id, message.id);
           } catch (e) {
             errorHandler(e.response.data.message);
           }
