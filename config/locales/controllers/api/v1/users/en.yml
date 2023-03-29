@@ -1,0 +1,8 @@
+en:
+  api:
+    v1:
+      users:
+        create:
+          success: User has been created successfully.
+        verify_email:
+          failure: The token has expired.

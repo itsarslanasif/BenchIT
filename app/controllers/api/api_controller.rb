@@ -32,7 +32,7 @@ class Api::ApiController < ApplicationController
     jwt_payload = JWT.decode(token, Rails.application.credentials.fetch(:secret_key_base))
     @current_user = User.find(jwt_payload[0]['sub'])
 
-    raise UnAuthorized, 'unauthorized' unless @current_user
+    check_user
 
     Current.user = @current_user
   end
@@ -43,5 +43,12 @@ class Api::ApiController < ApplicationController
 
   def current_workspace
     @current_workspace ||= Current.workspace
+  end
+
+  def check_user
+    return unless @current_user.blank? || (@current_user && !@current_user.verified?)
+
+    @current_user = nil
+    raise UnAuthorized, 'unauthorized'
   end
 end

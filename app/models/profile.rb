@@ -12,6 +12,8 @@ class Profile < ApplicationRecord
     }
   end
 
+  before_create :set_names
+
   after_commit :attach_avatar, :create_preference, on: %i[create]
   after_commit :broadcast_profile
 
@@ -72,10 +74,6 @@ class Profile < ApplicationRecord
     end
   end
 
-  def attach_avatar
-    generate_avatar(username, profile_image)
-  end
-
   def groups
     Group.where('profile_ids::text[] @> ARRAY[?]::text[]', [id])
   end
@@ -117,5 +115,10 @@ class Profile < ApplicationRecord
 
   def get_favourite_id(favourable_id, favourable_type)
     Current.profile.favourites.find_by(favourable_type: favourable_type, favourable_id: favourable_id)&.id
+  end
+
+  def set_names
+    self.pronounce_name = username if pronounce_name.blank?
+    self.display_name = username if display_name.blank?
   end
 end
