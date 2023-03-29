@@ -15,9 +15,14 @@
             <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
           </div>
         </div>
-        <p v-if="selectedChat.topic" class="text-black-500">
-          {{ selectedChat.topic }}
-        </p>
+        <div
+          v-if="selectedChat.topic"
+          class="flex items-center gap-1 hover-trigger"
+          @click="toggleEdittopic"
+        >
+          <p class="text-black-500">{{ selectedChat.topic }}</p>
+          <p class="text-info hover-target">Edit</p>
+        </div>
       </div>
       <GroupMembersInfoVue @click="toggleShowModal" />
     </div>
@@ -28,6 +33,11 @@
     :toggleModal="toggleShowModal"
     class="m-auto absolute inset-x-0"
   />
+  <edit-topic-modal
+    v-if="topicModal"
+    :chat="selectedChat"
+    :closeModal="toggleEdittopic"
+  />
 </template>
 
 <script>
@@ -37,10 +47,10 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-
+import editTopicModal from '../channeldetail/editTopicModal.vue';
 export default {
   name: 'ChannelInfo',
-  components: { ChatDetailModal, GroupMembersInfoVue },
+  components: { ChatDetailModal, GroupMembersInfoVue, editTopicModal },
   setup() {
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
@@ -53,6 +63,7 @@ export default {
     return {
       modalOpen: false,
       currentGroup: {},
+      topicModal: false,
     };
   },
   methods: {
@@ -67,11 +78,22 @@ export default {
       this.ChannelDetailStore.setSelectedOption('members');
       this.modalOpen = open;
     },
+    toggleEdittopic() {
+      this.topicModal = !this.topicModal;
+    },
   },
 };
 </script>
 <style scoped>
 .custom-border {
   border-bottom: 0.5px solid gray;
+}
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
 }
 </style>

@@ -40,9 +40,14 @@
           </span>
           <i class="fa-solid fa-chevron-down self-center mx-1" />
         </div>
-        <p v-if="selectedChat.topic" class="text-black-500">
-          {{ selectedChat.topic }}
-        </p>
+        <div
+          v-if="selectedChat.topic"
+          class="flex items-center gap-1 hover-trigger"
+          @click="toggleEdittopic"
+        >
+          <p class="text-black-500">{{ selectedChat.topic }}</p>
+          <p class="text-info hover-target">Edit</p>
+        </div>
       </div>
       <div
         class="flex items-center justify-center mr-2 w-8 h-8 rounded hover:bg-transparent cursor-pointer"
@@ -56,6 +61,11 @@
       :toggleModal="toggleShowModal"
       class="m-auto absolute inset-x-0"
     />
+    <edit-topic-modal
+      v-if="topicModal"
+      :closeModal="toggleEdittopic"
+      :chat="selectedChat"
+    />
   </div>
 </template>
 
@@ -67,9 +77,10 @@ import { useMessageStore } from '../../../stores/useMessagesStore.js';
 import { storeToRefs } from 'pinia';
 import ChatDetailModal from '../../containers/ChatDetailModal.vue';
 import { ref } from 'vue';
+import EditTopicModal from '../channeldetail/EditTopicModal.vue';
 
 export default {
-  components: { NAvatar, NTooltip, ChatDetailModal },
+  components: { NAvatar, NTooltip, ChatDetailModal, EditTopicModal },
   setup() {
     const directMessagesStore = useDirectMessagesStore();
     const leftPaneStore = useLeftpaneStore();
@@ -91,6 +102,16 @@ export default {
       openChatDetailModal,
     };
   },
+  data() {
+    return {
+      topicModal: false,
+    };
+  },
+  methods: {
+    toggleEdittopic() {
+      this.topicModal = !this.topicModal;
+    },
+  },
 };
 </script>
 
@@ -102,5 +123,13 @@ export default {
   margin-left: -10px;
   margin-top: 22px;
   outline: 2px solid rgb(255, 255, 255);
+}
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
 }
 </style>

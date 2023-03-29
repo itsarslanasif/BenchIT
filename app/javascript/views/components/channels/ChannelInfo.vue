@@ -23,9 +23,14 @@
             <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
           </div>
         </div>
-        <p v-if="selectedChat.topic" class="text-black-500">
-          {{ selectedChat.topic }}
-        </p>
+        <div
+          v-if="selectedChat.topic"
+          class="flex items-center gap-1 hover-trigger"
+          @click="toggleEditTopic"
+        >
+          <p class="text-black-500">{{ selectedChat.topic }}</p>
+          <p class="text-info hover-target">Edit</p>
+        </div>
       </div>
 
       <ChannelMembersInfoVue
@@ -41,6 +46,11 @@
     :toggleModal="toggleShowModal"
     class="m-auto absolute inset-x-0"
   />
+  <edit-topic-modal
+    v-if="topicModal"
+    :chat="selectedChat"
+    :closeModal="toggleEditTopic"
+  />
 </template>
 
 <script>
@@ -51,10 +61,10 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-
+import editTopicModal from '../channeldetail/editTopicModal.vue';
 export default {
   name: 'ChannelInfo',
-  components: { ChatDetailModal, ChannelMembersInfoVue },
+  components: { ChatDetailModal, ChannelMembersInfoVue, editTopicModal },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     const channelStore = useChannelStore();
@@ -67,6 +77,7 @@ export default {
     return {
       modalOpen: false,
       currentChannel: {},
+      topicModal: false,
     };
   },
   methods: {
@@ -91,6 +102,19 @@ export default {
           obj => obj.id === this.selectedChat.id
         );
     },
+    toggleEditTopic() {
+      this.topicModal = !this.topicModal;
+    },
   },
 };
 </script>
+<style>
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
+}
+</style>
