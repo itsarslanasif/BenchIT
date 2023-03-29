@@ -76,7 +76,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   def create_workspace_data
     ActiveRecord::Base.transaction do
       new_channel = BenchChannel.create!(name: 'general', description: 'general')
-      BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: new_channel.id)
+      BenchConversation.create!(conversationable: new_channel)
       new_channel.channel_participants.create!(profile_id: @profile.id, role: :channel_manager)
     end
   end
