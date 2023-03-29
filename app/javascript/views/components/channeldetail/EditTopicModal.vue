@@ -1,7 +1,7 @@
 <template>
   <transition name="fade" appear>
     <div
-      class="flex flex-wrap justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
+      class="flex flex-wrap justify-center items-center z-10 inset-0 fixed bg-opacity-25 bg-backgroundTransparent"
     >
       <div
         class="modal rounded-md w-2/5 h-2/5 shadow-md bg-white"
@@ -12,7 +12,7 @@
             <div
               class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer"
             >
-              <h1>Edit Topic</h1>
+              <h1>{{ $t('chat_detail.edit_topic') }}</h1>
             </div>
 
             <font-awesome-icon
@@ -29,20 +29,24 @@
             />
             <div
               v-if="
-                selectedChat.conversation_type === 'Profile' ||
-                selectedChat.conversation_type === 'Group'
+                selectedChat.conversation_type === $t('profile.title') ||
+                selectedChat.conversation_type === $t('conversation.group')
               "
               class="mb-6 text-black-500 mt-4"
             >
               <p>
                 {{ $t('chat_detail.add_topic_desc1') }}
                 <span class="font-semibold">{{ getChatName }}</span>
-                <span v-if="selectedChat.conversation_type === 'Profile'">{{
-                  $t('chat_detail.add_topic_desc2')
-                }}</span>
-                <span v-if="selectedChat.conversation_type === 'Group'">{{
-                  $t('chat_detail.add_topic_desc3')
-                }}</span>
+                <span
+                  v-if="selectedChat.conversation_type === $t('profile.title')"
+                  >{{ $t('chat_detail.add_topic_desc2') }}</span
+                >
+                <span
+                  v-if="
+                    selectedChat.conversation_type === $t('conversation.group')
+                  "
+                  >{{ $t('chat_detail.add_topic_desc3') }}</span
+                >
               </p>
             </div>
             <div v-else class="mb-6 text-black-500 mt-4">
@@ -77,8 +81,6 @@
   </transition>
 </template>
 <script>
-import { editTopic } from '../../../api/conversation/conversation';
-import { errorHandler } from '../../widgets/messageProvider';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
 
@@ -91,7 +93,7 @@ export default {
   setup() {
     const messagesStore = useMessageStore();
     const { selectedChat } = storeToRefs(messagesStore);
-    return { selectedChat };
+    return { selectedChat, messagesStore };
   },
   props: { closeModal: Function, chat: Object },
 
@@ -106,14 +108,8 @@ export default {
   },
   methods: {
     async onSubmit() {
-      editTopic(this.chat.bench_conversation_id, this.value)
-        .then(res => {
-          this.selectedChat.topic = this.value;
-          this.closeModal();
-        })
-        .catch(e => {
-          errorHandler(e.response.data.message);
-        });
+      this.messagesStore.editTopic(this.chat.bench_conversation_id, this.value);
+      this.closeModal();
     },
   },
 };
