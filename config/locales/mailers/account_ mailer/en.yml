@@ -1,0 +1,4 @@
+en:
+  account_mailer:
+    verification_email:
+      mail_subject: 'Email Verification'

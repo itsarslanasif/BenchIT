@@ -37,8 +37,4 @@ class Workspace < ApplicationRecord
     business_owner: 3,
     customer_support: 4
   }
-
-  def attach_avatar
-    generate_avatar(company_name, workspace_avatar)
-  end
 end

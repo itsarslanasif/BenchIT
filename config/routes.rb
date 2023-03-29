@@ -25,7 +25,11 @@ Rails.application.routes.draw do
             post :add_member
           end
         end
-        resources :users, only: %i[index]
+        resources :users, only: %i[index create] do
+          member do
+            get :verify_email
+          end
+        end
         resources :bench_conversations, only: %i[update]
         resources :schedule_messages, only: %i[index update destroy] do
           member do

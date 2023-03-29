@@ -1,0 +1,13 @@
+<h1>Hi <%= @profile.username %>, your workspace has been created successfully.</h1>
+<p>
+  Here are the details for your new workspace, <%= @workspace.company_name %>.
+<p>
+<strong>Workspace Name: </strong>
+<%= @workspace.company_name %> <br/>
+<strong>Workspace Type: </strong>
+<%= @workspace.workspace_type %> <br/>
+<strong>Workspace URL: </strong>
+<%= @workspace.bench_it_url %> <br/>
+<div>
+  <%= link_to button_tag('Click Here to Log In', class: 'btn btn-dark mt-3'), "#{ENV.fetch('VITE_APP_SERVER_URL', nil)}" %>
+</div>

@@ -310,6 +310,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_27_162733) do
     t.integer "invitations_count", default: 0
     t.string "name"
     t.string "jti", null: false
+    t.string "verification_token"
+    t.boolean "verified", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
