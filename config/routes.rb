@@ -26,7 +26,7 @@ Rails.application.routes.draw do
           end
         end
         resources :users, only: %i[index create] do
-          collection do
+          member do
             get :verify_email
           end
         end
