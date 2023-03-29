@@ -22,7 +22,7 @@ Rails.application.routes.draw do
 
         resources :groups, only: %i[index show create] do
           member do
-            patch :add_member
+            post :add_member
           end
         end
         resources :users, only: %i[index create] do

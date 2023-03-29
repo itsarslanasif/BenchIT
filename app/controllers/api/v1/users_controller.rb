@@ -5,7 +5,7 @@ class Api::V1::UsersController < Api::ApiController
 
   def index
     @users = User.all
-    render json: @users.as_json({ only: [:id, :name] })
+    render json: @users
   end
 
   def create
