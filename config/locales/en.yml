@@ -415,7 +415,7 @@ en:
         add_a_topic: 'Add a topic'
         add_topic_desc1: 'Add a topic to your conversation with'
         add_topic_desc2: 'This will be visible to both of you at the top of your DM.'
-        add_topic_desc3: 'This will be visible to both of you at the top of your conversation.'
+        add_topic_desc3: 'This will be visible to all participants at the top of your conversation.'
         add_topic_channel_desc1: 'Let people know what'
         add_topic_channel_desc2: 'is focused on right now (ex. a project milestone). Topics are always visible in the header.'
         mute: 'Mute'

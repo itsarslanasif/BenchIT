@@ -24,7 +24,8 @@
     </span>
     <span
       v-if="!isProfile"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 border-t-0"
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-4"
+      :class="isGroup ? 'border-t-1 rounded-b mb-5' : 'border-t-0'"
     >
       <p class="font-bold">{{ $t('chat_detail.created_by') }}</p>
       <p>

@@ -1,7 +1,7 @@
 <template>
   <transition name="fade" appear>
     <div
-      class="flex justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
+      class="flex flex-wrap justify-center items-center z-10 left-0 right-0 top-0 bottom-0 fixed bg-opacity-25 bg-backgroundTransparent"
     >
       <div
         class="modal rounded-md w-2/5 h-2/5 shadow-md bg-white"
@@ -32,7 +32,7 @@
                 selectedChat.conversation_type === 'Profile' ||
                 selectedChat.conversation_type === 'Group'
               "
-              class="mb-6 text-black-500 mt-4 cursor-pointer"
+              class="mb-6 text-black-500 mt-4"
             >
               <p>
                 {{ $t('chat_detail.add_topic_desc1') }}
@@ -53,7 +53,9 @@
               </p>
             </div>
 
-            <div class="flex items-center justify-end">
+            <div
+              class="flex flex-wrap md:justify-end items-center justify-center"
+            >
               <button
                 @click="closeModal"
                 class="bg-transparent text-black py-2 px-5 text-base float-right mb-3 rounded border"
@@ -96,10 +98,10 @@ export default {
   computed: {
     getChatName() {
       if (this.chat.conversation_type == 'Profile')
-        return `@${this.chat.username}`;
+        return `@${this.chat.username}. `;
       else if (this.chat.conversation_type == 'Channel')
-        return `#${this.chat.name}`;
-      else return `${this.chat.name}`;
+        return `#${this.chat.name}. `;
+      else return `${this.chat.name}. `;
     },
   },
   methods: {
