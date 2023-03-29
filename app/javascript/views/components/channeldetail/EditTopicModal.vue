@@ -9,7 +9,9 @@
       >
         <div class="p-8">
           <header class="flex w-full justify-between">
-            <div class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer">
+            <div
+              class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer"
+            >
               <h1>Edit Topic</h1>
             </div>
 
@@ -20,7 +22,11 @@
             />
           </header>
           <div class="m-0 relative mt-5">
-            <textarea :placeholder="$t('chat_detail.add_a_topic')" class="w-full border rounded h-32 p-3" v-model="value" />
+            <textarea
+              :placeholder="$t('chat_detail.add_a_topic')"
+              class="w-full border rounded h-32 p-3"
+              v-model="value"
+            />
             <div
               v-if="
                 selectedChat.conversation_type === 'Profile' ||
