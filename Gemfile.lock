@@ -229,6 +229,7 @@ GEM
       railties (~> 7.0.0)
     msgpack (1.6.1)
     multi_json (1.15.0)
+    multi_xml (0.6.0)
     multipart-post (2.3.0)
     net-imap (0.3.4)
       date
@@ -244,6 +245,13 @@ GEM
       racc (~> 1.4)
     nokogiri (1.14.2-x86_64-linux)
       racc (~> 1.4)
+    oauth2 (2.0.9)
+      faraday (>= 0.17.3, < 3.0)
+      jwt (>= 1.0, < 3.0)
+      multi_xml (~> 0.5)
+      rack (>= 1.2, < 4)
+      snaky_hash (~> 2.0)
+      version_gem (~> 1.1)
     orm_adapter (0.5.0)
     pagy (6.0.2)
     parallel (1.22.1)
@@ -352,6 +360,9 @@ GEM
       connection_pool (>= 2.2.5, < 3)
       rack (~> 2.0)
       redis (>= 4.5.0, < 5)
+    snaky_hash (2.0.1)
+      hashie
+      version_gem (~> 1.1, >= 1.1.1)
     spring (4.1.1)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
@@ -366,6 +377,7 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.4.2)
+    version_gem (1.1.2)
     vite_rails (3.0.14)
       railties (>= 5.1, < 8)
       vite_ruby (~> 3.0, >= 3.2.2)
@@ -426,6 +438,7 @@ DEPENDENCIES
   minitest-metadata
   minitest-profiler
   minitest-rails
+  oauth2 (~> 2.0)
   pagy
   pg
   puma (~> 5.0)
