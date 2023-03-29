@@ -4,6 +4,7 @@
       class="flex flex-wrap justify-center items-center z-10 inset-0 fixed bg-opacity-25 bg-backgroundTransparent"
     >
       <div
+        v-click-outside="closeModal"
         class="modal rounded-md w-2/5 h-2/5 shadow-md bg-white"
         role="dialog"
       >
@@ -83,6 +84,7 @@
 <script>
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import { storeToRefs } from 'pinia';
+import vClickOutside from 'click-outside-vue3';
 
 export default {
   data() {
@@ -96,7 +98,9 @@ export default {
     return { selectedChat, messagesStore };
   },
   props: { closeModal: Function, chat: Object },
-
+  directives: {
+    clickOutside: vClickOutside.directive,
+  },
   computed: {
     getChatName() {
       if (this.chat.conversation_type == 'Profile')

@@ -46,7 +46,7 @@
           @click="toggleEdittopic"
         >
           <p class="text-black-500">{{ selectedChat.topic }}</p>
-          <p class="text-info hover-target">Edit</p>
+          <p class="text-info hover-target hover:underline">Edit</p>
         </div>
       </div>
       <div
