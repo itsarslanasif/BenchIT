@@ -7,6 +7,7 @@ import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
 import { errorHandler } from '../views/widgets/messageProvider';
 import { getGroup } from '../api/groups/groups';
+import { editTopic } from '../api/conversation/conversation';
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -48,6 +49,15 @@ export const useMessageStore = () => {
       getSelectedChat: state => state.selectedChat,
     },
     actions: {
+      editTopic(bench_conversation_id, value) {
+        editTopic(bench_conversation_id, value)
+          .then(res => {
+            this.selectedChat.topic = value;
+          })
+          .catch(e => {
+            errorHandler(e.response.data.message);
+          });
+      },
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
         if (selectedChat.hasOwnProperty('user_id')) {

@@ -27,7 +27,7 @@ class ConversationMessage < ApplicationRecord
 
   scope :chat_messages, lambda { |id|
     includes(:profile, :replies, :reactions).where(parent_message_id: nil,
-                                                   bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
+                                                   bench_conversation_id: id).order(created_at: :desc).with_attached_message_attachments
   }
 
   scope :messages_with_other_reactions, lambda { |current_profile|
