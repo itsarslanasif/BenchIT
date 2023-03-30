@@ -103,11 +103,14 @@ export default {
   },
   computed: {
     getChatName() {
-      if (this.chat.conversation_type == 'Profile')
-        return `@${this.chat.username}. `;
-      else if (this.chat.conversation_type == 'Channel')
-        return `#${this.chat.name}. `;
-      else return `${this.chat.name}. `;
+      switch (this.chat.conversation_type) {
+        case 'Profile':
+          return `@${this.chat.username}. `;
+        case 'Channel':
+          return `#${this.chat.name} `;
+        default:
+          return `${this.chat.name}. `;
+      }
     },
   },
   methods: {
