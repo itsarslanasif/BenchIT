@@ -204,7 +204,7 @@ const router = createRouter({
       meta: {
         auth: false,
       },
-    }
+    },
   ],
 });
 router.beforeEach(async (to, from, next) => {
