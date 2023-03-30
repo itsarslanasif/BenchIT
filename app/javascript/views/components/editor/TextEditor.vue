@@ -420,7 +420,6 @@ export default {
       addKeyboardShortcuts() {
         return {
           'Shift-Enter': () => editor.value.chain().focus().splitListItem('listItem').run(),
-          'Backspace': () => editor.value.commands.toggleBulletList(),
         }
       },
     })
@@ -446,6 +445,7 @@ export default {
           OrderedList,
           ListItem,
         ],
+        autofocus: 'end',
         onUpdate: () => {
           editorContent.value = editor.value.getHTML();
         },
