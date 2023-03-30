@@ -62,6 +62,9 @@
           >
             <font-awesome-icon icon="fa-list" />
           </button>
+            <button @click="editor.chain().focus().splitListItem('listItem').run()" :disabled="!editor.can().splitListItem('listItem')">
+               splitListItem
+            </button>
           <div class="vl" />
           <button
             @click="editor.chain().focus().toggleBlockquote().run()"
@@ -277,6 +280,10 @@ import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import { useConnectionStore } from '../../../stores/useConnectionStore.js';
+import BulletList from '@tiptap/extension-bullet-list'
+import ListItem from '@tiptap/extension-list-item'
+import OrderedList from '@tiptap/extension-ordered-list'
+
 
 export default {
   data() {
@@ -408,6 +415,16 @@ export default {
     const emojiModalFlag = ref(false);
     const showTopBar = ref(true);
 
+    const CustomBulletList = BulletList.extend({
+      defining: true,
+      addKeyboardShortcuts() {
+        return {
+          'Shift-Enter': () => editor.value.chain().focus().splitListItem('listItem').run(),
+          'Backspace': () => editor.value.commands.toggleBulletList(),
+        }
+      },
+    })
+
     onMounted(() => {
       editor.value = new Editor({
         extensions: [
@@ -421,6 +438,13 @@ export default {
           Placeholder.configure({
             placeholder: getPlaceholder,
           }),
+          CustomBulletList.configure({
+            itemTypeName: 'listItem',
+            keepMarks: true,
+            keepAttributes: true,
+          }),
+          OrderedList,
+          ListItem,
         ],
         onUpdate: () => {
           editorContent.value = editor.value.getHTML();
