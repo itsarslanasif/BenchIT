@@ -162,9 +162,6 @@ module.exports = {
         180: '37.5rem',
         95: '20rem',
       },
-      gridTemplateRows: {
-        18: 'repeat(18, minmax(0, 1fr))',
-      },
     },
   },
   variants: {

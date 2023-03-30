@@ -9,6 +9,7 @@ import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
+import UserSignUp from './views/pages/UserSignUp.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
 import Homepage from './views/pages/Homepage.vue';
@@ -196,6 +197,14 @@ const router = createRouter({
         auth: false,
       },
     },
+    {
+      path: '/sign_up/',
+      component: UserSignUp,
+      name: 'user_sign_up',
+      meta: {
+        auth: false,
+      },
+    }
   ],
 });
 router.beforeEach(async (to, from, next) => {
