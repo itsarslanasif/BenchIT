@@ -92,13 +92,14 @@
         </p>
         <span class="flex">
           <p class="text-black-600 mr-2">
-            {{ selectedChat?.description }}
+            Description: {{ selectedChat?.description }}
           </p>
           <p
-            v-if="isChannel && !selectedChat?.is_private"
+            v-if="isChannel"
             class="text-info cursor-pointer hover:underline"
+            @click="toggleDescriptionModal()"
           >
-            {{ $t('chat.edit_description') }}
+            {{ $t('actions.edit') }}
           </p>
         </span>
         <p>
@@ -122,6 +123,11 @@
         >@{{ selectedChat?.username }}</a
       >
     </p>
+    <EditDescriptionModal
+      v-if="showDescriptionModal"
+      :closeModal="toggleDescriptionModal"
+      :chat="selectedChat"
+    />
   </div>
 </template>
 
@@ -134,12 +140,14 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import AddPeopleToChannel from '../components/channels/AddPeopleToChannel.vue';
+import EditDescriptionModal from '../components/channeldetail/EditDescriptionModal.vue';
 
 export default {
-  components: { AddPeopleToChannel },
+  components: { AddPeopleToChannel, EditDescriptionModal },
   data() {
     return {
       conversation_type: window.location.pathname.split('/')[1],
+      showDescriptionModal: false,
     };
   },
   setup() {
@@ -185,6 +193,9 @@ export default {
         profile => profile.id === profile_id
       );
       this.userProfileStore.setUserProfile(profile);
+    },
+    toggleDescriptionModal() {
+      this.showDescriptionModal = !this.showDescriptionModal;
     },
   },
 };

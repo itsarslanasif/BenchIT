@@ -48,6 +48,17 @@ class InfoMessagesCreatorService
     )
   end
 
+  def edit_channel(description)
+    text = description.blank? ? 'cleared the channel description' : "set the channel description: #{description}"
+    ConversationMessage.create(
+      content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"#{text}"}}]}),
+      is_threaded: @is_threaded,
+      bench_conversation_id: @bench_conversation_id,
+      sender_id: @sender_id,
+      is_info: @is_info
+    )
+  end
+
   private
 
   def user_list(users)

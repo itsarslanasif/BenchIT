@@ -25,10 +25,15 @@
             </span>
           </div>
           <div>
-            {{ channelParticipants.length }} {{ $t('channeldetail.members') }}
+            {{ channelParticipants.length }}
+            {{
+              channelParticipants.length === 1
+                ? $t('channel_details.member')
+                : $t('channel_details.members')
+            }}
           </div>
-          <div>
-            {{ channelDescription }}
+          <div v-if="channelDescription">
+            <strong> &middot; </strong> {{ channelDescription }}
           </div>
         </div>
       </div>

@@ -1,6 +1,7 @@
 <template>
-  <div v-if="chat" class="bg-white flex flex-col p-4 overflow-auto">
+  <div v-if="selectedChat" class="bg-white flex flex-col p-4 overflow-auto">
     <span
+      @click="toggleEditModal()"
       :class="!isProfile ? 'border-b-0 rounded-t-md' : 'rounded-md'"
       class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-4 rounded-t-md"
     >
@@ -9,19 +10,31 @@
         <p v-if="selectedChat.topic">{{ selectedChat.topic }}</p>
         <p v-else class="cursor-pointer">{{ $t('chat_detail.add_topic') }}</p>
       </span>
-      <span @click="toggleEditModal()">
-        <p class="cursor-pointer text-info font-semibold p-2">
+      <span>
+        <p class="cursor-pointer text-info hover:underline font-semibold p-2">
           {{ $t('actions.edit') }}
         </p>
       </span>
     </span>
     <span
+      @click="toggleDescriptionModal()"
       v-if="!isProfile && !isGroup"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 border-b-1"
+      class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-4 border-b-1"
     >
-      <p class="font-bold">{{ $t('chat_detail.description') }}</p>
-      <p>{{ chat.description }}</p>
+      <span>
+        <p class="font-bold">{{ $t('chat_detail.description') }}</p>
+        <p v-if="selectedChat.description">{{ selectedChat.description }}</p>
+        <p v-else class="cursor-pointer">
+          {{ $t('chat_detail.add_a_description') }}
+        </p>
+      </span>
+      <span>
+        <p class="cursor-pointer text-info hover:underline mr-2 font-semibold">
+          {{ $t('actions.edit') }}
+        </p>
+      </span>
     </span>
+
     <span
       v-if="!isProfile"
       class="border border-black-300 cursor-pointer hover:bg-transparent p-4"
@@ -29,8 +42,8 @@
     >
       <p class="font-bold">{{ $t('chat_detail.created_by') }}</p>
       <p>
-        {{ chat.creator_name }} on
-        {{ formatDate(chat.created_at) }}
+        {{ selectedChat.creator_name }} on
+        {{ formatDate(selectedChat.created_at) }}
       </p>
     </span>
     <span
@@ -46,22 +59,22 @@
     >
       <span class="flex gap-2 p-1 items-center">
         <i class="fa-regular fa-clock mx-1" />
-        <p>{{ chat.local_time }} {{ $t('chat_detail.local_time') }}</p>
+        <p>{{ selectedChat.local_time }} {{ $t('chat_detail.local_time') }}</p>
       </span>
       <span class="flex gap-2 p-1 items-center">
         <i class="fa-solid fa-phone mx-1" />
         <p class="text-info cursor-pointer hover:underline">
-          {{ chat.contact_info.phone }}
+          {{ selectedChat.contact_info.phone }}
         </p>
       </span>
       <span class="flex gap-2 p-1 items-center">
         <i class="fa-regular fa-envelope mx-1" />
         <p class="text-info cursor-pointer hover:underline">
-          {{ chat.contact_info.email }}
+          {{ selectedChat.contact_info.email }}
         </p>
       </span>
       <p
-        @click="showUserProfile(chat.id)"
+        @click="showUserProfile(selectedChat.id)"
         class="text-info font-semibold mx-2 mt-1 cursor-pointer hover:underline w-fit"
       >
         {{ $t('chat_detail.view_full_profile') }}
@@ -83,9 +96,14 @@
       <p class="font-bold">{{ $t('chat_detail.files') }}</p>
       <p>{{ $t('chat_detail.file_content') }}</p>
     </span>
-    <edit-topic-modal
+    <EditTopicModal
       v-if="showModal"
       :closeModal="toggleEditModal"
+      :chat="selectedChat"
+    />
+    <EditDescriptionModal
+      v-if="showDescriptionModal"
+      :closeModal="toggleDescriptionModal"
       :chat="selectedChat"
     />
   </div>
@@ -101,6 +119,7 @@ import { storeToRefs } from 'pinia';
 import moment from 'moment';
 import { useMessageStore } from '../../../stores/useMessagesStore';
 import EditTopicModal from './EditTopicModal.vue';
+import EditDescriptionModal from './EditDescriptionModal.vue';
 
 export default {
   props: {
@@ -109,10 +128,12 @@ export default {
   },
   components: {
     EditTopicModal,
+    EditDescriptionModal,
   },
   data() {
     return {
       showModal: false,
+      showDescriptionModal: false,
     };
   },
   computed: {
@@ -168,6 +189,9 @@ export default {
     },
     toggleEditModal() {
       this.showModal = !this.showModal;
+    },
+    toggleDescriptionModal() {
+      this.showDescriptionModal = !this.showDescriptionModal;
     },
   },
 };

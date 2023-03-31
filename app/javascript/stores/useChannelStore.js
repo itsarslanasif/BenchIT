@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import {
   getChannels,
+  updateChannel,
   createChannel,
   memberJoinChannel,
   memberLeaveChannel,
@@ -54,6 +55,16 @@ export const useChannelStore = () => {
         } catch (e) {
           this.handleError(e.response.data.message);
         }
+      },
+
+      updateChannel(channel_id, is_private, value) {
+        updateChannel(channel_id, is_private, value)
+          .then(res => {
+            this.currentChannel.description = value;
+          })
+          .catch(e => {
+            errorHandler(e.response.data.message);
+          });
       },
 
       async fetchStarredChannels() {

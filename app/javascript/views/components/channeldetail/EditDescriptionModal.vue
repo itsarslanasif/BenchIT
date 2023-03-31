@@ -13,7 +13,7 @@
             <div
               class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer"
             >
-              <h1>{{ $t('chat_detail.edit_topic') }}</h1>
+              <h1>{{ $t('chat.edit_description') }}</h1>
             </div>
 
             <font-awesome-icon
@@ -24,34 +24,13 @@
           </header>
           <div class="m-0 relative mt-5">
             <textarea
-              :placeholder="$t('chat_detail.add_a_topic')"
+              :placeholder="$t('chat_detail.add_a_description')"
               class="w-full border rounded h-32 p-3"
               v-model="value"
             />
-            <div
-              v-if="
-                chat.conversation_type === $t('profile.title') ||
-                chat.conversation_type === $t('conversation.group')
-              "
-              class="mb-6 text-black-500 mt-4"
-            >
+            <div class="mb-6 text-black-500 mt-4">
               <p>
-                {{ $t('chat_detail.add_topic_desc1') }}
-                <span class="font-semibold">{{ getChatName }}</span>
-                <span v-if="chat.conversation_type === $t('profile.title')">{{
-                  $t('chat_detail.add_topic_desc2')
-                }}</span>
-                <span
-                  v-if="chat.conversation_type === $t('conversation.group')"
-                  >{{ $t('chat_detail.add_topic_desc3') }}</span
-                >
-              </p>
-            </div>
-            <div v-else class="mb-6 text-black-500 mt-4">
-              <p>
-                {{ $t('chat_detail.add_topic_channel_desc1') }}
-                <span class="font-semibold">{{ getChatName }}</span>
-                {{ $t('chat_detail.add_topic_channel_desc2') }}
+                {{ $t('chat_detail.channel_description') }}
               </p>
             </div>
 
@@ -79,38 +58,30 @@
   </transition>
 </template>
 <script>
-import { useMessageStore } from '../../../stores/useMessagesStore';
+import { useChannelStore } from '../../../stores/useChannelStore';
 import vClickOutside from 'click-outside-vue3';
 
 export default {
   data() {
     return {
-      value: this.chat.topic,
+      value: this.chat.description,
     };
   },
   setup() {
-    const messagesStore = useMessageStore();
-    return { messagesStore };
+    const channelStore = useChannelStore();
+    return { channelStore };
   },
   props: { closeModal: Function, chat: Object },
   directives: {
     clickOutside: vClickOutside.directive,
   },
-  computed: {
-    getChatName() {
-      switch (this.chat.conversation_type) {
-        case 'Profile':
-          return `@${this.chat.username}. `;
-        case 'Channel':
-          return `#${this.chat.name} `;
-        default:
-          return `${this.chat.name}. `;
-      }
-    },
-  },
   methods: {
     async onSubmit() {
-      this.messagesStore.editTopic(this.chat.bench_conversation_id, this.value);
+      this.channelStore.updateChannel(
+        this.chat.id,
+        this.chat.is_private,
+        this.value
+      );
       this.closeModal();
     },
   },
