@@ -18,7 +18,7 @@
         <p class="text-md font-thin">
           {{ $t('pages.sign_in.new_to_bench_it') }}
         </p>
-        <a class="text-md text-woot-800" href="#">{{
+        <a class="text-md text-woot-800" href="http://127.0.0.1:5100/sign_up">{{
           $t('pages.sign_in.create_your_account')
         }}</a>
       </div>

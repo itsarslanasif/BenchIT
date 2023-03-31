@@ -48,6 +48,11 @@ en:
           email: 'Email'
           password: 'Password'
           user_name: 'User Name'
+          confirm_email: 'Next, confirm your email address'
+          privacy_terms: 'Privacy & Terms'
+          contact_us: 'Contact Us'
+          change_region: 'Change region'
+          sent_email_to: 'We have sent an email to'
       workspaces:
         title: 'Details About Your Workspace'
         new_workspace_title: 'Add Title Of Your Workspace'
