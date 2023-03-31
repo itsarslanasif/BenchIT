@@ -46,7 +46,7 @@
     :toggleModal="toggleShowModal"
     class="m-auto absolute inset-x-0"
   />
-  <edit-topic-modal
+  <EditTopicModal
     v-if="topicModal"
     :chat="selectedChat"
     :closeModal="toggleEditTopic"
@@ -61,10 +61,10 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-import editTopicModal from '../channeldetail/editTopicModal.vue';
+import EditTopicModal from '../channeldetail/EditTopicModal.vue';
 export default {
   name: 'ChannelInfo',
-  components: { ChatDetailModal, ChannelMembersInfoVue, editTopicModal },
+  components: { ChatDetailModal, ChannelMembersInfoVue, EditTopicModal },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     const channelStore = useChannelStore();
