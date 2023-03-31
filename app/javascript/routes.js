@@ -9,6 +9,9 @@ import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
+import UserSignUp from './views/pages/Signup/UserSignUp.vue';
+import UserSignUpForm from './views/pages/Signup/UserSignUpForm.vue';
+import SignUpSuccessful from './views/pages/Signup/SignUpSuccessful.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
 import Homepage from './views/pages/Homepage.vue';
@@ -195,6 +198,32 @@ const router = createRouter({
       meta: {
         auth: false,
       },
+    },
+    {
+      path: '/sign_up',
+      component: UserSignUp,
+      name: 'sign_up',
+      meta: {
+        auth: false,
+      },
+      children: [
+        {
+          path: '/sign_up',
+          component: UserSignUpForm,
+          name: 'sign_up',
+          meta: {
+            auth: false,
+          },
+        },
+        {
+          path: '/sign_up/success/',
+          component: SignUpSuccessful,
+          name: 'sign_up_success',
+          meta: {
+            auth: false,
+          },
+        },
+      ],
     },
   ],
 });
