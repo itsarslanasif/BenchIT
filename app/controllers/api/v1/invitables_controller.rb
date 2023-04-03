@@ -12,7 +12,7 @@ class Api::V1::InvitablesController < Api::ApiController
   def create
     ActiveRecord::Base.transaction do
       params[:mail_list].each do |email|
-        @invitable = Invitable.new(email: email, invitation_type: params[:invitable_type])
+        @invitable = Invitable.new(email: email, invitation_type: params[:invitation_type], reason: params[:reason])
         check_user_and_profile(email)
       end
     end
@@ -29,8 +29,9 @@ class Api::V1::InvitablesController < Api::ApiController
   def accept_invitation
     if @invitable.approved?
       ActiveRecord::Base.transaction do
-        @invitable.accepted!
         create_user_or_profile
+        @invitable.acceptor_id = @profile.id
+        @invitable.accepted!
       end
     end
 
@@ -38,6 +39,10 @@ class Api::V1::InvitablesController < Api::ApiController
   end
 
   private
+
+  def invitable_params
+    params.require(:invitable).permit(:mail_list[], :invitation_type, :reason)
+  end
 
   def set_invitable
     @invitable = Invitable.find(params[:id])
@@ -55,7 +60,7 @@ class Api::V1::InvitablesController < Api::ApiController
 
   def check_user_and_profile(email)
     @user = User.find_by(email: email)
-    @invitable.has_account = @user.nil? ? :no : :yes
+    @invitable.has_account = !@user.nil?
     @profile = @user&.profiles&.find_by(workspace_id: current_workspace.id)
     send_invitation if @profile.nil?
   end

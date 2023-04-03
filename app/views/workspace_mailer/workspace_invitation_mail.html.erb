@@ -12,7 +12,7 @@
 <%= @invitable.workspace.workspace_type %> <br/>
 <strong>Your Role: </strong>
 <%= @invitable.invitation_type %> <br/>
-<% if @invitable.no? %>
+<% unless @invitable.has_account? %>
   <h2>Your Default Credentials after accepting the invitation link will be</h2><br/>
   <strong>Email: <%= @invitable.email %> </strong> <br/>
   <strong>Password: <%= ENV.fetch('PASSWORD', 'Password1!') %></strong> <br/>

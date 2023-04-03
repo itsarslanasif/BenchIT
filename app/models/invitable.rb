@@ -1,17 +1,16 @@
 class Invitable < ApplicationRecord
   belongs_to :workspace
   belongs_to :profile
+  belongs_to :acceptor, class_name: 'Profile', optional: true
 
-  validates :email, :token, presence: true
-  validates :status, presence: true # , numericality: { only_integer: true, inclusion: 0..3 }
-  validates :invitation_type, presence: true # , numericality: { only_integer: true, inclusion: 0..1 }
+  validates :email, :token, :status, presence: true
   validates :workspace, uniqueness: { scope: %i[email] }
+  validates :token, uniqueness: true
 
   before_validation :set_values, on: :create
 
   enum invitation_type: { member: 0, guest: 1 }
   enum status: { pending: 0, approved: 1, rejected: 2, accepted: 3 }
-  enum has_account: { yes: 0, no: 1 }
 
   private
 

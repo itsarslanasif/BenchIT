@@ -38,6 +38,7 @@ class Profile < ApplicationRecord
   has_one :preference, dependent: :destroy
   has_many :mentions, as: :mentionable, dependent: :destroy
   has_many :invitables, dependent: :destroy
+  has_many :invitations, class_name: 'Invitable', foreign_key: 'acceptor_id', dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }

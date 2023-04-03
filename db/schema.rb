@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_29_160906) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_29_160905) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -166,18 +166,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_160906) do
     t.string "profile_ids", default: [], array: true
   end
 
-  create_table "invitables", id: :serial, force: :cascade do |t|
+  create_table "invitables", id: :string, force: :cascade do |t|
     t.string "token", null: false
-    t.string "workspace_id", null: false
+    t.text "reason"
+    t.string "email", null: false
     t.integer "invitation_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.boolean "has_account", default: false
+    t.string "workspace_id", null: false
+    t.string "profile_id", null: false
+    t.string "acceptor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "profile_id", null: false
-    t.string "email", null: false
-    t.integer "status", default: 0, null: false
-    t.integer "has_account", default: 0, null: false
+    t.index ["acceptor_id"], name: "index_invitables_on_acceptor_id"
     t.index ["profile_id"], name: "index_invitables_on_profile_id"
-    t.index ["token"], name: "index_invitables_on_token"
+    t.index ["token"], name: "index_invitables_on_token", unique: true
     t.index ["workspace_id", "email"], name: "index_invitables_on_workspace_id_and_email", unique: true
     t.index ["workspace_id"], name: "index_invitables_on_workspace_id"
   end
@@ -356,6 +359,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_160906) do
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
   add_foreign_key "invitables", "profiles"
+  add_foreign_key "invitables", "profiles", column: "acceptor_id"
   add_foreign_key "invitables", "workspaces"
   add_foreign_key "mentions", "conversation_messages"
   add_foreign_key "pins", "bench_conversations"
