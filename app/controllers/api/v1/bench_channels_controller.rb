@@ -4,7 +4,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   before_action :set_bench_channel, :authenticate_channel, only: %i[show update destroy leave_channel]
   before_action :set_channel_participant, only: :leave_channel
-  before_action :bench_channel_cannot_be_public_again, :channel_can_be_renamed_by_creator, only: :update
+  before_action :bench_channel_cannot_be_public_again, only: :update
 
   def index
     @bench_channels = current_workspace.bench_channels
@@ -33,6 +33,9 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def update
+    if params[:bench_channel][:name] != @bench_channel.name
+      authorize! :update_name, @bench_channel
+    end
     @bench_channel.update!(bench_channel_params)
     if @bench_channel.saved_change_to_description?
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).edit_channel(@bench_channel.description)
@@ -80,12 +83,6 @@ class Api::V1::BenchChannelsController < Api::ApiController
 
   def bench_channel_cannot_be_public_again
     return unless @bench_channel.is_private? && !params[:bench_channel][:is_private]
-
-    render json: { success: false, error: t('.failure') }, status: :bad_request
-  end
-
-  def channel_can_be_renamed_by_creator
-    return unless @bench_channel.creator_id != current_profile.id && params[:bench_channel][:name] != @bench_channel.name
 
     render json: { success: false, error: t('.failure') }, status: :bad_request
   end
