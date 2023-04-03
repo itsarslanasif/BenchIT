@@ -33,7 +33,10 @@
       <label class="flex mt-6 font-semibold">{{
         $t('placeholder.invitation')
       }}</label>
-      <select v-model="invitationType" class="border border-black-400 rounded w-150 text-black-900 mt-2 h-12 p-3">
+      <select
+        v-model="invitationType"
+        class="border border-black-400 rounded w-150 text-black-900 mt-2 h-12 p-3"
+      >
         <option value="member" selected>{{ $t('invitation.member') }}</option>
         <option value="guest">{{ $t('invitation.guest') }}</option>
       </select>
@@ -70,7 +73,7 @@ export default {
       errorAlert: null,
       emails: null,
       invitationType: 'member',
-      reason: null
+      reason: null,
     };
   },
   components: {
@@ -110,10 +113,12 @@ export default {
     async handleSubmit() {
       try {
         const emailList = this.emails.split(/[\s,]+/);
-        await invite_user(emailList, this.invitationType, this.reason).then(response => {
-          this.error = false;
-          this.response = response.data.message;
-        });
+        await invite_user(emailList, this.invitationType, this.reason).then(
+          response => {
+            this.error = false;
+            this.response = response.data.message;
+          }
+        );
       } catch (e) {
         this.error = true;
       }
