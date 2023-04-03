@@ -9,7 +9,7 @@ export const createWorkspace = async workspace => {
 
 export const invite_user = async (emailList, invitationType, reason) => {
   return await axios.post(
-    `/v1/invitables`,
+    `/v1/invites`,
     { mail_list: emailList, invitation_type: invitationType, reason: reason },
     { headers: getHeaders() }
   );

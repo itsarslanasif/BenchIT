@@ -1,7 +1,7 @@
 en:
   api:
     v1:
-      invitables:
+      invites:
         create:
           success: The invitation has been created successfully.
           failure: Error while creating the invitation.

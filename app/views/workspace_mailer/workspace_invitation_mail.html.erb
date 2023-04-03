@@ -1,20 +1,20 @@
-<h1>
-  Hi <%= @invitable.email %>, you have been invited into the
+<h3>
+  Hi <%= @invite.email %>, you have been invited into the
   <%= link_to ENV.fetch('APP_NAME', nil), ENV.fetch('VITE_APP_SERVER_URL', nil) %>
-  App by <%= @invitable.profile.username %>
-</h1>
+  App by <%= @invite.profile.username %>
+</h3>
 <p>
-  Here are the details for your invited workspace, <%= @invitable.workspace.company_name %>.
+  Here are the details for your invited workspace, <%= @invite.workspace.company_name %>.
 </p>
 <strong>Workspace Name: </strong>
-<%= @invitable.workspace.company_name %> <br/>
+<%= @invite.workspace.company_name %> <br/>
 <strong>Workspace Type: </strong>
-<%= @invitable.workspace.workspace_type %> <br/>
+<%= @invite.workspace.workspace_type %> <br/>
 <strong>Your Role: </strong>
-<%= @invitable.invitation_type %> <br/>
-<% unless @invitable.has_account? %>
+<%= @invite.invitation_type %> <br/>
+<% unless @invite.has_account? %>
   <h2>Your Default Credentials after accepting the invitation link will be</h2><br/>
-  <strong>Email: <%= @invitable.email %> </strong> <br/>
+  <strong>Email: <%= @invite.email %> </strong> <br/>
   <strong>Password: <%= ENV.fetch('PASSWORD', 'Password1!') %></strong> <br/>
 <% end %>
 <div>

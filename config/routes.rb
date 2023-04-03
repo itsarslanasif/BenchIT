@@ -50,7 +50,7 @@ Rails.application.routes.draw do
         end
         resources :saved_items, only: %i[index create destroy]
         resources :favourites, only: %i[create destroy]
-        resources :invitables, only: %i[create update] do
+        resources :invites, only: %i[create update] do
           member do
             get :accept_invitation
           end

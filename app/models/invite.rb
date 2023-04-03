@@ -1,7 +1,6 @@
-class Invitable < ApplicationRecord
+class Invite < ApplicationRecord
   belongs_to :workspace
   belongs_to :profile
-  belongs_to :acceptor, class_name: 'Profile', optional: true
 
   validates :email, :token, :status, presence: true
   validates :workspace, uniqueness: { scope: %i[email] }

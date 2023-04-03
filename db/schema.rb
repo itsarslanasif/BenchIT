@@ -167,7 +167,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_160905) do
     t.string "profile_ids", default: [], array: true
   end
 
-  create_table "invitables", force: :cascade do |t|
+  create_table "invites", force: :cascade do |t|
     t.string "token", null: false
     t.text "reason"
     t.string "email", null: false
@@ -176,14 +176,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_160905) do
     t.boolean "has_account", default: false
     t.string "workspace_id", null: false
     t.string "profile_id", null: false
-    t.string "acceptor_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["acceptor_id"], name: "index_invitables_on_acceptor_id"
-    t.index ["profile_id"], name: "index_invitables_on_profile_id"
-    t.index ["token"], name: "index_invitables_on_token", unique: true
-    t.index ["workspace_id", "email"], name: "index_invitables_on_workspace_id_and_email", unique: true
-    t.index ["workspace_id"], name: "index_invitables_on_workspace_id"
+    t.index ["profile_id"], name: "index_invites_on_profile_id"
+    t.index ["token"], name: "index_invites_on_token", unique: true
+    t.index ["workspace_id", "email"], name: "index_invites_on_workspace_id_and_email", unique: true
+    t.index ["workspace_id"], name: "index_invites_on_workspace_id"
   end
 
   create_table "mentions", id: :serial, force: :cascade do |t|
@@ -359,9 +357,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_160905) do
   add_foreign_key "draft_messages", "conversation_messages"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
-  add_foreign_key "invitables", "profiles"
-  add_foreign_key "invitables", "profiles", column: "acceptor_id"
-  add_foreign_key "invitables", "workspaces"
+  add_foreign_key "invites", "profiles"
+  add_foreign_key "invites", "workspaces"
   add_foreign_key "mentions", "conversation_messages"
   add_foreign_key "pins", "bench_conversations"
   add_foreign_key "pins", "conversation_messages"
