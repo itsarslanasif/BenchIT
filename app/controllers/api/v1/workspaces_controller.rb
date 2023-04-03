@@ -22,14 +22,6 @@ class Api::V1::WorkspacesController < Api::ApiController
     render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
   end
 
-  def create_invitable
-    @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id, token: @token, token_type: 'workspace_invitation')
-
-    return unless @invitable.errors.any?
-
-    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
-  end
-
   def switch_workspace
     session[:current_workspace_id] = @workspace.id
   end

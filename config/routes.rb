@@ -50,7 +50,7 @@ Rails.application.routes.draw do
         end
         resources :saved_items, only: %i[index create destroy]
         resources :favourites, only: %i[create destroy]
-        resources :invitables, only: %i[index create update] do
+        resources :invitables, only: %i[create update] do
           member do
             get :accept_invitation
           end
@@ -69,7 +69,6 @@ Rails.application.routes.draw do
 
         resources :workspaces, only: %i[index create] do
           member do
-            post :invite
             get :switch_workspace
           end
 

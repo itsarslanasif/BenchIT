@@ -4,11 +4,6 @@ class Api::V1::InvitablesController < Api::ApiController
   before_action :check_mail_list, only: %i[create]
   before_action :set_invitable, only: %i[update accept_invitation]
 
-  def index
-    @invitables = current_workspace.invitables
-    render json: @invitables
-  end
-
   def create
     ActiveRecord::Base.transaction do
       params[:mail_list].each do |email|
