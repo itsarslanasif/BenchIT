@@ -24,18 +24,28 @@
     >
     <form @submit.prevent="handleSubmit">
       <label class="flex font-semibold">{{ $t('request.to') }}</label>
-      <input
-        v-model="email"
-        type="email"
+      <textarea
+        v-model="emails"
         :placeholder="$t('placeholder.email')"
         required
-        class="border border-black-400 rounded w-150 h-12 text-black-900 mt-2 p-3"
-      />
+        class="border border-black-400 rounded w-150 h-36 text-black-900 mt-2 p-3"
+      ></textarea>
+      <label class="flex mt-6 font-semibold">{{
+        $t('placeholder.invitation')
+      }}</label>
+      <select
+        v-model="invitationType"
+        class="border border-black-400 rounded w-150 text-black-900 mt-2 h-12 p-3"
+      >
+        <option value="member" selected>{{ $t('invitation.member') }}</option>
+        <option value="guest">{{ $t('invitation.guest') }}</option>
+      </select>
       <label class="flex mt-6 font-semibold">{{
         $t('request.reason_for_request')
       }}</label>
       <input
         type="text"
+        v-model="reason"
         :placeholder="$t('request.request_reason_placeholder')"
         class="border border-black-400 rounded w-150 text-black-900 mt-2 h-12 p-3"
       />
@@ -61,7 +71,9 @@ export default {
       error: null,
       workspace: null,
       errorAlert: null,
-      email: null,
+      emails: null,
+      invitationType: 'member',
+      reason: null,
     };
   },
   components: {
@@ -90,20 +102,23 @@ export default {
   },
   updated() {
     this.error = null;
-    this.email = null;
+    this.emails = null;
   },
   beforeUnmount() {
     this.error = null;
     this.errorAlert = null;
-    this.email = null;
+    this.emails = null;
   },
   methods: {
     async handleSubmit() {
       try {
-        await invite_user(this.workspace.id, this.email).then(response => {
-          this.error = false;
-          this.response = response.data.message;
-        });
+        const emailList = this.emails.split(/[\s,]+/);
+        await invite_user(emailList, this.invitationType, this.reason).then(
+          response => {
+            this.error = false;
+            this.response = response.data.message;
+          }
+        );
       } catch (e) {
         this.error = true;
       }

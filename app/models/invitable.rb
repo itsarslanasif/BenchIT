@@ -1,2 +1,0 @@
-class Invitable < ApplicationRecord
-end

@@ -15,7 +15,7 @@ class Profile < ApplicationRecord
   before_create :set_names
 
   after_commit :attach_avatar, :create_preference, on: %i[create]
-  after_commit :broadcast_profile
+  after_commit :broadcast_profile, except: [:create]
 
   belongs_to :user
   belongs_to :workspace
@@ -37,6 +37,7 @@ class Profile < ApplicationRecord
   has_many :direct_message_users, dependent: :destroy
   has_one :preference, dependent: :destroy
   has_many :mentions, as: :mentionable, dependent: :destroy
+  has_many :invites, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
@@ -51,7 +52,7 @@ class Profile < ApplicationRecord
     workspace_owner: 1,
     workspace_admin: 2,
     member: 3,
-    outsider: 4
+    guest: 4
   }
 
   scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }
@@ -87,7 +88,7 @@ class Profile < ApplicationRecord
   end
 
   def broadcast_profile
-    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call
+    BroadcastMessageNotificationService.new(broadcastable_content, workspace.profile_ids).call unless Current.profile.nil?
   end
 
   def profile_content

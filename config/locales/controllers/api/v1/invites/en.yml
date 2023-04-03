@@ -1,0 +1,9 @@
+en:
+  api:
+    v1:
+      invites:
+        create:
+          success: The invitation has been created successfully.
+          failure: Error while creating the invitation.
+        update:
+          success: The invitation has been updated successfully.

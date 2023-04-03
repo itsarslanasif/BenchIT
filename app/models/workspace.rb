@@ -7,6 +7,7 @@ class Workspace < ApplicationRecord
   has_many :users, through: :profiles, dependent: :destroy
   has_many :statuses
   has_many :bench_channels, dependent: :destroy
+  has_many :invites, dependent: :destroy
 
   validates :company_name, presence: true
   validates :bench_it_url, uniqueness: true, presence: true

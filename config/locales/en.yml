@@ -322,6 +322,10 @@ en:
         workspace: 'acme@benchit.com'
         enter_workspace_url: 'your-workspace.benchit.com'
         add_people_to_channel: 'ex. Nathalie, or james@acme.com'
+        invitation: 'Invited as a'
+      invitation:
+        member: 'member'
+        guest: 'guest'
       profile:
         contact_information: 'Contact Information'
         email: 'Email Address'
