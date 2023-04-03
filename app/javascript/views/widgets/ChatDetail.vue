@@ -134,6 +134,7 @@
       v-if="showDescriptionModal"
       :closeModal="toggleDescriptionModal"
       :chat="selectedChat"
+      :attribute="'description'"
     />
   </div>
 </template>
