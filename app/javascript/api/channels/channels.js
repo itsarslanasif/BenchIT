@@ -93,7 +93,12 @@ export const memberJoinChannel = async channel_id => {
   );
 };
 
-export const updateChannel = async (channel_id, is_private, description, name) => {
+export const updateChannel = async (
+  channel_id,
+  is_private,
+  description,
+  name
+) => {
   return await axios.patch(
     `/v1/bench_channels/${channel_id}`,
     {
