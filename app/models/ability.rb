@@ -78,6 +78,10 @@ class Ability
     can %i[create update destroy], BookmarkFolder do |bookmark_folder|
       check_membership(bookmark_folder.bench_conversation, profile)
     end
+
+    can %i[update], BenchConversation do |conversation|
+      check_membership(conversation, profile)
+    end
   end
 
   private

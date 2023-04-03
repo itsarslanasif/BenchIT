@@ -9,7 +9,10 @@ class BenchConversation < ApplicationRecord
   has_many :pins, dependent: :destroy
   has_many :schedule_messages, dependent: :destroy
 
+  after_commit :broadcast_conversation
+
   validates :sender, uniqueness: { scope: %i[conversationable_id conversationable_type] }
+  validates :topic, length: { maximum: 250 }
 
   scope :profile_to_profile_conversation, lambda { |sender_id, receiver_id|
     find_by(conversationable_type: 'Profile', sender_id: sender_id, conversationable_id: receiver_id) ||
@@ -40,5 +43,23 @@ class BenchConversation < ApplicationRecord
     define_method("#{type}?") do
       conversationable_type.eql?(type.camelcase)
     end
+  end
+
+  private
+
+  def broadcast_conversation
+    result = {
+      content: conversation_content,
+      type: 'BenchConversation'
+    }
+    result[:action] = ActionPerformed.new.action_performed(self)
+    BroadcastMessageChatService.new(result, self).call
+  end
+
+  def conversation_content
+    {
+      id: id,
+      topic: topic
+    }
   end
 end

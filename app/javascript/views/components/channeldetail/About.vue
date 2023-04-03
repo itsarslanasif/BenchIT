@@ -6,10 +6,10 @@
     >
       <span>
         <p class="font-bold">{{ $t('chat_detail.topic') }}</p>
-        <p v-if="chat.topic">{{ chat.topic }}</p>
+        <p v-if="selectedChat.topic">{{ selectedChat.topic }}</p>
         <p v-else class="cursor-pointer">{{ $t('chat_detail.add_topic') }}</p>
       </span>
-      <span>
+      <span @click="toggleEditModal()">
         <p class="cursor-pointer text-info font-semibold p-2">
           {{ $t('actions.edit') }}
         </p>
@@ -24,7 +24,8 @@
     </span>
     <span
       v-if="!isProfile"
-      class="border border-black-300 cursor-pointer hover:bg-transparent p-4 border-t-0"
+      class="border border-black-300 cursor-pointer hover:bg-transparent p-4"
+      :class="isGroup ? 'border-t-1 rounded-b mb-5' : 'border-t-0'"
     >
       <p class="font-bold">{{ $t('chat_detail.created_by') }}</p>
       <p>
@@ -82,6 +83,11 @@
       <p class="font-bold">{{ $t('chat_detail.files') }}</p>
       <p>{{ $t('chat_detail.file_content') }}</p>
     </span>
+    <edit-topic-modal
+      v-if="showModal"
+      :closeModal="toggleEditModal"
+      :chat="selectedChat"
+    />
   </div>
 </template>
 
@@ -91,12 +97,23 @@ import { useProfileStore } from '../../../stores/useProfileStore';
 import { useUserProfileStore } from '../../../stores/useUserProfileStore';
 import { useRightPaneStore } from '../../../stores/useRightPaneStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
+import { storeToRefs } from 'pinia';
 import moment from 'moment';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import EditTopicModal from './EditTopicModal.vue';
 
 export default {
   props: {
     chat: Object,
     toggleModal: Function,
+  },
+  components: {
+    EditTopicModal,
+  },
+  data() {
+    return {
+      showModal: false,
+    };
   },
   computed: {
     isProfile() {
@@ -118,12 +135,15 @@ export default {
     const userProfileStore = useUserProfileStore();
     const currentProfileStore = useCurrentProfileStore();
     const rightPaneStore = useRightPaneStore();
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
     return {
       channelStore,
       profilesStore,
       rightPaneStore,
       userProfileStore,
       currentProfileStore,
+      selectedChat,
     };
   },
   methods: {
@@ -145,6 +165,9 @@ export default {
       );
       this.userProfileStore.setUserProfile(profile);
       this.toggleModal();
+    },
+    toggleEditModal() {
+      this.showModal = !this.showModal;
     },
   },
 };

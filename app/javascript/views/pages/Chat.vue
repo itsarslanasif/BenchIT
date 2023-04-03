@@ -178,7 +178,8 @@ export default {
             file = this.getFileFromBlob(file, filename);
           } else if (
             fileExtension == 'x-matroska;codecs=avc1,opus' ||
-            fileExtension == 'x-matroska;codecs=avc1'
+            fileExtension == 'x-matroska;codecs=avc1' ||
+            fileExtension == 'webm;codecs=vp8,opus'
           ) {
             filename += '.mp4';
             file = this.getFileFromBlob(file, filename);
