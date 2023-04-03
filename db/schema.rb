@@ -166,7 +166,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_29_160905) do
     t.string "profile_ids", default: [], array: true
   end
 
-  create_table "invitables", id: :string, force: :cascade do |t|
+  create_table "invitables", force: :cascade do |t|
     t.string "token", null: false
     t.text "reason"
     t.string "email", null: false

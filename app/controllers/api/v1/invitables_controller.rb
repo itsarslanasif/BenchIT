@@ -40,10 +40,6 @@ class Api::V1::InvitablesController < Api::ApiController
 
   private
 
-  def invitable_params
-    params.require(:invitable).permit(:mail_list[], :invitation_type, :reason)
-  end
-
   def set_invitable
     @invitable = Invitable.find(params[:id])
   end

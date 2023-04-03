@@ -8,7 +8,7 @@ module UuidGenerator
   private
 
   def decide_to_generate_id
-    return unless id.nil?
+    return if SELF_ID_GENERATOR_MODELS.include?(self.class.name) || id.present?
 
     set_id
   end

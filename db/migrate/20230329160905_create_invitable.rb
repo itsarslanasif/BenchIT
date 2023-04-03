@@ -1,6 +1,6 @@
 class CreateInvitable < ActiveRecord::Migration[7.0]
   def change
-    create_table :invitables, id: :string do |t|
+    create_table :invitables do |t|
       t.string :token, null: false
       t.text :reason
       t.string :email, null: false
