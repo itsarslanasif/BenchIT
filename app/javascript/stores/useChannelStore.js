@@ -61,6 +61,7 @@ export const useChannelStore = () => {
         updateChannel(channel_id, is_private, description, name)
           .then(res => {
             this.currentChannel.description = description;
+            this.currentChannel.name = name;
           })
           .catch(e => {
             errorHandler(e.response.data.message);

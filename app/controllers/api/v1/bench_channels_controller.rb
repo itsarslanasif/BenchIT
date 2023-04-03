@@ -85,7 +85,7 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def channel_can_be_renamed_by_creator
-    return unless @bench_channel.creator_id != current_profile.id
+    return unless @bench_channel.creator_id != current_profile.id && params[:bench_channel][:name] != @bench_channel.name
 
     render json: { success: false, error: t('.failure') }, status: :bad_request
   end
