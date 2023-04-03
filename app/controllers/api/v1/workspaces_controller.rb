@@ -1,8 +1,7 @@
 class Api::V1::WorkspacesController < Api::ApiController
   skip_before_action :set_workspace_in_session, :set_profile, only: %i[index create switch_workspace]
-  before_action :find_workspace, only: %i[invite switch_workspace]
+  before_action :find_workspace, only: %i[switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
-  before_action :check_profile, only: %i[invite]
 
   def index
     @workspaces = current_user.workspaces
@@ -21,14 +20,6 @@ class Api::V1::WorkspacesController < Api::ApiController
     end
 
     render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
-  end
-
-  def invite
-    @token = Token.new.generate
-    create_invitable if @user.present?
-    WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
-    render json: { success: true, message: t('.success',
-                                             email: params[:email], company_name: @workspace.company_name) }, status: :ok
   end
 
   def create_invitable
@@ -57,14 +48,6 @@ class Api::V1::WorkspacesController < Api::ApiController
     @profile = current_user.profiles.find_by(workspace_id: @workspace)
 
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
-  end
-
-  def check_profile
-    @user = User.find_by(email: params[:email])
-    return if @user.blank?
-    return if @user.profiles.find_by(workspace_id: @workspace).blank?
-
-    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
   def create_profile

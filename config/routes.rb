@@ -49,7 +49,11 @@ Rails.application.routes.draw do
         end
         resources :saved_items, only: %i[index create destroy]
         resources :favourites, only: %i[create destroy]
-
+        resources :invitables, only: %i[index create update] do
+          member do
+            get :accept_invitation
+          end
+        end
         resources :searches, only: %i[index]
 
         resources :bench_channels, except: %i[new edit] do

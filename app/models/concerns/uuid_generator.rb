@@ -2,10 +2,16 @@ module UuidGenerator
   extend ActiveSupport::Concern
 
   included do
-    before_create :set_id
+    before_create :decide_to_generate_id
   end
 
   private
+
+  def decide_to_generate_id
+    return unless id.nil?
+
+    set_id
+  end
 
   def set_id
     self.id = case self.class.name
