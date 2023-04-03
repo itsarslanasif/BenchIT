@@ -32,7 +32,7 @@
               v-if="attribute == 'description'"
               :placeholder="$t('chat_detail.add_a_description')"
               class="w-full border rounded h-32 p-3"
-              v-model="value"
+              v-model="description"
             />
             <n-input
               show-count
@@ -83,7 +83,7 @@ export default {
   },
   data() {
     return {
-      value: this.chat.description,
+      description: this.chat.description,
       name: this.chat.name,
     };
   },
@@ -100,7 +100,7 @@ export default {
       this.channelStore.updateChannel(
         this.chat.id,
         this.chat.is_private,
-        this.value,
+        this.description,
         this.name
       );
       this.closeModal();

@@ -57,10 +57,10 @@ export const useChannelStore = () => {
         }
       },
 
-      updateChannel(channel_id, is_private, value, name) {
-        updateChannel(channel_id, is_private, value, name)
+      updateChannel(channel_id, is_private, description, name) {
+        updateChannel(channel_id, is_private, description, name)
           .then(res => {
-            this.currentChannel.description = value;
+            this.currentChannel.description = description;
           })
           .catch(e => {
             errorHandler(e.response.data.message);
