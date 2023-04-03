@@ -24,7 +24,11 @@
         />
         <div class="flex flex-col">
           <span v-if="!isGroup" class="font-bold text-lg">
-            {{ isProfile ? chat.username : chat.name }}
+            {{
+              isProfile
+                ? messagesStore.selectedChat.username
+                : messagesStore.selectedChat.name
+            }}
           </span>
           <span v-if="isGroup" class="font-bold text-lg">
             {{ messagesStore.selectedChat.name }}

@@ -57,8 +57,8 @@ export const useChannelStore = () => {
         }
       },
 
-      updateChannel(channel_id, is_private, value) {
-        updateChannel(channel_id, is_private, value)
+      updateChannel(channel_id, is_private, value, name) {
+        updateChannel(channel_id, is_private, value, name)
           .then(res => {
             this.currentChannel.description = value;
           })

@@ -272,11 +272,11 @@ const updateBenchConversation = (data, messageStore) => {
 
 const updateBenchChannel = (data, messageStore, channelStore) => {
   messageStore.selectedChat.description = data.description;
+  messageStore.selectedChat.name = data.name;
   const index = channelStore.channels.findIndex(
     element => element.id === data.id
   );
-  channelStore.channels[index] = data
-
+  channelStore.channels[index] = data;
 };
 
 const actions = {

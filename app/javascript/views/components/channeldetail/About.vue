@@ -1,7 +1,25 @@
 <template>
   <div v-if="selectedChat" class="bg-white flex flex-col p-4 overflow-auto">
     <span
-      @click="toggleEditModal()"
+      v-if="
+        isChannel &&
+        selectedChat.creator_id == currentProfileStore.currentProfile.id
+      "
+      @click="toggleNameModal()"
+      class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-4 mb-4 rounded"
+    >
+      <span>
+        <p class="font-bold">{{ $t('chat_detail.channel_name') }}</p>
+        <p># {{ selectedChat.name }}</p>
+      </span>
+      <span>
+        <p class="cursor-pointer text-info hover:underline font-semibold p-2">
+          {{ $t('actions.edit') }}
+        </p>
+      </span>
+    </span>
+    <span
+      @click="toggleTopicModal()"
       :class="!isProfile ? 'border-b-0 rounded-t-md' : 'rounded-md'"
       class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-4 rounded-t-md"
     >
@@ -98,13 +116,14 @@
     </span>
     <EditTopicModal
       v-if="showModal"
-      :closeModal="toggleEditModal"
+      :closeModal="toggleTopicModal"
       :chat="selectedChat"
     />
     <EditDescriptionModal
       v-if="showDescriptionModal"
       :closeModal="toggleDescriptionModal"
       :chat="selectedChat"
+      :attribute="attribute"
     />
   </div>
 </template>
@@ -134,6 +153,7 @@ export default {
     return {
       showModal: false,
       showDescriptionModal: false,
+      attribute: '',
     };
   },
   computed: {
@@ -147,7 +167,7 @@ export default {
       return this.chat.conversation_type === 'Group';
     },
     isChannel() {
-      return this.chat.conversation_type === 'Channel';
+      return this.selectedChat.conversation_type === 'Channel';
     },
   },
   setup() {
@@ -187,10 +207,15 @@ export default {
       this.userProfileStore.setUserProfile(profile);
       this.toggleModal();
     },
-    toggleEditModal() {
+    toggleTopicModal() {
       this.showModal = !this.showModal;
     },
     toggleDescriptionModal() {
+      this.attribute = 'description';
+      this.showDescriptionModal = !this.showDescriptionModal;
+    },
+    toggleNameModal() {
+      this.attribute = 'name';
       this.showDescriptionModal = !this.showDescriptionModal;
     },
   },

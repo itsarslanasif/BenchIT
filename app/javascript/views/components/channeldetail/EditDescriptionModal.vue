@@ -13,7 +13,12 @@
             <div
               class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer"
             >
-              <h1>{{ $t('chat.edit_description') }}</h1>
+              <h1 v-if="attribute == 'description'">
+                {{ $t('chat.edit_description') }}
+              </h1>
+              <h1 v-else>
+                {{ $t('chat_detail.rename_channel') }}
+              </h1>
             </div>
 
             <font-awesome-icon
@@ -24,13 +29,23 @@
           </header>
           <div class="m-0 relative mt-5">
             <textarea
+              v-if="attribute == 'description'"
               :placeholder="$t('chat_detail.add_a_description')"
               class="w-full border rounded h-32 p-3"
               v-model="value"
             />
+            <n-input
+              show-count
+              :maxlength="80"
+              v-else
+              class="w-full border rounded p-3"
+              v-model:value="name"
+              :placeholder="$t('chat_detail.channel_name_placeholder')"
+            />
+
             <div class="mb-6 text-black-500 mt-4">
               <p>
-                {{ $t('chat_detail.channel_description') }}
+                {{ $t('chat_detail.name_modal_description') }}
               </p>
             </div>
 
@@ -60,18 +75,23 @@
 <script>
 import { useChannelStore } from '../../../stores/useChannelStore';
 import vClickOutside from 'click-outside-vue3';
+import { NInput } from 'naive-ui';
 
 export default {
+  components: {
+    NInput,
+  },
   data() {
     return {
       value: this.chat.description,
+      name: this.chat.name,
     };
   },
   setup() {
     const channelStore = useChannelStore();
     return { channelStore };
   },
-  props: { closeModal: Function, chat: Object },
+  props: { closeModal: Function, chat: Object, attribute: String },
   directives: {
     clickOutside: vClickOutside.directive,
   },
@@ -80,7 +100,8 @@ export default {
       this.channelStore.updateChannel(
         this.chat.id,
         this.chat.is_private,
-        this.value
+        this.value,
+        this.name
       );
       this.closeModal();
     },
