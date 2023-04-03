@@ -17,7 +17,7 @@
               class="w-1/6 bg-none py-1 px-3 text-base float-right text-black-900 rounded"
               @click="closeModal"
             >
-              {{ $t('actions.close') }}
+            <font-awesome-icon :icon="['fas', 'xmark']" />
             </button>
           </header>
           <div class="m-0 relative mt-5">

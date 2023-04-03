@@ -17,6 +17,9 @@
           {{ $t('workspace.workspace_not_found') }}
         </n-alert>
       </div>
+      <div v-if="showCreateWorkspace">
+        <CreateWorkspace :close-modal="closeNewWorkspaceModal" />
+      </div>
       <div class="flex gap-2">
         <input
           type="text"
@@ -74,6 +77,7 @@
 </template>
 
 <script>
+import CreateWorkspace from './CreateWorkspace.vue'
 import {
   joinedWorkspaces,
   switchWorkspace,
@@ -91,9 +95,11 @@ export default {
       joinedWorkspaces: [],
       workspaceURL: '',
       alert: false,
+      showCreateWorkspace: false,
     };
   },
   components: {
+    CreateWorkspace,
     NAlert,
   },
   async mounted() {
@@ -113,7 +119,7 @@ export default {
   },
   methods: {
     createWorkspace() {
-      this.$router.push('/new_workspace');
+      this.showCreateWorkspace = true
     },
     async goToWorkspaceDashboard(workspace) {
       const { id: workspaceId } = workspace;
@@ -140,6 +146,9 @@ export default {
       const workspace = this.findWorkspace();
       workspace ? this.goToWorkspaceDashboard(workspace) : (this.alert = true);
     },
+    closeNewWorkspaceModal() {
+      this.showCreateWorkspace = false;
+    }
   },
 };
 </script>
