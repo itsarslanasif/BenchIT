@@ -57,15 +57,14 @@ export const useChannelStore = () => {
         }
       },
 
-      updateChannel(channel_id, is_private, description, name) {
-        updateChannel(channel_id, is_private, description, name)
-          .then(res => {
-            this.currentChannel.description = description;
-            this.currentChannel.name = name;
-          })
-          .catch(e => {
-            errorHandler(e.response.data.message);
-          });
+      async updateChannel(channelId, isPrivate, description, name) {
+        try {
+          await updateChannel(channelId, isPrivate, description, name);
+          this.currentChannel.description = description;
+          this.currentChannel.name = name;
+        } catch (e) {
+          errorHandler(e.response.data.message);
+        }
       },
 
       async fetchStarredChannels() {

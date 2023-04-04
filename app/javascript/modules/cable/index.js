@@ -277,6 +277,10 @@ const updateBenchChannel = (data, messageStore, channelStore) => {
     element => element.id === data.id
   );
   channelStore.channels[index] = data;
+  const joinedChannelIndex = channelStore.joinedChannels.findIndex(
+    element => element.id === data.id
+  );
+  channelStore.joinedChannels[joinedChannelIndex] = data;
 };
 
 const actions = {

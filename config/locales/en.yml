@@ -140,6 +140,8 @@ en:
         profile: 'Profile'
         group: 'Group'
         direct_message: 'Direct Message'
+        description: 'description'
+        name: 'name'
       rightpane:
         send: 'Send'
         replies: 'replies'
@@ -191,6 +193,7 @@ en:
         share_title: 'Search for channel or a person'
         view_conversation : 'View Conversation'
         posted_in: 'Posted in # '
+        description: 'Description:'
       conversation_type:
         profile: 'Profile'
         channel: 'BenchChannel'

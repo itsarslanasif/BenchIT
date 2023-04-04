@@ -13,7 +13,7 @@
             <div
               class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer"
             >
-              <h1 v-if="attribute == 'description'">
+              <h1 v-if="isDescription">
                 {{ $t('chat.edit_description') }}
               </h1>
               <h1 v-else>
@@ -29,7 +29,7 @@
           </header>
           <div class="m-0 relative mt-5">
             <textarea
-              v-if="attribute == 'description'"
+              v-if="isDescription"
               :placeholder="$t('chat_detail.add_a_description')"
               class="w-full border rounded h-32 p-3"
               v-model="description"
@@ -94,6 +94,11 @@ export default {
   props: { closeModal: Function, chat: Object, attribute: String },
   directives: {
     clickOutside: vClickOutside.directive,
+  },
+  computed: {
+    isDescription() {
+      return this.attribute === $t('conversation.description');
+    },
   },
   methods: {
     async onSubmit() {

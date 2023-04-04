@@ -28,23 +28,16 @@
               class="w-full border rounded h-32 p-3"
               v-model="value"
             />
-            <div
-              v-if="
-                chat.conversation_type === $t('profile.title') ||
-                chat.conversation_type === $t('conversation.group')
-              "
-              class="mb-6 text-black-500 mt-4"
-            >
+            <div v-if="isProfile || isGroup" class="mb-6 text-black-500 mt-4">
               <p>
                 {{ $t('chat_detail.add_topic_desc1') }}
                 <span class="font-semibold">{{ getChatName }}</span>
-                <span v-if="chat.conversation_type === $t('profile.title')">{{
+                <span v-if="isProfile">{{
                   $t('chat_detail.add_topic_desc2')
                 }}</span>
-                <span
-                  v-if="chat.conversation_type === $t('conversation.group')"
-                  >{{ $t('chat_detail.add_topic_desc3') }}</span
-                >
+                <span v-if="isGroup">{{
+                  $t('chat_detail.add_topic_desc3')
+                }}</span>
               </p>
             </div>
             <div v-else class="mb-6 text-black-500 mt-4">
@@ -106,6 +99,12 @@ export default {
         default:
           return `${this.chat.name}. `;
       }
+    },
+    isProfile() {
+      return this.chat.conversation_type === $t('profile.title');
+    },
+    isGroup() {
+      return this.chat.conversation_type === $t('conversation.group');
     },
   },
   methods: {

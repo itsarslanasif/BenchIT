@@ -211,11 +211,11 @@ export default {
       this.showModal = !this.showModal;
     },
     toggleDescriptionModal() {
-      this.attribute = 'description';
+      this.attribute = $t('conversation.description');
       this.showDescriptionModal = !this.showDescriptionModal;
     },
     toggleNameModal() {
-      this.attribute = 'name';
+      this.attribute = $t('conversation.name');
       this.showDescriptionModal = !this.showDescriptionModal;
     },
   },
