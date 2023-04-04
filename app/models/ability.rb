@@ -51,6 +51,10 @@ class Ability
       channel.profile_ids.include?(profile.id)
     end
 
+    can :update_name, BenchChannel do |channel|
+      channel.creator_id.eql?(profile.id)
+    end
+
     can %i[get], BenchChannel do |channel|
       channel.is_private? ? channel.profile_ids.include?(profile.id) : true
     end

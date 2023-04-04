@@ -9,8 +9,9 @@ class BenchChannel < ApplicationRecord
   has_many :bookmarks, through: :bench_conversation
   has_many :bookmark_folders, through: :bench_conversation
 
-  before_validation :set_profile_and_workspace
+  before_validation :set_profile_and_workspace, on: :create
   before_validation :set_lower_case_channel_name
+  after_commit :broadcast_channel, on: :update
 
   validates :name, presence: true, length: { minimum: 1, maximum: 80 }
   validates :name, uniqueness: { scope: %i[workspace_id] }
@@ -84,5 +85,14 @@ class BenchChannel < ApplicationRecord
       creator_name: creator.username,
       profiles: []
     }
+  end
+
+  def broadcast_channel
+    result = {
+      content: bench_channel_basic_content,
+      type: 'BenchChannel'
+    }
+    result[:action] = ActionPerformed.new.action_performed(self)
+    BroadcastMessageChatService.new(result, bench_conversation).call
   end
 end

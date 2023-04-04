@@ -33,7 +33,11 @@ class Api::V1::BenchChannelsController < Api::ApiController
   end
 
   def update
+    authorize! :update_name, @bench_channel if params[:bench_channel][:name] != @bench_channel.name
     @bench_channel.update!(bench_channel_params)
+    if @bench_channel.saved_change_to_description?
+      InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).edit_channel(@bench_channel.description)
+    end
     render json: { success: true, message: t('.success') }, status: :ok
   end
 

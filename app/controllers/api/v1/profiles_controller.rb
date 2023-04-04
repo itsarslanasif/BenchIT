@@ -57,11 +57,11 @@ class Api::V1::ProfilesController < Api::ApiController
   private
 
   def set_job
+    status = @profile.statuses.new(text: params[:text_status], emoji: params[:emoji_status])
     if params[:clear_status_after].eql?("don't clear")
-      @profile.statuses.create(profile_params)
+      status.update!(clear_after: params[:clear_status_after])
     else
-      @profile.statuses.create(text: params[:text_status],
-                               emoji: params[:emoji_status], clear_after: params[:clear_status_after].to_time - DateTime.now)
+      status.update!(clear_after: params[:clear_status_after].to_time - DateTime.now)
       ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
     end
   end

@@ -87,7 +87,7 @@ export default {
     };
   },
   unmounted() {
-    this.channels = null;
+    this.joinedChannels = [];
   },
   setup() {
     const leftPaneStore = useLeftpaneStore();

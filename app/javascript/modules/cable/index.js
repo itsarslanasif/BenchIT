@@ -3,6 +3,7 @@ import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useThreadStore } from '../../stores/useThreadStore';
 import { usePinnedConversation } from '../../stores/UsePinnedConversationStore';
 import { useRightPaneStore } from '../../stores/useRightPaneStore';
+import { useChannelStore } from '../../stores/useChannelStore';
 
 const createMessage = (data, messageStore, threadStore) => {
   try {
@@ -269,6 +270,19 @@ const updateBenchConversation = (data, messageStore) => {
   messageStore.selectedChat.topic = data.topic;
 };
 
+const updateBenchChannel = (data, messageStore, channelStore) => {
+  messageStore.selectedChat.description = data.description;
+  messageStore.selectedChat.name = data.name;
+  const index = channelStore.channels.findIndex(
+    element => element.id === data.id
+  );
+  channelStore.channels[index] = data;
+  const joinedChannelIndex = channelStore.joinedChannels.findIndex(
+    element => element.id === data.id
+  );
+  channelStore.joinedChannels[joinedChannelIndex] = data;
+};
+
 const actions = {
   MessageCreate: createMessage,
   ReactionCreate: createReaction,
@@ -280,6 +294,7 @@ const actions = {
   ChannelParticipantCreate: ChannelParticipantCreate,
   ChannelParticipantDelete: ChannelParticipantDelete,
   BenchConversationUpdate: updateBenchConversation,
+  BenchChannelUpdate: updateBenchChannel,
 };
 
 export const cableActions = data => {
@@ -287,6 +302,7 @@ export const cableActions = data => {
   const threadStore = useThreadStore();
   const rightPaneStore = useRightPaneStore();
   const pinStore = usePinnedConversation();
+  const channelStore = useChannelStore();
 
   try {
     const key = data.type + data.action;
@@ -295,7 +311,8 @@ export const cableActions = data => {
       messageStore,
       threadStore,
       pinStore,
-      rightPaneStore
+      rightPaneStore,
+      channelStore
     );
   } catch (e) {
     errorHandler(e.response.data.message);

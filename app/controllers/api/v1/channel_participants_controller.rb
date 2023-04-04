@@ -64,7 +64,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   private
 
   def set_bench_channel
-    @bench_channel = current_profile.bench_channels.includes(:channel_participants).find(params[:bench_channel_id])
+    @bench_channel = BenchChannel.includes(:channel_participants).find(params[:bench_channel_id])
   end
 
   def set_channel_paticipant
