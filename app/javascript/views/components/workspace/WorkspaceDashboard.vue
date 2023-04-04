@@ -79,15 +79,15 @@
 <script>
 import CreateWorkspace from './CreateWorkspace.vue'
 import {
-  joinedWorkspaces,
   switchWorkspace,
 } from '../../../api/workspaces/workspacesApi';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useWorkspaceStore } from '../../../stores/useWorkspaceStore'
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
 import { setActiveStatus } from '../../../api/profiles/profileStatus';
 import { NAlert } from 'naive-ui';
-import { errorHandler } from '../../widgets/messageProvider';
+import { storeToRefs } from 'pinia';
 
 export default {
   data() {
@@ -102,19 +102,17 @@ export default {
     CreateWorkspace,
     NAlert,
   },
-  async mounted() {
-    try {
-      this.joinedWorkspaces = await joinedWorkspaces();
-    } catch (e) {
-      errorHandler(e.response.data.message);
-    }
-  },
   setup() {
     const currentWorkspace = useCurrentWorkspaceStore();
     const currentProfile = useCurrentProfileStore();
+    const workspaceStore = useWorkspaceStore();
+    workspaceStore.index()
+    const { joinedWorkspaces } = storeToRefs(workspaceStore)
     return {
       currentWorkspace,
       currentProfile,
+      workspaceStore,
+      joinedWorkspaces
     };
   },
   methods: {

@@ -91,6 +91,7 @@
 </template>
 
 <script>
+import { useWorkspaceStore } from '../../../stores/useWorkspaceStore';
 import {
   NForm,
   NFormItem,
@@ -101,7 +102,6 @@ import {
   NSelect,
   NInputNumber,
 } from 'naive-ui';
-import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
 import { CONSTANTS } from '../../../assets/constants';
 import { WorkspaceStore } from '../../../stores/workspace_store';
 import vClickOutside from 'click-outside-vue3';
@@ -143,7 +143,7 @@ export default {
   },
   setup() {
     const workspaceStoreOptions = WorkspaceStore();
-    const workspaceStore = useCurrentWorkspaceStore();
+    const workspaceStore = useWorkspaceStore();
     const splitter = new GraphemeSplitter();
     return {
       workspaceStoreOptions,
@@ -152,10 +152,10 @@ export default {
     };
   },
   methods: {
-    onSubmit() {
+    async onSubmit() {
       this.validations();
       if (!this.error) {
-        this.workspaceStore
+        await this.workspaceStore
           .createWorkspace(
             this.formValue.workspaceName,
             this.formValue.workspaceType,
@@ -163,17 +163,9 @@ export default {
             this.formValue.workspaceCapacity,
             this.formValue.workspaceURL
           )
-          .then(response => {
-            this.status = response.status;
-            if (this.status === 200) {
-              this.$router.push(
-                `/join_workspace/${response.data.workspace.id}`
-              );
-            } else {
-              this.error = response.data.message;
-            }
-          });
+        this.closeModal()
       }
+
     },
     validations() {
       const {

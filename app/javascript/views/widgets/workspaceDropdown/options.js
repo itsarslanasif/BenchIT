@@ -5,14 +5,14 @@ import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceSto
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { storeToRefs } from 'pinia';
 import {
-  joinedWorkspaces,
+  fetchJoinedWorkspaces,
   switchWorkspace,
 } from '../../../api/workspaces/workspacesApi';
 import { encryption } from '../../../modules/crypto/crypto';
 
 let listOfJoinedWorkspaces = [];
 
-joinedWorkspaces().then(workspaces => {
+fetchJoinedWorkspaces().then(workspaces => {
   workspaces.map(workspace => {
     let workspaceOption = {
       label: workspace.company_name,
