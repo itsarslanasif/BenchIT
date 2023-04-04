@@ -37,7 +37,10 @@
           </span>
           <div>
             <div v-for="block in messageBlock(message.content).blocks">
-              <MessageSection v-if="block.type === 'section'" :section="block" />
+              <MessageSection
+                v-if="block.type === 'section'"
+                :section="block"
+              />
             </div>
           </div>
           <div v-if="message.attachments">
@@ -134,7 +137,7 @@ export default {
       rightPaneStore,
       userProfileStore,
       profilesStore,
-      downloadsStore
+      downloadsStore,
     };
   },
   props: ['message', 'setDeleteModal'],
@@ -145,7 +148,7 @@ export default {
     NCollapseItem,
     NPopover,
     downloadsModal,
-    MessageSection
+    MessageSection,
   },
   data() {
     return {
@@ -173,7 +176,7 @@ export default {
     },
 
     messageBlock(message) {
-      return JSON.parse(message)
+      return JSON.parse(message);
     },
 
     handleClick() {
@@ -181,8 +184,8 @@ export default {
       this.showUserProfile();
     },
 
-    deleteMessage() {
-      deleteMessage(this.message.id);
+    async deleteMessage() {
+      await deleteMessage(this.message.id);
       this.setDeleteModal();
     },
 

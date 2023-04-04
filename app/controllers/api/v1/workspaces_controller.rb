@@ -1,9 +1,7 @@
 class Api::V1::WorkspacesController < Api::ApiController
-  before_action :find_workspace, only: %i[invite switch_workspace]
+  skip_before_action :set_workspace_in_session, :set_profile, only: %i[index create switch_workspace]
+  before_action :find_workspace, only: %i[switch_workspace]
   before_action :find_profile, only: %i[switch_workspace]
-  before_action :check_profile, only: %i[invite]
-  skip_before_action :set_workspace_in_session, only: %i[index create switch_workspace]
-  skip_before_action :set_profile, only: %i[index create switch_workspace]
 
   def index
     @workspaces = current_user.workspaces
@@ -17,27 +15,13 @@ class Api::V1::WorkspacesController < Api::ApiController
       @workspace.save!
       Current.workspace = @workspace
       create_profile
+      WorkspaceMailer.send_workspace_create_mail(@workspace, @profile, current_user).deliver_now
     end
 
     setup_database(Current.user, @profile, @workspace, @workspace.company_name.downcase)
+    switch_workspace
 
     render json: { workspace: @workspace, success: true, message: t('.success') }, status: :ok
-  end
-
-  def invite
-    @token = Token.new.generate
-    create_invitable if @user.present?
-    WorkspaceMailer.send_email(params[:email], @workspace, @token).deliver!
-    render json: { success: true, message: t('.success',
-                                             email: params[:email], company_name: @workspace.company_name) }, status: :ok
-  end
-
-  def create_invitable
-    @invitable = Invitable.create(user_id: @user.id, workspace_id: @workspace.id, token: @token, token_type: 'workspace_invitation')
-
-    return unless @invitable.errors.any?
-
-    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
   end
 
   def switch_workspace
@@ -48,7 +32,7 @@ class Api::V1::WorkspacesController < Api::ApiController
   private
 
   def workspace_params
-    params.permit(:company_name, :bench_it_url, :organization_type, :capacity, :admin_role, :workspace_type)
+    params.require(:workspace).permit(:company_name, :bench_it_url, :organization_type, :capacity, :admin_role, :workspace_type)
   end
 
   def find_workspace
@@ -63,17 +47,9 @@ class Api::V1::WorkspacesController < Api::ApiController
     render json: { success: false, error: t('.failure') }, status: :unprocessable_entity if @profile.nil?
   end
 
-  def check_profile
-    @user = User.find_by(email: params[:email])
-    return if @user.blank?
-    return if @user.profiles.find_by(workspace_id: @workspace).blank?
-
-    render json: { success: false, error: t('.failure') }, status: :unprocessable_entity
-  end
-
   def create_profile
     user = Current.user
-    @profile = Profile.create!(username: user.name, workspace_id: @workspace.id, role: 0, user_id: user.id)
+    @profile = @workspace.profiles.create!(username: user.name, role: 0, user_id: user.id)
     Current.profile = @profile
   end
 end

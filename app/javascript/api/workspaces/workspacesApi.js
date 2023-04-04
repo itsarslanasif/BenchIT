@@ -2,13 +2,15 @@ import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios';
 
 export const createWorkspace = async workspace => {
-  return await axios.post(`/v1/workspaces`, workspace, { headers: getHeaders() });
+  return await axios.post(`/v1/workspaces`, workspace, {
+    headers: getHeaders(),
+  });
 };
 
-export const invite_user = async (currentWorkspace, email) => {
+export const invite_user = async (emailList, invitationType, reason) => {
   return await axios.post(
-    `/v1/workspaces/${currentWorkspace}/invite`,
-    { email: email },
+    `/v1/invites`,
+    { mail_list: emailList, invitation_type: invitationType, reason: reason },
     { headers: getHeaders() }
   );
 };

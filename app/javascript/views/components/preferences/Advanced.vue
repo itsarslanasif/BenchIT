@@ -43,7 +43,10 @@
       <p class="font-semibold">
         {{ advancedSettings.confirmationWarning.title }}
       </p>
-      <div v-for="item in advancedSettings.confirmationWarning.settings" class="my-2">
+      <div
+        v-for="item in advancedSettings.confirmationWarning.settings"
+        class="my-2"
+      >
         <input type="checkbox" />
         <label class="pl-3">{{ item.label }}</label>
       </div>

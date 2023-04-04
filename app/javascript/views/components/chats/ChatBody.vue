@@ -72,8 +72,15 @@
           />
         </div>
       </div>
-      <div v-if="unsentQueue.length" v-for="message in unsentQueue">
-        <MessageWrapper v-if="isSameChat(message)" :currMessage="message" :prevMessage="prevMessage" :isUnsentMessage=true />
+      <div v-if="unsentQueue.length">
+        <div v-for="message in unsentQueue" :key="message.id">
+          <MessageWrapper
+            v-if="isSameChat(message)"
+            :currMessage="message"
+            :prevMessage="prevMessage"
+            :isUnsentMessage="true"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -145,16 +152,21 @@ export default {
   setup() {
     const messageStore = useMessageStore();
     const connectionStore = useConnectionStore();
-    const { messages, currMessage, hasMoreMessages, newMessageSent, selectedChat } =
-      storeToRefs(messageStore);
-    const { unsentQueue } = storeToRefs(connectionStore)
+    const {
+      messages,
+      currMessage,
+      hasMoreMessages,
+      newMessageSent,
+      selectedChat,
+    } = storeToRefs(messageStore);
+    const { unsentQueue } = storeToRefs(connectionStore);
     return {
       messages,
       currMessage,
       hasMoreMessages,
       newMessageSent,
       unsentQueue,
-      selectedChat
+      selectedChat,
     };
   },
   methods: {
@@ -262,8 +274,11 @@ export default {
     },
     isSameChat(message) {
       if (this.selectedChat.conversation_type) {
-        return this.selectedChat.id == message.conversation_id && 
-          this.selectedChat.conversation_type.toLowerCase() == message.conversation_type.slice(0, -1)
+        return (
+          this.selectedChat.id == message.conversation_id &&
+          this.selectedChat.conversation_type.toLowerCase() ==
+            message.conversation_type.slice(0, -1)
+        );
       }
     },
   },

@@ -1,0 +1,6 @@
+en:
+  api:
+    v1:
+      bench_conversations:
+        update:
+          success: Conversation updated.

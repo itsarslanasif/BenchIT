@@ -1,4 +1,4 @@
-import { defineStore } from 'pinia'
+import { defineStore } from 'pinia';
 
 export const useUserInviteStore = defineStore('useUserInviteStore', {
   state: () => {
@@ -12,6 +12,6 @@ export const useUserInviteStore = defineStore('useUserInviteStore', {
         invitation_token: null,
       },
       confirmPasswordError: null,
-    }
-  }
-})
+    };
+  },
+});

@@ -1,7 +1,7 @@
 import { getHeaders } from '../../modules/auth';
 import axios from '../../modules/axios';
 
-export const pinnedMessages = (conversation_type, conversation_id) => {
+export const pinnedMessages = async (conversation_type, conversation_id) => {
   return axios
     .get(
       `v1/pins?conversation_type=${conversation_type}&conversation_id=${conversation_id}`,
@@ -14,7 +14,7 @@ export const pinnedMessages = (conversation_type, conversation_id) => {
     });
 };
 
-export const pinMessage = (benchConversationId, messageId) => {
+export const pinMessage = async (benchConversationId, messageId) => {
   return axios
     .post(
       `v1/pins`,
@@ -31,7 +31,7 @@ export const pinMessage = (benchConversationId, messageId) => {
     });
 };
 
-export const unPinMessage = pin_id => {
+export const unPinMessage = async pin_id => {
   return axios
     .delete(`v1/pins/${pin_id}`, {
       headers: getHeaders(),

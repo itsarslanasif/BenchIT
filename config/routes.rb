@@ -25,7 +25,12 @@ Rails.application.routes.draw do
             post :add_member
           end
         end
-        resources :users, only: %i[index create]
+        resources :users, only: %i[index create] do
+          member do
+            get :verify_email
+          end
+        end
+        resources :bench_conversations, only: %i[update]
         resources :schedule_messages, only: %i[index update destroy] do
           member do
             get :send_now
@@ -36,6 +41,7 @@ Rails.application.routes.draw do
             get :sent_message
             get :recent_files
             get :unread_messages
+            get :threads
             get :reactions_and_mentions
           end
           member do
@@ -44,7 +50,11 @@ Rails.application.routes.draw do
         end
         resources :saved_items, only: %i[index create destroy]
         resources :favourites, only: %i[create destroy]
-
+        resources :invites, only: %i[create update] do
+          member do
+            get :accept_invitation
+          end
+        end
         resources :searches, only: %i[index]
 
         resources :bench_channels, except: %i[new edit] do
@@ -59,7 +69,6 @@ Rails.application.routes.draw do
 
         resources :workspaces, only: %i[index create] do
           member do
-            post :invite
             get :switch_workspace
           end
 
@@ -80,7 +89,8 @@ Rails.application.routes.draw do
         end
         resources :statuses, only: %i[index destroy]
         resources :pins, only: %i[index create destroy]
-        resources :bookmarks, only: %i[index create update destroy]
+        resources :bookmarks, only: %i[create update destroy]
+        resources :bookmark_folders, only: %i[create update destroy]
         resources :reactions, only: %i[create destroy]
         resources :direct_message_users, only: %i[index destroy] do
           collection do

@@ -1,11 +1,11 @@
 <template>
   <n-message-provider placement="top-right">
-    <div class="relative bg-primary text-sm h-screen grid grid-rows-18">
+    <div class="relative bg-primary text-sm h-screen grid grid-container">
       <alert v-if="downloadsStore.downloadAlert" />
-      <switching-workspace-loader 
+      <switching-workspace-loader
         v-if="currentWorkspaceStore.switchingWorkspace"
       />
-        <div class="row-span-1">
+      <div class="header">
         <SearchBar />
       </div>
       <splitpanes @resize="resizePane">
@@ -51,6 +51,7 @@
 
 <script>
 import { Splitpanes, Pane } from 'splitpanes';
+import { onMounted, onUnmounted } from 'vue';
 import 'splitpanes/dist/splitpanes.css';
 import WorkspaceDropdown from '../widgets/workspaceDropdown/WorkspaceDropdown.vue';
 import SearchBar from '../shared/searchBar.vue';
@@ -99,7 +100,7 @@ export default {
       this.startView();
     },
     isMobileView() {
-      return this.screenSize < 1400 && this.screenSize > 0;
+      return this.screenSize < 500 && this.screenSize > 0;
     },
     startView() {
       if (this.isMobileView()) {
@@ -123,7 +124,22 @@ export default {
     const currentWorkspaceStore = useCurrentWorkspaceStore();
     const leftPaneStore = useLeftpaneStore();
     const downloadsStore = useDownloadsStore();
-    window.$message = useMessage()
+
+    onMounted(() => {
+      window.addEventListener('resize', handleResize);
+      handleResize();
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', handleResize);
+    });
+
+    const handleResize = () => {
+      const height = window.innerHeight - 44;
+      const splitpanes = document.getElementsByClassName('splitpanes');
+      splitpanes[0].style.height = `${height}px`;
+    };
+    window.$message = useMessage();
 
     return {
       screenStore,
@@ -137,6 +153,9 @@ export default {
 </script>
 
 <style>
+.splitpanes {
+  grid-area: main;
+}
 .splitpanes__splitter {
   background-color: #ccc;
   position: relative;
@@ -168,9 +187,22 @@ export default {
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: auto;
+  grid-area: main;
 }
-.splitpanes {
-  grid-row: span 17 / span 17;
+.grid-container {
+  grid-auto-rows: 44px auto;
+  grid-template-columns: 1fr 2fr;
+  grid-template-areas:
+    'header header '
+    'main main ';
+}
+.header {
+  grid-area: header;
+}
+.main {
+  grid-area: main;
+}
+.sidebar {
+  grid-area: sidebar;
 }
 </style>

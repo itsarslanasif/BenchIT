@@ -12,10 +12,10 @@ module.exports = {
   },
   theme: {
     colors: {
-      primary: '#1E293B',
-      primaryHover: '#475569',
-      secondary: '#1F2937',
-      secondaryHover: '#4B5563',
+      primary: '#1D1D2C',
+      primaryHover: '#4c4c69',
+      secondary: '#4c4c69',
+      secondaryHover: '#c9c8ea',
       danger: '#B91C1C',
       dangerHover: '#991B1B',
       success: '#15803D',
@@ -27,6 +27,8 @@ module.exports = {
       white: colors.white,
       transparent: 'rgba(234, 231, 231, 0.477)',
       backgroundTransparent: 'rgba(0, 0, 0, 0.3)',
+      dark: '#717082',
+      light: '#b9b8cc',
       woot: {
         50: '#E3F2FF',
         100: '#BBDDFF',
@@ -160,9 +162,6 @@ module.exports = {
         180: '37.5rem',
         95: '20rem',
       },
-      gridTemplateRows: {
-        '18': 'repeat(18, minmax(0, 1fr))',
-      }
     },
   },
   variants: {

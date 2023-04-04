@@ -38,6 +38,21 @@ en:
           new_to_bench_it: 'New to Bench IT?'
           create_your_account: 'Create your account'
           error_message: 'Invalid email or password'
+        sign_up:
+          instructions1: 'Already have an account?'
+          instructions2: 'Start by entering the email address you use for work.'
+          sign_in_instead: 'Sign in instead'
+          join: 'Join BenchIT'
+          terms_services: 'I agree to the terms of service and privacy policy'
+          signup: 'Continue'
+          email: 'Email'
+          password: 'Password'
+          user_name: 'User Name'
+          confirm_email: 'Next, confirm your email address'
+          privacy_terms: 'Privacy & Terms'
+          contact_us: 'Contact Us'
+          change_region: 'Change region'
+          sent_email_to: 'We have sent an email to'
       workspaces:
         title: 'Details About Your Workspace'
         new_workspace_title: 'Add Title Of Your Workspace'
@@ -53,6 +68,7 @@ en:
         find_another_reaction: 'Find another reaction'
         reply_in_thread: 'Reply in thread'
         share_message: 'Share message...'
+        go_to_channel: 'Go to channel'
         add_to_saved_items: 'Add to saved items'
         more_actions: 'More actions'
       downloadsModal:
@@ -76,8 +92,10 @@ en:
         confirmation: 'Are you sure you want to remove this pinned item?'
       direct_messages:
         direct_messages: 'Direct Messages'
-        add_teammates: 'Add Teammates'
+        add_teammates: 'Add teammates'
       channel_details:
+        member: 'member'
+        members: 'members'
         find_members: 'Find members'
         no_matches_found: 'No matches found for '
       company:
@@ -182,8 +200,7 @@ en:
         profile: 'Profile'
       heading:
         thread_in: 'Thread in'
-        thread_in_group: 'Thread in group'
-        message_in_group: 'Message in group'
+        message_in: 'Message in'
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -197,13 +214,14 @@ en:
         workspace_type: "Please select workspace type"
       sidebar:
         threads: 'Threads'
+        no_threads_to_show: 'No threads to show'
         direct_messages: 'Direct Messages'
         mentions_and_reactions: 'Mentions & Reactions'
         draft_and_sent: 'Drafts & Sent'
         people_and_user_group: 'People & User Group'
         all_channels: 'All Channels'
         more: 'More'
-        save_message: 'Save items'
+        saved_items: 'Saved items'
       channels:
         channels: 'Channels'
         public_channels: 'Public Channels'
@@ -277,6 +295,7 @@ en:
         copy_member_id: 'Copy member ID'
         view_files: 'View Files'
         save_items: 'Added to your saved items'
+        saved: 'Saved'
         remove_from_saved_items: 'Remove from saved items'
         saved_items: 'Saved Items'
         save_changes: 'Save Changes'
@@ -303,6 +322,10 @@ en:
         workspace: 'acme@benchit.com'
         enter_workspace_url: 'your-workspace.benchit.com'
         add_people_to_channel: 'ex. Nathalie, or james@acme.com'
+        invitation: 'Invited as a'
+      invitation:
+        member: 'member'
+        guest: 'guest'
       profile:
         contact_information: 'Contact Information'
         email: 'Email Address'
@@ -334,7 +357,7 @@ en:
         copy_member_id: 'Copy member ID'
         no_results_found: 'No Results Found !'
         sort: 'Sort'
-        sort_label: 'Sort:'
+        sort_label: 'Sort: '
         account_type: 'Account Type'
         channel_type: 'Channel Type'
         more_options: 'More Options:'
@@ -407,7 +430,14 @@ en:
         leave: 'Leave Channel'
         files: 'Files'
         file_content: 'There aren’t any files to see here right now. But there could be — drag and drop any file into the message pane to add it to this conversation.'
+        edit_topic: 'Edit Topic'
         add_topic: 'Add topic'
+        add_a_topic: 'Add a topic'
+        add_topic_desc1: 'Add a topic to your conversation with'
+        add_topic_desc2: 'This will be visible to both of you at the top of your DM.'
+        add_topic_desc3: 'This will be visible to all participants at the top of your conversation.'
+        add_topic_channel_desc1: 'Let people know what'
+        add_topic_channel_desc2: 'is focused on right now (ex. a project milestone). Topics are always visible in the header.'
         mute: 'Mute'
         start_a_call: 'Start a call'
         view_full_profile: 'View full profile'
@@ -457,6 +487,7 @@ en:
         reacted: 'reacted in'
         reacted_by: 'reacted to your message'
         mentioned: 'mentioned you in'
+        no_mentions_and_reactions: 'No mentions and reactions'
       connection:
         trying_to_connect: 'Trying to connect...'
         message_failed: 'Failed to send'

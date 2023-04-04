@@ -138,7 +138,7 @@ export default {
                 ),
                 h(
                   NText,
-                  { depth: 2 },
+                  { depth: 2, class: 'text-xs' },
                   {
                     default: () =>
                       this.modal_profile?.is_active ? ' 🟢' : ' ⚫',

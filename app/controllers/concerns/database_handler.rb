@@ -51,7 +51,7 @@ module DatabaseHandler
       new_profile.save!
       set_current_values(new_workspace, new_user, new_profile)
       new_channel = BenchChannel.create!(name: 'general', description: 'general')
-      BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: new_channel.id)
+      BenchConversation.create!(conversationable: new_channel)
       new_channel.channel_participants.create!(permission: true, profile_id: profile.id, role: :channel_manager)
     end
   end

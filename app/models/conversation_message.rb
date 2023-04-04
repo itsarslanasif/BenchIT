@@ -27,7 +27,7 @@ class ConversationMessage < ApplicationRecord
 
   scope :chat_messages, lambda { |id|
     includes(:profile, :replies, :reactions).where(parent_message_id: nil,
-                                                   bench_conversation_id: id).order(id: :desc).with_attached_message_attachments
+                                                   bench_conversation_id: id).order(created_at: :desc).with_attached_message_attachments
   }
 
   scope :messages_with_other_reactions, lambda { |current_profile|
@@ -37,6 +37,8 @@ class ConversationMessage < ApplicationRecord
   }
 
   scope :sent_messages, -> { includes(:profile, :bench_conversation).where(sender_id: Current.profile.id).order(created_at: :desc) }
+
+  scope :current_profile_threads, ->(current_profile) { current_profile.conversation_messages.where.not(parent_message_id: nil) }
 
   def self.recent_conversation_ids(conversation_ids)
     two_weaks_ago_time = DateTimeLibrary.new.two_weeks_ago_time

@@ -1,7 +1,7 @@
 <template>
   <div class="relative">
     <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div class="">
+      <div class="flex px-1 my-2 items-center rounded cursor-pointer">
         <div
           class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer"
         >
@@ -15,6 +15,14 @@
             <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
           </div>
         </div>
+        <div
+          v-if="selectedChat.topic"
+          class="flex items-center gap-1 hover-trigger"
+          @click="toggleEdittopic"
+        >
+          <p class="text-black-500">{{ selectedChat.topic }}</p>
+          <p class="text-info hover-target hover:underline">Edit</p>
+        </div>
       </div>
       <GroupMembersInfoVue @click="toggleShowModal" />
     </div>
@@ -25,6 +33,11 @@
     :toggleModal="toggleShowModal"
     class="m-auto absolute inset-x-0"
   />
+  <EditTopicModal
+    v-if="topicModal"
+    :chat="selectedChat"
+    :closeModal="toggleEdittopic"
+  />
 </template>
 
 <script>
@@ -34,10 +47,10 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useChannelDetailStore } from '../../../stores/useChannelDetailStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-
+import EditTopicModal from '../channeldetail/EditTopicModal.vue';
 export default {
   name: 'ChannelInfo',
-  components: { ChatDetailModal, GroupMembersInfoVue },
+  components: { ChatDetailModal, GroupMembersInfoVue, EditTopicModal },
   setup() {
     const channelStore = useChannelStore();
     const { joinedChannels } = storeToRefs(channelStore);
@@ -50,19 +63,23 @@ export default {
     return {
       modalOpen: false,
       currentGroup: {},
+      topicModal: false,
     };
   },
   methods: {
     toggleShowModal() {
       if (!this.modalOpen) {
-        this.ChannelDetailStore.setSlectedOption('about');
+        this.ChannelDetailStore.setSelectedOption('about');
         this.currentGroup = this.selectedChat;
       }
       this.modalOpen = !this.modalOpen;
     },
     openChannelDetailMemberModal(open) {
-      this.ChannelDetailStore.setSlectedOption('members');
+      this.ChannelDetailStore.setSelectedOption('members');
       this.modalOpen = open;
+    },
+    toggleEdittopic() {
+      this.topicModal = !this.topicModal;
     },
   },
 };
@@ -70,5 +87,13 @@ export default {
 <style scoped>
 .custom-border {
   border-bottom: 0.5px solid gray;
+}
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
 }
 </style>

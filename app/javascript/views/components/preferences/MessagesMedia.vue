@@ -1,5 +1,3 @@
 <template lang="">
-  <div>
-    Messages & Media
-  </div>
+  <div>Messages & Media</div>
 </template>

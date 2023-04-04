@@ -7,6 +7,7 @@ import { getChannel } from '../api/channels/channels';
 import { decryption } from '../modules/crypto/crypto';
 import { errorHandler } from '../views/widgets/messageProvider';
 import { getGroup } from '../api/groups/groups';
+import { editTopic } from '../api/conversation/conversation';
 import {
   getScheduleMessages,
   sendScheduledMessageNow,
@@ -48,6 +49,15 @@ export const useMessageStore = () => {
       getSelectedChat: state => state.selectedChat,
     },
     actions: {
+      editTopic(bench_conversation_id, value) {
+        editTopic(bench_conversation_id, value)
+          .then(res => {
+            this.selectedChat.topic = value;
+          })
+          .catch(e => {
+            errorHandler(e.response.data.message);
+          });
+      },
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
         if (selectedChat.hasOwnProperty('user_id')) {
@@ -78,7 +88,7 @@ export const useMessageStore = () => {
           this.maxPages = newMessages.page_information.pages;
           this.hasMoreMessages = this.currentPage > this.maxPages;
         } catch (e) {
-          this.handleError(error.response.data.error)
+          this.handleError(error.response.data.error);
         }
         if (conversation_type === 'profiles') {
           const currentWorkspace = decryption(
@@ -96,10 +106,9 @@ export const useMessageStore = () => {
             this.selectedChat = await getChannel(id);
             this.selectedChat.conversation_type = 'Channel';
           } catch (e) {
-            this.handleError(e.response.data.error)
+            this.handleError(e.response.data.error);
           }
-        }
-        else if(conversation_type === 'groups'){
+        } else if (conversation_type === 'groups') {
           this.selectedChat = await getGroup(id);
           this.selectedChat.conversation_type = 'Group';
         }
@@ -110,9 +119,9 @@ export const useMessageStore = () => {
       },
       async deleteMessage(id) {
         try {
-         deleteMessage(id);
+          deleteMessage(id);
         } catch (e) {
-          this.handleError(e.response.data.error)
+          this.handleError(e.response.data.error);
         }
       },
       getMessage(id) {
@@ -182,8 +191,8 @@ export const useMessageStore = () => {
         });
       },
       handleError(error) {
-        errorHandler(error.response.data.message); 
-      }
+        errorHandler(error.response.data.message);
+      },
     },
   });
 

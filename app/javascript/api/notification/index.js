@@ -1,5 +1,5 @@
-import { getHeaders } from "../../modules/auth";
-import axios from "../../modules/axios";
+import { getHeaders } from '../../modules/auth';
+import axios from '../../modules/axios';
 
 export const getUnreadMessages = async id => {
   return axios

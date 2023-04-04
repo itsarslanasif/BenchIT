@@ -6,7 +6,7 @@ class Users::SessionsController < Devise::SessionsController
   skip_before_action :verify_authenticity_token
 
   def check_auth
-    if user_signed_in?
+    if user_signed_in? && @current_user.verified?
       render json: { success: true }, status: :ok
     else
       render json: { success: false }, status: :unprocessable_entity

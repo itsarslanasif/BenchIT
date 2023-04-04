@@ -1,7 +1,9 @@
 <template>
   <div class="relative">
-    <div class="custom-border px-1 h-12 items-center flex justify-between">
-      <div class="">
+    <div
+      class="border-b border-light px-1 h-12 items-center flex justify-between"
+    >
+      <div class="flex px-1 my-2 items-center gap-1 cursor-pointer">
         <div
           class="flex px-1 my-2 mx-2 hover:bg-slate-50 rounded cursor-pointer"
         >
@@ -21,7 +23,16 @@
             <i class="fa-solid fa-chevron-down self-center fa-xs"></i>
           </div>
         </div>
+        <div
+          v-if="selectedChat.topic"
+          class="flex items-center gap-1 hover-trigger"
+          @click="toggleEditTopic"
+        >
+          <p class="text-black-500">{{ selectedChat.topic }}</p>
+          <p class="text-info hover-target hover:underline">Edit</p>
+        </div>
       </div>
+
       <ChannelMembersInfoVue
         :showMemberClickListener="this.openChannelDetailMemberModal"
         :channelId="selectedChat.id"
@@ -31,9 +42,14 @@
   </div>
   <ChatDetailModal
     v-if="modalOpen"
-    :chat="this.currentChannel"
+    :chat="currentChannel"
     :toggleModal="toggleShowModal"
     class="m-auto absolute inset-x-0"
+  />
+  <EditTopicModal
+    v-if="topicModal"
+    :chat="selectedChat"
+    :closeModal="toggleEditTopic"
   />
 </template>
 
@@ -45,10 +61,10 @@ import { useChannelStore } from '../../../stores/useChannelStore';
 import { storeToRefs } from 'pinia';
 import { useLeftpaneStore } from '../../../stores/useLeftpaneStore';
 import { useMessageStore } from '../../../stores/useMessagesStore';
-
+import EditTopicModal from '../channeldetail/EditTopicModal.vue';
 export default {
   name: 'ChannelInfo',
-  components: { ChatDetailModal, ChannelMembersInfoVue },
+  components: { ChatDetailModal, ChannelMembersInfoVue, EditTopicModal },
   setup() {
     const ChannelDetailStore = useChannelDetailStore();
     const channelStore = useChannelStore();
@@ -61,35 +77,44 @@ export default {
     return {
       modalOpen: false,
       currentChannel: {},
+      topicModal: false,
     };
   },
   methods: {
     toggleShowModal() {
       if (!this.modalOpen) {
-        this.ChannelDetailStore.setSlectedOption('about');
+        this.ChannelDetailStore.setSelectedOption('about');
         this.getCurrentChannel();
         this.channelStore.setCurrentChannel(this.currentChannel);
       }
       this.modalOpen = !this.modalOpen;
     },
     openChannelDetailMemberModal(open) {
-      this.ChannelDetailStore.setSlectedOption('members');
+      this.ChannelDetailStore.setSelectedOption('members');
       this.modalOpen = open;
     },
     getCurrentChannel() {
       this.currentChannel =
         this.channelStore.joinedChannels.find(
-          obj => obj.id === Number(this.selectedChat.id)
+          obj => obj.id === this.selectedChat.id
         ) ||
         this.channelStore.starChannels.find(
-          obj => obj.id === Number(this.selectedChat.id)
+          obj => obj.id === this.selectedChat.id
         );
+    },
+    toggleEditTopic() {
+      this.topicModal = !this.topicModal;
     },
   },
 };
 </script>
-<style scoped>
-.custom-border {
-  border-bottom: 0.5px solid gray;
+<style>
+.hover-trigger .hover-target {
+  display: none;
+}
+
+.hover-trigger:hover .hover-target {
+  display: inline;
+  cursor: pointer;
 }
 </style>

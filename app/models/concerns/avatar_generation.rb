@@ -1,6 +1,16 @@
 module AvatarGeneration
   extend ActiveSupport::Concern
 
+  included do
+    before_create :attach_avatar
+  end
+
+  private
+
+  def attach_avatar
+    model_name.name.eql?('Profile') ? generate_avatar(username, profile_image) : generate_avatar(company_name, workspace_avatar)
+  end
+
   def generate_avatar(name, image)
     params = {
       name: name,

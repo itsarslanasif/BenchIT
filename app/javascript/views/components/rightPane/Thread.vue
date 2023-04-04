@@ -105,13 +105,15 @@ export default {
     },
     async sendMessage(message, files) {
       if (message.blocks[0] != undefined) {
-        let profileList =  await Promise.all( message.blocks.map( async (block) => {
-          return await this.getMentionedUsers(block)
-        }))
-        profileList = profileList.flat(2)
+        let profileList = await Promise.all(
+          message.blocks.map(async block => {
+            return await this.getMentionedUsers(block);
+          })
+        );
+        profileList = profileList.flat(2);
         profileList = profileList.map(profile => {
-          return profile.id
-        })
+          return profile.id;
+        });
         let formData = new FormData();
         formData.append('sender_id', 1);
         formData.append('content', JSON.stringify(message));
@@ -119,9 +121,8 @@ export default {
         formData.append('parent_message_id', this.threadStore.message.id);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
-        if (profileList.length != 0)
-        {
-          formData.append('profile_list[]', profileList)
+        if (profileList.length != 0) {
+          formData.append('profile_list[]', profileList);
         }
         files.forEach(file => {
           const fileExtension = file.type.split('/')[1];
@@ -132,7 +133,8 @@ export default {
             file = this.getFileFromBlob(file, filename);
           } else if (
             fileExtension == 'x-matroska;codecs=avc1,opus' ||
-            fileExtension == 'x-matroska;codecs=avc1'
+            fileExtension == 'x-matroska;codecs=avc1' ||
+            fileExtension == 'webm;codecs=vp8,opus'
           ) {
             filename += '.mp4';
             file = this.getFileFromBlob(file, filename);
@@ -152,9 +154,11 @@ export default {
     },
     async getMentionedUsers(section) {
       const html = new Remarkable({ html: true });
-      const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
-      return profiles
-    }
+      const { profiles } = await this.profileStore.getMentionsFromIds(
+        html.render(section.text.text)
+      );
+      return profiles;
+    },
   },
   mounted() {
     const message_id = this.$route.params.message_id;

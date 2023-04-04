@@ -9,21 +9,25 @@ import EmailForm from '@/views/widgets/form/EmailForm.vue';
 import PasswordForm from '@/views/widgets/form/PasswordForm.vue';
 import WorkspaceDashboard from '@/views/components/workspace/WorkspaceDashboard.vue';
 import UserSignIn from './views/pages/UserSignIn.vue';
+import UserSignUp from './views/pages/Signup/UserSignUp.vue';
+import UserSignUpForm from './views/pages/Signup/UserSignUpForm.vue';
+import SignUpSuccessful from './views/pages/Signup/SignUpSuccessful.vue';
 import LandingPage from './views/components/landingPage/landingPage.vue';
 import Chat from './views/pages/Chat.vue';
 import Homepage from './views/pages/Homepage.vue';
 import DraftsAndSentMessages from '@/views/components/draftsAndSent/DraftsAndSentMessages.vue';
-import DraftMessages from './views/components/draftsAndSent/DraftMessages.vue'
+import DraftMessages from './views/components/draftsAndSent/DraftMessages.vue';
 import RecentlySentMessages from '@/views/components/draftsAndSent/RecentlySentMessages.vue';
 import SaveMessageBody from './views/components/savemessages/SaveMessageBody.vue';
-import ScheduleMessages from './views/components/schedule/ScheduleMessages.vue'
+import ScheduleMessages from './views/components/schedule/ScheduleMessages.vue';
 import { useCurrentProfileStore } from './stores/useCurrentProfileStore.js';
 import { useCurrentUserStore } from './stores/useCurrentUserStore.js';
 import { useCurrentWorkspaceStore } from './stores/useCurrentWorkspaceStore.js';
 import DirectMessages from './views/components/directMessages/directMessages.vue';
+import Threads from './views/pages/Threads.vue';
 import { decryption } from './modules/crypto/crypto';
 import { checkAuth } from './api/user_auth/check_auth';
-import MentionsAndReactions from './views/components/mentionsAndReactions/MentionsAndReactions.vue'
+import MentionsAndReactions from './views/components/mentionsAndReactions/MentionsAndReactions.vue';
 
 const router = createRouter({
   history: createWebHistory(`/${I18n.prefix}`),
@@ -100,6 +104,11 @@ const router = createRouter({
           name: 'channel-chat',
         },
         {
+          path: '/threads',
+          component: Threads,
+          name: 'threads',
+        },
+        {
           path: '/channels/:id/:message_id?',
           component: Chat,
           name: 'user-chat',
@@ -171,7 +180,7 @@ const router = createRouter({
           meta: {
             auth: true,
           },
-        }
+        },
       ],
     },
     {
@@ -189,6 +198,32 @@ const router = createRouter({
       meta: {
         auth: false,
       },
+    },
+    {
+      path: '/sign_up',
+      component: UserSignUp,
+      name: 'sign_up',
+      meta: {
+        auth: false,
+      },
+      children: [
+        {
+          path: '/sign_up',
+          component: UserSignUpForm,
+          name: 'sign_up',
+          meta: {
+            auth: false,
+          },
+        },
+        {
+          path: '/sign_up/success/',
+          component: SignUpSuccessful,
+          name: 'sign_up_success',
+          meta: {
+            auth: false,
+          },
+        },
+      ],
     },
   ],
 });

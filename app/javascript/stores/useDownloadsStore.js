@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { CONSTANTS } from '../assets/constants'
+import { CONSTANTS } from '../assets/constants';
 
 export const useDownloadsStore = () => {
   const downloadsStore = defineStore('downloadsStore', {
@@ -17,17 +17,14 @@ export const useDownloadsStore = () => {
     actions: {
       getMessage() {
         if (this.response.data === CONSTANTS.DOWNLOAD_REMOVED) {
-          return CONSTANTS.DOWNLOAD_DELETE
+          return CONSTANTS.DOWNLOAD_DELETE;
+        } else if (this.response.data === CONSTANTS.DOWNLOADS_REMOVED) {
+          return CONSTANTS.DOWNLOADS_DELETE;
+        } else {
+          return CONSTANTS.DOWNLOAD_SUCCESS;
         }
-        else if (this.response.data === CONSTANTS.DOWNLOADS_REMOVED) {
-          return CONSTANTS.DOWNLOADS_DELETE
-        }
-        else {
-          return CONSTANTS.DOWNLOAD_SUCCESS
-        }
-
-      }
-    }
+      },
+    },
   });
 
   return downloadsStore();

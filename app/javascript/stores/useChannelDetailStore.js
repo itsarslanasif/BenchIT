@@ -31,7 +31,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
       return this.channelMemberCount;
     },
-    setSlectedOption(option) {
+    setSelectedOption(option) {
       this.selectedOption = option;
     },
     isAbout() {
@@ -65,7 +65,7 @@ export const useChannelDetailStore = defineStore('channelDetailStore ', {
       }
     },
     handleError(error) {
-      errorHandler(error)
-    }
+      errorHandler(error);
+    },
   },
 });

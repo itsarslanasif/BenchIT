@@ -112,9 +112,11 @@ channel_first = BenchChannel.create!(name: 'general', description: 'general')
 channel_second = BenchChannel.create!(name: 'dev', description: 'dev')
 channel_third = BenchChannel.create!(name: 'devsinc', description: 'IT company', is_private: true)
 
-channel_conversation_first = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id)
-channel_conversation_second = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_second.id)
-channel_conversation_third = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_third.id)
+channel_conversation_first = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id, topic: 'general')
+channel_conversation_second = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_second.id,
+                                                        topic: 'developers')
+channel_conversation_third = BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_third.id,
+                                                       topic: 'bench-it')
 
 channel_first.channel_participants.create!(permission: true, profile_id: admin.id)
 channel_first.channel_participants.create!(permission: true, profile_id: alva.id)
@@ -151,9 +153,9 @@ group_first = Group.create!(profile_ids: [alva.id, arnold.id, arthur.id])
 group_second = Group.create!(profile_ids: [alva.id, arnold.id, austin.id])
 group_third = Group.create!(profile_ids: [alva.id, arthur.id, austin.id])
 
-group_conversation_first = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_first.id)
-group_conversation_second = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_second.id)
-group_conversation_third = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_third.id)
+group_conversation_first = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_first.id, topic: 'group-1')
+group_conversation_second = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_second.id, topic: 'group-2')
+group_conversation_third = BenchConversation.create!(conversationable_type: 'Group', conversationable_id: group_third.id, topic: 'group-3')
 
 alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#1** from _Alva_"}}]}',
                                    is_threaded: false, bench_conversation_id: group_conversation_first.id)
@@ -164,7 +166,8 @@ alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text"
 alva.conversation_messages.create!(content: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Hi **Group#3** from _Alva_"}}]}',
                                    is_threaded: false, bench_conversation_id: group_conversation_third.id)
 
-profile_conversation_first = BenchConversation.create!(conversationable_type: 'Profile', conversationable_id: arthur.id, sender_id: alva.id)
+profile_conversation_first = BenchConversation.create!(conversationable_type: 'Profile', conversationable_id: arthur.id, sender_id: alva.id,
+                                                       topic: 'arthur-alva')
 
 sms_first = ConversationMessage.first
 sms_second = ConversationMessage.second
@@ -250,7 +253,7 @@ Current.profile = alvi
 Current.workspace = workspace
 
 channel_first = BenchChannel.create!(name: 'general', description: 'general')
-BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id)
+BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id, topic: 'general')
 channel_first.channel_participants.create!(permission: true, profile_id: alvi.id)
 
 ActiveRecord::Base.establish_connection(:development)

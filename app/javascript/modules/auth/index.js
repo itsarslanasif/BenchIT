@@ -1,7 +1,7 @@
-import { decryption } from "../crypto/crypto"
+import { decryption } from '../crypto/crypto';
 
 export const getHeaders = () => {
   return {
-      Authorization: decryption(localStorage, 'token')
-  }
-}
+    Authorization: decryption(localStorage, 'token'),
+  };
+};

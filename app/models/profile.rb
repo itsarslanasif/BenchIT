@@ -32,12 +32,12 @@ class Profile < ApplicationRecord
   has_many :reactions, dependent: :destroy
   has_many :favourites, dependent: :destroy, inverse_of: :profile
   has_many :statuses, dependent: :destroy
-  has_many :bookmarks, as: :bookmarkable, dependent: :destroy
   has_many :downloads, dependent: :destroy
   has_many :schedule_messages, dependent: :destroy
   has_many :direct_message_users, dependent: :destroy
   has_one :preference, dependent: :destroy
   has_many :mentions, as: :mentionable, dependent: :destroy
+  has_many :invites, dependent: :destroy
 
   validates :username, presence: true
   validates :description, length: { maximum: 150 }
@@ -52,7 +52,7 @@ class Profile < ApplicationRecord
     workspace_owner: 1,
     workspace_admin: 2,
     member: 3,
-    outsider: 4
+    guest: 4
   }
 
   scope :workspace_profiles, -> { where(workspace_id: Current.workspace).distinct }
@@ -73,10 +73,6 @@ class Profile < ApplicationRecord
         attachment_link: Rails.application.routes.url_helpers.rails_storage_proxy_url(attachment)
       }
     end
-  end
-
-  def attach_avatar
-    generate_avatar(username, profile_image)
   end
 
   def groups
@@ -123,7 +119,7 @@ class Profile < ApplicationRecord
   end
 
   def set_names
-    self.pronounce_name = user_name if pronounce_name.nil?
-    self.display_name = user_name if display_name.nil?
+    self.pronounce_name = username if pronounce_name.blank?
+    self.display_name = username if display_name.blank?
   end
 end

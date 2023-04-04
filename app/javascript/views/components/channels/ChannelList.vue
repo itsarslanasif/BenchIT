@@ -2,7 +2,11 @@
   <AccordionList>
     <AccordionItem default-opened="true">
       <template #summary>{{ heading }}</template>
-      <h5 v-for="channel in channels" :key="channel.id" class="hover:bg-primaryHover">
+      <h5
+        v-for="channel in channels"
+        :key="channel.id"
+        class="hover:bg-primaryHover"
+      >
         <ChannelItem :channel="channel" :goTo="goToChannelChat" />
       </h5>
     </AccordionItem>
@@ -19,7 +23,7 @@ export default {
   components: {
     ChannelItem,
     AccordionItem,
-    AccordionList
+    AccordionList,
   },
   setup() {
     const channelStore = useChannelStore();
@@ -40,5 +44,5 @@ export default {
       return window.innerWidth < 1400;
     },
   },
-}
+};
 </script>

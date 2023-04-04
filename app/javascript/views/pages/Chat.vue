@@ -1,6 +1,9 @@
 <template>
-  <div v-if="conversation_type && id" class="flex flex-col h-full">
-    <div v-if="chat" class="chat-header-style">
+  <div
+    v-if="conversation_type && id"
+    class="flex flex-col h-full justify-between"
+  >
+    <div v-if="chat">
       <ChatHeader />
     </div>
     <div v-if="messages" class="break-words chat-style overflow-y-auto">
@@ -9,7 +12,7 @@
         :oldestUnreadMessageId="oldestUnreadMessageId"
       />
     </div>
-    <div class="px-3 editor-style" v-if="isMember">
+    <div class="px-3" v-if="isMember">
       <TextEditorVue
         :sendMessage="sendMessage"
         :editMessage="false"
@@ -110,7 +113,7 @@ export default {
       currentProfile,
       profileStore,
       isConnected,
-      connectionStore
+      connectionStore,
     };
   },
   watch: {
@@ -146,21 +149,22 @@ export default {
     },
     async sendMessage(message, files, schedule) {
       if (message.blocks[0] != undefined) {
-        let profileList =  await Promise.all( message.blocks.map( async (block) => {
-          return await this.getMentionedUsers(block)
-        }))
-        profileList = profileList.flat(2)
+        let profileList = await Promise.all(
+          message.blocks.map(async block => {
+            return await this.getMentionedUsers(block);
+          })
+        );
+        profileList = profileList.flat(2);
         profileList = profileList.map(profile => {
-          return profile.id
-        })
+          return profile.id;
+        });
         let formData = new FormData();
         formData.append('content', JSON.stringify(message));
         formData.append('is_threaded', false);
         formData.append('conversation_type', this.conversation_type);
         formData.append('conversation_id', this.id);
-        if (profileList.length != 0)
-        {
-          formData.append('profile_list[]', profileList)
+        if (profileList.length != 0) {
+          formData.append('profile_list[]', profileList);
         }
         if (schedule) {
           formData.append('scheduled_at', schedule);
@@ -174,7 +178,8 @@ export default {
             file = this.getFileFromBlob(file, filename);
           } else if (
             fileExtension == 'x-matroska;codecs=avc1,opus' ||
-            fileExtension == 'x-matroska;codecs=avc1'
+            fileExtension == 'x-matroska;codecs=avc1' ||
+            fileExtension == 'webm;codecs=vp8,opus'
           ) {
             filename += '.mp4';
             file = this.getFileFromBlob(file, filename);
@@ -195,7 +200,7 @@ export default {
           });
           this.newMessageSent = true;
         } else {
-          this.connectionStore.unsendMessagesQueue(formData)
+          this.connectionStore.unsendMessagesQueue(formData);
         }
       } else {
         return false;
@@ -209,22 +214,16 @@ export default {
     },
     async getMentionedUsers(section) {
       const html = new Remarkable({ html: true });
-      const { profiles } = await this.profileStore.getMentionsFromIds(html.render(section.text.text))
-      return profiles
-    }
+      const { profiles } = await this.profileStore.getMentionsFromIds(
+        html.render(section.text.text)
+      );
+      return profiles;
+    },
   },
 };
 </script>
 
 <style scoped>
-.editor-style {
-  flex: 0.3;
-}
-
-.chat-header-style {
-  flex: 0.1;
-}
-
 .chat-style {
   flex: 1;
 }

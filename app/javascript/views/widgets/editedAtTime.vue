@@ -22,7 +22,7 @@ export default {
   components: {
     NTooltip,
   },
-  methods:{
+  methods: {
     time() {
       return moment(new Date(this.updated_at).getTime()).fromNow();
     },

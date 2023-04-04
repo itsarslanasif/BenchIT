@@ -70,6 +70,18 @@ class Ability
       conversation = get_conversation(favourite.favourable_type, favourite.favourable_id, profile.id)
       favourite.profile_id.eql?(profile.id) && check_membership(conversation, profile)
     end
+
+    can %i[create update destroy], Bookmark do |bookmark|
+      check_membership(bookmark.bench_conversation, profile)
+    end
+
+    can %i[create update destroy], BookmarkFolder do |bookmark_folder|
+      check_membership(bookmark_folder.bench_conversation, profile)
+    end
+
+    can %i[update], BenchConversation do |conversation|
+      check_membership(conversation, profile)
+    end
   end
 
   private

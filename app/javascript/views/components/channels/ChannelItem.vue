@@ -1,6 +1,5 @@
 <template>
   <n-dropdown
-    class="rounded-md"
     placement="bottom-end"
     size="medium"
     :show="showRightClickMenu"
@@ -11,7 +10,8 @@
   >
     <div
       @contextmenu.prevent
-      class="flex items-center pl-3 py-1 hover:bg-primaryHover cursor-pointer"
+      class="flex items-center rounded-md pl-3 py-1 hover:bg-primaryHover cursor-pointer duration-200"
+      :class="channelItemStyles(channel)"
       @click="goTo(`/channels/${channel.id}`, this.channel)"
       @click.right="toggleRightClickMenu"
     >
@@ -25,7 +25,11 @@
       </div>
       <div
         class="px-2 truncate"
-        :class="isUnreadChannel(channel) ? 'font-bold' : ''"
+        :class="
+          isChatOpen || isUnreadChannel(channel)
+            ? 'text-white'
+            : 'text-black-400'
+        "
       >
         {{ channel.name }}
       </div>
@@ -50,6 +54,7 @@ import {
   unreadMessagesLength,
 } from '../../../modules/unreadMessages';
 import { useUnreadStore } from '../../../stores/useUnreadStore';
+import { useMessageStore } from '../../../stores/useMessagesStore.js';
 export default {
   components: { NDropdown, markStar },
   props: ['goTo', 'toggleShow', 'isShowOptions', 'channel'],
@@ -57,7 +62,9 @@ export default {
     const channelStore = useChannelStore();
     const unreadStore = useUnreadStore();
     const { unreadMessages } = storeToRefs(unreadStore);
-    return { channelStore, unreadMessages, unreadStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { channelStore, unreadMessages, unreadStore, selectedChat };
   },
   data() {
     return {
@@ -71,6 +78,13 @@ export default {
   computed: {
     unReadMessageExist() {
       return this.unreadDetails?.messages.length > 0;
+    },
+    isChatOpen() {
+      return (
+        this.selectedChat.id === this.channel.id &&
+        this.selectedChat.conversation_type === 'Channel' &&
+        this.channel.conversation_type === 'BenchChannel'
+      );
     },
   },
   methods: {
@@ -107,11 +121,9 @@ export default {
     setCurrentChannel() {
       this.currentChannel =
         this.channelStore.joinedChannels.find(
-          obj => obj.id === Number(this.channel.id)
+          obj => obj.id === this.channel.id
         ) ||
-        this.channelStore.starChannels.find(
-          obj => obj.id === Number(this.channel.id)
-        );
+        this.channelStore.starChannels.find(obj => obj.id === this.channel.id);
       this.channelStore.setCurrentChannel(this.currentChannel);
       this.setRightClickMenuOptions();
     },
@@ -133,6 +145,15 @@ export default {
 
     totalUnreadMessages(unreadDetails) {
       return unreadMessagesLength(unreadDetails);
+    },
+
+    channelItemStyles(channel) {
+      if (this.isUnreadChannel(channel)) {
+        return 'font-semibold text-white';
+      }
+      if (this.isChatOpen) {
+        return 'bg-secondary text-white';
+      }
     },
   },
 };

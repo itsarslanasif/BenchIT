@@ -7,6 +7,7 @@ class Workspace < ApplicationRecord
   has_many :users, through: :profiles, dependent: :destroy
   has_many :statuses
   has_many :bench_channels, dependent: :destroy
+  has_many :invites, dependent: :destroy
 
   validates :company_name, presence: true
   validates :bench_it_url, uniqueness: true, presence: true
@@ -37,8 +38,4 @@ class Workspace < ApplicationRecord
     business_owner: 3,
     customer_support: 4
   }
-
-  def attach_avatar
-    generate_avatar(company_name, workspace_avatar)
-  end
 end

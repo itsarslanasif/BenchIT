@@ -5,62 +5,63 @@ export const languageRegion = {
     settings: {
       options: [
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (UK)'
+          label: 'English (UK)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
-      ]
-    }
+      ],
+    },
   },
   timezone: {
     title: 'Timezone',
-    tagline: 'Slack uses your time zone to send summary and notification emails, for times in your activity feeds, and for reminders.',
+    tagline:
+      'Slack uses your time zone to send summary and notification emails, for times in your activity feeds, and for reminders.',
     settings: {
       automatically: [
         {
           label: 'Set time zone automatically',
-        }
+        },
       ],
       options: [
         {
-          label: '(UTC +05:00) Islamabad, Karachi'
+          label: '(UTC +05:00) Islamabad, Karachi',
         },
         {
-          label: 'English (UK)'
+          label: 'English (UK)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
         {
-          label: 'English (US)'
+          label: 'English (US)',
         },
-      ]
-    }
+      ],
+    },
   },
   spellCheck: {
     title: 'Spellcheck',
@@ -68,12 +69,10 @@ export const languageRegion = {
     enableCheckspelling: [
       {
         label: 'Enable spellcheck on your messages',
-      }
+      },
     ],
     settings: {
-      selected: [
-        'English (US)'
-      ]
-    }
-  }
-}
+      selected: ['English (US)'],
+    },
+  },
+};

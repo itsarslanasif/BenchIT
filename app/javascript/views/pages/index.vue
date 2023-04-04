@@ -21,31 +21,31 @@
 </template>
 
 <script>
-import { SampleStore } from '@/stores/sample_store'
-import { useProfileStore } from '../../stores/useProfileStore'
-import { useChannelStore } from '../../stores/useChannelStore'
-import { onMounted } from 'vue'
+import { SampleStore } from '@/stores/sample_store';
+import { useProfileStore } from '../../stores/useProfileStore';
+import { useChannelStore } from '../../stores/useChannelStore';
+import { onMounted } from 'vue';
 export default {
   data() {
     return {
       showModal: false,
-    }
+    };
   },
   setup() {
-    SampleStore()
-    const userStore = useProfileStore()
-    useChannelStore()
+    SampleStore();
+    const userStore = useProfileStore();
+    useChannelStore();
     onMounted(() => {
-      userStore.index()
-    })
+      userStore.index();
+    });
   },
   methods: {
     unauthorized() {
-      this.$api.call(this.store.show('this-will-trigger-a-401'))
+      this.$api.call(this.store.show('this-will-trigger-a-401'));
     },
     crash() {
-      this.$api.call(this.store.show('this-will-trigger-a-500'))
+      this.$api.call(this.store.show('this-will-trigger-a-500'));
     },
-  }
-}
+  },
+};
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div class="text-sm" :class="isUnsentMessage ? 'opacity-50' : 'opacity-100'">
-    <div class="rich-content" v-html="text"></div>
+    <div class="rich-content max-w-5xl" v-html="text"></div>
   </div>
 </template>
 
@@ -15,8 +15,8 @@ export default {
     },
     isUnsentMessage: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
@@ -25,15 +25,17 @@ export default {
   },
   async mounted() {
     const html = new Remarkable({ html: true });
-    const { replacedStr } = await this.profileStore.getMentionsFromIds(html.render(this.section.text.text))
-    this.text = replacedStr
+    const { replacedStr } = await this.profileStore.getMentionsFromIds(
+      html.render(this.section.text.text)
+    );
+    this.text = replacedStr;
   },
   setup() {
-    const profileStore = useProfileStore()
+    const profileStore = useProfileStore();
     return {
-      profileStore
-    }
-  }
+      profileStore,
+    };
+  },
 };
 </script>
 <style lang="scss">
@@ -80,9 +82,9 @@ export default {
     padding: 0.5rem;
     border-radius: 0.3rem;
     border-width: 0.01rem;
-
+    white-space: pre-wrap;
     code {
-      color: inherit;
+      color: black;
       padding: 0;
       background: none;
       font-size: 0.8rem;

@@ -27,7 +27,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
         this.pinnedConversation = await pinnedMessages(conversation_type, id);
         this.pinToggle = false;
       } catch (e) {
-        this.handleError(e.response.data.error)
+        this.handleError(e.response.data.error);
       }
     },
     pinMessage(message) {
@@ -50,7 +50,7 @@ export const usePinnedConversation = defineStore('pinnedConversationStore', {
       this.pinToggle = false;
     },
     handleError(error) {
-      errorHandler(error.response.data.message); 
+      errorHandler(error.response.data.message);
     },
   },
 });

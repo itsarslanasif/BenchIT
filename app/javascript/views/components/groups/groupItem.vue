@@ -1,6 +1,7 @@
 <template>
   <div
-    class="flex items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer"
+    :class="{ 'bg-secondary': isChatOpen }"
+    class="flex rounded-md items-center hover-trigger-x justify-between pl-2 py-1 hover:bg-primaryHover cursor-pointer duration-200"
     @click="goTo(`/groups/${group.id}`, group)"
   >
     <span class="flex item-center w-full">
@@ -9,12 +10,17 @@
         <div
           class="bg-black-700 flex items-center justify-center awayStatus text-black-800 inactivePosition h-3 w-3 border rounded"
         >
-          <span class="text-white font-bold text_size">
+          <span class="text-black-400 font-bold text_size">
             {{ getMembersCount }}</span
           >
         </div>
       </div>
-      <p class="ml-2 text-sm text-white truncate">{{ group.name }}</p>
+      <p
+        class="ml-2 text-sm truncate"
+        :class="isChatOpen ? 'text-white' : 'text-black-400'"
+      >
+        {{ group.name }}
+      </p>
     </span>
   </div>
 </template>
@@ -22,12 +28,16 @@
 <script>
 import { NAvatar } from 'naive-ui';
 import { useProfileStore } from '../../../stores/useProfileStore';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { storeToRefs } from 'pinia';
 export default {
   components: { NAvatar },
   props: ['group', 'goTo'],
   setup() {
     const profileStore = useProfileStore();
-    return { profileStore };
+    const messagesStore = useMessageStore();
+    const { selectedChat } = storeToRefs(messagesStore);
+    return { profileStore, selectedChat };
   },
   computed: {
     membersProfileImage() {
@@ -39,6 +49,12 @@ export default {
       return this.group.profiles
         ? this.group.profiles.length
         : this.group.profile_ids.length;
+    },
+    isChatOpen() {
+      return (
+        this.selectedChat.id === this.group.id &&
+        this.selectedChat.conversation_type === this.group.conversation_type
+      );
     },
   },
 };

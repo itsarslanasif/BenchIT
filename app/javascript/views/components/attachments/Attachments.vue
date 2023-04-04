@@ -19,10 +19,7 @@
       v-click-outside="closeModal"
       v-if="openAttach"
     >
-      <n-card
-        class="border shadow-xl border-black-400 m-0"
-        size="small"
-      >
+      <n-card class="border shadow-xl border-black-400 m-0" size="small">
         <template #header>
           <n-space vertical>
             <n-input
@@ -56,9 +53,7 @@
           }}</span>
           <label for="getFile">
             <div
-              class="flex px-3 py-1 my-1 w-full hover-trigger 
-                hover:bg-primaryHover rounded group 
-                hover:text-white duration-200"
+              class="flex px-3 py-1 my-1 w-full hover-trigger hover:bg-primaryHover rounded group hover:text-white duration-200"
             >
               <span> <font-awesome-icon icon="fa-laptop" /></span>
               <span class="px-2 cursor-pointer">{{

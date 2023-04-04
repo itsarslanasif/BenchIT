@@ -18,7 +18,7 @@
         <p class="text-md font-thin">
           {{ $t('pages.sign_in.new_to_bench_it') }}
         </p>
-        <a class="text-md text-woot-800" href="#">{{
+        <a class="text-md text-woot-800" href="http://127.0.0.1:5100/sign_up">{{
           $t('pages.sign_in.create_your_account')
         }}</a>
       </div>
@@ -85,7 +85,7 @@ import { NForm, NFormItem, NInput, NButton, NDivider, NSpace } from 'naive-ui';
 import { userSignIn } from '../../api/user_auth/user_sign_in_api';
 import BenchitAlert from '../widgets/benchitAlert.vue';
 import { useCurrentUserStore } from '../../stores/useCurrentUserStore';
-import { encryption, decryption } from '../../modules/crypto/crypto'
+import { encryption, decryption } from '../../modules/crypto/crypto';
 
 export default {
   name: 'UserSignIn',
@@ -122,7 +122,7 @@ export default {
       }).then(res => {
         if (res.headers.authorization) {
           encryption(localStorage, 'token', res.headers.authorization);
-          encryption(localStorage, 'currentUser', res.data.user)
+          encryption(localStorage, 'currentUser', res.data.user);
         }
         this.response = res.data;
         if (res.data?.user) {

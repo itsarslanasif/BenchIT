@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
+ActiveRecord::Schema[7.0].define(version: 2023_03_29_160905) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -61,21 +61,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "sender_id"
+    t.string "topic"
     t.index ["conversationable_id", "conversationable_type", "sender_id"], name: "bench_conversation_index", unique: true
     t.index ["conversationable_type", "conversationable_id"], name: "index_chat_conversations_on_conversationable"
     t.index ["sender_id"], name: "index_bench_conversations_on_sender_id"
   end
 
+  create_table "bookmark_folders", id: :string, force: :cascade do |t|
+    t.string "name", null: false
+    t.string "bench_conversation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bench_conversation_id"], name: "index_bookmark_folders_on_bench_conversation_id"
+  end
+
   create_table "bookmarks", id: :serial, force: :cascade do |t|
-    t.string "profile_id", null: false
-    t.string "bookmarkable_type", null: false
-    t.string "bookmarkable_id", null: false
     t.string "name", default: ""
     t.text "bookmark_URL", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bookmarkable_type", "bookmarkable_id"], name: "index_bookmarks_on_bookmarkable"
-    t.index ["profile_id"], name: "index_bookmarks_on_profile_id"
+    t.string "bench_conversation_id", null: false
+    t.string "bookmark_folder_id"
+    t.index ["bench_conversation_id"], name: "index_bookmarks_on_bench_conversation_id"
+    t.index ["bookmark_folder_id"], name: "index_bookmarks_on_bookmark_folder_id"
   end
 
   create_table "channel_participants", id: :serial, force: :cascade do |t|
@@ -159,16 +167,21 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.string "profile_ids", default: [], array: true
   end
 
-  create_table "invitables", id: :serial, force: :cascade do |t|
-    t.string "token"
-    t.string "user_id", null: false
+  create_table "invites", force: :cascade do |t|
+    t.string "token", null: false
+    t.text "reason"
+    t.string "email", null: false
+    t.integer "invitation_type", default: 0, null: false
+    t.integer "status", default: 0, null: false
+    t.boolean "has_account", default: false
     t.string "workspace_id", null: false
-    t.string "token_type"
+    t.string "profile_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["token"], name: "index_invitables_on_token"
-    t.index ["user_id"], name: "index_invitables_on_user_id"
-    t.index ["workspace_id"], name: "index_invitables_on_workspace_id"
+    t.index ["profile_id"], name: "index_invites_on_profile_id"
+    t.index ["token"], name: "index_invites_on_token", unique: true
+    t.index ["workspace_id", "email"], name: "index_invites_on_workspace_id_and_email", unique: true
+    t.index ["workspace_id"], name: "index_invites_on_workspace_id"
   end
 
   create_table "mentions", id: :serial, force: :cascade do |t|
@@ -302,6 +315,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
     t.integer "invitations_count", default: 0
     t.string "name"
     t.string "jti", null: false
+    t.string "verification_token"
+    t.boolean "verified", default: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id"
@@ -327,7 +342,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   add_foreign_key "bench_channels", "profiles", column: "creator_id"
   add_foreign_key "bench_channels", "workspaces"
   add_foreign_key "bench_conversations", "profiles", column: "sender_id"
-  add_foreign_key "bookmarks", "profiles"
+  add_foreign_key "bookmark_folders", "bench_conversations"
+  add_foreign_key "bookmarks", "bench_conversations"
+  add_foreign_key "bookmarks", "bookmark_folders"
   add_foreign_key "channel_participants", "bench_channels"
   add_foreign_key "channel_participants", "profiles"
   add_foreign_key "conversation_messages", "bench_conversations"
@@ -340,8 +357,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_03_10_153039) do
   add_foreign_key "draft_messages", "conversation_messages"
   add_foreign_key "draft_messages", "profiles"
   add_foreign_key "favourites", "profiles"
-  add_foreign_key "invitables", "users"
-  add_foreign_key "invitables", "workspaces"
+  add_foreign_key "invites", "profiles"
+  add_foreign_key "invites", "workspaces"
   add_foreign_key "mentions", "conversation_messages"
   add_foreign_key "pins", "bench_conversations"
   add_foreign_key "pins", "conversation_messages"

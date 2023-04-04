@@ -48,7 +48,13 @@ export class handleDateTime {
       (totalSeconds - daysout * day - hoursout * hour) / minute
     );
 
-    return daysout == 7 ? CONSTANTS.THIS_WEEK : hoursout > 1 ? hoursout + CONSTANTS.HOURS : hoursout==1 ? hoursout + CONSTANTS.HOUR : minutesout + CONSTANTS.MINUTES;
+    return daysout == 7
+      ? CONSTANTS.THIS_WEEK
+      : hoursout > 1
+      ? hoursout + CONSTANTS.HOURS
+      : hoursout == 1
+      ? hoursout + CONSTANTS.HOUR
+      : minutesout + CONSTANTS.MINUTES;
   }
 
   incremntTimeStampBySeconds(seconds) {
