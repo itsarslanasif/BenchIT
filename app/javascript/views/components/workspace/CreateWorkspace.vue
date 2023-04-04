@@ -17,7 +17,7 @@
               class="w-1/6 bg-none py-1 px-3 text-base float-right text-black-900 rounded"
               @click="closeModal"
             >
-            <font-awesome-icon :icon="['fas', 'xmark']" />
+              <font-awesome-icon :icon="['fas', 'xmark']" />
             </button>
           </header>
           <div class="m-0 relative mt-5">
@@ -155,17 +155,15 @@ export default {
     async onSubmit() {
       this.validations();
       if (!this.error) {
-        await this.workspaceStore
-          .createWorkspace(
-            this.formValue.workspaceName,
-            this.formValue.workspaceType,
-            this.formValue.workspaceOrganizationType,
-            this.formValue.workspaceCapacity,
-            this.formValue.workspaceURL
-          )
-        this.closeModal()
+        await this.workspaceStore.createWorkspace(
+          this.formValue.workspaceName,
+          this.formValue.workspaceType,
+          this.formValue.workspaceOrganizationType,
+          this.formValue.workspaceCapacity,
+          this.formValue.workspaceURL
+        );
+        this.closeModal();
       }
-
     },
     validations() {
       const {

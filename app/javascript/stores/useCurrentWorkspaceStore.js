@@ -15,7 +15,7 @@ export const useCurrentWorkspaceStore = defineStore(
     actions: {
       setWorkspace(workspace) {
         this.currentWorkspace = workspace;
-      }
+      },
     },
   }
 );

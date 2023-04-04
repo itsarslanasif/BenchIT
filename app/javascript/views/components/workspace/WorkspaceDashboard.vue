@@ -77,12 +77,10 @@
 </template>
 
 <script>
-import CreateWorkspace from './CreateWorkspace.vue'
-import {
-  switchWorkspace,
-} from '../../../api/workspaces/workspacesApi';
+import CreateWorkspace from './CreateWorkspace.vue';
+import { switchWorkspace } from '../../../api/workspaces/workspacesApi';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
-import { useWorkspaceStore } from '../../../stores/useWorkspaceStore'
+import { useWorkspaceStore } from '../../../stores/useWorkspaceStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
 import { setActiveStatus } from '../../../api/profiles/profileStatus';
@@ -106,18 +104,18 @@ export default {
     const currentWorkspace = useCurrentWorkspaceStore();
     const currentProfile = useCurrentProfileStore();
     const workspaceStore = useWorkspaceStore();
-    workspaceStore.index()
-    const { joinedWorkspaces } = storeToRefs(workspaceStore)
+    workspaceStore.index();
+    const { joinedWorkspaces } = storeToRefs(workspaceStore);
     return {
       currentWorkspace,
       currentProfile,
       workspaceStore,
-      joinedWorkspaces
+      joinedWorkspaces,
     };
   },
   methods: {
     createWorkspace() {
-      this.showCreateWorkspace = true
+      this.showCreateWorkspace = true;
     },
     async goToWorkspaceDashboard(workspace) {
       const { id: workspaceId } = workspace;
@@ -146,7 +144,7 @@ export default {
     },
     closeNewWorkspaceModal() {
       this.showCreateWorkspace = false;
-    }
+    },
   },
 };
 </script>
