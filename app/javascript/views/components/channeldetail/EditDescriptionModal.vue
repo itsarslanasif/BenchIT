@@ -97,7 +97,7 @@ export default {
   },
   computed: {
     isDescription() {
-      return this.attribute === $t('conversation.description');
+      return this.attribute === this.$t('conversation.description');
     },
   },
   methods: {

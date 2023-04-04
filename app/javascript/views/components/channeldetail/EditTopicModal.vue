@@ -101,10 +101,10 @@ export default {
       }
     },
     isProfile() {
-      return this.chat.conversation_type === $t('profile.title');
+      return this.chat.conversation_type === this.$t('profile.title');
     },
     isGroup() {
-      return this.chat.conversation_type === $t('conversation.group');
+      return this.chat.conversation_type === this.$t('conversation.group');
     },
   },
   methods: {

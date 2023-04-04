@@ -1,10 +1,7 @@
 <template>
   <div v-if="selectedChat" class="bg-white flex flex-col p-4 overflow-auto">
     <span
-      v-if="
-        isChannel &&
-        selectedChat.creator_id == currentProfileStore.currentProfile.id
-      "
+      v-if="isCreator"
       @click="toggleNameModal()"
       class="flex justify-between items-center border border-black-300 cursor-pointer hover:bg-transparent p-4 mb-4 rounded"
     >
@@ -169,6 +166,13 @@ export default {
     isChannel() {
       return this.selectedChat.conversation_type === 'Channel';
     },
+    isCreator() {
+      return (
+        this.isChannel &&
+        this.selectedChat.creator_id ==
+          this.currentProfileStore.currentProfile.id
+      );
+    },
   },
   setup() {
     const channelStore = useChannelStore();
@@ -211,11 +215,11 @@ export default {
       this.showModal = !this.showModal;
     },
     toggleDescriptionModal() {
-      this.attribute = $t('conversation.description');
+      this.attribute = this.$t('conversation.description');
       this.showDescriptionModal = !this.showDescriptionModal;
     },
     toggleNameModal() {
-      this.attribute = $t('conversation.name');
+      this.attribute = this.$t('conversation.name');
       this.showDescriptionModal = !this.showDescriptionModal;
     },
   },
