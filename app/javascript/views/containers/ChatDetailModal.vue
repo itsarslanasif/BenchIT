@@ -155,12 +155,10 @@ export default {
       return this.chat.conversation_type === 'Group';
     },
     getChatName() {
-      switch (this.messagesStore.selectedChat.conversation_type) {
-        case 'Profile':
-          return this.messagesStore.selectedChat.username;
-        default:
-          return this.messagesStore.selectedChat.name;
+      if (this.messagesStore.selectedChat.conversation_type === 'Profile') {
+        return this.messagesStore.selectedChat.username;
       }
+      return this.messagesStore.selectedChat.name;
     },
   },
 };
