@@ -15,7 +15,7 @@ export const invite_user = async (emailList, invitationType, reason) => {
   );
 };
 
-export const joinedWorkspaces = async () => {
+export const fetchJoinedWorkspaces = async () => {
   return axios
     .get('v1/workspaces/', { headers: getHeaders() })
     .then(response => {

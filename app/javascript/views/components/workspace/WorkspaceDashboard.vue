@@ -17,6 +17,9 @@
           {{ $t('workspace.workspace_not_found') }}
         </n-alert>
       </div>
+      <div v-if="showCreateWorkspace">
+        <CreateWorkspace :close-modal="closeNewWorkspaceModal" />
+      </div>
       <div class="flex gap-2">
         <input
           type="text"
@@ -74,16 +77,15 @@
 </template>
 
 <script>
-import {
-  joinedWorkspaces,
-  switchWorkspace,
-} from '../../../api/workspaces/workspacesApi';
+import CreateWorkspace from './CreateWorkspace.vue';
+import { switchWorkspace } from '../../../api/workspaces/workspacesApi';
 import { useCurrentWorkspaceStore } from '../../../stores/useCurrentWorkspaceStore';
+import { useWorkspaceStore } from '../../../stores/useWorkspaceStore';
 import { useCurrentProfileStore } from '../../../stores/useCurrentProfileStore';
 import { encryption } from '../../../modules/crypto/crypto';
 import { setActiveStatus } from '../../../api/profiles/profileStatus';
 import { NAlert } from 'naive-ui';
-import { errorHandler } from '../../widgets/messageProvider';
+import { storeToRefs } from 'pinia';
 
 export default {
   data() {
@@ -91,29 +93,29 @@ export default {
       joinedWorkspaces: [],
       workspaceURL: '',
       alert: false,
+      showCreateWorkspace: false,
     };
   },
   components: {
+    CreateWorkspace,
     NAlert,
-  },
-  async mounted() {
-    try {
-      this.joinedWorkspaces = await joinedWorkspaces();
-    } catch (e) {
-      errorHandler(e.response.data.message);
-    }
   },
   setup() {
     const currentWorkspace = useCurrentWorkspaceStore();
     const currentProfile = useCurrentProfileStore();
+    const workspaceStore = useWorkspaceStore();
+    workspaceStore.index();
+    const { joinedWorkspaces } = storeToRefs(workspaceStore);
     return {
       currentWorkspace,
       currentProfile,
+      workspaceStore,
+      joinedWorkspaces,
     };
   },
   methods: {
     createWorkspace() {
-      this.$router.push('/new_workspace');
+      this.showCreateWorkspace = true;
     },
     async goToWorkspaceDashboard(workspace) {
       const { id: workspaceId } = workspace;
@@ -139,6 +141,9 @@ export default {
     goToWorkspace() {
       const workspace = this.findWorkspace();
       workspace ? this.goToWorkspaceDashboard(workspace) : (this.alert = true);
+    },
+    closeNewWorkspaceModal() {
+      this.showCreateWorkspace = false;
     },
   },
 };
