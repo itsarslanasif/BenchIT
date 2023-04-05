@@ -24,7 +24,7 @@
         />
         <div class="flex flex-col">
           <span v-if="!isGroup" class="font-bold text-lg">
-            {{ isProfile ? chat.username : chat.name }}
+            {{ getChatName }}
           </span>
           <span v-if="isGroup" class="font-bold text-lg">
             {{ messagesStore.selectedChat.name }}
@@ -153,6 +153,12 @@ export default {
     },
     isGroup() {
       return this.chat.conversation_type === 'Group';
+    },
+    getChatName() {
+      if (this.messagesStore.selectedChat.conversation_type === 'Profile') {
+        return this.messagesStore.selectedChat.username;
+      }
+      return this.messagesStore.selectedChat.name;
     },
   },
 };

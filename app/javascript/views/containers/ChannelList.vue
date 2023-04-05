@@ -25,10 +25,11 @@
             </span>
           </div>
           <div>
-            {{ channelParticipants.length }} {{ $t('channeldetail.members') }}
+            {{ channelParticipants.length }}
+            {{ channelMembersText }}
           </div>
-          <div>
-            {{ channelDescription }}
+          <div v-if="channelDescription">
+            <strong> &middot; </strong> {{ channelDescription }}
           </div>
         </div>
       </div>
@@ -65,6 +66,13 @@ export default {
   name: 'ChannelList',
   components: {
     NButton,
+  },
+  computed: {
+    channelMembersText() {
+      return this.channelParticipants.length === 1
+        ? this.$t('channel_details.member')
+        : this.$t('channel_details.members');
+    },
   },
   props: {
     channelName: {

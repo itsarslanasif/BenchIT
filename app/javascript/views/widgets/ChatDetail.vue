@@ -91,14 +91,23 @@
           <a> {{ formatDate(selectedChat?.created_at) }}</a>
         </p>
         <span class="flex">
-          <p class="text-black-600 mr-2">
+          <p v-if="selectedChat.description" class="text-black-600 mr-2">
+            {{ $t('chat.description') }}
             {{ selectedChat?.description }}
           </p>
           <p
-            v-if="isChannel && !selectedChat?.is_private"
+            v-if="isChannel && selectedChat?.description"
             class="text-info cursor-pointer hover:underline"
+            @click="toggleDescriptionModal()"
           >
-            {{ $t('chat.edit_description') }}
+            {{ $t('actions.edit') }}
+          </p>
+          <p
+            v-else
+            class="text-info cursor-pointer hover:underline"
+            @click="toggleDescriptionModal()"
+          >
+            {{ $t('chat_detail.add_a_description') }}
           </p>
         </span>
         <p>
@@ -122,6 +131,12 @@
         >@{{ selectedChat?.username }}</a
       >
     </p>
+    <EditDescriptionModal
+      v-if="showDescriptionModal"
+      :closeModal="toggleDescriptionModal"
+      :chat="selectedChat"
+      :attribute="'description'"
+    />
   </div>
 </template>
 
@@ -134,12 +149,14 @@ import { useRightPaneStore } from '../../stores/useRightPaneStore';
 import { useUserProfileStore } from '../../stores/useUserProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import AddPeopleToChannel from '../components/channels/AddPeopleToChannel.vue';
+import EditDescriptionModal from '../components/channeldetail/EditDescriptionModal.vue';
 
 export default {
-  components: { AddPeopleToChannel },
+  components: { AddPeopleToChannel, EditDescriptionModal },
   data() {
     return {
       conversation_type: window.location.pathname.split('/')[1],
+      showDescriptionModal: false,
     };
   },
   setup() {
@@ -185,6 +202,9 @@ export default {
         profile => profile.id === profile_id
       );
       this.userProfileStore.setUserProfile(profile);
+    },
+    toggleDescriptionModal() {
+      this.showDescriptionModal = !this.showDescriptionModal;
     },
   },
 };

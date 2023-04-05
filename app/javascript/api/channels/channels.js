@@ -92,3 +92,24 @@ export const memberJoinChannel = async channel_id => {
     }
   );
 };
+
+export const updateChannel = async (
+  channelId,
+  isPrivate,
+  description,
+  name
+) => {
+  return await axios.patch(
+    `/v1/bench_channels/${channelId}`,
+    {
+      bench_channel: {
+        description: description,
+        is_private: isPrivate,
+        name: name,
+      },
+    },
+    {
+      headers: getHeaders(),
+    }
+  );
+};

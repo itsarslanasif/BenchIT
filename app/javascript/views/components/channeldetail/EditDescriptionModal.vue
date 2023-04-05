@@ -13,7 +13,12 @@
             <div
               class="w-5/6 text-lg text-black-900 font-semibold cursor-pointer"
             >
-              <h1>{{ $t('chat_detail.edit_topic') }}</h1>
+              <h1 v-if="isDescription">
+                {{ $t('chat.edit_description') }}
+              </h1>
+              <h1 v-else>
+                {{ $t('chat_detail.rename_channel') }}
+              </h1>
             </div>
 
             <font-awesome-icon
@@ -24,27 +29,23 @@
           </header>
           <div class="m-0 relative mt-5">
             <textarea
-              :placeholder="$t('chat_detail.add_a_topic')"
+              v-if="isDescription"
+              :placeholder="$t('chat_detail.add_a_description')"
               class="w-full border rounded h-32 p-3"
-              v-model="value"
+              v-model="description"
             />
-            <div v-if="isProfile || isGroup" class="mb-6 text-black-500 mt-4">
+            <n-input
+              show-count
+              :maxlength="80"
+              v-else
+              class="w-full border rounded p-3"
+              v-model:value="name"
+              :placeholder="$t('chat_detail.channel_name_placeholder')"
+            />
+
+            <div class="mb-6 text-black-500 mt-4">
               <p>
-                {{ $t('chat_detail.add_topic_desc1') }}
-                <span class="font-semibold">{{ getChatName }}</span>
-                <span v-if="isProfile">{{
-                  $t('chat_detail.add_topic_desc2')
-                }}</span>
-                <span v-if="isGroup">{{
-                  $t('chat_detail.add_topic_desc3')
-                }}</span>
-              </p>
-            </div>
-            <div v-else class="mb-6 text-black-500 mt-4">
-              <p>
-                {{ $t('chat_detail.add_topic_channel_desc1') }}
-                <span class="font-semibold">{{ getChatName }}</span>
-                {{ $t('chat_detail.add_topic_channel_desc2') }}
+                {{ $t('chat_detail.name_modal_description') }}
               </p>
             </div>
 
@@ -72,44 +73,41 @@
   </transition>
 </template>
 <script>
-import { useMessageStore } from '../../../stores/useMessagesStore';
+import { useChannelStore } from '../../../stores/useChannelStore';
 import vClickOutside from 'click-outside-vue3';
+import { NInput } from 'naive-ui';
 
 export default {
+  components: {
+    NInput,
+  },
   data() {
     return {
-      value: this.chat.topic,
+      description: this.chat.description,
+      name: this.chat.name,
     };
   },
   setup() {
-    const messagesStore = useMessageStore();
-    return { messagesStore };
+    const channelStore = useChannelStore();
+    return { channelStore };
   },
-  props: { closeModal: Function, chat: Object },
+  props: { closeModal: Function, chat: Object, attribute: String },
   directives: {
     clickOutside: vClickOutside.directive,
   },
   computed: {
-    getChatName() {
-      switch (this.chat.conversation_type) {
-        case 'Profile':
-          return `@${this.chat.username}. `;
-        case 'Channel':
-          return `#${this.chat.name} `;
-        default:
-          return `${this.chat.name}. `;
-      }
-    },
-    isProfile() {
-      return this.chat.conversation_type === this.$t('profile.title');
-    },
-    isGroup() {
-      return this.chat.conversation_type === this.$t('conversation.group');
+    isDescription() {
+      return this.attribute === this.$t('conversation.description');
     },
   },
   methods: {
     async onSubmit() {
-      this.messagesStore.editTopic(this.chat.bench_conversation_id, this.value);
+      this.channelStore.updateChannel(
+        this.chat.id,
+        this.chat.is_private,
+        this.description,
+        this.name
+      );
       this.closeModal();
     },
   },

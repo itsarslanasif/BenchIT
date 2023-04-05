@@ -24,7 +24,6 @@ class Api::V1::UsersController < Api::ApiController
 
   def user_params
     params.require(:user).permit(:name, :email, :password).tap do |param|
-      param[:jti] = SecureRandom.uuid
       param[:verification_token] = SecureRandom.hex(32)
       param[:verified] = false
     end
