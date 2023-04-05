@@ -91,10 +91,10 @@
           <a> {{ formatDate(selectedChat?.created_at) }}</a>
         </p>
         <span class="flex">
-          <p v-if="selectedChat.description" class="text-black-600 mr-2">
-            {{ $t('chat.description') }}
+          <span v-if="selectedChat.description" class="text-black-600 mr-2">
+            <p v-if="isChannel">{{ $t('chat.description') }}</p>
             {{ selectedChat?.description }}
-          </p>
+          </span>
           <p
             v-if="isChannel && selectedChat?.description"
             class="text-info cursor-pointer hover:underline"
@@ -103,7 +103,7 @@
             {{ $t('actions.edit') }}
           </p>
           <p
-            v-else
+            v-else-if="isChannel"
             class="text-info cursor-pointer hover:underline"
             @click="toggleDescriptionModal()"
           >
