@@ -1,6 +1,6 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create destroy mute_channel unmute_channel invite_outsider]
-  before_action :set_channel_paticipant, only: %i[destroy mute_channel unmute_channel]
+  before_action :set_bench_channel, only: %i[index create destroy mute_unmute_channel invite_outsider]
+  before_action :set_channel_paticipant, only: %i[destroy mute_unmute_channel]
   before_action :check_profile_ids, :pluck_name_of_participants, only: %i[create]
   before_action :set_and_authorize_channel, only: %i[join_public_channel]
   before_action :authorize_channel_participant, only: %i[destroy]
@@ -45,13 +45,8 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
     render json: { success: true, message: t('.success') }, status: :ok
   end
 
-  def mute_channel
-    @channel_participant.update!(muted: true)
-    render json: { success: true, message: t('.success') }, status: :ok
-  end
-
-  def unmute_channel
-    @channel_participant.update!(muted: false)
+  def mute_unmute_channel
+    @channel_participant.update!(muted: !@channel_participant.muted)
     render json: { success: true, message: t('.success') }, status: :ok
   end
 

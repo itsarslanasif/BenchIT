@@ -99,6 +99,12 @@ export default {
         case 'mark-as-read':
           this.unreadStore.markedChatAsRead('channels', this.channel.id);
           break;
+        case 'mute-channel':
+          this.channelStore.muteUnmuteChannel(this.channel.id);
+          break;
+        case 'unmute-channel':
+          this.channelStore.muteUnmuteChannel(this.channel.id);
+          break;
       }
     },
 
@@ -114,7 +120,8 @@ export default {
       this.rightClickMenuOptions = new Option(
         this.checkCurrentChannel(this.currentChannel),
         this.unReadMessageExist,
-        true
+        true,
+        this.currentChannel.is_muted
       ).getOptions();
     },
 
@@ -152,7 +159,10 @@ export default {
         return 'font-semibold text-white';
       }
       if (this.isChatOpen) {
-        return 'bg-secondary text-white';
+        return 'bg-secondary text-white opacity-50';
+      }
+      if (channel.is_muted) {
+        return 'opacity-50';
       }
     },
   },

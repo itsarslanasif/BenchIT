@@ -92,7 +92,7 @@
         </p>
         <span class="flex">
           <span v-if="selectedChat.description" class="text-black-600 mr-2">
-            <p v-if="isChannel">{{ $t('chat.description') }}</p>
+            <span v-if="isChannel">{{ $t('chat.description') }}</span>
             {{ selectedChat?.description }}
           </span>
           <p

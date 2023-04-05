@@ -3,10 +3,11 @@ import { h } from 'vue';
 import { Albums } from '@vicons/ionicons5';
 import { CONSTANTS } from '../../../assets/constants';
 export default class Option {
-  constructor(favourite_id, unread_message_exist, is_channel) {
+  constructor(favourite_id, unread_message_exist, is_channel, is_muted) {
     this.favourite_id = favourite_id;
     this.unread_message_exist = unread_message_exist;
     this.is_channel = is_channel;
+    this.is_muted = is_muted;
   }
 
   renderIcon = icon => {
@@ -71,6 +72,18 @@ export default class Option {
         key: this.generateKey(
           this.is_channel ? CONSTANTS.MUTE_CHANNEL : CONSTANTS.MUTE_CONVERSATION
         ),
+        show: !this.is_muted,
+      },
+      {
+        label: this.is_channel
+          ? CONSTANTS.UN_MUTE_CHANNEL
+          : CONSTANTS.UN_MUTE_CONVERSATION,
+        key: this.generateKey(
+          this.is_channel
+            ? CONSTANTS.UN_MUTE_CHANNEL
+            : CONSTANTS.UN_MUTE_CONVERSATION
+        ),
+        show: this.is_muted,
       },
       {
         label: CONSTANTS.MARK_AS_READ,

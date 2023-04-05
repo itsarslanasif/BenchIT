@@ -113,3 +113,15 @@ export const updateChannel = async (
     }
   );
 };
+
+export const muteUnmuteChannel = async channelId => {
+  return await axios.post(
+    `/v1/channel_participants/mute_unmute_channel`,
+    {
+      bench_channel_id: channelId,
+    },
+    {
+      headers: getHeaders(),
+    }
+  );
+};
