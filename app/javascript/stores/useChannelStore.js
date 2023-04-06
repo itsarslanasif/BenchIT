@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import {
   getChannels,
   updateChannel,
+  muteUnmuteChannel,
   createChannel,
   memberJoinChannel,
   memberLeaveChannel,
@@ -62,6 +63,16 @@ export const useChannelStore = () => {
           await updateChannel(channelId, isPrivate, description, name);
           this.currentChannel.description = description;
           this.currentChannel.name = name;
+        } catch (e) {
+          errorHandler(e.response.data.message);
+        }
+      },
+
+      async muteUnmuteChannel(channelId) {
+        try {
+          await muteUnmuteChannel(channelId);
+          this.currentChannel.is_muted = !this.currentChannel.is_muted;
+          this.sortChannelsList();
         } catch (e) {
           errorHandler(e.response.data.message);
         }
@@ -131,21 +142,25 @@ export const useChannelStore = () => {
       },
 
       sortChannelsList() {
-        this.joinedChannels = this.joinedChannels.sort(
-          (thisChannel, nextChannel) => {
-            if (
-              thisChannel.name.toLowerCase() < nextChannel.name.toLowerCase()
-            ) {
-              return -1;
-            }
-            if (
-              thisChannel.name.toLowerCase() > nextChannel.name.toLowerCase()
-            ) {
-              return 1;
-            }
-            return 0;
-          }
-        );
+        const sortedChannels = this.joinedChannels
+          .sort(({ name: nameA }, { name: nameB }) =>
+            nameA.localeCompare(nameB, undefined, { sensitivity: 'base' })
+          )
+          .reduce(
+            (result, channel) => {
+              if (channel.is_muted) {
+                result.mutedChannels.push(channel);
+              } else {
+                result.unmutedChannels.push(channel);
+              }
+              return result;
+            },
+            { mutedChannels: [], unmutedChannels: [] }
+          );
+        this.joinedChannels = [
+          ...sortedChannels.unmutedChannels,
+          ...sortedChannels.mutedChannels,
+        ];
       },
 
       addChannelJoined(channel) {
