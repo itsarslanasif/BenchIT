@@ -76,12 +76,12 @@ export default class Option {
       },
       {
         label: this.is_channel
-          ? CONSTANTS.UN_MUTE_CHANNEL
-          : CONSTANTS.UN_MUTE_CONVERSATION,
+          ? CONSTANTS.UNMUTE_CHANNEL
+          : CONSTANTS.UNMUTE_CONVERSATION,
         key: this.generateKey(
           this.is_channel
-            ? CONSTANTS.UN_MUTE_CHANNEL
-            : CONSTANTS.UN_MUTE_CONVERSATION
+            ? CONSTANTS.UNMUTE_CHANNEL
+            : CONSTANTS.UNMUTE_CONVERSATION
         ),
         show: this.is_muted,
       },

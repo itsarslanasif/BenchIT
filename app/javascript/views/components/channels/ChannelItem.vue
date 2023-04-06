@@ -100,8 +100,6 @@ export default {
           this.unreadStore.markedChatAsRead('channels', this.channel.id);
           break;
         case 'mute-channel':
-          this.channelStore.muteUnmuteChannel(this.channel.id);
-          break;
         case 'unmute-channel':
           this.channelStore.muteUnmuteChannel(this.channel.id);
           break;
