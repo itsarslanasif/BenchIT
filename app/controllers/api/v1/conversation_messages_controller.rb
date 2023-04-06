@@ -77,13 +77,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
-    create_conversation if @conversation.blank?
-    create_direct_messages
+    create_direct_message_users
     paginate_messages
-  end
-
-  def create_conversation
-    @conversation = BenchConversation.create(conversationable: @receiver, sender_id: current_profile.id)
   end
 
   def unread_messages
@@ -155,7 +150,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @message.parent_message_id.blank? && @message.replies.count.positive?
   end
 
-  def create_direct_messages
+  def create_direct_message_users
     current_profile.direct_message_users.find_or_create_by!(receiver_id: @receiver.id)
     @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
   end
