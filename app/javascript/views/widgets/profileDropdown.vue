@@ -381,8 +381,8 @@ export default {
     },
     async toggleActiveStatus() {
       this.profileActiveStatus
-        ? await removeActiveStatus(this.currentWorkspace, this.profile.id)
-        : await setActiveStatus(this.currentWorkspace, this.profile.id);
+        ? await removeActiveStatus(this.currentWorkspace.id, this.profile.id)
+        : await setActiveStatus(this.currentWorkspace.id, this.profile.id);
       this.setProfileActiveStatus();
     },
   },

@@ -12,34 +12,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :authenticate, only: %i[bench_channel_messages group_messages]
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
-  def sent_message
-    @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
-  end
-
-  def reactions_and_mentions
-    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
-  end
-
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
       authorize! :create, @message
-
-      ActiveRecord::Base.transaction do
-        @message.save!
-
-        if params[:profile_list].present?
-          params[:profile_list].each do |profile_id|
-            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
-          end
-        end
-      end
-
+      @message.save!
+      create_mention if params[:profile_list].present?
       render json: { success: true, message: t('.success') }, status: :ok
     else
-      @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
-      authorize! :create, @schedule_message
-      @schedule_message.save!
+      create_schedule_message
     end
   end
 
@@ -58,6 +39,14 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     end
 
     render json: { success: true, message: t('.success') }, status: :ok
+  end
+
+  def sent_message
+    @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
+  end
+
+  def reactions_and_mentions
+    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def recent_files
@@ -94,7 +83,7 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   end
 
   def create_conversation
-    @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: current_profile.id)
+    @conversation = BenchConversation.create(conversationable: @receiver, sender_id: current_profile.id)
   end
 
   def unread_messages
@@ -191,5 +180,17 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def mentioned_messages
     ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)).where.not(sender_id: current_profile.id)
+  end
+
+  def create_mention
+    params[:profile_list].each do |profile_id|
+      @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
+    end
+  end
+
+  def create_schedule_message
+    @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
+    authorize! :create, @schedule_message
+    @schedule_message.save!
   end
 end
