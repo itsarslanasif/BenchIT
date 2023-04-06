@@ -1,0 +1,2 @@
+en:
+  delete_text: '{"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"This message was deleted."}}]}'

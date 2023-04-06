@@ -31,9 +31,9 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def destroy
     if delete_parent_message?
-      delete_reply_and_parent_message
+      @message.delete_reply_and_parent
     elsif soft_delete_message?
-      soft_delete_message
+      @message.soft_delete
     else
       @message.destroy!
     end
@@ -151,26 +151,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @message.parent_message&.content.eql?(t('.delete_text')) && @message.parent_message.replies.count.eql?(1)
   end
 
-  def delete_reply_and_parent_message
-    ActiveRecord::Base.transaction do
-      @message.pin&.destroy!
-      @message.destroy!
-      @message.parent_message.destroy!
-    end
-  end
-
   def soft_delete_message?
     @message.parent_message_id.blank? && @message.replies.count.positive?
-  end
-
-  def soft_delete_message
-    ActiveRecord::Base.transaction do
-      @message.pin&.destroy!
-      @message.reactions&.delete_all
-      @message.saved_items&.delete_all
-      @message.message_attachments&.delete_all
-      @message.update!(content: t('.delete_text'))
-    end
   end
 
   def create_direct_messages
