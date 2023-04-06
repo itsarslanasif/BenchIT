@@ -76,6 +76,8 @@ export const CONSTANTS = {
   CLOSE_CONVERSATION: 'Close conversation',
   MUTE_CHANNEL: 'Mute channel',
   MUTE_CONVERSATION: 'Mute conversation',
+  UNMUTE_CHANNEL: 'Unmute channel',
+  UNMUTE_CONVERSATION: 'Unmute conversation',
   MARK_AS_READ: 'Mark as read',
   OPEN_IN_SPLIT_VIEW: 'Open in split view',
   STAR_CHANNEL: 'Star channel',

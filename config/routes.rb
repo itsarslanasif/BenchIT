@@ -99,8 +99,7 @@ Rails.application.routes.draw do
         resources :channel_participants, only: %i[index create destroy] do
           collection do
             post :join_public_channel
-            post :mute_channel
-            post :unmute_channel
+            post :mute_unmute_channel
           end
         end
         resources :draft_messages, only: %i[index create update destroy]
