@@ -77,7 +77,14 @@ export default {
     const { selectedChat } = storeToRefs(messagesStore);
     const textEditor = ref(null);
 
-    return { threadStore, currentUser, profileStore, selectedChat, draftAndSentMessagesStore, textEditor };
+    return {
+      threadStore,
+      currentUser,
+      profileStore,
+      selectedChat,
+      draftAndSentMessagesStore,
+      textEditor,
+    };
   },
 
   data() {
@@ -173,12 +180,14 @@ export default {
     },
     async insertDraft() {
       const html = new Remarkable({ html: true });
-      const draftMessageBlocks = JSON.parse(this.messageStore.selectedChat.draft_message.content).blocks
-      const draftMessageText = draftMessageBlocks.map((section)=>{
-        return html.render(section.text.text)
-      })
-      this.textEditor.editor.commands.setContent(...draftMessageText)
-    }
+      const draftMessageBlocks = JSON.parse(
+        this.messageStore.selectedChat.draft_message.content
+      ).blocks;
+      const draftMessageText = draftMessageBlocks.map(section => {
+        return html.render(section.text.text);
+      });
+      this.textEditor.editor.commands.setContent(...draftMessageText);
+    },
   },
   mounted() {
     const message_id = this.$route.params.message_id;
@@ -187,7 +196,7 @@ export default {
       message.scrollIntoView({ block: 'center' });
       message.classList.add('highlight');
     }
-    this.insertDraft()
+    this.insertDraft();
   },
 };
 </script>

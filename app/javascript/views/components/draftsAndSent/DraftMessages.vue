@@ -109,11 +109,7 @@
   </div>
   <div ref="sentinel"></div>
   <div class="flex items-center justify-center">
-    <n-spin
-      v-if="!draftMessages"
-      class="self-center my-2"
-      size="small"
-    />
+    <n-spin v-if="!draftMessages" class="self-center my-2" size="small" />
   </div>
 </template>
 <script>
@@ -138,7 +134,7 @@ export default {
     };
   },
   mounted() {
-    this.draftAndSentMessagesStore.loadDraftMessages(1)
+    this.draftAndSentMessagesStore.loadDraftMessages(1);
   },
   beforeUnmount() {
     this.draftMessages = [];
