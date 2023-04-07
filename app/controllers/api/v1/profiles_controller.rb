@@ -31,6 +31,7 @@ class Api::V1::ProfilesController < Api::ApiController
   def update
     @profile.update!(profile_params)
     @current_profile = @profile
+    render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def set_status
