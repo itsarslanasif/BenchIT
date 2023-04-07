@@ -17,7 +17,6 @@ class BenchChannel < ApplicationRecord
   validates :name, uniqueness: { scope: %i[workspace_id] }
   validates :description, length: { maximum: 500 }
 
-  scope :private_channels, -> { where(is_private: true, workspace_id: Current.workspace) }
   scope :public_channels, -> { where(is_private: false, workspace_id: Current.workspace) }
   scope :profile_joined_private_channels, lambda {
     joins(:channel_participants).where(
