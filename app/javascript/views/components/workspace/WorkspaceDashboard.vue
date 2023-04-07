@@ -65,7 +65,7 @@
             </div>
             <div
               class="items-end self-center py-2 px-4 rounded border-primary border hover:text-white hover:bg-primary duration-200 cursor-pointer"
-              @click="goToWorkspaceDashboard(workspace)"
+              @click="goToWorkspaceDashboard(workspace.id)"
             >
               {{ $t('actions.open') }}
             </div>
@@ -117,9 +117,8 @@ export default {
     createWorkspace() {
       this.showCreateWorkspace = true;
     },
-    async goToWorkspaceDashboard(workspace) {
-      const { id: workspaceId } = workspace;
-      let { profile } = await switchWorkspace(workspaceId);
+    async goToWorkspaceDashboard(workspaceId) {
+      let { profile, workspace } = await switchWorkspace(workspaceId);
       profile.is_active = true;
       await setActiveStatus(workspaceId, profile.id);
 
@@ -140,7 +139,9 @@ export default {
     },
     goToWorkspace() {
       const workspace = this.findWorkspace();
-      workspace ? this.goToWorkspaceDashboard(workspace) : (this.alert = true);
+      workspace
+        ? this.goToWorkspaceDashboard(workspace.id)
+        : (this.alert = true);
     },
     closeNewWorkspaceModal() {
       this.showCreateWorkspace = false;

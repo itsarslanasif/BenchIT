@@ -63,6 +63,7 @@ Metrics/BlockLength:
     - '**/routes.rb'
     - 'config/environments/*'
     - db/schema.rb
+    - lib/tasks/db.rake
 Metrics/ModuleLength:
   Exclude:
     - lib/seeders/message_seeder.rb
