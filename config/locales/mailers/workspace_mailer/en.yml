@@ -1,6 +1,6 @@
 en:
   workspace_mailer:
-    send_workspace_create_mail:
+    send_workspace_creation_mail:
       workspace_create_subject: 'New Workspace Created'
     workspace_invitation_mail:
       workspace_invitation_subject: 'Invitation to join %{company_name}'

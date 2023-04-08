@@ -37,6 +37,7 @@ export const useDirectMessagesStore = defineStore('useDirectMessagesStore', {
       if (index !== -1) {
         this.directMessageUsers[index].status = profile.status;
         this.directMessageUsers[index].is_active = profile.is_active;
+        this.directMessageUsers[index].username = profile.username;
       }
     },
     async removeChatFromList(chat_id) {

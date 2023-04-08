@@ -1,5 +1,5 @@
 class Api::V1::ChannelParticipantsController < Api::ApiController
-  before_action :set_bench_channel, only: %i[index create destroy mute_unmute_channel invite_outsider]
+  before_action :set_bench_channel, only: %i[index create destroy mute_unmute_channel]
   before_action :set_channel_paticipant, only: %i[destroy mute_unmute_channel]
   before_action :check_profile_ids, :pluck_name_of_participants, only: %i[create]
   before_action :set_and_authorize_channel, only: %i[join_public_channel]
@@ -20,7 +20,7 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def create
     ActiveRecord::Base.transaction do
       params[:profile_ids].each do |profile_id|
-        ChannelParticipant.create!(bench_channel_id: @bench_channel.id, profile_id: profile_id, permission: true)
+        @bench_channel.channel_participants.create!(profile_id: profile_id, permission: true)
       end
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).add_members_in_channel(@users_joined, params[:profile_ids][0])
     end
@@ -30,14 +30,13 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def destroy
     ActiveRecord::Base.transaction do
       @channel_participant.destroy!
-      create_user_left_message_in_channel
+      InfoMessagesCreatorService.new(@channel.bench_conversation.id).left_channel(@bench_channel.name)
     end
-
     render json: { success: true, message: t('.success') }, status: :ok
   end
 
   def join_public_channel
-    @channel_participant = ChannelParticipant.new(bench_channel_id: @bench_channel.id, profile_id: current_profile.id, permission: true)
+    @channel_participant = @bench_channel.channel_participants.new(profile_id: current_profile.id, permission: true)
     ActiveRecord::Base.transaction do
       @channel_participant.save!
       InfoMessagesCreatorService.new(@bench_channel.bench_conversation.id).join_public_channel
@@ -48,12 +47,6 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
   def mute_unmute_channel
     @channel_participant.update!(muted: !@channel_participant.muted)
     render json: { success: true, message: t('.success') }, status: :ok
-  end
-
-  def invite_outsider
-    @token = Token.new.generate
-    ChannelMailer.send_email(params[:email], @bench_channel, @token).deliver!
-    render json: { success: true, message: t('.success'), company_name: @bench_channel.workspace.company_name }, status: :ok
   end
 
   private
@@ -83,15 +76,5 @@ class Api::V1::ChannelParticipantsController < Api::ApiController
 
   def authorize_channel_participant
     authorize! :destroy, @channel_participant
-  end
-
-  def create_user_left_message_in_channel
-    ConversationMessage.create!(
-      content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"#{I18n.t('application.services.left_message')} #{@channel.name}"}}]}),
-      is_threaded: false,
-      bench_conversation_id: @channel.bench_conversation_id,
-      sender_id: @channel_participant.profile_id,
-      is_info: true
-    )
   end
 end

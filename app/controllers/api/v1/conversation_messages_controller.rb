@@ -12,34 +12,15 @@ class Api::V1::ConversationMessagesController < Api::ApiController
   before_action :authenticate, only: %i[bench_channel_messages group_messages]
   after_action :marked_chat_read, only: %i[bench_channel_messages profile_messages group_messages]
 
-  def sent_message
-    @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
-  end
-
-  def reactions_and_mentions
-    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
-  end
-
   def create
     if params[:scheduled_at].blank?
       @message = @bench_conversation.conversation_messages.new(conversation_messages_params)
       authorize! :create, @message
-
-      ActiveRecord::Base.transaction do
-        @message.save!
-
-        if params[:profile_list].present?
-          params[:profile_list].each do |profile_id|
-            @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
-          end
-        end
-      end
-
+      @message.save!
+      create_mention if params[:profile_list].present?
       render json: { success: true, message: t('.success') }, status: :ok
     else
-      @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
-      authorize! :create, @schedule_message
-      @schedule_message.save!
+      create_schedule_message
     end
   end
 
@@ -50,14 +31,22 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def destroy
     if delete_parent_message?
-      delete_reply_and_parent_message
+      @message.delete_reply_and_parent
     elsif soft_delete_message?
-      soft_delete_message
+      @message.soft_delete
     else
       @message.destroy!
     end
 
     render json: { success: true, message: t('.success') }, status: :ok
+  end
+
+  def sent_message
+    @pagy, @sent_messages = pagination_for_sent_messages(params[:page])
+  end
+
+  def reactions_and_mentions
+    @messages = mentioned_messages + current_profile.conversation_messages.messages_with_other_reactions(current_profile)
   end
 
   def recent_files
@@ -88,13 +77,8 @@ class Api::V1::ConversationMessagesController < Api::ApiController
 
   def profile_messages
     @conversation = BenchConversation.profile_to_profile_conversation(current_profile.id, @receiver.id)
-    create_conversation if @conversation.blank?
-    create_direct_messages
+    create_direct_message_users
     paginate_messages
-  end
-
-  def create_conversation
-    @conversation = BenchConversation.create(conversationable_type: 'Profile', conversationable_id: @receiver.id, sender_id: current_profile.id)
   end
 
   def unread_messages
@@ -162,34 +146,28 @@ class Api::V1::ConversationMessagesController < Api::ApiController
     @message.parent_message&.content.eql?(t('.delete_text')) && @message.parent_message.replies.count.eql?(1)
   end
 
-  def delete_reply_and_parent_message
-    ActiveRecord::Base.transaction do
-      @message.pin&.destroy!
-      @message.destroy!
-      @message.parent_message.destroy!
-    end
-  end
-
   def soft_delete_message?
     @message.parent_message_id.blank? && @message.replies.count.positive?
   end
 
-  def soft_delete_message
-    ActiveRecord::Base.transaction do
-      @message.pin&.destroy!
-      @message.reactions&.delete_all
-      @message.saved_items&.delete_all
-      @message.message_attachments&.delete_all
-      @message.update!(content: t('.delete_text'))
-    end
-  end
-
-  def create_direct_messages
+  def create_direct_message_users
     current_profile.direct_message_users.find_or_create_by!(receiver_id: @receiver.id)
     @receiver.direct_message_users.find_or_create_by!(receiver_id: current_profile.id)
   end
 
   def mentioned_messages
     ConversationMessage.where(id: current_profile.mentions.pluck(:conversation_message_id)).where.not(sender_id: current_profile.id)
+  end
+
+  def create_mention
+    params[:profile_list].each do |profile_id|
+      @message.mentions.create!(mentionable_type: 'Profile', mentionable_id: profile_id)
+    end
+  end
+
+  def create_schedule_message
+    @schedule_message = @bench_conversation.schedule_messages.new(schedule_messages_params)
+    authorize! :create, @schedule_message
+    @schedule_message.save!
   end
 end

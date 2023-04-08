@@ -54,8 +54,11 @@ export const clearStatus = async (currentWorkspaceID, currentProfileID) => {
 
 export const setActiveStatus = async (currentWorkspaceID, currentProfileID) => {
   return await axios
-    .get(
-      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/set_is_active`,
+    .patch(
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}`,
+      {
+        is_active: true,
+      },
       {
         headers: getHeaders(),
       }
@@ -70,8 +73,11 @@ export const removeActiveStatus = async (
   currentProfileID
 ) => {
   return await axios
-    .get(
-      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}/remove_is_active`,
+    .patch(
+      `/v1/workspaces/${currentWorkspaceID}/profiles/${currentProfileID}`,
+      {
+        is_active: false,
+      },
       {
         headers: getHeaders(),
       }
