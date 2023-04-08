@@ -1,9 +1,10 @@
 class Api::V1::ProfilesController < Api::ApiController
-  before_action :set_profile, only: %i[show update set_status clear_status]
+  before_action :set_profile, only: %i[show]
   skip_before_action :set_workspace_in_session, only: %i[create]
   before_action :set_workspace, only: %i[index create show update]
   before_action :check_profile_already_exists, only: %i[create]
   before_action :check_user_member_of_workspace, only: %i[show update]
+  before_action :find_profile, only: %i[update set_status clear_status]
   before_action :fetch_country_name, only: %i[update]
 
   def index
@@ -54,6 +55,10 @@ class Api::V1::ProfilesController < Api::ApiController
       status.update!(clear_after: params[:clear_status_after].to_time - DateTime.now)
       ClearStatusJob.set(wait_until: params[:clear_status_after].to_time).perform_later(@profile.id)
     end
+  end
+
+  def find_profile
+    @profile = Profile.find(params[:id])
   end
 
   def set_workspace
