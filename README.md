@@ -1,4 +1,6 @@
 Bentch-it is a new way to communicate with your team. It's faster, better organized, and more secure than email.
+<img width="1444" alt="image" src="https://github.com/user-attachments/assets/4ef38132-69bd-466f-811c-c2664817463a">
+
 
 ## Tech Stack
 
