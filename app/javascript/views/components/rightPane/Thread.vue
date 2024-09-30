@@ -31,6 +31,7 @@
     </div>
     <div class="relative mx-1">
       <TextEditorVue
+        ref="textEditor"
         :isThread="true"
         :sendMessage="sendMessage"
         :recieverName="recieverName"
@@ -48,11 +49,14 @@ import { useThreadStore } from '../../../stores/useThreadStore';
 import { useProfileStore } from '../../../stores/useProfileStore';
 import { conversation } from '../../../modules/axios/editorapi';
 import RightPaneHeader from './RightPaneHeader.vue';
+import { useDraftAndSentMessagesStore } from '../../../stores/useDraftAndSentMessagesStore';
 import { useUserInviteStore } from '../../../stores/useUserInviteStore';
 import { storeToRefs } from 'pinia';
 import { Remarkable } from 'remarkable';
 import { CONSTANTS } from '../../../assets/constants';
 import { errorHandler } from '../../widgets/messageProvider';
+import { useMessageStore } from '../../../stores/useMessagesStore';
+import { ref } from 'vue';
 
 export default {
   name: 'RightPane',
@@ -67,8 +71,20 @@ export default {
     const threadStore = useThreadStore();
     const currentUserStore = useUserInviteStore();
     const profileStore = useProfileStore();
+    const messagesStore = useMessageStore();
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
     const { currentUser } = storeToRefs(currentUserStore);
-    return { threadStore, currentUser, profileStore };
+    const { selectedChat } = storeToRefs(messagesStore);
+    const textEditor = ref(null);
+
+    return {
+      threadStore,
+      currentUser,
+      profileStore,
+      selectedChat,
+      draftAndSentMessagesStore,
+      textEditor,
+    };
   },
 
   data() {
@@ -103,7 +119,7 @@ export default {
       const file = new File([blob], fileName, { type: blob.type });
       return file;
     },
-    async sendMessage(message, files) {
+    async sendMessage(message, files, isDraft) {
       if (message.blocks[0] != undefined) {
         let profileList = await Promise.all(
           message.blocks.map(async block => {
@@ -144,7 +160,11 @@ export default {
           formData.append('message_attachments[]', file, filename);
         });
         try {
-          conversation(formData);
+          if (!isDraft) {
+            conversation(formData);
+          } else {
+            this.draftAndSentMessagesStore.createDraftMessage(formData);
+          }
         } catch (e) {
           errorHandler(e.response.data.message);
         }
@@ -159,6 +179,16 @@ export default {
       );
       return profiles;
     },
+    async insertDraft() {
+      const html = new Remarkable({ html: true });
+      const draftMessageBlocks = JSON.parse(
+        this.messageStore.selectedChat.draft_message.content
+      ).blocks;
+      const draftMessageText = draftMessageBlocks.map(section => {
+        return html.render(section.text.text);
+      });
+      this.textEditor.editor.commands.setContent(...draftMessageText);
+    },
   },
   mounted() {
     const message_id = this.$route.params.message_id;
@@ -167,6 +197,7 @@ export default {
       message.scrollIntoView({ block: 'center' });
       message.classList.add('highlight');
     }
+    this.insertDraft();
   },
 };
 </script>

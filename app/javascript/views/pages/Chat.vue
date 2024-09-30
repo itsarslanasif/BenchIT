@@ -13,7 +13,8 @@
       />
     </div>
     <div class="px-3" v-if="isMember">
-      <TextEditorVue
+      <TextEditor
+        ref="textEditor"
         :sendMessage="sendMessage"
         :editMessage="false"
         :isThread="false"
@@ -31,7 +32,7 @@ import JoinChannel from '../widgets/JoinChannel.vue';
 import { NInput, NSpace } from 'naive-ui';
 import { Remarkable } from 'remarkable';
 import ChatBody from '../components/chats/ChatBody.vue';
-import TextEditorVue from '../components/editor/TextEditor.vue';
+import TextEditor from '../components/editor/TextEditor.vue';
 import { createCable, unsubscribe } from '@/plugins/cable';
 import { conversation } from '../../modules/axios/editorapi';
 import { useMessageStore } from '../../stores/useMessagesStore';
@@ -43,6 +44,8 @@ import { useChannelDetailStore } from '../../stores/useChannelDetailStore';
 import { useCurrentProfileStore } from '../../stores/useCurrentProfileStore';
 import { useProfileStore } from '../../stores/useProfileStore';
 import { useConnectionStore } from '../../stores/useConnectionStore';
+import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore';
+import { ref, onMounted } from 'vue';
 
 export default {
   name: 'Chat',
@@ -51,7 +54,7 @@ export default {
     ChatBody,
     NInput,
     NSpace,
-    TextEditorVue,
+    TextEditor,
     JoinChannel,
   },
   data() {
@@ -68,6 +71,7 @@ export default {
     function getIndexByParams(param) {
       return window.location.pathname.split('/')[param];
     }
+    const textEditor = ref(null);
     const messageStore = useMessageStore();
     const currentUserStore = useCurrentUserStore();
     const profileStore = useProfileStore();
@@ -75,6 +79,7 @@ export default {
     const connectionStore = useConnectionStore();
     const channelDetailStore = useChannelDetailStore();
     const currentProfileStore = useCurrentProfileStore();
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
     const conversation_type = getIndexByParams(1);
     const id = getIndexByParams(2);
     const {
@@ -93,6 +98,8 @@ export default {
       id
     );
     unreadStore.markedChatAsRead(conversation_type, id);
+    const { selectedChat } = storeToRefs(messageStore);
+
     return {
       messages,
       currMessage,
@@ -114,6 +121,9 @@ export default {
       profileStore,
       isConnected,
       connectionStore,
+      textEditor,
+      selectedChat,
+      draftAndSentMessagesStore,
     };
   },
   watch: {
@@ -133,6 +143,9 @@ export default {
     this.Cable.on('chat', data => {
       cableActions(data.message);
     });
+    if (this.messageStore.selectedChat.draft_message) {
+      this.insertDraft();
+    }
   },
   beforeUnmount() {
     this.chat = null;
@@ -147,7 +160,7 @@ export default {
       const file = new File([blob], fileName, { type: blob.type });
       return file;
     },
-    async sendMessage(message, files, schedule) {
+    async sendMessage(message, files, schedule, isDraft) {
       if (message.blocks[0] != undefined) {
         let profileList = await Promise.all(
           message.blocks.map(async block => {
@@ -191,14 +204,19 @@ export default {
           }
           formData.append('message_attachments[]', file, filename);
         });
+
         if (this.isConnected) {
-          conversation(formData).then(res => {
-            if (res.scheduled_at) {
-              this.messageStore.addScheduleMessage(res);
-            }
-            this.message = '';
-          });
-          this.newMessageSent = true;
+          if (!isDraft) {
+            conversation(formData).then(res => {
+              if (res.scheduled_at) {
+                this.messageStore.addScheduleMessage(res);
+              }
+              this.message = '';
+            });
+            this.newMessageSent = true;
+          } else {
+            this.draftAndSentMessagesStore.createDraftMessage(formData);
+          }
         } else {
           this.connectionStore.unsendMessagesQueue(formData);
         }
@@ -218,6 +236,16 @@ export default {
         html.render(section.text.text)
       );
       return profiles;
+    },
+    async insertDraft() {
+      const html = new Remarkable({ html: true });
+      const draftMessageBlocks = JSON.parse(
+        this.messageStore.selectedChat.draft_message.content
+      ).blocks;
+      const draftMessageText = draftMessageBlocks.map(section => {
+        return html.render(section.text.text);
+      });
+      this.textEditor.editor.commands.setContent(...draftMessageText);
     },
   },
 };

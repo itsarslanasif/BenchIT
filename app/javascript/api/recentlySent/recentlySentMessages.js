@@ -13,3 +13,26 @@ export const getSentMessages = async page => {
       return response.data;
     });
 };
+
+export const fetchDraftMessages = async page => {
+  return await axios
+    .get(`/v1/draft_messages`, {
+      params: {
+        page,
+      },
+      headers: getHeaders(),
+    })
+    .then(response => {
+      return response.data;
+    });
+};
+
+export const postDraftMessage = async messageContent => {
+  return axios
+    .post(`/v1/draft_messages`, messageContent, {
+      headers: getHeaders(),
+    })
+    .then(res => {
+      return res.data;
+    });
+};

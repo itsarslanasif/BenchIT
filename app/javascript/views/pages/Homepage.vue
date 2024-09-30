@@ -20,6 +20,7 @@ import {
   createNotificationCable,
   unsubscribeNotification,
 } from '../../plugins/cable';
+import { useDraftAndSentMessagesStore } from '../../stores/useDraftAndSentMessagesStore';
 export default {
   components: {
     SplitPanesVue,
@@ -59,9 +60,11 @@ export default {
     const savedItemStore = useSavedItemsStore();
     const unreadMessageStore = useUnreadStore();
     const messageStore = useMessageStore();
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore();
     const { currentWorkspace } = storeToRefs(currentWorkspaceStore);
     const { currentProfile } = storeToRefs(currentProfileStore);
     messageStore.getAllScheduleMessages();
+    draftAndSentMessagesStore.loadDraftMessages();
     unreadMessageStore.index();
     savedItemStore.index();
     return {

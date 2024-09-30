@@ -14,7 +14,7 @@ module Conversation
   end
 
   def get_receiver(conversation)
-    if conversation.profile? && conversation.conversationable_id.eql?(@current_profile.id)
+    if conversation.conversationable_type.eql?('Profile') && conversation.conversationable_id.eql?(@current_profile.id)
       conversation.sender
     else
       conversation.conversationable

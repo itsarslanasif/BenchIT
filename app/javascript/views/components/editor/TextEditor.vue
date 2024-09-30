@@ -248,7 +248,7 @@
 </template>
 
 <script>
-import { ref, watch, onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 import { markdownToBlocks } from '@tryfabric/mack';
 import TurndownService from 'turndown';
 import Attachments from '../attachments/Attachments.vue';
@@ -277,6 +277,8 @@ import VideoRecord from '../../widgets/videoRecord.vue';
 import VisualizeVideo from '../../widgets/VisualizeVideo.vue';
 import EmojiPicker from '../../widgets/emojipicker.vue';
 import { useConnectionStore } from '../../../stores/useConnectionStore.js';
+import { useDraftAndSentMessagesStore } from '../../../stores/useDraftAndSentMessagesStore';
+import { isHtmlOnly } from '../../utils/htmlFunctions';
 
 export default {
   data() {
@@ -290,6 +292,7 @@ export default {
     }
   },
   beforeUnmount() {
+    this.saveDraftMessage();
     this.editor.destroy();
   },
   components: {
@@ -392,6 +395,7 @@ export default {
     const { isConnected } = storeToRefs(connectionStore);
     const messageStore = useMessageStore();
     const { selectedChat, messageToEdit } = storeToRefs(messageStore);
+    const draftAndSentMessagesStore = useDraftAndSentMessagesStore;
     const { searches } = storeToRefs(searchStore);
     const scheduleModalFlag = ref(false);
     const { profiles } = storeToRefs(profileStore);
@@ -401,13 +405,11 @@ export default {
     const audioFiles = ref([]);
     const files = ref([]);
     const videoFiles = ref([]);
-    const filteredList = ref([]);
     const schedule = ref(null);
     const attachmentAndShortcutStore = useShortcutAndAttachmentStore();
     const editor = ref(null);
     const emojiModalFlag = ref(false);
     const showTopBar = ref(true);
-
     onMounted(() => {
       editor.value = new Editor({
         extensions: [
@@ -461,9 +463,15 @@ export default {
       });
     };
 
-    const sendMessagePayload = async (event, buttonClicked) => {
+    const sendMessagePayload = async (
+      event,
+      buttonClicked,
+      isDraft = false
+    ) => {
       if (
-        ((event.keyCode === 13 && !event.shiftKey) || buttonClicked) &&
+        ((event?.keyCode === 13 && !event?.shiftKey) ||
+          buttonClicked ||
+          isDraft) &&
         !props.editMessage
       ) {
         const mrkdwn = [];
@@ -495,18 +503,13 @@ export default {
 
         if (result[0] != null) {
           const output = formatBlockContent(result);
-          props.fromThreads
-            ? props.sendMessage(
-                { blocks: output },
-                files.value,
-                props.conversationType,
-                props.conversationId,
-                props.parentMessageId
-              )
+          props.isThread
+            ? props.sendMessage({ blocks: output }, files.value, isDraft)
             : props.sendMessage(
                 { blocks: output },
                 files.value,
-                schedule.value
+                schedule.value,
+                isDraft
               );
           newMessage.value = '';
           readerFile.value = [];
@@ -659,6 +662,20 @@ export default {
       scheduleModalFlag.value = !scheduleModalFlag.value;
     };
 
+    const saveDraftMessage = () => {
+      const editorContent = editor.value.getHTML().toString();
+      if (!isHtmlOnly(editorContent)) {
+        sendMessagePayload(undefined, false, true);
+      }
+    };
+
+    const insertDraftInEditor = () => {
+      const { draftMessage } = messageStore.selectedChat;
+      if (draftMessage) {
+        editor.commands.insertContent(draftMessage);
+      }
+    };
+
     return {
       newMessage,
       readerFile,
@@ -698,6 +715,8 @@ export default {
       addReaction,
       toggleModal,
       showTopBar,
+      saveDraftMessage,
+      insertDraftInEditor,
     };
   },
 };

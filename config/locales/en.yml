@@ -202,8 +202,10 @@ en:
         thread: 'Thread'
         profile: 'Profile'
       heading:
-        thread_in: 'Thread in'
+        thread_in: 'Thread in '
         message_in: 'Message in'
+        thread_in_group: 'Thread in group '
+        message_in_group: 'Message in group '
       workspace:
         title: 'Bench IT'
         join_workspace: 'Join Workspace'
@@ -474,6 +476,7 @@ en:
       messages_section:
         jump_to: 'Jump to...'
         jump_to_specific_date: 'Jump to a specific date'
+
       saved_items:
         title: 'Add messages and files to come back to later'
         description: 'Mark your to-dos or save something for another time. Only you can see
