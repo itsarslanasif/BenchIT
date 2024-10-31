@@ -71,7 +71,7 @@ class Api::V1::ProfilesController < Api::ApiController
   end
 
   def set_workspace
-    @workspace = Workspace.find(params[:workspace_id])
+    @workspace = Current.workspace
   end
 
   def profile_params

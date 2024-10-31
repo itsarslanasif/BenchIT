@@ -1,19 +1,15 @@
 password = ENV.fetch('PASSWORD', nil)
-user_first = User.create!(email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+uuid = "U0#{SecureRandom.alphanumeric(12).upcase}"
 
-workspace = Workspace.create!(company_name: 'BenchIT',
+user_first = User.create!(name: 'Admin', email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+
+workspace = Workspace.create!(company_name: 'Devsinc',
                               workspace_type: :work,
-                              bench_it_url: 'https://www.benchit.com',
+                              bench_it_url: 'https://www.devsinc.com',
                               capacity: 2000,
                               organization_type: :financial_services)
 
 Current.workspace = workspace
-
-workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
-workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
-workspace.statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today')
-workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
-workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
 
 admin = workspace.profiles.create!(username: 'admin', description: 'Admin of workspace', user_id: user_first.id,
                                    display_name: 'Admin', phone: '1234567890', skype: '1234567890', text_status: 'Happy',
@@ -21,7 +17,7 @@ admin = workspace.profiles.create!(username: 'admin', description: 'Admin of wor
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
                                   filename: 'admin.png', content_type: 'image/png')
 
-user_second = User.create!(name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+user_second = User.create!(id: uuid, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
 
 alva = workspace.profiles.create!(username: 'Alva', description: 'ASE', user_id: user_second.id, display_name: 'alva',
                                   phone: '1234567890', skype: '1234567890', text_status: 'Laughing', time_zone: 'Karachi',
@@ -41,6 +37,70 @@ Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arth
                                   filename: 'arthur.png', content_type: 'image/png')
 user_fifth = User.create!(name: 'Austin', email: 'austin@gmail.com', password: password, jti: SecureRandom.uuid)
 austin = workspace.profiles.create!(username: 'Austin', description: 'SSE', user_id: user_fifth.id, display_name: 'austin',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
+                                  filename: 'austin.png', content_type: 'image/png')
+
+user1 = user_second
+
+ActiveRecord::Base.connection.execute('COMMIT')
+ActiveRecord::Base.connection.execute("CREATE DATABASE #{workspace.company_name.downcase}")
+ActiveRecord::Base.connection.execute('BEGIN')
+
+ActiveRecord::Base.establish_connection(
+  adapter: 'postgresql',
+  encoding: 'unicode',
+  pool: ENV.fetch('RAILS_MAX_THREADS', 5),
+  username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
+  password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
+  host: ENV.fetch('POSTGRES_HOST', 'localhost'),
+  database: workspace.company_name.downcase
+)
+ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
+
+user_first = User.create!(id: user_first.id, name: 'Admin', email: 'admin@domain.com', password: password, jti: SecureRandom.uuid)
+
+workspace = Workspace.create!(id: workspace.id, company_name: 'Devsinc',
+                              workspace_type: :work,
+                              bench_it_url: 'https://www.devsinc.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
+Current.workspace = workspace
+
+workspace.statuses.create!(text: 'In a meeting', emoji: '🗓️', clear_after: '3600')
+workspace.statuses.create!(text: 'Commuting', emoji: '🚌', clear_after: '1740')
+workspace.statuses.create!(text: 'Out sick', emoji: '🤒', clear_after: 'Today')
+workspace.statuses.create!(text: 'Vacationing', emoji: '🌴', clear_after: "don't clear")
+workspace.statuses.create!(text: 'Working remotely', emoji: '🏡', clear_after: 'Today')
+
+admin = workspace.profiles.create!(id: admin.id, username: 'admin', description: 'Admin of workspace', user_id: user_first.id,
+                                   display_name: 'Admin', phone: '1234567890', skype: '1234567890', text_status: 'Happy',
+                                   time_zone: 'UTC', emoji_status: '😍', role: :workspace_owner)
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images admin.png]).open,
+                                  filename: 'admin.png', content_type: 'image/png')
+
+user_second = User.create!(id: uuid, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+
+alva = workspace.profiles.create!(id: alva.id, username: 'Alva', description: 'ASE', user_id: user_second.id, display_name: 'alva',
+                                  phone: '1234567890', skype: '1234567890', text_status: 'Laughing', time_zone: 'Karachi',
+                                  emoji_status: '😂', role: :workspace_admin)
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
+
+user_third = User.create!(id: user_third.id, name: 'Arnold', email: 'arnold@gmail.com', password: password, jti: SecureRandom.uuid)
+arnold = workspace.profiles.create!(id: arnold.id, username: 'Arnold', description: 'ASQE', user_id: user_third.id, display_name: 'arnold',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Angry', time_zone: 'UTC', emoji_status: '😡')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arnold.png]).open,
+                                  filename: 'arnold.png', content_type: 'image/png')
+
+user_fourth = User.create!(id: user_fourth.id, name: 'Arthur', email: 'arthur@gmail.com', password: password, jti: SecureRandom.uuid)
+arthur = workspace.profiles.create!(id: arthur.id, username: 'Arthur', description: 'SE', user_id: user_fourth.id, display_name: 'arthur',
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Lunch', time_zone: 'Samoa', emoji_status: '🍕')
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images arthur.png]).open,
+                                  filename: 'arthur.png', content_type: 'image/png')
+
+user_fifth = User.create!(id: user_fifth.id, name: 'Austin', email: 'austin@gmail.com', password: password, jti: SecureRandom.uuid)
+austin = workspace.profiles.create!(id: austin.id, username: 'Austin', description: 'SSE', user_id: user_fifth.id, display_name: 'austin',
                                     phone: '1234567890', skype: '1234567890', text_status: 'AFK', time_zone: 'Auckland', emoji_status: '💬')
 Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images austin.png]).open,
                                   filename: 'austin.png', content_type: 'image/png')
@@ -144,6 +204,10 @@ alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"typ
 alva.draft_messages.create!(content: %({"blocks":[{"type":"section","text":{"type":"mrkdwn","text":"Haha message in profile"}}]}),
                             bench_conversation_id: profile_conversation_first.id)
 
+user_second = user1
+
+ActiveRecord::Base.establish_connection(:development)
+
 workspace = Workspace.create!(company_name: 'TechHub',
                               workspace_type: :work,
                               bench_it_url: 'https://www.techhub.com',
@@ -151,9 +215,45 @@ workspace = Workspace.create!(company_name: 'TechHub',
                               organization_type: :financial_services)
 alvi = user_second.profiles.create!(username: 'Alvi', description: 'ASE', workspace_id: workspace.id, display_name: 'alvi', phone: '1234567890',
                                     skype: '1234567890', text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡', role: 0)
+
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
+Current.profile = alvi
+Current.workspace = workspace
+
+ActiveRecord::Base.connection.execute('COMMIT')
+ActiveRecord::Base.connection.execute("CREATE DATABASE #{workspace.company_name.downcase}")
+ActiveRecord::Base.connection.execute('BEGIN')
+
+ActiveRecord::Base.establish_connection(
+  adapter: 'postgresql',
+  encoding: 'unicode',
+  pool: ENV.fetch('RAILS_MAX_THREADS', 5),
+  username: ENV.fetch('POSTGRES_USERNAME', 'postgres'),
+  password: ENV.fetch('POSTGRES_PASSWORD', 'postgres'),
+  host: ENV.fetch('POSTGRES_HOST', 'localhost'),
+  database: workspace.company_name.downcase
+)
+ActiveRecord::MigrationContext.new('db/migrate/', ActiveRecord::SchemaMigration).migrate
+
+user_second = User.create!(id: uuid, name: 'Alva', email: 'alva@gmail.com', password: password, jti: SecureRandom.uuid)
+
+workspace = Workspace.create!(id: workspace.id, company_name: 'TechHub',
+                              workspace_type: :work,
+                              bench_it_url: 'https://www.techhub.com',
+                              capacity: 2000,
+                              organization_type: :financial_services)
+alvi = user_second.profiles.create!(id: alvi.id, username: 'Alvi', description: 'ASE', workspace_id: workspace.id, display_name: 'alvi', role: 0,
+                                    phone: '1234567890', skype: '1234567890', text_status: 'Not working', time_zone: 'Karachi', emoji_status: '🤡')
+
+Profile.last.profile_image.attach(io: Rails.root.join(*%w[app assets images alva.png]).open,
+                                  filename: 'alva.png', content_type: 'image/png')
+
 Current.profile = alvi
 Current.workspace = workspace
 
 channel_first = BenchChannel.create!(name: 'general', description: 'general')
 BenchConversation.create!(conversationable_type: 'BenchChannel', conversationable_id: channel_first.id, topic: 'general')
 channel_first.channel_participants.create!(permission: true, profile_id: alvi.id)
+
+ActiveRecord::Base.establish_connection(:development)

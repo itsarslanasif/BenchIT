@@ -1,4 +1,6 @@
 class Api::ApiController < ApplicationController
+  include DatabaseHandler
+
   skip_before_action :verify_authenticity_token
   before_action :presence_of_api_token
   before_action :authenticate_api_with_token
@@ -13,7 +15,12 @@ class Api::ApiController < ApplicationController
     if session[:current_workspace_id].nil?
       render json: { success: false, error: t('api.no_workspace') }, status: :unprocessable_entity
     else
-      Current.workspace = Workspace.find_by(id: session[:current_workspace_id])
+      Current.workspace = Workspace.find(session[:current_workspace_id])
+      if Current.workspace.id != session[:current_workspace_id]
+        switch_database
+        workspace = Workspace.find(session[:current_workspace_id])
+        establish_connection_to_workspace_db(workspace.company_name.downcase)
+      end
     end
   end
 
