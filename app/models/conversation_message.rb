@@ -54,6 +54,24 @@ class ConversationMessage < ApplicationRecord
     message
   end
 
+  def soft_delete
+    ActiveRecord::Base.transaction do
+      pin&.destroy!
+      reactions&.delete_all
+      saved_items&.delete_all
+      message_attachments&.delete_all
+      update!(content: I18n.t('.delete_text'))
+    end
+  end
+
+  def delete_reply_and_parent
+    ActiveRecord::Base.transaction do
+      pin&.destroy!
+      destroy!
+      parent_message.destroy!
+    end
+  end
+
   private
 
   def broadcastable_content

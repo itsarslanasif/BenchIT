@@ -1,10 +1,9 @@
 class Api::V1::ProfilesController < Api::ApiController
-  before_action :set_profile, only: %i[show]
+  before_action :set_profile, only: %i[show update set_status clear_status]
   skip_before_action :set_workspace_in_session, only: %i[create]
   before_action :set_workspace, only: %i[index create show update]
   before_action :check_profile_already_exists, only: %i[create]
   before_action :check_user_member_of_workspace, only: %i[show update]
-  before_action :find_profile, only: %i[update set_status clear_status set_is_active remove_is_active]
   before_action :fetch_country_name, only: %i[update]
 
   def index
@@ -39,16 +38,6 @@ class Api::V1::ProfilesController < Api::ApiController
     set_job
   end
 
-  def set_is_active
-    @profile.update!(is_active: true)
-    render json: { success: true, message: t('.success') }, status: :ok
-  end
-
-  def remove_is_active
-    @profile.update!(is_active: false)
-    render json: { success: true, message: t('.success') }, status: :ok
-  end
-
   def clear_status
     @profile.update!(text_status: '', emoji_status: '', clear_status_after: '')
     render json: { success: true, message: t('.success') }, status: :ok
@@ -66,17 +55,13 @@ class Api::V1::ProfilesController < Api::ApiController
     end
   end
 
-  def find_profile
-    @profile = Profile.find(params[:id])
-  end
-
   def set_workspace
     @workspace = Workspace.find(params[:workspace_id])
   end
 
   def profile_params
     params.permit(:username, :description, :recording, :profile_image, :role, :display_name, :title, :text_status, :emoji_status,
-                  :clear_status_after, :time_zone, :pronounce_name, :phone, :skype).tap do |param|
+                  :clear_status_after, :time_zone, :pronounce_name, :phone, :skype, :is_active).tap do |param|
       param[:workspace_id] = params[:workspace_id]
     end
   end

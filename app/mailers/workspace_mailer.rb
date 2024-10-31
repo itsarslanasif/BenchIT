@@ -1,5 +1,5 @@
 class WorkspaceMailer < ApplicationMailer
-  def send_workspace_create_mail(workspace, profile, user)
+  def send_workspace_creation_mail(workspace, profile, user)
     @email = user.email
     @workspace = workspace
     @profile = profile

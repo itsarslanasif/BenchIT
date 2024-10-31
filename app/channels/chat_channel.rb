@@ -2,15 +2,11 @@ class ChatChannel < ApplicationCable::Channel
   def subscribed
     stream_from case params[:type]
                 when 'profiles'
-                  conversation = BenchConversation.profile_to_profile_conversation(params[:id], params[:current_profile_id])
+                  @conversation = BenchConversation.profile_to_profile_conversation(params[:id], params[:current_profile_id])
 
-                  if conversation.blank?
-                    conversation = BenchConversation.new(conversationable_type: 'Profile', conversationable_id: params[:id],
-                                                         sender_id: params[:current_profile_id])
-                    conversation.save
-                  end
+                  create_conversation if @conversation.blank?
 
-                  "ChatChannelProfile#{conversation.conversationable_id}-#{conversation.sender_id}"
+                  "ChatChannelProfile#{@conversation.conversationable_id}-#{@conversation.sender_id}"
                 when 'groups'
                   "ChatChannelGroup#{params[:id]}"
                 when 'channels'
@@ -24,5 +20,11 @@ class ChatChannel < ApplicationCable::Channel
     ActionCable.server.broadcast('ChatChannel', {
                                    message: data['message'].upcase
                                  })
+  end
+
+  def create_conversation
+    @conversation = BenchConversation.new(conversationable_type: 'Profile', conversationable_id: params[:id],
+                                          sender_id: params[:current_profile_id])
+    @conversation.save!
   end
 end

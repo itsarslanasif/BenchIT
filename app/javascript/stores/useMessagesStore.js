@@ -58,6 +58,10 @@ export const useMessageStore = () => {
             errorHandler(e.response.data.message);
           });
       },
+      updateSelectedprofileStatus(data) {
+        if (data.id == this.selectedChat.id)
+          this.selectedChat.is_active = data.is_active;
+      },
       setSelectedChat(selectedChat) {
         this.selectedChat = selectedChat;
         if (selectedChat.hasOwnProperty('user_id')) {

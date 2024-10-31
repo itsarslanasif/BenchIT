@@ -15,8 +15,7 @@ Rails.application.routes.draw do
       namespace :v1 do
         resources :mentions, only: [] do
           collection do
-            get :channels_list
-            get :profiles_list
+            get :channels_list, :profiles_list
           end
         end
 
@@ -38,11 +37,7 @@ Rails.application.routes.draw do
         end
         resources :conversation_messages, only: %i[create update destroy] do
           collection do
-            get :sent_message
-            get :recent_files
-            get :unread_messages
-            get :threads
-            get :reactions_and_mentions
+            get :sent_message, :recent_files, :unread_messages, :threads, :reactions_and_mentions
           end
           member do
             get :bench_channel_messages, :group_messages, :profile_messages
@@ -74,10 +69,7 @@ Rails.application.routes.draw do
 
           resources :profiles, only: %i[index create show update] do
             member do
-              post :set_status
-              post :clear_status
-              get :set_is_active
-              get :remove_is_active
+              post :set_status, :clear_status
             end
             resource :preference, only: %i[update]
           end
@@ -94,15 +86,12 @@ Rails.application.routes.draw do
         resources :reactions, only: %i[create destroy]
         resources :direct_message_users, only: %i[index destroy] do
           collection do
-            get :previous_direct_messages
             get :recent_direct_messages
           end
         end
         resources :channel_participants, only: %i[index create destroy] do
           collection do
-            post :join_public_channel
-            post :mute_unmute_channel
-            post :invite_outsider
+            post :join_public_channel, :mute_unmute_channel
           end
         end
         resources :draft_messages, only: %i[index create update destroy]
